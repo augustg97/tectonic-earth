@@ -20,6 +20,12 @@ for fr in tl:
     for key in ("e", "r"):
         name = fr[key]
         p = os.path.join(WEB, "fields", name)
+        # Prefer the lighter elevation encoding here: this build is inlined as
+        # base64 (which inflates ~33%) and has to clear a 16 MB ceiling. The
+        # self-hosted site serves the full-quality textures instead.
+        lite = p.replace(".webp", "_lite.webp")
+        if key == "e" and os.path.exists(lite):
+            p = lite
         b = base64.b64encode(open(p, "rb").read()).decode()
         fields[name] = "data:image/webp;base64," + b
 

@@ -34,7 +34,12 @@ os.makedirs(OUT, exist_ok=True)
 ELEV_H, ELEV_W = 768, 1536      # coastline resolution
 RAIN_H, RAIN_W = 192, 384       # rainfall is smooth; this is plenty
 CLIM_H, CLIM_W = 384, 768       # resolution the wind solve runs at
-ELEV_Q, RAIN_Q = 86, 86
+ELEV_Q, RAIN_Q = 92, 90
+# The self-hosted site has no size ceiling, but the inlined artifact must fit
+# under 16 MB, so a second lower-quality copy of each elevation texture is
+# written for that build only. Elevation dominates the payload; rainfall is
+# already tiny.
+ELEV_Q_LITE = 84
 STEP = 5                         # Myr between keyframes, everywhere
 
 
@@ -60,6 +65,7 @@ def export(age, Z_hi, z_for_climate, tag):
     ef = f"{tag}_{abs(age):04d}_e.webp"
     rf = f"{tag}_{abs(age):04d}_r.webp"
     n = _save(e, os.path.join(OUT, ef), ELEV_Q) + _save(r, os.path.join(OUT, rf), RAIN_Q)
+    _save(e, os.path.join(OUT, ef.replace(".webp", "_lite.webp")), ELEV_Q_LITE)
     ice_T, sea_T = glaciation(cl)
     ep, per = period_for(age)
     return {"age": age, "e": ef, "r": rf, "epoch": ep, "period": per,

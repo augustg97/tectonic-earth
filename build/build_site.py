@@ -12,14 +12,16 @@ Cloudflare Pages, or any web server. No build step, no dependencies.
 import os, shutil, json
 
 WEB = "../web"
-SITE = "../site"
+SITE = "../docs"   # GitHub Pages serves main:/docs natively
 
 os.makedirs(SITE, exist_ok=True)
-for name in ("fields",):
-    dst = os.path.join(SITE, name)
-    if os.path.isdir(dst):
-        shutil.rmtree(dst)
-    shutil.copytree(os.path.join(WEB, name), dst)
+dst = os.path.join(SITE, "fields")
+if os.path.isdir(dst):
+    shutil.rmtree(dst)
+# The "_lite" elevation copies exist only to squeeze the inlined artifact under
+# its 16 MB ceiling; the site serves the full-quality textures.
+shutil.copytree(os.path.join(WEB, "fields"), dst,
+                ignore=shutil.ignore_patterns("*_lite.webp"))
 
 for name in ("index.html", "three.min.js", "timeline.json", "boundaries.json",
              "plates.json", "hotspots.json", "labels.json"):

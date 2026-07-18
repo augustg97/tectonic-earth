@@ -1,7 +1,11 @@
+# Source datasets (large downloads; see build/ for how they are fetched)
 data/
 venv/
 build/__pycache__/
 build/*.png
+
+# Generated intermediates. docs/ holds the deployable copy of the fields.
+web/fields/
 web/frames/
 web/artifact.html
 web/bluemarble.jpg
