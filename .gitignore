@@ -1,0 +1,7 @@
+data/
+venv/
+build/__pycache__/
+build/*.png
+web/frames/
+web/artifact.html
+web/bluemarble.jpg

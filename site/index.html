@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Tectonic Earth — Deep Time</title>
+<style>
+:root{
+  --bg:#0a0d12; --panel:rgba(18,22,29,.82); --panel-solid:#12161d;
+  --line:rgba(255,255,255,.10); --ink:#e8ecf2; --dim:#9aa6b6; --dim2:#6b7686;
+  --accent:#e2703a; --accent2:#5ea9c4;
+  --ridge:#e8534e; --trench:#59b0d6; --transform:#e0b23a;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidden;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0}
+canvas{display:block}
+#map2d{position:fixed;inset:0;display:none;background:transparent;z-index:5}
+.hidden{display:none!important}
+
+/* ---- top bar ---- */
+#topbar{position:fixed;top:0;left:0;right:0;padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:20;transition:opacity .5s}
+#title{pointer-events:auto}
+#title h1{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+#aboutBtn{cursor:pointer;color:var(--dim2);font-size:12px;margin-left:4px;transition:color .15s}
+#aboutBtn:hover{color:var(--accent)}
+#about{position:fixed;left:20px;top:70px;width:340px;max-width:calc(100vw - 40px);background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:14px;padding:20px;z-index:40;opacity:0;transform:translateY(6px);pointer-events:none;transition:.25s;max-height:calc(100vh - 160px);overflow-y:auto}
+#about.show{opacity:1;transform:none;pointer-events:auto}
+#about .ax{position:absolute;top:14px;right:16px;cursor:pointer;color:var(--dim2);font-size:18px;line-height:1}
+#about h2{font-size:15px;letter-spacing:.06em;margin-bottom:10px}
+#about h3{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:14px 0 7px}
+#about p{font-size:11.5px;line-height:1.65;color:var(--dim)}
+#about p b{color:var(--ink);font-weight:600}
+#about ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+#about li{font-size:11px;line-height:1.55;color:var(--dim);padding-left:12px;position:relative}
+#about li::before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+#about li b{color:var(--ink);font-weight:600}
+#about .note{margin-top:12px;font-size:10.5px;color:var(--dim2);border-top:1px solid var(--line);padding-top:10px}
+#title .sub{font-size:11px;color:var(--dim2);letter-spacing:.06em;margin-top:3px}
+#readout{pointer-events:auto;text-align:right;font-variant-numeric:tabular-nums;background:linear-gradient(to left,rgba(10,13,18,.55),rgba(10,13,18,0));padding:6px 4px 8px 40px;border-radius:10px}
+#age{font-size:30px;font-weight:300;letter-spacing:.01em;line-height:1}
+#eraName{font-size:13px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;font-weight:600}
+#periodName{font-size:11px;color:var(--dim);letter-spacing:.05em;margin-top:2px}
+#env{font-size:10.5px;color:var(--dim2);margin-top:8px;line-height:1.7;letter-spacing:.02em}
+#env b{color:var(--dim);font-weight:500}
+
+/* ---- right controls ---- */
+#controls{position:fixed;top:172px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
+.grp{margin-bottom:12px}
+.grp:last-child{margin-bottom:0}
+.grp-h{font-size:9.5px;color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;background:none;border:none;color:var(--dim);font-family:var(--font);font-size:11px;padding:7px 4px;cursor:pointer;letter-spacing:.03em;transition:.15s}
+.seg button.on{background:var(--accent);color:#0a0d12;font-weight:600}
+.seg button:not(.on):hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.tog{display:flex;align-items:center;justify-content:space-between;padding:5px 2px;cursor:pointer;user-select:none}
+.tog span{font-size:12px;color:var(--ink);letter-spacing:.02em}
+.tog .sw{width:32px;height:18px;border-radius:9px;background:rgba(255,255,255,.12);position:relative;transition:.2s;flex:none}
+.tog .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#cfd6df;transition:.2s}
+.tog.on .sw{background:var(--accent)}
+.tog.on .sw::after{left:16px;background:#fff}
+.tog .dotc{width:8px;height:8px;border-radius:50%;margin-right:6px;flex:none;display:inline-block;vertical-align:middle}
+
+/* ---- bottom timeline ---- */
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 22px 16px;background:linear-gradient(to top,rgba(8,10,14,.92),rgba(8,10,14,0));z-index:20;transition:opacity .5s}
+#markrow{position:relative;height:24px;margin:0 4px 2px}
+.mark{position:absolute;transform:translateX(-50%);font-size:9.5px;color:var(--dim2);letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:color .15s}
+.mark:hover{color:var(--ink)}
+.mark::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:5px;background:var(--line)}
+.mark.now{color:var(--accent2)}
+#track{position:relative;height:26px;margin:0 4px}
+#slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
+#slider::-webkit-slider-runnable-track{height:26px}
+#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:26px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
+#slider::-moz-range-thumb{width:4px;height:26px;border:none;background:#fff;border-radius:2px}
+#trackbg{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
+#trackgrad{position:absolute;inset:0}
+#ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px}
+.pbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
+.pbtn:hover{border-color:var(--accent);color:var(--accent)}
+.pbtn svg{width:15px;height:15px;fill:currentColor}
+#dir{width:34px;height:34px}
+#speedwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+#speed{width:96px}
+input[type=range].mini{-webkit-appearance:none;appearance:none;height:3px;background:#2b3240;border-radius:2px;outline:none}
+input[type=range].mini::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
+input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+#ambientBtn{margin-left:auto}
+.txtbtn{background:none;border:1px solid var(--line);color:var(--dim);font-family:var(--font);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:8px;cursor:pointer;transition:.15s}
+.txtbtn:hover{border-color:var(--accent);color:var(--ink)}
+.txtbtn.on{border-color:var(--accent);color:var(--accent)}
+
+/* ---- labels overlay ---- */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+.plabel{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:11px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);opacity:0;transition:opacity .4s}
+.plabel.ocean{font-style:italic;color:#bfe0ef;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0}
+.plabel.sea{color:#cfeaf3;font-size:10px;font-style:italic}
+.plabel.orogen{color:#f0d0a8;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em}
+.plabel.show{opacity:.92}
+
+/* ---- info panel ---- */
+#info{position:fixed;left:20px;bottom:120px;width:250px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:15px;z-index:25;opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s}
+#info.show{opacity:1;transform:none;pointer-events:auto}
+#info h3{font-size:14px;letter-spacing:.03em;margin-bottom:2px;display:flex;justify-content:space-between;align-items:center}
+#info .close{cursor:pointer;color:var(--dim2);font-size:16px;line-height:1}
+#info .tag{font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+#info .row{display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;border-top:1px solid var(--line);color:var(--dim)}
+#info .row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+#info p.desc{font-size:11px;color:var(--dim);line-height:1.6;margin-top:8px}
+
+/* ---- legend ---- */
+#legend{position:fixed;left:20px;top:96px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;padding:10px 12px;z-index:18;font-size:10.5px;color:var(--dim);transition:opacity .5s}
+#legend .li{display:flex;align-items:center;gap:7px;padding:2px 0}
+#legend .ln{width:16px;height:2px;border-radius:2px;flex:none}
+#legend .dt{width:7px;height:7px;border-radius:50%;flex:none}
+
+/* ---- loading ---- */
+#load{position:fixed;inset:0;background:var(--bg);z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s}
+#load.done{opacity:0;pointer-events:none}
+#load .ring{width:44px;height:44px;border:2px solid rgba(255,255,255,.12);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#load .lt{margin-top:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+#load .lp{margin-top:6px;font-size:10px;color:var(--dim2);font-variant-numeric:tabular-nums}
+
+#hint{position:fixed;left:50%;bottom:118px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
+#ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s}
+body.ambient #topbar,body.ambient #controls,body.ambient #bottom,body.ambient #legend,body.ambient #hint{opacity:0;pointer-events:none}
+body.ambient #ambientExit{opacity:1;pointer-events:auto}
+@media (max-width:720px){
+  #controls{top:auto;bottom:150px;width:160px}
+  #legend{display:none}
+  #info{bottom:150px;width:210px}
+  #age{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="gl"></canvas></div>
+<canvas id="map2d"></canvas>
+<div id="labels"></div>
+
+<div id="topbar">
+  <div id="title">
+    <h1>Tectonic&nbsp;Earth <span id="aboutBtn" title="About &amp; data sources">ⓘ</span></h1>
+    <div class="sub">Deep-time plate reconstruction · 1000 Ma → +250 Myr</div>
+  </div>
+  <div id="readout">
+    <div id="age">0 Ma</div>
+    <div id="eraName">Holocene</div>
+    <div id="periodName">Quaternary</div>
+    <div id="env"></div>
+  </div>
+</div>
+
+<div id="legend"></div>
+
+<div id="controls">
+  <div class="grp">
+    <div class="grp-h">View</div>
+    <div class="seg" id="viewSeg">
+      <button data-v="globe" class="on">Globe</button>
+      <button data-v="map">Map</button>
+    </div>
+  </div>
+  <div class="grp">
+    <div class="grp-h">Shading</div>
+    <div class="seg" id="shadeSeg">
+      <button data-s="sat" class="on">Satellite</button>
+      <button data-s="schem">Schematic</button>
+    </div>
+  </div>
+  <div class="grp">
+    <div class="grp-h">Present-day layers</div>
+    <div class="tog on" data-layer="boundaries"><span>Plate boundaries</span><div class="sw"></div></div>
+    <div class="tog" data-layer="vectors"><span>Motion vectors</span><div class="sw"></div></div>
+    <div class="tog" data-layer="hotspots"><span>Hotspots</span><div class="sw"></div></div>
+  </div>
+  <div class="grp">
+    <div class="grp-h">Annotation</div>
+    <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
+    <div class="tog on" data-layer="rotate"><span>Auto-rotate</span><div class="sw"></div></div>
+  </div>
+</div>
+
+<div id="info">
+  <h3><span id="infoName">—</span><span class="close" id="infoClose">×</span></h3>
+  <div class="tag" id="infoTag"></div>
+  <div id="infoRows"></div>
+  <p class="desc" id="infoDesc"></p>
+</div>
+
+<div id="about">
+  <div class="ax" id="aboutClose">×</div>
+  <h2>Tectonic Earth</h2>
+  <p>An interactive reconstruction of Earth's surface across 1.25 billion years — from the supercontinent <b>Rodinia</b> through <b>Pangaea</b> to the projected future supercontinent <b>Pangaea&nbsp;Proxima</b>. Land, mountains, shelves and inland seas come from published paleo-elevation data at 5-million-year steps.</p>
+  <h3>How it animates</h3>
+  <p>The page doesn't ship pictures of each era — it ships <b>elevation and rainfall fields</b>, and builds the world in a shader as you scrub. Because it interpolates the height field, a coastline genuinely <b>migrates</b> between keyframes instead of one image dissolving into another, so motion stays smooth at any playback speed. Relief is shaded per pixel, so terrain keeps its bite at any zoom. The future is the present-day map carried by rigid plate rotations, which is why it holds the same detail as today and leaves no seam at the present.</p>
+  <h3>How the climate is derived</h3>
+  <p>Biomes aren't painted on by latitude. Each frame runs a small climate model: prevailing winds (tropical easterlies, mid-latitude westerlies) carry moisture inland from the sea, drying as they go, so <b>continental interiors go arid on their own</b> — which is why Pangaea grows a desert heart while its coasts and Tethys shores stay monsoon-green. Air forced over mountains rains out and leaves a <b>rain shadow</b> behind them (the Atacama and Patagonia fall out of the model, not out of a lookup table). Vegetation is then set by rainfall against evaporative demand, so cold, dry Siberia is taiga while a subtropical plain on the same rainfall is desert.</p>
+  <h3>Data sources</h3>
+  <ul>
+    <li><b>Paleogeography &amp; elevation</b> — Scotese &amp; Wright (2018), <i>PALEOMAP PaleoDEMs</i> for the Phanerozoic (0–540 Ma), 6-arc-minute grids. CC-BY 4.0.</li>
+    <li><b>Present plate motions</b> — NNR-MORVEL56 (Argus, Gordon &amp; DeMets, 2011): real Euler poles drive the motion-vector field.</li>
+    <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults.</li>
+    <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Haq/Hallam sea-level curves, Late-Paleozoic and Neoproterozoic glaciations). Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
+  </ul>
+  <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
+</div>
+<div id="hint">Drag to rotate · scroll to zoom · click a plate for details</div>
+
+<div id="bottom">
+  <div id="markrow"></div>
+  <div id="track">
+    <div id="trackbg"><div id="trackgrad"></div></div>
+    <input type="range" id="slider" min="0" max="1250" value="1000" step="1">
+  </div>
+  <div id="ctlrow">
+    <button class="pbtn" id="playBtn" title="Play / pause">
+      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="pbtn" id="dir" title="Direction of travel">
+      <svg id="dirIcon" viewBox="0 0 24 24"><path d="M4 12h13l-5-5 1.4-1.4L21.8 12l-8.4 6.4L12 17l5-5H4z"/></svg>
+    </button>
+    <div id="speedwrap"><span>Speed</span><input type="range" id="speed" class="mini" min="1" max="60" value="18"><span id="speedVal">18 Myr/s</span></div>
+    <button class="txtbtn" id="ambientBtn">Ambient</button>
+  </div>
+</div>
+
+<div id="ambientExit"><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
+
+<div id="load">
+  <div class="ring"></div>
+  <div class="lt">Assembling deep time</div>
+  <div class="lp" id="loadPct">0%</div>
+</div>
+
+<script src="three.min.js"></script>
+<script>
+const DEG=Math.PI/180;
+const $=s=>document.querySelector(s);
+const state={
+  age:0, view:'globe', shade:'sat', playing:false, dir:+1, speed:18,
+  layers:{boundaries:true,vectors:false,hotspots:false,labels:true,rotate:true},
+  ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
+};
+let DATA={};   // timeline, boundaries, plates, hotspots, labels
+let ELI=[], RNI=[];   // decoded elevation / rainfall field images per keyframe
+/* GPU textures are created on demand around the current age and evicted by
+   LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
+   video memory for textures that are almost never on screen at once. */
+const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
+function getTex(kind,i){
+  const src=(kind==='e'?ELI:RNI)[i];
+  if(!src)return null;
+  const key=kind+i;
+  let e=TEXCACHE.get(key);
+  if(!e){
+    const t=new THREE.Texture(src);
+    // Field data, not colour: keep it linear and unfiltered by mipmaps so
+    // elevation isn't averaged across scales before the shader reads it.
+    t.colorSpace=THREE.NoColorSpace;
+    t.minFilter=THREE.LinearFilter; t.magFilter=THREE.LinearFilter;
+    t.generateMipmaps=false; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+    t.needsUpdate=true;
+    e={t,u:0}; TEXCACHE.set(key,e);
+  }
+  e.u=++texClock;
+  if(TEXCACHE.size>TEX_CAP){
+    let victim=null,best=Infinity;
+    for(const[k,v]of TEXCACHE){if(k!==key&&v.u<best){best=v.u;victim=k;}}
+    if(victim!==null){TEXCACHE.get(victim).t.dispose();TEXCACHE.delete(victim);}
+  }
+  return e.t;
+}
+
+/* ================= data load ================= */
+async function loadAll(){
+  const files=['timeline','boundaries','plates','hotspots','labels'];
+  if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
+  else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
+  const tl=DATA.timeline;
+  const src=n=>window.INLINE_FIELDS?window.INLINE_FIELDS[n]:'fields/'+n;
+  let done=0; const total=tl.length*2;
+  const one=(name,arr,i)=>new Promise(res=>{
+    const img=new Image();
+    const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
+    img.onload=()=>{arr[i]=img;fin();};
+    img.onerror=fin;
+    img.src=src(name);
+  });
+  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i)]));
+}
+
+/* map timeline (sorted asc by age) to helpers */
+function ages(){return DATA.timeline.map(f=>f.age);}
+function frameAt(age){
+  // returns {i,j,t} interpolation between adjacent frames
+  const A=ages();
+  if(age<=A[0])return{i:0,j:0,t:0};
+  if(age>=A[A.length-1])return{i:A.length-1,j:A.length-1,t:0};
+  for(let k=0;k<A.length-1;k++){
+    if(age>=A[k]&&age<=A[k+1]){
+      const t=(age-A[k])/(A[k+1]-A[k]);
+      return{i:k,j:k+1,t};
+    }
+  }
+  return{i:0,j:0,t:0};
+}
+
+/* ================= three.js globe ================= */
+let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo;
+const overlay={boundaries:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
+let dragging=false,lastX=0,lastY=0;
+
+function ll2v(lon,lat,r){
+  const phi=(90-lat)*DEG, theta=(lon+180)*DEG;
+  return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+}
+
+const VERT=`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `;
+
+/* ---------------------------------------------------------------------------
+   Terrain shader.
+
+   The page ships ELEVATION and RAINFALL fields per keyframe rather than
+   finished pictures. Interpolating elevation between two keyframes makes a
+   coastline migrate across the grid — real motion — where cross-fading two
+   colour images could only dissolve one coastline into another. Temperature is
+   recomputed here from latitude, elevation and the era anomaly, and relief is
+   shaded per pixel, so detail stays crisp no matter how far you zoom in.
+--------------------------------------------------------------------------- */
+const FRAG=`
+precision highp float;
+uniform sampler2D elevA, elevB, rainA, rainB;
+uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
+uniform vec2 uTexel;
+varying vec2 vUv;
+
+const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
+
+float decElev(float e){ float d=e*2.0-1.0; return sign(d)*d*d*Z_RANGE; }
+
+vec3 dirFromUv(vec2 uv){
+  float lon=radians(uv.x*360.0-180.0);
+  float lat=radians(90.0-uv.y*180.0);
+  return vec3(cos(lat)*cos(lon), sin(lat), cos(lat)*sin(lon));
+}
+float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
+float vnoise3(vec3 p){
+  vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+  float a=mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y);
+  float b=mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y);
+  return mix(a,b,f.z);
+}
+float fbm3(vec3 p){ float s=0.0,a=0.5; for(int i=0;i<5;i++){ s+=a*vnoise3(p); p*=2.07; a*=0.5; } return s; }
+
+// interpolate the two keyframes, then add procedural micro-relief so the
+// upsampled field doesn't read as soft
+float elevAt(vec2 uv){
+  float z=mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
+  vec3 d=dirFromUv(uv);
+  float n=fbm3(d*260.0)-0.5, n2=fbm3(d*70.0+13.7)-0.5;
+  float det=(n*250.0+n2*130.0)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
+  return z + (z>0.0 ? det : det*0.10);
+}
+float rainAt(vec2 uv){
+  return mix(texture2D(rainA,uv).r, texture2D(rainB,uv).r, mixf)*RF_MAX;
+}
+
+vec3 oceanColour(float z){
+  vec3 c=vec3(0.039,0.137,0.251);
+  c=mix(c,vec3(0.063,0.212,0.361),smoothstep(-6500.0,-4000.0,z));
+  c=mix(c,vec3(0.086,0.314,0.478),smoothstep(-4000.0,-2500.0,z));
+  c=mix(c,vec3(0.137,0.435,0.600),smoothstep(-2500.0,-1000.0,z));
+  c=mix(c,vec3(0.208,0.549,0.710),smoothstep(-1000.0,-350.0,z));
+  c=mix(c,vec3(0.455,0.749,0.824),smoothstep(-350.0,-120.0,z));
+  c=mix(c,vec3(0.680,0.878,0.910),smoothstep(-120.0,-15.0,z));
+  c=mix(c,vec3(0.804,0.933,0.941),smoothstep(-15.0,0.0,z));
+  return c;
+}
+
+void main(){
+  vec2 uv=vUv;
+  float lat=90.0-uv.y*180.0;
+  float s2=sin(radians(lat)); s2*=s2;
+
+  float z=elevAt(uv);
+  float zp=max(z,0.0);
+  float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
+  float Rf=rainAt(uv);
+
+  vec3 col;
+  if(z<0.0){
+    col=oceanColour(z);
+  }else{
+    float w=clamp((T+6.0)/30.0,0.0,1.0);
+    float pet=clamp((T+12.0)/34.0,0.16,1.35);
+    float h=clamp(Rf/(0.46*pet),0.0,1.0);
+    vec3 dry=mix(vec3(0.592,0.612,0.506), vec3(0.796,0.690,0.514), w);
+    vec3 mid=mix(vec3(0.565,0.608,0.322), vec3(0.753,0.659,0.396), w);
+    vec3 wet = (w<0.5) ? mix(vec3(0.255,0.333,0.226), vec3(0.298,0.453,0.251), clamp(w*2.0,0.0,1.0))
+                       : mix(vec3(0.298,0.453,0.251), vec3(0.169,0.396,0.192), clamp((w-0.5)*2.0,0.0,1.0));
+    col = (h<0.45) ? mix(dry,mid,clamp(h/0.45,0.0,1.0))
+                   : mix(mid,wet,clamp((h-0.45)/0.55,0.0,1.0));
+    float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
+    col=mix(col, vec3(0.710,0.604,0.404), core*0.5);
+    if(uVeg<0.999){
+      vec3 barren=mix(vec3(0.612,0.561,0.482), vec3(0.494,0.447,0.388), clamp(zp/2400.0,0.0,1.0));
+      float bf=pow(1.0-uVeg,0.5)*clamp(0.92+0.08*(1.0-h)+zp/9000.0,0.0,1.0);
+      col=mix(col,barren,clamp(bf,0.0,1.0));
+    }
+    float rock=clamp((zp-1700.0)/1500.0,0.0,1.0);
+    col=mix(col, mix(vec3(0.545,0.502,0.451), vec3(0.427,0.392,0.345), clamp((zp-2600.0)/1800.0,0.0,1.0)), rock*0.85);
+    float snowline=2600.0+190.0*clamp(T,-20.0,30.0);
+    col=mix(col, vec3(0.965,0.976,0.988), clamp((zp-snowline)/420.0,0.0,1.0));
+  }
+
+  // ice: a continuous ramp so sheets advance and retreat instead of popping
+  vec3 d=dirFromUv(uv);
+  float lobe=(fbm3(d*9.0)-0.5)*3.4;
+  float packn=fbm3(d*16.0+31.7);
+  if(z>=0.0){
+    col=mix(col, vec3(0.906,0.941,0.965), clamp((uIceT-(T+lobe))/4.5,0.0,1.0));
+  }else{
+    float sa=clamp((uSeaT-(T+lobe*2.6+(packn-0.5)*5.0))/3.5,0.0,1.0)*clamp((packn-0.30)/0.14,0.0,1.0);
+    col=mix(col, vec3(0.812,0.878,0.910)*(0.94+0.10*packn), sa);
+  }
+
+  // per-pixel relief from the elevation gradient
+  vec2 st=uTexel*0.75;
+  float ex1=elevAt(uv+vec2(st.x,0.0)), ex0=elevAt(uv-vec2(st.x,0.0));
+  float ey1=elevAt(uv+vec2(0.0,st.y)), ey0=elevAt(uv-vec2(0.0,st.y));
+  float coslat=max(cos(radians(lat)),0.08);
+  vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
+  float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
+  float shade=0.70+0.62*hs;
+  // Shelves keep their relief, but damp shading toward the abyss: there is no
+  // real detail down there and it would only amplify compression blocking.
+  float hw=(z<0.0)? mix(0.30,0.04,clamp(-z/2200.0,0.0,1.0)) : 1.0;
+  col*=((1.0-hw)+hw*shade);
+
+  if(uSchem>0.001){
+    float lum=dot(col,vec3(0.299,0.587,0.114));
+    vec3 s=(z<0.0)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    s*=(0.82+0.36*lum);
+    col=mix(col,s,uSchem);
+  }
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+function initGL(){
+  const cv=$('#gl');
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  scene=new THREE.Scene();
+  cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
+  orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
+  mat=new THREE.ShaderMaterial({uniforms:{
+    elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
+    mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
+    uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
+    uTexel:{value:new THREE.Vector2(1/1536,1/768)}
+  },vertexShader:VERT,fragmentShader:FRAG});
+  globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
+  scene.add(globe);
+  // the flat map is the same shader on a plane, so both views agree exactly
+  mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
+  mapMesh.visible=false; scene.add(mapMesh);
+  // atmosphere
+  const ageo=new THREE.SphereGeometry(1.03,64,32);
+  const amat=new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,uniforms:{},
+    vertexShader:`varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`varying vec3 vN;void main(){float i=pow(0.72-dot(vN,vec3(0,0,1.0)),2.2);gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9;}`});
+  atmo=new THREE.Mesh(ageo,amat); scene.add(atmo);
+  // stars
+  const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
+  for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.cos(ph);pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);}
+  sg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  starfield=new THREE.Points(sg,new THREE.PointsMaterial({color:0x9fb0c8,size:.09,sizeAttenuation:true,transparent:true,opacity:.55}));
+  scene.add(starfield);
+  globe.add(overlay.boundaries);globe.add(overlay.vectors);globe.add(overlay.hotspots);
+  resize();
+  cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);state.dragMoved=false;});
+  cv.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>3)state.dragMoved=true;state.rot+=dx*.006;state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+dy*.006));lastX=e.clientX;lastY=e.clientY;});
+  cv.addEventListener('pointerup',e=>{dragging=false;if(!state.dragMoved)pickGlobe(e);});
+  cv.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(1.35,Math.min(5,state.zoom+e.deltaY*.0016));},{passive:false});
+}
+
+function lineSeg(list,color,width,rBase){
+  const g=new THREE.BufferGeometry();const arr=[];
+  for(const s of list){const a=ll2v(s[0],s[1],rBase),b=ll2v(s[2],s[3],rBase);arr.push(a.x,a.y,a.z,b.x,b.y,b.z);}
+  g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));
+  const m=new THREE.LineBasicMaterial({color,transparent:true,opacity:.9});
+  return new THREE.LineSegments(g,m);
+}
+function buildBoundaries(){
+  overlay.boundaries.clear();
+  const R=1.006;
+  overlay.boundaries.add(lineSeg(DATA.boundaries.ridge,0xe8534e,1,R));
+  overlay.boundaries.add(lineSeg(DATA.boundaries.trench,0x59b0d6,1,R));
+  overlay.boundaries.add(lineSeg(DATA.boundaries.transform,0xe0b23a,1,R));
+}
+function buildHotspots(){
+  overlay.hotspots.clear();
+  const geo=new THREE.SphereGeometry(.008,8,8);
+  const mm=new THREE.MeshBasicMaterial({color:0xff7d3a});
+  for(const h of DATA.hotspots){const s=new THREE.Mesh(geo,mm);const p=ll2v(h.lon,h.lat,1.012);s.position.copy(p);overlay.hotspots.add(s);
+    // glow ring
+    const ring=new THREE.Mesh(new THREE.RingGeometry(.012,.02,16),new THREE.MeshBasicMaterial({color:0xff7d3a,transparent:true,opacity:.35,side:THREE.DoubleSide}));
+    ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));overlay.hotspots.add(ring);}
+}
+// motion vectors: sample grid, assign plate by point-in-poly, compute velocity
+function pointInRings(lon,lat,rings){
+  let inside=false;
+  for(const ring of rings){
+    for(let i=0,j=ring.length-1;i<ring.length;j=i++){
+      const xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];
+      if(((yi>lat)!=(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi)+xi))inside=!inside;
+    }
+  }
+  return inside;
+}
+function velocityAt(lon,lat,motion){
+  // omega vector along euler pole, magnitude deg/Myr
+  const pole=ll2v(motion.lon,motion.lat,1).normalize();
+  const w=motion.w*DEG; // rad/Myr
+  const omega=pole.multiplyScalar(w);
+  const p=ll2v(lon,lat,1).normalize();
+  const v=new THREE.Vector3().crossVectors(omega,p); // rad/Myr tangent
+  const speed=v.length()*6371; // mm/yr  (rad/Myr * km  ~ mm/yr)
+  return {v,speed};
+}
+function buildVectors(){
+  overlay.vectors.clear();
+  const arr=[];const heads=[];
+  for(let lat=-75;lat<=75;lat+=15){
+    for(let lon=-180;lon<180;lon+=15){
+      let pl=null;
+      for(const p of DATA.plates){if(p.motion&&pointInRings(lon,lat,p.rings)){pl=p;break;}}
+      if(!pl)continue;
+      const {v,speed}=velocityAt(lon,lat,pl.motion);
+      if(speed<3)continue;
+      const base=ll2v(lon,lat,1.008);
+      const dir=v.clone().normalize();
+      const len=Math.min(.10,.02+speed*.0011);
+      const tip=base.clone().add(dir.multiplyScalar(len));
+      arr.push(base.x,base.y,base.z,tip.x,tip.y,tip.z);
+      // arrowhead
+      const back=tip.clone().sub(base).normalize().multiplyScalar(len*.4);
+      const side=new THREE.Vector3().crossVectors(tip.clone().normalize(),back).multiplyScalar(.4);
+      const h1=tip.clone().sub(back).add(side),h2=tip.clone().sub(back).sub(side);
+      heads.push(tip.x,tip.y,tip.z,h1.x,h1.y,h1.z, tip.x,tip.y,tip.z,h2.x,h2.y,h2.z);
+    }
+  }
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));
+  overlay.vectors.add(new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.8})));
+  const g2=new THREE.BufferGeometry();g2.setAttribute('position',new THREE.Float32BufferAttribute(heads,3));
+  overlay.vectors.add(new THREE.LineSegments(g2,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.8})));
+}
+
+function pickGlobe(e){
+  const rect=$('#gl').getBoundingClientRect();
+  const mx=((e.clientX-rect.left)/rect.width)*2-1;
+  const my=-((e.clientY-rect.top)/rect.height)*2+1;
+  const ray=new THREE.Raycaster();ray.setFromCamera({x:mx,y:my},cam);
+  const hit=ray.intersectObject(globe,false);
+  if(!hit.length){closeInfo();return;}
+  const lp=globe.worldToLocal(hit[0].point.clone()).normalize();
+  const lat=Math.asin(THREE.MathUtils.clamp(lp.y,-1,1))/DEG;
+  let lon=Math.atan2(lp.z,-lp.x)/DEG-180; // invert ll2v
+  lon=((lon+540)%360)-180;
+  selectAt(lon,lat);
+}
+
+/* ================= 2D map ================= */
+const mcv=$('#map2d'),mctx=mcv.getContext('2d');
+const DPR=Math.min(devicePixelRatio,2);
+let mapView={dx:0,dy:0,dw:0,dh:0};
+/* The map is drawn by the same terrain shader on a plane; this positions that
+   plane and then paints only the vector overlays onto a transparent canvas
+   stacked above it. */
+function layoutMap(){
+  const W=innerWidth,H=innerHeight;
+  const topR=90, botR=150, avail=Math.max(120,H-topR-botR);
+  let dw=W*0.98, dh=dw/2;
+  if(dh>avail){dh=avail;dw=dh*2;}
+  const dx=(W-dw)/2, dy=topR+(avail-dh)/2;
+  mapView={dx,dy,dw,dh};
+  orthoCam.left=-W/2; orthoCam.right=W/2; orthoCam.top=H/2; orthoCam.bottom=-H/2;
+  orthoCam.updateProjectionMatrix();
+  mapMesh.scale.set(dw,dh,1);
+  mapMesh.position.set(dx+dw/2-W/2, H/2-(dy+dh/2), 0);
+}
+function drawMapOverlays(){
+  mctx.clearRect(0,0,mcv.width,mcv.height);
+  const {dx,dy,dw,dh}=mapView;
+  const X=dx*DPR,Y=dy*DPR,Wd=dw*DPR,Hd=dh*DPR;
+  const fade=presentFade();
+  if(state.layers.boundaries&&fade>0)drawBoundariesMap(X,Y,Wd,Hd,fade);
+  if(state.layers.hotspots&&fade>0)drawHotspotsMap(X,Y,Wd,Hd,fade);
+  if(state.layers.vectors&&fade>0)drawVectorsMap(X,Y,Wd,Hd,fade);
+}
+function ll2map(lon,lat,dx,dy,dw,dh){return[dx+(lon+180)/360*dw, dy+(90-lat)/180*dh];}
+function drawBoundariesMap(dx,dy,dw,dh,fade){
+  const draw=(list,color)=>{mctx.strokeStyle=color;mctx.globalAlpha=fade*.95;mctx.lineWidth=1.4;mctx.beginPath();
+    for(const s of list){const[a,b]=ll2map(s[0],s[1],dx,dy,dw,dh);const[c,d]=ll2map(s[2],s[3],dx,dy,dw,dh);if(Math.abs(s[0]-s[2])>180)continue;mctx.moveTo(a,b);mctx.lineTo(c,d);}mctx.stroke();};
+  draw(DATA.boundaries.ridge,'#e8534e');draw(DATA.boundaries.trench,'#59b0d6');draw(DATA.boundaries.transform,'#e0b23a');
+  mctx.globalAlpha=1;
+}
+function drawHotspotsMap(dx,dy,dw,dh,fade){
+  mctx.globalAlpha=fade;
+  for(const h of DATA.hotspots){const[x,y]=ll2map(h.lon,h.lat,dx,dy,dw,dh);
+    mctx.fillStyle='rgba(255,125,58,.35)';mctx.beginPath();mctx.arc(x,y,5,0,6.28);mctx.fill();
+    mctx.fillStyle='#ff7d3a';mctx.beginPath();mctx.arc(x,y,2.2,0,6.28);mctx.fill();}
+  mctx.globalAlpha=1;
+}
+function drawVectorsMap(dx,dy,dw,dh,fade){
+  mctx.globalAlpha=fade*.85;mctx.strokeStyle='#fff';mctx.fillStyle='#fff';mctx.lineWidth=1.2;
+  for(let lat=-75;lat<=75;lat+=15)for(let lon=-180;lon<180;lon+=15){
+    let pl=null;for(const p of DATA.plates){if(p.motion&&pointInRings(lon,lat,p.rings)){pl=p;break;}}
+    if(!pl)continue;const{v,speed}=velocityAt(lon,lat,pl.motion);if(speed<3)continue;
+    // project a nearby point to get screen direction
+    const p2=ll2v(lon,lat,1).add(v.clone().normalize().multiplyScalar(.06));
+    const lat2=Math.asin(p2.y/p2.length())/DEG;let lon2=Math.atan2(p2.z,-p2.x)/DEG-180;lon2=((lon2+540)%360)-180;
+    if(Math.abs(lon2-lon)>90)continue;
+    const[x1,y1]=ll2map(lon,lat,dx,dy,dw,dh);const[x2,y2]=ll2map(lon2,lat2,dx,dy,dw,dh);
+    const ang=Math.atan2(y2-y1,x2-x1);const L=Math.min(20,6+speed*.18);
+    const ex=x1+Math.cos(ang)*L,ey=y1+Math.sin(ang)*L;
+    mctx.beginPath();mctx.moveTo(x1,y1);mctx.lineTo(ex,ey);
+    mctx.lineTo(ex-Math.cos(ang-.4)*4,ey-Math.sin(ang-.4)*4);mctx.moveTo(ex,ey);mctx.lineTo(ex-Math.cos(ang+.4)*4,ey-Math.sin(ang+.4)*4);mctx.stroke();
+  }
+  mctx.globalAlpha=1;
+}
+function mapPick(e){
+  const rect=mcv.getBoundingClientRect();const x=(e.clientX-rect.left),y=(e.clientY-rect.top);
+  const{dx,dy,dw,dh}=mapView;const lon=(x-dx)/dw*360-180,lat=90-(y-dy)/dh*180;
+  if(lon<-180||lon>180||lat<-90||lat>90){closeInfo();return;}
+  selectAt(lon,lat);
+}
+mcv.addEventListener('click',mapPick);
+
+/* ================= selection / info ================= */
+function selectAt(lon,lat){
+  // present-day: identify plate. deep time: nearest era label.
+  const fade=presentFade();
+  if(fade>0.4){
+    for(const p of DATA.plates){if(pointInRings(lon,lat,p.rings)){showPlate(p,lon,lat);return;}}
+  }
+  // nearest visible label
+  const vis=DATA.labels.filter(l=>labelVisible(l));
+  let best=null,bd=1e9;
+  for(const l of vis){const d=Math.hypot(l.lon-lon,(l.lat-lat));if(d<bd){bd=d;best=l;}}
+  if(best&&bd<45)showFeature(best);else closeInfo();
+}
+function showPlate(p,lon,lat){
+  state.selPlate=p.code;
+  $('#infoName').textContent=p.name;$('#infoTag').textContent='Tectonic plate · present day';
+  const rows=[];
+  if(p.motion){const{speed}=velocityAt(lon,lat,p.motion);
+    rows.push(['Motion here',`${speed.toFixed(0)} mm/yr`]);
+    rows.push(['Euler pole',`${p.motion.lat.toFixed(1)}°, ${p.motion.lon.toFixed(1)}°`]);
+    rows.push(['Rotation rate',`${p.motion.w.toFixed(3)}°/Myr`]);
+  }
+  rows.push(['Clicked','~'+Math.abs(lat).toFixed(0)+'°'+(lat>=0?'N':'S')+' '+Math.abs(lon).toFixed(0)+'°'+(lon>=0?'E':'W')]);
+  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
+  $('#infoDesc').textContent=plateDesc(p.name);
+  $('#info').classList.add('show');
+}
+function showFeature(l){
+  $('#infoName').textContent=l.n;
+  $('#infoTag').textContent=({continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',orogen:'Mountain belt'})[l.t]+' · '+fmtAge(state.age);
+  $('#infoRows').innerHTML=`<div class="row">Exists<b>${fmtAge(Math.max(l.a0,state.age===0?0:l.a0))} – ${fmtAge(l.a1)}</b></div>`
+    +`<div class="row">Paleo-position<b>${Math.abs(l.lat)}°${l.lat>=0?'N':'S'}</b></div>`;
+  $('#infoDesc').textContent=featureDesc(l.n);
+  $('#info').classList.add('show');
+}
+function closeInfo(){$('#info').classList.remove('show');state.selPlate=null;}
+$('#infoClose').onclick=closeInfo;
+function plateDesc(n){const d={
+  'Pacific':'The largest plate, shrinking as subduction consumes its margins around the Ring of Fire.',
+  'North America':'Carries the continent plus the western Atlantic seafloor; diverging from Eurasia at the Mid-Atlantic Ridge.',
+  'Africa':'Splitting along the East African Rift, where the Somalia plate is peeling away.',
+  'Eurasia':'The largest continental plate; colliding with India and Arabia to raise the Himalaya and Zagros.',
+  'India':'Sprinted north from Gondwana and still drives into Asia at ~50 mm/yr.',
+  'Antarctica':'Nearly ringed by spreading ridges, leaving it almost stationary over the South Pole.',
+  'Australia':'The fastest-moving major continental plate, migrating north toward Asia.',
+  'Nazca':'Young oceanic plate subducting beneath South America to build the Andes.',
+  'South America':'Drifting west, overriding the Nazca plate along its Pacific margin.'};
+  return d[n]||'One of Earth’s present-day lithospheric plates. Toggle motion vectors to see its velocity field.';}
+function featureDesc(n){const d={
+  'Pangaea':'The last supercontinent, assembled ~320 Ma; its arid interior spawned vast red-bed deserts.',
+  'Pangaea Proxima':'A projected future supercontinent forming as the Atlantic closes and continents re-fuse around Africa.',
+  'Rodinia':'A Precambrian supercontinent (~1000 Ma) at the heart of the Neoproterozoic world.',
+  'Gondwana':'The southern supercontinent (South America, Africa, India, Australia, Antarctica) that drifted across the South Pole.',
+  'Laurasia':'The northern half of Pangaea (North America + Eurasia) after the Tethys and Atlantic began to open.',
+  'Panthalassa':'The world-ocean that surrounded Pangaea — ancestor of the Pacific.',
+  'Tethys Ocean':'The tropical seaway between Gondwana and Laurasia, cradle of vast carbonate platforms.',
+  'Iapetus Ocean':'The early-Paleozoic ocean that closed to build the Caledonian and Appalachian mountains.',
+  'Neo-Panthalassa':'The projected future world-ocean on the far side of Pangaea Proxima.'};
+  return d[n]||'An era-specific paleogeographic feature, reconstructed from PALEOMAP data.';}
+
+/* ================= labels ================= */
+const labelEls=new Map();
+function labelVisible(l){const a=state.age;return a>=Math.min(l.a0,l.a1)-6&&a<=Math.max(l.a0,l.a1)+6;}
+function ensureLabels(){
+  const box=$('#labels');
+  for(const l of DATA.labels){if(!labelEls.has(l)){const e=document.createElement('div');e.className='plabel '+l.t;e.textContent=l.n;box.appendChild(e);labelEls.set(l,e);}}
+}
+function updateLabels(){
+  const show=state.layers.labels;
+  for(const[l,e] of labelEls){
+    if(!show||!labelVisible(l)){e.classList.remove('show');continue;}
+    let sx,sy,vis=true;
+    if(state.view==='globe'){
+      const p=ll2v(l.lon,l.lat,1.02);const wp=p.clone().applyMatrix4(globe.matrixWorld);
+      const cp=wp.clone().project(cam);
+      if(cp.z>1){vis=false;}
+      // hide back of globe
+      const nrm=p.clone().applyQuaternion(globe.quaternion).normalize();
+      const toCam=cam.position.clone().sub(wp).normalize();
+      if(nrm.dot(toCam)<0.12)vis=false;
+      sx=(cp.x*.5+.5)*innerWidth;sy=(-cp.y*.5+.5)*innerHeight;
+    }else{
+      const{dx,dy,dw,dh}=mapView||{};if(dw){const c=ll2map(l.lon,l.lat,dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
+    }
+    if(vis){e.style.left=sx+'px';e.style.top=sy+'px';e.classList.add('show');}else e.classList.remove('show');
+  }
+}
+
+/* ================= time & environment ================= */
+function fmtAge(a){if(a===0)return'Present';return a>0?`${a} Ma`:`+${-a} Myr`;}
+function presentFade(){const a=state.age;// present-day layers fade out into deep time / future
+  if(a<=0)return a<-30?0:1+ a/30*0; // future: fade fast
+  return Math.max(0,1-a/45);}
+function curFrame(){return frameAt(state.age);}
+function nearestMeta(){const A=ages();let bi=0,bd=1e9;A.forEach((v,i)=>{const d=Math.abs(v-state.age);if(d<bd){bd=d;bi=i;}});return DATA.timeline[bi];}
+function updateReadout(){
+  const m=nearestMeta();
+  $('#age').textContent=fmtAge(Math.round(state.age));
+  let epoch=m.epoch,period=m.period;
+  if(state.age<-5){ // future: no geologic period
+    period='Future projection';
+    epoch = state.age<=-170?'Pangaea Proxima':state.age<=-60?'Atlantic closing':'Near future';
+  }
+  $('#eraName').textContent=epoch;$('#periodName').textContent=period;
+  const ice=m.iceT>-29.0;   // -30 is the ice-free hothouse threshold
+  const tw=m.temp>0.4?'Hothouse':m.temp>0.05?'Warm':m.temp>-0.25?'Cool':'Icehouse';
+  const veg=m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated';
+  $('#env').innerHTML=`<b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m &nbsp;·&nbsp; <b>Climate</b> ${tw}<br>`
+    +`<b>Ice</b> ${ice?'polar caps':'ice-free'} &nbsp;·&nbsp; <b>Biosphere</b> ${veg}`;
+}
+
+/* ================= render loop ================= */
+function bindTextures(){
+  const f=curFrame();
+  const ea=getTex('e',f.i), eb=getTex('e',f.j);
+  const ra=getTex('r',f.i), rb=getTex('r',f.j);
+  if(ea)mat.uniforms.elevA.value=ea;
+  if(eb||ea)mat.uniforms.elevB.value=eb||ea;
+  if(ra)mat.uniforms.rainA.value=ra;
+  if(rb||ra)mat.uniforms.rainB.value=rb||ra;
+  // Linear in t: the shader interpolates the height field, so this drives the
+  // coastline's position. Easing it would make continents accelerate and stall
+  // at every keyframe instead of drifting at a steady rate.
+  mat.uniforms.mixf.value=f.t;
+  const A=DATA.timeline[f.i], B=DATA.timeline[f.j], t=f.t;
+  const L=(k)=>A[k]+(B[k]-A[k])*t;
+  mat.uniforms.uTemp.value=L('temp');
+  mat.uniforms.uVeg.value=L('veg');
+  mat.uniforms.uIceT.value=L('iceT');
+  mat.uniforms.uSeaT.value=L('seaT');
+  mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
+  return f;
+}
+let last=performance.now();
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(state.playing){
+    state.age+=state.dir*state.speed*dt;
+    if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
+    if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
+    syncSlider();
+  }
+  if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
+  const f=bindTextures();
+  // overlays visibility & fade
+  const fade=presentFade();
+  overlay.boundaries.visible=state.layers.boundaries&&fade>0.02&&state.view==='globe';
+  overlay.vectors.visible=state.layers.vectors&&fade>0.02&&state.view==='globe';
+  overlay.hotspots.visible=state.layers.hotspots&&fade>0.02&&state.view==='globe';
+  setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,fade*.85);setOpacity(overlay.hotspots,fade);
+  const isGlobe=state.view==='globe';
+  globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
+  mapMesh.visible=!isGlobe;
+  if(isGlobe){
+    globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
+    // back the camera off on narrow/tall viewports so the globe always fits
+    const d=state.zoom*Math.max(1,1.15/cam.aspect);
+    cam.position.set(0,Math.sin(state.tilt)*d,Math.cos(state.tilt)*d);
+    cam.lookAt(0,0,0);
+    globe.rotation.x=0;atmo.rotation.copy(globe.rotation);
+    renderer.render(scene,cam);
+  }else{
+    layoutMap();
+    renderer.render(scene,orthoCam);
+    drawMapOverlays();
+  }
+  updateLabels();
+  requestAnimationFrame(loop);
+}
+function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==undefined){c.material.opacity=(c.userData.baseOp||0.88)*o;}});}
+
+/* ================= UI wiring ================= */
+function syncSlider(){$('#slider').value=Math.round(1000-state.age);}
+function sliderToAge(v){return 1000-(+v);}
+$('#slider').addEventListener('input',e=>{state.age=sliderToAge(e.target.value);updateReadout();});
+function syncPlay(){const p=state.playing;$('#playIcon').innerHTML=p?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';}
+$('#playBtn').onclick=()=>{state.playing=!state.playing;syncPlay();};
+$('#dir').onclick=()=>{state.dir*=-1;$('#dirIcon').style.transform=state.dir<0?'scaleX(-1)':'none';};
+$('#speed').addEventListener('input',e=>{state.speed=+e.target.value;$('#speedVal').textContent=state.speed+' Myr/s';});
+document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#viewSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  state.view=b.dataset.v;const map=state.view==='map';
+  // #gl draws terrain in BOTH views now; #map2d is a transparent overlay
+  $('#map2d').style.display=map?'block':'none';
+  $('#hint').textContent=map?'Click a plate or landmass for details':'Drag to rotate · scroll to zoom · click a plate for details';
+  resize();
+});
+document.querySelectorAll('#shadeSeg button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#shadeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.shade=b.dataset.s;});
+document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
+  const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);});
+$('#ambientBtn').onclick=()=>enterAmbient(true);
+$('#exitAmbient').onclick=()=>enterAmbient(false);
+$('#aboutBtn').onclick=()=>$('#about').classList.toggle('show');
+$('#aboutClose').onclick=()=>$('#about').classList.remove('show');
+function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
+  if(on){state.playing=true;syncPlay();state.speed=Math.max(state.speed,14);}
+}
+document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
+  if(e.key==='Escape'&&state.ambient)enterAmbient(false);});
+
+/* ---- markers ---- */
+const MARKERS=[[1000,'Rodinia'],[720,'Cryogenian'],[541,'Cambrian'],[445,'Ordovician'],[300,'Pangaea'],[252,'End-Permian'],[66,'K–Pg'],[0,'Now'],[-250,'+250 Myr']];
+function buildMarkers(){
+  const row=$('#markrow');
+  MARKERS.forEach(([age,name])=>{
+    const e=document.createElement('div');e.className='mark'+(age===0?' now':'');
+    e.style.left=((1000-age)/1250*100)+'%';e.textContent=name;
+    e.onclick=()=>{state.age=age;syncSlider();updateReadout();};
+    row.appendChild(e);
+  });
+  // gradient hint on track (deep time warm -> present blue -> future warm)
+  $('#trackgrad').style.background='linear-gradient(90deg,#5a3a2a,#7a5a3a 18%,#3a5a6a 55%,#2a4a6a 80%,#5a3a3a)';
+}
+
+function resize(){
+  renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+  const dpr=Math.min(devicePixelRatio,2);mcv.width=innerWidth*dpr;mcv.height=innerHeight*dpr;mcv.style.width=innerWidth+'px';mcv.style.height=innerHeight+'px';
+}
+addEventListener('resize',resize);
+
+function buildLegend(){
+  $('#legend').innerHTML=`<div class="li"><span class="ln" style="background:#e8534e"></span>Ridge (spreading)</div>
+  <div class="li"><span class="ln" style="background:#59b0d6"></span>Trench (subduction)</div>
+  <div class="li"><span class="ln" style="background:#e0b23a"></span>Transform fault</div>
+  <div class="li"><span class="dt" style="background:#ff7d3a"></span>Volcanic hotspot</div>`;
+}
+
+/* ================= boot ================= */
+(async function(){
+  initGL();
+  await loadAll();
+  ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
+  state.age=0;syncSlider();updateReadout();syncPlay();
+  setInterval(updateReadout,120);
+  $('#load').classList.add('done');
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
