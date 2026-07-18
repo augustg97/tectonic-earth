@@ -124,3 +124,81 @@ def climate_at(age):
 if __name__ == "__main__":
     for a in [0, 34, 90, 250, 300, 445, 540, -70, -250]:
         print(a, climate_at(a))
+
+
+# ---------------------------------------------------------------------------
+# Global system curves. These are digitised approximations of published
+# reconstructions, sampled coarsely and interpolated:
+#   GMST  - global mean surface temperature, deg C (Scotese et al. GAT curve)
+#   CO2   - atmospheric CO2, ppm (GEOCARB III / Royer compilations)
+#   O2    - atmospheric O2, % by volume (Berner GEOCARBSULF / COPSE)
+# Precambrian oxygen is the big one: before the Neoproterozoic Oxygenation
+# Event the atmosphere held a few percent at most, which is why the deep-time
+# end of the record reads so low.
+# ---------------------------------------------------------------------------
+SYSTEM = [
+    # age    GMST  CO2     O2
+    (0,      14.4,  420,   20.9),
+    (5,      15.5,  400,   20.9),
+    (20,     17.0,  450,   20.8),
+    (34,     19.0,  700,   20.5),
+    (40,     23.0, 1000,   20.0),
+    (50,     26.5, 1400,   19.5),
+    (56,     27.5, 1600,   19.2),
+    (66,     25.0, 1000,   19.0),
+    (90,     28.0, 1200,   18.5),
+    (120,    25.0, 1100,   17.5),
+    (145,    22.0,  900,   16.5),
+    (160,    21.5, 1000,   16.0),
+    (200,    23.0, 1800,   14.0),
+    (230,    24.0, 1900,   14.5),
+    (250,    27.0, 2000,   16.0),
+    (260,    22.0, 1000,   23.0),
+    (280,    16.0,  400,   30.0),
+    (300,    13.5,  300,   32.0),
+    (315,    13.0,  350,   35.0),
+    (330,    16.0,  700,   30.0),
+    (360,    19.0, 1800,   22.0),
+    (380,    21.0, 2600,   18.0),
+    (400,    21.5, 3300,   16.0),
+    (420,    22.0, 4000,   15.0),
+    (440,    17.0, 4400,   14.0),
+    (445,    14.5, 4000,   13.5),
+    (460,    22.0, 5000,   13.0),
+    (490,    23.0, 5500,   12.0),
+    (520,    23.5, 6000,   10.0),
+    (540,    22.0, 6000,    8.0),
+    (600,    16.0, 4000,    3.0),
+    (630,    12.0, 3000,    2.0),
+    (650,    -2.0, 1500,    1.5),
+    (700,    -8.0, 1200,    1.0),
+    (730,    12.0, 3000,    1.0),
+    (750,    20.0, 4000,    0.8),
+    (850,    21.0, 4500,    0.5),
+    (1000,   20.0, 5000,    0.3),
+    # future: a warm world that slowly relaxes as the supercontinent assembles
+    (-30,    17.5,  600,   20.9),
+    (-70,    21.0,  900,   20.8),
+    (-120,   24.0, 1200,   20.6),
+    (-170,   25.5, 1500,   20.3),
+    (-250,   27.0, 1800,   20.0),
+]
+
+
+def system_at(age):
+    """Global mean temperature (C), CO2 (ppm) and O2 (%) for an age."""
+    pts = [p for p in SYSTEM if (p[0] <= 0) == (age <= 0)] or SYSTEM
+    pts = sorted(pts, key=lambda p: p[0])
+    ages = [p[0] for p in pts]
+    if age <= ages[0]:
+        lo = hi = pts[0]; t = 0.0
+    elif age >= ages[-1]:
+        lo = hi = pts[-1]; t = 0.0
+    else:
+        i = max(i for i, a in enumerate(ages) if a <= age)
+        lo, hi = pts[i], pts[min(i + 1, len(pts) - 1)]
+        span = hi[0] - lo[0]
+        t = 0.0 if span == 0 else (age - lo[0]) / span
+    return {"gmst": round(lo[1] + (hi[1] - lo[1]) * t, 1),
+            "co2":  int(round(lo[2] + (hi[2] - lo[2]) * t)),
+            "o2":   round(lo[3] + (hi[3] - lo[3]) * t, 1)}

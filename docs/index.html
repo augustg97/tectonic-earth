@@ -69,6 +69,10 @@ canvas{display:block}
 .mark:hover{color:var(--ink)}
 .mark::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:5px;background:var(--line)}
 .mark.now{color:var(--accent2)}
+#scalerow{position:relative;height:13px;margin:0 4px}
+.tick{position:absolute;transform:translateX(-50%);font-size:9px;color:#5c6675;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tick::before{content:"";position:absolute;left:50%;top:-4px;width:1px;height:3px;background:rgba(255,255,255,.16)}
+.tick.zero{color:var(--accent2)}
 #track{position:relative;height:26px;margin:0 4px}
 #slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
 #slider::-webkit-slider-runnable-track{height:26px}
@@ -123,9 +127,12 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 #load .lt{margin-top:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 #load .lp{margin-top:6px;font-size:10px;color:var(--dim2);font-variant-numeric:tabular-nums}
 
-#hint{position:fixed;left:50%;bottom:118px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
+#hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
 #ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s}
-body.ambient #topbar,body.ambient #controls,body.ambient #bottom,body.ambient #legend,body.ambient #hint{opacity:0;pointer-events:none}
+body.ambient #controls,body.ambient #bottom,body.ambient #legend,body.ambient #hint{opacity:0;pointer-events:none}
+/* the readout is the point of ambient mode, so it stays; only the chrome goes */
+body.ambient #title{opacity:0}
+body.ambient #readout{opacity:1}
 body.ambient #ambientExit{opacity:1;pointer-events:auto}
 @media (max-width:720px){
   #controls{top:auto;bottom:150px;width:160px}
@@ -196,6 +203,8 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <p>An interactive reconstruction of Earth's surface across 1.25 billion years — from the supercontinent <b>Rodinia</b> through <b>Pangaea</b> to the projected future supercontinent <b>Pangaea&nbsp;Proxima</b>. Land, mountains, shelves and inland seas come from published paleo-elevation data at 5-million-year steps.</p>
   <h3>How it animates</h3>
   <p>The page doesn't ship pictures of each era — it ships <b>elevation and rainfall fields</b>, and builds the world in a shader as you scrub. Because it interpolates the height field, a coastline genuinely <b>migrates</b> between keyframes instead of one image dissolving into another, so motion stays smooth at any playback speed. Relief is shaded per pixel, so terrain keeps its bite at any zoom. The future is the present-day map carried by rigid plate rotations, which is why it holds the same detail as today and leaves no seam at the present.</p>
+  <h3>Layers through time</h3>
+  <p>The present-day layers are surveyed data only for today. Going back, plate <b>motion is measured from the reconstruction itself</b> — consecutive keyframes are the same crust a few million years apart, so matching one against the next recovers how fast and which way each patch of surface travelled. Boundaries follow from that same field: crust pulling apart is a ridge, crust converging a trench. The two layers therefore always agree. Where there is no structure to match — bare abyssal plain — no motion is claimed rather than invented. <b>Hotspots</b> carry age windows, so large igneous provinces appear only while erupting (the Siberian Traps at 252 Ma, Deccan at 66) and long-lived plumes persist along their tracks.</p>
   <h3>How the climate is derived</h3>
   <p>Biomes aren't painted on by latitude. Each frame runs a small climate model: prevailing winds (tropical easterlies, mid-latitude westerlies) carry moisture inland from the sea, drying as they go, so <b>continental interiors go arid on their own</b> — which is why Pangaea grows a desert heart while its coasts and Tethys shores stay monsoon-green. Air forced over mountains rains out and leaves a <b>rain shadow</b> behind them (the Atacama and Patagonia fall out of the model, not out of a lookup table). Vegetation is then set by rainfall against evaporative demand, so cold, dry Siberia is taiga while a subtropical plain on the same rainfall is desert.</p>
   <h3>Data sources</h3>
@@ -211,6 +220,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 
 <div id="bottom">
   <div id="markrow"></div>
+    <div id="scalerow"></div>
   <div id="track">
     <div id="trackbg"><div id="trackgrad"></div></div>
     <input type="range" id="slider" min="0" max="1250" value="1000" step="1">
@@ -245,13 +255,14 @@ const state={
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[];   // decoded elevation / rainfall field images per keyframe
+let ELI=[], RNI=[], MOI=[];   // decoded elevation / rainfall / motion field images
+const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:RNI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -280,8 +291,8 @@ async function loadAll(){
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
   const tl=DATA.timeline;
-  const src=n=>window.INLINE_FIELDS?window.INLINE_FIELDS[n]:'fields/'+n;
-  let done=0; const total=tl.length*2;
+  const src=n=>'fields/'+n;
+  let done=0; const total=tl.length*3;
   const one=(name,arr,i)=>new Promise(res=>{
     const img=new Image();
     const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
@@ -289,7 +300,7 @@ async function loadAll(){
     img.onerror=fin;
     img.src=src(name);
   });
-  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i)]));
+  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i)]));
 }
 
 /* map timeline (sorted asc by age) to helpers */
@@ -312,6 +323,7 @@ function frameAt(age){
 let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo;
 const overlay={boundaries:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
+let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null;
 
 function ll2v(lon,lat,r){
   const phi=(90-lat)*DEG, theta=(lon+180)*DEG;
@@ -332,12 +344,33 @@ const VERT=`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*
 --------------------------------------------------------------------------- */
 const FRAG=`
 precision highp float;
-uniform sampler2D elevA, elevB, rainA, rainB;
+uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
+uniform float uMapProj, uBounds;
 uniform vec2 uTexel;
 varying vec2 vUv;
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
+const float PI=3.14159265359;
+
+/* Mollweide inverse. The flat map used a plain equirectangular grid, which
+   stretches the poles so violently that Antarctica reads as a continent-wide
+   smear. Mollweide is equal-area, so polar regions keep something close to
+   their true proportion relative to the globe view, and its inverse is closed
+   form — no iteration needed in the fragment shader. */
+bool mollweideInv(vec2 p, out vec2 lonlat){
+  float X=(p.x*2.0-1.0)*2.0;      // -2..2
+  float Y=(p.y*2.0-1.0);          // -1..1, +1 = north
+  if(X*X*0.25 + Y*Y > 1.0) return false;
+  float th=asin(clamp(Y,-1.0,1.0));
+  float lat=asin(clamp((2.0*th+sin(2.0*th))/PI,-1.0,1.0));
+  float c=cos(th);
+  if(abs(c)<1e-5) return false;
+  float lon=PI*X/(2.0*c);
+  if(abs(lon)>PI) return false;
+  lonlat=vec2(lon, lat);
+  return true;
+}
 
 float decElev(float e){ float d=e*2.0-1.0; return sign(d)*d*d*Z_RANGE; }
 
@@ -364,8 +397,23 @@ float elevAt(vec2 uv){
   float det=(n*250.0+n2*130.0)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
   return z + (z>0.0 ? det : det*0.10);
 }
+/* The moisture solve advects along rows of constant latitude, which leaves
+   faint row-to-row streaks in the rainfall field — and those streaks were
+   showing up as straight horizontal bands of vegetation. Blur across latitude
+   when sampling (the atmosphere mixes meridionally anyway) and warp the lookup
+   slightly so biome edges wander. */
+float rainTap(sampler2D t, vec2 uv){
+  float dv=1.0/384.0;
+  return texture2D(t,uv).r*0.36
+       + (texture2D(t,uv+vec2(0.0,dv)).r + texture2D(t,uv-vec2(0.0,dv)).r)*0.21
+       + (texture2D(t,uv+vec2(0.0,2.0*dv)).r + texture2D(t,uv-vec2(0.0,2.0*dv)).r)*0.11;
+}
 float rainAt(vec2 uv){
-  return mix(texture2D(rainA,uv).r, texture2D(rainB,uv).r, mixf)*RF_MAX;
+  vec3 wd=dirFromUv(uv);
+  vec2 warp=vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
+             + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016;
+  vec2 q=uv+warp;
+  return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
 }
 
 vec3 oceanColour(float z){
@@ -382,6 +430,11 @@ vec3 oceanColour(float z){
 
 void main(){
   vec2 uv=vUv;
+  if(uMapProj>0.5){
+    vec2 ll;
+    if(!mollweideInv(vUv, ll)){ discard; }   // outside the map ellipse
+    uv=vec2(ll.x/(2.0*PI)+0.5, 0.5-ll.y/PI);
+  }
   float lat=90.0-uv.y*180.0;
   float s2=sin(radians(lat)); s2*=s2;
 
@@ -390,6 +443,7 @@ void main(){
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
   float Rf=rainAt(uv);
 
+  vec3 sdir=dirFromUv(uv);
   vec3 col;
   if(z<0.0){
     col=oceanColour(z);
@@ -397,6 +451,16 @@ void main(){
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
     float h=clamp(Rf/(0.46*pet),0.0,1.0);
+    /* Warmth is a smooth function of latitude, so biome edges derived from it
+       alone run dead straight across the map. Real vegetation boundaries
+       wander: they follow terrain, drainage and local exposure. Perturb both
+       axes of the biome lookup with noise at two scales, and let low ground
+       hold water, so forest and grassland interlock instead of striping. */
+    float nA=fbm3(sdir*2.0+11.3)-0.5;                  // large, wandering
+    float nB=fbm3(sdir*6.4+41.9)-0.5;                  // patchy detail
+    float valley=clamp((320.0-zp)/700.0,0.0,1.0);      // lowlands stay wetter
+    w=clamp(w+nA*0.13+nB*0.06,0.0,1.0);
+    h=clamp(h+nA*0.30+nB*0.13+valley*0.12,0.0,1.0);
     vec3 dry=mix(vec3(0.592,0.612,0.506), vec3(0.796,0.690,0.514), w);
     vec3 mid=mix(vec3(0.565,0.608,0.322), vec3(0.753,0.659,0.396), w);
     vec3 wet = (w<0.5) ? mix(vec3(0.255,0.333,0.226), vec3(0.298,0.453,0.251), clamp(w*2.0,0.0,1.0))
@@ -417,9 +481,8 @@ void main(){
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
-  vec3 d=dirFromUv(uv);
-  float lobe=(fbm3(d*9.0)-0.5)*3.4;
-  float packn=fbm3(d*16.0+31.7);
+  float lobe=(fbm3(sdir*9.0)-0.5)*3.4;
+  float packn=fbm3(sdir*16.0+31.7);
   if(z>=0.0){
     col=mix(col, vec3(0.906,0.941,0.965), clamp((uIceT-(T+lobe))/4.5,0.0,1.0));
   }else{
@@ -446,6 +509,23 @@ void main(){
     s*=(0.82+0.36*lum);
     col=mix(col,s,uSchem);
   }
+
+  /* Plate boundaries for any era, read off the derived motion field: where
+     crust pulls apart it is a spreading ridge, where it converges it is a
+     trench or collision. This is the same measurement that draws the motion
+     arrows, so the two layers always agree. */
+  if(uBounds>0.001){
+    vec2 mt=vec2(1.0/128.0,1.0/64.0);
+    vec3 mE=texture2D(motA,uv+vec2(mt.x,0.0)).rgb;
+    vec3 mW=texture2D(motA,uv-vec2(mt.x,0.0)).rgb;
+    vec3 mN=texture2D(motA,uv-vec2(0.0,mt.y)).rgb;
+    vec3 mS=texture2D(motA,uv+vec2(0.0,mt.y)).rgb;
+    float conf=texture2D(motA,uv).b;
+    float div=((mE.r-mW.r)+(mN.g-mS.g));       // >0 spreading, <0 converging
+    float mag=clamp(abs(div)*4.0-0.42,0.0,1.0)*clamp(conf*1.6,0.0,1.0)*uBounds;
+    vec3 bc=(div>0.0)?vec3(0.91,0.33,0.31):vec3(0.35,0.69,0.84);
+    col=mix(col,bc,mag*0.75);
+  }
   gl_FragColor=vec4(col,1.0);
 }`;
 
@@ -458,8 +538,10 @@ function initGL(){
   orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
   mat=new THREE.ShaderMaterial({uniforms:{
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
+    motA:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
+    uMapProj:{value:0},uBounds:{value:0},
     uTexel:{value:new THREE.Vector2(1/1536,1/768)}
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -502,14 +584,58 @@ function buildBoundaries(){
   overlay.boundaries.add(lineSeg(DATA.boundaries.trench,0x59b0d6,1,R));
   overlay.boundaries.add(lineSeg(DATA.boundaries.transform,0xe0b23a,1,R));
 }
+/* Decode a motion field once so the arrow layer can read it. R/G hold the
+   east/north components, B the confidence: abyssal plain has no structure to
+   match against, so those cells are deliberately reported as unreliable and
+   simply go undrawn rather than showing invented motion. */
+const MOT_W=128, MOT_H=64, MOT_RANGE=160;
+function motionField(i){
+  if(MOTDATA.has(i))return MOTDATA.get(i);
+  const img=MOI[i]; if(!img)return null;
+  const c=document.createElement('canvas');c.width=MOT_W;c.height=MOT_H;
+  const cx=c.getContext('2d',{willReadFrequently:true});
+  cx.drawImage(img,0,0,MOT_W,MOT_H);
+  const d=cx.getImageData(0,0,MOT_W,MOT_H).data;
+  const out={vx:new Float32Array(MOT_W*MOT_H),vy:new Float32Array(MOT_W*MOT_H),
+             cf:new Float32Array(MOT_W*MOT_H)};
+  for(let k=0;k<MOT_W*MOT_H;k++){
+    out.vx[k]=(d[k*4]/255*2-1)*MOT_RANGE;
+    out.vy[k]=(d[k*4+1]/255*2-1)*MOT_RANGE;
+    out.cf[k]=d[k*4+2]/255;
+  }
+  MOTDATA.set(i,out);
+  if(MOTDATA.size>40){for(const k of MOTDATA.keys()){if(k!==i){MOTDATA.delete(k);break;}}}
+  return out;
+}
+function motionAt(fld,lon,lat){
+  const c=Math.min(MOT_W-1,Math.max(0,Math.floor((lon+180)/360*MOT_W)));
+  const r=Math.min(MOT_H-1,Math.max(0,Math.floor((90-lat)/180*MOT_H)));
+  const k=r*MOT_W+c;
+  return {vx:fld.vx[k],vy:fld.vy[k],cf:fld.cf[k]};
+}
+function hotspotsNow(){
+  const a=state.age;
+  return DATA.hotspots.filter(h=>a>=Math.min(h.a0,h.a1)&&a<=Math.max(h.a0,h.a1));
+}
 function buildHotspots(){
   overlay.hotspots.clear();
   const geo=new THREE.SphereGeometry(.008,8,8);
   const mm=new THREE.MeshBasicMaterial({color:0xff7d3a});
-  for(const h of DATA.hotspots){const s=new THREE.Mesh(geo,mm);const p=ll2v(h.lon,h.lat,1.012);s.position.copy(p);overlay.hotspots.add(s);
-    // glow ring
-    const ring=new THREE.Mesh(new THREE.RingGeometry(.012,.02,16),new THREE.MeshBasicMaterial({color:0xff7d3a,transparent:true,opacity:.35,side:THREE.DoubleSide}));
-    ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));overlay.hotspots.add(ring);}
+  const lipm=new THREE.MeshBasicMaterial({color:0xffd257});
+  for(const h of hotspotsNow()){
+    const isLip=h.k==='lip';
+    // a large igneous province erupts in a geological instant; flag the pulse
+    const erupting=isLip&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    const sp=new THREE.Mesh(geo,erupting?lipm:mm);
+    const p=ll2v(h.lon,h.lat,1.012);sp.position.copy(p);
+    if(erupting)sp.scale.setScalar(1.9); else if(isLip)sp.scale.setScalar(1.3);
+    overlay.hotspots.add(sp);
+    const rr=erupting?.034:isLip?.024:.02;
+    const ring=new THREE.Mesh(new THREE.RingGeometry(rr*0.6,rr,20),
+      new THREE.MeshBasicMaterial({color:erupting?0xffd257:0xff7d3a,transparent:true,
+        opacity:erupting?.55:.32,side:THREE.DoubleSide}));
+    ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));overlay.hotspots.add(ring);
+  }
 }
 // motion vectors: sample grid, assign plate by point-in-poly, compute velocity
 function pointInRings(lon,lat,rings){
@@ -534,17 +660,22 @@ function velocityAt(lon,lat,motion){
 }
 function buildVectors(){
   overlay.vectors.clear();
+  const fld=motionField(curFrame().i); if(!fld)return;
   const arr=[];const heads=[];
-  for(let lat=-75;lat<=75;lat+=15){
-    for(let lon=-180;lon<180;lon+=15){
-      let pl=null;
-      for(const p of DATA.plates){if(p.motion&&pointInRings(lon,lat,p.rings)){pl=p;break;}}
-      if(!pl)continue;
-      const {v,speed}=velocityAt(lon,lat,pl.motion);
-      if(speed<3)continue;
+  for(let lat=-78;lat<=78;lat+=9){
+    for(let lon=-180;lon<180;lon+=9){
+      const m=motionAt(fld,lon,lat);
+      if(m.cf<0.30)continue;                       // no structure -> no claim
+      const speed=Math.hypot(m.vx,m.vy);
+      if(speed<6)continue;
       const base=ll2v(lon,lat,1.008);
-      const dir=v.clone().normalize();
-      const len=Math.min(.10,.02+speed*.0011);
+      // east/north components -> a tangent vector on the sphere
+      const north=new THREE.Vector3(0,1,0);
+      const n=base.clone().normalize();
+      const e=new THREE.Vector3().crossVectors(north,n).normalize();
+      const nn=new THREE.Vector3().crossVectors(n,e).normalize();
+      const dir=e.multiplyScalar(m.vx).add(nn.multiplyScalar(m.vy)).normalize();
+      const len=Math.min(.085,.016+speed*.0007);
       const tip=base.clone().add(dir.multiplyScalar(len));
       arr.push(base.x,base.y,base.z,tip.x,tip.y,tip.z);
       // arrowhead
@@ -599,10 +730,34 @@ function drawMapOverlays(){
   const X=dx*DPR,Y=dy*DPR,Wd=dw*DPR,Hd=dh*DPR;
   const fade=presentFade();
   if(state.layers.boundaries&&fade>0)drawBoundariesMap(X,Y,Wd,Hd,fade);
-  if(state.layers.hotspots&&fade>0)drawHotspotsMap(X,Y,Wd,Hd,fade);
-  if(state.layers.vectors&&fade>0)drawVectorsMap(X,Y,Wd,Hd,fade);
+  if(state.layers.hotspots)drawHotspotsMap(X,Y,Wd,Hd,1);
+  if(state.layers.vectors)drawVectorsMap(X,Y,Wd,Hd,1);
 }
-function ll2map(lon,lat,dx,dy,dw,dh){return[dx+(lon+180)/360*dw, dy+(90-lat)/180*dh];}
+/* Mollweide, matching the shader. Equal-area, so the flat map keeps polar
+   regions in something close to their true proportion instead of smearing
+   them across the full width as equirectangular does. */
+function mollFwd(lon,lat){
+  const ph=lat*DEG, la=lon*DEG;
+  let th=ph;                                  // solve 2th+sin2th = pi*sin(phi)
+  if(Math.abs(Math.abs(ph)-Math.PI/2)<1e-6){ th=ph; }
+  else{ for(let k=0;k<6;k++){
+      const dv=(2*th+Math.sin(2*th)-Math.PI*Math.sin(ph))/(2+2*Math.cos(2*th));
+      th-=dv; if(Math.abs(dv)<1e-8)break; } }
+  return [ (2/Math.PI)*la*Math.cos(th), Math.sin(th) ];   // x -2..2, y -1..1
+}
+function mollInv(xn,yn){
+  if(xn*xn*0.25+yn*yn>1) return null;
+  const th=Math.asin(Math.max(-1,Math.min(1,yn)));
+  const lat=Math.asin(Math.max(-1,Math.min(1,(2*th+Math.sin(2*th))/Math.PI)))/DEG;
+  const c=Math.cos(th); if(Math.abs(c)<1e-6) return null;
+  const lon=(Math.PI*xn/(2*c))/DEG;
+  if(Math.abs(lon)>180) return null;
+  return [lon,lat];
+}
+function ll2map(lon,lat,dx,dy,dw,dh){
+  const [xn,yn]=mollFwd(lon,lat);
+  return [dx+(xn/4+0.5)*dw, dy+(0.5-yn/2)*dh];
+}
 function drawBoundariesMap(dx,dy,dw,dh,fade){
   const draw=(list,color)=>{mctx.strokeStyle=color;mctx.globalAlpha=fade*.95;mctx.lineWidth=1.4;mctx.beginPath();
     for(const s of list){const[a,b]=ll2map(s[0],s[1],dx,dy,dw,dh);const[c,d]=ll2map(s[2],s[3],dx,dy,dw,dh);if(Math.abs(s[0]-s[2])>180)continue;mctx.moveTo(a,b);mctx.lineTo(c,d);}mctx.stroke();};
@@ -611,33 +766,42 @@ function drawBoundariesMap(dx,dy,dw,dh,fade){
 }
 function drawHotspotsMap(dx,dy,dw,dh,fade){
   mctx.globalAlpha=fade;
-  for(const h of DATA.hotspots){const[x,y]=ll2map(h.lon,h.lat,dx,dy,dw,dh);
-    mctx.fillStyle='rgba(255,125,58,.35)';mctx.beginPath();mctx.arc(x,y,5,0,6.28);mctx.fill();
-    mctx.fillStyle='#ff7d3a';mctx.beginPath();mctx.arc(x,y,2.2,0,6.28);mctx.fill();}
+  for(const h of hotspotsNow()){
+    const[x,y]=ll2map(h.lon,h.lat,dx,dy,dw,dh);
+    const erupting=h.k==='lip'&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    const R=erupting?9:h.k==='lip'?6.5:5, col=erupting?'255,210,87':'255,125,58';
+    mctx.fillStyle=`rgba(${col},.32)`;mctx.beginPath();mctx.arc(x,y,R*DPR,0,6.28);mctx.fill();
+    mctx.fillStyle=`rgb(${col})`;mctx.beginPath();mctx.arc(x,y,(erupting?3.4:2.2)*DPR,0,6.28);mctx.fill();
+  }
   mctx.globalAlpha=1;
 }
 function drawVectorsMap(dx,dy,dw,dh,fade){
-  mctx.globalAlpha=fade*.85;mctx.strokeStyle='#fff';mctx.fillStyle='#fff';mctx.lineWidth=1.2;
-  for(let lat=-75;lat<=75;lat+=15)for(let lon=-180;lon<180;lon+=15){
-    let pl=null;for(const p of DATA.plates){if(p.motion&&pointInRings(lon,lat,p.rings)){pl=p;break;}}
-    if(!pl)continue;const{v,speed}=velocityAt(lon,lat,pl.motion);if(speed<3)continue;
-    // project a nearby point to get screen direction
-    const p2=ll2v(lon,lat,1).add(v.clone().normalize().multiplyScalar(.06));
-    const lat2=Math.asin(p2.y/p2.length())/DEG;let lon2=Math.atan2(p2.z,-p2.x)/DEG-180;lon2=((lon2+540)%360)-180;
-    if(Math.abs(lon2-lon)>90)continue;
-    const[x1,y1]=ll2map(lon,lat,dx,dy,dw,dh);const[x2,y2]=ll2map(lon2,lat2,dx,dy,dw,dh);
-    const ang=Math.atan2(y2-y1,x2-x1);const L=Math.min(20,6+speed*.18);
-    const ex=x1+Math.cos(ang)*L,ey=y1+Math.sin(ang)*L;
-    mctx.beginPath();mctx.moveTo(x1,y1);mctx.lineTo(ex,ey);
-    mctx.lineTo(ex-Math.cos(ang-.4)*4,ey-Math.sin(ang-.4)*4);mctx.moveTo(ex,ey);mctx.lineTo(ex-Math.cos(ang+.4)*4,ey-Math.sin(ang+.4)*4);mctx.stroke();
+  const fld=motionField(curFrame().i); if(!fld)return;
+  mctx.globalAlpha=fade*.85;mctx.strokeStyle='#fff';mctx.lineWidth=1.2*DPR;
+  for(let lat=-78;lat<=78;lat+=9)for(let lon=-180;lon<180;lon+=9){
+    const m=motionAt(fld,lon,lat);
+    if(m.cf<0.30)continue;
+    const speed=Math.hypot(m.vx,m.vy); if(speed<6)continue;
+    // step a short way along the motion and project both ends
+    const dlat=lat+m.vy*0.045, dlon=lon+m.vx*0.045/Math.max(0.25,Math.cos(lat*DEG));
+    if(Math.abs(dlat)>88||Math.abs(dlon-lon)>60)continue;
+    const a=ll2map(lon,lat,dx,dy,dw,dh), b=ll2map(dlon,dlat,dx,dy,dw,dh);
+    const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+    const L=Math.min(17,5+speed*.16)*DPR;
+    const ex=a[0]+Math.cos(ang)*L, ey=a[1]+Math.sin(ang)*L;
+    mctx.beginPath();mctx.moveTo(a[0],a[1]);mctx.lineTo(ex,ey);
+    mctx.lineTo(ex-Math.cos(ang-.4)*4*DPR,ey-Math.sin(ang-.4)*4*DPR);
+    mctx.moveTo(ex,ey);mctx.lineTo(ex-Math.cos(ang+.4)*4*DPR,ey-Math.sin(ang+.4)*4*DPR);
+    mctx.stroke();
   }
   mctx.globalAlpha=1;
 }
 function mapPick(e){
   const rect=mcv.getBoundingClientRect();const x=(e.clientX-rect.left),y=(e.clientY-rect.top);
-  const{dx,dy,dw,dh}=mapView;const lon=(x-dx)/dw*360-180,lat=90-(y-dy)/dh*180;
-  if(lon<-180||lon>180||lat<-90||lat>90){closeInfo();return;}
-  selectAt(lon,lat);
+  const{dx,dy,dw,dh}=mapView;
+  const ll=mollInv(((x-dx)/dw-0.5)*4, (0.5-(y-dy)/dh)*2);
+  if(!ll){closeInfo();return;}
+  selectAt(ll[0],ll[1]);
 }
 mcv.addEventListener('click',mapPick);
 
@@ -737,7 +901,7 @@ function presentFade(){const a=state.age;// present-day layers fade out into dee
 function curFrame(){return frameAt(state.age);}
 function nearestMeta(){const A=ages();let bi=0,bd=1e9;A.forEach((v,i)=>{const d=Math.abs(v-state.age);if(d<bd){bd=d;bi=i;}});return DATA.timeline[bi];}
 function updateReadout(){
-  const m=nearestMeta();
+  const m=nearestMeta(); const cf=curFrame();
   $('#age').textContent=fmtAge(Math.round(state.age));
   let epoch=m.epoch,period=m.period;
   if(state.age<-5){ // future: no geologic period
@@ -748,8 +912,13 @@ function updateReadout(){
   const ice=m.iceT>-29.0;   // -30 is the ice-free hothouse threshold
   const tw=m.temp>0.4?'Hothouse':m.temp>0.05?'Warm':m.temp>-0.25?'Cool':'Icehouse';
   const veg=m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated';
-  $('#env').innerHTML=`<b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m &nbsp;·&nbsp; <b>Climate</b> ${tw}<br>`
-    +`<b>Ice</b> ${ice?'polar caps':'ice-free'} &nbsp;·&nbsp; <b>Biosphere</b> ${veg}`;
+  const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
+  const gmst=L('gmst'), co2=L('co2'), o2=L('o2');
+  $('#env').innerHTML=
+     `<b>Avg temp</b> ${gmst.toFixed(1)}&deg;C &nbsp;·&nbsp; <b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m<br>`
+    +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%<br>`
+    +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}<br>`
+    +`<b>Biosphere</b> ${veg}`;
 }
 
 /* ================= render loop ================= */
@@ -772,6 +941,11 @@ function bindTextures(){
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
+  const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
+  // Derived boundaries take over from the surveyed present-day set as that
+  // fades, so the layer stays populated all the way back.
+  mat.uniforms.uBounds.value=state.layers.boundaries?Math.max(0,1-presentFade()*1.4):0;
+  mat.uniforms.uMapProj.value=state.view==='map'?1:0;
   return f;
 }
 let last=performance.now();
@@ -787,10 +961,20 @@ function loop(now){
   const f=bindTextures();
   // overlays visibility & fade
   const fade=presentFade();
-  overlay.boundaries.visible=state.layers.boundaries&&fade>0.02&&state.view==='globe';
-  overlay.vectors.visible=state.layers.vectors&&fade>0.02&&state.view==='globe';
-  overlay.hotspots.visible=state.layers.hotspots&&fade>0.02&&state.view==='globe';
-  setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,fade*.85);setOpacity(overlay.hotspots,fade);
+  // Hotspots and motion vectors are era-specific, so rebuild them whenever the
+  // keyframe changes rather than only once at load.
+  if(f.i!==lastOverlayFrame||state.layers.vectors!==lastVecOn||state.layers.hotspots!==lastHotOn){
+    lastOverlayFrame=f.i; lastVecOn=state.layers.vectors; lastHotOn=state.layers.hotspots;
+    if(state.layers.hotspots)buildHotspots();
+    if(state.layers.vectors)buildVectors();
+  }
+  const g=state.view==='globe';
+  // Only the surveyed present-day boundary set fades out; its derived
+  // counterpart in the shader covers the rest of the timeline.
+  overlay.boundaries.visible=state.layers.boundaries&&fade>0.02&&g;
+  overlay.vectors.visible=state.layers.vectors&&g;
+  overlay.hotspots.visible=state.layers.hotspots&&g;
+  setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
   const isGlobe=state.view==='globe';
   globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
   mapMesh.visible=!isGlobe;
@@ -837,7 +1021,9 @@ $('#exitAmbient').onclick=()=>enterAmbient(false);
 $('#aboutBtn').onclick=()=>$('#about').classList.toggle('show');
 $('#aboutClose').onclick=()=>$('#about').classList.remove('show');
 function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
-  if(on){state.playing=true;syncPlay();state.speed=Math.max(state.speed,14);}
+  // Ambient is the same view with the chrome hidden: it keeps whatever speed
+  // and layer toggles are already set rather than imposing its own.
+  if(on){state.playing=true;syncPlay();}
 }
 document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
   if(e.key==='Escape'&&state.ambient)enterAmbient(false);});
@@ -845,6 +1031,20 @@ document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state
 /* ---- markers ---- */
 const MARKERS=[[1000,'Rodinia'],[720,'Cryogenian'],[541,'Cambrian'],[445,'Ordovician'],[300,'Pangaea'],[252,'End-Permian'],[66,'K–Pg'],[0,'Now'],[-250,'+250 Myr']];
 function buildMarkers(){
+  // numeric scale, so the era names sit against an absolute time axis
+  const srow=$('#scalerow');
+  const ticks=[1000,900,800,700,600,500,400,300,200,100,0,-100,-250];
+  ticks.forEach(age=>{
+    const e=document.createElement('div');
+    e.className='tick'+(age===0?' zero':'');
+    e.style.left=((1000-age)/1250*100)+'%';
+    e.textContent = age>0?age : age===0?'0' : '+'+(-age);
+    srow.appendChild(e);
+  });
+  const u=document.createElement('div');
+  u.className='tick'; u.style.left='0%'; u.style.transform='translateX(0)';
+  u.style.top='-13px'; u.style.color='#4d5663'; u.textContent='Ma';
+  srow.appendChild(u);
   const row=$('#markrow');
   MARKERS.forEach(([age,name])=>{
     const e=document.createElement('div');e.className='mark'+(age===0?' now':'');
@@ -864,9 +1064,11 @@ addEventListener('resize',resize);
 
 function buildLegend(){
   $('#legend').innerHTML=`<div class="li"><span class="ln" style="background:#e8534e"></span>Ridge (spreading)</div>
-  <div class="li"><span class="ln" style="background:#59b0d6"></span>Trench (subduction)</div>
-  <div class="li"><span class="ln" style="background:#e0b23a"></span>Transform fault</div>
-  <div class="li"><span class="dt" style="background:#ff7d3a"></span>Volcanic hotspot</div>`;
+  <div class="li"><span class="ln" style="background:#59b0d6"></span>Trench (converging)</div>
+  <div class="li"><span class="ln" style="background:#e0b23a"></span>Transform fault<span style="color:#5c6675"> · today</span></div>
+  <div class="li"><span class="dt" style="background:#ff7d3a"></span>Hotspot / plume</div>
+  <div class="li"><span class="dt" style="background:#ffd257"></span>Erupting province</div>
+  <div class="li" style="margin-top:5px;color:#5c6675;font-size:9.5px;max-width:150px;line-height:1.45">Boundaries and vectors in deep time are derived from the reconstruction's own motion.</div>`;
 }
 
 /* ================= boot ================= */

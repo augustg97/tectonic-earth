@@ -11,9 +11,13 @@ Three eras, three sources:
     At age 0 every rotation is the identity, so the future series begins as an
     exact copy of the present frame and inherits its full detail; there is no
     seam and no drop in fidelity.
-  * Precambrian 540-1000 Ma -- authored craton reconstruction, blended onto the
-    real 540 Ma DEM across the youngest 60 Myr so the handoff into the
+  * Precambrian 540-1000 Ma -- generated cratons (see precambrian.py), blended
+    onto the real 540 Ma DEM across the youngest 60 Myr so the handoff into the
     Phanerozoic is continuous instead of popping.
+
+A third texture per keyframe carries derived plate motion (see motion.py),
+which drives both the motion-vector arrows and the plate boundaries at every
+age rather than only near the present.
 """
 import os, re, json, glob, io
 import numpy as np
@@ -22,24 +26,20 @@ from PIL import Image
 
 import render as R
 from render import compute_fields, resample_dem, smooth_bathymetry, glaciation
-from climate import climate_at
+from climate import climate_at, system_at
 from fieldpack import enc_elev, RF_MAX
 from build_frames import period_for, sealevel_for, index_dems, read_dem
 import build_synthetic as BS
 import precambrian as PRE
+import motion as MO
 
 OUT = "../web/fields"
 os.makedirs(OUT, exist_ok=True)
 
 ELEV_H, ELEV_W = 768, 1536      # coastline resolution
-RAIN_H, RAIN_W = 192, 384       # rainfall is smooth; this is plenty
+RAIN_H, RAIN_W = 384, 768       # higher res so moisture drives fine biome detail
 CLIM_H, CLIM_W = 384, 768       # resolution the wind solve runs at
 ELEV_Q, RAIN_Q = 92, 90
-# The self-hosted site has no size ceiling, but the inlined artifact must fit
-# under 16 MB, so a second lower-quality copy of each elevation texture is
-# written for that build only. Elevation dominates the payload; rainfall is
-# already tiny.
-ELEV_Q_LITE = 84
 STEP = 5                         # Myr between keyframes, everywhere
 
 
@@ -65,13 +65,14 @@ def export(age, Z_hi, z_for_climate, tag):
     ef = f"{tag}_{abs(age):04d}_e.webp"
     rf = f"{tag}_{abs(age):04d}_r.webp"
     n = _save(e, os.path.join(OUT, ef), ELEV_Q) + _save(r, os.path.join(OUT, rf), RAIN_Q)
-    _save(e, os.path.join(OUT, ef.replace(".webp", "_lite.webp")), ELEV_Q_LITE)
     ice_T, sea_T = glaciation(cl)
     ep, per = period_for(age)
-    return {"age": age, "e": ef, "r": rf, "epoch": ep, "period": per,
-            "sealevel": sealevel_for(age),
+    sysd = system_at(age)
+    return {"age": age, "e": ef, "r": rf, "m": ef.replace("_e.webp", "_m.webp"),
+            "epoch": ep, "period": per, "sealevel": sealevel_for(age),
             "temp": round(cl["temp"], 3), "veg": round(cl["veg"], 3),
-            "iceT": round(ice_T, 2), "seaT": round(sea_T, 2)}, n
+            "iceT": round(ice_T, 2), "seaT": round(sea_T, 2),
+            "gmst": sysd["gmst"], "co2": sysd["co2"], "o2": sysd["o2"]}, n
 
 
 # ---------------------------------------------------------------- future ----
@@ -202,6 +203,7 @@ def main():
     idx = index_dems()
     avail = np.array(sorted(idx.keys()))
     manifest, total = [], 0
+    coarse = {}          # age -> motion-grid elevation, for the matching pass
 
     def dem_for(age):
         near = float(avail[np.argmin(np.abs(avail - age))])
@@ -210,7 +212,9 @@ def main():
     # ---- Phanerozoic ----
     for age in range(0, 541, STEP):
         z = dem_for(age)
-        m, n = export(age, resample_dem(z, ELEV_H, ELEV_W), z, "phan")
+        Zhi = resample_dem(z, ELEV_H, ELEV_W)
+        coarse[age] = MO.coarsen(Zhi)
+        m, n = export(age, Zhi, z, "phan")
         manifest.append(m); total += n
     print(f"Phanerozoic: {len(manifest)} keyframes")
 
@@ -223,6 +227,7 @@ def main():
         frac = abs(age) / 250.0
         gh = future_grid(frac, gid, Zsrc, ELEV_H, ELEV_W)
         gl = future_grid(frac, gid, Zsrc, CLIM_H, CLIM_W)
+        coarse[age] = MO.coarsen(gh)
         m, n = export(age, gh, gl[::-1], "fut")   # export wants lat-ascending
         manifest.append(m); total += n; nfut += 1
     print(f"Future: {nfut} keyframes (plate-warped present DEM)")
@@ -239,9 +244,23 @@ def main():
         wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
         hi = A_hi * (1 - wq) + hi * wq
         lo = A_lo * (1 - wq) + lo * wq
+        coarse[age] = MO.coarsen(hi)
         m, n = export(age, hi, lo[::-1], "pre")
         manifest.append(m); total += n; npre += 1
     print(f"Precambrian: {npre} keyframes (anchored to 540 Ma)")
+
+    # ---- motion: match each keyframe's neighbours across a wide baseline ----
+    ages = sorted(coarse)
+    for rec in manifest:
+        a = rec["age"]
+        older = min(ages, key=lambda x: abs(x - (a + MO.BASE_MYR)))
+        younger = min(ages, key=lambda x: abs(x - (a - MO.BASE_MYR)))
+        dt = max(5.0, older - younger)
+        vx, vy, cf = MO.displacement(coarse[older], coarse[younger], dt)
+        p = os.path.join(OUT, rec["m"])
+        MO.encode(vx, vy, cf).save(p, "WEBP", quality=94, method=6)
+        total += os.path.getsize(p)
+    print(f"motion: {len(manifest)} fields derived")
 
     manifest.sort(key=lambda m: m["age"])
     json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"),

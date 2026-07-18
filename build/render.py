@@ -216,7 +216,12 @@ def _rainfall(Z, land, lat, cl):
     # it is deliberately not applied twice here
     glob = np.clip(1.02 + 0.22 * cl["temp"], 0.78, 1.30)
     Rf = (B + monsoon) * R * glob
-    Rf = _smooth(Rf, 1)                    # kill row-scan streaking
+    # The advection runs along rows, so without meridional mixing the field
+    # keeps row-to-row streaks that surface later as straight horizontal bands
+    # of vegetation. Real atmosphere mixes across latitude; so does this.
+    Rf = _smooth(Rf, 2)
+    Rf = 0.5 * Rf + 0.25 * np.roll(Rf, 1, axis=0) + 0.25 * np.roll(Rf, -1, axis=0)
+    Rf = _smooth(Rf, 1)
     return np.clip(Rf, 0, 1.3)
 
 
