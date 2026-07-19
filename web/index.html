@@ -97,30 +97,95 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 
 /* ---- labels overlay ---- */
 #labels{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
-.plabel{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:11px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);opacity:0;transition:opacity .4s}
+#leaders{position:fixed;inset:0;pointer-events:none;z-index:9}
+#leaders line{stroke:rgba(255,255,255,.30);stroke-width:1}
+.plabel{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:11px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);opacity:0;transition:opacity .4s;pointer-events:none;cursor:pointer;padding:2px 3px;border-radius:4px}
+.plabel.show{pointer-events:auto}
+.plabel:hover{color:var(--accent);background:rgba(10,13,18,.55)}
 .plabel.ocean{font-style:italic;color:#bfe0ef;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0}
 .plabel.sea{color:#cfeaf3;font-size:10px;font-style:italic}
 .plabel.orogen{color:#f0d0a8;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em}
+.plabel.desert{color:#e8cf9a;font-size:9.5px;letter-spacing:.09em}
+.plabel.forest{color:#a8d5a2;font-size:9.5px;letter-spacing:.07em}
+.plabel.grassland{color:#d3d99b;font-size:9.5px;letter-spacing:.07em}
+.plabel.ice{color:#dbeaf5;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+.plabel.basin,.plabel.plateau{color:#d8c9b4;font-size:9.5px;letter-spacing:.07em}
+.plabel.rift{color:#efb08a;font-size:9.5px;letter-spacing:.1em}
+.plabel.island{color:#c8e2e8;font-size:9.5px;font-style:italic}
+.plabel.region{color:#c3c9d4;font-size:9.5px;letter-spacing:.1em}
 .plabel.plate{color:#cbd6e4;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
   text-shadow:0 1px 3px rgba(0,0,0,.95);opacity:0}
 .plabel.plate .sp{color:#8fa1b8;letter-spacing:.04em}
 .plabel.show{opacity:.92}
 
-/* ---- info panel ---- */
-#info{position:fixed;left:20px;bottom:120px;width:250px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:15px;z-index:25;opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s}
+/* ---- info panel (right column, under the controls) ---- */
+/* Its own column, inboard of the controls. The panel now carries phase text,
+   regional fossil notes and an illustrated life list, so stacking it under the
+   controls left it about 200px tall and permanently scrolled. */
+#info{position:fixed;right:218px;top:172px;bottom:158px;width:290px;overflow-y:auto;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:15px;z-index:25;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s,transform .25s}
 #info.show{opacity:1;transform:none;pointer-events:auto}
-#info h3{font-size:14px;letter-spacing:.03em;margin-bottom:2px;display:flex;justify-content:space-between;align-items:center}
-#info .close{cursor:pointer;color:var(--dim2);font-size:16px;line-height:1}
+#info.wide{width:300px}
+#info h3{font-size:14px;letter-spacing:.03em;margin-bottom:2px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#info .close{cursor:pointer;color:var(--dim2);font-size:16px;line-height:1;flex:none}
 #info .tag{font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-#info .row{display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;border-top:1px solid var(--line);color:var(--dim)}
-#info .row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+#info .row{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:4px 0;border-top:1px solid var(--line);color:var(--dim)}
+#info .row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
 #info p.desc{font-size:11px;color:var(--dim);line-height:1.6;margin-top:8px}
+#info p.desc+p.desc{margin-top:6px}
+.ihead{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:13px 0 7px;padding-top:9px;border-top:1px solid var(--line)}
+.evlist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.evlist li{font-size:10.5px;line-height:1.5;color:var(--dim);padding-left:11px;position:relative}
+.evlist li::before{content:"";position:absolute;left:0;top:6px;width:3px;height:3px;border-radius:50%;background:var(--accent)}
+/* life gallery */
+.life{display:flex;flex-direction:column;gap:8px}
+.lifeitem{display:flex;gap:9px;align-items:flex-start}
+.lifeicon{width:46px;height:31px;flex:none;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#cfd9e6}
+.lifeicon svg{width:44px;height:29px;display:block;fill:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.lifeicon.sea{background:rgba(94,169,196,.13);color:#a9d6e8}
+.lifeicon.land{background:rgba(150,190,120,.13);color:#c2debb}
+.lifeicon.air{background:rgba(226,178,90,.13);color:#eed6a6}
+.lifeicon.fresh{background:rgba(120,190,190,.13);color:#a9e0dc}
+.lifetxt{min-width:0}
+.lifetxt .ln2{font-size:11px;color:var(--ink);letter-spacing:.02em;line-height:1.3}
+.lifetxt .lr{font-size:8.5px;color:var(--dim2);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
+.lifetxt .lnote{font-size:10px;color:var(--dim);line-height:1.5;margin-top:3px}
 
-/* ---- legend ---- */
-#legend{position:fixed;left:20px;top:96px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;padding:10px 12px;z-index:18;font-size:10.5px;color:var(--dim);transition:opacity .5s}
+/* ---- left rail: legend + browsable sidebars ---- */
+#leftrail{position:fixed;left:20px;top:96px;bottom:118px;width:200px;z-index:18;display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;transition:opacity .5s;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+#leftrail::-webkit-scrollbar{width:6px}
+#leftrail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:3px}
+#leftrail::-webkit-scrollbar-track{background:transparent}
+#legend{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:10.5px;color:var(--dim);flex:none}
 #legend .li{display:flex;align-items:center;gap:7px;padding:2px 0}
 #legend .ln{width:16px;height:2px;border-radius:2px;flex:none}
 #legend .dt{width:7px;height:7px;border-radius:50%;flex:none}
+.panel{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;flex:none;overflow:hidden}
+.panel .ph{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 11px;cursor:pointer;user-select:none;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);transition:color .15s}
+.panel .ph:hover{color:var(--ink)}
+.panel .chev{font-size:9px;transition:transform .22s;flex:none}
+.panel.open .chev{transform:rotate(180deg)}
+.panel .pb{max-height:0;overflow:hidden;transition:max-height .28s ease}
+/* Capped so an open intervals list cannot push the supercontinents panel off
+   the bottom of the rail — each panel scrolls inside itself instead. */
+.panel.open .pb{max-height:min(46vh,420px);overflow-y:auto}
+.panel .pb::-webkit-scrollbar{width:5px}
+.panel .pb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:3px}
+.gh{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#5c6675;padding:8px 11px 3px;border-top:1px solid var(--line)}
+.gh:first-child{border-top:none;padding-top:4px}
+.erow{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:5px 11px;cursor:pointer;transition:background .13s}
+.erow:hover{background:rgba(255,255,255,.055)}
+.erow.cur{background:rgba(226,112,58,.16);box-shadow:inset 2px 0 0 var(--accent)}
+.erow .en{font-size:11px;color:var(--ink);letter-spacing:.02em}
+.erow.cur .en{color:var(--accent)}
+.erow .ea{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.erow.proj .en{color:#9fb6c9;font-style:italic}
+.srow{padding:7px 11px;cursor:pointer;transition:background .13s}
+.srow:hover{background:rgba(255,255,255,.055)}
+.srow.cur{background:rgba(226,112,58,.16);box-shadow:inset 2px 0 0 var(--accent)}
+.srow .sn{font-size:11.5px;color:var(--ink);letter-spacing:.03em}
+.srow.cur .sn{color:var(--accent)}
+.srow .sa{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;margin-top:2px}
+.srow .sd{font-size:8.5px;color:#5c6675;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
 
 /* ---- loading ---- */
 #load{position:fixed;inset:0;background:var(--bg);z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s}
@@ -132,15 +197,21 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 
 #hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
 #ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s}
-body.ambient #controls,body.ambient #bottom,body.ambient #legend,body.ambient #hint{opacity:0;pointer-events:none}
+body.ambient #controls,body.ambient #bottom,body.ambient #leftrail,body.ambient #hint,body.ambient #info{opacity:0;pointer-events:none}
 /* the readout is the point of ambient mode, so it stays; only the chrome goes */
 body.ambient #title{opacity:0}
 body.ambient #readout{opacity:1}
 body.ambient #ambientExit{opacity:1;pointer-events:auto}
+/* Narrow windows have no room for a third column, so the panel drops back to
+   the right edge and simply overlaps the controls, which are the less
+   important of the two once something is selected. */
+@media (max-width:1180px){
+  #info{right:20px;top:auto;bottom:158px;max-height:calc(100vh - 400px)}
+}
 @media (max-width:720px){
   #controls{top:auto;bottom:150px;width:160px}
-  #legend{display:none}
-  #info{bottom:150px;width:210px}
+  #leftrail{display:none}
+  #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:44vh}
   #age{font-size:24px}
 }
 </style>
@@ -148,6 +219,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 <body>
 <div id="stage"><canvas id="gl"></canvas></div>
 <canvas id="map2d"></canvas>
+<svg id="leaders"></svg>
 <div id="labels"></div>
 
 <div id="topbar">
@@ -163,7 +235,17 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   </div>
 </div>
 
-<div id="legend"></div>
+<div id="leftrail">
+  <div id="legend"></div>
+  <div class="panel open" id="eraPanel">
+    <div class="ph"><span>Geological intervals</span><span class="chev">▾</span></div>
+    <div class="pb" id="eraList"></div>
+  </div>
+  <div class="panel" id="scPanel">
+    <div class="ph"><span>Supercontinents</span><span class="chev">▾</span></div>
+    <div class="pb" id="scList"></div>
+  </div>
+</div>
 
 <div id="controls">
   <div class="grp">
@@ -198,6 +280,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <div class="tag" id="infoTag"></div>
   <div id="infoRows"></div>
   <p class="desc" id="infoDesc"></p>
+  <div id="infoExtra"></div>
 </div>
 
 <div id="about">
@@ -207,7 +290,9 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <h3>How it animates</h3>
   <p>The page doesn't ship pictures of each era — it ships <b>elevation and rainfall fields</b>, and builds the world in a shader as you scrub. Because it interpolates the height field, a coastline genuinely <b>migrates</b> between keyframes instead of one image dissolving into another, so motion stays smooth at any playback speed. Relief is shaded per pixel, so terrain keeps its bite at any zoom. The future is the present-day map carried by rigid plate rotations, which is why it holds the same detail as today and leaves no seam at the present.</p>
   <h3>Layers through time</h3>
-  <p>The present-day layers are surveyed data only for today. Going back, plate <b>motion is measured from the reconstruction itself</b> — consecutive keyframes are the same crust a few million years apart, so matching one against the next recovers how fast and which way each patch of surface travelled. Boundaries follow from that same field: crust pulling apart is a ridge, crust converging a trench. The two layers therefore always agree. Where there is no structure to match — bare abyssal plain — no motion is claimed rather than invented. <b>Hotspots</b> carry age windows, so large igneous provinces appear only while erupting (the Siberian Traps at 252 Ma, Deccan at 66) and long-lived plumes persist along their tracks.</p>
+  <p>The present-day layers are surveyed data only for today. Going back, plate <b>motion is measured from the reconstruction itself</b> — consecutive keyframes are the same crust a few million years apart, so matching one against the next recovers how fast and which way each patch of surface travelled. Boundaries follow from that same field: crust pulling apart is a ridge, crust converging a trench. The two layers therefore always agree. Where there is no structure to match — bare abyssal plain — no motion is claimed rather than invented. <b>Volcanism</b> carries age windows, but a flood basalt is an eruption for a moment and a <b>landform</b> for far longer, so each province stays on the map for as long as it stood as high ground — the Deccan still holds up the Western Ghats, while CAMP, the largest of them all, was buried in its own rift basins almost as it erupted and is a landform essentially nowhere. Plumes are anchored in the mantle while plates slide over them, so those markers stay put and the crust moves past; provinces, which ride away on the plate, are carried back to the crust they erupted through.</p>
+  <h3>Names and life</h3>
+  <p>A feature that lasts 300 million years is not doing the same thing throughout, so the long-lived ones carry a description <b>per phase of their life</b>: the Appalachians read as a rising arc collision at 450 Ma, a Himalayan-scale range at 290, and a worn root today. Names are laid out rather than merely projected — each takes the nearest free slot to its feature, with a leader line when it has to move, and is dropped rather than drawn on top of another. Clicking a landmass also shows what its rocks preserve at that moment, and the life of the age is drawn alongside.</p>
   <h3>How the climate is derived</h3>
   <p>Biomes aren't painted on by latitude. Each frame runs a small climate model: prevailing winds (tropical easterlies, mid-latitude westerlies) carry moisture inland from the sea, drying as they go, so <b>continental interiors go arid on their own</b> — which is why Pangaea grows a desert heart while its coasts and Tethys shores stay monsoon-green. Air forced over mountains rains out and leaves a <b>rain shadow</b> behind them (the Atacama and Patagonia fall out of the model, not out of a lookup table). Vegetation is then set by rainfall against evaporative demand, so cold, dry Siberia is taiga while a subtropical plain on the same rainfall is desert.</p>
   <h3>Data sources</h3>
@@ -216,6 +301,9 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <li><b>Present plate motions</b> — NNR-MORVEL56 (Argus, Gordon &amp; DeMets, 2011): real Euler poles drive the motion-vector field.</li>
     <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults.</li>
     <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Haq/Hallam sea-level curves, Late-Paleozoic and Neoproterozoic glaciations). Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
+    <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
+    <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
+    <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith. The illustrations are schematic drawings, not reconstructions.</li>
   </ul>
   <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
 </div>
@@ -249,6 +337,21 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 </div>
 
 <script src="three.min.js"></script>
+<script>
+/* One bad frame used to kill the whole app: the render loop re-arms itself
+   with requestAnimationFrame on its LAST line, so any exception before that
+   silently stops animation, playback and label layout, leaving the last
+   rendered frame on screen looking like a hang. Record what went wrong so it
+   can be read back instead of guessed at. */
+window.__ERRORS=[];
+window.addEventListener('error',e=>{
+  window.__ERRORS.push((e.message||'')+' @ '+(e.filename||'')+':'+e.lineno+
+                       (e.error&&e.error.stack?'\n'+e.error.stack:''));
+});
+window.addEventListener('unhandledrejection',e=>{
+  window.__ERRORS.push('unhandled rejection: '+(e.reason&&e.reason.message||e.reason));
+});
+</script>
 <script>
 const DEG=Math.PI/180;
 const $=s=>document.querySelector(s);
@@ -290,9 +393,11 @@ function getTex(kind,i){
 
 /* ================= data load ================= */
 async function loadAll(){
-  const files=['timeline','boundaries','plates','hotspots','labels','plates_time'];
+  const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
-  else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
+  else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json()).catch(()=>null)));files.forEach((f,i)=>DATA[f]=res[i]);}
+  DATA.eras=DATA.eras||{intervals:[],supercontinents:[]};
+  DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
   let done=0; const total=tl.length*3;
@@ -763,14 +868,28 @@ function buildHotspots(){
       }
       continue;
     }
-    const sp=new THREE.Mesh(geo,erupting?lipm:mm);
-    const p=ll2v(h.lon,h.lat,1.012);sp.position.copy(p);
-    if(erupting)sp.scale.setScalar(1.9); else if(isLip)sp.scale.setScalar(1.3);
+    /* Three states, not two. A plume is a live centre; a province mid-eruption
+       is the loudest thing on the map; and a province that erupted long ago is
+       still a landform — a basalt plateau, muted and fading as erosion strips
+       it — which is why its window now runs far past its eruption. */
+    const standing=isLip&&!erupting;
+    const col=erupting?0xffd257:standing?0xb08968:0xff7d3a;
+    const p=ll2v(h.lon,h.lat,1.012);
+    const sp=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:col,
+      transparent:true,opacity:standing?.55:1}));
+    sp.position.copy(p);
+    if(erupting)sp.scale.setScalar(1.9); else if(isLip)sp.scale.setScalar(1.15);
     overlay.hotspots.add(sp);
-    const rr=erupting?.034:isLip?.024:.02;
+    const rr=erupting?.034:isLip?.026:.02;
+    // fade the ring over the province's life as a landform
+    let fade=1;
+    if(standing&&h.peak!==undefined){
+      const span=Math.max(12,h.peak-(h.vu!==undefined?h.vu:0));
+      fade=Math.max(.25,1-(h.peak-state.age)/span);
+    }
     const ring=new THREE.Mesh(new THREE.RingGeometry(rr*0.6,rr,20),
-      new THREE.MeshBasicMaterial({color:erupting?0xffd257:0xff7d3a,transparent:true,
-        opacity:erupting?.55:.32,side:THREE.DoubleSide}));
+      new THREE.MeshBasicMaterial({color:col,transparent:true,
+        opacity:(erupting?.55:.32)*fade,side:THREE.DoubleSide}));
     ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));overlay.hotspots.add(ring);
   }
 }
@@ -839,7 +958,7 @@ function pickGlobe(e){
   const lat=Math.asin(THREE.MathUtils.clamp(lp.y,-1,1))/DEG;
   let lon=Math.atan2(lp.z,-lp.x)/DEG-180; // invert ll2v
   lon=((lon+540)%360)-180;
-  selectAt(lon,lat);
+  selectAt(lon,lat,e);
 }
 
 /* ================= 2D map ================= */
@@ -968,55 +1087,77 @@ function mapPick(e){
   const{dx,dy,dw,dh}=mapView;
   const ll=mollInv(((x-dx)/dw-0.5)*4, (0.5-(y-dy)/dh)*2);
   if(!ll){closeInfo();return;}
-  selectAt(ll[0],ll[1]);
+  selectAt(ll[0],ll[1],e);
 }
 mcv.addEventListener('click',mapPick);
 
 /* ================= selection / info ================= */
-function selectAt(lon,lat){
-  // present-day: identify plate. deep time: nearest era label.
-  const fade=presentFade();
-  if(fade>0.4){
-    for(const p of DATA.plates){if(pointInRings(lon,lat,p.rings)){showPlate(p,lon,lat);return;}}
+/* One projection for both views, so hit-testing and label layout can work in
+   screen pixels. Testing in degrees was wrong at any zoom other than the
+   default: a 7-degree radius is a handful of pixels zoomed out and half the
+   window zoomed in. */
+function projectLL(lon,lat,r){
+  if(state.view==='globe'){
+    const p=ll2v(lon,lat,r||1.02), wp=p.clone().applyMatrix4(globe.matrixWorld);
+    const cp=wp.clone().project(cam);
+    const nrm=p.clone().applyQuaternion(globe.quaternion).normalize();
+    const toCam=cam.position.clone().sub(wp).normalize();
+    const vis=!(cp.z>1||nrm.dot(toCam)<0.12);
+    return {x:(cp.x*.5+.5)*innerWidth, y:(-cp.y*.5+.5)*innerHeight, vis};
   }
-  // A crater or an erupting province is a small, precise target and the most
-  // interesting thing on the map when it is there, so it wins over a label.
+  const{dx,dy,dw,dh}=mapView||{};
+  if(!dw)return{x:0,y:0,vis:false};
+  const c=ll2map(lon,lat,dx,dy,dw,dh);
+  return {x:c[0], y:c[1], vis:true};
+}
+
+/* Click priority. This used to lead with the present-day plate lookup gated on
+   presentFade()>0.4, which is true all the way out to 24.75 Ma — and because
+   PB2002 tiles the whole globe, EVERY click inside that window returned a
+   plate and returned early. Craters, erupting provinces and era labels were
+   unreachable for the first 25 Myr of the record. Small precise targets now go
+   first, and the plate is the fallback for clicks that hit nothing specific. */
+function selectAt(lon,lat,ev){
+  const px=ev?{x:ev.clientX,y:ev.clientY}:projectLL(lon,lat);
+  const fi=curFrame().i, z=elevField(fi);
+  // 1. volcanism and impacts: small, precise, and the most interesting thing
+  //    on the map when they are there
   if(state.layers.hotspots){
     let he=null,hd=1e9;
     for(const h of hotspotsNow()){
-      let dlon=Math.abs(h.lon-lon); if(dlon>180)dlon=360-dlon;
-      const d=Math.hypot(dlon*Math.cos(lat*DEG),h.lat-lat);
+      const p=projectLL(h.lon,h.lat); if(!p.vis)continue;
+      const d=Math.hypot(p.x-px.x,p.y-px.y);
       if(d<hd){hd=d;he=h;}
     }
-    if(he&&hd<7){showEvent(he);return;}
+    if(he&&hd<18){showEvent(he);return;}
   }
-  // Pick the nearest visible label of the RIGHT KIND for what was clicked:
-  // clicking water should name the ocean, not the continent beside it.
-  const fi=curFrame().i, z=elevField(fi);
-  const onLand=z?elevAtLL(z,lon,lat)>0:true;
+  // 2. a label the click effectively landed on
   const vis=DATA.labels.filter(l=>labelVisible(l));
-  const dist=l=>{
-    const p=snapLabel(l,fi); if(!p)return 1e9;
-    let dlon=Math.abs(p[0]-lon); if(dlon>180)dlon=360-dlon;
-    return Math.hypot(dlon*Math.cos(lat*DEG),p[1]-lat);
-  };
-  // If the click lands right on a label, take it whatever is underneath —
-  // otherwise prefer a feature matching what was actually clicked.
-  let best=null,bd=1e9;
-  for(const l of vis){const d=dist(l); if(d<bd){bd=d;best=l;}}
-  if(bd>12){
-    const wanted=vis.filter(l=>((l.t==='continent'||l.t==='orogen')===onLand));
-    const pool=wanted.length?wanted:vis;
-    best=null;bd=1e9;
-    for(const l of pool){const d=dist(l); if(d<bd){bd=d;best=l;}}
+  const spos=new Map();
+  for(const l of vis){
+    const sp=snapLabel(l,fi); if(!sp)continue;
+    const p=projectLL(sp[0],sp[1]); if(!p.vis)continue;
+    spos.set(l,p);
   }
-  // generous radius: a click deep inside a large landmass should still
-  // name it even when the label sits well away
-  if(best&&bd<75)showFeature(best,lon,lat);else closeInfo();
+  let best=null,bd=1e9;
+  for(const[l,p]of spos){const d=Math.hypot(p.x-px.x,p.y-px.y); if(d<bd){bd=d;best=l;}}
+  if(best&&bd<26){showFeature(best,lon,lat);return;}
+  // 3. present-day plate, while the present-day layer is still legible
+  if(presentFade()>0.4){
+    for(const p of DATA.plates){if(pointInRings(lon,lat,p.rings)){showPlate(p,lon,lat);return;}}
+  }
+  // 4. nearest label of the right kind: clicking water should name the ocean,
+  //    not the continent beside it
+  const onLand=z?elevAtLL(z,lon,lat)>0:true;
+  const LANDY=new Set(['continent','orogen','desert','forest','grassland','basin','plateau','rift','ice','region']);
+  const wanted=[...spos.keys()].filter(l=>LANDY.has(l.t)===onLand);
+  const pool=wanted.length?wanted:[...spos.keys()];
+  best=null;bd=1e9;
+  for(const l of pool){const p=spos.get(l);const d=Math.hypot(p.x-px.x,p.y-px.y); if(d<bd){bd=d;best=l;}}
+  if(best&&bd<Math.min(innerWidth,innerHeight)*0.42)showFeature(best,lon,lat);else closeInfo();
 }
 function showPlate(p,lon,lat){
   state.selPlate=p.code;
-  $('#infoName').textContent=p.name;$('#infoTag').textContent='Tectonic plate · present day';
   const rows=[];
   if(p.motion){const{speed}=velocityAt(lon,lat,p.motion);
     rows.push(['Motion here',`${speed.toFixed(0)} mm/yr`]);
@@ -1027,32 +1168,53 @@ function showPlate(p,lon,lat){
   if(zf){const e=elevAtLL(zf,lon,lat);
     rows.push([e>=0?'Elevation':'Depth', `${Math.abs(Math.round(e)).toLocaleString()} m`]);}
   rows.push(['Clicked','~'+Math.abs(lat).toFixed(0)+'°'+(lat>=0?'N':'S')+' '+Math.abs(lon).toFixed(0)+'°'+(lon>=0?'E':'W')]);
-  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
-  $('#infoDesc').textContent=plateDesc(p.name);
-  $('#info').classList.add('show');
+  const reg=regionalAt(p.name,state.age);
+  const extra=reg?`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`:'';
+  /* The plate polygons are surveyed present-day PB2002. They stay legible for
+     the first few tens of millions of years, but the outline is today's — say
+     so rather than implying it was measured for the displayed age. */
+  openInfo({name:p.name,
+    tag:'Tectonic plate · '+(Math.abs(state.age)<1?'present day':'present-day outline'),
+    rows,desc:plateDesc(p.name),extra,wide:!!extra});
 }
 function showEvent(h){
   const rows=[];
   const kind=h.k==='impact'?'Impact structure':h.k==='lip'?'Large igneous province':'Mantle plume';
-  $('#infoName').textContent=h.n;
+  let tag, extra='';
   if(h.k==='impact'){
     const since=Math.max(0,h.peak-state.age);
-    $('#infoTag').textContent=kind+' · '+h.peak+' Ma';
+    tag=kind+' · '+h.peak+' Ma';
     rows.push(['Rim diameter',`${h.d} km`]);
     rows.push(['Impact age',`${h.peak} Ma`]);
     rows.push([since<1?'Status':'Age of scar',
       since<1?'just struck':`${Math.round(since)} Myr old`]);
   }else{
-    const a0=Math.min(h.a0,h.a1), a1=Math.max(h.a0,h.a1);
-    $('#infoTag').textContent=kind+' · '+(h.peak!==undefined?h.peak+' Ma peak':`${a1}–${a0} Ma`);
-    rows.push(['Active',`${a1}–${a0} Ma`]);
-    if(h.peak!==undefined)rows.push(['Peak eruption',`${h.peak} Ma`]);
+    const e0=Math.min(h.e0!==undefined?h.e0:h.a0,h.e1!==undefined?h.e1:h.a1);
+    const e1=Math.max(h.e0!==undefined?h.e0:h.a0,h.e1!==undefined?h.e1:h.a1);
+    /* A flood basalt is an eruption for a moment and a landform for a very
+       long time. Say which of the two you are looking at. A plume is never
+       "erupting" in this sense — it is simply active for its whole life. */
+    const erupting=h.k==='lip'&&state.age>=e0-1&&state.age<=e1+1;
+    tag=kind+' · '+(h.k==='plume'?'active':erupting?'erupting':'standing');
+    if(h.k==='lip'){
+      rows.push(['Erupted',`${e1}–${e0} Ma`]);
+      if(h.peak!==undefined)rows.push(['Peak',`${h.peak} Ma`]);
+      if(h.vu!==undefined){
+        rows.push(['A landform until',h.vu===0?'the present day':`${h.vu} Ma`]);
+        if(!erupting)rows.push(['Age of province',`${Math.round(h.peak-state.age)} Myr`]);
+      }
+      if(h.vw)extra+=`<div class="ihead">As a landform</div><p class="desc">${esc(h.vw)}</p>`;
+    }else{
+      rows.push(['Active',`${Math.max(h.a0,h.a1)}–${Math.min(h.a0,h.a1)} Ma`]);
+    }
   }
   rows.push(['Position','~'+Math.abs(h.lat).toFixed(0)+'°'+(h.lat>=0?'N':'S')+' '+
     Math.abs(h.lon).toFixed(0)+'°'+(h.lon>=0?'E':'W')]);
-  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
-  $('#infoDesc').textContent=h.d1||'';
-  $('#info').classList.add('show');
+  if(h.k==='plume')extra+=`<div class="ihead">On position</div><p class="desc">`+
+    `Plumes are anchored in the mantle while plates slide over them, so this marker `+
+    `stays put and the crust moves past it. That is an approximation: Hawaii is known `+
+    `to have drifted about 15° south between 81 and 47 Ma.</p>`;
+  openInfo({name:h.n,tag,rows,desc:h.d1||'',extra,wide:!!extra});
 }
 const COMPASS=['north','north-east','east','south-east','south','south-west','west','north-west'];
 function bearingName(vx,vy){
@@ -1086,9 +1248,28 @@ function showFeature(l,lon,lat){
   rows.push(['Position',`${Math.abs(useLat).toFixed(0)}°${useLat>=0?'N':'S'} ${Math.abs(useLon).toFixed(0)}°${useLon>=0?'E':'W'}`]);
   const m2=nearestMeta();
   rows.push(['World then',`${m2.gmst.toFixed(1)}°C · ${m2.sealevel>=0?'+':''}${m2.sealevel} m seas`]);
-  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
-  $('#infoDesc').textContent=l.d||featureDesc(l.n);
-  $('#info').classList.add('show');
+  /* Prefer the description written for THIS moment in the feature's life; the
+     timeless one is the fallback, not the default. */
+  const ph=phaseDesc(l,state.age);
+  let extra='';
+  if(ph&&l.d)extra+=`<div class="ihead">In general</div><p class="desc">${esc(l.d)}</p>`;
+  // What the rocks of this landmass, at this age, actually preserve.
+  const reg=regionalAt(l.n,state.age);
+  if(reg)extra+=`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`;
+  // Life of the age, for anything big enough to host a biota.
+  const BIG=new Set(['continent','ocean','sea','forest','grassland','island','region']);
+  if(BIG.has(l.t)){
+    const L=lifeAt(state.age);
+    if(L&&L.taxa&&L.taxa.length){
+      const want=l.t==='ocean'||l.t==='sea'?['sea']:['land','air','fresh'];
+      let pick=L.taxa.filter(t=>want.includes(t.realm));
+      if(pick.length<3)pick=L.taxa;
+      extra+=`<div class="ihead">Life at ${fmtAge(Math.round(state.age))}</div>`+lifeHTML(pick,4);
+    }
+  }
+  openInfo({name:l.n,
+    tag:kind+' · '+fmtAge(Math.round(state.age)),
+    rows, desc:ph||l.d||featureDesc(l.n), extra, wide:!!extra});
 }
 function closeInfo(){$('#info').classList.remove('show');state.selPlate=null;}
 $('#infoClose').onclick=closeInfo;
@@ -1103,6 +1284,160 @@ function plateDesc(n){const d={
   'Nazca':'Young oceanic plate subducting beneath South America to build the Andes.',
   'South America':'Drifting west, overriding the Nazca plate along its Pacific margin.'};
   return d[n]||'One of Earth’s present-day lithospheric plates. Toggle motion vectors to see its velocity field.';}
+/* ============ intervals, supercontinents, life ============ */
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function fmtSpan(a0,a1){
+  const lo=Math.min(a0,a1), hi=Math.max(a0,a1);
+  if(hi<=0)return `+${-hi}–${-lo} Myr`;
+  if(lo<0)return `+${-lo} Myr – ${hi} Ma`;
+  return `${hi}–${lo} Ma`;
+}
+/* The present is a boundary case: the projected "Near Future" runs (-30, 0]
+   and the Quaternary runs [0, 2.58), so age 0 satisfies both. Split on sign
+   first — at or after the present you want the real interval, not the
+   projection that happens to end there. */
+function intervalAt(age){
+  const proj=age<0;
+  return (DATA.eras.intervals||[]).find(i=>
+    (i.rank==='projected')===proj &&
+    age>=Math.min(i.a0,i.a1) && age<=Math.max(i.a0,i.a1))||null;
+}
+function lifeAt(age){
+  return (DATA.life.life||[]).find(e=>age>=Math.min(e.a0,e.a1)&&age<=Math.max(e.a0,e.a1))||null;
+}
+function biomesAt(age){
+  const B=DATA.life.biomes||[]; if(!B.length)return [];
+  let best=B[0],bd=1e9;
+  for(const b of B){const d=Math.abs(b.age-age); if(d<bd){bd=d;best=b;}}
+  return best.biomes||[];
+}
+function regionalAt(name,age){
+  const R=(DATA.life.regional||{})[name]; if(!R)return null;
+  const hit=R.find(r=>age>=Math.min(r.a0,r.a1)&&age<=Math.max(r.a0,r.a1));
+  return hit?hit.text:null;
+}
+/* A feature that lives for 300 Myr is not doing the same thing throughout, so
+   long-lived entries carry a description per phase; fall back to the timeless
+   one when nothing matches. */
+function phaseDesc(l,age){
+  if(l.ph)for(const p of l.ph){
+    if(age>=Math.min(p.a0,p.a1)&&age<=Math.max(p.a0,p.a1))return p.d;
+  }
+  return null;
+}
+function lifeHTML(taxa,limit){
+  const I=DATA.life.icons||{};
+  return '<div class="life">'+taxa.slice(0,limit||99).map(t=>
+    `<div class="lifeitem"><div class="lifeicon ${esc(t.realm)}">`+
+    `<svg viewBox="0 0 64 40">${I[t.ic]||''}</svg></div>`+
+    `<div class="lifetxt"><div class="ln2">${esc(t.n)}</div>`+
+    `<div class="lr">${esc(t.r)} · ${esc(t.realm)}</div>`+
+    `<div class="lnote">${esc(t.note)}</div></div></div>`).join('')+'</div>';
+}
+function listHTML(title,items){
+  if(!items||!items.length)return '';
+  return `<div class="ihead">${esc(title)}</div><ul class="evlist">`+
+    items.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';
+}
+function openInfo(o){
+  $('#infoName').textContent=o.name;
+  $('#infoTag').textContent=o.tag||'';
+  $('#infoRows').innerHTML=(o.rows||[]).map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
+  $('#infoDesc').textContent=o.desc||'';
+  $('#infoExtra').innerHTML=o.extra||'';
+  $('#info').classList.toggle('wide',!!o.wide);
+  $('#info').scrollTop=0;
+  $('#info').classList.add('show');
+}
+function jumpTo(age){
+  state.age=Math.max(-250,Math.min(1000,age));
+  state.playing=false;syncPlay();syncSlider();
+  bindTextures();buildBoundaries();buildHotspots();buildVectors();updateReadout();
+  markSidebarCurrent();
+}
+function showInterval(i){
+  const mid=(i.a0+i.a1)/2;
+  const L=lifeAt(mid), bio=biomesAt(mid);
+  let extra='';
+  extra+=listHTML('Key events',i.key_events);
+  if(bio.length)extra+=`<div class="ihead">Biomes</div><ul class="evlist">`+
+    bio.map(b=>`<li><b style="color:#c6d0dd">${esc(b.name)}</b> — ${esc(b.note)}</li>`).join('')+'</ul>';
+  if(L&&L.taxa&&L.taxa.length)extra+=`<div class="ihead">Life</div>`+lifeHTML(L.taxa,6);
+  openInfo({name:i.name,
+    tag:(i.rank==='projected'?'Projected interval · ':'')+fmtSpan(i.a0,i.a1),
+    rows:[['Span',fmtSpan(i.a0,i.a1)],['Part of',`${i.era}`]],
+    desc:i.summary, extra, wide:true});
+  jumpTo(mid);
+}
+function showSupercontinent(s){
+  const rows=[['Assembly',fmtSpan(s.assembly[0],s.assembly[1])],
+              ['Coherent',fmtSpan(s.peak[0],s.peak[1])],
+              ['Break-up',fmtSpan(s.breakup[0],s.breakup[1])]];
+  let extra='';
+  if(s.life)extra+=`<div class="ihead">Life it carried</div><p class="desc">${esc(s.life)}</p>`;
+  if(s.fate)extra+=`<div class="ihead">What happened to it</div><p class="desc">${esc(s.fate)}</p>`;
+  if(s.disputed)extra+=`<div class="ihead">Contested</div><p class="desc">`+
+    `This one is not settled. It is shown because it is in the published literature, `+
+    `not because the reconstruction is agreed.</p>`;
+  openInfo({name:s.name,tag:(s.disputed?'Disputed · ':'')+'Supercontinent',
+            rows,desc:s.summary,extra,wide:true});
+  jumpTo(s.jump_age);
+}
+function buildEraList(){
+  const iv=(DATA.eras.intervals||[]).slice();
+  if(!iv.length)return;
+  // far future -> present -> far past, which is how the timeline reads
+  iv.sort((a,b)=>((a.a0+a.a1)/2)-((b.a0+b.a1)/2));
+  let html='',group=null;
+  for(const i of iv){
+    if(i.era!==group){group=i.era;html+=`<div class="gh">${esc(group)}</div>`;}
+    html+=`<div class="erow${i.rank==='projected'?' proj':''}" data-era="${esc(i.name)}">`+
+      `<span class="en">${esc(i.name)}</span><span class="ea">${fmtSpan(i.a0,i.a1)}</span></div>`;
+  }
+  const box=$('#eraList'); box.innerHTML=html;
+  box.querySelectorAll('.erow').forEach(el=>{
+    el.onclick=()=>{const i=iv.find(x=>x.name===el.dataset.era); if(i)showInterval(i);};
+  });
+}
+function buildScList(){
+  const sc=(DATA.eras.supercontinents||[]).slice();
+  if(!sc.length)return;
+  sc.sort((a,b)=>a.jump_age-b.jump_age);
+  const box=$('#scList');
+  box.innerHTML=sc.map(s=>
+    `<div class="srow" data-sc="${esc(s.name)}"><div class="sn">${esc(s.name)}</div>`+
+    `<div class="sa">${fmtSpan(Math.min(...s.breakup),Math.max(...s.assembly))}</div>`+
+    (s.disputed?'<div class="sd">Disputed</div>':'')+`</div>`).join('');
+  box.querySelectorAll('.srow').forEach(el=>{
+    el.onclick=()=>{const s=sc.find(x=>x.name===el.dataset.sc); if(s)showSupercontinent(s);};
+  });
+}
+let _curEra=null;
+function markSidebarCurrent(){
+  const i=intervalAt(state.age), n=i?i.name:null;
+  if(n===_curEra)return; _curEra=n;
+  document.querySelectorAll('.erow').forEach(el=>
+    el.classList.toggle('cur',el.dataset.era===n));
+  document.querySelectorAll('.srow').forEach(el=>{
+    const s=(DATA.eras.supercontinents||[]).find(x=>x.name===el.dataset.sc);
+    el.classList.toggle('cur',!!s&&state.age>=Math.min(...s.breakup)&&state.age<=Math.max(...s.assembly));
+  });
+}
+document.querySelectorAll('.panel .ph').forEach(h=>{
+  h.onclick=()=>h.parentElement.classList.toggle('open');
+});
+function showEraPlate(d){
+  const p=DATA.plates.find(x=>x.name===d.n);
+  if(p&&presentFade()>0.4){showPlate(p,d.lon,d.lat);return;}
+  openInfo({name:d.n,tag:'Plate · '+fmtAge(Math.round(state.age)),
+    rows:[['Relative size',d.s>2?`${d.s}`:'small'],
+          ['Position',`${Math.abs(d.lat).toFixed(0)}°${d.lat>=0?'N':'S'} ${Math.abs(d.lon).toFixed(0)}°${d.lon>=0?'E':'W'}`]],
+    desc:'A plate in this reconstruction, tracked back from the surveyed present-day '+
+         'plate model and carried along the measured motion field. Plates merge going '+
+         'backwards as their relative motion falls to nothing, so there are fewer of '+
+         'them the deeper you go.'});
+}
+
 function featureDesc(n){const d={
   'Pangaea':'The last supercontinent, assembled ~320 Ma; its arid interior spawned vast red-bed deserts.',
   'Pangaea Proxima':'A projected future supercontinent forming as the Atlantic closes and continents re-fuse around Africa.',
@@ -1115,72 +1450,135 @@ function featureDesc(n){const d={
   'Neo-Panthalassa':'The projected future world-ocean on the far side of Pangaea Proxima.'};
   return d[n]||'An era-specific paleogeographic feature, reconstructed from PALEOMAP data.';}
 
-/* ================= labels ================= */
+/* ================= labels =================
+   Anchoring every name straight onto its feature reads fine when features are
+   spread out and turns into an unreadable pile when they are not: at 325 Ma the
+   Appalachian, Alleghanian, Ouachita and Antler belts are four names inside one
+   corner of Pangaea. So placement is a layout problem, not a projection
+   problem. Names are sorted by importance and placed greedily, each taking the
+   nearest free slot to its anchor; a name pushed more than a few pixels gets a
+   leader line back to the feature, and one that cannot fit anywhere near its
+   anchor is dropped rather than drawn on top of something else. */
 const labelEls=new Map();
 const plateEls=[];
-/* Plate names persist for as long as the plate does: identity is tracked
-   across keyframes in the build, so the same plate keeps its name while it
-   exists rather than being relabelled every frame. */
-function updatePlateLabels(){
-  const show=state.layers.boundaries;
-  // Don't print a plate name that the era-label layer is already showing —
-  // "NORTH AMERICA" stacked on "North America" is just noise.
-  const shown=new Set();
-  if(state.layers.labels){
-    for(const[l,e]of labelEls)if(e.classList.contains('show'))shown.add(l.n.toLowerCase());
-  }
-  const list=show?eraPlates().p.filter(d=>!shown.has(d.n.toLowerCase())):[];
-  const box=$('#labels');
-  while(plateEls.length<list.length){
-    const e=document.createElement('div');
-    e.className='plabel plate'; box.appendChild(e); plateEls.push(e);
-  }
-  for(let i=0;i<plateEls.length;i++){
-    const e=plateEls[i], d=list[i];
-    if(!d){e.classList.remove('show');continue;}
-    e.innerHTML=d.n+(d.s>2?` <span class="sp">${d.s}</span>`:'');
-    let sx,sy,vis=true;
-    if(state.view==='globe'){
-      const p=ll2v(d.lon,d.lat,1.02), wp=p.clone().applyMatrix4(globe.matrixWorld);
-      const cp=wp.clone().project(cam);
-      const nrm=p.clone().applyQuaternion(globe.quaternion).normalize();
-      const toCam=cam.position.clone().sub(wp).normalize();
-      if(cp.z>1||nrm.dot(toCam)<0.12)vis=false;
-      sx=(cp.x*.5+.5)*innerWidth; sy=(-cp.y*.5+.5)*innerHeight;
-    }else{
-      const{dx,dy,dw,dh}=mapView||{};
-      if(dw){const c=ll2map(d.lon,d.lat,dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
-    }
-    if(vis){e.style.left=sx+'px';e.style.top=sy+'px';e.classList.add('show');}
-    else e.classList.remove('show');
-  }
-}
-function labelVisible(l){const a=state.age;return a>=Math.min(l.a0,l.a1)-6&&a<=Math.max(l.a0,l.a1)+6;}
+const PRI={continent:100,ocean:90,sea:72,region:66,orogen:60,ice:58,desert:56,
+           forest:55,grassland:52,plateau:50,basin:48,rift:47,island:44,plate:30};
+/* A little slack either side stops names strobing on and off as the slider
+   crosses a window edge, but 6 Myr was enough to float future-only features
+   like Baja Island over the present-day map. Keyframes are 5 Myr apart, so
+   half that is all the smoothing this needs. */
+function labelVisible(l){const a=state.age,t=2.5;
+  return a>=Math.min(l.a0,l.a1)-t&&a<=Math.max(l.a0,l.a1)+t;}
 function ensureLabels(){
   const box=$('#labels');
-  for(const l of DATA.labels){if(!labelEls.has(l)){const e=document.createElement('div');e.className='plabel '+l.t;e.textContent=l.n;box.appendChild(e);labelEls.set(l,e);}}
-}
-function updateLabels(){
-  const show=state.layers.labels;
-  for(const[l,e] of labelEls){
-    if(!show||!labelVisible(l)){e.classList.remove('show');continue;}
-    let sx,sy,vis=true;
-    const sp=snapLabel(l,curFrame().i);
-    if(!sp){e.classList.remove('show');continue;}
-    if(state.view==='globe'){
-      const p=ll2v(sp[0],sp[1],1.02);const wp=p.clone().applyMatrix4(globe.matrixWorld);
-      const cp=wp.clone().project(cam);
-      if(cp.z>1){vis=false;}
-      // hide back of globe
-      const nrm=p.clone().applyQuaternion(globe.quaternion).normalize();
-      const toCam=cam.position.clone().sub(wp).normalize();
-      if(nrm.dot(toCam)<0.12)vis=false;
-      sx=(cp.x*.5+.5)*innerWidth;sy=(-cp.y*.5+.5)*innerHeight;
-    }else{
-      const{dx,dy,dw,dh}=mapView||{};if(dw){const c=ll2map(sp[0],sp[1],dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
-    }
-    if(vis){e.style.left=sx+'px';e.style.top=sy+'px';e.classList.add('show');}else e.classList.remove('show');
+  for(const l of DATA.labels){
+    if(labelEls.has(l))continue;
+    const e=document.createElement('div');
+    e.className='plabel '+l.t; e.textContent=l.n;
+    e.title=l.n;
+    e.addEventListener('click',ev=>{ev.stopPropagation();showFeature(l);});
+    box.appendChild(e); labelEls.set(l,e);
   }
+}
+function measureEl(e){
+  const key=e.innerHTML;
+  if(e._mk===key)return;
+  e._mk=key; e._mw=e.offsetWidth||42; e._mh=e.offsetHeight||14;
+}
+/* Candidate offsets from the anchor: on it first, then progressively further,
+   vertical before horizontal because a name reads best directly above or below
+   the thing it names. Horizontal steps are stretched since labels are wide. */
+const RINGS=(()=>{
+  const o=[[0,0]];
+  for(const r of [16,29,44,62,82])
+    for(const a of [90,270,50,130,230,310,0,180])
+      o.push([Math.cos(a*DEG)*r*1.45, -Math.sin(a*DEG)*r]);
+  return o;
+})();
+/* Panels are opaque, so a name underneath one is simply lost. Read their real
+   rects each frame so this stays right as panels collapse, open and resize. */
+function uiRects(){
+  const out=[];
+  /* Use #title and #readout rather than #topbar: the bar spans the full width
+     and stands 210px tall to fit the readout, but it is transparent in
+     between, and excluding the whole band cost the upper third of the globe. */
+  for(const sel of ['#leftrail','#controls','#title','#readout','#bottom','#info']){
+    const el=$(sel); if(!el)continue;
+    const cs=getComputedStyle(el);
+    if(cs.display==='none'||+cs.opacity<0.05)continue;
+    const r=el.getBoundingClientRect();
+    if(r.width>0&&r.height>0)out.push(r);
+  }
+  return out;
+}
+let _leadStr='';
+function drawLeaders(list){
+  const s=$('#leaders');
+  const str=list.map(l=>`<line x1="${l[0].toFixed(1)}" y1="${l[1].toFixed(1)}" x2="${l[2].toFixed(1)}" y2="${l[3].toFixed(1)}"/>`).join('');
+  if(str===_leadStr)return;
+  _leadStr=str;
+  s.setAttribute('width',innerWidth); s.setAttribute('height',innerHeight);
+  s.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);
+  s.innerHTML=str;
+}
+function layoutLabels(){
+  const fi=curFrame().i;
+  const cands=[];
+  if(state.layers.labels){
+    for(const[l,e]of labelEls){
+      if(!labelVisible(l)){e.classList.remove('show');continue;}
+      const sp=snapLabel(l,fi);
+      if(!sp){e.classList.remove('show');continue;}
+      const p=projectLL(sp[0],sp[1]);
+      if(!p.vis){e.classList.remove('show');continue;}
+      cands.push({e,x:p.x,y:p.y,pri:(PRI[l.t]||40)+(l.w||0)});
+    }
+  }else for(const[,e]of labelEls)e.classList.remove('show');
+  /* Don't print a plate name the era-label layer is already showing —
+     "NORTH AMERICA" stacked on "North America" is just noise. */
+  const shown=new Set();
+  for(const[l,e]of labelEls)if(e.classList.contains('show')||cands.some(c=>c.e===e))shown.add(l.n.toLowerCase());
+  const plist=state.layers.boundaries?eraPlates().p.filter(d=>!shown.has(d.n.toLowerCase())):[];
+  const box=$('#labels');
+  while(plateEls.length<plist.length){
+    const e=document.createElement('div'); e.className='plabel plate';
+    e.addEventListener('click',ev=>{ev.stopPropagation();if(e._pd)showEraPlate(e._pd);});
+    box.appendChild(e); plateEls.push(e);
+  }
+  for(let i=0;i<plateEls.length;i++){
+    const e=plateEls[i], d=plist[i];
+    if(!d){e.classList.remove('show');e._pd=null;continue;}
+    e._pd=d;
+    const html=d.n+(d.s>2?` <span class="sp">${d.s}</span>`:'');
+    if(e.innerHTML!==html)e.innerHTML=html;
+    const p=projectLL(d.lon,d.lat);
+    if(!p.vis){e.classList.remove('show');continue;}
+    cands.push({e,x:p.x,y:p.y,pri:PRI.plate});
+  }
+
+  cands.sort((a,b)=>b.pri-a.pri);
+  const panels=uiRects(), placed=[], leaders=[];
+  const GAP=3;
+  for(const c of cands){
+    const e=c.e; measureEl(e);
+    const w=e._mw+GAP*2, h=e._mh+GAP*2;
+    let put=null;
+    for(const[ox,oy]of RINGS){
+      const x=c.x+ox, y=c.y+oy;
+      if(x-w/2<4||x+w/2>innerWidth-4||y-h/2<4||y+h/2>innerHeight-4)continue;
+      let hit=false;
+      for(const r of placed)
+        if(Math.abs(x-r.x)<(w+r.w)/2+2&&Math.abs(y-r.y)<(h+r.h)/2+2){hit=true;break;}
+      if(!hit)for(const r of panels)
+        if(x+w/2>r.left-2&&x-w/2<r.right+2&&y+h/2>r.top-2&&y-h/2<r.bottom+2){hit=true;break;}
+      if(!hit){put={x,y};break;}
+    }
+    if(!put){e.classList.remove('show');continue;}
+    placed.push({x:put.x,y:put.y,w,h});
+    e.style.left=put.x+'px'; e.style.top=put.y+'px'; e.classList.add('show');
+    if(Math.hypot(put.x-c.x,put.y-c.y)>17)leaders.push([c.x,c.y,put.x,put.y]);
+  }
+  drawLeaders(leaders);
 }
 
 /* ================= time & environment ================= */
@@ -1214,11 +1612,19 @@ function updateReadout(){
   const modelled = state.age>540 || state.age<0;
   const tag = modelled
     ? `<span style="color:#7a8494">&nbsp;· ${state.age<0?'projected':'modelled'}</span>` : '';
+  /* Biomes are what the world would actually look like to stand in, which the
+     scalar readouts above never convey. Names are era-appropriate: there is no
+     grassland before the Cenozoic and no land biome at all worth the word
+     before plants, so this reads "microbial crust" in the Precambrian rather
+     than dressing bare rock up as tundra. */
+  const bio=biomesAt(state.age).slice(0,3).map(b=>b.name);
   $('#env').innerHTML=
      `<b>Avg temp</b> ${gmst.toFixed(1)}&deg;C &nbsp;·&nbsp; <b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m<br>`
     +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%${tag}<br>`
     +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}<br>`
-    +`<b>Biosphere</b> ${veg}`;
+    +`<b>Biosphere</b> ${veg}`
+    +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
+  markSidebarCurrent();
 }
 
 /* ================= render loop ================= */
@@ -1295,7 +1701,7 @@ function loop(now){
     renderer.render(scene,orthoCam);
     drawMapOverlays();
   }
-  updateLabels(); updatePlateLabels();
+  layoutLabels();
   requestAnimationFrame(loop);
 }
 function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==undefined){c.material.opacity=(c.userData.baseOp||0.88)*o;}});}
@@ -1372,6 +1778,7 @@ function buildLegend(){
   <div class="li"><span class="ln" style="background:#e0b23a"></span>Transform fault<span style="color:#5c6675"> · today</span></div>
   <div class="li"><span class="dt" style="background:#ff7d3a"></span>Hotspot / plume</div>
   <div class="li"><span class="dt" style="background:#ffd257"></span>Erupting province</div>
+  <div class="li"><span class="dt" style="background:#b08968"></span>Basalt province standing</div>
   <div class="li"><span class="dt" style="background:#c9d6e8"></span>Impact crater</div>
   <div class="li" style="margin-top:5px;color:#5c6675;font-size:9.5px;max-width:150px;line-height:1.45">Boundaries and vectors in deep time are derived from the reconstruction's own motion.</div>`;
 }
@@ -1381,6 +1788,19 @@ function buildLegend(){
   initGL();
   await loadAll();
   ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
+  buildEraList();buildScList();markSidebarCurrent();
+  /* A handle on the internals. Everything here is derived — label positions
+     are snapped to the elevation field, feature coordinates are back-advected —
+     so when something does not appear on screen the only way to find out which
+     stage dropped it is to be able to call that stage directly. */
+  window.APP={state,DATA,snapLabel,projectLL,curFrame,elevField,elevAtLL,
+              labelVisible,layoutLabels,hotspotsNow,intervalAt,lifeAt,biomesAt,
+              selectAt,showFeature,showEvent,jumpTo,
+              /* step() drives one frame by hand. Needed because a headless or
+                 backgrounded tab reports document.hidden, and the browser then
+                 never fires requestAnimationFrame — the app looks frozen when
+                 it is simply not being asked to draw. */
+              step(){loop(performance.now());}};
   state.age=0;syncSlider();updateReadout();syncPlay();
   setInterval(updateReadout,120);
   $('#load').classList.add('done');

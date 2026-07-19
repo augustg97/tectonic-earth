@@ -9,3 +9,6 @@ web/fields/
 web/frames/
 web/artifact.html
 web/bluemarble.jpg
+
+# macOS Finder metadata
+.DS_Store

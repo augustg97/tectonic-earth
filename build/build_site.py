@@ -23,9 +23,18 @@ if os.path.isdir(dst):
 shutil.copytree(os.path.join(WEB, "fields"), dst,
                 ignore=shutil.ignore_patterns("*_lite.webp"))
 
-for name in ("index.html", "three.min.js", "timeline.json", "boundaries.json",
-             "plates_time.json", "plates.json", "hotspots.json", "labels.json"):
-    shutil.copy2(os.path.join(WEB, name), os.path.join(SITE, name))
+DATA_FILES = ("index.html", "three.min.js", "timeline.json", "boundaries.json",
+              "plates_time.json", "plates.json", "hotspots.json", "labels.json",
+              "eras.json", "life.json")
+for name in DATA_FILES:
+    src = os.path.join(WEB, name)
+    # The app degrades gracefully if a data file is missing — the sidebars just
+    # stay empty — which means a copy silently dropped from this list would not
+    # show up as an error anywhere. Fail the build instead.
+    if not os.path.exists(src):
+        raise SystemExit(f"build_site: {name} is missing from {WEB}. "
+                         f"Run build_webdata.py first.")
+    shutil.copy2(src, os.path.join(SITE, name))
 
 # GitHub Pages otherwise runs the tree through Jekyll, which ignores files and
 # folders beginning with an underscore and slows the build for no benefit.

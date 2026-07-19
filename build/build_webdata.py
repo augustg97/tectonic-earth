@@ -12,6 +12,8 @@ import numpy as np
 from PIL import Image
 from climate import climate_at
 import features
+import eras
+import life
 
 DATA = "../data"
 WEB = "../web"
@@ -192,7 +194,12 @@ def paleo_position(lon, lat, age, mot, step=5.0):
 def build_hotspots():
     mot = _motion_fields()
     out = features.hotspots()
+    vis = features.visible_until()
     moved = 0
+    # A plume has to be active on the frame its own province erupts. The two
+    # are catalogued independently, so nothing enforces that but this.
+    for problem in features.coupling_problems():
+        print("  WARNING plume/province:", problem)
     for h in out:
         # The Neoproterozoic entries are authored directly onto the synthetic
         # Precambrian map, i.e. they are ALREADY in the frame of their era.
@@ -200,17 +207,36 @@ def build_hotspots():
         # correction only applies to features catalogued at modern coordinates.
         if min(h["a0"], h["a1"]) >= 540:
             continue
-        # a plume is marked where its track starts; a province where it erupted
-        ref = h.get("peak", min(h["a0"], h["a1"]))
+        # A PROVINCE erupts at one place and then rides away on the plate, so it
+        # has to be carried back to the crust it actually sat on. A PLUME does
+        # not: it is anchored in the mantle while the plate slides over it, so
+        # its present-day coordinate already is (approximately) where it has
+        # always been. Only LIPs carry a 'peak', so only LIPs advect -- that
+        # asymmetry is deliberate, not an oversight.
+        ref = h.get("peak")
         if ref and 20 < ref <= ADVECT_LIMIT:
             h["lon"], h["lat"] = paleo_position(h["lon"], h["lat"], ref, mot)
             moved += 1
+
+        # A flood basalt is a landform for far longer than it is an eruption.
+        # Keep the eruption window for the "erupting now" flag, and widen the
+        # window the marker is DRAWN in to however long the province stayed a
+        # visible feature. Without this the Deccan appears for two frames and
+        # then vanishes, when in fact it still holds up the Western Ghats.
+        h["e0"], h["e1"] = h["a0"], h["a1"]
+        vu = vis.get(h["n"])
+        if vu is not None and h["k"] == "lip":
+            h["vu"] = vu[0]
+            h["vw"] = vu[1]
+            h["a0"] = min(h["a0"], vu[0])
+
     imp = features.impacts()
     for m in imp:
         if 20 < m["age"] <= ADVECT_LIMIT:
             m["lon"], m["lat"] = paleo_position(m["lon"], m["lat"], m["age"], mot)
         # a crater is a lasting scar: visible from the impact onward
         m["a0"], m["a1"] = 0, m["age"]
+        m["e0"], m["e1"] = m["age"], m["age"]
         m["peak"] = m["age"]
     out += imp
     notes = features.event_notes()
@@ -237,12 +263,45 @@ def build_hotspots():
 def build_labels():
     out = features.labels()
     desc = features.descriptions()
+    ph = features.phases()
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
+        # Long-lived features carry a description per phase of their life; the
+        # app picks whichever contains the displayed age and falls back to "d".
+        # A phase outside the label's own window can never be reached, and the
+        # failure is silent -- the label just keeps showing its generic text --
+        # so check it here rather than discovering it by scrubbing the timeline.
+        if l["n"] in ph:
+            l["ph"] = [{"a0": a0, "a1": a1, "d": t} for (a0, a1, t) in ph[l["n"]]]
+            lo, hi = min(l["a0"], l["a1"]), max(l["a0"], l["a1"])
+            for p in l["ph"]:
+                if min(p["a0"], p["a1"]) < lo - 1 or max(p["a0"], p["a1"]) > hi + 1:
+                    print(f"  WARNING unreachable phase: {l['n']} "
+                          f"{p['a0']}-{p['a1']} outside label window {lo}-{hi}")
     json.dump(out, open(f"{WEB}/labels.json", "w"), separators=(",", ":"))
     have = sum(1 for l in out if "d" in l)
-    print(f"labels: {len(out)} ({have} with descriptions)")
+    phased = sum(1 for l in out if "ph" in l)
+    print(f"labels: {len(out)} ({have} with descriptions, {phased} phased)")
+
+
+# ---------- browsable intervals + supercontinents ----------
+def build_eras():
+    out = {"intervals": eras.intervals(),
+           "supercontinents": eras.supercontinents()}
+    json.dump(out, open(f"{WEB}/eras.json", "w"), separators=(",", ":"))
+    print(f"eras: {len(out['intervals'])} intervals, "
+          f"{len(out['supercontinents'])} supercontinents")
+
+
+# ---------- biomes, life through time, regional fossil record ----------
+def build_life():
+    out = {"biomes": life.biomes(), "life": life.life(),
+           "regional": life.regional(), "icons": life.icons()}
+    json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
+    print(f"life: {len(out['biomes'])} biome samples, {len(out['life'])} intervals, "
+          f"{len(out['regional'])} regions, {len(out['icons'])} illustrations")
+
 
 if __name__ == "__main__":
     build_timeline()
@@ -250,3 +309,5 @@ if __name__ == "__main__":
     build_plates()
     build_hotspots()
     build_labels()
+    build_eras()
+    build_life()
