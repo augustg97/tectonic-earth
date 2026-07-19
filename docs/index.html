@@ -1032,7 +1032,13 @@ const plateEls=[];
    exists rather than being relabelled every frame. */
 function updatePlateLabels(){
   const show=state.layers.boundaries;
-  const list=show?eraPlates().p:[];
+  // Don't print a plate name that the era-label layer is already showing —
+  // "NORTH AMERICA" stacked on "North America" is just noise.
+  const shown=new Set();
+  if(state.layers.labels){
+    for(const[l,e]of labelEls)if(e.classList.contains('show'))shown.add(l.n.toLowerCase());
+  }
+  const list=show?eraPlates().p.filter(d=>!shown.has(d.n.toLowerCase())):[];
   const box=$('#labels');
   while(plateEls.length<list.length){
     const e=document.createElement('div');

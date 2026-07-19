@@ -1,27 +1,42 @@
-"""Export per-era plate tessellations: continuous boundaries and named plates.
+"""Carry one plate model through time, rather than re-deriving it every frame.
 
-Reads the derived motion textures, segments each keyframe into plates, traces
-the borders as continuous polylines, and — the part that makes the layer
-readable — tracks plate identity across keyframes so names persist for as long
-as a plate does.
+Segmenting each keyframe independently made the boundaries jump: the derived
+motion field wobbles a little between frames, the clustering reacts to that
+wobble, and the whole tessellation reorganises. It also meant the present-day
+frame was a derived guess sitting next to the surveyed PB2002 network, so the
+two visibly disagreed.
 
-Naming works outward from the present, where the answer is known: each region
-at 0 Ma is matched to the PB2002 plate it overlaps most, so it inherits a real
-name (Pacific, Nazca, Eurasia...). Walking back through time, each frame's
-regions are matched to the previous frame's by overlap and inherit the name.
-A plate that appears with no ancestor is named for the landmass it carries,
-falling back to its ocean basin.
+Instead the plate model is advected. It starts as the *real* PB2002 plates at
+age 0 and is then carried step by step along the measured motion field, so:
+
+  * the present day IS PB2002 -- there is no seam to cross;
+  * every frame is the previous frame moved slightly, so boundaries evolve
+    continuously instead of reorganising;
+  * boundaries follow the reconstruction's own motion by construction;
+  * plates shrink, merge and vanish on their own as the crust they occupy
+    converges, which is what the record should show;
+  * names ride along with the label, so a plate keeps its identity for exactly
+    as long as it exists.
+
+Deep in the Precambrian the advected present-day network is necessarily a
+fiction -- those plates did not exist -- but it is a *coherent* fiction driven
+by the reconstruction, which reads far better than a mosaic that reshuffles
+every step.
 """
 import os, json
 import numpy as np
 from PIL import Image
 
 import plates_time as PT
-import features
 
 OUT = "../web/fields"
 WEB = "../web"
 W, H = PT.GRID_W, PT.GRID_H
+
+LAT = 90 - (np.arange(H) + 0.5) / H * 180
+LON = (np.arange(W) + 0.5) / W * 360 - 180
+LONG, LATG = np.meshgrid(LON, LAT)
+COSLAT = np.clip(np.cos(np.radians(LATG)), 0.15, 1.0)
 
 
 def load_motion(rec):
@@ -30,67 +45,111 @@ def load_motion(rec):
 
 
 def rasterise_pb2002():
-    """Present-day plate names on the motion grid, for seeding the chain."""
+    """PB2002 plates on the motion grid: an id raster plus id -> name."""
     plates = json.load(open(f"{WEB}/plates.json"))
-    lon = (np.arange(W) + 0.5) / W * 360 - 180
-    lat = 90 - (np.arange(H) + 0.5) / H * 180
-    LON, LAT = np.meshgrid(lon, lat)
-    names = np.empty((H, W), object); names[:] = None
-    for p in plates:
+    lab = np.zeros((H, W), np.int32)
+    names = {}
+    for i, p in enumerate(plates, start=1):
         inside = np.zeros((H, W), bool)
         for ring in p["rings"]:
             ring = np.asarray(ring, float)
             x, y = ring[:, 0], ring[:, 1]
             acc = np.zeros((H, W), bool)
-            for i in range(len(ring)):
-                j = (i - 1) % len(ring)
-                acc ^= (((y[i] > LAT) != (y[j] > LAT)) &
-                        (LON < (x[j] - x[i]) * (LAT - y[i]) / (y[j] - y[i] + 1e-12) + x[i]))
+            for k in range(len(ring)):
+                j = (k - 1) % len(ring)
+                acc ^= (((y[k] > LATG) != (y[j] > LATG)) &
+                        (LONG < (x[j] - x[k]) * (LATG - y[k]) / (y[j] - y[k] + 1e-12) + x[k]))
             inside |= acc
-        names[inside & (names == None)] = p["name"]      # noqa: E711
-    return names
+        new = inside & (lab == 0)
+        if new.any():
+            lab[new] = i
+            names[i] = p["name"]
+    lab = PT._flood_fill_rest(lab)      # cells the polygons missed
+    return lab, names
 
 
-def dominant(counter):
-    return max(counter, key=counter.get) if counter else None
+def majority(lab):
+    """Light regularisation so advection noise does not fray the regions."""
+    out = lab.copy()
+    for r in range(H):
+        rows = [max(0, r - 1), r, min(H - 1, r + 1)]
+        for c in range(W):
+            vals = [lab[rr, (c + dc) % W] for rr in rows for dc in (-1, 0, 1)]
+            best, bn = lab[r, c], 0
+            for v in set(vals):
+                n = vals.count(v)
+                if n > bn:
+                    bn, best = n, v
+            if bn >= 6:
+                out[r, c] = best
+    return out
 
 
-# Only landmasses and ocean basins make sense as plate names. A mountain belt
-# or an epeiric sea is a feature ON a plate, not a plate.
-PRIORITY = {"continent": 0, "ocean": 1}
+def advect(lab, vx, vy, dt_myr, back=True):
+    """Move the plate raster one step along the motion field.
 
-
-def name_from_geography(lab, pid, age, labels, cen=None):
-    """Name a plate for what it actually carries in THIS world.
-
-    Names are far more meaningful when read off the era's own geography than
-    when propagated across a hundred million years of splitting and merging,
-    which smears one name across unrelated fragments. A label sitting inside
-    the plate wins; failing that, the nearest one within reach.
+    Semi-Lagrangian: the label at a grid point in the earlier frame is whatever
+    label sits where that parcel has drifted to by the later frame. mm/yr over
+    dt Myr works out as kilometres, which is a convenient accident of units.
     """
-    m = lab == pid
-    active = [l for l in labels
-              if l["t"] in PRIORITY
-              and min(l["a0"], l["a1"]) - 6 <= age <= max(l["a0"], l["a1"]) + 6]
-    best, bp = None, 99
-    for l in active:
-        c = int((l["lon"] + 180) / 360 * W) % W
-        r = int(np.clip((90 - l["lat"]) / 180 * H, 0, H - 1))
-        if m[r, c]:
-            p = PRIORITY.get(l["t"], 4)
-            if p < bp:
-                bp, best = p, l["n"]
-    if best or cen is None:
-        return best
-    # nothing inside: take the nearest feature, if it is close enough to mean
-    # anything at all
-    bd = 1e9
-    for l in active:
-        dlon = abs(((l["lon"] - cen[0] + 540) % 360) - 180)
-        d = np.hypot(dlon * np.cos(np.radians(cen[1])), l["lat"] - cen[1])
-        if d < bd:
-            bd, best = d, l["n"]
-    return best if bd < 42 else None
+    sgn = 1.0 if back else -1.0
+    dlon = (vx * dt_myr * sgn) / (111.0 * COSLAT)
+    dlat = (vy * dt_myr * sgn) / 111.0
+    src_lat = np.clip(LATG + dlat, -89.9, 89.9)
+    c = np.mod(((LONG + dlon + 180) / 360 * W).astype(int), W)
+    r = np.clip(((90 - src_lat) / 180 * H).astype(int), 0, H - 1)
+    return lab[r, c]
+
+
+def weld(lab, vx, vy, names, thresh=1.0):
+    """Merge neighbouring plates that are no longer moving relative to
+    each other.
+
+    Advection alone preserves every plate for ever, which is wrong going back:
+    the Atlantic closes, and North America and Africa should stop being two
+    plates and become one. Two neighbours whose relative motion has fallen to
+    nothing are a single plate, so they are welded and stay welded. Run over
+    the whole march this makes plates progressively merge into the past and
+    into the assembled future, and the boundary between them simply ceases to
+    be drawn.
+    """
+    ids = [int(i) for i in np.unique(lab) if i > 0]
+    if len(ids) < 2:
+        return lab
+    vel, area = {}, {}
+    for i in ids:
+        m = lab == i
+        vel[i] = (float(vx[m].mean()), float(vy[m].mean()))
+        area[i] = int(m.sum())
+    # adjacency
+    adj = set()
+    right = np.roll(lab, -1, axis=1)
+    down = np.roll(lab, -1, axis=0)[:-1]
+    for a, b in zip(lab.ravel(), right.ravel()):
+        if a != b and a > 0 and b > 0:
+            adj.add((min(a, b), max(a, b)))
+    for a, b in zip(lab[:-1].ravel(), down.ravel()):
+        if a != b and a > 0 and b > 0:
+            adj.add((min(a, b), max(a, b)))
+
+    remap = {}
+    for a, b in sorted(adj):
+        a = remap.get(a, a); b = remap.get(b, b)
+        if a == b:
+            continue
+        rel = np.hypot(vel[a][0] - vel[b][0], vel[a][1] - vel[b][1])
+        if rel < thresh:
+            keep, gone = (a, b) if area[a] >= area[b] else (b, a)
+            remap[gone] = keep
+            for k, v in list(remap.items()):
+                if v == gone:
+                    remap[k] = keep
+    if remap:
+        out = lab.copy()
+        for gone, keep in remap.items():
+            out[lab == gone] = keep
+        return out
+    return lab
 
 
 def main():
@@ -98,102 +157,72 @@ def main():
     man.sort(key=lambda m: m["age"])
     by_age = {m["age"]: m for m in man}
     ages = sorted(by_age)
-    labels = features.labels()
 
-    seg, info, bounds = {}, {}, {}
-    for a in ages:
-        vx, vy, cf = load_motion(by_age[a])
-        lab = PT.segment(vx, vy, cf)
-        seg[a] = lab
-        info[a] = PT.plate_info(lab, vx, vy)
-        bounds[a] = PT.trace_boundaries(lab, vx, vy)
-    print(f"segmented {len(ages)} keyframes")
+    mot = {a: load_motion(by_age[a]) for a in ages}
+    # Smooth the motion in TIME too: a single keyframe's field carries matching
+    # noise, whereas neighbouring frames agree on the real signal.
+    sm = {}
+    for i, a in enumerate(ages):
+        nb = [ages[j] for j in (i - 1, i, i + 1) if 0 <= j < len(ages)]
+        sm[a] = (np.mean([mot[b][0] for b in nb], axis=0),
+                 np.mean([mot[b][1] for b in nb], axis=0),
+                 np.mean([mot[b][2] for b in nb], axis=0))
 
-    # ---- seed names at the present, then propagate along the chain ----
-    pb = rasterise_pb2002()
-    names = {a: {} for a in ages}
+    lab0, names = rasterise_pb2002()
     a0 = min(ages, key=lambda x: abs(x))
-    for pid in info[a0]:
-        m = seg[a0] == pid
-        tally = {}
-        for n in pb[m]:
-            if n:
-                tally[n] = tally.get(n, 0) + 1
-        cen0 = (info[a0][pid]["lon"], info[a0][pid]["lat"])
-        names[a0][pid] = dominant(tally) or name_from_geography(seg[a0], pid, a0, labels, cen0)
+    seg = {a0: lab0}
 
-    def propagate(order):
+    def march(order, back):
+        cur = lab0.copy()
         prev = None
         for a in order:
             if prev is None:
-                prev = a; continue
-            lp, lc = seg[prev], seg[a]
-            for pid in info[a]:
-                m = lc == pid
-                tally = {}
-                for q in lp[m]:
-                    if q:
-                        tally[int(q)] = tally.get(int(q), 0) + 1
-                src = dominant(tally)
-                inherited = names[prev].get(src) if src else None
-                cen = (info[a][pid]["lon"], info[a][pid]["lat"])
-                geo = name_from_geography(lc, pid, a, labels, cen)
-                if abs(a) <= 25 and src and tally[src] / max(1, m.sum()) > 0.5 and inherited:
-                    # near the present the surveyed plate names are the truth
-                    names[a][pid] = inherited
-                else:
-                    names[a][pid] = geo or inherited or "Plate"
+                prev = a
+                continue
+            vx, vy, cf = sm[prev]
+            weak = cf < 0.22            # don't move crust on an unreliable match
+            vx = np.where(weak, 0, vx)
+            vy = np.where(weak, 0, vy)
+            cur = advect(cur, vx, vy, abs(a - prev), back=back)
+            cur = PT._flood_fill_rest(cur)
+            cur = majority(cur)
+            cur = PT._absorb_small(cur)
+            cur = weld(cur, vx, vy, names)
+            seg[a] = cur.copy()
             prev = a
 
-    propagate([a for a in ages if a >= a0])                 # into the past
-    propagate([a for a in ages if a <= a0][::-1])           # into the future
+    march([a for a in ages if a >= a0], back=True)           # into the past
+    march([a for a in ages if a <= a0][::-1], back=False)     # into the future
+    print(f"advected the plate model across {len(ages)} keyframes")
 
-    # ---- export ----
     out = {}
     total_pts = 0
     for a in ages:
+        vx, vy, cf = sm[a]
+        lab = seg[a]
+        info = PT.plate_info(lab, vx, vy)
+        bounds = PT.trace_boundaries(lab, vx, vy)
         plates = []
-        used = {}
-        # largest region keeps the plain name; splinters are named for what
-        # they carry, so we don't end up with "Australia 2, 3, 4"
-        for pid, d in sorted(info[a].items(), key=lambda kv: -kv[1]["area"]):
-            if d["area"] < 4.0:
+        for pid, d in sorted(info.items(), key=lambda kv: -kv[1]["area"]):
+            nm = names.get(pid)
+            if not nm or d["area"] < 6.0:
                 continue
-            nm = names[a].get(pid) or "Plate"
-            # Segmentation can split one named plate into two regions. Qualify
-            # the smaller one rather than dropping it — a missing plate is far
-            # more misleading than an approximate name.
-            if nm in used:
-                alt = name_from_geography(seg[a], pid, a, labels, (d["lon"], d["lat"]))
-                alt = alt if alt else None
-                if alt and alt not in used:
-                    nm = alt
-                else:
-                    base, ref = nm, used[nm]
-                    ns = "N" if d["lat"] > ref[1] else "S"
-                    ew = "E" if ((d["lon"] - ref[0] + 540) % 360 - 180) > 0 else "W"
-                    nm = f"{base} ({ns}{ew})"
-                    k = 2
-                    while nm in used:
-                        nm = f"{base} {k}"; k += 1
-            used[nm] = (d["lon"], d["lat"])
-            sp = float(np.hypot(d["vx"], d["vy"]))
             plates.append({"n": nm, "lon": round(d["lon"], 1), "lat": round(d["lat"], 1),
-                           "a": round(d["area"], 1), "s": round(sp, 0),
-                           "vx": round(d["vx"], 1), "vy": round(d["vy"], 1)})
-        # Cap the label count: a dozen plate names on top of the era labels is
-        # unreadable, and the small ones are the least certain anyway.
-        plates = [q for q in plates if not q["n"].startswith("Plate")][:6]
-        total_pts += sum(len(b["p"]) for b in bounds[a])
-        out[str(a)] = {"b": bounds[a], "p": plates}
+                           "a": round(d["area"], 1),
+                           "s": round(float(np.hypot(d["vx"], d["vy"])), 0)})
+        total_pts += sum(len(b["p"]) for b in bounds)
+        out[str(a)] = {"b": bounds, "p": plates[:7]}
 
     path = f"{WEB}/plates_time.json"
     json.dump(out, open(path, "w"), separators=(",", ":"))
     npl = np.mean([len(v["p"]) for v in out.values()])
-    print(f"plates_time.json: {os.path.getsize(path)/1e6:.2f} MB, "
-          f"{total_pts} boundary points, {npl:.1f} plates per era")
-    sample = out[str(a0)]["p"][:8]
-    print("present-day plate names:", ", ".join(p["n"] for p in sample))
+    nb = np.mean([len(v["b"]) for v in out.values()])
+    print(f"plates_time.json: {os.path.getsize(path)/1e6:.2f} MB, {total_pts} points, "
+          f"{npl:.1f} plates and {nb:.1f} boundary runs per era")
+    for probe in ("0", "90", "180", "250", "400", "540", "900", "-150"):
+        if probe in out:
+            n = len(out[probe]["p"])
+            print(f"  {probe:>5} Ma: {n} named -", ", ".join(p["n"] for p in out[probe]["p"][:6]))
 
 
 if __name__ == "__main__":
