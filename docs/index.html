@@ -101,6 +101,9 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 .plabel.ocean{font-style:italic;color:#bfe0ef;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0}
 .plabel.sea{color:#cfeaf3;font-size:10px;font-style:italic}
 .plabel.orogen{color:#f0d0a8;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em}
+.plabel.plate{color:#cbd6e4;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  text-shadow:0 1px 3px rgba(0,0,0,.95);opacity:0}
+.plabel.plate .sp{color:#8fa1b8;letter-spacing:.04em}
 .plabel.show{opacity:.92}
 
 /* ---- info panel ---- */
@@ -287,7 +290,7 @@ function getTex(kind,i){
 
 /* ================= data load ================= */
 async function loadAll(){
-  const files=['timeline','boundaries','plates','hotspots','labels','boundaries_time'];
+  const files=['timeline','boundaries','plates','hotspots','labels','plates_time'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
   const tl=DATA.timeline;
@@ -572,17 +575,30 @@ function nearestKeyAge(){
   for(const r of A){const d=Math.abs(r.age-state.age); if(d<bd){bd=d;b=r.age;}}
   return b;
 }
+const BND_COL={ridge:0xe8534e,trench:0x59b0d6,transform:0xe0b23a};
+function eraPlates(){return DATA.plates_time[String(nearestKeyAge())]||{b:[],p:[]};}
+/* Boundaries arrive as traced polylines, so they are drawn as continuous
+   curves rather than loose segments. A run is cut only where it crosses the
+   antimeridian, which would otherwise streak across the whole map. */
 function buildDerivedBounds(){
   overlay.derived.clear();
-  const set=DATA.boundaries_time[String(nearestKeyAge())];
-  if(!set)return;
   const R=1.006;
-  const spec=[['ridge',0xe8534e],['trench',0x59b0d6],['transform',0xe0b23a]];
-  for(const [k,col] of spec){
-    const segs=set[k]; if(!segs||!segs.length)continue;
-    const m=lineSeg(segs,col,1,R);
-    m.userData.baseOp=0.85;
-    overlay.derived.add(m);
+  for(const b of eraPlates().b){
+    let run=[];
+    const flush=()=>{
+      if(run.length>1){
+        const g=new THREE.BufferGeometry().setFromPoints(run.map(q=>ll2v(q[0],q[1],R)));
+        const ln=new THREE.Line(g,new THREE.LineBasicMaterial({
+          color:BND_COL[b.c]||0xffffff,transparent:true,opacity:.9}));
+        ln.userData.baseOp=.9; overlay.derived.add(ln);
+      }
+      run=[];
+    };
+    for(const q of b.p){
+      if(run.length&&Math.abs(q[0]-run[run.length-1][0])>180)flush();
+      run.push(q);
+    }
+    flush();
   }
 }
 function buildBoundaries(){
@@ -840,17 +856,19 @@ function drawBoundariesMap(dx,dy,dw,dh,fade){
   draw(DATA.boundaries.ridge,'#e8534e');draw(DATA.boundaries.trench,'#59b0d6');draw(DATA.boundaries.transform,'#e0b23a');
   mctx.globalAlpha=1;
 }
+const BND_CSS={ridge:'#e8534e',trench:'#59b0d6',transform:'#e0b23a'};
 function drawDerivedBoundsMap(dx,dy,dw,dh,fade){
-  const set=DATA.boundaries_time[String(nearestKeyAge())];
-  if(!set)return;
-  for(const [k,col] of [['ridge','#e8534e'],['trench','#59b0d6'],['transform','#e0b23a']]){
-    const segs=set[k]; if(!segs||!segs.length)continue;
-    mctx.strokeStyle=col; mctx.globalAlpha=fade*0.9; mctx.lineWidth=1.6*DPR;
+  mctx.globalAlpha=fade*0.92; mctx.lineWidth=1.7*DPR;
+  mctx.lineJoin='round'; mctx.lineCap='round';
+  for(const b of eraPlates().b){
+    mctx.strokeStyle=BND_CSS[b.c]||'#fff';
     mctx.beginPath();
-    for(const s of segs){
-      if(Math.abs(s[0]-s[2])>180)continue;
-      const a=ll2map(s[0],s[1],dx,dy,dw,dh), b=ll2map(s[2],s[3],dx,dy,dw,dh);
-      mctx.moveTo(a[0],a[1]); mctx.lineTo(b[0],b[1]);
+    let pen=false, prev=null;
+    for(const q of b.p){
+      if(prev&&Math.abs(q[0]-prev[0])>180)pen=false;
+      const a=ll2map(q[0],q[1],dx,dy,dw,dh);
+      if(!pen){mctx.moveTo(a[0],a[1]);pen=true;}else mctx.lineTo(a[0],a[1]);
+      prev=q;
     }
     mctx.stroke();
   }
@@ -1008,6 +1026,38 @@ function featureDesc(n){const d={
 
 /* ================= labels ================= */
 const labelEls=new Map();
+const plateEls=[];
+/* Plate names persist for as long as the plate does: identity is tracked
+   across keyframes in the build, so the same plate keeps its name while it
+   exists rather than being relabelled every frame. */
+function updatePlateLabels(){
+  const show=state.layers.boundaries;
+  const list=show?eraPlates().p:[];
+  const box=$('#labels');
+  while(plateEls.length<list.length){
+    const e=document.createElement('div');
+    e.className='plabel plate'; box.appendChild(e); plateEls.push(e);
+  }
+  for(let i=0;i<plateEls.length;i++){
+    const e=plateEls[i], d=list[i];
+    if(!d){e.classList.remove('show');continue;}
+    e.innerHTML=d.n+(d.s>2?` <span class="sp">${d.s}</span>`:'');
+    let sx,sy,vis=true;
+    if(state.view==='globe'){
+      const p=ll2v(d.lon,d.lat,1.02), wp=p.clone().applyMatrix4(globe.matrixWorld);
+      const cp=wp.clone().project(cam);
+      const nrm=p.clone().applyQuaternion(globe.quaternion).normalize();
+      const toCam=cam.position.clone().sub(wp).normalize();
+      if(cp.z>1||nrm.dot(toCam)<0.12)vis=false;
+      sx=(cp.x*.5+.5)*innerWidth; sy=(-cp.y*.5+.5)*innerHeight;
+    }else{
+      const{dx,dy,dw,dh}=mapView||{};
+      if(dw){const c=ll2map(d.lon,d.lat,dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
+    }
+    if(vis){e.style.left=sx+'px';e.style.top=sy+'px';e.classList.add('show');}
+    else e.classList.remove('show');
+  }
+}
 function labelVisible(l){const a=state.age;return a>=Math.min(l.a0,l.a1)-6&&a<=Math.max(l.a0,l.a1)+6;}
 function ensureLabels(){
   const box=$('#labels');
@@ -1138,7 +1188,7 @@ function loop(now){
     renderer.render(scene,orthoCam);
     drawMapOverlays();
   }
-  updateLabels();
+  updateLabels(); updatePlateLabels();
   requestAnimationFrame(loop);
 }
 function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==undefined){c.material.opacity=(c.userData.baseOp||0.88)*o;}});}

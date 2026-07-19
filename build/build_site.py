@@ -24,7 +24,7 @@ shutil.copytree(os.path.join(WEB, "fields"), dst,
                 ignore=shutil.ignore_patterns("*_lite.webp"))
 
 for name in ("index.html", "three.min.js", "timeline.json", "boundaries.json",
-             "boundaries_time.json", "plates.json", "hotspots.json", "labels.json"):
+             "plates_time.json", "plates.json", "hotspots.json", "labels.json"):
     shutil.copy2(os.path.join(WEB, name), os.path.join(SITE, name))
 
 # GitHub Pages otherwise runs the tree through Jekyll, which ignores files and
