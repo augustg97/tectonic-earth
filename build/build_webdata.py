@@ -99,8 +99,13 @@ def build_hotspots():
 # ---------- era labels (time-aware, full timeline) ----------
 def build_labels():
     out = features.labels()
+    desc = features.descriptions()
+    for l in out:
+        if l["n"] in desc:
+            l["d"] = desc[l["n"]]
     json.dump(out, open(f"{WEB}/labels.json", "w"), separators=(",", ":"))
-    print("labels:", len(out), "(with age windows)")
+    have = sum(1 for l in out if "d" in l)
+    print(f"labels: {len(out)} ({have} with descriptions)")
 
 if __name__ == "__main__":
     build_timeline()

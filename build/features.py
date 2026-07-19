@@ -152,3 +152,79 @@ LABELS = [
 def labels():
     return [{"t": t, "n": n, "lon": lo, "lat": la, "a0": a0, "a1": a1}
             for (t, n, lo, la, a0, a1) in LABELS]
+
+
+# ------------------------------------------------------------ descriptions --
+# Narrative context for the info panel. The panel also reports live measured
+# motion and elevation, so these supply the story the numbers cannot.
+DESCRIPTIONS = {
+ # oceans
+ "Pacific Ocean": "The largest and oldest surviving ocean basin, the shrunken remnant of Panthalassa. Subduction consumes its margins faster than its ridges create new floor, so it has been closing for 180 million years.",
+ "Atlantic Ocean": "Young and still opening. Born when Pangaea split, it widens a few centimetres a year at the Mid-Atlantic Ridge and has almost no subduction zones to consume it.",
+ "Indian Ocean": "Opened as Gondwana broke apart and India tore north. Its floor records that sprint as a trail of ridges and the Ninetyeast fracture line.",
+ "Southern Ocean": "Opened when South America and Australia finally cleared Antarctica, letting a current circle the pole unobstructed — the event that refrigerated the continent.",
+ "Arctic Ocean": "A small, nearly enclosed basin ringed by continents, capped by sea ice through the present icehouse.",
+ "Panthalassa": "The world-ocean wrapped around Pangaea, covering more of the planet than every modern ocean combined. The Pacific is what is left of it.",
+ "Panthalassic Ocean": "The vast single ocean facing Pangaea's outer shore, floored by crust that has since been almost entirely subducted.",
+ "Panthalassic (proto)": "The early world-ocean surrounding the assembling southern continents, ancestor of Panthalassa.",
+ "Tethys Ocean": "A warm tropical gulf biting into the eastern flank of Pangaea. Its shallow shelves built the limestone that became the Alps and the Middle East's oil.",
+ "Paleo-Tethys": "The older Tethyan ocean, closing as the Cimmerian terranes rifted off Gondwana and drifted north to collide with Asia.",
+ "Iapetus Ocean": "The ocean between Laurentia and Baltica whose closure raised the Caledonian and Appalachian mountains — a mountain belt now split across the Atlantic.",
+ "Rheic Ocean": "Opened behind Avalonia as it rifted from Gondwana, then closed as Gondwana and Laurussia converged to finish Pangaea.",
+ "Mirovia": "The ocean encircling Rodinia. Its name means 'global' — beyond the supercontinent there was little else.",
+ "Neo-Panthalassa": "The projected world-ocean on the far side of the next supercontinent, as the Atlantic closes and the Pacific's descendants take over.",
+ # seas
+ "Mediterranean": "The last surviving scrap of Tethys, squeezed between Africa and Europe and slowly being closed by their convergence.",
+ "Mediterranean (closing)": "Africa's northward push is shutting this basin. In the projection it becomes a suture with mountains, not a sea.",
+ "Paratethys": "A brackish inland sea left behind as the Alps rose and cut it off from Tethys; the Black and Caspian seas are its last remnants.",
+ "Western Interior Seaway": "A shallow sea that split North America in two from the Arctic to the Gulf, drowning the continental interior at the Cretaceous sea-level peak.",
+ "Turgai Strait": "A north-south seaway flooding western Siberia, separating Europe from Asia for much of the Mesozoic and early Cenozoic.",
+ "Eromanga Sea": "An epeiric sea flooding central Australia during the Cretaceous highstand.",
+ "Sauk Sea": "The great early-Palaeozoic flooding of Laurentia, laying down sheets of clean quartz sand across a drowned, lifeless continent.",
+ "Zechstein Sea": "A hypersaline sea in Pangaea's arid interior that repeatedly evaporated, leaving thick salt beds beneath the North Sea.",
+ # continents / terranes
+ "Pangaea": "The last true supercontinent: nearly all land fused into one mass reaching pole to pole. Its interior lay so far from any ocean that it became one of the most arid landscapes in Earth's history.",
+ "Pangaea Proxima": "A projected future supercontinent, assembled as the Atlantic closes and the continents crowd back together around Africa.",
+ "Rodinia": "A Precambrian supercontinent of the Neoproterozoic world, assembled around a Laurentian core roughly a billion years ago. Its breakup may have helped trigger the Cryogenian glaciations.",
+ "Pannotia": "A short-lived latest-Precambrian supercontinent, already coming apart as the Cambrian explosion began.",
+ "Gondwana": "The southern supercontinent — South America, Africa, India, Australia and Antarctica as one landmass — which drifted across the South Pole and carried ice sheets with it.",
+ "Gondwana (assembling)": "The southern continents welding together along the Pan-African belts, forming the mass that would dominate the Palaeozoic.",
+ "Laurasia": "Pangaea's northern half after Tethys opened: North America and Eurasia still joined, drifting north into temperate and polar latitudes.",
+ "Laurussia (Euramerica)": "The 'Old Red Sandstone continent', formed when Laurentia and Baltica collided and raised the Caledonides. Its vast red floodplains hosted the first forests.",
+ "Laurentia": "The ancient core of North America, sitting astride the equator for much of the early Palaeozoic and repeatedly drowned by shallow seas.",
+ "Baltica": "The Precambrian core of northern Europe, converging on Laurentia across the closing Iapetus.",
+ "Siberia": "An independent continent for most of the Palaeozoic, drifting in northern latitudes before docking with Laurussia to complete Pangaea.",
+ "Avalonia": "A slender terrane that rifted off Gondwana and rafted north across the Rheic Ocean; fragments now form eastern New England, Nova Scotia and southern Britain.",
+ "Cimmeria": "A ribbon of continental fragments that peeled off Gondwana and drifted north, closing Palaeo-Tethys ahead and opening Tethys behind.",
+ "North America": "Drifting west, overriding Pacific crust along its leading edge while the Atlantic widens behind it.",
+ "South America": "Carried west by Atlantic spreading, its Pacific margin overriding the Nazca plate to raise the Andes.",
+ "Africa": "Nearly ringed by spreading ridges, so it moves slowly. It is splitting along the East African Rift and pushing north into Europe.",
+ "Eurasia": "The largest continental plate, assembled from a long history of collisions and still being built as India, Arabia and Africa drive into its southern edge.",
+ "Australia": "The fastest-moving major continental plate, racing north from Antarctica toward the Asian margin.",
+ "Antarctica": "Isolated over the South Pole and thermally sealed off by the circumpolar current, which turned a forested continent into an ice sheet.",
+ "India": "Rifted from Gondwana and sprinted north faster than any continent known, then collided with Asia to raise the Himalaya.",
+ # orogens
+ "Himalaya": "Still rising as India drives into Asia — the youngest and highest mountains on Earth, built entirely of crumpled continental crust.",
+ "Andes": "Raised by the subduction of oceanic crust beneath South America's western edge; a volcanic spine running the length of the continent.",
+ "Rocky Mountains": "Built far inland from the plate margin, when a shallowly subducting slab transmitted stress deep into the continent.",
+ "Alps": "Thrown up by Africa's collision with Europe as Tethys closed, stacking former seafloor high above sea level.",
+ "Atlas": "The northwest African expression of the same Africa-Europe convergence that raised the Alps.",
+ "Cordillera": "The long belt of ranges along western North America, assembled from terranes swept in and welded onto the continental margin.",
+ "Sevier-Laramide": "The mountain-building episode that thickened western North America and shed sediment east into the Western Interior Seaway.",
+ "Central Pangaean Mts": "A Himalayan-scale range along Pangaea's suture, running from what is now Appalachia through Iberia into central Europe.",
+ "Ural Mountains": "The suture where Siberia met Laurussia, closing the last ocean inside Pangaea. Erosion has since worn it low.",
+ "Appalachians": "Built in several collisions culminating in Pangaea's assembly; once alpine, now deeply eroded roots.",
+ "Variscan Belt": "The European half of the Pangaean collision zone, its worn stumps preserved across France, Iberia and central Europe.",
+ "Caledonides": "Raised by the closure of Iapetus; the same range now stands split between Scotland, Scandinavia and eastern Greenland.",
+ "Acadian Belt": "A mid-Palaeozoic collision along Laurussia's margin, shedding sand into vast river plains.",
+ "Taconic Belt": "An early Palaeozoic arc collision along Laurentia's eastern edge, the first step toward the Appalachians.",
+ "Pan-African Belt": "The web of sutures created as Gondwana welded together, running through Africa, Arabia and Brazil.",
+ "Grenville Belt": "A billion-year-old collisional belt marking Rodinia's assembly, traceable from Mexico through eastern Canada to Scandinavia.",
+ "Afro-European Belt": "In the projection, the mountain chain thrown up where Africa finishes closing the Mediterranean against Europe.",
+ "Neo-Himalaya": "The projected continuation of Himalayan building as the remaining Tethyan gap is consumed.",
+ "Trans-Atlantic Belt": "The suture in the projection where the Americas rejoin Africa and Europe, closing the Atlantic entirely.",
+}
+
+
+def descriptions():
+    return DESCRIPTIONS

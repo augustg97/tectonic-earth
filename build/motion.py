@@ -127,3 +127,59 @@ def encode(vx, vy, conf):
     g = np.clip(vy / V_RANGE * 0.5 + 0.5, 0, 1)
     b = np.clip(conf, 0, 1)
     return Image.fromarray((np.stack([r, g, b], -1) * 255 + 0.5).astype(np.uint8))
+
+
+def remove_net_rotation(vx, vy, conf):
+    """Subtract the confidence-weighted global mean motion.
+
+    Paleomagnetic reconstructions do not constrain paleolongitude, so
+    successive frames can share an arbitrary global drift. Left in, that drift
+    swamps the real signal and makes every plate appear to march the same way.
+    Removing it puts the field in something close to a no-net-rotation frame,
+    which is also the convention MORVEL uses for present-day motions.
+    """
+    w = conf.sum() + 1e-6
+    return vx - (vx * conf).sum() / w, vy - (vy * conf).sum() / w
+
+
+def classify(vx, vy, conf):
+    """Ridge / trench / transform strength from the motion field.
+
+    Divergence separates spreading from converging; the shear (off-diagonal
+    strain) picks out where plates slide past each other instead. Doing this
+    offline rather than in the shader means the field can be smoothed and
+    thresholded properly, so boundaries come out as continuous belts rather
+    than a speckle of pixels crossing a threshold.
+    """
+    def dx(a):
+        return (np.roll(a, -1, axis=1) - np.roll(a, 1, axis=1)) * 0.5
+    def dy(a):
+        return (np.roll(a, -1, axis=0) - np.roll(a, 1, axis=0)) * 0.5
+
+    dudx, dudy = dx(vx), dy(vx)
+    dvdx, dvdy = dx(vy), dy(vy)
+    div = dudx + dvdy                      # >0 spreading, <0 converging
+    shear = np.sqrt((dudy + dvdx) ** 2 + (dudx - dvdy) ** 2)
+
+    def smooth(a, k=1):
+        pad = np.pad(a, ((k, k), (k, k)), mode="wrap")
+        return sliding_window_view(pad, (2 * k + 1, 2 * k + 1)).mean(axis=(-1, -2))
+
+    div = smooth(div); shear = smooth(shear)
+    c = np.clip(conf * 1.5, 0, 1)
+    # Boundaries are narrow features on a coarse grid, so thresholds are set
+    # high and the fields are NOT smoothed afterwards -- blurring the result
+    # turns a plate margin into a broad stain rather than a line.
+    scale = np.percentile(np.abs(div)[conf > 0.25], 94) + 1e-6
+    ridge = np.clip(div / scale - 0.80, 0, 1) * c
+    trench = np.clip(-div / scale - 0.80, 0, 1) * c
+    # transform: strong shear that is NOT mostly opening or closing
+    tscale = np.percentile(shear[conf > 0.25], 96) + 1e-6
+    trans = np.clip(shear / tscale - 0.85, 0, 1) * c
+    trans *= np.clip(1.0 - (ridge + trench) * 2.0, 0, 1)
+    return np.clip(ridge, 0, 1), np.clip(trench, 0, 1), np.clip(trans, 0, 1)
+
+
+def encode_bounds(ridge, trench, trans):
+    return Image.fromarray(
+        (np.stack([ridge, trench, trans], -1) * 255 + 0.5).astype(np.uint8))

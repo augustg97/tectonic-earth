@@ -255,14 +255,14 @@ const state={
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[];   // decoded elevation / rainfall / motion field images
+let ELI=[], RNI=[], MOI=[], BNI=[];  // elevation / rainfall / motion / boundary fields
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:MOI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='m'?MOI:BNI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -292,7 +292,7 @@ async function loadAll(){
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
-  let done=0; const total=tl.length*3;
+  let done=0; const total=tl.length*4;
   const one=(name,arr,i)=>new Promise(res=>{
     const img=new Image();
     const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
@@ -300,7 +300,7 @@ async function loadAll(){
     img.onerror=fin;
     img.src=src(name);
   });
-  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i)]));
+  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),one(fr.b,BNI,i)]));
 }
 
 /* map timeline (sorted asc by age) to helpers */
@@ -344,7 +344,7 @@ const VERT=`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*
 --------------------------------------------------------------------------- */
 const FRAG=`
 precision highp float;
-uniform sampler2D elevA, elevB, rainA, rainB, motA;
+uniform sampler2D elevA, elevB, rainA, rainB, motA, bndA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform vec2 uTexel;
@@ -433,7 +433,10 @@ void main(){
   if(uMapProj>0.5){
     vec2 ll;
     if(!mollweideInv(vUv, ll)){ discard; }   // outside the map ellipse
-    uv=vec2(ll.x/(2.0*PI)+0.5, 0.5-ll.y/PI);
+    // The sphere samples with uv.y = 1 at the north pole (flipY puts image row
+    // 0 there), so the flat map has to match that convention or it renders
+    // upside down relative to the globe.
+    uv=vec2(ll.x/(2.0*PI)+0.5, 0.5+ll.y/PI);
   }
   float lat=90.0-uv.y*180.0;
   float s2=sin(radians(lat)); s2*=s2;
@@ -510,21 +513,19 @@ void main(){
     col=mix(col,s,uSchem);
   }
 
-  /* Plate boundaries for any era, read off the derived motion field: where
-     crust pulls apart it is a spreading ridge, where it converges it is a
-     trench or collision. This is the same measurement that draws the motion
-     arrows, so the two layers always agree. */
+  /* Plate boundaries for any era. Classified offline from the same derived
+     motion field that draws the arrows (ridge = spreading, trench =
+     converging, transform = shear), so the two layers always agree and the
+     belts come through continuous rather than as threshold speckle. */
   if(uBounds>0.001){
-    vec2 mt=vec2(1.0/128.0,1.0/64.0);
-    vec3 mE=texture2D(motA,uv+vec2(mt.x,0.0)).rgb;
-    vec3 mW=texture2D(motA,uv-vec2(mt.x,0.0)).rgb;
-    vec3 mN=texture2D(motA,uv-vec2(0.0,mt.y)).rgb;
-    vec3 mS=texture2D(motA,uv+vec2(0.0,mt.y)).rgb;
-    float conf=texture2D(motA,uv).b;
-    float div=((mE.r-mW.r)+(mN.g-mS.g));       // >0 spreading, <0 converging
-    float mag=clamp(abs(div)*4.0-0.42,0.0,1.0)*clamp(conf*1.6,0.0,1.0)*uBounds;
-    vec3 bc=(div>0.0)?vec3(0.91,0.33,0.31):vec3(0.35,0.69,0.84);
-    col=mix(col,bc,mag*0.75);
+    vec3 b=texture2D(bndA,uv).rgb;
+    float ridge=b.r, trench=b.g, trans=b.b;
+    vec3 bc=vec3(0.0); float amt=0.0;
+    if(ridge>=trench&&ridge>=trans){ bc=vec3(0.91,0.33,0.31); amt=ridge; }
+    else if(trench>=trans){ bc=vec3(0.35,0.69,0.84); amt=trench; }
+    else { bc=vec3(0.88,0.70,0.23); amt=trans; }
+    // steep transfer so only the core of each belt paints
+    col=mix(col,bc,pow(clamp(amt*1.8,0.0,1.0),1.5)*0.85*uBounds);
   }
   gl_FragColor=vec4(col,1.0);
 }`;
@@ -538,7 +539,7 @@ function initGL(){
   orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
   mat=new THREE.ShaderMaterial({uniforms:{
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
-    motA:{value:null},
+    motA:{value:null},bndA:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},
@@ -612,6 +613,59 @@ function motionAt(fld,lon,lat){
   const r=Math.min(MOT_H-1,Math.max(0,Math.floor((90-lat)/180*MOT_H)));
   const k=r*MOT_W+c;
   return {vx:fld.vx[k],vy:fld.vy[k],cf:fld.cf[k]};
+}
+/* Labels are authored at approximate positions, but the world moves under
+   them: an ocean name can end up sitting on a continent a few frames later.
+   Decode the elevation field per keyframe and nudge each label to the nearest
+   cell of the right kind, so seas stay on water and landmasses on land. */
+const ELEV_W=256, ELEV_H=128, ELEV_RANGE=8000;
+const ELEVDATA=new Map();
+function elevField(i){
+  if(ELEVDATA.has(i))return ELEVDATA.get(i);
+  const img=ELI[i]; if(!img)return null;
+  const c=document.createElement('canvas');c.width=ELEV_W;c.height=ELEV_H;
+  const cx=c.getContext('2d',{willReadFrequently:true});
+  cx.drawImage(img,0,0,ELEV_W,ELEV_H);
+  const d=cx.getImageData(0,0,ELEV_W,ELEV_H).data;
+  const z=new Float32Array(ELEV_W*ELEV_H);
+  for(let k=0;k<z.length;k++){
+    const e=d[k*4]/255*2-1;                 // signed-sqrt decode
+    z[k]=Math.sign(e)*e*e*ELEV_RANGE;
+  }
+  ELEVDATA.set(i,z);
+  if(ELEVDATA.size>30){for(const k of ELEVDATA.keys()){if(k!==i){ELEVDATA.delete(k);break;}}}
+  return z;
+}
+function elevAtLL(z,lon,lat){
+  const c=((Math.round((lon+180)/360*ELEV_W)%ELEV_W)+ELEV_W)%ELEV_W;
+  const r=Math.min(ELEV_H-1,Math.max(0,Math.round((90-lat)/180*ELEV_H)));
+  return z[r*ELEV_W+c];
+}
+const SNAP=new Map();
+function snapLabel(l,fi){
+  const key=l.n+'@'+fi;
+  if(SNAP.has(key))return SNAP.get(key);
+  const z=elevField(fi);
+  let out=[l.lon,l.lat];
+  if(z){
+    const wantLand=(l.t==='continent'||l.t==='orogen');
+    const ok=p=>{const e=elevAtLL(z,p[0],p[1]);return wantLand?e>0:e<0;};
+    if(!ok(out)){
+      // spiral outward for the nearest cell of the right kind
+      let best=null,bd=1e9;
+      for(let rad=3;rad<=40&&!best;rad+=3){
+        for(let a=0;a<360;a+=12){
+          const dlon=rad*Math.cos(a*DEG)/Math.max(0.3,Math.cos(l.lat*DEG));
+          const p=[((l.lon+dlon+540)%360)-180, Math.max(-85,Math.min(85,l.lat+rad*Math.sin(a*DEG)))];
+          if(ok(p)){const d=rad;if(d<bd){bd=d;best=p;}}
+        }
+      }
+      if(best)out=best;
+    }
+  }
+  SNAP.set(key,out);
+  if(SNAP.size>4000)SNAP.clear();
+  return out;
 }
 function hotspotsNow(){
   const a=state.age;
@@ -812,11 +866,23 @@ function selectAt(lon,lat){
   if(fade>0.4){
     for(const p of DATA.plates){if(pointInRings(lon,lat,p.rings)){showPlate(p,lon,lat);return;}}
   }
-  // nearest visible label
+  // Pick the nearest visible label of the RIGHT KIND for what was clicked:
+  // clicking water should name the ocean, not the continent beside it.
+  const fi=curFrame().i, z=elevField(fi);
+  const onLand=z?elevAtLL(z,lon,lat)>0:true;
   const vis=DATA.labels.filter(l=>labelVisible(l));
+  const wanted=vis.filter(l=>((l.t==='continent'||l.t==='orogen')===onLand));
+  const pool=wanted.length?wanted:vis;
   let best=null,bd=1e9;
-  for(const l of vis){const d=Math.hypot(l.lon-lon,(l.lat-lat));if(d<bd){bd=d;best=l;}}
-  if(best&&bd<45)showFeature(best);else closeInfo();
+  for(const l of pool){
+    const p=snapLabel(l,fi);
+    let dlon=Math.abs(p[0]-lon); if(dlon>180)dlon=360-dlon;
+    const d=Math.hypot(dlon*Math.cos(lat*DEG),p[1]-lat);
+    if(d<bd){bd=d;best=l;}
+  }
+  // generous radius: a click deep inside a large landmass should still
+  // name it even when the label sits well away
+  if(best&&bd<75)showFeature(best,lon,lat);else closeInfo();
 }
 function showPlate(p,lon,lat){
   state.selPlate=p.code;
@@ -827,17 +893,48 @@ function showPlate(p,lon,lat){
     rows.push(['Euler pole',`${p.motion.lat.toFixed(1)}°, ${p.motion.lon.toFixed(1)}°`]);
     rows.push(['Rotation rate',`${p.motion.w.toFixed(3)}°/Myr`]);
   }
+  const zf=elevField(curFrame().i);
+  if(zf){const e=elevAtLL(zf,lon,lat);
+    rows.push([e>=0?'Elevation':'Depth', `${Math.abs(Math.round(e)).toLocaleString()} m`]);}
   rows.push(['Clicked','~'+Math.abs(lat).toFixed(0)+'°'+(lat>=0?'N':'S')+' '+Math.abs(lon).toFixed(0)+'°'+(lon>=0?'E':'W')]);
   $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
   $('#infoDesc').textContent=plateDesc(p.name);
   $('#info').classList.add('show');
 }
-function showFeature(l){
+const COMPASS=['north','north-east','east','south-east','south','south-west','west','north-west'];
+function bearingName(vx,vy){
+  const b=(Math.atan2(vx,vy)*180/Math.PI+360)%360;
+  return COMPASS[Math.round(b/45)%8];
+}
+function showFeature(l,lon,lat){
+  const at=snapLabel(l,curFrame().i);
+  const useLon=(lon===undefined?at[0]:lon), useLat=(lat===undefined?at[1]:lat);
   $('#infoName').textContent=l.n;
-  $('#infoTag').textContent=({continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',orogen:'Mountain belt'})[l.t]+' · '+fmtAge(state.age);
-  $('#infoRows').innerHTML=`<div class="row">Exists<b>${fmtAge(Math.max(l.a0,state.age===0?0:l.a0))} – ${fmtAge(l.a1)}</b></div>`
-    +`<div class="row">Paleo-position<b>${Math.abs(l.lat)}°${l.lat>=0?'N':'S'}</b></div>`;
-  $('#infoDesc').textContent=featureDesc(l.n);
+  const kind={continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',orogen:'Mountain belt'}[l.t];
+  $('#infoTag').textContent=kind+' · '+fmtAge(Math.round(state.age));
+  const rows=[];
+  // live measurement from the derived motion field, so the panel describes
+  // this feature at THIS moment rather than quoting a fixed fact
+  const fld=motionField(curFrame().i);
+  if(fld){
+    const m=motionAt(fld,useLon,useLat);
+    if(m.cf>0.22){
+      const sp=Math.hypot(m.vx,m.vy);
+      rows.push(['Moving',`${sp.toFixed(0)} mm/yr ${bearingName(m.vx,m.vy)}`]);
+    }
+  }
+  const z=elevField(curFrame().i);
+  if(z){
+    const e=elevAtLL(z,useLon,useLat);
+    rows.push([e>=0?'Elevation':'Depth', `${Math.abs(Math.round(e)).toLocaleString()} m`]);
+  }
+  const span=[Math.min(l.a0,l.a1),Math.max(l.a0,l.a1)];
+  rows.push(['On the map',`${fmtAge(span[1])} – ${fmtAge(span[0])}`]);
+  rows.push(['Position',`${Math.abs(useLat).toFixed(0)}°${useLat>=0?'N':'S'} ${Math.abs(useLon).toFixed(0)}°${useLon>=0?'E':'W'}`]);
+  const m2=nearestMeta();
+  rows.push(['World then',`${m2.gmst.toFixed(1)}°C · ${m2.sealevel>=0?'+':''}${m2.sealevel} m seas`]);
+  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
+  $('#infoDesc').textContent=l.d||featureDesc(l.n);
   $('#info').classList.add('show');
 }
 function closeInfo(){$('#info').classList.remove('show');state.selPlate=null;}
@@ -877,8 +974,9 @@ function updateLabels(){
   for(const[l,e] of labelEls){
     if(!show||!labelVisible(l)){e.classList.remove('show');continue;}
     let sx,sy,vis=true;
+    const sp=snapLabel(l,curFrame().i);
     if(state.view==='globe'){
-      const p=ll2v(l.lon,l.lat,1.02);const wp=p.clone().applyMatrix4(globe.matrixWorld);
+      const p=ll2v(sp[0],sp[1],1.02);const wp=p.clone().applyMatrix4(globe.matrixWorld);
       const cp=wp.clone().project(cam);
       if(cp.z>1){vis=false;}
       // hide back of globe
@@ -887,7 +985,7 @@ function updateLabels(){
       if(nrm.dot(toCam)<0.12)vis=false;
       sx=(cp.x*.5+.5)*innerWidth;sy=(-cp.y*.5+.5)*innerHeight;
     }else{
-      const{dx,dy,dw,dh}=mapView||{};if(dw){const c=ll2map(l.lon,l.lat,dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
+      const{dx,dy,dw,dh}=mapView||{};if(dw){const c=ll2map(sp[0],sp[1],dx,dy,dw,dh);sx=c[0];sy=c[1];}else vis=false;
     }
     if(vis){e.style.left=sx+'px';e.style.top=sy+'px';e.classList.add('show');}else e.classList.remove('show');
   }
@@ -942,9 +1040,11 @@ function bindTextures(){
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
   const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
-  // Derived boundaries take over from the surveyed present-day set as that
-  // fades, so the layer stays populated all the way back.
-  mat.uniforms.uBounds.value=state.layers.boundaries?Math.max(0,1-presentFade()*1.4):0;
+  const btex=getTex('b',f.i); if(btex)mat.uniforms.bndA.value=btex;
+  // Near today the surveyed PB2002 set is drawn and is far more precise, so
+  // the derived belts fade in exactly as it fades out. Together they cover the
+  // whole timeline without doubling up where the good data exists.
+  mat.uniforms.uBounds.value=state.layers.boundaries?Math.min(1,Math.max(0,1-presentFade()*1.25)):0;
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
   return f;
 }
