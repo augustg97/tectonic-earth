@@ -461,6 +461,8 @@ precision highp float;
 uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
+uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
+uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
 varying vec2 vUv;
 
@@ -528,9 +530,17 @@ float elevAt(vec2 uv, float rug){
   float z=baseElev(uv);
   vec3 d=dirFromUv(uv);
   float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
+  if(z<0.0){
+    // The seafloor is not a flat sheet: give it its own gentle relief so
+    // shelves, ridge flanks and the abyssal plain read as different terrain.
+    // Muted on the shelf, a little bolder out on the plain. Deliberately
+    // small in amplitude so it never approaches sea level and flips to land.
+    float shelf=smoothstep(-500.0,-40.0,z);       // ->1 on the shelf
+    return z + (n*150.0 + n2*95.0)*(1.0-shelf*0.7)*uDetail;
+  }
   // rugged ground also carries more relief, not just a different shape
-  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
-  return z + (z>0.0 ? det : det*0.10);
+  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
+  return z + det;
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
    faint row-to-row streaks in the rainfall field — and those streaks were
@@ -551,15 +561,30 @@ float rainAt(vec2 uv){
   return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
 }
 
-vec3 oceanColour(float z){
-  vec3 c=vec3(0.039,0.137,0.251);
-  c=mix(c,vec3(0.063,0.212,0.361),smoothstep(-6500.0,-4000.0,z));
-  c=mix(c,vec3(0.086,0.314,0.478),smoothstep(-4000.0,-2500.0,z));
-  c=mix(c,vec3(0.137,0.435,0.600),smoothstep(-2500.0,-1000.0,z));
-  c=mix(c,vec3(0.208,0.549,0.710),smoothstep(-1000.0,-350.0,z));
-  c=mix(c,vec3(0.455,0.749,0.824),smoothstep(-350.0,-120.0,z));
-  c=mix(c,vec3(0.680,0.878,0.910),smoothstep(-120.0,-15.0,z));
-  c=mix(c,vec3(0.804,0.933,0.941),smoothstep(-15.0,0.0,z));
+/* Water colour is mostly what the body of water does to light: clear ocean
+   absorbs red within metres and returns blue from depth, so deep water is dark
+   and saturated while shallow water over a bright shelf scatters back pale and
+   green. Productivity pushes it greener — chlorophyll reflects green — and
+   concentrates on shelves and in cold, well-mixed high latitudes, not in the
+   warm subtropical gyres. uSeaTint slides the palette from an ancient, iron-
+   and algae-tinted green sea (0) to the modern coccolith-clear blue (1).
+   (The productivity noise is named "mott" because "patch" is a GLSL reserved
+   word that silently kills the whole shader.) */
+vec3 oceanColour(float z, vec3 sd, float latd){
+  vec3 deep    = mix(vec3(0.043,0.140,0.150), vec3(0.027,0.098,0.192), uSeaTint);
+  vec3 midc    = mix(vec3(0.098,0.318,0.316), vec3(0.086,0.314,0.478), uSeaTint);
+  vec3 shallow = mix(vec3(0.300,0.612,0.545), vec3(0.220,0.565,0.720), uSeaTint);
+  float t=clamp(-z/5000.0,0.0,1.0);
+  vec3 c=mix(midc, deep, pow(t,0.6));
+  c=mix(c, shallow, smoothstep(-850.0,-25.0,z));
+  // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
+  float shelf=smoothstep(-700.0,-40.0,z);
+  float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
+  float mott=fbm3(sd*6.0+3.1);
+  float bio=clamp(shelf*0.7+band*0.5,0.0,1.0)*(0.5+0.8*mott);
+  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.5,0.0,1.0));
+  // Turquoise over a bright shallow bottom, just before the beach.
+  c=mix(c, vec3(0.451,0.804,0.796), smoothstep(-40.0,-5.0,z)*0.7);
   return c;
 }
 
@@ -590,7 +615,7 @@ void main(){
   vec3 sdir=dirFromUv(uv);
   vec3 col;
   if(z<0.0){
-    col=oceanColour(z);
+    col=oceanColour(z,sdir,lat);
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
@@ -620,8 +645,25 @@ void main(){
     }
     float rock=clamp((zp-1700.0)/1500.0,0.0,1.0);
     col=mix(col, mix(vec3(0.545,0.502,0.451), vec3(0.427,0.392,0.345), clamp((zp-2600.0)/1800.0,0.0,1.0)), rock*0.85);
-    float snowline=2600.0+190.0*clamp(T,-20.0,30.0);
-    col=mix(col, vec3(0.965,0.976,0.988), clamp((zp-snowline)/420.0,0.0,1.0));
+    /* Mountain glaciers from an equilibrium-line altitude, not a bare snowline.
+       Temperature alone does not glaciate a range: a glacier needs snow to
+       accumulate, so a cold DRY massif can stand ice-free while a warmer wet
+       one is buried — which is why the dry Andes and Tibet carry an ELA above
+       5 km while wet maritime ranges at higher latitude carry one near 1.5 km.
+       Solve for the height at which the lapse-corrected temperature hits the
+       melting threshold, and let that threshold slide with how wet it is.
+       (The aridity term is named "arid" not "dry": "dry" is the tan land
+       colour three lines up, and reusing that name silently breaks the
+       whole shader.) */
+    float T0=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
+    float arid=1.0-clamp(Rf/0.85,0.0,1.0);
+    float Tela=1.0-7.0*arid;
+    float ela=clamp((T0-Tela)/0.0058, 300.0, 6200.0);
+    // Ice flows below the ELA down valleys, so the margin is ragged, not a
+    // clean contour; nudge it with noise and let it reach a little lower.
+    float tongue=(fbm3(sdir*22.0+5.5)-0.5)*1.7;
+    float glac=clamp((zp-ela)/520.0+tongue+0.08,0.0,1.0);
+    col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
@@ -644,8 +686,25 @@ void main(){
   float shade=0.70+0.62*hs;
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
-  float hw=(z<0.0)? mix(0.30,0.04,clamp(-z/2200.0,0.0,1.0)) : 1.0;
+  // Keep relief on the seafloor all the way down (gentler than land), instead
+  // of flattening it to almost nothing below ~2 km — that flattening is what
+  // made every ocean read as one blue sheet.
+  float hw=(z<0.0)? mix(0.52,0.30,clamp(-z/4500.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
+
+  if(z<0.0 && uSchem<0.5){
+    // A moving sea surface, without ever touching the height field: fine
+    // ripples perturb only the SHADING normal, so the coastline derived from
+    // elevation stays exact. Kept subtle — a low sheen, not chrome.
+    vec3 Ls=normalize(vec3(-0.55,0.55,0.63));
+    vec3 rd=sdir*560.0+vec3(uTime*0.05);
+    float r1=fbm3(rd), r2=fbm3(rd*2.6+11.0);
+    vec3 wn=normalize(nrm+vec3((r1-r2)*0.5,(r2-r1)*0.5,0.0));
+    float spec=pow(clamp(dot(wn,Ls),0.0,1.0),42.0);
+    float openw=1.0-smoothstep(-120.0,-8.0,z);   // no glitter in the surf zone
+    col+=vec3(0.55,0.68,0.78)*spec*0.28*openw;
+    col*=0.98+0.04*r1;
+  }
 
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
@@ -669,7 +728,7 @@ function initGL(){
     motA:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
-    uMapProj:{value:0},uBounds:{value:0},
+    uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -1744,6 +1803,14 @@ function bindTextures(){
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
+  /* Sea colour slides from an ancient green ocean toward the modern blue. The
+     research places the shift with the mid-Mesozoic rise of coccolithophores
+     and the deep-sea carbonate sink, so blue is fully established by ~150 Ma
+     and the sea greens going back into the Palaeozoic and Precambrian. Future
+     and recent ages are the modern blue. */
+  const ag=state.age;
+  mat.uniforms.uSeaTint.value = ag<=150 ? 1.0 : ag>=680 ? 0.12
+     : 1.0 - 0.88*(ag-150.0)/530.0;
   const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
@@ -1759,6 +1826,9 @@ function loop(now){
     syncSlider();
   }
   if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
+  // Drives only the sea-surface sheen; nothing about world state depends on it,
+  // so scrubbing time and this clock stay independent.
+  mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
   // overlays visibility & fade
   const fade=presentFade();

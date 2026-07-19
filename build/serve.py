@@ -4,7 +4,15 @@
 os.getcwd() at import time, which the sandbox refuses, so it dies before it can
 serve anything. This binds the directory explicitly instead.
 """
-import functools, http.server, os, socketserver, sys
+import functools, http.server, os, socketserver, sys, threading
+
+
+class Threaded(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    """Serve requests concurrently. The single-threaded default serialises
+    every one of the ~750 texture fetches, which stalls a fresh tab at 0% when
+    anything else is also loading."""
+    daemon_threads = True
+    allow_reuse_address = True
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "web")
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8899
@@ -17,8 +25,7 @@ class Quiet(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     handler = functools.partial(Quiet, directory=os.path.abspath(ROOT))
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("127.0.0.1", PORT), handler) as httpd:
+    with Threaded(("127.0.0.1", PORT), handler) as httpd:
         print(f"serving {os.path.abspath(ROOT)} on http://127.0.0.1:{PORT}")
         sys.stdout.flush()
         httpd.serve_forever()
