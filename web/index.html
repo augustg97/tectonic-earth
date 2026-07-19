@@ -849,17 +849,24 @@ function buildHotspots(){
     // a large igneous province erupts in a geological instant; flag the pulse
     const erupting=(isLip||isImp)&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
     if(isImp){
-      // A crater is a scar, not an event: bright at the moment of impact, then
-      // a persistent ring that fades as it is buried and eroded. Size tracks
-      // the real rim diameter, so Chicxulub reads larger than Ries.
+      /* A crater is a scar, not an event: bright at the moment of impact, then
+         a ring that fades as it is buried and eroded. How long that takes runs
+         over two orders of magnitude, so it is per-crater rather than a flat
+         rate — Chicxulub was buried within about two million years, while
+         Manicouagan is 215 Myr old and still unmistakable from orbit. Once the
+         scar is gone, a structure that left a global signature stays on as a
+         small dim mark: the hole has closed but the record has not. */
       const p=ll2v(h.lon,h.lat,1.012);
-      const rr=Math.max(.014,Math.min(.05,(h.d||30)/180*.05));
-      const age=Math.max(0,h.peak-state.age);          // Myr since the impact
-      const fresh=Math.exp(-age/90);
-      const col=erupting?0xffe9a8:0xc9d6e8;
+      let rr=Math.max(.014,Math.min(.05,(h.d||30)/180*.05));
+      const since=Math.max(0,h.peak-state.age);        // Myr since the impact
+      const sl=h.sl||90;
+      const gone=since>sl;
+      const fresh=Math.exp(-since/Math.max(2,sl));
+      const col=erupting?0xffe9a8:gone?0x8792a6:0xc9d6e8;
+      if(gone)rr*=0.45;
       const ring=new THREE.Mesh(new THREE.RingGeometry(rr*(erupting?.3:.62),rr,24),
         new THREE.MeshBasicMaterial({color:col,transparent:true,
-          opacity:erupting?.85:.20+.35*fresh,side:THREE.DoubleSide}));
+          opacity:erupting?.85:gone?.17:.20+.40*fresh,side:THREE.DoubleSide}));
       ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));
       overlay.hotspots.add(ring);
       if(erupting){
@@ -1183,11 +1190,20 @@ function showEvent(h){
   let tag, extra='';
   if(h.k==='impact'){
     const since=Math.max(0,h.peak-state.age);
-    tag=kind+' · '+h.peak+' Ma';
+    const sl=h.sl||90, gone=since>sl;
+    tag=kind+' · '+(since<1?'just struck':gone?'eroded away':'visible scar');
     rows.push(['Rim diameter',`${h.d} km`]);
-    rows.push(['Impact age',`${h.peak} Ma`]);
+    /* Say how well the age is actually known. A quarter of the catalogue has
+       no radiometric age at all, and presenting those with the same authority
+       as a U-Pb date is the kind of quiet overclaim this app should not make. */
+    rows.push(['Impact age',`${h.peak} Ma`+(h.cf&&h.cf!=='precise'?` (${h.cf})`:'')]);
+    if(h.cfu)rows.push(['Age constraint',h.cfu]);
     rows.push([since<1?'Status':'Age of scar',
       since<1?'just struck':`${Math.round(since)} Myr old`]);
+    rows.push(['Stayed visible',sl>=500?'to the present':`~${sl} Myr`]);
+    if(h.slw)extra+=`<div class="ihead">Why that long</div><p class="desc">${esc(h.slw)}</p>`;
+    if(h.ge)extra+=`<div class="ihead">${gone?'What outlasted it':'Global signature'}</div>`+
+      `<p class="desc">${esc(h.ge)}</p>`;
   }else{
     const e0=Math.min(h.e0!==undefined?h.e0:h.a0,h.e1!==undefined?h.e1:h.a1);
     const e1=Math.max(h.e0!==undefined?h.e0:h.a0,h.e1!==undefined?h.e1:h.a1);
@@ -1780,6 +1796,7 @@ function buildLegend(){
   <div class="li"><span class="dt" style="background:#ffd257"></span>Erupting province</div>
   <div class="li"><span class="dt" style="background:#b08968"></span>Basalt province standing</div>
   <div class="li"><span class="dt" style="background:#c9d6e8"></span>Impact crater</div>
+  <div class="li"><span class="dt" style="background:#8792a6"></span>Crater eroded, record remains</div>
   <div class="li" style="margin-top:5px;color:#5c6675;font-size:9.5px;max-width:150px;line-height:1.45">Boundaries and vectors in deep time are derived from the reconstruction's own motion.</div>`;
 }
 

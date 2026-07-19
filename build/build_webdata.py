@@ -231,11 +231,29 @@ def build_hotspots():
             h["a0"] = min(h["a0"], vu[0])
 
     imp = features.impacts()
+    scar = features.scar_life()
+    glob = features.global_effect()
+    conf = features.impact_confidence()
     for m in imp:
         if 20 < m["age"] <= ADVECT_LIMIT:
             m["lon"], m["lat"] = paleo_position(m["lon"], m["lat"], m["age"], mot)
-        # a crater is a lasting scar: visible from the impact onward
-        m["a0"], m["a1"] = 0, m["age"]
+        # How long a crater stays a crater varies by two orders of magnitude,
+        # so the old flat 90 Myr fade was wrong at both ends: Chicxulub was
+        # buried within about two million years, while Manicouagan is 215 Myr
+        # old and still the most recognisable impact structure on the planet.
+        life = scar.get(m["n"], (90, ""))[0]
+        m["sl"] = life
+        m["slw"] = scar.get(m["n"], (90, ""))[1]
+        if m["n"] in glob:
+            m["ge"] = glob[m["n"]]
+        if m["n"] in conf:
+            m["cf"], m["cfu"] = conf[m["n"]]
+        # Visible from the impact until the scar is gone -- and structures whose
+        # mark on the world outlasted their own topography (an ejecta layer, an
+        # extinction, a climate excursion) stay flagged all the way to the
+        # present, because that is the sense in which they are still there.
+        m["a0"] = 0 if m["n"] in glob else max(0.0, m["age"] - life)
+        m["a1"] = m["age"]
         m["e0"], m["e1"] = m["age"], m["age"]
         m["peak"] = m["age"]
     out += imp

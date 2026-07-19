@@ -784,11 +784,11 @@ IMPACTS = [
     # superseded -- Charlevoix and Carswell are Ordovician, not Palaeozoic-late
     # or Cretaceous, and Clearwater East and West are two craters ~180 Myr
     # apart, not a binary-impact doublet.
-    ("Chicxulub",        -89.5,  21.3,   66.05, 180),
+    ("Chicxulub",        -89.5,  21.3,   66.04, 180),
     ("Popigai",          111.0,  71.6,   35.7,  100),
-    ("Manicouagan",      -68.7,  51.4,  215.6,  100),
+    ("Manicouagan",      -68.7,  51.4,  215.5,  100),
     ("Acraman",          135.5, -32.0,  580.0,   90),
-    ("Morokweng",         23.5, -26.5,  146.1,   70),
+    ("Morokweng",         23.5, -26.47,  146.1,   70),
     ("Kara",              64.2,  69.1,   70.7,   65),
     ("Beaverhead",      -113.0,  44.6,  600.0,   60),
     ("Tookoonooka",      142.8, -27.0,  125.0,   55),
@@ -797,29 +797,69 @@ IMPACTS = [
     ("Karakul",           73.5,  39.0,   25.0,   52),
     ("Montagnais",       -64.2,  42.9,   51.1,   45),
     ("Steen River",     -117.6,  59.5,  141.0,   25),
-    ("Chesapeake Bay",   -76.0,  37.3,   34.9,   40),
+    ("Chesapeake Bay",   -76.0,  37.3,   34.9,   85),
     ("Araguainha",       -53.0, -16.8,  254.7,   40),
     ("Mjolnir",           29.7,  73.8,  142.0,   40),
-    ("Woodleigh",        114.7, -26.1,  364.0,   40),
+    ("Woodleigh",        114.7, -26.1,  364.0,   60),
     ("Saint Martin",     -98.5,  51.8,  227.8,   40),
-    ("Puchezh-Katunki",   43.7,  57.0,  194.0,   40),
+    ("Puchezh-Katunki",   43.7,  57.0,  195.9,   40),
     ("Carswell",        -109.5,  58.4,  481.5,   39),
     ("Clearwater West",  -74.5,  56.2,  286.2,   36),
     ("Manson",           -94.6,  42.6,   75.9,   35),
-    ("Strangways",       133.6, -15.2,  646.0,   25),
-    ("Hiawatha",         -67.3,  78.8,   58.0,   31),
+    ("Strangways",       133.6, -15.2,  657,   25),
+    ("Hiawatha",         -66.18,  78.8,   58.0,   31),
     ("Slate Islands",    -87.0,  48.7,  450.0,   30),
-    ("Mistastin",        -63.3,  55.9,   37.8,   28),
+    ("Mistastin",        -63.3,  55.9,   37.91,   28),
     ("Clearwater East",  -74.1,  56.1,  465.0,   26),
     ("Tunnunik",        -114.0,  72.5,  440.0,   26),
-    ("Lake Marsal",      -64.7,  51.2,  390.0,   25),
+    ("Uhackatik",      -64.7,  51.2,  390.0,   25),
     ("Kamensk",           40.5,  48.4,   50.4,   25),
     ("Ries",              10.6,  48.9,   14.8,   24),
     ("Boltysh",           32.3,  48.9,   65.4,   24),
     ("Rochechouart",       0.9,  45.8,  206.9,   23),
     ("Lappajarvi",        23.7,  63.2,   77.9,   23),
     ("Gosses Bluff",     132.3, -23.8,  142.5,   22),
-    ("Haughton",         -89.7,  75.4,   31.0,   23),
+    ("Haughton",         -89.7,  75.4,   31.04,   23),
+    # ---------- added by the impact-structure audit ----------
+    # Every confirmed structure >= 12 km across and younger than
+    # 1000 Ma that the original catalogue did not carry.
+    ("Talundilly", 144.5, -24.83, 125.0, 84),
+    ("Saqqar", 38.7, 29.59, 240.0, 34),
+    ("Shoemaker", 120.89, -25.87, 784.0, 30),
+    ("Alhama de Almeria", -2.55, 36.98, 8.0, 22),
+    ("Gweni-Fada", 21.75, 17.42, 345.0, 22),
+    ("Amelia Creek", 134.89, -20.84, 830.0, 20),
+    ("Logancha", 95.97, 65.52, 40.0, 20),
+    ("Neugrund", 23.62, 59.33, 535.0, 20),
+    ("Sierra Madera", -102.91, 30.6, 100.0, 20),
+    ("Dellen", 16.68, 61.85, 140.8, 19),
+    ("Glikson", 121.56, -23.98, 500.0, 19),
+    ("Obolon", 32.93, 49.57, 169.0, 19),
+    ("El'gygytgyn", 172.07, 67.49, 3.58, 18),
+    ("Logoisk", 27.8, 54.2, 30.0, 17),
+    ("Lawn Hill", 138.65, -18.68, 476.0, 17),
+    ("Ames", -98.19, 36.25, 468.0, 16),
+    ("Aorounga", 19.24, 19.09, 345.0, 16),
+    ("Eagle Butte", -110.51, 49.7, 60.0, 16),
+    ("Oasis", 24.41, 24.58, 120.0, 16),
+    ("Cleanskin", 137.94, -18.17, 760.0, 15),
+    ("Kaluga", 36.2, 54.5, 388.0, 15),
+    ("Luizi", 28.0, -10.17, 550.0, 15),
+    ("Ternovka", 33.53, 48.14, 280.0, 15),
+    ("Janisjarvi", 30.92, 61.97, 687.0, 14),
+    ("Pantasma", -85.95, 13.37, 0.8, 14),
+    ("Serra da Cangalha", -46.86, -8.08, 250.0, 14),
+    ("Wells Creek", -87.66, 36.38, 200.0, 14),
+    ("Cerro do Jarau", -56.53, -30.2, 125.0, 13.5),
+    ("Lockne", 14.85, 63.04, 455.0, 13.5),
+    ("Deep Bay", -102.99, 56.4, 99.0, 13),
+    ("Spider", 126.09, -16.74, 740.0, 13),
+    ("Zhamanshin", 60.94, 48.37, 0.91, 13),
+    ("Marquez", -96.29, 31.28, 58.3, 12.7),
+    ("Nicholson", -102.67, 62.66, 387.0, 12.5),
+    ("Vargeao Dome", -52.17, -26.82, 123.0, 12.4),
+    ("Karla", 48.03, 54.92, 5.0, 12),
+    ("Yallalie", 115.77, -30.34, 86.7, 12),
 ]
 
 
@@ -879,7 +919,10 @@ EVENT_NOTES = {
     "Lake Marsal": "Confirmed as an impact structure only in 2025, after shatter cones were found around a ring-shaped basin spotted on satellite imagery.",
     "Mjolnir": "A crater on the floor of the Barents Sea, which triggered a tsunami across the shallow Jurassic seaway.",
     "Beaverhead": "One of the oldest large craters in North America, its structure dismembered and scattered by later mountain building.",
-    "Woodleigh": "A buried Devonian crater in Western Australia, near in age to a major extinction pulse.",
+    "Woodleigh": "A crater buried under the Carnarvon Basin east of Shark Bay, known only from "
+     "drilling into its central uplift. Its age is genuinely unknown -- the only "
+     "radiometric date is on authigenic clay and was formally disputed -- so the "
+     "stratigraphy allows anything from the Devonian to the Proterozoic.",
     "Tookoonooka": "An Early Cretaceous impact into a shallow Australian sea, now buried under the Eromanga Basin.",
     "Sierra Madre Occidental": "The largest silicic volcanic province on Earth: ignimbrite sheets across northern Mexico, erupted as the subducting Farallon slab rolled back and the crust above it began to tear open into the Gulf of California.",
     "Manihiki Plateau": "One of three fragments of Ontong Java Nui, a single Cretaceous mega-plateau that a spreading triple junction later split apart.",
@@ -1035,6 +1078,108 @@ EVENT_NOTES = {
     "Yemen Traps": "The other half of the Afar flood basalts, erupted at the same moment as the Ethiopian "
      "Traps and then torn away from them as the Red Sea opened. The two plateaus now face "
      "each other across the water.",
+
+    # ---- notes for the craters added by the audit ----
+    "Alhama de Almeria": "Confirmed only in 2023, and buried: a small Miocene crater in southern Spain whose "
+     "22 km footprint is mostly collapsed ground around a true crater a quarter that size.",
+    "Amelia Creek": "A crater in the Northern Territory with no crater shape left -- it is recognised "
+     "entirely from shatter cones and sheared rock. Its age could be anywhere in a "
+     "billion-year window.",
+    "Ames": "Buried nearly three kilometres deep in Oklahoma, and productive: oil accumulated in "
+     "the shattered rock of the crater fill, which is how it was found.",
+    "Aorounga": "Concentric rings in the Chadian Sahara, combed into stripes by wind-carved yardangs. "
+     "One of the most photographed craters on Earth from orbit, and possibly one of a "
+     "chain.",
+    "Cerro do Jarau": "One of only about three craters on Earth punched into flood basalt. Its central core "
+     "rises out of the flat Pampas of southern Brazil.",
+    "Cleanskin": "Confirmed in 2021 on shocked quartz alone, straddling the Northern Territory- "
+     "Queensland border. Nothing about the landscape suggests a crater; the rock does.",
+    "Deep Bay": "A circular bay 220 metres deep at the south end of Reindeer Lake, Saskatchewan. "
+     "Glaciation cleaned it out rather than erasing it, leaving one of the sharpest crater "
+     "outlines visible from orbit.",
+    "Dellen": "Two lakes in Sweden filling a Cretaceous crater. Long thought to be 89 million years "
+     "old, it was redated to 141 -- one of the larger single-crater corrections in the "
+     "catalogue.",
+    "Eagle Butte": "A crater buried without trace under southern Alberta, mapped only by seismic surveys "
+     "and drilling.",
+    "El'gygytgyn": "An almost perfectly circular lake in Chukotka. Because it has never been glaciated, "
+     "its sediments hold an unbroken 3.6-million-year record of Arctic climate -- the "
+     "longest that exists on land.",
+    "Glikson": "A crater in the Little Sandy Desert defined mostly by a ring-shaped magnetic "
+     "anomaly. Named for Andrew Glikson, who spent a career arguing that Australia was "
+     "full of unrecognised impact structures.",
+    "Gweni-Fada": "A ring of hills on Chad's Ennedi Plateau. The Sahara's hyperaridity has kept a "
+     "crater of roughly Devonian age legible as surface topography, which almost nowhere "
+     "else on Earth manages.",
+    "Janisjarvi": "A Karelian lake filling a crater 687 million years old -- the oldest impact "
+     "structure on Earth that still holds a lake.",
+    "Kaluga": "A Devonian crater buried under central Russia, known only from boreholes.",
+    "Karla": "A small, buried crater on the Russian platform, a few million years old.",
+    "Lawn Hill": "A ring of dolomite hills in Queensland marking a mid-Ordovician impact. The crater "
+     "is gone; the shatter cones and impact diamonds are not.",
+    "Lockne": "A Swedish crater formed on a shallow Ordovician sea floor, which is why its resurge "
+     "deposits -- the sediment that washed back in -- are the best preserved anywhere. It "
+     "belongs to the Ordovician meteorite shower that followed the break-up of the "
+     "L-chondrite parent body.",
+    "Logancha": "A Siberian crater punched through the Siberian Traps themselves, so its target rock "
+     "is the largest flood basalt province on Earth.",
+    "Logoisk": "A crater buried under Belarus, found by drilling in the 1970s. Its published age was "
+     "wrong by 12 million years until Ar-Ar dating moved it to 30 Ma.",
+    "Luizi": "The first impact structure ever confirmed in the Democratic Republic of the Congo, "
+     "found in 2011. Its rim rises 300 metres above the interior on the Kundelungu Plateau "
+     "and is unmistakable from space.",
+    "Marquez": "A buried Palaeocene dome in Texas, its central uplift showing at the surface as a "
+     "low rise.",
+    "Neugrund": "A submarine crater in the Gulf of Finland whose ejecta layer is more useful than the "
+     "crater: it sits in Early Cambrian rocks laid down before trilobites appeared, and is "
+     "the only reason we know when it struck.",
+    "Nicholson": "A lake full of islands in the Northwest Territories, scoured by ice until little of "
+     "the crater form was left.",
+    "Oasis": "A crater in the Libyan desert whose rim has been stripped down to an inner ring of "
+     "hills. It sits close to the small BP structure, and the two may be related.",
+    "Obolon": "A Jurassic crater buried beneath the Dnieper-Donets basin in Ukraine, with no trace "
+     "at the surface.",
+    "Pantasma": "A young crater in the Nicaraguan highlands, and the likely source of the impact "
+     "glass scattered across Belize 800,000 years ago.",
+    "Saqqar": "The largest confirmed impact structure on the Arabian Peninsula, exposed in the "
+     "northern Saudi desert and confirmed by shocked quartz. Its age is pinned only "
+     "between 410 and 70 million years.",
+    "Serra da Cangalha": "Brazil's second-largest crater, cut into flat-lying Parnaiba Basin sandstone. Its "
+     "central uplift ring is about as clean a textbook example as exists.",
+    "Shoemaker": "Concentric rings of salt lakes in the Western Australian desert, named for Gene "
+     "Shoemaker, who did more than anyone to establish that craters like this exist. Its "
+     "age is bracketed only between 1300 and 568 million years -- it may not even belong "
+     "in this timeline.",
+    "Sierra Madera": "The central uplift of a West Texas crater, standing as a cluster of hills on "
+     "otherwise flat plains. Erosion has cut so deep that the crater floor is gone and the "
+     "plumbing beneath it is exposed.",
+    "Spider": "Named for the radiating ridges of shatter-coned sandstone that spread from its "
+     "centre across the Kimberley -- the legs are visible from the air after something "
+     "like 700 million years.",
+    "Talundilly": "A buried structure in Queensland, 84 km across, sitting 300 km from Tookoonooka and "
+     "apparently the same age. If both are impacts they are the largest known doublet on "
+     "Earth -- but Talundilly has only ever been seen in seismic data, never drilled, so "
+     "it remains unproven.",
+    "Ternovka": "A Permian crater in Ukraine visible only inside the Krivoy Rog iron-ore pits, where "
+     "mining has cut through the buried structure.",
+    "Uhackatik": "Spotted on Google Maps by an amateur, confirmed by shatter cones and impact melt in "
+     "2025, and named in consultation with the Ekuanitshit Innu. A ring basin 25 km across "
+     "on Quebec's Cote-Nord that nobody had recognised until someone looked at a satellite "
+     "image properly.",
+    "Vargeao Dome": "A crater blasted into the Parana flood basalts, 225 metres deep with a rim so intact "
+     "that three Brazilian municipalities sit inside it.",
+    "Wells Creek": "A Tennessee crater with a superbly exposed central uplift and shatter cones, long "
+     "used as a field-teaching site. Its age is bracketed only between 323 and 100 million "
+     "years.",
+    "Woodleigh": "A crater buried under the Carnarvon Basin east of Shark Bay, known only from "
+     "drilling into its central uplift. Its age is genuinely unknown -- the only "
+     "radiometric date is on authigenic clay and was formally disputed -- so the "
+     "stratigraphy permits anything from the Devonian to the Proterozoic.",
+    "Yallalie": "Australia's first confirmed Late Cretaceous impact, buried under the Perth Basin and "
+     "betrayed only by shocked quartz in its breccia.",
+    "Zhamanshin": "The youngest crater of its size on Earth, in Kazakhstan, and the source of "
+     "irghizites -- glass droplets thrown from the impact and still lying loose on the "
+     "surface.",
 }
 
 
@@ -1590,3 +1735,343 @@ def coupling_problems():
                 out.append(f"{plume} active only from {oldest} Ma but "
                            f"{prov} erupts at {erupted} Ma")
     return out
+
+
+# ------------------------------------------- how long a crater shows --
+# The layer used to fade every crater over a flat 90 Myr, which is wrong at
+# both ends and wrong systematically. A marine or basin impact is buried in
+# geological moments -- Chicxulub was invisible within about two million
+# years, the worst case here -- while a crater on dry, stable craton vastly
+# outlives the average: Manicouagan is 215 Myr old and still the most
+# recognisable impact structure on Earth.
+#
+# `myr` is how long the crater stayed a recognisable surface feature.
+SCAR_LIFE = {
+ "Acraman": (580, "STILL, in outline. Deeply eroded into the Gawler Range Volcanics, but the circular "
+  "playa of Lake Acraman is obvious from orbit after ~580 Myr."),
+ "Alhama de Almeria": (3, "Buried and confirmed by drilling; the 22 km figure is exterior collapse terrain, not "
+  "a visible crater."),
+ "Amelia Creek": (30, "Structurally deformed with no crater morphology left; recognised from shatter cones "
+  "and strike-slip-style deformation."),
+ "Ames": (5, "Buried ~2.7 km deep in Oklahoma and now a productive oil reservoir in the crater "
+  "fill."),
+ "Aorounga": (345, "STILL. Concentric rings striped by wind-carved yardangs in the Sahara; a classic "
+  "Landsat and SIR-C image. Hyperaridity has preserved a Devonian crater as surface "
+  "topography."),
+ "Araguainha": (150, "STILL, in fact -- a well-exposed granite central uplift with concentric ring "
+  "valleys, obvious from orbit after 255 Myr. South America's largest."),
+ "Beaverhead": (30, "TOPOGRAPHY ENTIRELY GONE. Tectonically dismembered by Cordilleran thrusting; there "
+  "is no crater form left anywhere. It is known almost solely from a huge shatter-cone "
+  "field smeared across thrust sheets, and even its centre is inferred -- published "
+  "positions disagree by over a degree."),
+ "Boltysh": (5, "Buried under sediment -- which is precisely why its crater-lake record survived "
+  "intact enough to log a hyperthermal."),
+ "Carswell": (150, "Survives as an exposed ring of Carswell Formation dolomite. Notable for a practical "
+  "reason: impact-remobilised uranium ore hosts the Cluff Lake mine."),
+ "Cerro do Jarau": (125, "STILL. A central elevated core rising out of the flat Pampas -- highly legible from "
+  "orbit."),
+ "Charlevoix": (200, "Partially survives as the semicircular St Lawrence embayment, with Mont des "
+  "Eboulements as the central uplift. Still a seismically active zone -- the weakened "
+  "rock localises modern earthquakes 450 Myr later."),
+ "Chesapeake Bay": (5, "Buried under 300-500 m of Coastal Plain sediment. But it never stopped MATTERING: it "
+  "still steers the modern bay, drives a groundwater salinity anomaly and causes "
+  "measurable land subsidence. A case where 'scar' and 'influence' diverge."),
+ "Chicxulub": (2, "BURIED ALMOST IMMEDIATELY. A submarine crater on the Yucatan carbonate shelf, "
+  "blanketed within a couple of million years and now under ~1 km of carbonate. It is "
+  "traced only by a gravity anomaly and the ring of cenotes. Rendering it as a visible "
+  "scar for 90 Myr is the layer's biggest persistence error -- although its GLOBAL "
+  "signature (see GLOBAL_EFFECT) is permanent, which is the opposite lesson."),
+ "Cleanskin": (30, "~15 km apparent structure with a 6 km central uplift; confirmed on PDFs, planar "
+  "fractures and feather features in quartz rather than on any surviving landform."),
+ "Clearwater East": (465, "STILL. Lake-filled after 465 Myr -- remarkable persistence, again thanks to glacial "
+  "excavation of the weakened rock."),
+ "Clearwater West": (286, "STILL. A lake with a central ring of melt-rock islands. Glacial scour sharpened "
+  "rather than erased it."),
+ "Deep Bay": (99, "STILL. A near-perfect circular bay 220 m deep on Reindeer Lake; one of the sharpest "
+  "crater outlines visible from orbit."),
+ "Dellen": (140.8, "STILL. Lakes Norra and Sodra Dellen occupy it after 140 Myr."),
+ "Eagle Butte": (5, "Fully buried in southern Alberta; imaged by seismic and drilling only."),
+ "El'gygytgyn": (3.58, "STILL. A near-perfect circular lake in Chukotka, essentially pristine."),
+ "Glikson": (50, "Eroded in the Little Sandy Desert; defined largely by a ring-shaped aeromagnetic "
+  "anomaly plus shatter cones."),
+ "Gosses Bluff": (142, "STILL. The 5 km central-uplift ring stands 180 m above the desert floor. A textbook "
+  "orbital image after 142 Myr."),
+ "Gweni-Fada": (345, "STILL. A clear annular ridge on the Ennedi Plateau, preserved by Saharan "
+  "hyperaridity."),
+ "Haughton": (31, "STILL. Superbly preserved in polar desert on Devon Island -- so well preserved that "
+  "NASA runs the Haughton-Mars Project and the Flashline Mars station inside it."),
+ "Hiawatha": (58, "A special case: superbly preserved BENEATH ~930 m of the Greenland Ice Sheet. It was "
+  "a surface feature in a rainforest landscape for tens of Myr, then sealed by ice "
+  "rather than eroded. The only known subglacial crater."),
+ "Janisjarvi": (687, "STILL. A lake-filled basin in Karelia after 687 Myr -- the oldest crater on Earth "
+  "still holding a lake."),
+ "Kaluga": (10, "Buried under Devonian-Carboniferous cover; known from boreholes."),
+ "Kamensk": (10, "Buried under Neogene cover."),
+ "Kara": (30, "Deeply eroded on Pay-Khoy and partly submerged under the Kara Sea. Carries impact "
+  "diamonds."),
+ "Karakul": (60, "STILL. Lake Karakul at 3,900 m in the Pamirs fills most of the structure. High- "
+  "altitude aridity has preserved it, whatever its true age."),
+ "Karla": (5, "Small, buried, minimal expression."),
+ "Lappajarvi": (77.9, "STILL. Lake Lappajarvi fills the crater."),
+ "Lawn Hill": (100, "Expressed as an 18 km annulus of dolomite hills; the crater form itself is gone but "
+  "shatter cones, PDFs and impact diamonds remain."),
+ "Lockne": (455, "Partially. Exhumed by Quaternary glaciation after being buried; the resurge deposits "
+  "are exceptionally well preserved."),
+ "Logancha": (20, "Exposed but heavily eroded on the Siberian Traps."),
+ "Logoisk": (5, "Entirely buried in Belarus; found by drilling in the 1970s."),
+ "Luizi": (550, "STILL. The rim stands 300-350 m above the interior on the Kundelungu Plateau -- "
+  "clearly visible in satellite imagery."),
+ "Manicouagan": (215, "STILL. The 'Eye of Quebec' -- an annular reservoir ring around Ile Rene-Levasseur. "
+  "215 Myr old and the most recognisable crater on Earth from orbit. Proof that a large "
+  "crater in stable Grenvillian basement can outlast the fade window by a factor of "
+  "two."),
+ "Manson": (10, "The largest fully-onshore US structure and completely buried under glacial drift; "
+  "known only from drillcore."),
+ "Marquez": (20, "Buried Texas dome; the central uplift is faintly expressed as a topographic high."),
+ "Mistastin": (37.9, "STILL. Lake Kamestastin with a central-uplift island; the prime terrestrial analogue "
+  "site for lunar impact melt."),
+ "Mjolnir": (5, "On the floor of the Barents Sea, entirely submarine and now buried. Known only from "
+  "seismic and drilling."),
+ "Montagnais": (3, "Submarine on the Scotian Shelf; buried beneath the seafloor and found only by "
+  "petroleum drilling."),
+ "Morokweng": (15, "Completely buried beneath Kalahari sand. Found by its magnetic signature -- "
+  "literally invisible."),
+ "Neugrund": (30, "Submarine in the Gulf of Finland; the ejecta layer is better known than the crater."),
+ "Nicholson": (50, "An island-studded lake in the NWT, but heavily glacially scoured -- the crater form "
+  "is largely gone."),
+ "Oasis": (120, "STILL. An ~11.5 km central ring of hills in the Libyan desert."),
+ "Obolon": (10, "Buried beneath Dnieper-Donets sediments; no surface expression."),
+ "Pantasma": (0.8, "STILL. A young crater basin in the Nicaraguan highlands."),
+ "Popigai": (35.7, "STILL. An eroded but well-exposed tundra basin, now a UNESCO geopark."),
+ "Puchezh-Katunki": (15, "Buried under Neogene and Quaternary cover; impactites crop out only in Volga bank "
+  "cuts."),
+ "Ries": (14.8, "STILL. The best-preserved mid-size crater on Earth; the town of Nordlingen is built "
+  "inside it and the rim is a visible ring of hills."),
+ "Rochechouart": (206.9, "Structure survives, topography does not. No topographic rim is left after 207 Myr, "
+  "but the impactites are so well preserved they were quarried as building stone for "
+  "the local chateaux. Scar life as topography: ~50 Myr."),
+ "Saint Martin": (30, "Buried under Jurassic red beds and glacial till, though Lake St Martin's outline "
+  "partly reflects it."),
+ "Saqqar": (100, "Exposed in Saudi desert and confirmed on shocked quartz; the largest confirmed "
+  "structure on the Arabian Peninsula."),
+ "Serra da Cangalha": (250, "STILL. Excellent exposure and a prominent central uplift ring in near-undeformed "
+  "Parnaiba Basin sediments."),
+ "Shoemaker": (200, "STILL, oddly. Concentric ring synclines with salt lakes, strikingly visible from "
+  "orbit despite an age that may exceed a billion years -- Australian cratonic aridity "
+  "at its most extreme."),
+ "Sierra Madera": (100, "STILL. The central uplift stands out as hills on the West Texas plains, though the "
+  "crater is deeply eroded."),
+ "Siljan": (380.9, "STILL, partially. Sweden's ring of lakes traces the rim depression around the "
+  "central uplift after 380 Myr -- the crater floor was eroded away but the ring of "
+  "softer downfaulted sediment survives as topography."),
+ "Slate Islands": (100, "Only the central uplift survives, emerging as an archipelago in Lake Superior. The "
+  "rest is drowned and eroded. The islands' rocks are full of shatter cones."),
+ "Spider": (740, "STILL. The radiating shatter-cone-bearing sandstone ridges that give it its name are "
+  "visible from the air after ~740 Myr."),
+ "Steen River": (10, "Buried ~200 m deep in Alberta and now a producing oil and gas field."),
+ "Strangways": (100, "Deeply eroded in remote Arnhem Land; a prominent central uplift with a >=20 km "
+  "collar of upturned and overturned beds is all that remains."),
+ "Talundilly": (10, "Same burial history as its neighbour Tookoonooka; seismic-only, never drilled."),
+ "Ternovka": (5, "Buried; exposed only inside the Krivoy Rog iron-ore open pits and mine workings."),
+ "Tookoonooka": (10, "Buried under ~900 m of Eromanga Basin sediment. Known from seismic plus 31 petroleum "
+  "wells -- there is no surface expression at all."),
+ "Tunnunik": (50, "Deeply eroded on Victoria Island with no topographic rim; recognised in 2010 only "
+  "from shatter-coned bedrock and ring-disturbed strata visible from the air."),
+ "Uhackatik": (150, "The reason it was found at all: a ring-shaped basin with 200-300 m rim-to-floor "
+  "relief, spotted on Google Maps by an amateur. Survives as topography after ~390 Myr."),
+ "Vargeao Dome": (123, "STILL. A 225 m deep depression with a sharp circular rim; three Brazilian "
+  "municipalities sit inside it."),
+ "Wells Creek": (200, "STILL, as structure. A well-exposed central uplift with classic shatter cones in "
+  "Tennessee."),
+ "Woodleigh": (20, "Not exposed; buried under the Carnarvon Basin and known only from drilling into the "
+  "central uplift."),
+ "Yallalie": (5, "Buried under Perth Basin sediments; expressed only as a subtle basin."),
+ "Zhamanshin": (0.91, "STILL. The youngest structure of its size on Earth; exposed and fresh."),
+}
+
+
+# A hole in the ground is not the only thing an impact leaves. These are the
+# structures whose mark on the world outlasted their own topography --
+# an ejecta layer, an extinction, a climate excursion in the record.
+GLOBAL_EFFECT = {
+ "Acraman": "A distal ejecta horizon traced over 300 km into the Bunyeroo Formation of the "
+  "Flinders Ranges. The layer is stratigraphically interleaved with early acritarch and "
+  "Ediacaran biotic change, which is why the crater is dated from the ejecta rather "
+  "than the other way round.",
+ "Araguainha": "Falls within uncertainty of the Permian-Triassic boundary, and the association is "
+  "much discussed. But at 40 km it is roughly two orders of magnitude too small in "
+  "energy to drive the end-Permian extinction; the Siberian Traps are. The existing "
+  "EVENT_NOTES entry already states this correctly and should be kept.",
+ "Boltysh": "Not a cause but a RECORDER, and a valuable one. It struck ~0.65 Myr AFTER the K-Pg "
+  "extinction, and its crater-lake sediments log the Lower C29n (Dan-C2) hyperthermal "
+  "in fine detail -- a direct archive of how the post-extinction world was recovering, "
+  "and of a climate excursion that had nothing to do with the impact that made the "
+  "lake. Pickersgill et al. (2021) raise the possibility that even a 24 km impact could "
+  "perturb an already-stressed recovery.",
+ "Chesapeake Bay": "Source of the North American tektite/microtektite strewn field, a global marker "
+  "horizon. Separately and unusually, it still exerts a physical influence today: it "
+  "controls the shape of the modern Chesapeake Bay, drives a deep groundwater salinity "
+  "anomaly across the lower Delmarva Peninsula, and causes measurable ongoing land "
+  "subsidence -- 35 Myr after the fact.",
+ "Chicxulub": "The only unambiguous impact-driven mass extinction in the record. A worldwide ejecta "
+  "and iridium layer at 66.052 +/- 0.043 Ma, sulphate aerosol loading from the "
+  "anhydrite-rich target, an impact winter lasting years, and the end of the non-avian "
+  "dinosaurs. The topography vanished in ~2 Myr; the boundary clay is permanent and is "
+  "found on every continent. If the app renders one thing that outlives its crater, it "
+  "is this.",
+ "El'gygytgyn": "No ejecta layer, but a globally important scientific consequence: the ICDP core "
+  "through its lake sediments yields a continuous 3.6 Myr record of Arctic climate -- "
+  "the longest terrestrial Arctic palaeoclimate archive that exists.",
+ "Lockne": "One of the craters of the mid-Ordovician meteorite shower, the ~470 Ma spike in "
+  "impact flux following the L-chondrite parent-body breakup. That event is recorded "
+  "worldwide as fossil meteorites in Swedish and Chinese limestones and is the clearest "
+  "evidence of a sustained, non-random change in Earth's impact rate. Ames, Clearwater "
+  "East, Carswell, Tunnunik, Slate Islands and possibly Charlevoix all fall in or near "
+  "this window -- if the app can cluster events, this Ordovician spike is the one worth "
+  "showing.",
+ "Manicouagan": "A candidate source for a Late Triassic (Rhaetian/Norian) distal spherule bed "
+  "reported from the Bristol Channel, UK (Walkden et al. 2002). The correlation is "
+  "reasonable but not as tight as the Chicxulub or Popigai cases, and Manicouagan is "
+  "NOT a mass-extinction trigger -- it predates the end-Triassic event by ~14 Myr.",
+ "Mjolnir": "Impact into the shallow Jurassic-Cretaceous Barents seaway generated a documented "
+  "resurge and tsunami signature in the surrounding basin, and an iridium anomaly is "
+  "reported in the Volgian nearby. A claimed correlative tsunami deposit in Sweden is "
+  "speculative. Regional, not global -- the existing EVENT_NOTES wording ('triggered a "
+  "tsunami across the shallow Jurassic seaway') is appropriately scoped.",
+ "Neugrund": "Its ejecta layer, sitting in the pre-trilobite Platysolenites antiquissimus biozone "
+  "of the Baltic Early Cambrian, is better known and more useful than the crater -- it "
+  "is the sole basis for the ~535 Ma age.",
+ "Pantasma": "Probable source of the Belize impact glass (0.769 +/- 0.016 Ma). Schmieder & Kring "
+  "list the source crater as unknown with Pantasma as the candidate, so state this as "
+  "likely rather than established.",
+ "Popigai": "Source of the older late Eocene clinopyroxene-bearing spherule layer, geochemically "
+  "tied to the crater (Whitehead et al. 2000, EPSL). A global stratigraphic marker. "
+  "Note this is a DIFFERENT layer from the North American tektites -- Popigai and "
+  "Chesapeake Bay are separated by at least ~0.5 and possibly ~3 Myr, so the late "
+  "Eocene 'cluster' is a sequence, not a pair.",
+ "Ries": "Threw moldavite tektites across central Europe -- a regional strewn field several "
+  "hundred km east of the crater -- at 14.808 +/- 0.038 Ma.",
+ "Tookoonooka": "A distal ejecta blanket across roughly 400,000 km2 of the Eromanga Basin, pinned to "
+  "the Barremian/Aptian boundary. The ejecta is the only reason the age is known at all "
+  "-- the crater itself is undated. Impact into a shallow epicontinental sea, so there "
+  "is a resurge and tsunami signature too.",
+}
+
+
+# How well the age is actually pinned. "poor" covers the ones with no
+# radiometric age at all -- Karakul's 25 Ma is an early guess with no
+# standing, and Woodleigh's only date is on authigenic clay and was
+# formally disputed -- so the app can show those differently rather than
+# presenting them with the same authority as a U-Pb age.
+IMPACT_CONFIDENCE = {
+ "Acraman": ("moderate", "~580 Ma; Impact Earth brackets 541-635 Ma. Age is INDIRECT -- from the Bunyeroo Fm "
+  "ejecta horizon, not the crater"),
+ "Alhama de Almeria": ("moderate", "~8 Ma, Late Tortonian. Confirmed only in 2023 on a single paper (Sanchez Gomez et "
+  "al.); the 22 km is exterior collapse terrain, the true crater is ~5 km"),
+ "Amelia Creek": ("poor", "660-1660 Ma. A 1000 Myr window that straddles the cutoff and cannot be resolved"),
+ "Ames": ("moderate", "458-478 Ma bracket (Ordovician)"),
+ "Aorounga": ("poor", "Middle Devonian-Early Mississippian target bracket, ~345-370 Ma. Impact Earth's "
+  "'0.0035-383 Ma' is effectively no constraint at all"),
+ "Araguainha": ("moderate", "254.7 +/- 2.5 Ma (Tohver et al. 2012, U-Pb + Ar-Ar). Supersedes 244.4 Ma. Impact "
+  "Earth brackets 248-264 Ma"),
+ "Beaverhead": ("poor", "470-900 Ma bracket. Structure is tectonically dismembered; no direct date exists"),
+ "Boltysh": ("precise", "65.39 +/- 0.14 Ma (Ar-Ar, Pickersgill et al. 2021)"),
+ "Carswell": ("precise", "481.5 +/- 0.8 Ma (Ar-Ar adularia). Caveat: dates hydrothermal circulation, a close "
+  "minimum"),
+ "Cerro do Jarau": ("poor", "<=135 Ma maximum age only (post-Serra Geral basalts). No direct date"),
+ "Charlevoix": ("moderate", "450 +/- 20 Ma (U-Pb shocked zircon, Schmieder et al. 2019); S&K bracket ~453-430 Ma"),
+ "Chesapeake Bay": ("precise", "34.86 +/- 0.32 Ma (Ar-Ar on melt rock and tektites)"),
+ "Chicxulub": ("precise", "66.038 +/- 0.098 Ma (Ar-Ar + U-Pb); boundary ejecta 66.052 +/- 0.043 Ma"),
+ "Cleanskin": ("poor", "520-1400 Ma stratigraphic bracket; straddles the cutoff. Confirmed as an impact by "
+  "Kenkmann et al. 2021 but undated"),
+ "Clearwater East": ("moderate", "460-470 Ma apparent ages. 465 is a computed midpoint, NOT a published value"),
+ "Clearwater West": ("precise", "286.2 +/- 2.6 Ma (Ar-Ar plateau)"),
+ "Deep Bay": ("moderate", "95-102 Ma (Albian-Cenomanian palynology)"),
+ "Dellen": ("precise", "140.82 +/- 0.51 Ma (Ar-Ar). Sharply revised from the legacy 89 Ma"),
+ "Eagle Butte": ("poor", "<65 Ma maximum age only"),
+ "El'gygytgyn": ("precise", "3.58 +/- 0.04 Ma (Layer 2000). Independently corroborated by ICDP "
+  "magnetostratigraphy tuned to 3.580-3.596 Ma. S&K recalculate to 3.65 +/- 0.08 Ma"),
+ "Glikson": ("poor", "<513 Ma maximum age only, from Neoproterozoic-Cambrian cover"),
+ "Gosses Bluff": ("precise", "142.5 +/- 0.8 Ma (Ar-Ar, Milton & Sutter 1987), corroborated by U-Pb zircon 139 +/- "
+  "4 Ma. NOTE: the '165-383 Ma' on Wikipedia's global list is a TARGET-ROCK bracket "
+  "that leaked into the age column -- it is an error"),
+ "Gweni-Fada": ("poor", "<=383 Ma maximum age only (Devonian-Carboniferous target)"),
+ "Haughton": ("precise", "31.04 +/- 0.37 Ma (Ar-Ar shocked K-feldspar, Erickson et al. 2021)"),
+ "Hiawatha": ("precise", "57.99 +/- 0.54 Ma (Ar-Ar + U-Pb, Kenny et al. 2022)"),
+ "Janisjarvi": ("precise", "687 +/- 5 Ma (Ar-Ar)"),
+ "Kaluga": ("moderate", "383-394 Ma bracket (Late Devonian)"),
+ "Kamensk": ("precise", "50.37 +/- 0.40 Ma (Ar-Ar)"),
+ "Kara": ("moderate", "70.7 +/- 2.2 Ma (Ar-Ar, Trieloff et al. 1998, recalc. S&K 2020). Reject the uncited "
+  "75.34 +/- 0.66 Ma"),
+ "Karakul": ("poor", "NO radiometric age exists. Only '<60 Ma'. The 25 Ma in the list has no standing; "
+  "legacy EID said '<5 Ma'"),
+ "Karla": ("poor", "4-6 Ma bracket"),
+ "Lappajarvi": ("precise", "77.85 +/- 0.78 Ma (Ar-Ar, ~1%)"),
+ "Lawn Hill": ("precise", "476 +/- 8 Ma. Supersedes the stale '>515 Ma' still in circulation"),
+ "Lockne": ("moderate", "~455 Ma, tied to Ordovician marine stratigraphy; part of the Ordovician meteorite "
+  "shower"),
+ "Logancha": ("poor", "40 +/- 20 Ma (50% uncertainty); Impact Earth brackets 23-66 Ma"),
+ "Logoisk": ("precise", "29.71 +/- 0.48 Ma (Ar-Ar, Sherlock et al. 2009). The 42.3 +/- 1.1 Ma still on "
+  "Wikipedia is the superseded pre-2006 EID value"),
+ "Luizi": ("poor", "<=573 Ma maximum age only (post-Neoproterozoic Kundelungu Group)"),
+ "Manicouagan": ("precise", "215.56 +/- 0.05 Ma (U-Pb zircon) -- among the best-dated craters on Earth"),
+ "Manson": ("precise", "75.9 +/- 0.1 Ma (Ar-Ar) -- one of the tightest in the catalogue"),
+ "Marquez": ("moderate", "58.3 +/- 3.1 Ma (~5%)"),
+ "Mistastin": ("precise", "37.91 +/- 0.05 Ma (Ar-Ar)"),
+ "Mjolnir": ("moderate", "142 +/- 2.6 Ma; Impact Earth brackets 141-145 Ma"),
+ "Montagnais": ("moderate", "51.1 +/- 1.6 Ma (~3%)"),
+ "Morokweng": ("precise", "146.06 +/- 0.16 Ma (U-Pb); sits on the Jurassic-Cretaceous boundary"),
+ "Neugrund": ("moderate", "~535 Ma, Early Cambrian, BIOSTRATIGRAPHIC only -- ejecta sits in the pre-trilobite "
+  "Platysolenites antiquissimus biozone. No radiometric date. An older ~470 Ma estimate "
+  "is superseded"),
+ "Nicholson": ("precise", "387 +/- 5 Ma (~1.3%)"),
+ "Oasis": ("poor", "<120 Ma maximum age only"),
+ "Obolon": ("moderate", "169 +/- 7 Ma (~4%)"),
+ "Pantasma": ("precise", "0.804 +/- 0.009 Ma (Ar-Ar)"),
+ "Popigai": ("precise", "35.7 +/- 0.2 Ma (Bottomley et al. 1997); 36.63 +/- 0.92 Ma recalculated by S&K 2020"),
+ "Puchezh-Katunki": ("precise", "195.9 +/- 1.0 Ma (Holm-Alwmark et al. 2019)"),
+ "Ries": ("precise", "14.808 +/- 0.038 Ma -- the single most precisely dated impact structure on Earth"),
+ "Rochechouart": ("precise", "206.92 +/- 0.32 Ma (Ar-Ar)"),
+ "Saint Martin": ("precise", "227.8 +/- 0.9 Ma (Ar-Ar)"),
+ "Saqqar": ("poor", "70-410 Ma stratigraphic bracket only. A 340 Myr window"),
+ "Serra da Cangalha": ("poor", "<=250 Ma maximum age only (Parnaiba Basin stratigraphy)"),
+ "Shoemaker": ("poor", "568-1300 Ma. Ar-Ar K-feldspar older limit ~1300 Ma, K-Ar illite-smectite younger "
+  "limit ~568 Ma; the authors caution 568 Ma may be a tectonothermal reset. Cannot be "
+  "placed on either side of 1000 Ma. NO post-2015 redating exists; the '~836 Ma' figure "
+  "in circulation has no traceable source"),
+ "Sierra Madera": ("poor", "<113 Ma (Albian or younger) maximum age only"),
+ "Siljan": ("moderate", "380.9 +/- 4.6 Ma (Ar-Ar), ~1.2%"),
+ "Slate Islands": ("poor", "~450 Ma, poorly constrained, no formal uncertainty published"),
+ "Spider": ("poor", "580-900 Ma. Younger than the ~900 Ma Yampi Orogeny syncline, older than ~570 Ma "
+  "cover"),
+ "Steen River": ("poor", "Three live candidates: ~91, ~132 +/- 1.3, ~141 Ma. S&K bracket ~383-108 Ma. Impact "
+  "Earth: 108-383 Ma"),
+ "Strangways": ("poor", "657 +/- 43 Ma (~6.5%)"),
+ "Talundilly": ("poor", "~125 Ma inferred by correlation with Tookoonooka. STRUCTURE ITSELF IS UNCONFIRMED -- "
+  "seismic only, never drilled"),
+ "Ternovka": ("moderate", "280 +/- 10 Ma (~3.5%)"),
+ "Tookoonooka": ("moderate", "125 +/- 1 Ma, but a STRATIGRAPHIC tie to the Barremian/Aptian boundary, not a "
+  "radiometric date. Impact Earth: 121.8-123.8 Ma"),
+ "Tunnunik": ("moderate", "430-450 Ma bracket (Ar-Ar)"),
+ "Uhackatik": ("poor", "~390 Ma, provisional. Conference abstract only (MetSoc 2026 #5369); no peer-reviewed "
+  "paper, no stated uncertainty"),
+ "Vargeao Dome": ("precise", "123 +/- 1.4 Ma"),
+ "Wells Creek": ("poor", "100-323 Ma bracket; ~200 Ma is a commonly quoted midpoint with no direct support"),
+ "Woodleigh": ("poor", "NO reliable age. 364 +/- 8 Ma is K-Ar on authigenic clay, formally disputed. "
+  "S&K/Impact Earth: 168-2005 Ma bracket"),
+ "Yallalie": ("moderate", "83.6-89.8 Ma (Coniacian-Santonian stratigraphic bracket). Australia's first "
+  "confirmed Late Cretaceous impact"),
+ "Zhamanshin": ("moderate", "0.91 +/- 0.14 Ma (~15%, but on an absolute scale this is very tightly placed)"),
+}
+
+
+def scar_life():
+    return SCAR_LIFE
+
+
+def global_effect():
+    return GLOBAL_EFFECT
+
+
+def impact_confidence():
+    return IMPACT_CONFIDENCE
