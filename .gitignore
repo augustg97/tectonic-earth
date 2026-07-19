@@ -12,3 +12,12 @@ web/bluemarble.jpg
 
 # macOS Finder metadata
 .DS_Store
+
+# Finder / iCloud conflict copies: "fut_0005_e 2.webp" beside "fut_0005_e.webp".
+# The project lives under Desktop, so these keep reappearing in docs/fields
+# after build_site.py wipes and rebuilds it. They are byte-identical to the
+# originals and pure deploy bloat, but `git add -A docs` would happily commit
+# 600+ of them and roughly double what GitHub Pages has to serve.
+* [0-9].webp
+* [0-9].json
+* [0-9].html
