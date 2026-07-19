@@ -30,6 +30,7 @@ def main():
 
     speeds = []
     total = 0
+    lines = {}
     for rec in man:
         a = rec["age"]
         older = min(ages, key=lambda x: abs(x - (a + MO.BASE_MYR)))
@@ -42,18 +43,18 @@ def main():
         MO.encode(vx, vy, cf).save(p, "WEBP", quality=94, method=6)
         total += os.path.getsize(p)
 
-        rid, tre, tra = MO.classify(vx, vy, cf)
-        bname = rec["e"].replace("_e.webp", "_b.webp")
-        rec["b"] = bname
-        pb = os.path.join(OUT, bname)
-        MO.encode_bounds(rid, tre, tra).save(pb, "WEBP", quality=92, method=6)
-        total += os.path.getsize(pb)
+        lines[str(rec["age"])] = MO.boundary_lines(vx, vy, cf)
+        rec.pop("b", None)
 
         m = cf > 0.3
         if m.any():
             speeds.append(float(np.median(np.hypot(vx, vy)[m])))
 
     json.dump(man, open(os.path.join(OUT, "manifest.json"), "w"), separators=(",", ":"))
+    bpath = "../web/boundaries_time.json"
+    json.dump(lines, open(bpath, "w"), separators=(",", ":"))
+    nseg = sum(len(v) for f in lines.values() for v in f.values())
+    print(f"boundary lines: {nseg} segments, {os.path.getsize(bpath)/1e6:.2f} MB")
     print(f"motion + boundaries: {len(man)} keyframes, {total/1e6:.2f} MB")
     print(f"median plate speed across the record: {np.median(speeds):.0f} mm/yr "
           f"(p10 {np.percentile(speeds,10):.0f}, p90 {np.percentile(speeds,90):.0f})")

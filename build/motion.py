@@ -183,3 +183,91 @@ def classify(vx, vy, conf):
 def encode_bounds(ridge, trench, trans):
     return Image.fromarray(
         (np.stack([ridge, trench, trans], -1) * 255 + 0.5).astype(np.uint8))
+
+
+def _bilerp(F, y, x):
+    h, w = F.shape
+    x0 = np.floor(x).astype(int); y0 = np.floor(y).astype(int)
+    fx = x - x0; fy = y - y0
+    x0 %= w; x1 = (x0 + 1) % w
+    y0 = np.clip(y0, 0, h - 1); y1 = np.clip(y0 + 1, 0, h - 1)
+    return (F[y0, x0] * (1 - fx) * (1 - fy) + F[y0, x1] * fx * (1 - fy) +
+            F[y1, x0] * (1 - fx) * fy + F[y1, x1] * fx * fy)
+
+
+def _skeleton(S, thresh):
+    """Non-maximum suppression: keep only the crest of each ridge in S.
+
+    Thresholding a smooth field leaves a blob several cells wide, which is why
+    the boundaries rendered as stains. Suppressing everything that is not a
+    local maximum along the gradient reduces each belt to a one-cell line.
+    """
+    h, w = S.shape
+    gy, gx = np.gradient(S)
+    mag = np.hypot(gx, gy) + 1e-9
+    ux, uy = gx / mag, gy / mag
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    a = _bilerp(S, yy + uy, xx + ux)
+    b = _bilerp(S, yy - uy, xx - ux)
+    return (S >= a) & (S >= b) & (S > thresh)
+
+
+def boundary_lines(vx, vy, conf, up=2):
+    """Trace derived plate boundaries as line segments.
+
+    Returns {'ridge': [...], 'trench': [...], 'transform': [...]} where each
+    entry is [lon1, lat1, lon2, lat2]. Segments are what the present-day PB2002
+    layer draws, so deep-time boundaries render in exactly the same style
+    instead of as a coloured field.
+    """
+    def smooth(a, k=1):
+        pad = np.pad(a, ((k, k), (k, k)), mode="wrap")
+        return sliding_window_view(pad, (2 * k + 1, 2 * k + 1)).mean(axis=(-1, -2))
+
+    def dx(a): return (np.roll(a, -1, axis=1) - np.roll(a, 1, axis=1)) * 0.5
+    def dy(a): return (np.roll(a, -1, axis=0) - np.roll(a, 1, axis=0)) * 0.5
+
+    dudx, dudy = dx(vx), dy(vx)
+    dvdx, dvdy = dx(vy), dy(vy)
+    div = smooth(dudx + dvdy)
+    shear = smooth(np.sqrt((dudy + dvdx) ** 2 + (dudx - dvdy) ** 2))
+    c = np.clip(conf * 1.5, 0, 1)
+
+    # upsample so the traced line has finer than one-cell placement
+    H, W = GRID_H * up, GRID_W * up
+    yy, xx = np.mgrid[0:H, 0:W].astype(float)
+    ys, xs = yy / up, xx / up
+    divU = _bilerp(div, ys, xs); shU = _bilerp(shear, ys, xs); cU = _bilerp(c, ys, xs)
+
+    ok = conf > 0.25
+    dscale = np.percentile(np.abs(div)[ok], 90) + 1e-6
+    sscale = np.percentile(shear[ok], 93) + 1e-6
+
+    masks = {
+        "ridge":     _skeleton(divU / dscale, 0.75) & (cU > 0.30),
+        "trench":    _skeleton(-divU / dscale, 0.75) & (cU > 0.30),
+        "transform": _skeleton(shU / sscale, 0.95) & (cU > 0.35),
+    }
+    # shear is high wherever plates interact; keep transforms only where the
+    # motion is not mostly opening or closing
+    masks["transform"] &= (np.abs(divU) / dscale < 0.55)
+
+    out = {}
+    for name, M in masks.items():
+        segs = []
+        idx = np.argwhere(M)
+        Mset = set(map(tuple, idx))
+        for (r, cc) in idx:
+            for dr, dc in ((0, 1), (1, 0), (1, 1), (1, -1)):
+                nb = ((r + dr) % H, (cc + dc) % W)
+                if nb in Mset:
+                    lon1 = (cc + 0.5) / W * 360 - 180
+                    lat1 = 90 - (r + 0.5) / H * 180
+                    lon2 = (nb[1] + 0.5) / W * 360 - 180
+                    lat2 = 90 - (nb[0] + 0.5) / H * 180
+                    if abs(lon2 - lon1) > 180:      # skip the wrap seam
+                        continue
+                    segs.append([round(lon1, 1), round(lat1, 1),
+                                 round(lon2, 1), round(lat2, 1)])
+        out[name] = segs
+    return out

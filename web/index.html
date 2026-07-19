@@ -255,14 +255,14 @@ const state={
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[], BNI=[];  // elevation / rainfall / motion / boundary fields
+let ELI=[], RNI=[], MOI=[];   // elevation / rainfall / motion fields
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='m'?MOI:BNI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -287,12 +287,12 @@ function getTex(kind,i){
 
 /* ================= data load ================= */
 async function loadAll(){
-  const files=['timeline','boundaries','plates','hotspots','labels'];
+  const files=['timeline','boundaries','plates','hotspots','labels','boundaries_time'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json())));files.forEach((f,i)=>DATA[f]=res[i]);}
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
-  let done=0; const total=tl.length*4;
+  let done=0; const total=tl.length*3;
   const one=(name,arr,i)=>new Promise(res=>{
     const img=new Image();
     const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
@@ -300,7 +300,7 @@ async function loadAll(){
     img.onerror=fin;
     img.src=src(name);
   });
-  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),one(fr.b,BNI,i)]));
+  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i)]));
 }
 
 /* map timeline (sorted asc by age) to helpers */
@@ -321,9 +321,9 @@ function frameAt(age){
 
 /* ================= three.js globe ================= */
 let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo;
-const overlay={boundaries:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
+const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
-let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null;
+let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null,lastBndOn=null;
 
 function ll2v(lon,lat,r){
   const phi=(90-lat)*DEG, theta=(lon+180)*DEG;
@@ -344,7 +344,7 @@ const VERT=`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*
 --------------------------------------------------------------------------- */
 const FRAG=`
 precision highp float;
-uniform sampler2D elevA, elevB, rainA, rainB, motA, bndA;
+uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform vec2 uTexel;
@@ -513,20 +513,6 @@ void main(){
     col=mix(col,s,uSchem);
   }
 
-  /* Plate boundaries for any era. Classified offline from the same derived
-     motion field that draws the arrows (ridge = spreading, trench =
-     converging, transform = shear), so the two layers always agree and the
-     belts come through continuous rather than as threshold speckle. */
-  if(uBounds>0.001){
-    vec3 b=texture2D(bndA,uv).rgb;
-    float ridge=b.r, trench=b.g, trans=b.b;
-    vec3 bc=vec3(0.0); float amt=0.0;
-    if(ridge>=trench&&ridge>=trans){ bc=vec3(0.91,0.33,0.31); amt=ridge; }
-    else if(trench>=trans){ bc=vec3(0.35,0.69,0.84); amt=trench; }
-    else { bc=vec3(0.88,0.70,0.23); amt=trans; }
-    // steep transfer so only the core of each belt paints
-    col=mix(col,bc,pow(clamp(amt*1.8,0.0,1.0),1.5)*0.85*uBounds);
-  }
   gl_FragColor=vec4(col,1.0);
 }`;
 
@@ -539,7 +525,7 @@ function initGL(){
   orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
   mat=new THREE.ShaderMaterial({uniforms:{
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
-    motA:{value:null},bndA:{value:null},
+    motA:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},
@@ -563,7 +549,7 @@ function initGL(){
   sg.setAttribute('position',new THREE.BufferAttribute(pos,3));
   starfield=new THREE.Points(sg,new THREE.PointsMaterial({color:0x9fb0c8,size:.09,sizeAttenuation:true,transparent:true,opacity:.55}));
   scene.add(starfield);
-  globe.add(overlay.boundaries);globe.add(overlay.vectors);globe.add(overlay.hotspots);
+  globe.add(overlay.boundaries);globe.add(overlay.derived);globe.add(overlay.vectors);globe.add(overlay.hotspots);
   resize();
   cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);state.dragMoved=false;});
   cv.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>3)state.dragMoved=true;state.rot+=dx*.006;state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+dy*.006));lastX=e.clientX;lastY=e.clientY;});
@@ -577,6 +563,27 @@ function lineSeg(list,color,width,rBase){
   g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));
   const m=new THREE.LineBasicMaterial({color,transparent:true,opacity:.9});
   return new THREE.LineSegments(g,m);
+}
+/* Derived boundaries are drawn as real line geometry, exactly like the
+   surveyed present-day set, so they read as boundaries rather than as a
+   coloured field. Rebuilt whenever the keyframe changes. */
+function nearestKeyAge(){
+  const A=DATA.timeline; let b=A[0].age,bd=1e9;
+  for(const r of A){const d=Math.abs(r.age-state.age); if(d<bd){bd=d;b=r.age;}}
+  return b;
+}
+function buildDerivedBounds(){
+  overlay.derived.clear();
+  const set=DATA.boundaries_time[String(nearestKeyAge())];
+  if(!set)return;
+  const R=1.006;
+  const spec=[['ridge',0xe8534e],['trench',0x59b0d6],['transform',0xe0b23a]];
+  for(const [k,col] of spec){
+    const segs=set[k]; if(!segs||!segs.length)continue;
+    const m=lineSeg(segs,col,1,R);
+    m.userData.baseOp=0.85;
+    overlay.derived.add(m);
+  }
 }
 function buildBoundaries(){
   overlay.boundaries.clear();
@@ -649,18 +656,31 @@ function snapLabel(l,fi){
   let out=[l.lon,l.lat];
   if(z){
     const wantLand=(l.t==='continent'||l.t==='orogen');
-    const ok=p=>{const e=elevAtLL(z,p[0],p[1]);return wantLand?e>0:e<0;};
-    if(!ok(out)){
-      // spiral outward for the nearest cell of the right kind
-      let best=null,bd=1e9;
-      for(let rad=3;rad<=40&&!best;rad+=3){
-        for(let a=0;a<360;a+=12){
-          const dlon=rad*Math.cos(a*DEG)/Math.max(0.3,Math.cos(l.lat*DEG));
-          const p=[((l.lon+dlon+540)%360)-180, Math.max(-85,Math.min(85,l.lat+rad*Math.sin(a*DEG)))];
-          if(ok(p)){const d=rad;if(d<bd){bd=d;best=p;}}
+    // Require a substantial patch, not a single stray pixel: a continent name
+    // parked on a lone island reads as badly as one parked in open ocean.
+    const solid=(lo,la)=>{
+      let hit=0,n=0;
+      for(let dy=-4;dy<=4;dy+=4)for(let dx=-6;dx<=6;dx+=6){
+        const e=elevAtLL(z,((lo+dx+540)%360)-180,Math.max(-88,Math.min(88,la+dy)));
+        n++; if((e>0)===wantLand)hit++;
+      }
+      return hit/n>=0.65;
+    };
+    if(!solid(out[0],out[1])){
+      // Authored positions are approximations in the reconstruction's frame and
+      // the world moves under them, so search widely before giving up.
+      let best=null;
+      for(let rad=4;rad<=75&&!best;rad+=4){
+        for(let a=0;a<360;a+=10){
+          const dlon=rad*Math.cos(a*DEG)/Math.max(0.25,Math.cos(l.lat*DEG));
+          const lo=((l.lon+dlon+540)%360)-180;
+          const la=Math.max(-86,Math.min(86,l.lat+rad*Math.sin(a*DEG)));
+          if(solid(lo,la)){best=[lo,la];break;}
         }
       }
-      if(best)out=best;
+      // Nothing suitable anywhere: better to drop the label than to float a
+      // continent in open ocean.
+      out=best||null;
     }
   }
   SNAP.set(key,out);
@@ -784,6 +804,8 @@ function drawMapOverlays(){
   const X=dx*DPR,Y=dy*DPR,Wd=dw*DPR,Hd=dh*DPR;
   const fade=presentFade();
   if(state.layers.boundaries&&fade>0)drawBoundariesMap(X,Y,Wd,Hd,fade);
+  const dfade=Math.min(1,Math.max(0,1-fade*1.25));
+  if(state.layers.boundaries&&dfade>0)drawDerivedBoundsMap(X,Y,Wd,Hd,dfade);
   if(state.layers.hotspots)drawHotspotsMap(X,Y,Wd,Hd,1);
   if(state.layers.vectors)drawVectorsMap(X,Y,Wd,Hd,1);
 }
@@ -816,6 +838,22 @@ function drawBoundariesMap(dx,dy,dw,dh,fade){
   const draw=(list,color)=>{mctx.strokeStyle=color;mctx.globalAlpha=fade*.95;mctx.lineWidth=1.4;mctx.beginPath();
     for(const s of list){const[a,b]=ll2map(s[0],s[1],dx,dy,dw,dh);const[c,d]=ll2map(s[2],s[3],dx,dy,dw,dh);if(Math.abs(s[0]-s[2])>180)continue;mctx.moveTo(a,b);mctx.lineTo(c,d);}mctx.stroke();};
   draw(DATA.boundaries.ridge,'#e8534e');draw(DATA.boundaries.trench,'#59b0d6');draw(DATA.boundaries.transform,'#e0b23a');
+  mctx.globalAlpha=1;
+}
+function drawDerivedBoundsMap(dx,dy,dw,dh,fade){
+  const set=DATA.boundaries_time[String(nearestKeyAge())];
+  if(!set)return;
+  for(const [k,col] of [['ridge','#e8534e'],['trench','#59b0d6'],['transform','#e0b23a']]){
+    const segs=set[k]; if(!segs||!segs.length)continue;
+    mctx.strokeStyle=col; mctx.globalAlpha=fade*0.9; mctx.lineWidth=1.6*DPR;
+    mctx.beginPath();
+    for(const s of segs){
+      if(Math.abs(s[0]-s[2])>180)continue;
+      const a=ll2map(s[0],s[1],dx,dy,dw,dh), b=ll2map(s[2],s[3],dx,dy,dw,dh);
+      mctx.moveTo(a[0],a[1]); mctx.lineTo(b[0],b[1]);
+    }
+    mctx.stroke();
+  }
   mctx.globalAlpha=1;
 }
 function drawHotspotsMap(dx,dy,dw,dh,fade){
@@ -871,14 +909,20 @@ function selectAt(lon,lat){
   const fi=curFrame().i, z=elevField(fi);
   const onLand=z?elevAtLL(z,lon,lat)>0:true;
   const vis=DATA.labels.filter(l=>labelVisible(l));
-  const wanted=vis.filter(l=>((l.t==='continent'||l.t==='orogen')===onLand));
-  const pool=wanted.length?wanted:vis;
-  let best=null,bd=1e9;
-  for(const l of pool){
-    const p=snapLabel(l,fi);
+  const dist=l=>{
+    const p=snapLabel(l,fi); if(!p)return 1e9;
     let dlon=Math.abs(p[0]-lon); if(dlon>180)dlon=360-dlon;
-    const d=Math.hypot(dlon*Math.cos(lat*DEG),p[1]-lat);
-    if(d<bd){bd=d;best=l;}
+    return Math.hypot(dlon*Math.cos(lat*DEG),p[1]-lat);
+  };
+  // If the click lands right on a label, take it whatever is underneath —
+  // otherwise prefer a feature matching what was actually clicked.
+  let best=null,bd=1e9;
+  for(const l of vis){const d=dist(l); if(d<bd){bd=d;best=l;}}
+  if(bd>12){
+    const wanted=vis.filter(l=>((l.t==='continent'||l.t==='orogen')===onLand));
+    const pool=wanted.length?wanted:vis;
+    best=null;bd=1e9;
+    for(const l of pool){const d=dist(l); if(d<bd){bd=d;best=l;}}
   }
   // generous radius: a click deep inside a large landmass should still
   // name it even when the label sits well away
@@ -975,6 +1019,7 @@ function updateLabels(){
     if(!show||!labelVisible(l)){e.classList.remove('show');continue;}
     let sx,sy,vis=true;
     const sp=snapLabel(l,curFrame().i);
+    if(!sp){e.classList.remove('show');continue;}
     if(state.view==='globe'){
       const p=ll2v(sp[0],sp[1],1.02);const wp=p.clone().applyMatrix4(globe.matrixWorld);
       const cp=wp.clone().project(cam);
@@ -1040,11 +1085,7 @@ function bindTextures(){
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
   const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
-  const btex=getTex('b',f.i); if(btex)mat.uniforms.bndA.value=btex;
-  // Near today the surveyed PB2002 set is drawn and is far more precise, so
-  // the derived belts fade in exactly as it fades out. Together they cover the
-  // whole timeline without doubling up where the good data exists.
-  mat.uniforms.uBounds.value=state.layers.boundaries?Math.min(1,Math.max(0,1-presentFade()*1.25)):0;
+  mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
   return f;
 }
@@ -1063,15 +1104,21 @@ function loop(now){
   const fade=presentFade();
   // Hotspots and motion vectors are era-specific, so rebuild them whenever the
   // keyframe changes rather than only once at load.
-  if(f.i!==lastOverlayFrame||state.layers.vectors!==lastVecOn||state.layers.hotspots!==lastHotOn){
+  if(f.i!==lastOverlayFrame||state.layers.vectors!==lastVecOn||state.layers.hotspots!==lastHotOn
+     ||state.layers.boundaries!==lastBndOn){
     lastOverlayFrame=f.i; lastVecOn=state.layers.vectors; lastHotOn=state.layers.hotspots;
+    lastBndOn=state.layers.boundaries;
     if(state.layers.hotspots)buildHotspots();
     if(state.layers.vectors)buildVectors();
+    if(state.layers.boundaries)buildDerivedBounds();
   }
   const g=state.view==='globe';
   // Only the surveyed present-day boundary set fades out; its derived
   // counterpart in the shader covers the rest of the timeline.
   overlay.boundaries.visible=state.layers.boundaries&&fade>0.02&&g;
+  const dfade=Math.min(1,Math.max(0,1-fade*1.25));
+  overlay.derived.visible=state.layers.boundaries&&dfade>0.02&&g;
+  setOpacity(overlay.derived,dfade);
   overlay.vectors.visible=state.layers.vectors&&g;
   overlay.hotspots.visible=state.layers.hotspots&&g;
   setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
