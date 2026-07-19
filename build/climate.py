@@ -250,3 +250,74 @@ def system_at(age):
     return {"gmst": round(lo[1] + (hi[1] - lo[1]) * t, 1),
             "co2":  int(round(lo[2] + (hi[2] - lo[2]) * t)),
             "o2":   round(lo[3] + (hi[3] - lo[3]) * t, 1)}
+
+
+# ---------------------------------------------------------------------------
+# Sea-surface colour through deep time.
+#
+# The strong claim behind this is a NEGATIVE one, and it is well supported by
+# the ocean-optics literature: the sea is blue because water absorbs red, not
+# because it reflects the sky, and changing the atmosphere's composition
+# (CO2 from 280 to 6000 ppm, O2 from 15 to 35%) moves the sky's colour by well
+# under a percent and its hue essentially not at all. So the ocean is NOT
+# repainted a fanciful colour every era.
+#
+# What DOES move sea colour, and is encoded here:
+#   - Biological productivity pulls the surface green; before eukaryotic algae
+#     and especially before the coccolithophores of the Mesozoic, the open
+#     ocean lacked the calcite-scattering that gives modern blue-water its
+#     particular clarity, and a Precambrian iron-rich (ferruginous) ocean is
+#     reconstructed as a duller, greener, greyer body of water.
+#   - Deep water is always dark and saturated regardless of era.
+# Photic-zone euxinia, the "green/purple sea" idea, is deliberately NOT applied
+# to the surface: it is a subsurface chemocline phenomenon and the modern Black
+# Sea, fully euxinic below ~100 m, has an ordinary-looking surface.
+#
+# Each entry: age, (shallow rgb), (mid rgb), (deep rgb), surface-biology 0..1.
+# Colours are 0..1 linear-ish sRGB, chosen to sit near the modern values so the
+# ocean reads as water in every frame, not as a mood.
+SEA_COLOUR = [
+    #  age    shallow                    mid                        deep                      bio
+    (0,     (0.216, 0.561, 0.718),    (0.086, 0.314, 0.478),    (0.027, 0.098, 0.192),   0.35),
+    (34,    (0.216, 0.561, 0.718),    (0.086, 0.314, 0.478),    (0.027, 0.098, 0.192),   0.36),
+    (90,    (0.235, 0.549, 0.686),    (0.098, 0.322, 0.463),    (0.031, 0.106, 0.184),   0.42),  # warm chalk seas, coccoliths thriving
+    (150,   (0.243, 0.541, 0.659),    (0.106, 0.322, 0.447),    (0.035, 0.110, 0.176),   0.44),
+    (200,   (0.251, 0.529, 0.635),    (0.114, 0.322, 0.427),    (0.039, 0.114, 0.169),   0.46),  # coccolithophores appear ~T-J
+    (250,   (0.259, 0.510, 0.596),    (0.122, 0.314, 0.396),    (0.043, 0.114, 0.157),   0.48),  # no coccoliths yet; greener
+    (360,   (0.271, 0.502, 0.573),    (0.130, 0.310, 0.376),    (0.047, 0.114, 0.149),   0.52),  # Devonian, black-shale prone
+    (445,   (0.275, 0.494, 0.557),    (0.134, 0.306, 0.361),    (0.051, 0.114, 0.145),   0.50),
+    (540,   (0.286, 0.482, 0.529),    (0.141, 0.302, 0.341),    (0.055, 0.114, 0.137),   0.46),  # Cambrian; algae but no calcifying plankton
+    (635,   (0.298, 0.463, 0.494),    (0.149, 0.290, 0.310),    (0.059, 0.110, 0.125),   0.34),  # post-snowball, recovering
+    (720,   (0.314, 0.447, 0.463),    (0.157, 0.278, 0.286),    (0.063, 0.106, 0.114),   0.24),  # Cryogenian; ocean mostly under ice
+    (850,   (0.325, 0.435, 0.435),    (0.165, 0.271, 0.263),    (0.067, 0.102, 0.106),   0.20),  # ferruginous, cyanobacterial
+    (1000,  (0.337, 0.427, 0.408),    (0.173, 0.267, 0.243),    (0.071, 0.098, 0.098),   0.18),  # iron-tinted, greenest/greyest
+    # future: modern-like, warming
+    (-120,  (0.220, 0.557, 0.706),    (0.090, 0.318, 0.471),    (0.029, 0.102, 0.188),   0.38),
+    (-250,  (0.231, 0.545, 0.678),    (0.098, 0.322, 0.459),    (0.033, 0.106, 0.180),   0.42),
+]
+
+
+def sea_colour_at(age):
+    """Interpolated {seaSh, seaMid, seaDeep, seaBio} for an age.
+
+    Split future/past on the sign so the interpolation never runs across the
+    present boundary, exactly like climate_at and system_at.
+    """
+    pts = [p for p in SEA_COLOUR if (p[0] <= 0) == (age <= 0)] or SEA_COLOUR
+    pts = sorted(pts, key=lambda p: p[0])
+    ages = [p[0] for p in pts]
+    if age <= ages[0]:
+        lo = hi = pts[0]; t = 0.0
+    elif age >= ages[-1]:
+        lo = hi = pts[-1]; t = 0.0
+    else:
+        i = max(i for i, a in enumerate(ages) if a <= age)
+        lo, hi = pts[i], pts[min(i + 1, len(pts) - 1)]
+        span = hi[0] - lo[0]
+        t = 0.0 if span == 0 else (age - lo[0]) / span
+
+    def mix(a, b):
+        return [round(a[k] + (b[k] - a[k]) * t, 4) for k in range(3)]
+    return {"seaSh": mix(lo[1], hi[1]), "seaMid": mix(lo[2], hi[2]),
+            "seaDeep": mix(lo[3], hi[3]),
+            "seaBio": round(lo[4] + (hi[4] - lo[4]) * t, 3)}

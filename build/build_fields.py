@@ -155,13 +155,27 @@ def axis_angle_scale(Rm, frac):
 
 
 def future_grid(frac, gid, Zsrc, h, w):
-    """Inverse-warp the present DEM by per-group rotation. frac 0 -> identity."""
+    """Inverse-warp the present DEM by per-group rotation. frac 0 -> identity.
+
+    Seafloor that no group claims is new ocean opened behind the drifting
+    plates. Filling it with one flat constant made those gaps read as blocky
+    slabs of dead-level abyss with hard edges -- exactly the "oceans move as
+    chunks" complaint. Instead the fill is a smooth field: shallower where new
+    crust is young (near a spreading centre) grading to true abyssal depth, so
+    the gaps look like ridge-and-basin ocean floor rather than a cut-out. It is
+    still only a backdrop -- the shader adds the fine abyssal-hill texture on
+    top -- but it removes the flat-slab appearance at the source.
+    """
     gh, gw = gid.shape
     lon = (np.arange(w) + 0.5) / w * 360 - 180
     lat = 90 - (np.arange(h) + 0.5) / h * 180
     LON, LAT = np.meshgrid(lon, lat)
     T = BS.unit(LON.ravel(), LAT.ravel())
-    out = np.full((h, w), -5200.0)
+    # low-frequency ridge/basin backdrop for unclaimed ocean, centred near the
+    # mid-ocean depth and never as shallow as a shelf
+    fx = np.sin(np.radians(LON) * 2.3 + 0.7) + 0.6 * np.sin(np.radians(LON) * 5.1 + 2.1)
+    fy = np.sin(np.radians(LAT) * 3.1 + 1.3) + 0.5 * np.cos(np.radians(LAT) * 6.7)
+    out = (-4300.0 + 700.0 * fx * fy).astype(float)
 
     # present centroid of each group, on the sphere
     cent = {}

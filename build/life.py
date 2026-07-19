@@ -262,6 +262,56 @@ def regional():
     return _DATA.get("regional", {})
 
 
+def region_taxa():
+    """Per-place, per-interval characteristic biota, with icons bound.
+
+    Clicking any two features at the same age used to show the same four
+    organisms, because there was only ever one global list. This is what makes
+    Permian Gondwana show Glossopteris and Mesosaurus while Permian Siberia
+    does not. Realm is enforced on the way out: a marine region may only carry
+    marine taxa, which is the defect this exists to fix.
+    """
+    out = {}
+    for region, spans in _DATA.get("region_taxa", {}).items():
+        marine = region in MARINE_REGIONS
+        rows = []
+        for s in spans:
+            taxa = []
+            for t in s.get("taxa", []):
+                name, rank, realm, note = (
+                    t if isinstance(t, (list, tuple))
+                    else (t["name"], t["rank"], t["realm"], t["note"]))
+                if marine and realm != "sea":
+                    print(f"  WARNING dropped {realm} taxon {name!r} "
+                          f"from marine region {region!r}")
+                    continue
+                taxa.append({"n": name, "r": rank, "realm": realm,
+                             "note": note, "ic": icon_for(name, realm)})
+            if taxa:
+                rows.append({"a0": s["a0"], "a1": s["a1"], "taxa": taxa,
+                             **({"shared": s["shared"]} if s.get("shared") else {})})
+        if rows:
+            out[region] = rows
+    return out
+
+
+def sparse():
+    return _DATA.get("sparse", {})
+
+
+# Anything named here may only ever carry realm="sea" taxa.
+MARINE_REGIONS = {
+    "Panthalassa", "Panthalassic Ocean", "Panthalassic (proto)", "Iapetus Ocean",
+    "Rheic Ocean", "Tethys Ocean", "Paleo-Tethys", "Mirovia", "Pacific Ocean",
+    "Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Arctic Ocean",
+    "Mediterranean", "Mediterranean (closing)", "Western Interior Seaway",
+    "Sauk Sea", "Zechstein Sea", "Turgai Strait", "Eromanga Sea", "Paratethys",
+    "Mozambique Ocean", "Adamastor Ocean", "Ural Ocean", "Tornquist Sea",
+    "Neo-Panthalassa", "Sundance Sea", "Trans-Saharan Sea",
+    "Central American Sea", "Hudson Seaway", "East African Ocean",
+}
+
+
 def icons():
     return ICONS
 

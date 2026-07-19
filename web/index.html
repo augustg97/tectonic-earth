@@ -264,7 +264,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   </div>
   <div class="grp">
     <div class="grp-h">Present-day layers</div>
-    <div class="tog on" data-layer="boundaries"><span>Plate boundaries</span><div class="sw"></div></div>
+    <div class="tog" data-layer="boundaries"><span>Plate boundaries</span><div class="sw"></div></div>
     <div class="tog" data-layer="vectors"><span>Motion vectors</span><div class="sw"></div></div>
     <div class="tog" data-layer="hotspots"><span>Volcanism &amp; impacts</span><div class="sw"></div></div>
   </div>
@@ -314,7 +314,8 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <div id="scalerow"></div>
   <div id="track">
     <div id="trackbg"><div id="trackgrad"></div></div>
-    <input type="range" id="slider" min="0" max="1250" value="1000" step="1">
+    <!-- value maps as age = 1000 - value, so 0 is the 1000 Ma deep end -->
+    <input type="range" id="slider" min="0" max="1250" value="0" step="1">
   </div>
   <div id="ctlrow">
     <button class="pbtn" id="playBtn" title="Play / pause">
@@ -355,9 +356,14 @@ window.addEventListener('unhandledrejection',e=>{
 <script>
 const DEG=Math.PI/180;
 const $=s=>document.querySelector(s);
+/* Opening state is "press play and watch Earth's history run": start at the
+   deep end, travel forward. `dir` is added to the AGE, so dir=-1 makes the age
+   count down, which is time moving forwards — and on the timeline, forwards is
+   left-to-right, 1000 Ma toward +250 Myr. Plate boundaries start off; they are
+   a specialist overlay and they crowd the first look at the globe. */
 const state={
-  age:0, view:'globe', shade:'sat', playing:false, dir:+1, speed:18,
-  layers:{boundaries:true,vectors:false,hotspots:false,labels:true,rotate:true},
+  age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:18,
+  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:true},
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
@@ -456,6 +462,12 @@ uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform vec2 uTexel;
+// Sea colour is era-dependent, not a constant: a ferruginous Precambrian ocean,
+// a euxinic one, and the modern coccolith-rich blue are genuinely different
+// bodies of water. Driven from the climate table per keyframe.
+uniform vec3 uSeaShallow, uSeaMid, uSeaDeep;
+uniform float uSeaBio;     // 0..1 productivity — how green the surface reads
+uniform float uTime;       // seconds, for the surface sheen only
 varying vec2 vUv;
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
@@ -516,15 +528,32 @@ float detail3(vec3 p, float rug){
   }
   return mix(sm-0.5, (rg-0.42)*1.35, rug);
 }
+/* The seafloor is not a flat blue sheet, and it used to render as one: ocean
+   got a tenth of the land's procedural relief and almost no hillshade, so
+   shelves, ridge flanks and trenches all read the same. It also has its own
+   grain, quite unlike a mountain range — abyssal hills are low, closely spaced
+   and strongly lineated parallel to the ridge that made them, shelves are
+   smooth, and the odd seamount rises off the plain. */
+float oceanDetail(vec3 d, float z){
+  float hills=fbm3(d*430.0)-0.5;
+  // stretched sampling makes the noise anisotropic, which is what gives
+  // abyssal hills their grain rather than a uniform lumpiness
+  float fabric=fbm3(vec3(d.x*70.0,d.y*760.0,d.z*70.0))-0.5;
+  float cones=max(0.0,fbm3(d*34.0)-0.60); cones*=cones*7.0;
+  float shelf=smoothstep(-420.0,-50.0,z);        // 1 on the shelf
+  float abyss=smoothstep(-2000.0,-4200.0,z);     // 1 out on the plain
+  return (hills*150.0 + fabric*120.0*abyss + cones*820.0*abyss)*(1.0-shelf*0.72);
+}
 // interpolate the two keyframes, then add procedural micro-relief so the
 // upsampled field doesn't read as soft
 float elevAt(vec2 uv, float rug){
   float z=baseElev(uv);
   vec3 d=dirFromUv(uv);
+  if(z<0.0) return z + oceanDetail(d,z)*uDetail;
   float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
   // rugged ground also carries more relief, not just a different shape
-  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
-  return z + (z>0.0 ? det : det*0.10);
+  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
+  return z + det;
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
    faint row-to-row streaks in the rainfall field — and those streaks were
@@ -545,15 +574,27 @@ float rainAt(vec2 uv){
   return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
 }
 
-vec3 oceanColour(float z){
-  vec3 c=vec3(0.039,0.137,0.251);
-  c=mix(c,vec3(0.063,0.212,0.361),smoothstep(-6500.0,-4000.0,z));
-  c=mix(c,vec3(0.086,0.314,0.478),smoothstep(-4000.0,-2500.0,z));
-  c=mix(c,vec3(0.137,0.435,0.600),smoothstep(-2500.0,-1000.0,z));
-  c=mix(c,vec3(0.208,0.549,0.710),smoothstep(-1000.0,-350.0,z));
-  c=mix(c,vec3(0.455,0.749,0.824),smoothstep(-350.0,-120.0,z));
-  c=mix(c,vec3(0.680,0.878,0.910),smoothstep(-120.0,-15.0,z));
-  c=mix(c,vec3(0.804,0.933,0.941),smoothstep(-15.0,0.0,z));
+/* Water colour is mostly what the water body does to light, not what floats on
+   it: clear ocean absorbs red within metres and returns blue from depth, so
+   deep water is dark and saturated while shallow water over a bright shelf
+   scatters back pale and green. Productivity pushes it green — chlorophyll
+   absorbs blue and red and reflects green — and that concentrates on shelves
+   and upwelling margins rather than mid-gyre. The three era colours come from
+   the climate table, so a Precambrian ferruginous sea and a modern one are not
+   forced to be the same blue. */
+vec3 oceanColour(float z, vec3 d, float lat){
+  float t=clamp(-z/5000.0,0.0,1.0);
+  vec3 c=mix(uSeaMid, uSeaDeep, pow(t,0.62));
+  c=mix(c, uSeaShallow, smoothstep(-900.0,-30.0,z));
+  // Biology: strongest on the shelf and in cold, well-mixed high latitudes,
+  // weakest in the warm subtropical gyres, which is the real pattern.
+  float shelf=smoothstep(-600.0,-40.0,z);
+  float band=smoothstep(0.28,0.62,abs(sin(radians(lat))));   // away from gyres
+  float patch=fbm3(d*7.0+3.1);
+  float bio=uSeaBio*clamp(shelf*0.75+band*0.5,0.0,1.0)*(0.55+0.75*patch);
+  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.55,0.0,1.0));
+  // Very shallow water over a light bottom goes turquoise before it goes to sand
+  c=mix(c, vec3(0.451,0.804,0.796), smoothstep(-45.0,-6.0,z)*0.75);
   return c;
 }
 
@@ -584,7 +625,7 @@ void main(){
   vec3 sdir=dirFromUv(uv);
   vec3 col;
   if(z<0.0){
-    col=oceanColour(z);
+    col=oceanColour(z,sdir,lat);
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
@@ -614,8 +655,25 @@ void main(){
     }
     float rock=clamp((zp-1700.0)/1500.0,0.0,1.0);
     col=mix(col, mix(vec3(0.545,0.502,0.451), vec3(0.427,0.392,0.345), clamp((zp-2600.0)/1800.0,0.0,1.0)), rock*0.85);
-    float snowline=2600.0+190.0*clamp(T,-20.0,30.0);
-    col=mix(col, vec3(0.965,0.976,0.988), clamp((zp-snowline)/420.0,0.0,1.0));
+
+    /* Mountain glaciers, from an equilibrium-line altitude rather than a bare
+       snowline. Temperature alone is not what glaciates a range: a glacier
+       needs accumulation as well, so a cold DRY massif can stand ice-free
+       while a warmer maritime one is buried. That is why the dry Andes and
+       Tibet carry an ELA above 5000 m while wet Norway at far higher latitude
+       carries one near 1500 m, and the old fixed 2600 m snowline could not
+       express either. Solve for the height at which the lapse-corrected
+       temperature reaches the melting threshold, and let that threshold slide
+       with how wet the range is. */
+    float T0=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
+    float dry=1.0-clamp(Rf/0.85,0.0,1.0);
+    float Tela=1.0-7.0*dry;
+    float ela=clamp((T0-Tela)/0.0058, 250.0, 6200.0);
+    /* Ice does not stop at the ELA — it flows well below it down valleys, so
+       the margin is ragged and reaches lowest where terrain converges. */
+    float tongue=(fbm3(sdir*24.0+5.5)-0.5)*1.8;
+    float glac=clamp((zp-ela)/520.0+tongue+0.12,0.0,1.0);
+    col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
@@ -634,12 +692,29 @@ void main(){
   float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
   float coslat=max(cos(radians(lat)),0.08);
   vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
-  float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
+  vec3 L=normalize(vec3(-0.55,0.55,0.63));
+  float hs=clamp(dot(nrm,L),0.0,1.0);
   float shade=0.70+0.62*hs;
-  // Shelves keep their relief, but damp shading toward the abyss: there is no
-  // real detail down there and it would only amplify compression blocking.
-  float hw=(z<0.0)? mix(0.30,0.04,clamp(-z/2200.0,0.0,1.0)) : 1.0;
+  /* Bathymetry used to be shaded almost flat below about 2 km, on the argument
+     that there was no real detail down there. There is: the paleoDEMs carry
+     ridges, fracture zones, plateaus and trenches, and flattening them made
+     every ocean read as one blue sheet. Keep relief all the way down, just
+     gentler than on land so texture compression is not amplified. */
+  float hw=(z<0.0)? mix(0.62,0.34,clamp(-z/4500.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
+
+  if(z<0.0 && uSchem<0.5){
+    /* Surface sheen. Fine ripples perturb only the SHADING normal and never
+       the elevation, so the sea gains a moving fluid surface without
+       corrupting the height field the coastline is derived from. */
+    vec3 rd=sdir*620.0+vec3(uTime*0.04);
+    float r1=fbm3(rd), r2=fbm3(rd*2.7+11.0);
+    vec3 wn=normalize(nrm+vec3((r1-r2)*0.6,(r2-r1)*0.6,0.0));
+    float spec=pow(clamp(dot(wn,L),0.0,1.0),40.0);
+    float open=1.0-smoothstep(-130.0,-8.0,z);   // no glitter in the surf zone
+    col+=vec3(0.60,0.71,0.80)*spec*0.36*open;
+    col*=0.975+0.05*r1;
+  }
 
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
@@ -664,6 +739,10 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},
+    uSeaShallow:{value:new THREE.Color(0.216,0.561,0.718)},
+    uSeaMid:{value:new THREE.Color(0.086,0.314,0.478)},
+    uSeaDeep:{value:new THREE.Color(0.027,0.098,0.192)},
+    uSeaBio:{value:0.35},uTime:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -712,6 +791,28 @@ function eraPlates(){return DATA.plates_time[String(nearestKeyAge())]||{b:[],p:[
 /* Boundaries arrive as traced polylines, so they are drawn as continuous
    curves rather than loose segments. A run is cut only where it crosses the
    antimeridian, which would otherwise streak across the whole map. */
+/* The boundaries are traced from a rasterised plate-label field, so raw they
+   are a staircase of grid-aligned steps — which is the "rough" look. Two
+   rounds of Chaikin corner-cutting round that off into a smooth curve without
+   moving it off the boundary, and it is cheap enough to run every rebuild. A
+   run is only smoothed if it is long enough that the trace, not the geometry,
+   is what makes it jagged. */
+function chaikin(pts,iter){
+  for(let k=0;k<iter;k++){
+    if(pts.length<3)break;
+    const out=[pts[0]];
+    for(let i=0;i<pts.length-1;i++){
+      const a=pts[i],b=pts[i+1];
+      // guard the antimeridian: never interpolate across a 180 wrap
+      if(Math.abs(a[0]-b[0])>180){out.push(a,b);continue;}
+      out.push([a[0]*0.75+b[0]*0.25, a[1]*0.75+b[1]*0.25],
+               [a[0]*0.25+b[0]*0.75, a[1]*0.25+b[1]*0.75]);
+    }
+    out.push(pts[pts.length-1]);
+    pts=out;
+  }
+  return pts;
+}
 function buildDerivedBounds(){
   overlay.derived.clear();
   const R=1.006;
@@ -719,7 +820,8 @@ function buildDerivedBounds(){
     let run=[];
     const flush=()=>{
       if(run.length>1){
-        const g=new THREE.BufferGeometry().setFromPoints(run.map(q=>ll2v(q[0],q[1],R)));
+        const sm=run.length>=4?chaikin(run,2):run;
+        const g=new THREE.BufferGeometry().setFromPoints(sm.map(q=>ll2v(q[0],q[1],R)));
         const ln=new THREE.Line(g,new THREE.LineBasicMaterial({
           color:BND_COL[b.c]||0xffffff,transparent:true,opacity:.9}));
         ln.userData.baseOp=.9; overlay.derived.add(ln);
@@ -1274,15 +1376,7 @@ function showFeature(l,lon,lat){
   if(reg)extra+=`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`;
   // Life of the age, for anything big enough to host a biota.
   const BIG=new Set(['continent','ocean','sea','forest','grassland','island','region']);
-  if(BIG.has(l.t)){
-    const L=lifeAt(state.age);
-    if(L&&L.taxa&&L.taxa.length){
-      const want=l.t==='ocean'||l.t==='sea'?['sea']:['land','air','fresh'];
-      let pick=L.taxa.filter(t=>want.includes(t.realm));
-      if(pick.length<3)pick=L.taxa;
-      extra+=`<div class="ihead">Life at ${fmtAge(Math.round(state.age))}</div>`+lifeHTML(pick,4);
-    }
-  }
+  if(BIG.has(l.t))extra+=lifeSection(l);
   openInfo({name:l.n,
     tag:kind+' · '+fmtAge(Math.round(state.age)),
     rows, desc:ph||l.d||featureDesc(l.n), extra, wide:!!extra});
@@ -1349,6 +1443,66 @@ function lifeHTML(taxa,limit){
     `<div class="lifetxt"><div class="ln2">${esc(t.n)}</div>`+
     `<div class="lr">${esc(t.r)} · ${esc(t.realm)}</div>`+
     `<div class="lnote">${esc(t.note)}</div></div></div>`).join('')+'</div>';
+}
+/* Which organisms to show for a clicked feature.
+
+   Two things were wrong here. Realms crossed: the old code filtered the global
+   list by realm and then, if fewer than three survived, threw the filter away
+   and showed everything — so clicking an ocean listed land animals, which is
+   most of the record (16 of 30 intervals have under three marine taxa, and the
+   Pliocene and Quaternary have none at all). And every feature drew from that
+   one global list, so every plate at a given age showed the same four species.
+
+   Now: a region's own characteristic biota wins where the fossil record
+   supports one. Otherwise the global list is filtered by realm and NEVER
+   un-filtered — if nothing of the right realm exists, that is stated rather
+   than papered over. On a Precambrian continent that is the interesting
+   answer, because the land really was bare. */
+const MARINE_T=new Set(['ocean','sea']);
+function regionTaxaAt(name,age){
+  const R=(DATA.life.regionTaxa||{})[name]; if(!R)return null;
+  return R.find(r=>age>=Math.min(r.a0,r.a1)&&age<=Math.max(r.a0,r.a1))||null;
+}
+function sparseAt(name,age){
+  const S=(DATA.life.sparse||{})[name]; if(!S)return null;
+  const h=S.find(r=>age>=Math.min(r.a0,r.a1)&&age<=Math.max(r.a0,r.a1));
+  return h?h.why:null;
+}
+function lifeSection(l){
+  const age=state.age, when=fmtAge(Math.round(age)), marine=MARINE_T.has(l.t);
+  const rt=regionTaxaAt(l.n,age);
+  if(rt&&rt.taxa&&rt.taxa.length){
+    let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(rt.taxa,5);
+    if(rt.shared)h+=`<p class="desc">${esc(rt.shared)}</p>`;
+    return h;
+  }
+  const why=sparseAt(l.n,age);
+  if(why)return `<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;
+  const L=lifeAt(age);
+  if(!L||!L.taxa||!L.taxa.length)return '';
+  const want=marine?['sea']:['land','air','fresh'];
+  const pick=L.taxa.filter(t=>want.includes(t.realm));
+  if(pick.length){
+    // Global, not local — label it as such so it does not read as a claim
+    // that these lived in this particular basin.
+    return `<div class="ihead">${marine?'In the sea':'On land'} at ${when}</div>`+
+           lifeHTML(pick,4);
+  }
+  if(marine){
+    return `<div class="ihead">In the sea at ${when}</div><p class="desc">`+
+      `No marine group is catalogued as characteristic of this interval yet — `+
+      `which is a gap in this app, not in the ocean.</p>`;
+  }
+  // Nothing terrestrial: for most of this timeline that is the true answer.
+  const sea=L.taxa.filter(t=>t.realm==='sea');
+  let h=`<div class="ihead">On land at ${when}</div><p class="desc">`+
+    (age>430
+      ? `Essentially nothing. Land is bare rock, sand and microbial crust — `+
+        `vascular plants do not spread until the Silurian, and everything below `+
+        `lived in the sea.`
+      : `No land group is catalogued for this interval yet.`)+`</p>`;
+  if(sea.length)h+=`<div class="ihead">In the sea instead</div>`+lifeHTML(sea,3);
+  return h;
 }
 function listHTML(title,items){
   if(!items||!items.length)return '';
@@ -1663,6 +1817,17 @@ function bindTextures(){
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
+  /* Sea colour per era. Reads the palette out of the manifest when the climate
+     table carries one and falls back to the modern ocean otherwise, so the
+     shader works whether or not the fields have been generated yet. */
+  const D_SH=[0.216,0.561,0.718], D_SM=[0.086,0.314,0.478], D_SD=[0.027,0.098,0.192];
+  const pal=(k,d)=>{const a=A[k]||d, b=B[k]||d;
+    return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];};
+  let c=pal('seaSh',D_SH);   mat.uniforms.uSeaShallow.value.setRGB(c[0],c[1],c[2]);
+  c=pal('seaMid',D_SM);      mat.uniforms.uSeaMid.value.setRGB(c[0],c[1],c[2]);
+  c=pal('seaDeep',D_SD);     mat.uniforms.uSeaDeep.value.setRGB(c[0],c[1],c[2]);
+  const sa=A.seaBio, sb=B.seaBio;
+  mat.uniforms.uSeaBio.value=(sa===undefined||sb===undefined)?0.35:sa+(sb-sa)*t;
   const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
@@ -1678,6 +1843,9 @@ function loop(now){
     syncSlider();
   }
   if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
+  // Drives the sea-surface sheen only; nothing about the world state depends
+  // on it, so scrubbing time and this clock stay independent.
+  mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
   // overlays visibility & fade
   const fade=presentFade();
@@ -1728,7 +1896,13 @@ function sliderToAge(v){return 1000-(+v);}
 $('#slider').addEventListener('input',e=>{state.age=sliderToAge(e.target.value);updateReadout();});
 function syncPlay(){const p=state.playing;$('#playIcon').innerHTML=p?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';}
 $('#playBtn').onclick=()=>{state.playing=!state.playing;syncPlay();};
-$('#dir').onclick=()=>{state.dir*=-1;$('#dirIcon').style.transform=state.dir<0?'scaleX(-1)':'none';};
+/* The arrow points the way the playhead travels along the timeline, which runs
+   1000 Ma on the left to +250 Myr on the right. dir<0 counts the age down, so
+   that is rightward — the unflipped icon. It used to be the other way round,
+   which meant the arrow contradicted the scrubber underneath it. */
+function syncDir(){$('#dirIcon').style.transform=state.dir>0?'scaleX(-1)':'none';}
+$('#dir').onclick=()=>{state.dir*=-1;syncDir();};
+syncDir();
 $('#speed').addEventListener('input',e=>{state.speed=+e.target.value;$('#speedVal').textContent=state.speed+' Myr/s';});
 document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#viewSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -1817,8 +1991,11 @@ function buildLegend(){
                  backgrounded tab reports document.hidden, and the browser then
                  never fires requestAnimationFrame — the app looks frozen when
                  it is simply not being asked to draw. */
-              step(){loop(performance.now());}};
-  state.age=0;syncSlider();updateReadout();syncPlay();
+              step(){loop(performance.now());},
+              gl:{mat,scene,globe,atmo,renderer,cam}};
+  // Do NOT reset the age here — the opening age is a deliberate choice made in
+  // `state`, and hard-coding 0 quietly overrode it.
+  syncSlider();updateReadout();syncPlay();syncDir();
   setInterval(updateReadout,120);
   $('#load').classList.add('done');
   requestAnimationFrame(loop);

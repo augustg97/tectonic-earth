@@ -364,6 +364,34 @@ LABELS = [
     ("sea", "Messinian Salt Basin", 16, 37, 5, 6),
     ("sea", "Afar Seaway", 41, 13, -35, -3),
     ("sea", "Pangaea Proxima Inland Sea", 28, 8, -250, -140),
+    # ---------- named palaeolakes (research: lakes are point features at
+    # this resolution; sea level and lake level are decoupled) ----------
+    ("lake", "Songliao Palaeolake", 124.0, 45.0, 80.0, 135.0),
+    ("lake", "Jehol Lakes", 120.0, 42.0, 120.0, 135.0),
+    ("lake", "Lake Gosiute", -109.0, 41.5, 48.5, 53.5),
+    ("lake", "Lake Uinta", -110.0, 39.8, 43.0, 53.5),
+    ("lake", "Fossil Lake", -110.8, 41.9, 50.0, 52.0),
+    ("lake", "Messel Lake", 8.75, 49.9, 47.0, 48.0),
+    ("lake", "Lake Baikal", 108.0, 53.5, 0.0, 30.0),
+    ("lake", "Pebas Mega-Wetland", -70.0, -5.0, 10.0, 23.0),
+    ("lake", "Lake Vostok", 106.0, -77.0, 0.0, 15.0),
+    ("lake", "Lake Tanganyika", 29.5, -6.0, 0.0, 12.0),
+    ("lake", "Lake Pannon", 19.0, 46.0, 4.5, 11.6),
+    ("lake", "East African Rift soda lakes", 36.0, 0.5, 0.0, 7.0),
+    ("lake", "Lago Mare (Messinian Mediterranean)", 16.0, 37.0, 5.33, 5.6),
+    ("lake", "Caspian Sea (Paratethys remnant)", 51.0, 42.0, 0.0, 5.5),
+    ("lake", "Black Sea (Paratethys remnant)", 34.0, 43.0, 0.0, 5.5),
+    ("lake", "Lake Titicaca", -69.5, -15.8, 0.0, 3.0),
+    ("lake", "Lake Victoria", 33.0, -1.0, 0.0, 0.4),
+    ("lake", "Palaeolake Makgadikgadi", 25.5, -20.5, 0.01, 0.3),
+    ("lake", "Lake Manly", -117.0, 36.3, 0.01, 0.186),
+    ("lake", "Lake Lisan", 35.5, 31.5, 0.014, 0.07),
+    ("lake", "Lake Bonneville", -113.0, 40.5, 0.013, 0.03),
+    ("lake", "Lake Lahontan", -119.0, 40.0, 0.013, 0.03),
+    ("lake", "Lake Tauca", -68.0, -19.5, 0.0141, 0.0181),
+    ("lake", "Lake Agassiz", -95.0, 50.0, 0.0082, 0.015),
+    ("lake", "Laurentian Great Lakes", -84.0, 45.5, 0.0, 0.014),
+    ("lake", "Lake Mega-Chad", 15.0, 13.0, 0.005, 0.011),
 ]
 
 
@@ -766,6 +794,123 @@ DESCRIPTIONS = {
   "kilometres from where they formed.",
  "Zealandia": "A continent 94 percent underwater. Thinned to the point of drowning as it unzipped "
   "from Antarctica, it now shows above the waves only as New Zealand and New Caledonia.",
+
+ # ---- palaeolake descriptions ----
+ "Lake Bonneville": "The largest of the Ice Age lakes of the American West, filling the Utah desert to a "
+  "depth of over 300 metres while the sea stood 125 metres lower than today. It drained "
+  "catastrophically northward through Red Rock Pass around 18,000 years ago. The Great "
+  "Salt Lake is its shrunken, saline remnant.",
+ "Lake Lahontan": "Bonneville's western twin, a branching lake filling the valleys of northwestern Nevada "
+  "at the height of the last glaciation. Its shorelines are still cut into the hillsides "
+  "above Pyramid Lake, hundreds of metres above the modern water.",
+ "Lake Manly": "A lake 130 kilometres long and 180 metres deep in what is now the driest place in "
+  "North America. Death Valley sat at the end of a chain of overflowing pluvial lakes, "
+  "and filled whenever the chain upstream ran full.",
+ "Lake Agassiz": "Meltwater ponded against the southern edge of the Laurentide ice sheet, larger than "
+  "all the modern Great Lakes combined. When it finally burst north into Hudson Strait "
+  "around 8,200 years ago it released some 163,000 cubic kilometres of fresh water into "
+  "the North Atlantic and cooled the northern hemisphere for a century.",
+ "West Siberian Glacial Lake": "The Ob and Yenisei drain north to the Arctic. Block their mouths with an ice sheet and "
+  "the whole of western Siberia ponds up behind it -- possibly the largest lake that has "
+  "ever existed, draining south and west across Eurasia instead of into the Arctic Ocean.",
+ "Lake Lisan": "The Dead Sea's Ice Age ancestor, filling the Jordan Rift some 200 metres above the "
+  "modern shore. Its finely laminated marls record each wet and dry year of the last "
+  "glaciation as a separate couplet.",
+ "Laurentian Great Lakes": "A fifth of the world's surface fresh water, sitting in basins the ice gouged out of "
+  "Precambrian rock and abandoned only about 14,000 years ago. Geologically they are "
+  "brand new, and on any longer view they are temporary.",
+ "Lake Mega-Chad": "During the African Humid Period the Sahara was grassland and lake, and Chad held 160 "
+  "metres of water over an area the size of the Caspian. Fish bones and hippo remains sit "
+  "in the open desert hundreds of kilometres from the modern shore. What is left is a "
+  "shallow pond a hundredth the size.",
+ "Palaeolake Makgadikgadi": "A lake the size of Lake Victoria in the middle of the Kalahari, fed by rivers that now "
+  "vanish into the Okavango Delta before reaching it. Its floor is a salt pan so flat and "
+  "so bare that it is visible from orbit as a white smear.",
+ "Lake Dieri (Lake Eyre megalake)": "Australia's dead centre drains inward to a salt pan below sea level. In wetter phases "
+  "of the Quaternary the pan and its neighbours merged into a single inland sea, which is "
+  "why the continent's interior is ringed with the bones of giant marsupials.",
+ "Lake Baikal": "The oldest and deepest lake on Earth, 1,642 metres down in a rift that is still "
+  "opening at about two centimetres a year. It holds a fifth of the planet's unfrozen "
+  "surface fresh water and a fauna -- including a freshwater seal -- found nowhere else.",
+ "Lake Tanganyika": "The second deepest lake in the world, filling a segment of the East African Rift. Its "
+  "lower waters have not mixed with the surface in over a thousand years, and its cichlid "
+  "fishes are a textbook case of explosive evolution in isolation.",
+ "Lake Victoria": "Africa's largest lake is not a rift lake at all -- it is rainwater ponded in a shallow "
+  "sag between the two arms of the rift, after uplift reversed the rivers that used to "
+  "drain west. It dried out completely as recently as 17,000 years ago, which makes the "
+  "hundreds of cichlid species now living in it a startlingly fast radiation.",
+ "East African Rift soda lakes": "Where the rift floor has no outlet and volcanic rock supplies the chemistry, the lakes "
+  "turn caustic -- brine so alkaline it preserves the carcasses of birds that land on it. "
+  "They are also where much of the early hominin record was buried.",
+ "Lake Pannon": "A vast brackish lake filling the Carpathian Basin after the Alps and Carpathians "
+  "sealed it off from the sea. Isolated for millions of years, its molluscs radiated into "
+  "hundreds of species found nowhere else. The Danube now runs across its dried floor.",
+ "Caspian Sea (Paratethys remnant)": "The last open piece of the Paratethys, an ocean that once ran from the Alps to central "
+  "Asia. Cut off as the mountains rose, it has been drying, refilling and changing "
+  "salinity ever since, and it still holds seals and sturgeon descended from marine "
+  "ancestors.",
+ "Black Sea (Paratethys remnant)": "A basin that has flipped between lake and sea again and again, depending on whether "
+  "global sea level stood above or below the shallow sill at the Bosphorus. Below 150 "
+  "metres its water is anoxic and sulphidic -- and preserves whatever sinks into it.",
+ "Lago Mare (Messinian Mediterranean)": "In the last act of the Messinian Salinity Crisis the desiccated Mediterranean refilled "
+  "-- not from the Atlantic, but with brackish water spilling in from the rivers and from "
+  "Paratethys to the northeast. For a few hundred thousand years the Mediterranean was a "
+  "lake, kilometres below the ocean outside it.",
+ "Lake Gosiute": "The largest of the three Green River lakes, filling the Greater Green River Basin "
+  "between the young Rocky Mountains. In its closed, evaporating phases it precipitated "
+  "trona -- the world's largest deposit of soda ash lies under Wyoming.",
+ "Lake Uinta": "Gosiute's southern neighbour, spilling across the Uinta and Piceance basins. Its "
+  "bottom muds are the richest oil shale on Earth -- algal organic matter that never "
+  "decayed because the deep water had no oxygen in it.",
+ "Fossil Lake": "The smallest of the three Green River lakes and by far the most productive fossil "
+  "site. Its laminated limestone preserves fish, birds, bats, insects and flowers in such "
+  "numbers and such detail that whole museum halls are furnished from one quarry.",
+ "Lake Idaho": "A long-lived lake in the graben the Yellowstone hotspot left behind as it burned its "
+  "way east under Idaho. It held a rich freshwater fish fauna until the Snake River cut "
+  "through Hells Canyon and drained it.",
+ "Lake Tauca": "A lake 600 kilometres long on the Bolivian Altiplano at four kilometres' altitude, at "
+  "the same time as the northern ice sheets stood at their maximum. When it evaporated it "
+  "left the Salar de Uyuni -- the largest salt flat in the world.",
+ "Lake Titicaca": "The highest large lake on Earth, held in a basin between two arms of the Andes as the "
+  "range rose around it. It is the deepest surviving piece of a series of far larger Ice "
+  "Age lakes that once covered the Altiplano.",
+ "Pebas Mega-Wetland": "Before the Amazon flowed east, western Amazonia was a million square kilometres of "
+  "shallow lake and swamp draining north to the Caribbean, with tides reaching far "
+  "inland. Andean uplift eventually tipped the continent the other way and drained it.",
+ "Lake Vostok": "A lake the size of Lake Ontario, sealed under four kilometres of Antarctic ice and "
+  "kept liquid by the pressure and the heat of the rock beneath. It is one of roughly "
+  "four hundred subglacial lakes, and it has been cut off from the sky for millions of "
+  "years.",
+ "Messel Lake": "A maar -- a lake in a volcanic explosion pit, less than a kilometre across and "
+  "hundreds of metres deep. Its anoxic bottom preserved Eocene horses, bats and birds "
+  "complete with stomach contents, fur and the colour of their feathers.",
+ "Songliao Palaeolake": "One of the largest lakes of the Mesozoic, filling a rift-and-sag basin in northeast "
+  "China for fifty million years. Twice it rose high enough to meet the Pacific and take "
+  "in seawater, and its black anoxic muds became China's biggest oil field.",
+ "Jehol Lakes": "Dozens of small lakes among active volcanoes in northeastern China, buried again and "
+  "again under ash and pyroclastic flows. The result is the finest window anywhere on "
+  "feathered dinosaurs, early birds and mammals, and the first flowers -- preserved down "
+  "to the melanin in individual feathers.",
+ "Crato Lake": "A lake in the rift that was tearing South America away from Africa, its bottom waters "
+  "so salty and still that insects, fish and pterosaurs sank into them intact. A rare "
+  "Gondwanan lacustrine Lagerstatte, from an ocean that had barely begun to open.",
+ "Newark Rift Lakes": "As Pangaea began to tear along the line of the future Atlantic, a chain of deep, "
+  "narrow lakes formed in the rift valleys. They rose and fell with the wobble of Earth's "
+  "orbit so regularly that their layered beds are used to calibrate the Triassic "
+  "timescale itself -- and they record the end-Triassic extinction and the flood basalts "
+  "that caused it.",
+ "Palaeo-Lake Junggar": "One of the largest lakes of the entire Phanerozoic, in a basin caught between the "
+  "growing mountain belts of central Asia. Its floor holds the thickest organic-rich lake "
+  "sediments known anywhere on Earth, laid down while the Early Permian world was warming "
+  "sharply.",
+ "Lake Orcadie": "A great lake in the collapsing wreckage of the Caledonian mountains, rising and "
+  "falling to the beat of Earth's orbit for ten million years. Each time it deepened it "
+  "laid down a bed of dark laminated mudstone packed with fish -- the flagstones of "
+  "Caithness and Orkney, quarried for pavements and full of Devonian armoured fish.",
+ "Torridonian Lakes": "River and lake beds a billion years old in northwest Scotland, laid down on a barren "
+  "continent long before anything lived on land. Their muds hold some of the oldest known "
+  "non-marine life: cyanobacteria and early eukaryotes living in fresh water, hundreds of "
+  "millions of years before plants.",
 }
 
 

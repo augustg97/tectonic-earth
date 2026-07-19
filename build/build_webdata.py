@@ -11,6 +11,7 @@ import json, re, glob, os
 import numpy as np
 from PIL import Image
 from climate import climate_at
+import climate
 import features
 import eras
 import life
@@ -25,11 +26,16 @@ def r(x, n=2):
 # ---------- timeline (merge manifests) ----------
 def build_timeline():
     """The field manifest IS the timeline now — it already carries the per
-    keyframe scalars (temp, veg, ice thresholds) the shader needs."""
+    keyframe scalars (temp, veg, ice thresholds) the shader needs. Sea colour
+    is layered on here rather than baked into the fields, because it is a
+    display choice (how the water reads) not part of the elevation/rainfall
+    physics, so it can be retuned without a 35-minute field rebuild."""
     all_ = json.load(open("../web/fields/manifest.json"))
+    for m in all_:
+        m.update(climate.sea_colour_at(m["age"]))
     all_.sort(key=lambda m: m["age"])
     json.dump(all_, open(f"{WEB}/timeline.json", "w"), separators=(",", ":"))
-    print("timeline:", len(all_), "keyframes")
+    print("timeline:", len(all_), "keyframes (with sea-colour palette)")
     return all_
 
 # ---------- boundaries ----------
@@ -315,10 +321,21 @@ def build_eras():
 # ---------- biomes, life through time, regional fossil record ----------
 def build_life():
     out = {"biomes": life.biomes(), "life": life.life(),
-           "regional": life.regional(), "icons": life.icons()}
+           "regional": life.regional(), "icons": life.icons(),
+           "regionTaxa": life.region_taxa(), "sparse": life.sparse()}
     json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
+    spans = sum(len(v) for v in out["regionTaxa"].values())
     print(f"life: {len(out['biomes'])} biome samples, {len(out['life'])} intervals, "
-          f"{len(out['regional'])} regions, {len(out['icons'])} illustrations")
+          f"{len(out['regional'])} regions, {len(out['icons'])} illustrations, "
+          f"{len(out['regionTaxa'])} regions x {spans} spans of local biota")
+    # The global list is thin on marine taxa in the Cenozoic, which is exactly
+    # where the old code used to cross realms. Surface that as a build warning
+    # so it is visible rather than only showing up as land animals in an ocean.
+    for e in out["life"]:
+        for realm, label in (("sea", "marine"), ("land", "terrestrial")):
+            n = sum(1 for t in e["taxa"] if (t["realm"] == "sea") == (realm == "sea"))
+            if n == 0:
+                print(f"  note: {e['interval']} has no {label} taxa in the global list")
 
 
 if __name__ == "__main__":
