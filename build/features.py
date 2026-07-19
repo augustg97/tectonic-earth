@@ -232,7 +232,10 @@ LABELS = [
     ("continent", "Congo Craton",     20,  -3,  545, 950),
     ("continent", "Kalahari Craton", 24, -26, 545, 700),
     ("continent", "Kalahari Craton", 30, -50, 700, 950),
-    ("continent", "North China", 114, 38, 200, 420),
+    # Reaches into the Early Cretaceous so the Jehol biota (~135-120 Ma) is
+    # clickable where it belongs: the block is a recognisable part of Asia
+    # through the Mesozoic even after it welds on.
+    ("continent", "North China", 114, 38, 120, 420),
     ("continent", "North China", 130, 5, 420, 900),
     ("continent", "South China", 110, 26, 200, 420),
     ("continent", "South China", 125, -10, 420, 900),
