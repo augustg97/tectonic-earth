@@ -36,7 +36,7 @@ import motion as MO
 OUT = "../web/fields"
 os.makedirs(OUT, exist_ok=True)
 
-ELEV_H, ELEV_W = 768, 1536      # coastline resolution
+ELEV_H, ELEV_W = 1024, 2048     # coastline resolution
 RAIN_H, RAIN_W = 384, 768       # higher res so moisture drives fine biome detail
 CLIM_H, CLIM_W = 384, 768       # resolution the wind solve runs at
 ELEV_Q, RAIN_Q = 92, 90
@@ -227,6 +227,16 @@ def main():
         frac = abs(age) / 250.0
         gh = future_grid(frac, gid, Zsrc, ELEV_H, ELEV_W)
         gl = future_grid(frac, gid, Zsrc, CLIM_H, CLIM_W)
+        # The future series warps TODAY's terrain, which is referenced to
+        # today's sea level, so the era's eustatic level has to be applied by
+        # hand. Without this the coastline never moves and low ground such as
+        # Florida, Bangladesh and the Netherlands stays dry through a hothouse
+        # that has melted every ice sheet. (The Phanerozoic DEMs are already
+        # relative to their own contemporaneous sea level; adjusting those too
+        # would double-count.)
+        sl = sealevel_for(age)
+        gh = gh - sl
+        gl = gl - sl
         coarse[age] = MO.coarsen(gh)
         m, n = export(age, gh, gl[::-1], "fut")   # export wants lat-ascending
         manifest.append(m); total += n; nfut += 1

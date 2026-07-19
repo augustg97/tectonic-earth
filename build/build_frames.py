@@ -56,14 +56,36 @@ def period_for(age):
             return ep, per
     return "—", "—"
 
-# ---- eustatic sea level (m vs present), Haq/Hallam-style, for readout ------
+# ---- eustatic sea level (m vs present), for the readout --------------------
+# This follows the HAQ family of curves (Haq & Schutter 2008; van der Meer's
+# tectono-glacio-eustatic curve agrees closely). The competing Miller
+# backstripping family puts the Cretaceous peak at roughly half this. The two
+# barely overlap, so the rule is to pick one and stay in it -- mixing them
+# produces a curve that matches neither.
 SEALEVEL = [
     (0, 0), (20, 40), (40, 80), (66, 110), (80, 250), (90, 240), (100, 200),
     (120, 150), (145, 110), (160, 90), (200, 60), (230, 40), (250, 20),
     (270, -20), (300, -40), (340, 60), (360, 90), (400, 140), (420, 160),
     (445, 200), (460, 220), (480, 180), (500, 120), (540, 60),
-    (600, 30), (700, -10), (850, 40), (1000, 30),
-    (-30, -10), (-70, 20), (-120, 60), (-170, 30), (-250, -20),
+    # Precambrian: there is NO published quantitative eustatic curve before
+    # 541 Ma -- Haq & Schutter and Miller both start at the Cambrian base, and
+    # the one model-derived attempt (van der Meer 2017) reaches only ~825 Ma
+    # through a long inference chain its own authors flag as least reliable
+    # exactly there. These are plausible values, not readings, and the app
+    # marks them as modelled.
+    # Snowball sea level is the one Neoproterozoic value with a real
+    # constraint on it: with ~1 km of sea-level-equivalent water locked into
+    # ice sheets, levels "must have been very low (lower than -200 m)"
+    # (van der Meer et al. 2022). The interglacials rebound sharply.
+    (600, 30), (628, 20), (637, -210), (648, -260), (658, 15),
+    (665, -250), (690, -280), (712, -230), (721, 25),
+    (750, 30), (850, 40), (1000, 30),
+    # Future: the present icehouse ends. Melting Antarctica and Greenland alone
+    # is ~65 m of sea level (NASA/NSIDC), and the projection warms into a
+    # hothouse, so seas rise steeply and then ebb as the assembling
+    # supercontinent and ageing, deepening ocean basins take water back down --
+    # the same reason Pangaea sat at a low stand.
+    (-10, 12), (-30, 40), (-70, 65), (-120, 70), (-170, 50), (-250, 15),
 ]
 def sealevel_for(age):
     pts = [p for p in SEALEVEL if (p[0] <= 0) == (age <= 0)] or SEALEVEL

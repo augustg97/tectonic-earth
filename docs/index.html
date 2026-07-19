@@ -184,7 +184,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <div class="grp-h">Present-day layers</div>
     <div class="tog on" data-layer="boundaries"><span>Plate boundaries</span><div class="sw"></div></div>
     <div class="tog" data-layer="vectors"><span>Motion vectors</span><div class="sw"></div></div>
-    <div class="tog" data-layer="hotspots"><span>Hotspots</span><div class="sw"></div></div>
+    <div class="tog" data-layer="hotspots"><span>Volcanism &amp; impacts</span><div class="sw"></div></div>
   </div>
   <div class="grp">
     <div class="grp-h">Annotation</div>
@@ -391,13 +391,34 @@ float vnoise3(vec3 p){
 }
 float fbm3(vec3 p){ float s=0.0,a=0.5; for(int i=0;i<5;i++){ s+=a*vnoise3(p); p*=2.07; a*=0.5; } return s; }
 
+float baseElev(vec2 uv){
+  return mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
+}
+/* One octave walk, two accumulations. Plain fbm gives rounded lumps, which is
+   right for a floodplain and wrong for a mountain belt — real ranges are
+   ridge-and-valley, with sharp crests and incised drainages between them.
+   Ridged noise (1-|2n-1|, squared, with each octave gated by the one above)
+   produces exactly that. Blend the two by how steep the shipped field already
+   is, so the Himalaya grow crests while the Amazon basin stays flat. */
+float detail3(vec3 p, float rug){
+  float sm=0.0, rg=0.0, a=0.5, w=1.0;
+  for(int i=0;i<5;i++){
+    float n=vnoise3(p);
+    sm+=a*n;
+    float r=1.0-abs(n*2.0-1.0); r*=r;
+    rg+=a*r*w; w=clamp(r*1.5,0.25,1.0);
+    p*=2.07; a*=0.5;
+  }
+  return mix(sm-0.5, (rg-0.42)*1.35, rug);
+}
 // interpolate the two keyframes, then add procedural micro-relief so the
 // upsampled field doesn't read as soft
-float elevAt(vec2 uv){
-  float z=mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
+float elevAt(vec2 uv, float rug){
+  float z=baseElev(uv);
   vec3 d=dirFromUv(uv);
-  float n=fbm3(d*260.0)-0.5, n2=fbm3(d*70.0+13.7)-0.5;
-  float det=(n*250.0+n2*130.0)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
+  float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
+  // rugged ground also carries more relief, not just a different shape
+  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
   return z + (z>0.0 ? det : det*0.10);
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
@@ -444,7 +465,13 @@ void main(){
   float lat=90.0-uv.y*180.0;
   float s2=sin(radians(lat)); s2*=s2;
 
-  float z=elevAt(uv);
+  // How broken is the shipped field around here? Measured once and reused, so
+  // the five elevAt taps below all agree on what kind of terrain this is.
+  vec2 rs=uTexel*1.6;
+  float rug=clamp(length(vec2(
+      baseElev(uv+vec2(rs.x,0.0))-baseElev(uv-vec2(rs.x,0.0)),
+      baseElev(uv+vec2(0.0,rs.y))-baseElev(uv-vec2(0.0,rs.y))))/460.0,0.0,1.0);
+  float z=elevAt(uv,rug);
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
   float Rf=rainAt(uv);
@@ -498,8 +525,8 @@ void main(){
 
   // per-pixel relief from the elevation gradient
   vec2 st=uTexel*0.75;
-  float ex1=elevAt(uv+vec2(st.x,0.0)), ex0=elevAt(uv-vec2(st.x,0.0));
-  float ey1=elevAt(uv+vec2(0.0,st.y)), ey0=elevAt(uv-vec2(0.0,st.y));
+  float ex1=elevAt(uv+vec2(st.x,0.0),rug), ex0=elevAt(uv-vec2(st.x,0.0),rug);
+  float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
   float coslat=max(cos(radians(lat)),0.08);
   vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
   float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
@@ -532,7 +559,7 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},
-    uTexel:{value:new THREE.Vector2(1/1536,1/768)}
+    uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
   scene.add(globe);
@@ -713,9 +740,29 @@ function buildHotspots(){
   const mm=new THREE.MeshBasicMaterial({color:0xff7d3a});
   const lipm=new THREE.MeshBasicMaterial({color:0xffd257});
   for(const h of hotspotsNow()){
-    const isLip=h.k==='lip';
+    const isLip=h.k==='lip', isImp=h.k==='impact';
     // a large igneous province erupts in a geological instant; flag the pulse
-    const erupting=isLip&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    const erupting=(isLip||isImp)&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    if(isImp){
+      // A crater is a scar, not an event: bright at the moment of impact, then
+      // a persistent ring that fades as it is buried and eroded. Size tracks
+      // the real rim diameter, so Chicxulub reads larger than Ries.
+      const p=ll2v(h.lon,h.lat,1.012);
+      const rr=Math.max(.014,Math.min(.05,(h.d||30)/180*.05));
+      const age=Math.max(0,h.peak-state.age);          // Myr since the impact
+      const fresh=Math.exp(-age/90);
+      const col=erupting?0xffe9a8:0xc9d6e8;
+      const ring=new THREE.Mesh(new THREE.RingGeometry(rr*(erupting?.3:.62),rr,24),
+        new THREE.MeshBasicMaterial({color:col,transparent:true,
+          opacity:erupting?.85:.20+.35*fresh,side:THREE.DoubleSide}));
+      ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));
+      overlay.hotspots.add(ring);
+      if(erupting){
+        const flash=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xfff4d0}));
+        flash.position.copy(p);flash.scale.setScalar(2.2);overlay.hotspots.add(flash);
+      }
+      continue;
+    }
     const sp=new THREE.Mesh(geo,erupting?lipm:mm);
     const p=ll2v(h.lon,h.lat,1.012);sp.position.copy(p);
     if(erupting)sp.scale.setScalar(1.9); else if(isLip)sp.scale.setScalar(1.3);
@@ -878,7 +925,17 @@ function drawHotspotsMap(dx,dy,dw,dh,fade){
   mctx.globalAlpha=fade;
   for(const h of hotspotsNow()){
     const[x,y]=ll2map(h.lon,h.lat,dx,dy,dw,dh);
-    const erupting=h.k==='lip'&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    const erupting=h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
+    if(h.k==='impact'){
+      const R=Math.max(4,Math.min(11,(h.d||30)/180*11));
+      const fresh=Math.exp(-Math.max(0,h.peak-state.age)/90);
+      mctx.strokeStyle=erupting?'rgba(255,244,208,.9)':`rgba(201,214,232,${(.25+.4*fresh).toFixed(2)})`;
+      mctx.lineWidth=(erupting?2.2:1.4)*DPR;
+      mctx.beginPath();mctx.arc(x,y,R*DPR,0,6.28);mctx.stroke();
+      if(erupting){mctx.fillStyle='rgba(255,244,208,.5)';mctx.beginPath();
+        mctx.arc(x,y,R*.45*DPR,0,6.28);mctx.fill();}
+      continue;
+    }
     const R=erupting?9:h.k==='lip'?6.5:5, col=erupting?'255,210,87':'255,125,58';
     mctx.fillStyle=`rgba(${col},.32)`;mctx.beginPath();mctx.arc(x,y,R*DPR,0,6.28);mctx.fill();
     mctx.fillStyle=`rgb(${col})`;mctx.beginPath();mctx.arc(x,y,(erupting?3.4:2.2)*DPR,0,6.28);mctx.fill();
@@ -922,6 +979,17 @@ function selectAt(lon,lat){
   if(fade>0.4){
     for(const p of DATA.plates){if(pointInRings(lon,lat,p.rings)){showPlate(p,lon,lat);return;}}
   }
+  // A crater or an erupting province is a small, precise target and the most
+  // interesting thing on the map when it is there, so it wins over a label.
+  if(state.layers.hotspots){
+    let he=null,hd=1e9;
+    for(const h of hotspotsNow()){
+      let dlon=Math.abs(h.lon-lon); if(dlon>180)dlon=360-dlon;
+      const d=Math.hypot(dlon*Math.cos(lat*DEG),h.lat-lat);
+      if(d<hd){hd=d;he=h;}
+    }
+    if(he&&hd<7){showEvent(he);return;}
+  }
   // Pick the nearest visible label of the RIGHT KIND for what was clicked:
   // clicking water should name the ocean, not the continent beside it.
   const fi=curFrame().i, z=elevField(fi);
@@ -961,6 +1029,29 @@ function showPlate(p,lon,lat){
   rows.push(['Clicked','~'+Math.abs(lat).toFixed(0)+'°'+(lat>=0?'N':'S')+' '+Math.abs(lon).toFixed(0)+'°'+(lon>=0?'E':'W')]);
   $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
   $('#infoDesc').textContent=plateDesc(p.name);
+  $('#info').classList.add('show');
+}
+function showEvent(h){
+  const rows=[];
+  const kind=h.k==='impact'?'Impact structure':h.k==='lip'?'Large igneous province':'Mantle plume';
+  $('#infoName').textContent=h.n;
+  if(h.k==='impact'){
+    const since=Math.max(0,h.peak-state.age);
+    $('#infoTag').textContent=kind+' · '+h.peak+' Ma';
+    rows.push(['Rim diameter',`${h.d} km`]);
+    rows.push(['Impact age',`${h.peak} Ma`]);
+    rows.push([since<1?'Status':'Age of scar',
+      since<1?'just struck':`${Math.round(since)} Myr old`]);
+  }else{
+    const a0=Math.min(h.a0,h.a1), a1=Math.max(h.a0,h.a1);
+    $('#infoTag').textContent=kind+' · '+(h.peak!==undefined?h.peak+' Ma peak':`${a1}–${a0} Ma`);
+    rows.push(['Active',`${a1}–${a0} Ma`]);
+    if(h.peak!==undefined)rows.push(['Peak eruption',`${h.peak} Ma`]);
+  }
+  rows.push(['Position','~'+Math.abs(h.lat).toFixed(0)+'°'+(h.lat>=0?'N':'S')+' '+
+    Math.abs(h.lon).toFixed(0)+'°'+(h.lon>=0?'E':'W')]);
+  $('#infoRows').innerHTML=rows.map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
+  $('#infoDesc').textContent=h.d1||'';
   $('#info').classList.add('show');
 }
 const COMPASS=['north','north-east','east','south-east','south','south-west','west','north-west'];
@@ -1113,9 +1204,19 @@ function updateReadout(){
   const veg=m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated';
   const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
   const gmst=L('gmst'), co2=L('co2'), o2=L('o2');
+  /* Be honest about what is measured and what is not. Proxy CO2 runs out in
+     the Ordovician and there is NO published eustatic sea-level curve at all
+     before 541 Ma — the standard compilations start at the Cambrian base. Any
+     number shown deeper than that is model output with an uncertainty span of
+     roughly an order of magnitude, and the readout should say so rather than
+     present it with the same authority as a Cenozoic value. The future is
+     projection by the same token. */
+  const modelled = state.age>540 || state.age<0;
+  const tag = modelled
+    ? `<span style="color:#7a8494">&nbsp;· ${state.age<0?'projected':'modelled'}</span>` : '';
   $('#env').innerHTML=
      `<b>Avg temp</b> ${gmst.toFixed(1)}&deg;C &nbsp;·&nbsp; <b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m<br>`
-    +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%<br>`
+    +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%${tag}<br>`
     +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}<br>`
     +`<b>Biosphere</b> ${veg}`;
 }
@@ -1271,6 +1372,7 @@ function buildLegend(){
   <div class="li"><span class="ln" style="background:#e0b23a"></span>Transform fault<span style="color:#5c6675"> · today</span></div>
   <div class="li"><span class="dt" style="background:#ff7d3a"></span>Hotspot / plume</div>
   <div class="li"><span class="dt" style="background:#ffd257"></span>Erupting province</div>
+  <div class="li"><span class="dt" style="background:#c9d6e8"></span>Impact crater</div>
   <div class="li" style="margin-top:5px;color:#5c6675;font-size:9.5px;max-width:150px;line-height:1.45">Boundaries and vectors in deep time are derived from the reconstruction's own motion.</div>`;
 }
 

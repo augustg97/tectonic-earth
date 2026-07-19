@@ -9,6 +9,7 @@
 """
 import json, re, glob, os
 import numpy as np
+from PIL import Image
 from climate import climate_at
 import features
 
@@ -90,11 +91,147 @@ def build_plates():
     json.dump(out, open(f"{WEB}/plates.json", "w"), separators=(",", ":"))
     print("plates:", len(out), "-", os.path.getsize(f"{WEB}/plates.json")//1024, "KB")
 
-# ---------- hotspots (time-aware: LIPs + long-lived plumes) ----------
+# ---------- back-advection of feature positions ----------
+def _motion_fields():
+    """Per-age (vx, vy) on the motion grid, for tracing points back in time."""
+    man = json.load(open(f"{WEB}/fields/manifest.json"))
+    out = {}
+    for rec in man:
+        p = os.path.join(WEB, "fields", rec["m"])
+        if not os.path.exists(p):
+            continue
+        a = np.asarray(Image.open(p).convert("RGB")).astype(float) / 255
+        out[rec["age"]] = ((a[..., 0] * 2 - 1) * 160, (a[..., 1] * 2 - 1) * 160,
+                           a[..., 2])
+    return out
+
+
+# How far back the correction is trusted. Checked against known
+# paleogeography, it holds up through the Mesozoic -- Chicxulub lands in the
+# Gulf, Popigai in Siberia, Manicouagan in the Pangaean interior -- and then
+# degrades. Past roughly 250 Ma a systematic poleward bias takes over: the
+# motion field is block-matched on an equirectangular grid, whose cells
+# converge at the poles, so a point that drifts to high latitude accumulates
+# spurious meridional motion and keeps going. Unclamped, Acraman ended up at
+# 88 S and Suordakh at 89 N, which is visibly nonsense.
+#
+# So: correct where the correction is trustworthy, and leave older features at
+# their catalogued coordinates -- an approximation the module docstring
+# already declares -- rather than replacing it with a confident-looking wrong
+# answer.
+ADVECT_LIMIT = 250.0
+MAX_ABS_LAT = 78.0
+
+
+def paleo_position(lon, lat, age, mot, step=5.0):
+    """Carry a present-day point back to where that crust sat at `age`.
+
+    Volcanic provinces and impact craters are catalogued at the coordinates
+    where we find them today, but the crust they sit on has travelled. Marking
+    the Siberian Traps or Chicxulub at modern coordinates on a 250 Ma map puts
+    them in the wrong ocean. Stepping the point back along the measured motion
+    field puts each event roughly where it actually happened.
+
+    Stepping is done as a rotation on the sphere rather than by adding degrees
+    of latitude and longitude. The naive version divides the longitude step by
+    cos(lat), which blows up near the poles: a point that wandered to high
+    latitude got flung around the globe and then stuck there, which is how
+    Suordakh ended up at 88 N and Acraman at 87 S.
+
+    Even done properly this recovers direction better than magnitude -- the
+    motion field is smoothed and confidence-gated, so fast plates come out
+    short. It is a correction, not a rotation model.
+    """
+    if age <= 0 or not mot:
+        return lon, lat
+    ages = sorted(a for a in mot if a >= 0)
+    H, W = next(iter(mot.values()))[0].shape
+    la, lo = np.radians(lat), np.radians(lon)
+    p = np.array([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
+    n = int(age / step)
+    for i in range(n):
+        a = min(ages, key=lambda x: abs(x - i * step))
+        vx, vy, cf = mot[a]
+        lat_i = np.degrees(np.arcsin(np.clip(p[2], -1, 1)))
+        lon_i = np.degrees(np.arctan2(p[1], p[0]))
+        c = int((lon_i + 180) / 360 * W) % W
+        r = int(np.clip((90 - lat_i) / 180 * H, 0, H - 1))
+        if cf[r, c] < 0.2:
+            continue
+        # local east/north frame, then step backwards along the motion
+        north = np.array([0.0, 0.0, 1.0])
+        east = np.cross(north, p)
+        ne = np.linalg.norm(east)
+        if ne < 1e-8:                      # exactly at a pole: no defined east
+            continue
+        east /= ne
+        north = np.cross(p, east)
+        d = -(vx[r, c] * step) * east - (vy[r, c] * step) * north   # km
+        dist = np.linalg.norm(d)
+        if dist < 1e-9:
+            continue
+        axis = np.cross(p, d / dist)
+        na = np.linalg.norm(axis)
+        if na < 1e-9:
+            continue
+        axis /= na
+        th = dist / 6371.0                 # arc angle on the sphere
+        q = (p * np.cos(th) + np.cross(axis, p) * np.sin(th)
+             + axis * np.dot(axis, p) * (1 - np.cos(th)))
+        q /= np.linalg.norm(q)
+        # backstop: refuse a step into the polar zone where the field is least
+        # trustworthy, rather than letting the point run away to the pole
+        if abs(np.degrees(np.arcsin(np.clip(q[2], -1, 1)))) > MAX_ABS_LAT:
+            break
+        p = q
+    return (round(float(np.degrees(np.arctan2(p[1], p[0]))), 1),
+            round(float(np.degrees(np.arcsin(np.clip(p[2], -1, 1)))), 1))
+
+
+# ---------- hotspots + impacts (time-aware, paleo-positioned) ----------
 def build_hotspots():
+    mot = _motion_fields()
     out = features.hotspots()
+    moved = 0
+    for h in out:
+        # The Neoproterozoic entries are authored directly onto the synthetic
+        # Precambrian map, i.e. they are ALREADY in the frame of their era.
+        # Advecting those would move them away from where they belong -- the
+        # correction only applies to features catalogued at modern coordinates.
+        if min(h["a0"], h["a1"]) >= 540:
+            continue
+        # a plume is marked where its track starts; a province where it erupted
+        ref = h.get("peak", min(h["a0"], h["a1"]))
+        if ref and 20 < ref <= ADVECT_LIMIT:
+            h["lon"], h["lat"] = paleo_position(h["lon"], h["lat"], ref, mot)
+            moved += 1
+    imp = features.impacts()
+    for m in imp:
+        if 20 < m["age"] <= ADVECT_LIMIT:
+            m["lon"], m["lat"] = paleo_position(m["lon"], m["lat"], m["age"], mot)
+        # a crater is a lasting scar: visible from the impact onward
+        m["a0"], m["a1"] = 0, m["age"]
+        m["peak"] = m["age"]
+    out += imp
+    notes = features.event_notes()
+    for e in out:
+        d = notes.get(e["n"])
+        if not d:
+            if e["k"] == "impact":
+                d = (f"A confirmed impact structure roughly {e['d']} km across, "
+                     f"formed about {e['peak']} million years ago.")
+            elif e["k"] == "lip":
+                d = ("A large igneous province: flood basalts erupted over a "
+                     "geologically brief interval, on a scale with no modern "
+                     "equivalent.")
+            else:
+                d = ("A long-lived mantle plume. The plate slides over it, so "
+                     "the volcanoes it builds form a track rather than a "
+                     "single centre.")
+        e["d1"] = d
     json.dump(out, open(f"{WEB}/hotspots.json", "w"), separators=(",", ":"))
-    print("hotspots:", len(out), "(with age windows)")
+    print(f"volcanism + impacts: {len(out)} features "
+          f"({len(imp)} craters, {moved} plume/LIP positions back-advected)")
 
 # ---------- era labels (time-aware, full timeline) ----------
 def build_labels():
