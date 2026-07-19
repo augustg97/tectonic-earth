@@ -462,12 +462,6 @@ uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform vec2 uTexel;
-// Sea colour is era-dependent, not a constant: a ferruginous Precambrian ocean,
-// a euxinic one, and the modern coccolith-rich blue are genuinely different
-// bodies of water. Driven from the climate table per keyframe.
-uniform vec3 uSeaShallow, uSeaMid, uSeaDeep;
-uniform float uSeaBio;     // 0..1 productivity — how green the surface reads
-uniform float uTime;       // seconds, for the surface sheen only
 varying vec2 vUv;
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
@@ -528,32 +522,15 @@ float detail3(vec3 p, float rug){
   }
   return mix(sm-0.5, (rg-0.42)*1.35, rug);
 }
-/* The seafloor is not a flat blue sheet, and it used to render as one: ocean
-   got a tenth of the land's procedural relief and almost no hillshade, so
-   shelves, ridge flanks and trenches all read the same. It also has its own
-   grain, quite unlike a mountain range — abyssal hills are low, closely spaced
-   and strongly lineated parallel to the ridge that made them, shelves are
-   smooth, and the odd seamount rises off the plain. */
-float oceanDetail(vec3 d, float z){
-  float hills=fbm3(d*430.0)-0.5;
-  // stretched sampling makes the noise anisotropic, which is what gives
-  // abyssal hills their grain rather than a uniform lumpiness
-  float fabric=fbm3(vec3(d.x*70.0,d.y*760.0,d.z*70.0))-0.5;
-  float cones=max(0.0,fbm3(d*34.0)-0.60); cones*=cones*7.0;
-  float shelf=smoothstep(-420.0,-50.0,z);        // 1 on the shelf
-  float abyss=smoothstep(-2000.0,-4200.0,z);     // 1 out on the plain
-  return (hills*150.0 + fabric*120.0*abyss + cones*820.0*abyss)*(1.0-shelf*0.72);
-}
 // interpolate the two keyframes, then add procedural micro-relief so the
 // upsampled field doesn't read as soft
 float elevAt(vec2 uv, float rug){
   float z=baseElev(uv);
   vec3 d=dirFromUv(uv);
-  if(z<0.0) return z + oceanDetail(d,z)*uDetail;
   float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
   // rugged ground also carries more relief, not just a different shape
-  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
-  return z + det;
+  float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(max(z,0.0)/900.0,0.15,1.0);
+  return z + (z>0.0 ? det : det*0.10);
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
    faint row-to-row streaks in the rainfall field — and those streaks were
@@ -574,27 +551,15 @@ float rainAt(vec2 uv){
   return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
 }
 
-/* Water colour is mostly what the water body does to light, not what floats on
-   it: clear ocean absorbs red within metres and returns blue from depth, so
-   deep water is dark and saturated while shallow water over a bright shelf
-   scatters back pale and green. Productivity pushes it green — chlorophyll
-   absorbs blue and red and reflects green — and that concentrates on shelves
-   and upwelling margins rather than mid-gyre. The three era colours come from
-   the climate table, so a Precambrian ferruginous sea and a modern one are not
-   forced to be the same blue. */
-vec3 oceanColour(float z, vec3 d, float lat){
-  float t=clamp(-z/5000.0,0.0,1.0);
-  vec3 c=mix(uSeaMid, uSeaDeep, pow(t,0.62));
-  c=mix(c, uSeaShallow, smoothstep(-900.0,-30.0,z));
-  // Biology: strongest on the shelf and in cold, well-mixed high latitudes,
-  // weakest in the warm subtropical gyres, which is the real pattern.
-  float shelf=smoothstep(-600.0,-40.0,z);
-  float band=smoothstep(0.28,0.62,abs(sin(radians(lat))));   // away from gyres
-  float patch=fbm3(d*7.0+3.1);
-  float bio=uSeaBio*clamp(shelf*0.75+band*0.5,0.0,1.0)*(0.55+0.75*patch);
-  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.55,0.0,1.0));
-  // Very shallow water over a light bottom goes turquoise before it goes to sand
-  c=mix(c, vec3(0.451,0.804,0.796), smoothstep(-45.0,-6.0,z)*0.75);
+vec3 oceanColour(float z){
+  vec3 c=vec3(0.039,0.137,0.251);
+  c=mix(c,vec3(0.063,0.212,0.361),smoothstep(-6500.0,-4000.0,z));
+  c=mix(c,vec3(0.086,0.314,0.478),smoothstep(-4000.0,-2500.0,z));
+  c=mix(c,vec3(0.137,0.435,0.600),smoothstep(-2500.0,-1000.0,z));
+  c=mix(c,vec3(0.208,0.549,0.710),smoothstep(-1000.0,-350.0,z));
+  c=mix(c,vec3(0.455,0.749,0.824),smoothstep(-350.0,-120.0,z));
+  c=mix(c,vec3(0.680,0.878,0.910),smoothstep(-120.0,-15.0,z));
+  c=mix(c,vec3(0.804,0.933,0.941),smoothstep(-15.0,0.0,z));
   return c;
 }
 
@@ -625,7 +590,7 @@ void main(){
   vec3 sdir=dirFromUv(uv);
   vec3 col;
   if(z<0.0){
-    col=oceanColour(z,sdir,lat);
+    col=oceanColour(z);
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
@@ -655,25 +620,8 @@ void main(){
     }
     float rock=clamp((zp-1700.0)/1500.0,0.0,1.0);
     col=mix(col, mix(vec3(0.545,0.502,0.451), vec3(0.427,0.392,0.345), clamp((zp-2600.0)/1800.0,0.0,1.0)), rock*0.85);
-
-    /* Mountain glaciers, from an equilibrium-line altitude rather than a bare
-       snowline. Temperature alone is not what glaciates a range: a glacier
-       needs accumulation as well, so a cold DRY massif can stand ice-free
-       while a warmer maritime one is buried. That is why the dry Andes and
-       Tibet carry an ELA above 5000 m while wet Norway at far higher latitude
-       carries one near 1500 m, and the old fixed 2600 m snowline could not
-       express either. Solve for the height at which the lapse-corrected
-       temperature reaches the melting threshold, and let that threshold slide
-       with how wet the range is. */
-    float T0=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
-    float dry=1.0-clamp(Rf/0.85,0.0,1.0);
-    float Tela=1.0-7.0*dry;
-    float ela=clamp((T0-Tela)/0.0058, 250.0, 6200.0);
-    /* Ice does not stop at the ELA — it flows well below it down valleys, so
-       the margin is ragged and reaches lowest where terrain converges. */
-    float tongue=(fbm3(sdir*24.0+5.5)-0.5)*1.8;
-    float glac=clamp((zp-ela)/520.0+tongue+0.12,0.0,1.0);
-    col=mix(col, vec3(0.965,0.976,0.988), glac);
+    float snowline=2600.0+190.0*clamp(T,-20.0,30.0);
+    col=mix(col, vec3(0.965,0.976,0.988), clamp((zp-snowline)/420.0,0.0,1.0));
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
@@ -692,29 +640,12 @@ void main(){
   float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
   float coslat=max(cos(radians(lat)),0.08);
   vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
-  vec3 L=normalize(vec3(-0.55,0.55,0.63));
-  float hs=clamp(dot(nrm,L),0.0,1.0);
+  float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
   float shade=0.70+0.62*hs;
-  /* Bathymetry used to be shaded almost flat below about 2 km, on the argument
-     that there was no real detail down there. There is: the paleoDEMs carry
-     ridges, fracture zones, plateaus and trenches, and flattening them made
-     every ocean read as one blue sheet. Keep relief all the way down, just
-     gentler than on land so texture compression is not amplified. */
-  float hw=(z<0.0)? mix(0.62,0.34,clamp(-z/4500.0,0.0,1.0)) : 1.0;
+  // Shelves keep their relief, but damp shading toward the abyss: there is no
+  // real detail down there and it would only amplify compression blocking.
+  float hw=(z<0.0)? mix(0.30,0.04,clamp(-z/2200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
-
-  if(z<0.0 && uSchem<0.5){
-    /* Surface sheen. Fine ripples perturb only the SHADING normal and never
-       the elevation, so the sea gains a moving fluid surface without
-       corrupting the height field the coastline is derived from. */
-    vec3 rd=sdir*620.0+vec3(uTime*0.04);
-    float r1=fbm3(rd), r2=fbm3(rd*2.7+11.0);
-    vec3 wn=normalize(nrm+vec3((r1-r2)*0.6,(r2-r1)*0.6,0.0));
-    float spec=pow(clamp(dot(wn,L),0.0,1.0),40.0);
-    float open=1.0-smoothstep(-130.0,-8.0,z);   // no glitter in the surf zone
-    col+=vec3(0.60,0.71,0.80)*spec*0.36*open;
-    col*=0.975+0.05*r1;
-  }
 
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
@@ -739,10 +670,6 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},
-    uSeaShallow:{value:new THREE.Color(0.216,0.561,0.718)},
-    uSeaMid:{value:new THREE.Color(0.086,0.314,0.478)},
-    uSeaDeep:{value:new THREE.Color(0.027,0.098,0.192)},
-    uSeaBio:{value:0.35},uTime:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -1817,17 +1744,6 @@ function bindTextures(){
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
-  /* Sea colour per era. Reads the palette out of the manifest when the climate
-     table carries one and falls back to the modern ocean otherwise, so the
-     shader works whether or not the fields have been generated yet. */
-  const D_SH=[0.216,0.561,0.718], D_SM=[0.086,0.314,0.478], D_SD=[0.027,0.098,0.192];
-  const pal=(k,d)=>{const a=A[k]||d, b=B[k]||d;
-    return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];};
-  let c=pal('seaSh',D_SH);   mat.uniforms.uSeaShallow.value.setRGB(c[0],c[1],c[2]);
-  c=pal('seaMid',D_SM);      mat.uniforms.uSeaMid.value.setRGB(c[0],c[1],c[2]);
-  c=pal('seaDeep',D_SD);     mat.uniforms.uSeaDeep.value.setRGB(c[0],c[1],c[2]);
-  const sa=A.seaBio, sb=B.seaBio;
-  mat.uniforms.uSeaBio.value=(sa===undefined||sb===undefined)?0.35:sa+(sb-sa)*t;
   const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
@@ -1843,9 +1759,6 @@ function loop(now){
     syncSlider();
   }
   if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
-  // Drives the sea-surface sheen only; nothing about the world state depends
-  // on it, so scrubbing time and this clock stay independent.
-  mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
   // overlays visibility & fade
   const fade=presentFade();
