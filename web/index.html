@@ -214,6 +214,110 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:44vh}
   #age{font-size:24px}
 }
+
+/* ===== About one-pager overlay =====================================
+   Fully namespaced under #aboutPage with its own palette variables, so
+   nothing here touches the viewer's own styles and vice versa. */
+#aboutPageBtn{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.14em;
+  border:1px solid var(--line);border-radius:6px;padding:3px 7px;margin-left:9px;
+  vertical-align:middle;transition:color .15s,border-color .15s}
+#aboutPageBtn:hover{color:var(--accent);border-color:var(--accent)}
+
+#aboutPage{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+  padding:3vh 3vw;background:rgba(4,6,10,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .28s ease;
+  --ap-space:#070a10;--ap-space2:#0b1018;--ap-panel:#121a27;--ap-panel2:#18202f;
+  --ap-line:#243040;--ap-line2:rgba(48,64,84,.6);
+  --ap-ink:#eaeef4;--ap-dim:#9aa8bc;--ap-dim2:#63728a;
+  --ap-amber:#ef8146;--ap-amber-soft:#f6a877;--ap-teal:#5793ab;--ap-green:#84a458;
+  --ap-serif:'Iowan Old Style','Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+  --ap-sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ap-mono:'SF Mono','SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace}
+#aboutPage.show{opacity:1;pointer-events:auto}
+#aboutPage *{box-sizing:border-box}
+#aboutPage .ap-panel{position:relative;width:min(1060px,100%);height:min(960px,94vh);
+  background:radial-gradient(1100px 640px at 72% -6%,rgba(40,74,110,.32),transparent 60%),
+    radial-gradient(820px 560px at 10% 2%,rgba(70,45,30,.16),transparent 55%),var(--ap-space);
+  border:1px solid var(--ap-line);border-radius:16px;overflow:hidden;
+  box-shadow:0 40px 120px -40px rgba(0,0,0,.9);transform:translateY(12px) scale(.992);transition:transform .28s ease}
+#aboutPage.show .ap-panel{transform:none}
+#aboutPage .ap-inner{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+#aboutPage .ap-close{position:absolute;top:12px;right:14px;z-index:6;width:36px;height:36px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;
+  color:var(--ap-ink);background:rgba(10,14,20,.6);border:1px solid var(--ap-line);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .15s,border-color .15s,color .15s}
+#aboutPage .ap-close:hover{background:rgba(239,129,70,.16);border-color:var(--ap-amber);color:var(--ap-amber)}
+#aboutPage .ap-wrap{max-width:900px;margin:0 auto;padding:40px 30px 52px;font-family:var(--ap-sans)}
+#aboutPage p{margin:0 0 1em;color:var(--ap-ink)}
+#aboutPage a{color:var(--ap-amber-soft);text-decoration:none}
+#aboutPage a:hover{color:var(--ap-amber)}
+#aboutPage img{display:block;max-width:100%}
+#aboutPage .eyebrow{font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ap-amber);margin:0 0 12px}
+#aboutPage h1{font-family:var(--ap-serif);font-weight:600;letter-spacing:-.01em;font-size:clamp(34px,5.4vw,54px);line-height:1.03;margin:0}
+#aboutPage h2{font-family:var(--ap-serif);font-weight:600;letter-spacing:-.01em;font-size:clamp(22px,3vw,30px);line-height:1.14;margin:0 0 4px}
+#aboutPage h3{font-weight:650;font-size:15px;margin:0;color:var(--ap-ink)}
+#aboutPage .dim{color:var(--ap-dim)}
+#aboutPage .lead{font-size:clamp(17px,2vw,19.5px);line-height:1.6;color:#dbe2ec;max-width:64ch}
+#aboutPage .hero{text-align:center;padding:8px 0 20px}
+#aboutPage .hero .tag{max-width:56ch;margin:18px auto 0;color:var(--ap-dim);font-size:clamp(15px,1.8vw,17.5px);line-height:1.55}
+#aboutPage .byline{margin:11px auto 0;font-size:12.5px;color:var(--ap-dim2)}
+#aboutPage .byline a{color:var(--ap-dim)}
+#aboutPage .byline a:hover{color:var(--ap-amber)}
+#aboutPage .hero-figure{position:relative;margin:22px auto 0;max-width:440px}
+#aboutPage .hero-figure::before{content:"";position:absolute;inset:6% 8% 10%;background:radial-gradient(closest-side,rgba(70,120,160,.28),transparent 72%);filter:blur(16px);z-index:0}
+#aboutPage .hero-figure img{position:relative;z-index:1;width:100%;border-radius:50%}
+#aboutPage .hero-cap{max-width:52ch;margin:12px auto 0;font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.02em;color:var(--ap-dim2)}
+#aboutPage .ruler{max-width:560px;margin:26px auto 2px;padding:0 4px}
+#aboutPage .ruler-line{position:relative;height:2px;border-radius:2px;background:linear-gradient(90deg,#2a3547,#6b7a45 42%,var(--ap-amber) 62%,#7a3f2a);opacity:.85}
+#aboutPage .ruler-ticks{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--ap-mono);font-size:10.5px;letter-spacing:.04em;color:var(--ap-dim2)}
+#aboutPage .ruler-ticks .now{color:var(--ap-amber)}
+#aboutPage .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+#aboutPage .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--ap-sans);font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,color .15s}
+#aboutPage .btn.primary{background:var(--ap-amber);color:#1a0f08}
+#aboutPage .btn.primary:hover{background:var(--ap-amber-soft);transform:translateY(-1px)}
+#aboutPage .btn.ghost{background:transparent;border-color:var(--ap-line2);color:var(--ap-ink)}
+#aboutPage .btn.ghost:hover{border-color:var(--ap-amber);color:var(--ap-amber)}
+#aboutPage section{padding:30px 0}
+#aboutPage .rule{height:1px;background:var(--ap-line);border:0;margin:0}
+#aboutPage .sec-head{margin-bottom:20px}
+#aboutPage .sec-head .eyebrow{margin-bottom:9px}
+#aboutPage figure{margin:0}
+#aboutPage .shot{border-radius:12px;border:1px solid var(--ap-line);overflow:hidden;background:var(--ap-space2);box-shadow:0 24px 60px -32px rgba(0,0,0,.9)}
+#aboutPage .shot img{width:100%}
+#aboutPage figcaption{margin-top:10px;font-size:13px;color:var(--ap-dim);line-height:1.5}
+#aboutPage figcaption b{color:var(--ap-ink);font-weight:600}
+#aboutPage .split{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+#aboutPage .split.rev{grid-template-columns:.95fr 1.05fr}
+#aboutPage .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+#aboutPage .card{background:linear-gradient(180deg,var(--ap-panel),var(--ap-space2));border:1px solid var(--ap-line);border-radius:12px;padding:16px 16px 18px}
+#aboutPage .card .k{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+#aboutPage .card .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+#aboutPage .card p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ap-dim)}
+#aboutPage .models{display:grid;grid-template-columns:1fr 1fr;gap:12px 32px}
+#aboutPage .model{display:grid;grid-template-columns:126px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--ap-line)}
+#aboutPage .model .lab{font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ap-amber);padding-top:2px}
+#aboutPage .model p{margin:0;font-size:13.5px;color:var(--ap-dim);line-height:1.55}
+#aboutPage .sources{display:grid;gap:11px}
+#aboutPage .src{display:grid;grid-template-columns:146px 1fr;gap:16px;align-items:baseline;padding-bottom:11px;border-bottom:1px dashed var(--ap-line)}
+#aboutPage .src .role{font-family:var(--ap-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ap-dim2)}
+#aboutPage .src p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ap-dim)}
+#aboutPage .src .cite{color:var(--ap-ink)}
+#aboutPage .src .doi{font-family:var(--ap-mono);font-size:11.5px;color:var(--ap-teal)}
+#aboutPage .note{border-left:2px solid var(--ap-amber);background:rgba(239,129,70,.055);padding:13px 16px;border-radius:0 8px 8px 0;color:var(--ap-dim);font-size:14px}
+#aboutPage .note b{color:var(--ap-ink)}
+#aboutPage .stat-row{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+#aboutPage .stat{text-align:center}
+#aboutPage .stat .n{font-family:var(--ap-mono);font-size:21px;color:var(--ap-ink)}
+#aboutPage .stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--ap-dim2);margin-top:4px}
+#aboutPage .ap-foot{padding:32px 0 6px;border-top:1px solid var(--ap-line);margin-top:16px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+#aboutPage .ap-foot .caveat{color:var(--ap-dim2);font-size:12.5px;max-width:62ch;line-height:1.5}
+@media (max-width:720px){
+  #aboutPage .split,#aboutPage .split.rev{grid-template-columns:1fr;gap:18px}
+  #aboutPage .models{grid-template-columns:1fr;gap:0}
+  #aboutPage .src{grid-template-columns:1fr;gap:3px}
+  #aboutPage .ap-wrap{padding:34px 20px 44px}
+}
+@media (prefers-reduced-motion:reduce){#aboutPage,#aboutPage .ap-panel{transition:none}}
 </style>
 </head>
 <body>
@@ -224,7 +328,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 
 <div id="topbar">
   <div id="title">
-    <h1>Tectonic&nbsp;Earth <span id="aboutBtn" title="About &amp; data sources">ⓘ</span></h1>
+    <h1>Tectonic&nbsp;Earth <span id="aboutBtn" title="About &amp; data sources">ⓘ</span> <span id="aboutPageBtn" title="About this project — features, models &amp; sources">About</span></h1>
     <div class="sub">Deep-time plate reconstruction · 1000 Ma → +250 Myr</div>
   </div>
   <div id="readout">
@@ -307,6 +411,133 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   </ul>
   <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
 </div>
+
+<div id="aboutPage" aria-hidden="true">
+  <div class="ap-panel">
+    <button class="ap-close" id="aboutPageClose" aria-label="Close about">×</button>
+    <div class="ap-inner">
+      <div class="ap-wrap">
+
+        <header class="hero">
+          <p class="eyebrow">Interactive deep-time model</p>
+          <h1>Tectonic&nbsp;Earth</h1>
+          <p class="byline">For questions, reach out to August Gweon &middot; <a href="mailto:augustgweon@gmail.com">augustgweon@gmail.com</a> &middot; <a href="mailto:august@anthropic.com">august@anthropic.com</a></p>
+          <p class="tag">An interactive reconstruction of Earth's surface from 1,000 million years ago to 250 million years ahead, built from published plate motions and a climate model and rendered from physical data fields rather than pre-made images.</p>
+          <div class="ruler">
+            <div class="ruler-line"></div>
+            <div class="ruler-ticks"><span>1000 Ma</span><span>540</span><span>250</span><span class="now">Now</span><span>+250 Myr</span></div>
+          </div>
+          <div class="cta-row"><button class="btn primary" data-ap-close>Back to the globe &rarr;</button></div>
+          <figure class="hero-figure">
+            <img data-src="about-globe.jpg" alt="The globe at 90 million years ago: the young Atlantic between the Americas and Africa, with clouds, a day/night terminator and atmospheric haze." loading="lazy">
+          </figure>
+          <p class="hero-cap">90 Ma &middot; Late Cretaceous &middot; the Atlantic opening</p>
+        </header>
+
+        <hr class="rule">
+
+        <section>
+          <p class="lead">Each moment in the timeline is stored as physical <b>fields</b> &mdash; elevation, rainfall, and plate motion &mdash; and the surface is assembled in a GPU shader at render time rather than played back as finished images. Interpolating the elevation field between keyframes lets coastlines migrate as sea level changes, relief is shaded per pixel, and the view holds detail from the whole globe down to a single valley.</p>
+          <div class="stat-row">
+            <div class="stat"><div class="n">1,250 Myr</div><div class="l">span, at 5-Myr steps</div></div>
+            <div class="stat"><div class="n">Merdith 2021</div><div class="l">plate rotation model</div></div>
+            <div class="stat"><div class="n">73 + 37</div><div class="l">impacts &middot; igneous provinces</div></div>
+            <div class="stat"><div class="n">per-pixel</div><div class="l">climate &middot; relief &middot; water</div></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="sec-head"><p class="eyebrow">One planet, two views</p><h2>An equal-area map, or a body in space</h2></div>
+          <figure>
+            <div class="shot"><img data-src="about-map.jpg" alt="Equal-area Mollweide map of Earth at 90 million years ago." loading="lazy"></div>
+            <figcaption><b>The flat map, 90 Ma.</b> An equal-area (Mollweide) projection of the same world &mdash; the young Atlantic, epeiric seas flooding the continental interiors, and modeled drainage on the land. The flat map is shown fully lit; the day/night terminator is applied only on the globe.</figcaption>
+          </figure>
+        </section>
+
+        <section>
+          <div class="split">
+            <figure>
+              <div class="shot"><img data-src="about-pangaea.jpg" alt="The supercontinent Pangaea at 250 million years ago." loading="lazy"></div>
+              <figcaption><b>Pangaea, 250 Ma.</b> The desert heart of the supercontinent and the Tethys seaway, wrapped in limb haze with a sliver of night.</figcaption>
+            </figure>
+            <div>
+              <div class="sec-head"><p class="eyebrow">The timeline</p><h2>Rodinia to the next supercontinent</h2></div>
+              <p class="dim">Moving through the timeline changes the whole configuration: Rodinia and a single world ocean at 1000 Ma, the Cryogenian glaciations, Pangaea's arid interior, the opening of the Atlantic, and &mdash; beyond the present &mdash; the assembly of a future supercontinent under a brightening Sun. Climate, sea level, ice, CO<sub>2</sub> and O<sub>2</sub> follow published estimates for each interval. The deep past and deep future are the least constrained; the future is shown as one plausible scenario, with the biosphere contracting to refugia rather than disappearing.</p>
+            </div>
+          </div>
+        </section>
+
+        <hr class="rule">
+
+        <section>
+          <div class="sec-head"><p class="eyebrow">What you can see</p><h2>A whole Earth system, modeled</h2></div>
+          <div class="grid">
+            <div class="card"><div class="k"><span class="dot" style="background:var(--ap-amber)"></span><h3>Real plate motion</h3></div><p>Ridges, trenches and transforms from the Merdith 2021 rotation model &mdash; moving continuously, keeping their names, ocean floor as active as the continents.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:var(--ap-green)"></span><h3>Climate &amp; biomes</h3></div><p>Winds carry moisture inland and dry the interiors; mountains cast rain shadows; vegetation follows rainfall against evaporation &mdash; so Pangaea grows a desert heart on its own.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#c9a86a"></span><h3>Photoreal terrain</h3></div><p>Per-pixel relief and hillshade, slope-bare rock on mountain flanks, ocean bathymetry, and glaciers from a snowline that answers to both cold and snowfall.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:var(--ap-teal)"></span><h3>Rivers, marshes &amp; deltas</h3></div><p>Modeled drainage read from the lows of the reconstructed terrain and weighted by rainfall &mdash; channels in the valleys, marshes in wet flats, deltas at wet coasts.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>A cloud layer driven by each era's own rainfall (tropical convergence, storm tracks, clear desert belts), a day/night terminator, limb haze, and era-appropriate ocean colour.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#d2662f"></span><h3>Deep-time events</h3></div><p>73 confirmed impact structures and 37 large igneous provinces, each carried along its plate toward where that crust sat at the time (an estimate that recovers direction better than distance).</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#8fae5c"></span><h3>The fossil record</h3></div><p>Characteristic life per region and interval &mdash; flora and fauna drawn from the record, with hand-made illustrations &mdash; plus named seas, deserts, plateaus and lakes.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:var(--ap-amber-soft)"></span><h3>The future</h3></div><p>Solar brightening and the next supercontinent &mdash; the most uncertain stretch of the timeline, shown as one plausible scenario with the land biosphere thinning toward refugia.</p></div>
+          </div>
+        </section>
+
+        <hr class="rule">
+
+        <section>
+          <div class="split rev">
+            <div>
+              <div class="sec-head"><p class="eyebrow">Method</p><h2>Drainage, marshes, and deltas</h2></div>
+              <p class="dim">Individual ancient river courses are not known, so none are drawn from a map. Drainage is instead derived from data the model already carries: the topographic lows of the reconstructed elevation field, weighted by local rainfall. Narrow incised lows are rendered as river channels, broad wet flats as marsh, and the same at a coastline as a delta plain. The resolution is valley-scale (tens of kilometres), so the result represents major drainage rather than individual tributaries, and it becomes less certain in deeper time as the underlying topography does.</p>
+              <p class="note">As a check, the same method applied to the present-day elevation model places channels in the real Himalayan valleys draining to the Bay of Bengal. These are modeled drainage patterns, not mapped rivers.</p>
+            </div>
+            <figure>
+              <div class="shot"><img data-src="about-hydro.jpg" alt="Regional close-up of South America at 90 million years ago." loading="lazy"></div>
+              <figcaption><b>South America, 90 Ma.</b> Drainage in the Andean valleys, wet lowlands and a flooded interior &mdash; clouds cleared to show the surface.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <hr class="rule">
+
+        <section>
+          <div class="sec-head"><p class="eyebrow">Under the hood</p><h2>How it's built</h2></div>
+          <div class="models">
+            <div class="model"><div class="lab">The engine</div><p>Ships elevation, rainfall and motion textures per 5-Myr keyframe; a GLSL shader interpolates them and recomputes temperature, relief, biomes, water and sky per pixel &mdash; nothing is a pre-baked picture.</p></div>
+            <div class="model"><div class="lab">Plate motion</div><p>The Merdith et al. (2021) full-plate rotation model, resolved with pyGPlates into continuously-closing plate topologies and classified boundaries.</p></div>
+            <div class="model"><div class="lab">Paleogeography</div><p>Scotese &amp; Wright PALEOMAP paleo-elevation models for 0&ndash;540 Ma; an authored craton composite deeper in the Precambrian; the present terrain rotated forward for the future.</p></div>
+            <div class="model"><div class="lab">Climate</div><p>Temperature from latitude, elevation and an era anomaly; rainfall from wind-driven moisture transport, orographic rain shadow and Budyko humidity &mdash; calibrated to published GMST, CO<sub>2</sub> and O<sub>2</sub> curves.</p></div>
+            <div class="model"><div class="lab">Sun &amp; future</div><p>Solar luminosity from the Gough (1981) standard model (&minus;8% at 1000 Ma, brighter ahead); the deep future calibrated to Farnsworth et al. (2024) on the same Pangaea Ultima reconstruction.</p></div>
+            <div class="model"><div class="lab">Events &amp; life</div><p>Impact structures vetted against the Impact Earth database and Schmieder &amp; Kring (2020); fossil-record biota per region and interval, each event and label written up by hand.</p></div>
+          </div>
+        </section>
+
+        <hr class="rule">
+
+        <section>
+          <div class="sec-head"><p class="eyebrow">Sources</p><h2>Data and references</h2></div>
+          <div class="sources">
+            <div class="src"><div class="role">Plate model</div><p><span class="cite">Merdith, A. S. et al. (2021). Extending full-plate tectonic models into deep time.</span> <span class="dim">Earth-Science Reviews 214, 103477.</span> <span class="doi">Zenodo 10.5281/zenodo.4485738 &middot; CC-BY 4.0</span></p></div>
+            <div class="src"><div class="role">Paleo-DEMs</div><p><span class="cite">Scotese, C. R. &amp; Wright, N. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMs).</span> <span class="doi">Zenodo 5460860 &middot; CC-BY 4.0</span></p></div>
+            <div class="src"><div class="role">Future climate</div><p><span class="cite">Farnsworth, A. et al. (2024). Climate extremes likely to drive land mammal extinction during next supercontinent assembly.</span> <span class="dim">Nature Geoscience 17, 1109&ndash;1116.</span></p></div>
+            <div class="src"><div class="role">Solar model</div><p><span class="cite">Gough, D. O. (1981). Solar interior structure and luminosity variations.</span> <span class="dim">Solar Physics 74, 21&ndash;34.</span></p></div>
+            <div class="src"><div class="role">Boundaries</div><p><span class="cite">Bird, P. (2003). An updated digital model of plate boundaries (PB2002).</span> <span class="dim">Geochem. Geophys. Geosyst. 4(3)</span> &mdash; the present-day network the reconstruction is pinned to.</p></div>
+            <div class="src"><div class="role">Impacts</div><p><span class="cite">Impact Earth database (Osinski et al., Western University)</span> and <span class="cite">Schmieder &amp; Kring (2020)</span>, cross-checked against primary papers.</p></div>
+            <div class="src"><div class="role">Software</div><p><span class="cite">pyGPlates / GPlates</span> for reconstruction; <span class="cite">three.js + GLSL</span> for the real-time globe.</p></div>
+          </div>
+        </section>
+
+        <div class="ap-foot">
+          <div class="caveat">A modeled reconstruction, not a data record. It aims to be plausible within published constraints; deep-time and deep-future detail is interpretive and least constrained toward the ends of the timeline.</div>
+          <button class="btn ghost" data-ap-close>Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="hint">Drag to rotate · scroll to zoom · click a plate for details</div>
 
 <div id="bottom">
@@ -2101,6 +2332,30 @@ $('#ambientBtn').onclick=()=>enterAmbient(true);
 $('#exitAmbient').onclick=()=>enterAmbient(false);
 $('#aboutBtn').onclick=()=>$('#about').classList.toggle('show');
 $('#aboutClose').onclick=()=>$('#about').classList.remove('show');
+
+/* Full one-pager About overlay. Images are lazy: their src is swapped in from
+   data-src on first open, so the viewer's initial load never fetches them. */
+const aboutPage=$('#aboutPage');
+let aboutImgsLoaded=false;
+function openAboutPage(){
+  if(!aboutImgsLoaded){
+    aboutPage.querySelectorAll('img[data-src]').forEach(im=>{im.src=im.getAttribute('data-src');});
+    aboutImgsLoaded=true;
+  }
+  $('#about').classList.remove('show');           // close the little info panel if open
+  aboutPage.classList.add('show');
+  aboutPage.setAttribute('aria-hidden','false');
+  aboutPage.querySelector('.ap-inner').scrollTop=0;
+}
+function closeAboutPage(){
+  aboutPage.classList.remove('show');
+  aboutPage.setAttribute('aria-hidden','true');
+}
+$('#aboutPageBtn').onclick=openAboutPage;
+$('#aboutPageClose').onclick=closeAboutPage;
+aboutPage.addEventListener('click',e=>{ if(e.target===aboutPage) closeAboutPage(); });   // click backdrop
+aboutPage.querySelectorAll('[data-ap-close]').forEach(b=>b.onclick=closeAboutPage);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&aboutPage.classList.contains('show')) closeAboutPage(); });
 function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
   // Ambient is the same view with the chrome hidden: it keeps whatever speed
   // and layer toggles are already set rather than imposing its own.
