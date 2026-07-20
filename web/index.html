@@ -434,7 +434,7 @@ function frameAt(age){
 }
 
 /* ================= three.js globe ================= */
-let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo;
+let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds;
 const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
 let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null,lastBndOn=null;
@@ -636,6 +636,16 @@ void main(){
                        : mix(vec3(0.298,0.453,0.251), vec3(0.169,0.396,0.192), clamp((w-0.5)*2.0,0.0,1.0));
     col = (h<0.45) ? mix(dry,mid,clamp(h/0.45,0.0,1.0))
                    : mix(mid,wet,clamp((h-0.45)/0.55,0.0,1.0));
+    /* Fine within-biome mottle: real vegetation is never one flat colour -- it
+       is canopy, clearing and slope mixed at every scale. Two high-frequency
+       noises vary the tone, strongest on well-watered ground, so forest and
+       plain read as textured rather than painted. This is the "higher detail"
+       vegetation, and it is per-pixel so it holds up at any zoom. */
+    float fine=fbm3(sdir*23.0+7.0)-0.5;
+    float fine2=fbm3(sdir*58.0+29.0)-0.5;
+    float veget=clamp(h*1.3,0.18,1.0);
+    col*=1.0+(fine*0.14+fine2*0.07)*veget;
+    col.g+=fine*0.045*h;                 // patchy darker/lighter stands
     float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
     col=mix(col, vec3(0.710,0.604,0.404), core*0.5);
     if(uVeg<0.999){
@@ -742,6 +752,54 @@ function initGL(){
     vertexShader:`varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
     fragmentShader:`varying vec3 vN;void main(){float i=pow(0.72-dot(vN,vec3(0,0,1.0)),2.2);gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9;}`});
   atmo=new THREE.Mesh(ageo,amat); scene.add(atmo);
+
+  /* Cloud layer -- the single biggest "seen from space" cue. It is a thin shell
+     just above the terrain, and it reads the SAME shipped rainfall field the
+     biomes come from, so clouds gather where each era is actually wet: a bright
+     ITCZ band over the tropics, mid-latitude storm tracks, and clear subtropical
+     high belts over the deserts. Slowly drifting fBm breaks it into real weather
+     cells. It shares the terrain material's rain textures and clock, so it
+     tracks the era for free. */
+  const CVERT=`varying vec2 vUv; varying vec3 vN;
+    void main(){ vUv=uv; vN=normalize(normalMatrix*normal);
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `;
+  const CFRAG=`
+    precision highp float;
+    uniform sampler2D rainA, rainB; uniform float mixf, uTime, uCloud;
+    varying vec2 vUv; varying vec3 vN;
+    float ch(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+    float cn(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+      float a=mix(mix(ch(i),ch(i+vec3(1,0,0)),f.x),mix(ch(i+vec3(0,1,0)),ch(i+vec3(1,1,0)),f.x),f.y);
+      float b=mix(mix(ch(i+vec3(0,0,1)),ch(i+vec3(1,0,1)),f.x),mix(ch(i+vec3(0,1,1)),ch(i+vec3(1,1,1)),f.x),f.y);
+      return mix(a,b,f.z);}
+    float cfb(vec3 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*cn(p);p*=2.03;a*=0.5;}return s;}
+    void main(){
+      float lat=90.0-vUv.y*180.0;
+      float al=abs(lat);
+      float rain=mix(texture2D(rainA,vUv).r, texture2D(rainB,vUv).r, mixf);
+      float itcz=exp(-pow(lat/9.0,2.0));                 // tropical convection band
+      float storm=exp(-pow((al-52.0)/13.0,2.0));         // mid-latitude storm tracks
+      float subtrop=1.0-0.75*exp(-pow((al-25.0)/10.0,2.0)); // clear subtropical highs
+      float base=(rain*1.2+itcz*0.5+storm*0.42)*subtrop*uCloud;
+      // weather cells, drifting slowly westward. Weight the fBm heavily so the
+      // latitude bands read as broken cloud fields, not painted stripes.
+      float lon=vUv.x*360.0-180.0+uTime*0.6;
+      float cl=cos(radians(lat));
+      vec3 d=vec3(cl*cos(radians(lon)), sin(radians(lat)), cl*sin(radians(lon)));
+      float tex=cfb(d*3.2)*0.5+cfb(d*7.5+5.0)*0.32+cfb(d*17.0+13.0)*0.18;
+      float dens=smoothstep(0.52,1.08, base*0.45+tex*0.95);
+      // soften at the limb so the shell has no hard silhouette ring
+      float face=smoothstep(0.12,0.5,vN.z);
+      gl_FragColor=vec4(vec3(0.96,0.975,1.0), clamp(dens,0.0,1.0)*0.9*face);
+    }`;
+  const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+    side:THREE.FrontSide, uniforms:{
+      rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // shared with terrain
+      mixf:mat.uniforms.mixf, uTime:mat.uniforms.uTime,
+      uCloud:{value:1.0}},
+    vertexShader:CVERT, fragmentShader:CFRAG});
+  clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
+  globe.add(clouds);   // co-rotates with the terrain; drift comes from uTime
   // stars
   const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
@@ -1894,6 +1952,8 @@ function loop(now){
   setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
   const isGlobe=state.view==='globe';
   globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
+  // clouds only on the globe, and only in the photoreal (satellite) shading
+  clouds.visible=isGlobe && state.shade!=='schem';
   mapMesh.visible=!isGlobe;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
@@ -2015,7 +2075,7 @@ function buildLegend(){
                  never fires requestAnimationFrame — the app looks frozen when
                  it is simply not being asked to draw. */
               step(){loop(performance.now());},
-              gl:{mat,scene,globe,atmo,renderer,cam}};
+              gl:{mat,scene,globe,atmo,clouds,renderer,cam}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
   syncSlider();updateReadout();syncPlay();syncDir();
