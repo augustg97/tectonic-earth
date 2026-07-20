@@ -927,6 +927,30 @@ function hotspotsNow(){
   const a=state.age;
   return DATA.hotspots.filter(h=>a>=Math.min(h.a0,h.a1)&&a<=Math.max(h.a0,h.a1));
 }
+/* Where a feature sits at the displayed age. Craters and large igneous
+   provinces carry a `tr` track — their position along their plate's real
+   rotation (Merdith 2021), sampled every 5 Myr — so they ride the plate
+   continuously instead of freezing at one spot. Plumes have no track: they are
+   mantle-anchored and stay put while the crust slides past. h.lon/h.lat is the
+   present-day position and the fallback. */
+function featurePos(h){
+  const tr=h.tr;
+  if(!tr||tr.length<2)return [h.lon,h.lat];
+  const a=Math.max(0,state.age);
+  if(a<=tr[0][0])return [tr[0][1],tr[0][2]];
+  const last=tr[tr.length-1];
+  if(a>=last[0])return [last[1],last[2]];
+  for(let i=0;i<tr.length-1;i++){
+    if(a>=tr[i][0]&&a<=tr[i+1][0]){
+      const t=(a-tr[i][0])/(tr[i+1][0]-tr[i][0]||1);
+      let lo0=tr[i][1],lo1=tr[i+1][1];
+      if(Math.abs(lo1-lo0)>180){if(lo1>lo0)lo0+=360;else lo1+=360;}  // wrap
+      let lo=((lo0+(lo1-lo0)*t+540)%360)-180;
+      return [lo, tr[i][2]+(tr[i+1][2]-tr[i][2])*t];
+    }
+  }
+  return [h.lon,h.lat];
+}
 function buildHotspots(){
   overlay.hotspots.clear();
   const geo=new THREE.SphereGeometry(.008,8,8);
@@ -934,6 +958,7 @@ function buildHotspots(){
   const lipm=new THREE.MeshBasicMaterial({color:0xffd257});
   for(const h of hotspotsNow()){
     const isLip=h.k==='lip', isImp=h.k==='impact';
+    const[flon,flat]=featurePos(h);   // rides its plate if it has a track
     // a large igneous province erupts in a geological instant; flag the pulse
     const erupting=(isLip||isImp)&&h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
     if(isImp){
@@ -944,7 +969,7 @@ function buildHotspots(){
          Manicouagan is 215 Myr old and still unmistakable from orbit. Once the
          scar is gone, a structure that left a global signature stays on as a
          small dim mark: the hole has closed but the record has not. */
-      const p=ll2v(h.lon,h.lat,1.012);
+      const p=ll2v(flon,flat,1.012);
       let rr=Math.max(.014,Math.min(.05,(h.d||30)/180*.05));
       const since=Math.max(0,h.peak-state.age);        // Myr since the impact
       const sl=h.sl||90;
@@ -969,7 +994,7 @@ function buildHotspots(){
        it — which is why its window now runs far past its eruption. */
     const standing=isLip&&!erupting;
     const col=erupting?0xffd257:standing?0xb08968:0xff7d3a;
-    const p=ll2v(h.lon,h.lat,1.012);
+    const p=ll2v(flon,flat,1.012);
     const sp=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:col,
       transparent:true,opacity:standing?.55:1}));
     sp.position.copy(p);
@@ -1138,7 +1163,8 @@ function drawDerivedBoundsMap(dx,dy,dw,dh,fade){
 function drawHotspotsMap(dx,dy,dw,dh,fade){
   mctx.globalAlpha=fade;
   for(const h of hotspotsNow()){
-    const[x,y]=ll2map(h.lon,h.lat,dx,dy,dw,dh);
+    const fp=featurePos(h);
+    const[x,y]=ll2map(fp[0],fp[1],dx,dy,dw,dh);
     const erupting=h.peak!==undefined&&Math.abs(state.age-h.peak)<6;
     if(h.k==='impact'){
       const R=Math.max(4,Math.min(11,(h.d||30)/180*11));
@@ -1220,7 +1246,8 @@ function selectAt(lon,lat,ev){
   if(state.layers.hotspots){
     let he=null,hd=1e9;
     for(const h of hotspotsNow()){
-      const p=projectLL(h.lon,h.lat); if(!p.vis)continue;
+      const fp=featurePos(h);
+      const p=projectLL(fp[0],fp[1]); if(!p.vis)continue;
       const d=Math.hypot(p.x-px.x,p.y-px.y);
       if(d<hd){hd=d;he=h;}
     }
@@ -1312,8 +1339,9 @@ function showEvent(h){
       rows.push(['Active',`${Math.max(h.a0,h.a1)}–${Math.min(h.a0,h.a1)} Ma`]);
     }
   }
-  rows.push(['Position','~'+Math.abs(h.lat).toFixed(0)+'°'+(h.lat>=0?'N':'S')+' '+
-    Math.abs(h.lon).toFixed(0)+'°'+(h.lon>=0?'E':'W')]);
+  const[hlon,hlat]=featurePos(h);   // where it sits at the displayed age
+  rows.push(['Position','~'+Math.abs(hlat).toFixed(0)+'°'+(hlat>=0?'N':'S')+' '+
+    Math.abs(hlon).toFixed(0)+'°'+(hlon>=0?'E':'W')]);
   if(h.k==='plume')extra+=`<div class="ihead">On position</div><p class="desc">`+
     `Plumes are anchored in the mantle while plates slide over them, so this marker `+
     `stays put and the crust moves past it. That is an approximation: Hawaii is known `+
@@ -1981,7 +2009,7 @@ function buildLegend(){
      stage dropped it is to be able to call that stage directly. */
   window.APP={state,DATA,snapLabel,projectLL,curFrame,elevField,elevAtLL,
               labelVisible,layoutLabels,hotspotsNow,intervalAt,lifeAt,biomesAt,
-              selectAt,showFeature,showEvent,jumpTo,
+              selectAt,showFeature,showEvent,jumpTo,featurePos,
               /* step() drives one frame by hand. Needed because a headless or
                  backgrounded tab reports document.hidden, and the browser then
                  never fires requestAnimationFrame — the app looks frozen when

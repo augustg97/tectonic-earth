@@ -15,6 +15,7 @@ import climate
 import features
 import eras
 import life
+import paleo_tracks
 
 DATA = "../data"
 WEB = "../web"
@@ -198,10 +199,17 @@ def paleo_position(lon, lat, age, mot, step=5.0):
 
 # ---------- hotspots + impacts (time-aware, paleo-positioned) ----------
 def build_hotspots():
-    mot = _motion_fields()
     out = features.hotspots()
     vis = features.visible_until()
-    moved = 0
+    # A real rotation model (Merdith 2021 via pyGPlates) carries each feature
+    # along its plate's finite rotation, giving a continuous track that is
+    # correct on ocean floor as well as continent -- so a crater rides the plate
+    # instead of freezing. Fall back to the old block-matched advection only if
+    # pyGPlates or the model files are missing.
+    rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
+    mot = None if rec else _motion_fields()
+    tracked = 0
+
     # A plume has to be active on the frame its own province erupts. The two
     # are catalogued independently, so nothing enforces that but this.
     for problem in features.coupling_problems():
@@ -211,18 +219,7 @@ def build_hotspots():
         # Precambrian map, i.e. they are ALREADY in the frame of their era.
         # Advecting those would move them away from where they belong -- the
         # correction only applies to features catalogued at modern coordinates.
-        if min(h["a0"], h["a1"]) >= 540:
-            continue
-        # A PROVINCE erupts at one place and then rides away on the plate, so it
-        # has to be carried back to the crust it actually sat on. A PLUME does
-        # not: it is anchored in the mantle while the plate slides over it, so
-        # its present-day coordinate already is (approximately) where it has
-        # always been. Only LIPs carry a 'peak', so only LIPs advect -- that
-        # asymmetry is deliberate, not an oversight.
-        ref = h.get("peak")
-        if ref and 20 < ref <= ADVECT_LIMIT:
-            h["lon"], h["lat"] = paleo_position(h["lon"], h["lat"], ref, mot)
-            moved += 1
+        neo = min(h["a0"], h["a1"]) >= 540
 
         # A flood basalt is a landform for far longer than it is an eruption.
         # Keep the eruption window for the "erupting now" flag, and widen the
@@ -236,12 +233,36 @@ def build_hotspots():
             h["vw"] = vu[1]
             h["a0"] = min(h["a0"], vu[0])
 
+        if neo:
+            continue
+        # A PROVINCE erupts at one place then rides away on the plate, so it gets
+        # a track back to the crust it erupted through. A PLUME is anchored in
+        # the mantle while the plate slides over it, so it stays put -- no track.
+        # Only LIPs carry a 'peak', which is what distinguishes the two.
+        if h.get("peak") and h["k"] == "lip":
+            span = max(h["a0"], h["a1"])
+            if rec:
+                tr, _ = rec.track(h["lon"], h["lat"], span)
+                if len(tr) > 1:
+                    h["tr"] = tr
+                    tracked += 1
+            elif 20 < h["peak"] <= ADVECT_LIMIT:
+                h["lon"], h["lat"] = paleo_position(h["lon"], h["lat"], h["peak"], mot)
+
     imp = features.impacts()
     scar = features.scar_life()
     glob = features.global_effect()
     conf = features.impact_confidence()
     for m in imp:
-        if 20 < m["age"] <= ADVECT_LIMIT:
+        # A crater rides the plate from the moment it forms. Track it from the
+        # present back to the impact -- on ocean floor this is the whole point:
+        # a Pacific crater moves ~45 deg in 80 Myr, it does not sit still.
+        if rec:
+            tr, _ = rec.track(m["lon"], m["lat"], m["age"])
+            if len(tr) > 1:
+                m["tr"] = tr
+                tracked += 1
+        elif 20 < m["age"] <= ADVECT_LIMIT:
             m["lon"], m["lat"] = paleo_position(m["lon"], m["lat"], m["age"], mot)
         # How long a crater stays a crater varies by two orders of magnitude,
         # so the old flat 90 Myr fade was wrong at both ends: Chicxulub was
@@ -280,8 +301,9 @@ def build_hotspots():
                      "single centre.")
         e["d1"] = d
     json.dump(out, open(f"{WEB}/hotspots.json", "w"), separators=(",", ":"))
+    src = "Merdith 2021 rotation tracks" if rec else "block-matched advection"
     print(f"volcanism + impacts: {len(out)} features "
-          f"({len(imp)} craters, {moved} plume/LIP positions back-advected)")
+          f"({len(imp)} craters, {tracked} given plate-motion tracks; {src})")
 
 # ---------- era labels (time-aware, full timeline) ----------
 def build_labels():
