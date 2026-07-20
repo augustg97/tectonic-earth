@@ -1755,9 +1755,21 @@ function updateReadout(){
   $('#eraName').textContent=epoch;$('#periodName').textContent=period;
   const ice=m.iceT>-29.0;   // -30 is the ice-free hothouse threshold
   const tw=m.temp>0.4?'Hothouse':m.temp>0.05?'Warm':m.temp>-0.25?'Cool':'Icehouse';
-  const veg=m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated';
+  /* The vegetation label describes extent, but direction matters: in the past
+     a partly-vegetated world is greening, in the projected future it is a
+     biosphere in RETREAT as the supercontinent and brightening Sun push life
+     to the margins — "spreading forests" would read exactly backwards there. */
+  const veg = state.age<0
+    ? (m.veg<0.05?'Barren land':m.veg<0.35?'Refugia only':m.veg<0.6?'Retreating to margins':m.veg<0.85?'Thinning, drylands spreading':'Vegetated')
+    : (m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated');
   const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
-  const gmst=L('gmst'), co2=L('co2'), o2=L('o2');
+  const gmst=L('gmst'), co2=L('co2'), o2=L('o2'), sol=L('sol');
+  /* Solar luminosity, from the standard solar model — the faint young Sun in
+     the deep past (about 8% dimmer at 1000 Ma) brightening to a few percent
+     above today in the far future. Only shown once it is large enough to
+     matter, so the present sits without a near-zero "+0.0%". */
+  const sunStr = (sol===undefined||Math.abs(sol)<0.2) ? ''
+    : ` &nbsp;·&nbsp; <b>Sun</b> ${sol>0?'+':''}${sol.toFixed(1)}%`;
   /* Be honest about what is measured and what is not. Proxy CO2 runs out in
      the Ordovician and there is NO published eustatic sea-level curve at all
      before 541 Ma — the standard compilations start at the Cambrian base. Any
@@ -1777,7 +1789,7 @@ function updateReadout(){
   $('#env').innerHTML=
      `<b>Avg temp</b> ${gmst.toFixed(1)}&deg;C &nbsp;·&nbsp; <b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m<br>`
     +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%${tag}<br>`
-    +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}<br>`
+    +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}${sunStr}<br>`
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
   markSidebarCurrent();

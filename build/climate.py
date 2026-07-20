@@ -81,12 +81,24 @@ CLIMATE = [
     (850,   0.20, None,  None, 0.00, 0.58),  # Rodinia
     (900,   0.15, None,  None, 0.00, 0.58),  # Rodinia assembled
     (1000,  0.10, None,  80,   0.00, 0.55),  # Rodinia
-    # ---- Future (Pangaea Proxima scenario, Scotese) ----
-    (-30,  -0.30, 74,    64,   1.00, 0.55),  # +30 Myr, near-modern icehouse waning
-    (-70,   0.20, None,  70,   1.00, 0.60),  # +70, Mediterranean closed, warming
-    (-120,  0.55, None,  None, 1.00, 0.66),  # +120, Atlantic closing
-    (-170,  0.70, None,  None, 0.95, 0.74),  # +170, assembling
-    (-250,  0.85, None,  None, 0.85, 0.82),  # +250, Pangaea Proxima hothouse
+    # ---- Future (Pangaea Proxima scenario, Scotese geography; climate after
+    # Farnsworth et al. 2024, whose reconstruction IS this one -- Scotese is a
+    # co-author). The old table showed a merely-warm supercontinent with
+    # vegetation near-modern (veg 0.85 at +250). That is wrong in the direction
+    # that matters: the assembling supercontinent -- plus modest solar
+    # brightening and volcanic CO2 outpacing weathering -- drives the COMPLEX
+    # LAND-ANIMAL biosphere toward collapse, with only ~8-16% of land left
+    # habitable for mammals and vegetation retreating to coastal, polar and
+    # upland refugia. It is NOT a dead world within 250 Myr: oceans, microbes
+    # and margin plants persist; true biosphere-wide death is a 0.5-2.8 Gyr
+    # story. Vegetation therefore falls to ~0.48, aridity climbs, and the ice
+    # caps are gone by the supercontinent stage. Solar luminosity is applied
+    # explicitly in system_at() below, across the whole record.
+    (-30,  -0.05,  80,   72,   0.80, 0.55),  # +30: solar +0.3%; biosphere intact, interiors first drying
+    (-70,   0.15, None, None,  0.70, 0.62),  # +70: Mediterranean gone; deserts widening, ice caps gone
+    (-120,  0.35, None, None,  0.60, 0.70),  # +120: Atlantic closing; hot arid interior forming
+    (-170,  0.50, None, None,  0.53, 0.76),  # +170: near-assembled; mammal habitability collapsing
+    (-250,  0.60, None, None,  0.48, 0.82),  # +250: Pangaea Proxima; complex life to refugia
 ]
 
 
@@ -224,13 +236,31 @@ SYSTEM = [
     (750,    20.0,  2900,    0.8),
     (850,    21.0,  3600,    0.5),
     (1000,   20.0,  5600,    0.3),
-    # future: a warm world that slowly relaxes as the supercontinent assembles
-    (-30,    17.5,  600,   20.9),
-    (-70,    21.0,  900,   20.8),
-    (-120,   24.0, 1200,   20.6),
-    (-170,   25.5, 1500,   20.3),
-    (-250,   27.0, 1800,   20.0),
+    # future: recentred on Farnsworth et al. 2024 for Pangaea Proxima. Their
+    # central case is ~24 C global (land ~29-30 C, interior monthly >50 C) with
+    # background CO2 in the 410-816 ppm range (~621 central), NOT the 27 C /
+    # 1800 ppm the old table used -- which paired their worst-case temperature
+    # with an overstated CO2. O2 eases down a little as the land biosphere
+    # thins. The values below fold in solar brightening as one driver among
+    # several; solar_lum() reports the luminosity itself for the readout.
+    (-30,    16.5,  470,   20.8),
+    (-70,    18.5,  560,   20.5),
+    (-120,   20.5,  630,   20.1),
+    (-170,   22.5,  680,   19.7),
+    (-250,   24.0,  700,   19.3),
 ]
+
+
+def solar_lum(age):
+    """Solar luminosity relative to today, in percent, from the standard solar
+    model of Gough (1981): L/L0 = 1 / (1 + 0.4*(1 - t/t0)), with the Sun's
+    present age t0 = 4.57 Gyr. The Sun was about 8% fainter at 1000 Ma -- the
+    faint young Sun -- and is about 2.3% brighter by +250 Myr. Real, and shown
+    in the readout across the whole timeline, but over the next 250 Myr it is a
+    secondary push next to the assembling supercontinent."""
+    t = 4570.0 - age            # Myr since the Sun formed (future age is negative)
+    lum = 1.0 / (1.0 + 0.4 * (1.0 - t / 4570.0))
+    return round((lum - 1.0) * 100.0, 2)
 
 
 def system_at(age):
@@ -249,7 +279,8 @@ def system_at(age):
         t = 0.0 if span == 0 else (age - lo[0]) / span
     return {"gmst": round(lo[1] + (hi[1] - lo[1]) * t, 1),
             "co2":  int(round(lo[2] + (hi[2] - lo[2]) * t)),
-            "o2":   round(lo[3] + (hi[3] - lo[3]) * t, 1)}
+            "o2":   round(lo[3] + (hi[3] - lo[3]) * t, 1),
+            "sol":  solar_lum(age)}
 
 
 # ---------------------------------------------------------------------------

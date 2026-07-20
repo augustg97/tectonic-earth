@@ -29,7 +29,8 @@ def main():
         new = {"epoch": ep, "period": per, "sealevel": sealevel_for(age),
                "temp": round(cl["temp"], 3), "veg": round(cl["veg"], 3),
                "iceT": round(ice_T, 2), "seaT": round(sea_T, 2),
-               "gmst": sysd["gmst"], "co2": sysd["co2"], "o2": sysd["o2"]}
+               "gmst": sysd["gmst"], "co2": sysd["co2"], "o2": sysd["o2"],
+               "sol": sysd["sol"]}
         if any(rec.get(k) != v for k, v in new.items()):
             changed += 1
         rec.update(new)
