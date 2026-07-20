@@ -46,7 +46,7 @@ canvas{display:block}
 #env b{color:var(--dim);font-weight:500}
 
 /* ---- right controls ---- */
-#controls{position:fixed;top:172px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
+#controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
 .grp{margin-bottom:12px}
 .grp:last-child{margin-bottom:0}
 .grp-h{font-size:9.5px;color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
@@ -444,7 +444,7 @@ function ll2v(lon,lat,r){
   return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
 }
 
-const VERT=`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `;
+const VERT=`varying vec2 vUv; varying vec3 vVN; void main(){ vUv=uv; vVN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `;
 
 /* ---------------------------------------------------------------------------
    Terrain shader.
@@ -463,8 +463,10 @@ uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
+uniform float uSunLon, uSunLat;   // subsolar point (radians); day/night terminator
 uniform vec2 uTexel;
 varying vec2 vUv;
+varying vec3 vVN;         // view-space surface normal, for limb haze
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
 const float PI=3.14159265359;
@@ -616,6 +618,18 @@ void main(){
   vec3 col;
   if(z<0.0){
     col=oceanColour(z,sdir,lat);
+    /* Sediment plumes: big rivers dump suspended silt where they meet the sea,
+       staining the shallows a turbid green-brown for tens of km offshore. We
+       carry no rivers, but a wet coast IS a big-river coast, so drive the plume
+       from local rainfall (the river supply) confined to shallow, near-shore
+       water. It rides the shipped fields, so plumes follow the coasts and the
+       climate across the whole timeline -- strong off wet tropical margins,
+       absent along desert and polar coasts. */
+    float shallow=smoothstep(-500.0,-6.0,z);
+    float river=clamp((Rf-0.16)/0.55,0.0,1.0);
+    float pn=fbm3(sdir*10.0+21.0);
+    float plume=shallow*river*(0.45+0.55*pn);
+    col=mix(col, vec3(0.34,0.41,0.31), clamp(plume,0.0,0.55));
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
@@ -734,6 +748,41 @@ void main(){
     col*=0.98+0.04*r1;
   }
 
+  /* Day/night terminator, city-light-free. The sun is a fixed point in space;
+     the hemisphere turned away from it goes dark. sdir is the local surface
+     direction and the subsolar point is supplied the same way, so their dot
+     product is the solar elevation. On the night side there are NO artificial
+     lights -- just a dark, faintly star-lit surface -- with a warm sliver along
+     the terminator where the sun grazes. Age-independent geometry, so it holds
+     across the whole timeline, on globe and flat map alike. */
+  float lit=1.0;
+  if(uSchem<0.5){
+    float sd;
+    if(uMapProj>0.5){
+      /* Flat map: the subsolar point drifts (uSunLon) so day and night sweep
+         slowly across the projection -- the classic day/night world map. */
+      vec3 sunDir=vec3(cos(uSunLat)*cos(uSunLon), sin(uSunLat), cos(uSunLat)*sin(uSunLon));
+      sd=dot(normalize(sdir), sunDir);
+    }else{
+      /* Globe: the sun is fixed in VIEW space, so the terminator holds a steady
+         place on screen while the spinning Earth carries continents through it --
+         sun fixed, Earth turning. vVN is the view-space surface normal; the sun
+         sits off the view axis so the line crosses the visible disc (~70% lit). */
+      sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
+    }
+    lit=smoothstep(-0.15,0.20,sd);
+    vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
+    float dusk=exp(-pow(sd/0.12,2.0))*lit;
+    col=mix(nightCol, col, lit);
+    col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
+    /* Atmospheric haze toward the limb (globe only). Airmass thickens at grazing
+       angles, so the globe's edge fades into a pale blue veil -- atmospheric
+       perspective, the "seen from space" rim. The flat map faces the camera
+       (vVN.z ~ 1) and uMapProj gates it out there, so the map is untouched. */
+    float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0)*(1.0-uMapProj);
+    col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
+  }
+
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
     vec3 s=(z<0.0)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
@@ -757,6 +806,7 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
+    uSunLon:{value:0},uSunLat:{value:0.14},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -1981,6 +2031,12 @@ function loop(now){
   // clouds only on the globe, and only in the photoreal (satellite) shading
   clouds.visible=isGlobe && state.shade!=='schem';
   mapMesh.visible=!isGlobe;
+  // Day/night terminator. On the globe the sun is fixed in view space (handled
+  // in the shader), so the spinning Earth carries continents through a screen-
+  // steady terminator. The flat map does not spin, so its subsolar point drifts
+  // here and day/night sweeps slowly across the projection.
+  mat.uniforms.uSunLat.value=0.14;
+  mat.uniforms.uSunLon.value=mat.uniforms.uTime.value*0.06;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
     // back the camera off on narrow/tall viewports so the globe always fits
