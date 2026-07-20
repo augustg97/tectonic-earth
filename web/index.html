@@ -196,7 +196,7 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 #load .lp{margin-top:6px;font-size:10px;color:var(--dim2);font-variant-numeric:tabular-nums}
 
 #hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
-#ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s}
+#ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s;display:flex;gap:8px}
 body.ambient #controls,body.ambient #bottom,body.ambient #leftrail,body.ambient #hint,body.ambient #info{opacity:0;pointer-events:none}
 /* the readout is the point of ambient mode, so it stays; only the chrome goes */
 body.ambient #title{opacity:0}
@@ -560,7 +560,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   </div>
 </div>
 
-<div id="ambientExit"><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
+<div id="ambientExit"><button class="txtbtn" id="fullscreenBtn">Full screen</button><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
 
 <div id="load">
   <div class="ring"></div>
@@ -2356,13 +2356,30 @@ $('#aboutPageClose').onclick=closeAboutPage;
 aboutPage.addEventListener('click',e=>{ if(e.target===aboutPage) closeAboutPage(); });   // click backdrop
 aboutPage.querySelectorAll('[data-ap-close]').forEach(b=>b.onclick=closeAboutPage);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&aboutPage.classList.contains('show')) closeAboutPage(); });
+/* Full-screen toggle, offered in ambient mode: hides the browser's own tabs and
+   menu bars for a clean, immersive view. Prefixed fallbacks cover Safari, and the
+   request can be refused (e.g. inside a sandboxed frame), so it is guarded. */
+function fsElement(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+function requestFS(){const el=document.documentElement,fn=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(fn){try{const p=fn.call(el);if(p&&p.catch)p.catch(()=>{});}catch(e){}}}
+function exitFS(){const fn=document.exitFullscreen||document.webkitExitFullscreen;
+  if(fn){try{const p=fn.call(document);if(p&&p.catch)p.catch(()=>{});}catch(e){}}}
+function syncFS(){const on=!!fsElement(),b=$('#fullscreenBtn');
+  b.textContent=on?'Exit full screen':'Full screen';b.classList.toggle('on',on);}
+$('#fullscreenBtn').onclick=()=>{fsElement()?exitFS():requestFS();};
+document.addEventListener('fullscreenchange',syncFS);
+document.addEventListener('webkitfullscreenchange',syncFS);
+
 function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
   // Ambient is the same view with the chrome hidden: it keeps whatever speed
   // and layer toggles are already set rather than imposing its own.
   if(on){state.playing=true;syncPlay();}
+  else if(fsElement()){exitFS();}   // leaving ambient drops back to the normal windowed view
 }
 document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
-  if(e.key==='Escape'&&state.ambient)enterAmbient(false);});
+  // In full screen the browser's own Escape exits full screen first; a second
+  // Escape then leaves ambient. Outside full screen, Escape leaves ambient.
+  if(e.key==='Escape'&&state.ambient&&!fsElement())enterAmbient(false);});
 
 /* ---- markers ---- */
 const MARKERS=[[1000,'Rodinia'],[720,'Cryogenian'],[541,'Cambrian'],[445,'Ordovician'],[300,'Pangaea'],[252,'End-Permian'],[66,'K–Pg'],[0,'Now'],[-250,'+250 Myr']];
