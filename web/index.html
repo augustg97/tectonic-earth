@@ -692,6 +692,24 @@ void main(){
   float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
   float coslat=max(cos(radians(lat)),0.08);
   vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
+
+  if(z>=0.0){
+    /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
+       rock, so mountains gain rocky flanks with vegetation in the valleys --
+       one of the strongest photoreal cues on a global view. Slope comes from
+       the TRUE relief normal (before the grain below perturbs it). */
+    float slope=1.0-clamp(nrm.z,0.0,1.0);
+    float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
+    vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(sdir*33.0));
+    col=mix(col, rockc, bare*0.6);
+    /* Fine surface grain: perturb the SHADING normal with high-frequency noise
+       so the relief carries micro-texture at close zoom instead of stopping at
+       the shipped field's resolution. Two cheap single-octave taps; stronger on
+       already-rough ground. Never touches elevation, so coastlines stay exact. */
+    float nx=vnoise3(sdir*145.0+1.0)-0.5;
+    float ny=vnoise3(sdir*145.0+9.0)-0.5;
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.30+0.45*rug));
+  }
   float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
   float shade=0.70+0.62*hs;
   // Shelves keep their relief, but damp shading toward the abyss: there is no
@@ -780,17 +798,25 @@ function initGL(){
       float itcz=exp(-pow(lat/9.0,2.0));                 // tropical convection band
       float storm=exp(-pow((al-52.0)/13.0,2.0));         // mid-latitude storm tracks
       float subtrop=1.0-0.75*exp(-pow((al-25.0)/10.0,2.0)); // clear subtropical highs
-      float base=(rain*1.2+itcz*0.5+storm*0.42)*subtrop*uCloud;
+      // Rainfall drives cloudiness, but with a soft CEILING: orographic and
+      // monsoon coasts spike the rain field, and feeding that in raw piled the
+      // cloud into a solid bright-white glow. This rolls off so heavy rain adds
+      // little more than moderate rain.
+      float rn=rain/(rain+0.55);                          // 0..~0.9, saturating
+      float base=(rn*1.0+itcz*0.42+storm*0.38)*subtrop*uCloud;
       // weather cells, drifting slowly westward. Weight the fBm heavily so the
       // latitude bands read as broken cloud fields, not painted stripes.
       float lon=vUv.x*360.0-180.0+uTime*0.6;
       float cl=cos(radians(lat));
       vec3 d=vec3(cl*cos(radians(lon)), sin(radians(lat)), cl*sin(radians(lon)));
       float tex=cfb(d*3.2)*0.5+cfb(d*7.5+5.0)*0.32+cfb(d*17.0+13.0)*0.18;
-      float dens=smoothstep(0.52,1.08, base*0.45+tex*0.95);
+      float dens=smoothstep(0.5,1.14, base*0.5+tex*0.9);
+      // Self-shadow: an offset noise darkens parts of the deck so the cloud has
+      // relief and volume instead of reading as a flat glowing sheet.
+      float shade=0.72+0.28*smoothstep(0.25,0.85, cfb(d*10.0+30.0));
       // soften at the limb so the shell has no hard silhouette ring
       float face=smoothstep(0.12,0.5,vN.z);
-      gl_FragColor=vec4(vec3(0.96,0.975,1.0), clamp(dens,0.0,1.0)*0.9*face);
+      gl_FragColor=vec4(vec3(0.90,0.92,0.95)*shade, clamp(dens,0.0,1.0)*0.62*face);
     }`;
   const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
     side:THREE.FrontSide, uniforms:{
