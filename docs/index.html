@@ -463,7 +463,6 @@ uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
-uniform float uSunLon, uSunLat;   // subsolar point (radians); day/night terminator
 uniform vec2 uTexel;
 varying vec2 vUv;
 varying vec3 vVN;         // view-space surface normal, for limb haze
@@ -716,6 +715,41 @@ void main(){
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(sdir*33.0));
     col=mix(col, rockc, bare*0.6);
+    /* Hydrology: drainage, marshes and delta plains. We cannot know the courses
+       of ancient rivers, but water obeys the terrain and climate we DO
+       reconstruct: it gathers in the lows of the paleo-DEM and pools where wet
+       ground lies flat. Sampling the shipped field over a small ring gives the
+       local base level; ground sitting below it is a topographic low, and
+       rainfall says how much water runs through it. A narrow, incised low reads
+       as a river channel along the valley floor; a broad flat wet low as marsh;
+       the same at the shore as a delta plain -- the land side of the sediment
+       plume already drawn offshore. All derived from the fields, so it migrates
+       with plates and climate across the timeline: modelled drainage, not mapped
+       rivers. ("flatf" not "flat": flat is a reserved GLSL keyword.) */
+    vec2 rv=uTexel*2.4;
+    float zc=baseElev(uv);
+    float ring=(baseElev(uv+vec2(rv.x,0.0))+baseElev(uv-vec2(rv.x,0.0))
+               +baseElev(uv+vec2(0.0,rv.y))+baseElev(uv-vec2(0.0,rv.y)))*0.25;
+    float below=clamp((ring-zc)/85.0,0.0,1.0);       // how far into a local low
+    float supply=clamp((Rf-0.10)/0.60,0.0,1.0);      // rainfall available to run off
+    float warm=clamp((T+2.0)/6.0,0.0,1.0);           // liquid water, not frozen
+    float flatf=1.0-smoothstep(0.05,0.24,slope);     // valley floors and plains
+    float hn=fbm3(sdir*118.0+3.0);
+    // River: an incised low on a flat floor, carrying water. Sharpened so it
+    // traces the thalweg as a line rather than flooding the whole basin.
+    float chan=smoothstep(0.42,0.82,below)*flatf;
+    float trunk=smoothstep(0.66,0.92,below)*flatf;   // the deepest, biggest channels
+    float river=chan*supply*warm*(0.62+0.38*hn);
+    vec3 rivc=mix(vec3(0.243,0.310,0.286), vec3(0.157,0.271,0.353), supply);  // silty -> clear water-blue
+    col=mix(col, rivc, clamp(river,0.0,0.72));
+    col=mix(col, vec3(0.176,0.306,0.376), clamp(trunk*supply*warm*0.55,0.0,0.45));  // water on the trunks
+    // Marsh: broad flat wet lowland that is not an incised channel -- reedy,
+    // dark green-brown, water-mottled.
+    float marsh=smoothstep(0.14,0.5,below)*(1.0-chan)*flatf*supply*warm;
+    col=mix(col, mix(vec3(0.286,0.345,0.231), vec3(0.227,0.302,0.239), hn), clamp(marsh*(0.35+0.45*hn),0.0,0.5));
+    // Delta plain: wet flat lowland right at the shore, fed by a coastal low.
+    float delta=(1.0-smoothstep(8.0,140.0,zp))*flatf*supply*warm*smoothstep(0.10,0.5,below);
+    col=mix(col, vec3(0.263,0.357,0.235), clamp(delta*0.55,0.0,0.45));
     /* Fine surface grain: perturb the SHADING normal with high-frequency noise
        so the relief carries micro-texture at close zoom instead of stopping at
        the shipped field's resolution. Two cheap single-octave taps; stronger on
@@ -748,38 +782,27 @@ void main(){
     col*=0.98+0.04*r1;
   }
 
-  /* Day/night terminator, city-light-free. The sun is a fixed point in space;
-     the hemisphere turned away from it goes dark. sdir is the local surface
-     direction and the subsolar point is supplied the same way, so their dot
-     product is the solar elevation. On the night side there are NO artificial
-     lights -- just a dark, faintly star-lit surface -- with a warm sliver along
-     the terminator where the sun grazes. Age-independent geometry, so it holds
-     across the whole timeline, on globe and flat map alike. */
+  /* Day/night terminator, city-light-free -- GLOBE ONLY. The flat map is a data
+     plate meant to be read whole, so it stays fully lit; only the sphere, which
+     reads as a body in space, gets a terminator. The sun is fixed in VIEW space,
+     so the terminator holds a steady place on screen while the spinning Earth
+     carries continents through it -- sun fixed, Earth turning. vVN is the view-
+     space surface normal; the sun sits off the view axis so the line crosses the
+     visible disc (~65% lit). The night side has NO artificial lights -- just a
+     dark, faintly star-lit surface -- with a warm sliver along the terminator
+     where the sun grazes. Age-independent geometry, so it holds across time. */
   float lit=1.0;
-  if(uSchem<0.5){
-    float sd;
-    if(uMapProj>0.5){
-      /* Flat map: the subsolar point drifts (uSunLon) so day and night sweep
-         slowly across the projection -- the classic day/night world map. */
-      vec3 sunDir=vec3(cos(uSunLat)*cos(uSunLon), sin(uSunLat), cos(uSunLat)*sin(uSunLon));
-      sd=dot(normalize(sdir), sunDir);
-    }else{
-      /* Globe: the sun is fixed in VIEW space, so the terminator holds a steady
-         place on screen while the spinning Earth carries continents through it --
-         sun fixed, Earth turning. vVN is the view-space surface normal; the sun
-         sits off the view axis so the line crosses the visible disc (~70% lit). */
-      sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
-    }
+  if(uSchem<0.5 && uMapProj<0.5){
+    float sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
     lit=smoothstep(-0.15,0.20,sd);
     vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
     float dusk=exp(-pow(sd/0.12,2.0))*lit;
     col=mix(nightCol, col, lit);
     col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
-    /* Atmospheric haze toward the limb (globe only). Airmass thickens at grazing
-       angles, so the globe's edge fades into a pale blue veil -- atmospheric
-       perspective, the "seen from space" rim. The flat map faces the camera
-       (vVN.z ~ 1) and uMapProj gates it out there, so the map is untouched. */
-    float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0)*(1.0-uMapProj);
+    /* Atmospheric haze toward the limb. Airmass thickens at grazing angles, so
+       the globe's edge fades into a pale blue veil -- atmospheric perspective,
+       the "seen from space" rim. */
+    float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0);
     col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
   }
 
@@ -806,7 +829,6 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
-    uSunLon:{value:0},uSunLat:{value:0.14},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -2031,12 +2053,6 @@ function loop(now){
   // clouds only on the globe, and only in the photoreal (satellite) shading
   clouds.visible=isGlobe && state.shade!=='schem';
   mapMesh.visible=!isGlobe;
-  // Day/night terminator. On the globe the sun is fixed in view space (handled
-  // in the shader), so the spinning Earth carries continents through a screen-
-  // steady terminator. The flat map does not spin, so its subsolar point drifts
-  // here and day/night sweeps slowly across the projection.
-  mat.uniforms.uSunLat.value=0.14;
-  mat.uniforms.uSunLon.value=mat.uniforms.uTime.value*0.06;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
     // back the camera off on narrow/tall viewports so the globe always fits
