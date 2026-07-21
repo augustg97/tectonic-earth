@@ -20,11 +20,14 @@ from scipy.ndimage import distance_transform_edt
 
 FIELDS = os.path.join(os.path.dirname(__file__), "..", "web", "fields")
 LAKES = os.path.join(os.path.dirname(__file__), "..", "data", "ne_10m_lakes.geojson")
-W, H = 2048, 1024
+# The present lake field is baked at DOUBLE the elevation grid so real coastlines
+# (Great Lakes, Baikal) come out crisp, not gridded. The shader samples it exactly
+# like any _w field; only this frame carries the extra detail.
+W, H = 4096, 2048
 DMAX = 2600.0            # must match bake_lakes.DMAX / shader LAKE_DMAX
-PX_DEPTH = 55.0          # metres of depth per pixel of distance from shore
+PX_DEPTH = 27.5          # metres of depth per pixel of distance from shore (~10 km/px)
 DEPTH_CAP = 900.0
-MIN_PX = 20             # keep only genuine, readable lakes (~130 worldwide)
+MIN_PX = 55             # keep only genuine, readable lakes (~130 worldwide)
 # Famously deep lakes: give them a darker, deeper reading than distance alone.
 DEEP_NAMED = {"Lake Baikal": 3.0, "Lake Tanganyika": 2.6, "Lake Malawi": 2.4,
               "Lake Nyasa": 2.4, "Issyk Kul": 1.8, "Lake Tahoe": 2.0,

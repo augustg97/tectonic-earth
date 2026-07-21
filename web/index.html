@@ -47,6 +47,20 @@ canvas{display:block}
 
 /* ---- right controls ---- */
 #controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
+#extinctBox{position:fixed;right:20px;top:582px;width:210px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(224,118,74,.55);border-radius:12px;z-index:21;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);transition:opacity .4s}
+#extinctBox.hidden{opacity:0;pointer-events:none}
+#extinctHead{cursor:pointer;padding:9px 12px 10px;position:relative;background:linear-gradient(to right,rgba(224,118,74,.16),rgba(224,118,74,.03))}
+#extinctHead:hover{background:linear-gradient(to right,rgba(224,118,74,.26),rgba(224,118,74,.06))}
+#extinctEyebrow{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#e8794c;font-weight:700}
+#extinctEyebrow.after{color:#c99a6a}
+#extinctTitle{font-size:12.5px;font-weight:600;color:#e9edf2;margin-top:3px;line-height:1.28;padding-right:16px}
+#extinctChev{position:absolute;right:11px;top:10px;color:#e8794c;font-size:11px;transition:transform .25s}
+#extinctBox.open #extinctChev{transform:rotate(180deg)}
+#extinctBody{max-height:0;overflow-y:auto;font-size:11.5px;line-height:1.52;color:#c2cad4;padding:0 12px;transition:max-height .32s ease}
+#extinctBox.open #extinctBody{max-height:158px;padding:2px 12px 12px}
+@media (min-height:1000px){#extinctBox.open #extinctBody{max-height:230px}}
+@media (min-height:1300px){#extinctBox.open #extinctBody{max-height:330px}}
+body.ambient #extinctBox{opacity:0;pointer-events:none}
 .grp{margin-bottom:12px}
 .grp:last-child{margin-bottom:0}
 .grp-h{font-size:9.5px;color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
@@ -377,6 +391,15 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
     <div class="tog on" data-layer="rotate"><span>Auto-rotate</span><div class="sw"></div></div>
   </div>
+</div>
+
+<div id="extinctBox" class="hidden">
+  <div id="extinctHead">
+    <div id="extinctEyebrow">Mass Extinction</div>
+    <div id="extinctTitle">—</div>
+    <span id="extinctChev">▾</span>
+  </div>
+  <div id="extinctBody"></div>
 </div>
 
 <div id="info">
@@ -1032,12 +1055,16 @@ void main(){
      shrink and migrate WITH the terrain instead of being stamped discs. Rendered
      with the ocean's own water cues so they read as part of the landscape. */
   if(z>=0.0 && uSchem<0.5){
-    float wenc=mix(texture2D(waterA,uv).r, texture2D(waterB,uv).r, mixf);
+    // Break the lake field's coarse grid into a natural, geography-scale
+    // coastline: warp the sample point by a few cells of fractal noise, so the
+    // waterline meanders into bays and headlands instead of tracing the pixel
+    // lattice. Two bands -- broad inlets and fine crenellation -- and the present
+    // frame's field is baked from real outlines, so this only dresses its edge.
+    vec2 lw = (vec2(fbm3(sdir*175.0)-0.5,     fbm3(sdir*175.0+37.0)-0.5)*2.3
+             + vec2(fbm3(sdir*470.0+7.0)-0.5, fbm3(sdir*470.0+61.0)-0.5)*1.1) * uTexel;
+    float wenc=mix(texture2D(waterA,uv+lw).r, texture2D(waterB,uv+lw).r, mixf);
     float lakeDepth=wenc*wenc*LAKE_DMAX;
-    // Break the waterline with the fine terrain grain so the shore wiggles with
-    // the ground rather than following a smooth texel boundary.
-    float shoreN=(fbm3(sdir*150.0+4.0)-0.5)*18.0;
-    float shore=smoothstep(2.0, 26.0, lakeDepth+shoreN);
+    float shore=smoothstep(2.0, 24.0, lakeDepth);
     shore*=1.0-landIce;                 // a frozen basin is ice, not open water
     if(shore>0.002){
       float dp=clamp(lakeDepth/230.0,0.0,1.0);
@@ -2263,7 +2290,74 @@ function updateReadout(){
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
   markSidebarCurrent();
+  updateExtinction();
 }
+
+/* Mass-extinction events. Each has phases keyed to age windows: the extinction
+   itself plus ~5 Myr (title = the event), then one or more "Aftermath" phases
+   that run for as long as the crisis kept reshaping the planet. A phase is
+   active when lo <= age <= hi (age decreases toward the present, so a phase's
+   younger edge is `lo`). Content: causes, effects, the die-off, and the legacy. */
+const MASS_EXTINCTIONS=[
+ {name:"End-Ordovician", phases:[
+   {hi:445,lo:440,t:"End-Ordovician Mass Extinction",b:`The second-largest extinction of the Phanerozoic, and the only great one driven by <b>cold</b>. As Gondwana drifted over the South Pole, a short, sharp ice age locked water into ice sheets and dropped sea level by roughly 100 m, draining the shallow tropical shelves where almost all life then lived. A few hundred thousand years later the glaciers melted, seas rose, and oxygen-poor water spread back over the shelves — a lethal one-two punch. About <b>85% of marine species</b> vanished: graptolites, brachiopods, trilobites, conodonts and the first reef-builders. Life was still almost wholly marine, so the land came through largely untouched.`},
+   {hi:440,lo:432,t:"Aftermath: Silurian Recovery",b:`Recovery was relatively quick. The cold-tolerant survivors — the "<i>Hirnantia</i>" fauna — gave way as warm shelf seas returned and diversity rebuilt through the Early Silurian. But the reef ecosystems took millions of years to reassemble, and the graptolites never recovered their former reach. The event reshuffled which groups would dominate the Silurian seas.`},
+ ]},
+ {name:"Late Devonian", phases:[
+   {hi:372,lo:367,t:"Late Devonian Mass Extinction",b:`A drawn-out crisis of pulses rather than a single blow, centred on the Frasnian–Famennian boundary. Widespread <b>ocean anoxia</b> — recorded in black "Kellwasser" shales — repeatedly starved the seas of oxygen, amplified by cooling and, many argue, by the spread of the first forests: deep-rooted land plants weathered rock and flushed nutrients into the oceans, triggering algal blooms and dead zones. Around <b>75% of species</b> were lost. The great stromatoporoid–coral reefs — the largest the world had yet built — collapsed, and armoured placoderm fish were nearly wiped out.`},
+   {hi:367,lo:358,t:"Aftermath: The Reef Gap",b:`The oceans fell into a prolonged "reef gap": metazoan reefs stayed rare through the rest of the Devonian and deep into the Carboniferous, more than 100 million years passing before reef systems of comparable scale returned. A final pulse near the period's end (the Hangenberg event) struck again. On land, the earliest tetrapods kept taking shape, and the survivors set the stage for the coming coal forests.`},
+ ]},
+ {name:"End-Permian", phases:[
+   {hi:252,lo:247,t:"End-Permian Mass Extinction — “The Great Dying”",b:`The largest extinction in Earth's history — the closest complex life has come to ending. The <b>Siberian Traps</b>, one of the greatest volcanic outpourings ever, erupted through coal and salt beds and pumped vast volumes of CO₂, methane and sulphur into the air over tens of thousands of years. Temperatures soared, the oceans acidified, lost their oxygen and turned <b>euxinic</b> — poisoned with hydrogen sulphide — while the land baked and dried. About <b>96% of marine species</b> and some 70% of land-vertebrate families died. Reefs, trilobites and the entire dominant Permian order of life were annihilated.`},
+   {hi:247,lo:243,t:"Aftermath: The Dead Zone",b:`For millions of years the Early Triassic was a hot, impoverished dead zone. Coal vanishes from the rock record — a "coal gap" — reefs are absent, and a handful of disaster taxa like the clam <i>Claraia</i> and the burrowing, pig-snouted <i>Lystrosaurus</i> dominated near-empty ecosystems. Repeated pulses of extreme warming kept knocking any recovery back down.`},
+   {hi:243,lo:237,t:"Aftermath: The Long Recovery",b:`Full recovery took around <b>8–10 million years</b> — far longer than any other extinction. Only once the climate finally steadied did new groups radiate into the emptied world: the first archosaurs and, from them, the ancestors of the dinosaurs, alongside the earliest marine reptiles and the first modern-style reefs. The Permian world did not return; a new one was built on its ruins.`},
+ ]},
+ {name:"End-Triassic", phases:[
+   {hi:201,lo:196,t:"End-Triassic Mass Extinction",b:`As Pangaea began to tear apart, the <b>Central Atlantic Magmatic Province</b> flooded a region the size of a continent with lava, releasing CO₂ that spiked global warming and acidified the oceans. About <b>76% of species</b> vanished, including many large amphibians, most of the conodonts, and the crurotarsan archosaurs — crocodile-line reptiles that until then had rivalled the early dinosaurs. The event emptied ecological niches on land and at sea alike.`},
+   {hi:196,lo:189,t:"Aftermath: The Age of Dinosaurs Begins",b:`With their chief competitors gone, the <b>dinosaurs radiated</b> to dominate terrestrial ecosystems for the next 135 million years. The Jurassic opened with new marine reptiles — ichthyosaurs and plesiosaurs — and fresh ammonoid faunas filling the emptied seas, and with the first truly giant dinosaurs beginning to appear.`},
+ ]},
+ {name:"End-Cretaceous", phases:[
+   {hi:66,lo:61,t:"End-Cretaceous (K–Pg) Mass Extinction",b:`A <b>10-km asteroid</b> struck Chicxulub, in what is now the Yucatán, with the energy of billions of atomic bombs — while the Deccan Traps were already erupting in India. The impact threw a global veil of dust and sulphate aerosols into the sky that blocked sunlight for months to years, collapsing photosynthesis on land and in the surface ocean; wildfires, tsunamis and a brief pulse of searing heat followed. About <b>76% of species</b> died, including <b>all non-avian dinosaurs</b>, the ammonites, the great marine reptiles, and much of the plankton at the base of ocean food webs.`},
+   {hi:61,lo:56,t:"Aftermath: The Empty World",b:`The earliest Paleocene was a stunned, low-diversity world. "Disaster" ferns and hardy weeds recolonised scorched ground first; ocean productivity stayed depressed for tens to hundreds of thousands of years — a "Strangelove ocean" nearly emptied of surface life. The survivors were mostly small, generalist and burrowing animals that could shelter and scavenge through the dark.`},
+   {hi:56,lo:50,t:"Aftermath: The Rise of Mammals",b:`With the dinosaurs gone, <b>mammals</b> — until then small and nocturnal — radiated explosively into the empty niches, growing larger and more varied within a few million years. Birds (the last surviving dinosaurs) and flowering plants diversified alongside them, assembling the recognisably modern world. A sharp warming spike, the PETM, would soon test that new order.`},
+ ]},
+];
+let extinctExpanded=false, extinctKey=null, extinctShown=false;
+function extinctPhaseAt(age){
+  for(const ev of MASS_EXTINCTIONS)for(const p of ev.phases)
+    if(age<=p.hi && age>=p.lo) return {ev,p};
+  return null;
+}
+function positionExtinct(){
+  const box=$('#extinctBox'); if(!box||box.classList.contains('hidden')) return;
+  // Sit just under the controls panel. The CSS top is a good static default;
+  // refine it from the panel's real height only when the layout is valid (the
+  // in-app preview pane can report a collapsed 0-size layout).
+  const c=$('#controls').getBoundingClientRect();
+  if(c.bottom>80 && innerHeight>0) box.style.top=(c.bottom+12)+'px';
+}
+// Called every frame; only touches the DOM when the active phase actually
+// changes, so it is cheap to poll.
+function updateExtinction(){
+  const box=$('#extinctBox'); if(!box) return;
+  const cur=extinctPhaseAt(state.age);
+  if(!cur){ if(extinctShown){box.classList.add('hidden');extinctShown=false;extinctKey=null;} return; }
+  const key=cur.ev.name+'|'+cur.p.t;
+  if(key!==extinctKey){
+    extinctKey=key;
+    const after=cur.p.t.indexOf('Aftermath')===0;
+    const eb=$('#extinctEyebrow');
+    eb.textContent=after?'Aftermath':'Mass Extinction'; eb.className=after?'after':'';
+    $('#extinctTitle').textContent=cur.p.t.replace(/^Aftermath: /,'');
+    $('#extinctBody').innerHTML=cur.p.b;
+    box.classList.toggle('open', extinctExpanded);
+  }
+  if(!extinctShown){ box.classList.remove('hidden'); extinctShown=true; positionExtinct(); }
+}
+$('#extinctHead').addEventListener('click',()=>{
+  extinctExpanded=!extinctExpanded;
+  $('#extinctBox').classList.toggle('open', extinctExpanded);
+});
 
 /* ================= render loop ================= */
 function bindTextures(){
@@ -2312,6 +2406,7 @@ function loop(now){
     syncSlider();
   }
   if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
+  updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
   // Drives only the sea-surface sheen; nothing about world state depends on it,
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
@@ -2471,6 +2566,7 @@ function buildMarkers(){
 function resize(){
   renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
   const dpr=Math.min(devicePixelRatio,2);mcv.width=innerWidth*dpr;mcv.height=innerHeight*dpr;mcv.style.width=innerWidth+'px';mcv.style.height=innerHeight+'px';
+  positionExtinct();
 }
 addEventListener('resize',resize);
 
