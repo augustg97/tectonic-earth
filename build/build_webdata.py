@@ -313,6 +313,9 @@ def build_labels():
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
+        # lakes carry a rendered radius (deg) so the app can draw them as water
+        if l["t"] == "lake":
+            l["r"] = features.lake_radius(l["n"])
         # Long-lived features carry a description per phase of their life; the
         # app picks whichever contains the displayed age and falls back to "d".
         # A phase outside the label's own window can never be reached, and the

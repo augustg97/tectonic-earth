@@ -447,6 +447,28 @@ def labels():
             for (t, n, lo, la, a0, a1) in LABELS]
 
 
+# Approximate rendered radius (degrees) for each named lake, so the app can draw
+# it as a water body sized roughly to its real extent, with a small floor so the
+# tiny ones stay visible at global scale. Unlisted lakes use LAKE_R_DEF.
+LAKE_R_DEF = 0.6
+LAKE_R = {
+    "Caspian Sea (Paratethys remnant)": 3.0, "Black Sea (Paratethys remnant)": 2.2,
+    "Laurentian Great Lakes": 2.2, "Lake Agassiz": 3.2, "Lake Bonneville": 1.4,
+    "Lake Lahontan": 1.2, "Lake Mega-Chad": 2.6, "Lake Pannon": 2.6,
+    "Pebas Mega-Wetland": 3.2, "Songliao Palaeolake": 2.0, "Jehol Lakes": 1.6,
+    "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Tanganyika": 0.9,
+    "Lake Titicaca": 0.5, "Lake Vostok": 0.6, "Lake Gosiute": 1.0,
+    "Lake Uinta": 0.9, "Fossil Lake": 0.4, "Messel Lake": 0.3,
+    "Lago Mare (Messinian Mediterranean)": 3.5, "East African Rift soda lakes": 1.3,
+    "Lake Manly": 0.9, "Lake Lisan": 0.6, "Lake Tauca": 1.1,
+    "Palaeolake Makgadikgadi": 1.4,
+}
+
+
+def lake_radius(name):
+    return LAKE_R.get(name, LAKE_R_DEF)
+
+
 # ------------------------------------------------------------ descriptions --
 # Narrative context for the info panel. The panel also reports live measured
 # motion and elevation, so these supply the story the numbers cannot.
@@ -958,6 +980,39 @@ DESCRIPTIONS = {
   "continent long before anything lived on land. Their muds hold some of the oldest known "
   "non-marine life: cyanobacteria and early eukaryotes living in fresh water, hundreds of "
   "millions of years before plants.",
+
+ # ---- timeline-audit additions (2026-07-20) ----
+ "Zagros Mts": "The long fold-and-thrust belt raised as Arabia drove into Eurasia from the Oligocene onward, closing the last of Neotethys. Its parallel ridges trap the richest oil province on Earth, and the collision is still shortening the crust today.",
+ "Greater Caucasus": "The northern front of the Arabia-Eurasia collision, thrown up as the ocean between them was consumed. It carries the highest peaks in Europe and rose largely within the last five to ten million years.",
+ "Pyrenees": "Raised as the small Iberian plate collided with Europe through the Late Cretaceous and Palaeogene. A textbook doubly-vergent belt, its ancient core was pushed up and exhumed by Eocene shortening.",
+ "Carpathians": "An arc of thrust sheets swept into place during the Miocene as continental fragments rolled into the European margin, curving around the subsiding Pannonian Basin behind them.",
+ "Apennines": "The spine of Italy, built through the Neogene as the Adriatic plate sank and its sedimentary cover peeled off into a migrating thrust belt, while back-arc extension opened the Tyrrhenian Sea behind it.",
+ "Sonoma Orogeny": "A collision along the western edge of North America near the Permian-Triassic boundary, as the Sonomia island-arc terrane docked against the continent -- the successor to the earlier Antler event along the same margin.",
+ "Lachlan Orogen": "A vast accretionary belt of eastern Gondwana, assembled from the Ordovician to the Carboniferous as slice after slice of ocean floor and volcanic arc was plastered onto the Australian margin. It forms the basement of southeastern Australia.",
+ "Rio Grande Rift": "A continental rift tearing the southwestern United States open since the late Palaeogene, as the crust behind the Cordillera stretched and dropped a chain of basins from Colorado into Mexico.",
+ "Basin and Range": "The type example of wide continental extension: the crust of the western United States pulled apart into dozens of tilted mountain blocks and intervening valleys, stretching to nearly twice its original width since the mid-Cenozoic.",
+ "Gulf of California": "A young oblique rift where Baja California has been torn from mainland Mexico over the last dozen million years, the spreading having jumped inland from the dying offshore ridge to open a narrow new sea.",
+ "West Antarctic Rift": "One of the largest rift systems on Earth, splitting West from East Antarctica and almost wholly buried under ice. Active since the Cretaceous, its stretched crust holds much of West Antarctica below sea level.",
+ "Gulf of Mexico": "A marginal ocean basin opened in the Jurassic as North America pulled away from Gondwana. It began as a restricted basin that dried to leave the thick Louann salt, later buried under kilometres of river sediment.",
+ "West Siberian Sea": "A vast, shallow sea that flooded the West Siberian lowland through the Late Cretaceous and Palaeogene, linking the Arctic to the Tethys by way of the narrow Turgai Strait.",
+ "Tasman Sea": "The basin that opened in the Late Cretaceous as the drowned continent of Zealandia rifted away from Australia, spreading new ocean floor for some thirty million years before it stalled.",
+ "South China Sea": "The largest marginal sea of the western Pacific, opened by back-arc spreading from the Oligocene into the Miocene as the South China margin stretched and continental blocks slid southward.",
+ "Mid-Atlantic Ridge": "The slow-spreading ridge along which the Atlantic has been widening since the Jurassic, adding sea floor to either side a few centimetres a year and tracing the line the continents rifted apart along.",
+ "East Pacific Rise": "The fastest-spreading ridge on Earth, making Pacific sea floor at more than ten centimetres a year. It is the living successor to the ancestral Pacific-Farallon spreading system.",
+ "Atacama Desert": "The driest place on Earth, held arid for millions of years between the Andean rain shadow and the cold, upwelling Humboldt Current. Parts of it may not have seen real rain in centuries.",
+ "Arabian Desert": "The great sand sea of Arabia, including the Rub' al Khali or Empty Quarter, the largest unbroken body of sand on the planet -- arid since the peninsula drifted into the subtropical high after splitting from Africa.",
+ "Kalahari Desert": "A huge semi-arid sand basin across southern Africa, its dunes and dry pans spread over the interior plateau through the Cenozoic.",
+ "Australian Desert": "The arid heart of Australia, its long parallel dunefields and stony plains spreading as the continent drifted north into the subtropics and dried through the late Cenozoic.",
+ "Patagonian Desert": "A cold, wind-scoured steppe in the rain shadow east of the Andes, dry ever since the mountains rose high enough in the Miocene to wring the moisture from the Pacific westerlies.",
+ "Cordilleran Ice Sheet": "The ice cap that repeatedly buried the mountains of western North America during the Pleistocene, meeting the Laurentide sheet along its eastern edge before both melted away.",
+ "Greenland Ice Sheet": "The last great ice sheet of the Northern Hemisphere, in place since the late-Cenozoic cooling and holding enough ice to raise sea level about seven metres were it to melt.",
+ "Patagonian Ice Sheet": "The ice sheet that mantled the southern Andes through the Pleistocene -- the largest ice mass in the Southern Hemisphere outside Antarctica -- its outlet glaciers carving the Patagonian fjords.",
+ "Deccan Plateau": "The basalt tableland of peninsular India, built on the flood lavas that erupted as the subcontinent passed over the Reunion plume near the end of the Cretaceous, since worn into step-like hills.",
+ "Ethiopian Highlands": "The roof of Africa: a domed plateau of flood basalts erupted over the Afar plume in the Oligocene and lifted as the East African and Red Sea rifts began to tear the region apart.",
+ "East African Plateau": "A broad Cenozoic upwarp of the African interior, raised over hot mantle and split by the East African Rift, its high cool surface holding the great lakes and the headwaters of the Nile.",
+ "Williston Basin": "A long-lived, gently sinking bowl on the North American craton that gathered sediment through most of the Phanerozoic, from Palaeozoic carbonates and evaporites to later oil-rich shales.",
+ "Sahul": "The single landmass of Australia and New Guinea, joined whenever Pleistocene sea levels fell, across which the first people crossed into Australia.",
+ "Doggerland": "The low plain that once linked Britain to mainland Europe across the southern North Sea, a rich hunting ground for Mesolithic people until the rising seas of the early Holocene drowned it.",
 }
 
 

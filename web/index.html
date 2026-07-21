@@ -695,6 +695,8 @@ uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
+uniform vec3 uLakes[24];   // visible freshwater lakes for the displayed age: (lon, lat, radius-deg)
+uniform int uLakeCount;
 varying vec2 vUv;
 varying vec3 vVN;         // view-space surface normal, for limb haze
 
@@ -831,6 +833,7 @@ void main(){
     uv=vec2(ll.x/(2.0*PI)+0.5, 0.5+ll.y/PI);
   }
   float lat=90.0-uv.y*180.0;
+  float lonD=uv.x*360.0-180.0;
   float s2=sin(radians(lat)); s2*=s2;
 
   // How broken is the shipped field around here? Measured once and reused, so
@@ -1013,6 +1016,37 @@ void main(){
     col*=0.98+0.04*r1;
   }
 
+  /* Freshwater lakes. A lake surface sits ABOVE sea level, so the shipped height
+     field treats it as land and it never shows as water on its own -- which is
+     why Baikal and the Great Lakes were only labels. Each visible lake is
+     supplied as (lon, lat, radius) and painted here as a flat water body over the
+     land, with a faint sheen so it reads as water. Land only, never schematic. */
+  if(z>=0.0 && uSchem<0.5 && uLakeCount>0){
+    // The shader lat above is actually the NEGATED geographic latitude on BOTH
+    // views (sphere-uv and the Mollweide inverse both put v=1 at the north pole,
+    // so 90-uv.y*180 = -latitude). It only ever fed hemisphere-symmetric climate
+    // (sin^2 lat), so the flip went unnoticed. Lakes carry true geographic
+    // coordinates, so undo the flip here to match them.
+    float latT = -lat;
+    float lakeM=0.0;
+    for(int i=0;i<24;i++){
+      if(i>=uLakeCount) break;
+      vec3 lk=uLakes[i];
+      float dl=mod(lonD-lk.x+540.0,360.0)-180.0;
+      float ldist=length(vec2(dl*cos(radians(latT)), latT-lk.y));
+      float wob=(fbm3(vec3(dl,latT-lk.y,lk.x)*1.6)-0.5)*lk.z*0.6;   // irregular shoreline
+      lakeM=max(lakeM, 1.0-smoothstep(lk.z*0.58, lk.z, ldist+wob));
+    }
+    if(lakeM>0.001){
+      vec3 Lsl=normalize(vec3(-0.55,0.55,0.63));
+      float q1=fbm3(sdir*520.0+vec3(uTime*0.04)), q2=fbm3(sdir*1100.0+9.0);
+      vec3 wnl=normalize(vec3((q1-q2)*0.4,(q2-q1)*0.4,1.0));
+      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),44.0);
+      vec3 lakeCol=vec3(0.086,0.196,0.255)*(0.94+0.12*q1)+vec3(0.55,0.66,0.75)*spc*0.18;
+      col=mix(col, lakeCol, lakeM);
+    }
+  }
+
   /* Day/night terminator, city-light-free -- GLOBE ONLY. The flat map is a data
      plate meant to be read whole, so it stays fully lit; only the sphere, which
      reads as a body in space, gets a terminator. The sun is fixed in VIEW space,
@@ -1047,6 +1081,9 @@ void main(){
   gl_FragColor=vec4(col,1.0);
 }`;
 
+// Pre-allocated (lon,lat,radius) slots for the shader's fixed-size lake array;
+// filled each frame from the visible lakes. Must match uLakes[24] in the shader.
+const lakeUniform=Array.from({length:24},()=>new THREE.Vector3());
 function initGL(){
   const cv=$('#gl');
   renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
@@ -1060,6 +1097,7 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
+    uLakes:{value:lakeUniform},uLakeCount:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -2046,8 +2084,11 @@ const PRI={continent:100,ocean:90,sea:72,region:66,orogen:60,ice:58,desert:56,
 /* A little slack either side stops names strobing on and off as the slider
    crosses a window edge, but 6 Myr was enough to float future-only features
    like Baja Island over the present-day map. Keyframes are 5 Myr apart, so
-   half that is all the smoothing this needs. */
-function labelVisible(l){const a=state.age,t=2.5;
+   half that is all the smoothing this needs -- EXCEPT for the recent lakes,
+   whose windows are only thousands of years: a flat 2.5 Myr slack floated
+   Pleistocene lakes (Agassiz, Bonneville) onto the present-day map, so cap the
+   slack at half the window for anything shorter than 5 Myr. */
+function labelVisible(l){const a=state.age,t=Math.min(2.5,Math.abs(l.a1-l.a0)*0.5);
   return a>=Math.min(l.a0,l.a1)-t&&a<=Math.max(l.a0,l.a1)+t;}
 function ensureLabels(){
   const box=$('#labels');
@@ -2266,6 +2307,18 @@ function loop(now){
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
+  // Pack the freshwater lakes visible at this age for the shader: their snapped
+  // (plate-relocated) position and radius. They render as water over the land.
+  {
+    let ln=0;
+    for(const l of DATA.labels){
+      if(ln>=24)break;
+      if(l.t!=='lake'||!labelVisible(l))continue;
+      const sp=snapLabel(l,f.i); if(!sp)continue;
+      lakeUniform[ln].set(sp[0],sp[1],l.r||0.6); ln++;
+    }
+    mat.uniforms.uLakeCount.value=ln;
+  }
   // overlays visibility & fade
   const fade=presentFade();
   // Hotspots and motion vectors are era-specific, so rebuild them whenever the
