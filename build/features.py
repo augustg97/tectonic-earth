@@ -469,6 +469,61 @@ def lake_radius(name):
     return LAKE_R.get(name, LAKE_R_DEF)
 
 
+# Real morphology so lakes read as their actual shapes, not symmetric blobs.
+# Each lake is one or more LOBES; a lobe is
+#   (dlon, dlat, length_km, width_km, azimuth_deg)
+# where (dlon,dlat) offsets the lobe from the label's coordinate (degrees), the
+# ellipse is length_km by width_km, and azimuth is the long axis measured
+# clockwise from north. Multi-lobe entries capture clusters (the Great Lakes are
+# five separate lakes; the Jehol biota sat in a string of rift lakes). The app
+# adds the lobe to the lake's plate-relocated position and draws an oriented,
+# irregular-shored water body. Dimensions are real where the lake is real and
+# reconstructed from the basin where it is a palaeolake.
+LAKE_SHAPE = {
+    "Lake Baikal":            [(0, 0, 636, 55, 25)],
+    "Lake Tanganyika":        [(0, 0, 676, 55, 345)],
+    "Lake Victoria":          [(0, 0, 337, 250, 5)],
+    "Lake Titicaca":          [(0, 0, 190, 80, 320)],
+    "Lake Vostok":            [(0, 0, 250, 55, 30)],
+    "East African Rift soda lakes": [(0, 0, 650, 90, 358)],
+    "Laurentian Great Lakes": [(-3.5, 2.2, 560, 260, 100),   # Superior
+                               (-3.0, -1.4, 490, 190, 2),    # Michigan
+                               (1.8, -0.7, 330, 245, 145),   # Huron
+                               (2.9, -3.3, 388, 92, 70),     # Erie
+                               (6.2, -1.8, 311, 85, 78)],    # Ontario
+    "Songliao Palaeolake":    [(0, 0, 820, 380, 20)],
+    "Jehol Lakes":            [(-0.9, 0.6, 130, 60, 40),
+                               (0.6, -0.4, 110, 55, 25),
+                               (-0.2, -1.3, 95, 48, 55)],
+    "Lake Gosiute":           [(0, 0, 240, 130, 65)],
+    "Lake Uinta":             [(0, 0, 250, 120, 90)],
+    "Fossil Lake":            [(0, 0, 80, 40, 0)],
+    "Messel Lake":            [(0, 0, 30, 22, 0)],
+    "Palaeolake Makgadikgadi":[(0, 0, 300, 250, 50)],
+    "Lake Manly":             [(0, 0, 160, 20, 340)],
+    "Lake Lisan":             [(0, 0, 220, 17, 2)],
+    "Lake Bonneville":        [(0, 0, 520, 220, 358)],
+    "Lake Lahontan":          [(0, 0, 430, 260, 340)],
+    "Lake Tauca":             [(0, 0, 660, 210, 340)],
+    "Lake Agassiz":           [(0, 0, 1100, 400, 335)],
+    "Lake Mega-Chad":         [(0, 0, 700, 620, 0)],
+    "Pebas Mega-Wetland":     [(0, 0, 1050, 720, 340)],
+    "Caspian Sea (Paratethys remnant)": [(0, 0, 1200, 320, 358)],
+    "Black Sea (Paratethys remnant)":   [(0, 0, 1150, 380, 90)],
+    "Lago Mare (Messinian Mediterranean)": [(0, 0, 3200, 1400, 90)],
+}
+
+
+def lake_shape(name):
+    """Lobes as [dlon, dlat, semiMajorDeg, semiMinorDeg, azimuthDeg]."""
+    lobes = LAKE_SHAPE.get(name)
+    if lobes is None:                       # unlisted: a mildly elongated blob
+        r = lake_radius(name)
+        return [[0.0, 0.0, r, r * 0.72, 0.0]]
+    return [[dl, da, lk / 222.0, wk / 222.0, az]      # km -> semi-axis in degrees
+            for (dl, da, lk, wk, az) in lobes]
+
+
 # ------------------------------------------------------------ descriptions --
 # Narrative context for the info panel. The panel also reports live measured
 # motion and elevation, so these supply the story the numbers cannot.

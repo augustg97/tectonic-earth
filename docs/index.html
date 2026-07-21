@@ -695,7 +695,8 @@ uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
-uniform vec3 uLakes[24];   // visible freshwater lakes for the displayed age: (lon, lat, radius-deg)
+uniform vec4 uLakes[32];    // visible lake lobes: (lon, lat, semiMajor-deg, semiMinor-deg)
+uniform float uLakeAz[32];  // long-axis azimuth (radians) per lobe
 uniform int uLakeCount;
 varying vec2 vUv;
 varying vec3 vVN;         // view-space surface normal, for limb haze
@@ -1018,9 +1019,11 @@ void main(){
 
   /* Freshwater lakes. A lake surface sits ABOVE sea level, so the shipped height
      field treats it as land and it never shows as water on its own -- which is
-     why Baikal and the Great Lakes were only labels. Each visible lake is
-     supplied as (lon, lat, radius) and painted here as a flat water body over the
-     land, with a faint sheen so it reads as water. Land only, never schematic. */
+     why Baikal and the Great Lakes were only labels. Each visible lake arrives as
+     one or more oriented ellipse lobes (lon, lat, semi-axes, azimuth); we draw
+     each as a real, irregular-shored water body -- shallow green-blue margins
+     deepening to dark blue, with a low sun sheen, the same cues as the ocean.
+     Land only, never schematic. */
   if(z>=0.0 && uSchem<0.5 && uLakeCount>0){
     // The shader lat above is actually the NEGATED geographic latitude on BOTH
     // views (sphere-uv and the Mollweide inverse both put v=1 at the north pole,
@@ -1028,21 +1031,34 @@ void main(){
     // (sin^2 lat), so the flip went unnoticed. Lakes carry true geographic
     // coordinates, so undo the flip here to match them.
     float latT = -lat;
-    float lakeM=0.0;
-    for(int i=0;i<24;i++){
+    float lakeM=0.0, lakeDepth=0.0;
+    for(int i=0;i<32;i++){
       if(i>=uLakeCount) break;
-      vec3 lk=uLakes[i];
-      float dl=mod(lonD-lk.x+540.0,360.0)-180.0;
-      float ldist=length(vec2(dl*cos(radians(latT)), latT-lk.y));
-      float wob=(fbm3(vec3(dl,latT-lk.y,lk.x)*1.6)-0.5)*lk.z*0.6;   // irregular shoreline
-      lakeM=max(lakeM, 1.0-smoothstep(lk.z*0.58, lk.z, ldist+wob));
+      vec4 lk=uLakes[i];               // lon, lat, semiMajor, semiMinor (deg)
+      float dlon=(mod(lonD-lk.x+540.0,360.0)-180.0)*cos(radians(latT));
+      float dlat=latT-lk.y;
+      float A=uLakeAz[i], sA=sin(A), cA=cos(A);
+      float along = dlon*sA+dlat*cA;   // component along the long axis
+      float across= dlon*cA-dlat*sA;   // and across it
+      float er0=length(vec2(along/lk.z, across/lk.w));
+      if(er0<1.5){                     // only pay for shoreline noise near a lobe
+        float wob=(fbm3(vec3(along,across,lk.x)*3.2)-0.5)*0.30
+                 +(fbm3(vec3(along,across,lk.x)*8.0+3.0)-0.5)*0.14;
+        float er=er0+wob;
+        float m=1.0-smoothstep(0.74,1.0,er);
+        lakeM=max(lakeM,m);
+        lakeDepth=max(lakeDepth,(1.0-er)*m);
+      }
     }
     if(lakeM>0.001){
+      float dp=clamp(lakeDepth,0.0,1.0);
+      vec3 shallow=vec3(0.184,0.404,0.435), deep=vec3(0.055,0.145,0.216);
+      vec3 lakeCol=mix(shallow, deep, smoothstep(0.05,0.55,dp));
       vec3 Lsl=normalize(vec3(-0.55,0.55,0.63));
-      float q1=fbm3(sdir*520.0+vec3(uTime*0.04)), q2=fbm3(sdir*1100.0+9.0);
-      vec3 wnl=normalize(vec3((q1-q2)*0.4,(q2-q1)*0.4,1.0));
-      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),44.0);
-      vec3 lakeCol=vec3(0.086,0.196,0.255)*(0.94+0.12*q1)+vec3(0.55,0.66,0.75)*spc*0.18;
+      float q1=fbm3(sdir*560.0+vec3(uTime*0.04)), q2=fbm3(sdir*1200.0+9.0);
+      vec3 wnl=normalize(vec3((q1-q2)*0.45,(q2-q1)*0.45,1.0));
+      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),46.0);
+      lakeCol=lakeCol*(0.95+0.08*q1)+vec3(0.55,0.66,0.75)*spc*0.16;
       col=mix(col, lakeCol, lakeM);
     }
   }
@@ -1082,8 +1098,9 @@ void main(){
 }`;
 
 // Pre-allocated (lon,lat,radius) slots for the shader's fixed-size lake array;
-// filled each frame from the visible lakes. Must match uLakes[24] in the shader.
-const lakeUniform=Array.from({length:24},()=>new THREE.Vector3());
+// filled each frame from the visible lake lobes. Must match uLakes[32] / uLakeAz[32].
+const lakeUniform=Array.from({length:32},()=>new THREE.Vector4());
+const lakeAz=new Float32Array(32);
 function initGL(){
   const cv=$('#gl');
   renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
@@ -1097,7 +1114,7 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
-    uLakes:{value:lakeUniform},uLakeCount:{value:0},
+    uLakes:{value:lakeUniform},uLakeAz:{value:lakeAz},uLakeCount:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -2307,15 +2324,22 @@ function loop(now){
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
-  // Pack the freshwater lakes visible at this age for the shader: their snapped
-  // (plate-relocated) position and radius. They render as water over the land.
+  // Pack the freshwater lakes visible at this age for the shader: each lobe at
+  // the lake's plate-relocated position, as an oriented ellipse. They render as
+  // real, irregular-shored water bodies over the land.
   {
     let ln=0;
     for(const l of DATA.labels){
-      if(ln>=24)break;
+      if(ln>=32)break;
       if(l.t!=='lake'||!labelVisible(l))continue;
       const sp=snapLabel(l,f.i); if(!sp)continue;
-      lakeUniform[ln].set(sp[0],sp[1],l.r||0.6); ln++;
+      const shape=l.shape||[[0,0,(l.r||0.6),(l.r||0.6)*0.72,0]];
+      for(const lb of shape){
+        if(ln>=32)break;
+        lakeUniform[ln].set(sp[0]+lb[0], sp[1]+lb[1], lb[2], lb[3]);
+        lakeAz[ln]=lb[4]*Math.PI/180;
+        ln++;
+      }
     }
     mat.uniforms.uLakeCount.value=ln;
   }
