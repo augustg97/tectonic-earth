@@ -299,7 +299,11 @@ def sparse():
     return _DATA.get("sparse", {})
 
 
-# Anything named here may only ever carry realm="sea" taxa.
+# Anything named here may only ever carry realm="sea" taxa. NOTE deliberately
+# absent: Solnhofen Lagoon and Hudson Seaway (their key fossils are the birds /
+# pterosaurs / dinosaurs they preserved), and Lake Pannon (brackish, endemic
+# freshwater molluscs) — realm-locking those would strip exactly what makes them
+# worth naming.
 MARINE_REGIONS = {
     "Panthalassa", "Panthalassic Ocean", "Panthalassic (proto)", "Iapetus Ocean",
     "Rheic Ocean", "Tethys Ocean", "Paleo-Tethys", "Mirovia", "Pacific Ocean",
@@ -308,7 +312,13 @@ MARINE_REGIONS = {
     "Sauk Sea", "Zechstein Sea", "Turgai Strait", "Eromanga Sea", "Paratethys",
     "Mozambique Ocean", "Adamastor Ocean", "Ural Ocean", "Tornquist Sea",
     "Neo-Panthalassa", "Sundance Sea", "Trans-Saharan Sea",
-    "Central American Sea", "Hudson Seaway", "East African Ocean",
+    "Central American Sea", "East African Ocean",
+    # marine features added 2026-07 to end the "every ocean shows the same fauna"
+    "Muschelkalk Sea", "Mowry Sea", "Boreal Sea", "Bearpaw Sea", "Neotethys",
+    "Nama Sea", "Tippecanoe Sea", "Kaskaskia Sea", "Absaroka Sea",
+    "Messinian Salt Basin", "West Siberian Sea", "South China Sea", "Tasman Sea",
+    "Gulf of Mexico", "Mid-Atlantic Ridge", "East Pacific Rise", "Cannonball Sea",
+    "Viking Corridor", "Hispanic Corridor",
 }
 
 
