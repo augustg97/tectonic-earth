@@ -598,14 +598,14 @@ const state={
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[];   // elevation / rainfall / motion fields
+let ELI=[], RNI=[], MOI=[], WLI=[];   // elevation / rainfall / motion / lake-depth fields
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:MOI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -637,7 +637,7 @@ async function loadAll(){
   DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
-  let done=0; const total=tl.length*3;
+  let done=0; const total=tl.length*4;
   const one=(name,arr,i)=>new Promise(res=>{
     const img=new Image();
     const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
@@ -645,7 +645,12 @@ async function loadAll(){
     img.onerror=fin;
     img.src=src(name);
   });
-  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i)]));
+  // The lake-depth field is baked alongside the elevation field and named by the
+  // same convention, so derive it here rather than threading it through the
+  // timeline JSON. If a _w file is missing the loader just leaves that slot empty
+  // and the shader shows no lake there — the build degrades gracefully.
+  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),
+                                        one(fr.e.replace('_e.webp','_w.webp'),WLI,i)]));
 }
 
 /* map timeline (sorted asc by age) to helpers */
@@ -690,20 +695,17 @@ const VERT=`varying vec2 vUv; varying vec3 vVN; void main(){ vUv=uv; vVN=normali
 const FRAG=`
 precision highp float;
 uniform sampler2D elevA, elevB, rainA, rainB, motA;
+uniform sampler2D waterA, waterB;   // baked lake-depth field (sqrt-encoded metres), per keyframe
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
-uniform vec4 uLakes[32];    // visible lake lobes: (lon, lat, semiMajor-deg, semiMinor-deg) -- bounding region
-uniform float uLakeAz[32];  // long-axis azimuth (radians) per lobe
-uniform float uLakeW[32];   // water-surface elevation (m) per lobe -- terrain fills below it
-uniform float uLakeTerrainW[32]; // 0 = flat basin (use authored body), 1 = deep basin (carve to terrain)
-uniform int uLakeCount;
 varying vec2 vUv;
 varying vec3 vVN;         // view-space surface normal, for limb haze
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
+const float LAKE_DMAX=2600.0;   // must match bake_lakes.DMAX
 const float PI=3.14159265359;
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -929,8 +931,10 @@ void main(){
   // ice: a continuous ramp so sheets advance and retreat instead of popping
   float lobe=(fbm3(sdir*9.0)-0.5)*3.4;
   float packn=fbm3(sdir*16.0+31.7);
+  float landIce=0.0;
   if(z>=0.0){
-    col=mix(col, vec3(0.906,0.941,0.965), clamp((uIceT-(T+lobe))/4.5,0.0,1.0));
+    landIce=clamp((uIceT-(T+lobe))/4.5,0.0,1.0);
+    col=mix(col, vec3(0.906,0.941,0.965), landIce);
   }else{
     float sa=clamp((uSeaT-(T+lobe*2.6+(packn-0.5)*5.0))/3.5,0.0,1.0)*clamp((packn-0.30)/0.14,0.0,1.0);
     col=mix(col, vec3(0.812,0.878,0.910)*(0.94+0.10*packn), sa);
@@ -1019,66 +1023,36 @@ void main(){
     col*=0.98+0.04*r1;
   }
 
-  /* Freshwater lakes. A lake surface sits ABOVE sea level, so the shipped height
-     field treats it as land and it never shows as water on its own. Each lake
-     arrives as one or more bounding lobes (an oriented ellipse) plus a water-
-     surface elevation; WITHIN the lobe, wherever the reconstructed terrain lies
-     below that surface it is water -- so the lake takes the real shape of the
-     basin it occupies (Baikal fills its rift, the Great Lakes their lowlands)
-     instead of a stamped disc. Shaded shallow-to-deep with a low sun sheen, the
-     same cues as the ocean. Land only, never schematic. */
-  if(z>=0.0 && uSchem<0.5 && uLakeCount>0){
-    // shader lat is the NEGATED geographic latitude on both views (v=1 at the
-    // north pole), so undo it to match the lakes' true coordinates.
-    float latT = -lat;
-    float lakeM=0.0, lakeDepth=0.0;
-    // Coherent fractal warp, sampled at lake-edge scale (a lobe spans only a few
-    // degrees, so the frequency must be high enough to undulate WITHIN it -- low
-    // frequencies just slide the whole ellipse and leave it a disc). fbm3 is
-    // already 5-octave, so one call per axis gives multi-scale bays and headlands;
-    // the shared field keeps overlapping lobes (the five Great Lakes) seamless.
-    float wx = fbm3(sdir*58.0)-0.5;
-    float wy = fbm3(sdir*58.0+31.0)-0.5;
-    for(int i=0;i<32;i++){
-      if(i>=uLakeCount) break;
-      vec4 lk=uLakes[i];               // lon, lat, semiMajor, semiMinor (deg) -- bounds
-      float dlon=(mod(lonD-lk.x+540.0,360.0)-180.0)*cos(radians(latT));
-      float dlat=latT-lk.y;
-      float A=uLakeAz[i], sA=sin(A), cA=cos(A);
-      float along = dlon*sA+dlat*cA;
-      float across= dlon*cA-dlat*sA;
-      // warp the sample point in ellipse-normalized space, so bays/headlands scale
-      // with each lobe instead of being a fixed metric size
-      float nax=along/lk.z + wx*0.42, nac=across/lk.w + wy*0.42;
-      float er=length(vec2(nax, nac));
-      if(er<1.6){
-        // Authored organic body: the warped ellipse reads as a natural shoreline.
-        // A tight edge band keeps the shore crisp (a wide one looks like a stain).
-        float envelope = 1.0-smoothstep(0.90,1.02,er);
-        // Terrain carving, gated by how much real relief the DEM resolves here.
-        // Deep basins (rifts) get their true shape flooded to the water line;
-        // shallow basins the coarse DEM can't resolve fall back to the body.
-        float tw = uLakeTerrainW[i];
-        float wet = 1.0-smoothstep(uLakeW[i]-22.0, uLakeW[i]+30.0, z);
-        float m = envelope*mix(1.0, wet, tw);
-        // depth: distance-to-shore for the body, water column for the terrain
-        float envDepth = (1.0-smoothstep(0.0,1.0,er))*60.0;
-        float terDepth = max(0.0, uLakeW[i]-z);
-        float dpth = mix(envDepth, terDepth, tw);
-        lakeM=max(lakeM,m);
-        lakeDepth=max(lakeDepth, dpth*smoothstep(0.0,0.25,m));
-      }
-    }
-    if(lakeM>0.001){
-      float dp=clamp(lakeDepth/80.0,0.0,1.0);
-      vec3 shallow=vec3(0.184,0.404,0.435), deep=vec3(0.055,0.145,0.216);
-      vec3 lakeCol=mix(shallow, deep, smoothstep(0.05,0.7,dp));
+  /* Freshwater lakes, DERIVED from the terrain, not authored. bake_lakes.py
+     depression-fills the reconstructed elevation each keyframe, so water pools in
+     every closed basin up to the lip it would spill over; that DEPTH ships as the
+     sqrt-encoded _w field and is interpolated between keyframes here. So lakes sit
+     IN the real basins (Baikal in its rift, the endorheic lows of Tibet, the
+     Great Basin, Lake Eyre) with shorelines that follow the ground, and they grow,
+     shrink and migrate WITH the terrain instead of being stamped discs. Rendered
+     with the ocean's own water cues so they read as part of the landscape. */
+  if(z>=0.0 && uSchem<0.5){
+    float wenc=mix(texture2D(waterA,uv).r, texture2D(waterB,uv).r, mixf);
+    float lakeDepth=wenc*wenc*LAKE_DMAX;
+    // Break the waterline with the fine terrain grain so the shore wiggles with
+    // the ground rather than following a smooth texel boundary.
+    float shoreN=(fbm3(sdir*150.0+4.0)-0.5)*18.0;
+    float shore=smoothstep(2.0, 26.0, lakeDepth+shoreN);
+    shore*=1.0-landIce;                 // a frozen basin is ice, not open water
+    if(shore>0.002){
+      float dp=clamp(lakeDepth/230.0,0.0,1.0);
+      // freshwater: a touch greener/darker than the open sea, shaded shallow->deep
+      vec3 lsh=vec3(0.216,0.478,0.487), lmd=vec3(0.094,0.298,0.369), ldp=vec3(0.043,0.145,0.212);
+      vec3 lakeCol=mix(lsh, lmd, smoothstep(0.03,0.32,dp));
+      lakeCol=mix(lakeCol, ldp, smoothstep(0.32,0.9,dp));
+      // flat water surface: drop the land hillshade, add a low sun sheen
       vec3 Lsl=normalize(vec3(-0.55,0.55,0.63));
-      float q1=fbm3(sdir*560.0+vec3(uTime*0.04)), q2=fbm3(sdir*1200.0+9.0);
-      vec3 wnl=normalize(vec3((q1-q2)*0.45,(q2-q1)*0.45,1.0));
-      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),46.0);
-      lakeCol=lakeCol*(0.95+0.08*q1)+vec3(0.55,0.66,0.75)*spc*0.16;
-      col=mix(col, lakeCol, lakeM);
+      vec3 rd=sdir*540.0+vec3(uTime*0.045);
+      float q1=fbm3(rd), q2=fbm3(rd*2.6+9.0);
+      vec3 wnl=normalize(vec3((q1-q2)*0.5,(q2-q1)*0.5,1.0));
+      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),44.0);
+      lakeCol=lakeCol*(0.96+0.06*q1)+vec3(0.55,0.66,0.76)*spc*0.20*smoothstep(0.02,0.2,dp);
+      col=mix(col, lakeCol, shore);
     }
   }
 
@@ -1116,13 +1090,6 @@ void main(){
   gl_FragColor=vec4(col,1.0);
 }`;
 
-// Pre-allocated (lon,lat,radius) slots for the shader's fixed-size lake array;
-// filled each frame from the visible lake lobes. Must match uLakes[32] / uLakeAz[32].
-const lakeUniform=Array.from({length:32},()=>new THREE.Vector4());
-const lakeAz=new Float32Array(32);
-const lakeW=new Float32Array(32);
-const lakeTerrainW=new Float32Array(32);
-let lakeFrameKey=null, lakeCountCache=0;   // recompute lake water levels only when the keyframe changes
 function initGL(){
   const cv=$('#gl');
   renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
@@ -1132,11 +1099,10 @@ function initGL(){
   orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
   mat=new THREE.ShaderMaterial({uniforms:{
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
-    motA:{value:null},
+    motA:{value:null},waterA:{value:null},waterB:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
-    uLakes:{value:lakeUniform},uLakeAz:{value:lakeAz},uLakeW:{value:lakeW},uLakeTerrainW:{value:lakeTerrainW},uLakeCount:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG});
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
@@ -2304,10 +2270,14 @@ function bindTextures(){
   const f=curFrame();
   const ea=getTex('e',f.i), eb=getTex('e',f.j);
   const ra=getTex('r',f.i), rb=getTex('r',f.j);
+  const wa=getTex('w',f.i), wb=getTex('w',f.j);
   if(ea)mat.uniforms.elevA.value=ea;
   if(eb||ea)mat.uniforms.elevB.value=eb||ea;
   if(ra)mat.uniforms.rainA.value=ra;
   if(rb||ra)mat.uniforms.rainB.value=rb||ra;
+  // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
+  if(wa)mat.uniforms.waterA.value=wa;
+  if(wb||wa)mat.uniforms.waterB.value=wb||wa;
   // Linear in t: the shader interpolates the height field, so this drives the
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
@@ -2346,61 +2316,6 @@ function loop(now){
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
-  // Pack the freshwater lakes visible at this age. Each lobe is a bounding
-  // ellipse at the lake's plate-relocated position PLUS a water-surface
-  // elevation read from the reconstructed terrain, so the shader can flood the
-  // basin to its real shape. Only recomputed when the keyframe or age changes
-  // (it samples the elevation grid), not every animation frame.
-  {
-    const key=f.i+'@'+Math.round(state.age*4);
-    if(key!==lakeFrameKey){
-      lakeFrameKey=key;
-      const zf=elevField(f.i);
-      let ln=0;
-      for(const l of DATA.labels){
-        if(ln>=32)break;
-        if(l.t!=='lake'||!labelVisible(l))continue;
-        const sp=snapLabel(l,f.i); if(!sp)continue;
-        const shape=l.shape||[[0,0,(l.r||0.6),(l.r||0.6)*0.72,0]];
-        for(const lb of shape){
-          if(ln>=32)break;
-          const clon=sp[0]+lb[0], clat=sp[1]+lb[1];
-          const azr=lb[4]*Math.PI/180, ea=lb[2], eb=lb[3];
-          // Sample terrain over the authored footprint (slightly padded) to learn
-          // how much real relief the DEM resolves here. Deep, sharply-walled
-          // basins (rifts) carry hundreds of metres of relief; shallow glacial or
-          // flexural basins the coarse DEM can't resolve are nearly flat.
-          let W=0, terrainW=0;
-          if(zf){
-            const sA=Math.sin(azr), cA=Math.cos(azr), coslat=Math.max(0.2,Math.cos(clat*Math.PI/180)), es=[];
-            for(let u=-1;u<=1.001;u+=0.2)for(let v=-1;v<=1.001;v+=0.2){
-              if(u*u+v*v>1.1)continue;
-              const al=u*ea*1.4, ac=v*eb*1.4;
-              const plon=clon+(al*sA+ac*cA)/coslat, plat=clat+(al*cA-ac*sA);
-              const e=elevAtLL(zf,plon,plat); if(e>=0)es.push(e);
-            }
-            if(es.length>4){
-              es.sort((x,y)=>x-y);
-              const q=t=>es[Math.min(es.length-1,Math.floor(es.length*t))];
-              const relief=q(0.75)-q(0.25);
-              // 0 below ~120 m of relief, 1 above ~320 m -- the crossover between
-              // basins the DEM smooths away and basins it genuinely resolves.
-              terrainW=Math.max(0,Math.min(1,(relief-120)/200));
-              W=q(0.45)+15;
-            }
-          }
-          // Give terrain-carved lakes room for the true basin to spill past the
-          // rough authored outline; keep flat, body-only lakes at authored size.
-          const enlarge=1.05+0.45*terrainW;
-          lakeUniform[ln].set(clon,clat,ea*enlarge,eb*enlarge);
-          lakeAz[ln]=azr; lakeW[ln]=W; lakeTerrainW[ln]=terrainW;
-          ln++;
-        }
-      }
-      lakeCountCache=ln;
-    }
-    mat.uniforms.uLakeCount.value=lakeCountCache;
-  }
   // overlays visibility & fade
   const fade=presentFade();
   // Hotspots and motion vectors are era-specific, so rebuild them whenever the
