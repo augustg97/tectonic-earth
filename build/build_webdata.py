@@ -310,9 +310,32 @@ def build_labels():
     out = features.labels()
     desc = features.descriptions()
     ph = features.phases()
+    # Carry each label along its plate's REAL rotation (Merdith 2021), the same
+    # track craters and LIPs use, so a name follows its feature across the whole
+    # timeline instead of being yanked to the nearest matching terrain by
+    # snapLabel -- which put the Western Interior Seaway and Gulf of Mexico out
+    # in the Pacific at 98 Ma. Cap at 540 Ma: the deep-Precambrian frame is
+    # authored, not Merdith-derived, and Scotese/Merdith only agree within the
+    # Phanerozoic. Labels authored entirely in the Precambrian era-frame
+    # (>=540 Ma, e.g. Timanian Belt) are left to snapLabel with their paleo coord.
+    rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
+    tracked = 0
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
+        # Not oceans: an ocean basin is a body of water, not a patch of crust, so
+        # carrying a present-day ocean point back on its plate follows the wrong
+        # thing (Tethys would ride the Indian plate south, away from the Tethyan
+        # seaway). Broad ocean names keep snapLabel. Seas (epicontinental, ON
+        # continental crust) DO ride the plate correctly and are the ones that
+        # were mislaid — that is the fix.
+        if rec and l["t"] != "ocean" and min(l["a0"], l["a1"]) < 540:
+            span = min(540, max(l["a0"], l["a1"]))
+            if span >= 5:
+                tr, _ = rec.track(l["lon"], l["lat"], span)
+                if len(tr) > 1:
+                    l["tr"] = tr
+                    tracked += 1
         # lakes carry a rendered radius (deg) plus real morphology (oriented,
         # multi-lobe ellipses) so the app can draw them as their actual shapes
         if l["t"] == "lake":
@@ -333,7 +356,7 @@ def build_labels():
     json.dump(out, open(f"{WEB}/labels.json", "w"), separators=(",", ":"))
     have = sum(1 for l in out if "d" in l)
     phased = sum(1 for l in out if "ph" in l)
-    print(f"labels: {len(out)} ({have} with descriptions, {phased} phased)")
+    print(f"labels: {len(out)} ({have} with descriptions, {phased} phased, {tracked} plate-tracked)")
 
 
 # ---------- browsable intervals + supercontinents ----------

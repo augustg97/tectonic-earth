@@ -1364,19 +1364,23 @@ function elevAtLL(z,lon,lat){
 }
 const SNAP=new Map();
 function snapLabel(l,fi){
+  // A TRACKED label rides its plate along the real Merdith rotation (`tr`), so
+  // its position is recomputed from the age every frame (smooth, feature-locked)
+  // and only lightly refined onto matching terrain nearby — never flung across
+  // the globe. An UNTRACKED label (deep-Precambrian, authored in its era's frame)
+  // keeps the original wide terrain search, cached per keyframe.
+  const tracked=!!l.tr;
   const key=l.n+'@'+fi;
-  if(SNAP.has(key))return SNAP.get(key);
+  if(!tracked && SNAP.has(key))return SNAP.get(key);
   const z=elevField(fi);
-  let out=[l.lon,l.lat];
+  const base = tracked ? trackPos(l.tr, l.lon, l.lat) : [l.lon, l.lat];
+  let out=base;
   if(z){
     // Only seas and oceans belong on water; every other feature type — lakes,
     // rifts, deserts, forests, ice sheets, basins, plateaus, islands/terranes,
     // regions, orogens, continents — is a LAND feature and must snap to land.
-    // (The old test only spared continent/orogen, so interior land labels like
-    // Lake Baikal were flung to the nearest ocean, thousands of km off.)
     const wantLand=!(l.t==='sea'||l.t==='ocean');
-    // Require a substantial patch, not a single stray pixel: a continent name
-    // parked on a lone island reads as badly as one parked in open ocean.
+    // Require a substantial patch, not a single stray pixel.
     const solid=(lo,la)=>{
       let hit=0,n=0;
       for(let dy=-4;dy<=4;dy+=4)for(let dx=-6;dx<=6;dx+=6){
@@ -1385,29 +1389,26 @@ function snapLabel(l,fi){
       }
       return hit/n>=0.65;
     };
-    if(!solid(out[0],out[1])){
-      // Authored positions are approximations in the reconstruction's frame and
-      // the world moves under them, so search widely before giving up.
+    if(!solid(base[0],base[1])){
+      // Tracked: the plate track already puts the name in the right place, so
+      // only nudge onto nearby matching terrain (<=24°). Untracked: search wide
+      // (to 90°), since a static coord can sit far from where the world moved it.
+      const maxrad=tracked?24:90, astep=tracked?15:10;
       let best=null;
-      // Search out to 90 deg: long-lived features drift far from their authored
-      // coordinate in deep time, and the nearest matching terrain (usually the
-      // same landmass, relocated by the reconstruction) can sit just past the old
-      // 75 deg cap — which used to hide the label entirely (Antler, Timanide).
-      for(let rad=4;rad<=90&&!best;rad+=4){
-        for(let a=0;a<360;a+=10){
-          const dlon=rad*Math.cos(a*DEG)/Math.max(0.25,Math.cos(l.lat*DEG));
-          const lo=((l.lon+dlon+540)%360)-180;
-          const la=Math.max(-86,Math.min(86,l.lat+rad*Math.sin(a*DEG)));
+      for(let rad=4;rad<=maxrad&&!best;rad+=4){
+        for(let a=0;a<360;a+=astep){
+          const dlon=rad*Math.cos(a*DEG)/Math.max(0.25,Math.cos(base[1]*DEG));
+          const lo=((base[0]+dlon+540)%360)-180;
+          const la=Math.max(-86,Math.min(86,base[1]+rad*Math.sin(a*DEG)));
           if(solid(lo,la)){best=[lo,la];break;}
         }
       }
-      // Nothing suitable anywhere: better to drop the label than to float a
-      // continent in open ocean.
-      out=best||null;
+      // Tracked keeps its plate position even if terrain disagrees (better than
+      // dropping); untracked drops rather than float a name in open ocean.
+      out = best || (tracked ? base : null);
     }
   }
-  SNAP.set(key,out);
-  if(SNAP.size>4000)SNAP.clear();
+  if(!tracked){ SNAP.set(key,out); if(SNAP.size>4000)SNAP.clear(); }
   return out;
 }
 function hotspotsNow(){
@@ -1420,9 +1421,10 @@ function hotspotsNow(){
    continuously instead of freezing at one spot. Plumes have no track: they are
    mantle-anchored and stay put while the crust slides past. h.lon/h.lat is the
    present-day position and the fallback. */
-function featurePos(h){
-  const tr=h.tr;
-  if(!tr||tr.length<2)return [h.lon,h.lat];
+// Interpolate a Merdith track [[age,lon,lat],...] at the current age. Shared by
+// craters/LIPs (featurePos) and now labels (snapLabel), so both ride their plate.
+function trackPos(tr,lon,lat){
+  if(!tr||tr.length<2)return [lon,lat];
   const a=Math.max(0,state.age);
   if(a<=tr[0][0])return [tr[0][1],tr[0][2]];
   const last=tr[tr.length-1];
@@ -1436,8 +1438,9 @@ function featurePos(h){
       return [lo, tr[i][2]+(tr[i+1][2]-tr[i][2])*t];
     }
   }
-  return [h.lon,h.lat];
+  return [lon,lat];
 }
+function featurePos(h){ return trackPos(h.tr, h.lon, h.lat); }
 function buildHotspots(){
   overlay.hotspots.clear();
   const geo=new THREE.SphereGeometry(.008,8,8);
