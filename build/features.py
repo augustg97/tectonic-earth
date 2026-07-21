@@ -486,11 +486,13 @@ LAKE_SHAPE = {
     "Lake Titicaca":          [(0, 0, 190, 80, 320)],
     "Lake Vostok":            [(0, 0, 250, 55, 30)],
     "East African Rift soda lakes": [(0, 0, 650, 90, 358)],
-    "Laurentian Great Lakes": [(-3.5, 2.2, 560, 260, 100),   # Superior
-                               (-3.0, -1.4, 490, 190, 2),    # Michigan
-                               (1.8, -0.7, 330, 245, 145),   # Huron
-                               (2.9, -3.3, 388, 92, 70),     # Erie
-                               (6.2, -1.8, 311, 85, 78)],    # Ontario
+    "Laurentian Great Lakes": [(-3.6, 2.3, 600, 250, 104),   # Superior (clearly largest)
+                               (-3.1, -1.5, 500, 175, 4),    # Michigan (N-S body)
+                               (-4.7, 0.1, 200, 52, 36),     # Green Bay (Michigan's NW arm)
+                               (1.9, -0.5, 300, 205, 150),   # Huron (main body)
+                               (3.5, 0.5, 205, 100, 140),    # Georgian Bay (Huron's NE lobe)
+                               (2.9, -3.3, 400, 90, 71),     # Erie (elongated ENE-WSW)
+                               (6.3, -1.7, 320, 86, 80)],    # Ontario (E-W)
     "Songliao Palaeolake":    [(0, 0, 820, 380, 20)],
     "Jehol Lakes":            [(-0.9, 0.6, 130, 60, 40),
                                (0.6, -0.4, 110, 55, 25),
