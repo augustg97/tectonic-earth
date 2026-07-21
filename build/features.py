@@ -225,7 +225,7 @@ LABELS = [
     ("orogen", "Transantarctic Mts", 160, -80,  480, 560),
     ("orogen", "Verkhoyansk Belt",   130,  67,  118, 162),
     ("orogen", "Cadomian Belt",       -2,  48,  538, 650),
-    ("orogen", "Timanian Belt",       55,  66,  548, 620),
+    ("orogen", "Timanian Belt",       -8, -14,  548, 620),
     ("orogen", "Cimmerian Belt",      55,  35,  190, 250),
     ("orogen", "Innuitian Belt",     -85,  78,  340, 385),
     ("continent", "Amazonia",        -55, -10,  545, 900),
@@ -395,6 +395,50 @@ LABELS = [
     ("lake", "Lake Agassiz", -95.0, 50.0, 0.0082, 0.015),
     ("lake", "Laurentian Great Lakes", -84.0, 45.5, 0.0, 0.014),
     ("lake", "Lake Mega-Chad", 15.0, 13.0, 0.005, 0.011),
+    # ---------- timeline audit additions: key features that were missing.
+    # Present-day coordinates; the app relocates drifting ones. Large igneous
+    # provinces (Deccan, Siberian Traps, Ontong Java, Shatsky, Manihiki,
+    # Caribbean, Columbia River, Parana-Etendeka, CAMP, Kerguelen) are NOT here
+    # -- they already live in the volcanism / hotspot layer. ----------
+    # -- Alpine-Himalayan and other orogens --
+    ("orogen", "Zagros Mts", 50, 32, 0, 35),
+    ("orogen", "Greater Caucasus", 44, 43, 0, 30),
+    ("orogen", "Pyrenees", 1, 43, 20, 83),
+    ("orogen", "Carpathians", 24, 48, 0, 34),
+    ("orogen", "Apennines", 13, 43, 0, 23),
+    ("orogen", "Sonoma Orogeny", -117, 41, 240, 260),
+    ("orogen", "Lachlan Orogen", 148, -35, 340, 485),
+    # -- rifts / extensional provinces --
+    ("rift", "Rio Grande Rift", -106, 34, 0, 36),
+    ("rift", "Basin and Range", -117, 39, 0, 36),
+    ("rift", "Gulf of California", -111, 27, 0, 12),
+    ("rift", "West Antarctic Rift", 180, -80, 0, 105),
+    # -- seas / marginal basins --
+    ("sea", "Gulf of Mexico", -90, 25, 0, 170),
+    ("sea", "West Siberian Sea", 75, 62, 30, 100),
+    ("sea", "Tasman Sea", 160, -38, 0, 85),
+    ("sea", "South China Sea", 115, 14, 0, 33),
+    # -- named mid-ocean ridges (linear features, marked at a mid-point) --
+    ("ocean", "Mid-Atlantic Ridge", -30, 0, 0, 170),
+    ("ocean", "East Pacific Rise", -108, -15, 0, 30),
+    # -- deserts --
+    ("desert", "Atacama Desert", -69, -24, 0, 15),
+    ("desert", "Arabian Desert", 50, 20, 0, 23),
+    ("desert", "Kalahari Desert", 22, -23, 0, 30),
+    ("desert", "Australian Desert", 133, -26, 0, 15),
+    ("desert", "Patagonian Desert", -69, -46, 0, 15),
+    # -- ice sheets (Pleistocene pairs of the Laurentide) --
+    ("ice", "Cordilleran Ice Sheet", -125, 54, 0, 2.6),
+    ("ice", "Greenland Ice Sheet", -42, 72, 0, 3.5),
+    ("ice", "Patagonian Ice Sheet", -73, -48, 0, 2.6),
+    # -- plateaus / uplifts --
+    ("plateau", "Deccan Plateau", 76, 18, 0, 60),
+    ("plateau", "Ethiopian Highlands", 39, 9, 0, 31),
+    ("plateau", "East African Plateau", 35, -2, 0, 25),
+    # -- basins / regions --
+    ("basin", "Williston Basin", -103, 48, 0, 400),
+    ("region", "Sahul", 140, -12, 0.01, 2.6),
+    ("region", "Doggerland", 3, 55, 0.008, 0.02),
 ]
 
 

@@ -1298,7 +1298,11 @@ function snapLabel(l,fi){
       // Authored positions are approximations in the reconstruction's frame and
       // the world moves under them, so search widely before giving up.
       let best=null;
-      for(let rad=4;rad<=75&&!best;rad+=4){
+      // Search out to 90 deg: long-lived features drift far from their authored
+      // coordinate in deep time, and the nearest matching terrain (usually the
+      // same landmass, relocated by the reconstruction) can sit just past the old
+      // 75 deg cap — which used to hide the label entirely (Antler, Timanide).
+      for(let rad=4;rad<=90&&!best;rad+=4){
         for(let a=0;a<360;a+=10){
           const dlon=rad*Math.cos(a*DEG)/Math.max(0.25,Math.cos(l.lat*DEG));
           const lo=((l.lon+dlon+540)%360)-180;
