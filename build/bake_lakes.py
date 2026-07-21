@@ -66,14 +66,10 @@ DEEP_LO, DEEP_HI, DEEP_MAX = 90.0, 320.0, 0.60
 # and let the SAME water balance decide whether and how much it holds. Not an
 # authored lake: a hint that a depression exists, filled by the same physics as
 # every other basin. Each lobe: (dlon, dlat, semiMajorDeg, semiMinorDeg, azDeg).
-SEED_LAKES = [
-    # The Great Lakes as five carved lobes at their real positions/orientations;
-    # they are a Pleistocene feature, so only the last few Myr of frames.
-    dict(lon=-84.0, lat=45.6, carve=150.0, max_age=3.0, lobes=[
-        (-3.6, 2.3, 2.70, 1.13, 104), (-3.1, -1.5, 2.25, 0.79, 4),
-        (1.9, -0.5, 1.35, 0.92, 150), (2.9, -3.3, 1.80, 0.41, 71),
-        (6.3, -1.7, 1.44, 0.39, 80)]),
-]
+# (Empty: the present frame now uses REAL lake outlines via bake_present_lakes.py,
+# so the Great Lakes no longer need seeding here. Other notable DEM-missed lakes
+# could be listed for paleo/future frames if ever needed.)
+SEED_LAKES = []
 
 
 def enc_depth(d):
