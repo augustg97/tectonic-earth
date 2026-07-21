@@ -1278,7 +1278,12 @@ function snapLabel(l,fi){
   const z=elevField(fi);
   let out=[l.lon,l.lat];
   if(z){
-    const wantLand=(l.t==='continent'||l.t==='orogen');
+    // Only seas and oceans belong on water; every other feature type — lakes,
+    // rifts, deserts, forests, ice sheets, basins, plateaus, islands/terranes,
+    // regions, orogens, continents — is a LAND feature and must snap to land.
+    // (The old test only spared continent/orogen, so interior land labels like
+    // Lake Baikal were flung to the nearest ocean, thousands of km off.)
+    const wantLand=!(l.t==='sea'||l.t==='ocean');
     // Require a substantial patch, not a single stray pixel: a continent name
     // parked on a lone island reads as badly as one parked in open ocean.
     const solid=(lo,la)=>{
