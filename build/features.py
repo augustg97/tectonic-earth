@@ -529,6 +529,88 @@ def lake_shape(name):
 # ------------------------------------------------------------ descriptions --
 # Narrative context for the info panel. The panel also reports live measured
 # motion and elevation, so these supply the story the numbers cannot.
+# A paleocontinent is not a point. Gondwana, Laurentia, Baltica and the rest were
+# authored here as single (lon, lat) coordinates in nobody's particular frame,
+# and the app then hunted outward from them for any matching terrain -- up to 90
+# degrees. That search is unstable by construction: it re-runs against whichever
+# keyframe field the age happens to sample, so a name hops between landmasses as
+# the age crosses a keyframe. Measured before this table existed: the Gondwana
+# label sat on the EQUATOR from 430 to 420 Ma and then jumped 54 degrees south;
+# Siberia moved 72 then 101 degrees between Cambrian frames; and Laurentia --
+# whose coordinate (-60, 5) is in the Amazon basin -- was tracked on SOUTH
+# AMERICAN crust and drawn near Antarctica, south of Gondwana, through the whole
+# early Palaeozoic.
+#
+# So define each one the way a geologist would locate it: by where the crust of
+# its MODERN FRAGMENTS actually sat at that age. build_webdata.build_labels
+# back-advects every anchor below along the Merdith rotation model (with the
+# PaleoDEM frame correction applied) and takes the spherical centroid, giving a
+# smooth per-age track instead of a search.
+#
+#   modern  - present-day points on the craton, which must be LAND today so the
+#             rotation model can assign them a plate. Pick craton interior, not
+#             accreted margin: the Cordillera and the Appalachians were not part
+#             of Laurentia in the Cambrian.
+#   cratons - the equivalents in build_synthetic.PRE_KEYS, used past 540 Ma where
+#             the map is the authored Precambrian composite rather than a real
+#             DEM, blended across the same 540-600 handoff the terrain uses.
+# Assignment order, biggest first. Each name claims a landmass and no two share
+# one, so whoever goes first gets the pick -- a supercontinent must claim the
+# supercontinent before a craton-sized name can take it. Pannotia and Gondwana
+# were last in this list and ended up on leftovers, in open water.
+COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
+                   "Laurussia (Euramerica)", "Laurentia", "Siberia",
+                   "Baltica", "Avalonia"]
+
+COMPOSITE_LABELS = {
+    "Gondwana": {
+        "modern": [(-60, -5), (-55, -20), (-64, -33), (-45, -12),      # S America
+                   (15, 5), (25, -20), (-6, 12), (33, 2), (28, -28),   # Africa
+                   (45, 22), (47, -20),                                # Arabia, Madagascar
+                   (78, 22), (133, -25), (120, -28),                   # India, Australia
+                   (25, -75), (100, -75), (-60, -80)],                 # Antarctica
+        "cratons": ["Amazonia", "WestAfrica", "Congo", "Kalahari", "Arabia",
+                    "India", "Australia", "EAntarctica"],
+    },
+    "Gondwana (assembling)": {
+        "modern": [(-60, -5), (-55, -20), (15, 5), (25, -20), (33, 2),
+                   (78, 22), (133, -25), (25, -75), (100, -75)],
+        "cratons": ["Amazonia", "WestAfrica", "Congo", "Kalahari", "Arabia",
+                    "India", "Australia", "EAntarctica"],
+    },
+    "Laurentia": {
+        "modern": [(-95, 55), (-105, 63), (-85, 50), (-75, 58), (-110, 55),
+                   (-42, 72), (-50, 68)],
+        "cratons": ["Laurentia"],
+    },
+    "Baltica": {
+        "modern": [(16, 62), (28, 60), (38, 55), (24, 57), (32, 65)],
+        "cratons": ["Baltica"],
+    },
+    "Siberia": {
+        "modern": [(105, 64), (115, 60), (95, 67), (125, 65), (110, 70)],
+        "cratons": ["Siberia"],
+    },
+    "Avalonia": {
+        # rifted off Gondwana in the Ordovician; its fragments are now split
+        # between Britain, Belgium and maritime Canada
+        "modern": [(-2, 52), (-3, 51), (4, 51), (-63, 45), (-53, 47)],
+    },
+    "Laurussia (Euramerica)": {
+        # Laurentia + Baltica welded by the Caledonian collision, plus Avalonia
+        "modern": [(-95, 55), (-85, 50), (-75, 58), (-42, 72),
+                   (16, 62), (28, 60), (24, 57), (-2, 52), (-56, 47)],
+        "cratons": ["Laurentia", "Baltica"],
+    },
+    "Pannotia": {
+        # the latest-Precambrian assembly: essentially everything at once
+        "modern": [],
+        "cratons": ["Laurentia", "Baltica", "Siberia", "Amazonia", "WestAfrica",
+                    "Congo", "Kalahari", "India", "Australia", "EAntarctica"],
+    },
+}
+
+
 DESCRIPTIONS = {
 
  "Mozambique Ocean": "The ocean between eastern and western Gondwana, closing in stages between about 600 and 550 Ma. Its closure welded the two halves together along the East African Orogeny, one of the great mountain-building events of the Precambrian.",

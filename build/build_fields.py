@@ -86,9 +86,20 @@ GROUP_TARGET = {          # where each group's centroid heads by +250 Myr, and i
     "ANTARCTICA":    (25, -42, 26),
     "ARABIA":        (33, 18, 8),
     "PACIFIC":       (-150, 5, 0),
+    # The Somali plate has to be its own group or the East African Rift cannot
+    # open. It was lumped in with AFRICA, so it rotated identically with Africa
+    # and no gap ever appeared -- while the labels promised an Afar Seaway from
+    # +3 Myr, Somalia as an island from +15, and an East African Ocean from +25.
+    # The map simply never showed the split the text described.
+    # This target carries it east-northeast into the Indian Ocean, opening a
+    # Red Sea-scale strait by +25 Myr and a true ocean basin by +60-130, and
+    # eventually docking it against the India/Australia mass as Pangaea Proxima
+    # assembles -- which is the "Madagascar-scale fragment drifting into the
+    # Indian Ocean" the label describes.
+    "SOMALIA":       (78, 4, 10),
 }
 PLATE_GROUP = {
-    "Africa": "AFRICA", "Somalia": "AFRICA", "Lwandle": "AFRICA",
+    "Africa": "AFRICA", "Somalia": "SOMALIA", "Lwandle": "SOMALIA",
     "Eurasia": "EURASIA", "Amur": "EURASIA", "Okhotsk": "EURASIA",
     "Aegean Sea": "EURASIA", "Anatolia": "EURASIA", "Yangtze": "EURASIA",
     "Okinawa": "EURASIA", "Sunda": "EURASIA", "Burma": "EURASIA",
@@ -240,6 +251,57 @@ def future_grid(frac, gid, Zsrc, h, w):
     return out
 
 
+
+def handoff_blend(A, B, wq):
+    """Cross-fade the real 540 Ma DEM into the authored Precambrian composite.
+
+    Blending elevations in METRES destroys land. Ocean floor is about -4000 m
+    and a continental interior only a few hundred, so mixing in even 8 percent
+    of "ocean" drowns most land: measured, the world went from 18.6 percent land
+    at 540 Ma to 7.5 percent one keyframe later and bottomed out at 4.3 percent
+    mid-handoff, before a whole southern continent reappeared out of it. That is
+    the "continents flood then a new continent arises" the map showed between
+    595 and 545 Ma, and it is an artefact of the cross-fade, not geology.
+
+    Two corrections. Blend in the SIGNED-SQRT domain the shader already
+    interpolates keyframes in, which compresses the abyss so a coastline
+    survives a partial mix. Then re-level the result so its land fraction is the
+    interpolation of the two endpoints' land fractions, instead of collapsing to
+    wherever the two happen to agree. The handoff is still a morph between two
+    reconstructions -- it cannot be anything else -- but land area now moves
+    smoothly from one world to the other.
+    """
+    if wq <= 0:
+        return A
+    if wq >= 1:
+        return B
+
+    def enc(z):
+        return 0.5 + 0.5 * np.sign(z) * np.sqrt(np.clip(np.abs(z) / 8000.0, 0, 1))
+
+    def dec(e):
+        s = 2 * e - 1
+        return np.sign(s) * s * s * 8000.0
+
+    h, w = A.shape
+    wlat = np.cos(np.radians(90 - (np.arange(h) + 0.5) / h * 180))[:, None]
+    denom = wlat.sum() * w
+
+    def landfrac(z):
+        return float(((z > 0) * wlat).sum() / denom)
+
+    out = dec(enc(A) * (1 - wq) + enc(B) * wq)
+    target = landfrac(A) * (1 - wq) + landfrac(B) * wq
+    lo, hi = -3000.0, 3000.0
+    for _ in range(40):                      # bisect the sea-level shim
+        mid = (lo + hi) / 2
+        if landfrac(out + mid) < target:
+            lo = mid
+        else:
+            hi = mid
+    return out + (lo + hi) / 2
+
+
 # ------------------------------------------------------------------ main ----
 def main():
     idx = index_dems()
@@ -294,8 +356,8 @@ def main():
         lo = PRE.precambrian_grid(age, tw=CLIM_W, th=CLIM_H, flood=140.0)
         # ramp from the real 540 Ma reconstruction into the authored one
         wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
-        hi = A_hi * (1 - wq) + hi * wq
-        lo = A_lo * (1 - wq) + lo * wq
+        hi = handoff_blend(A_hi, hi, wq)
+        lo = handoff_blend(A_lo, lo, wq)
         coarse[age] = MO.coarsen(hi)
         m, n = export(age, hi, lo[::-1], "pre")
         manifest.append(m); total += n; npre += 1

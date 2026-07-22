@@ -12,7 +12,8 @@ is what makes this safe: the `_m` motion fields derived from it stay valid.
 import json, os, sys
 import numpy as np
 
-from build_fields import export, ELEV_H, ELEV_W, CLIM_H, CLIM_W, OUT
+from build_fields import (export, handoff_blend,
+                          ELEV_H, ELEV_W, CLIM_H, CLIM_W, OUT)
 from build_frames import index_dems, read_dem
 from render import resample_dem
 import precambrian as PRE
@@ -32,7 +33,9 @@ def _pre_grids(age, a_hi, a_lo):
     hi = PRE.precambrian_grid(age, tw=ELEV_W, th=ELEV_H, flood=140.0)
     lo = PRE.precambrian_grid(age, tw=CLIM_W, th=CLIM_H, flood=140.0)
     wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
-    return a_hi * (1 - wq) + hi * wq, a_lo * (1 - wq) + lo * wq
+    # the SAME land-preserving handoff build_fields uses; a straight blend of
+    # metres here would quietly put the drowned-continent artefact back
+    return handoff_blend(a_hi, hi, wq), handoff_blend(a_lo, lo, wq)
 
 
 def main(ages):

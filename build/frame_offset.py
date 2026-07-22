@@ -68,6 +68,42 @@ def score(mask, lon, lat, nx=720, ny=360):
     return mask[y, x].mean()
 
 
+def smooth_offsets(raw, med_win=7, mean_win=5):
+    """Smooth the per-age fit.
+
+    The difference between two reconstructions' absolute frames is a property of
+    the models, not of any single keyframe: it has to vary smoothly with age. The
+    per-age fit does not, because the objective is shallow -- especially in the
+    Palaeozoic, where correcting the shift only moves the on-land score a few
+    points, so noise picks the winner. Raw, this series stepped 41 degrees
+    between 360 and 365 Ma, which yanked every tracked feature sideways and then
+    back: the Laurussia label latched onto an islet 40 degrees from its
+    continent and stayed there for 50 Myr.
+
+    Rolling median first (kills the outliers), then a short rolling mean (takes
+    the corners off), then re-anchor the present at zero, where the two models
+    agree by construction.
+    """
+    ages = sorted(int(k) for k in raw)
+    v = [float(raw[str(a)]) for a in ages]
+    n = len(v)
+
+    def roll(vals, win, fn):
+        h = win // 2
+        return [fn(vals[max(0, i - h):min(n, i + h + 1)]) for i in range(n)]
+
+    def median(xs):
+        xs = sorted(xs)
+        m = len(xs) // 2
+        return xs[m] if len(xs) % 2 else 0.5 * (xs[m - 1] + xs[m])
+
+    v = roll(v, med_win, median)
+    v = roll(v, mean_win, lambda xs: sum(xs) / len(xs))
+    base = v[ages.index(0)] if 0 in ages else 0.0
+    return {str(a): round(v[i] - base * (1.0 if a == 0 else 0.0), 1)
+            for i, a in enumerate(ages)}
+
+
 def main():
     import paleo_tracks
     if not paleo_tracks.available():
@@ -112,8 +148,9 @@ def main():
         print(f"  {age:4d} Ma  shift {best:+6.1f} deg   on-land {base*100:4.0f}% "
               f"-> {best_s*100:4.0f}%")
 
+    out = smooth_offsets(out)
     json.dump(out, open(OUT, "w"), indent=0, sort_keys=True)
-    print(f"\nwrote {OUT} ({len(out)} ages)")
+    print(f"\nwrote {OUT} ({len(out)} ages, smoothed)")
 
 
 if __name__ == "__main__":

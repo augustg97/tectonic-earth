@@ -7,7 +7,8 @@
   - hotspots.json : major volcanic hotspots
   - labels.json : era-correct continent / ocean / feature labels (paleo-coords)
 """
-import json, re, glob, os
+import json
+import math, re, glob, os
 import numpy as np
 from PIL import Image
 from climate import climate_at
@@ -334,6 +335,263 @@ def _elev_lookup(dem, lon, lat):
     return (1 if sgn >= 0 else -1) * sgn * sgn * 8000.0
 
 
+
+def _unit(lon, lat):
+    import math
+    la, lo = math.radians(lat), math.radians(lon)
+    return (math.cos(la) * math.cos(lo), math.cos(la) * math.sin(lo), math.sin(la))
+
+
+def _centroid(points):
+    """Spherical centroid. A mean of longitudes tears apart across 180."""
+    import math
+    if not points:
+        return None
+    x = y = z = 0.0
+    for lon, lat in points:
+        a, b, c = _unit(lon, lat)
+        x += a; y += b; z += c
+    n = math.sqrt(x * x + y * y + z * z)
+    if n < 1e-9:
+        return None
+    x, y, z = x / n, y / n, z / n
+    return (math.degrees(math.atan2(y, x)), math.degrees(math.asin(max(-1, min(1, z)))))
+
+
+def composite_track(spec, a_old, rec, step=5):
+    """Per-age position of a paleocontinent, from where its fragments were.
+
+    Modern anchors ride the Merdith rotations (frame-corrected to the PaleoDEM).
+    Past 540 Ma the map is the authored Precambrian composite instead of a real
+    DEM, so the position comes from that composite's own craton placement, and
+    the two are blended across exactly the 540-600 handoff the terrain uses --
+    otherwise the name would drift off the landmass while the landmass morphs.
+    """
+    modern = spec.get("modern") or []
+    cratons = spec.get("cratons") or []
+    tracks = []
+    for lon, lat in modern:
+        try:
+            tr, _ = rec.track(float(lon), float(lat), min(540, max(a_old, 5)), step=step)
+        except Exception:
+            continue
+        if len(tr) > 1:
+            tracks.append({int(round(a)): (x, y) for a, x, y in tr})
+    pre = None
+    if cratons:
+        try:
+            import build_synthetic as BS
+            pre = BS.pre_placement
+        except Exception:
+            pre = None
+    out = []
+    for age in range(0, int(math.ceil(a_old)) + step, step):
+        m = None
+        if tracks:
+            pts = [t[min(age, 540)] for t in tracks if min(age, 540) in t]
+            m = _centroid(pts)
+        c = None
+        if pre is not None and age > 540:
+            place = {n: (lo, la) for n, lo, la, _sp in pre(age)}
+            pts = [place[n] for n in cratons if n in place]
+            c = _centroid(pts)
+        if m is None and c is None:
+            continue
+        wq = max(0.0, min(1.0, (age - 540.0) / 60.0)) if c is not None else 0.0
+        if m is None:
+            lon, lat = c
+        elif c is None or wq <= 0:
+            lon, lat = m
+        else:
+            # interpolate on the sphere, shortest way round
+            d = ((c[0] - m[0] + 180.0) % 360.0) - 180.0
+            lon = m[0] + d * wq
+            lat = m[1] + (c[1] - m[1]) * wq
+        out.append([age, round(((lon + 180.0) % 360.0) - 180.0, 1), round(lat, 1)])
+    return out
+
+
+
+_LANDMASS_CACHE = {}
+
+
+def landmasses(age, nx=720, ny=360, min_area=40.0):
+    """Connected landmasses in the shipped DEM at this age, with centroids.
+
+    Longitude wraps, so a continent straddling 180 is ONE landmass and not two.
+    Areas are cos(lat)-weighted; centroids are spherical.
+    """
+    key = int(round(age / 5.0)) * 5
+    if key in _LANDMASS_CACHE:
+        return _LANDMASS_CACHE[key]
+    import numpy as np
+    from PIL import Image
+    try:
+        from scipy import ndimage
+    except Exception as e:
+        # Silently returning [] here disables continent snapping for the WHOLE
+        # build and the only symptom is labels quietly drifting back into the
+        # sea. Say so once, loudly.
+        if not _LANDMASS_CACHE.get("_warned"):
+            print(f"  WARNING: scipy unavailable ({e}) -- paleocontinent labels "
+                  f"will NOT be snapped to landmasses. Run with the venv python.")
+            _LANDMASS_CACHE["_warned"] = True
+        _LANDMASS_CACHE[key] = []
+        return []
+    name = (f"pre_{key:04d}_e.webp" if key > 540 else
+            (f"fut_{abs(key):04d}_e.webp" if key < 0 else f"phan_{key:04d}_e.webp"))
+    path = os.path.join(WEB, "fields", name)
+    if not os.path.exists(path):
+        _LANDMASS_CACHE[key] = []
+        return []
+    a = np.asarray(Image.open(path).convert("L").resize((nx, ny)), np.float32) / 255.0
+    sg = 2 * a - 1
+    z = np.sign(sg) * sg * sg * 8000.0
+    land = z > 0
+    lab, _ = ndimage.label(land)
+    for y in range(ny):                      # weld components across 180
+        if land[y, 0] and land[y, nx - 1]:
+            u, v = lab[y, 0], lab[y, nx - 1]
+            if u != v:
+                lab[lab == v] = u
+    wlat = np.cos(np.radians(90 - (np.arange(ny) + 0.5) / ny * 180))[:, None]
+    out = []
+    for i in np.unique(lab):
+        if i == 0:
+            continue
+        m = lab == i
+        area = float((m * wlat).sum())
+        if area < min_area:
+            continue
+        ys, xs = np.nonzero(m)
+        lon = (xs + 0.5) / nx * 360 - 180
+        lat = 90 - (ys + 0.5) / ny * 180
+        cl, sl = np.cos(np.radians(lat)), np.sin(np.radians(lat))
+        vx = (cl * np.cos(np.radians(lon))).mean()
+        vy = (cl * np.sin(np.radians(lon))).mean()
+        vz = sl.mean()
+        n = math.sqrt(vx * vx + vy * vy + vz * vz)
+        if n < 1e-9:
+            continue
+        clon = math.degrees(math.atan2(vy / n, vx / n))
+        clat = math.degrees(math.asin(max(-1, min(1, vz / n))))
+        # keep a sample of the landmass itself. A name should sit on the part of
+        # the continent its own crust occupies, not at the middle of the whole
+        # thing: while Gondwana is welded into Pangaea, its centroid is up in
+        # Laurasia, and the label wandered 60 degrees as fragments came and went.
+        step = max(1, len(lon) // 1500)
+        cells = np.stack([lon[::step], lat[::step]])
+        out.append((area, clon, clat, cells))
+    out.sort(key=lambda r: -r[0])
+    _LANDMASS_CACHE[key] = out
+    return out
+
+
+def _nearest_cell(cells, lon, lat):
+    """Closest point of a landmass to a position, and its angular distance."""
+    import numpy as np
+    clo, cla = cells
+    a = np.radians(lat); b = np.radians(lon)
+    u = np.array([math.cos(a) * math.cos(b), math.cos(a) * math.sin(b), math.sin(a)])
+    la, lo = np.radians(cla), np.radians(clo)
+    v = np.stack([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
+    dot = np.clip(u @ v, -1.0, 1.0)
+    k = int(np.argmax(dot))
+    return float(clo[k]), float(cla[k]), math.degrees(math.acos(dot[k]))
+
+
+def _arc(lon0, lat0, lon1, lat1):
+    a0, b0, c0 = _unit(lon0, lat0)
+    a1, b1, c1 = _unit(lon1, lat1)
+    d = max(-1.0, min(1.0, a0 * a1 + b0 * b1 + c0 * c1))
+    return math.degrees(math.acos(d))
+
+
+# generous: the uniqueness rule already stops a name taking the wrong
+# continent, and a tight cap just leaves deep-time names floating instead
+MAX_SNAP_DEG = 75.0
+
+
+def resolve_to_landmasses(tracks, windows, order):
+    """Put each paleocontinent ON a landmass, and never two on the same one.
+
+    The rotation model and the PaleoDEM do not agree plate by plate -- the global
+    frame correction is rigid, the real disagreement is regional -- so a centroid
+    derived from modern fragments can land in open ocean. Siberia did, at every
+    Cambrian age. Snapping to the nearest real landmass fixes that; enforcing one
+    landmass per name is what stops two continents sharing a label, which is the
+    confusing failure the search version produced.
+
+    Names are matched biggest-first, so Gondwana claims the supercontinent before
+    a smaller name can take it.
+    """
+    resolved = {n: [] for n in tracks}
+    last = {}
+    ages = sorted({a for tr in tracks.values() for a, _lo, _la in tr})
+    for age in ages:
+        here = [n for n in order
+                if n in tracks and windows[n][0] <= age <= windows[n][1]]
+        if not here:
+            continue
+        masses = landmasses(age)
+        used = set()
+        # Score every (name, landmass) pair and take the most confident matches
+        # first, rather than letting a fixed priority order decide. A fixed order
+        # made the big names claim landmasses that a small one was sitting
+        # directly on: Avalonia went from always on land to on land less than
+        # half the time. Ties still fall to the priority order, so a
+        # supercontinent wins a genuine draw.
+        pairs = []
+        for rank, n in enumerate(here):
+            pt = next(((lo, la) for a, lo, la in tracks[n] if a == age), None)
+            if pt is None:
+                continue
+            prev = last.get(n)
+            for k, (area, clon, clat, cells) in enumerate(masses):
+                plon, plat, d = _nearest_cell(cells, pt[0], pt[1])
+                # Distance to where the crust actually is leads; continuity is a
+                # tie-break, not the driver. Weighted the other way round, one
+                # bad frame becomes permanent -- Laurussia latched onto a
+                # 43-cell islet and continuity then kept re-picking it for
+                # 50 Myr, 40 degrees from the continent it names.
+                score = d if prev is None else d + 0.55 * _nearest_cell(
+                    cells, prev[0], prev[1])[2]
+                # and a continent does not belong on a speck
+                score += 10.0 * max(0.0, 1.0 - area / 500.0)
+                pairs.append((score, rank, n, k, plon, plat))
+        pairs.sort()
+        placed = {}
+        for score, _rank, n, k, plon, plat in pairs:
+            if n in placed or k in used or score > MAX_SNAP_DEG:
+                continue
+            used.add(k)
+            placed[n] = (plon, plat)
+            last[n] = (plon, plat)
+            resolved[n].append([age, round(plon, 1), round(plat, 1)])
+        # Second pass: continents that genuinely MERGED may share a landmass.
+        # One-name-per-landmass is right while they are separate -- it is what
+        # stops two names on one continent -- but once Gondwana and Laurussia
+        # weld into Pangaea both names belong on it, at their own ends. Without
+        # this, whichever lost the tie was flung to another landmass entirely,
+        # 69 degrees away. Sharing is allowed only when the two placements stay
+        # well apart, so they still read as two labels on one supercontinent.
+        for score, _rank, n, k, plon, plat in pairs:
+            if n in placed or score > MAX_SNAP_DEG:
+                continue
+            if any(_arc(plon, plat, q[0], q[1]) < 18.0 for q in placed.values()):
+                continue
+            placed[n] = (plon, plat)
+            last[n] = (plon, plat)
+            resolved[n].append([age, round(plon, 1), round(plat, 1)])
+        for n in here:
+            if n in placed:
+                continue
+            pt = next(((lo, la) for a, lo, la in tracks[n] if a == age), None)
+            if pt is not None:
+                resolved[n].append([age, round(pt[0], 1), round(pt[1], 1)])
+    return resolved
+
+
 def build_labels():
     out = features.labels()
     desc = features.descriptions()
@@ -377,6 +635,9 @@ def build_labels():
             return True
         return _elev_lookup(present_dem, l["lon"], l["lat"]) > 0
 
+    composites = getattr(features, "COMPOSITE_LABELS", {})
+    n_comp = 0
+    raw_comp, comp_window, comp_label = {}, {}, {}
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
@@ -386,6 +647,14 @@ def build_labels():
         # seaway). Broad ocean names keep snapLabel. Seas (epicontinental, ON
         # continental crust) DO ride the plate correctly and are the ones that
         # were mislaid — that is the fix.
+        spec = composites.get(l["n"])
+        if rec and spec is not None:
+            tr = composite_track(spec, max(l["a0"], l["a1"]), rec)
+            if len(tr) > 1:
+                raw_comp[l["n"]] = tr
+                comp_window[l["n"]] = (min(l["a0"], l["a1"]), max(l["a0"], l["a1"]))
+                comp_label[l["n"]] = l
+            continue
         if rec and l["t"] != "ocean" and min(l["a0"], l["a1"]) < 540:
             span = min(540, max(l["a0"], l["a1"]))
             if span >= 5 and coord_is_present_day(l):
@@ -412,6 +681,18 @@ def build_labels():
                 if min(p["a0"], p["a1"]) < lo - 1 or max(p["a0"], p["a1"]) > hi + 1:
                     print(f"  WARNING unreachable phase: {l['n']} "
                           f"{p['a0']}-{p['a1']} outside label window {lo}-{hi}")
+    if raw_comp:
+        order = getattr(features, "COMPOSITE_ORDER", None) or list(composites)
+        order = [n for n in order if n in raw_comp] + \
+                [n for n in raw_comp if n not in order]
+        fixed = resolve_to_landmasses(raw_comp, comp_window, order)
+        for name, tr in fixed.items():
+            if len(tr) > 1:
+                comp_label[name]["tr"] = tr
+                tracked += 1
+                n_comp += 1
+    if n_comp:
+        print(f"  {n_comp} paleocontinents positioned from their modern fragments")
     if untracked_bad_coord:
         print(f"  {len(untracked_bad_coord)} labels left untracked — their coord is "
               f"not a present-day position: "
