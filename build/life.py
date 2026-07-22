@@ -28,6 +28,14 @@ with open(os.path.join(_HERE, "life_data.json")) as _f:
     _DATA = json.load(_f)
 with open(os.path.join(_HERE, "life_icons.json")) as _f:
     ICONS = json.load(_f)
+# Attribution and licence for every traced silhouette. PhyloPic images are
+# individually licensed and the CC-BY ones REQUIRE credit, so this ships to the
+# app and is rendered in the About panel. Absent for hand-drawn icons.
+_CREDITS_PATH = os.path.join(_HERE, "life_credits.json")
+CREDITS = {}
+if os.path.exists(_CREDITS_PATH):
+    with open(_CREDITS_PATH) as _f:
+        CREDITS = json.load(_f)
 
 
 # Which drawing stands for which taxon. Matched as lowercase substrings against
@@ -344,13 +352,32 @@ RANK_FALLBACK = {"sea": "fish", "land": "reptile", "air": "bird",
                  "fresh": "fish"}
 
 
+def taxon_key(name):
+    """The per-taxon icon key, if this taxon has a silhouette of its own."""
+    return "t:" + re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")
+
+
 def icon_for(name, realm="sea"):
-    """The illustration key for a taxon name."""
+    """The illustration key for a taxon name.
+
+    Most specific first: a silhouette traced for THIS taxon beats the group
+    drawing, which is the whole point of fetching them -- Triceratops should
+    not share a picture with every other ceratopsian. Then the group rules,
+    then the per-realm fallback.
+    """
+    own = taxon_key(name)
+    if own in ICONS:
+        return own
     n = (name or "").lower()
     for key, icon in ICON_RULES:
         if key in n:
             return icon
     return RANK_FALLBACK.get(realm, "microbe")
+
+
+def credits():
+    """Only the credits actually referenced by an icon in the build."""
+    return CREDITS
 
 
 def biomes():

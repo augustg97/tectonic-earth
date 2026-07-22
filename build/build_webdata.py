@@ -372,12 +372,14 @@ def build_eras():
 def build_life():
     out = {"biomes": life.biomes(), "life": life.life(),
            "regional": life.regional(), "icons": life.icons(),
-           "regionTaxa": life.region_taxa(), "sparse": life.sparse()}
+           "regionTaxa": life.region_taxa(), "sparse": life.sparse(),
+           "credits": life.credits()}
     json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
     spans = sum(len(v) for v in out["regionTaxa"].values())
     print(f"life: {len(out['biomes'])} biome samples, {len(out['life'])} intervals, "
           f"{len(out['regional'])} regions, {len(out['icons'])} illustrations, "
-          f"{len(out['regionTaxa'])} regions x {spans} spans of local biota")
+          f"{len(out['regionTaxa'])} regions x {spans} spans of local biota, "
+          f"{len(out['credits'])} credited")
     # The global list is thin on marine taxa in the Cenozoic, which is exactly
     # where the old code used to cross realms. Surface that as a build warning
     # so it is visible rather than only showing up as land animals in an ocean.

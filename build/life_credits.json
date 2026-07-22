@@ -1,0 +1,1878 @@
+{
+ "algae": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Fucus vesiculosus",
+  "uuid": "2bb3f2a4-1567-4a8e-bf33-16abb7f0c7c1"
+ },
+ "ammonite": {
+  "attribution": "Chase Brownstein",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Placenticeras",
+  "uuid": "4dfa324f-3d20-4deb-8839-d29a5a90dcc3"
+ },
+ "anomalocaris": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Anomalocaris canadensis",
+  "uuid": "c3b75f48-d943-422b-9234-dc56b39ae01a"
+ },
+ "bird": {
+  "attribution": "Andy Wilson",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Corvus splendens",
+  "uuid": "be215386-95b3-4477-a657-cbf0d7b6d669"
+ },
+ "bivalve": {
+  "attribution": "Felix Vaux",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pecten novaezelandiae",
+  "uuid": "4f2b7da0-e02d-4ec3-80f9-412b653562be"
+ },
+ "brachiopod": {
+  "attribution": "Matthew E. Clapham",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mucrospiriferidae",
+  "uuid": "c5991eab-ed69-4874-80df-1547b15f6a79"
+ },
+ "broadleaf": {
+  "attribution": "Pablo Castro S\u00e1nchez-Bermejo",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Quercus serrata",
+  "uuid": "8f8ab812-64af-4a5a-8d45-8b6fca2de235"
+ },
+ "carnivore": {
+  "attribution": "Jeff Haight",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Canis latrans",
+  "uuid": "f787cef9-1801-4387-8f6c-4234b5c8d72a"
+ },
+ "ceratopsian": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Triceratops horridus",
+  "uuid": "075de9e2-1b71-49d3-8d22-9eb2a78248e4"
+ },
+ "charnia": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Charnia",
+  "uuid": "5711f5d3-b783-42a0-b217-56f3c4ef92d7"
+ },
+ "conifer": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Picea abies",
+  "uuid": "953f16e2-d85f-43dd-84a5-37f509dc3f7f"
+ },
+ "coral": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Acropora hyacinthus",
+  "uuid": "7e223888-904a-4920-8a1d-dd6d03e45478"
+ },
+ "crab": {
+  "attribution": "Joanna Wolfe",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Eoprosopon klugi",
+  "uuid": "035b0041-ec5b-4a9c-ac8e-5a3cc3ee02a1"
+ },
+ "crinoid": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Antedon bifida",
+  "uuid": "c3888c95-a1b2-49d7-905b-fd064f13441a"
+ },
+ "cycad": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cycas media",
+  "uuid": "16535285-cdf3-4bea-ab97-9d907bc61470"
+ },
+ "cynodont": {
+  "attribution": "Christine Axon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Thrinaxodon liorhinus",
+  "uuid": "94fda119-5435-4246-ad23-20b15f3bcb8d"
+ },
+ "dickinsonia": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dickinsonia",
+  "uuid": "089629b8-c5a3-4214-8ee7-3160a6341628"
+ },
+ "eurypterid": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pterygotus anglicus",
+  "uuid": "735a22b0-0d8a-4eef-8561-0d9b8545f94c"
+ },
+ "fern": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Polystichum lonchitis",
+  "uuid": "2d2bd6f4-be5e-48de-a61a-510f09692e48"
+ },
+ "fish": {
+  "attribution": "R. H. Traquair",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Palaeoniscum freieslebeni",
+  "uuid": "7360374f-8860-44c5-b74b-af53ca1a8af4"
+ },
+ "flower": {
+  "attribution": "Mason McNair",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Helianthus annuus",
+  "uuid": "40b91c6c-4ef8-4a5a-9b90-85fb50d74c5b"
+ },
+ "fungus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Agaricus campestris",
+  "uuid": "afd875a3-815f-443b-9b93-3e5bedd9a7a3"
+ },
+ "ginkgo": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ginkgo biloba",
+  "uuid": "798f147f-fe2a-4227-8805-228f5aea9bb6"
+ },
+ "graptolite": {
+  "attribution": "DW Bapst (Modified from photograph taken by Charles Mitchell)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Monograptus priodon",
+  "uuid": "33a37133-0373-4aab-9fa1-a1bf57e7544e"
+ },
+ "grass": {
+  "attribution": "aniya",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Zea mays",
+  "uuid": "89dc273a-1a26-4abc-819a-0ba8b28ff111"
+ },
+ "hadrosaur": {
+  "attribution": "Richard Rich",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Parasaurolophus",
+  "uuid": "ef954cac-604a-4e1f-9b8d-bd92bf3cc3f6"
+ },
+ "horse": {
+  "attribution": "Andy Wilson",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Equus ferus przewalskii",
+  "uuid": "9f550f9e-b8df-43c4-9f00-396548507424"
+ },
+ "horsetail": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Equisetum arvense \u00d7 fluviatile",
+  "uuid": "aca3357f-a8fc-4ab9-a9b3-ae456f54d0a7"
+ },
+ "ichthyosaur": {
+  "attribution": "Jagged Fang Designs",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ichthyosaurus communis",
+  "uuid": "dd45c347-d7ff-4860-80a3-a4e00d4a8dc4"
+ },
+ "insect": {
+  "attribution": "Lisa Nicvert",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ischnura elegans",
+  "uuid": "516df51a-adc7-4cfc-86b9-9954698bd5ed"
+ },
+ "jawless": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cephalaspis",
+  "uuid": "1bdef5cc-59bf-4c6a-b4a4-49082f0a002b"
+ },
+ "jellyfish": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Chrysaora fuscescens",
+  "uuid": "47b45e45-c107-44a5-8a47-dc3bcf9f751f"
+ },
+ "lobefin": {
+  "attribution": "Steven Coombs (vectorized by T. Michael Keesey)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Eusthenopteron foordi",
+  "uuid": "c81d7d12-7b4f-4ddd-bbb9-11dc0d856792"
+ },
+ "lycopod": {
+  "attribution": "Eliana P. Coturel",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Lepidodendron",
+  "uuid": "b769d118-6fe8-4e52-b2d0-757f4b953f5f"
+ },
+ "mammal": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Didelphis virginiana",
+  "uuid": "0e1fe113-feb7-46db-8a10-12f22f80332c"
+ },
+ "marsupial": {
+  "attribution": "Rachel T Mason",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Macropus fuliginosus",
+  "uuid": "ad0c1aa2-abc7-4ace-be47-8206a3759db2"
+ },
+ "mosasaur": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Tylosaurus",
+  "uuid": "8ae20f15-d9c1-45ff-a117-77f001b6eb0a"
+ },
+ "moss": {
+  "attribution": "Jan Vigu\u00e9s Jorba",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Sphagnum",
+  "uuid": "83121b9f-b916-4770-b226-87c082532647"
+ },
+ "myriapod": {
+  "attribution": "Jun",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Arthropleura armata",
+  "uuid": "7fd55470-802d-4a0a-9bdd-73e2f828c5a6"
+ },
+ "nautiloid": {
+  "attribution": "Tyler Greenfield",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Endoceras",
+  "uuid": "88edcbd6-dd46-4e4a-ba1b-20a71f0cfdeb"
+ },
+ "palm": {
+  "attribution": "(unattributed)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Cocos nucifera",
+  "uuid": "823d67ef-e4c9-4be5-8b22-e38ee2beccab"
+ },
+ "placoderm": {
+  "attribution": "Olof Moleman",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Dunkleosteus terrelli",
+  "uuid": "9521072f-2a2f-445c-b5de-a10414663764"
+ },
+ "plankton": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Globigerina bulloides",
+  "uuid": "238493d5-cdb6-43c9-a573-a415b8e64127"
+ },
+ "plesiosaur": {
+  "attribution": "E. D. Cope (modified by T. Michael Keesey, Michael P. Taylor & Matthew J. Wedel)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Elasmosaurus platyurus",
+  "uuid": "5719ee67-4bd3-44e9-ba19-2d36ec7e5b30"
+ },
+ "primate": {
+  "attribution": "Andy Wilson",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Gorilla gorilla",
+  "uuid": "dd10acd5-fef8-41b4-b7af-fd8f651cc8b3"
+ },
+ "proboscidean": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mammuthus primigenius",
+  "uuid": "6f0acd79-1f7d-402f-8679-dc3036b1a504"
+ },
+ "prototaxites": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Prototaxites",
+  "uuid": "33165df7-6b3f-4ab0-b58a-fa02b9dad7b7"
+ },
+ "pterosaur": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pteranodon longiceps",
+  "uuid": "0433aae5-9d7b-4a19-9de3-767c38ed9412"
+ },
+ "reptile": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Varanus caerulivirens",
+  "uuid": "7841b1e3-1bbe-4c13-b4ab-3dbd207bfee8"
+ },
+ "rodent": {
+  "attribution": "Matthew Schmitz",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mus musculus",
+  "uuid": "11ccace5-9ad4-409b-97fe-9320058280c7"
+ },
+ "sauropod": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Brachiosaurus altithorax",
+  "uuid": "2003b4f6-7b8d-4c98-9797-1aca028dc2ac"
+ },
+ "shark": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Carcharodon carcharias",
+  "uuid": "00f208a3-887d-4ae8-838c-2124f53b9fc1"
+ },
+ "snail": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Helix pomatia",
+  "uuid": "4ce5601f-cf94-4d21-b3a1-07bd58a811c2"
+ },
+ "sponge": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Acarnidae",
+  "uuid": "31acf3d7-716a-4594-846e-f7d20f04b45a"
+ },
+ "stegosaur": {
+  "attribution": "Connor Ashbridge",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Stegosaurus priscus",
+  "uuid": "8c4e6e33-bf09-465a-b46d-fdf85fdd7728"
+ },
+ "synapsid": {
+  "attribution": "Will Toosey",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Dimetrodon giganhomogenes",
+  "uuid": "c5dbbce1-9b2b-4236-a6e3-0d9cd9ab0ff6"
+ },
+ "t:acanthostega": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Acanthostega gunnari",
+  "uuid": "0a49db72-0896-4c5a-8c90-5ae6b434ff44"
+ },
+ "t:actinopterygii": {
+  "attribution": "R. H. Traquair",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Palaeoniscum freieslebeni",
+  "uuid": "7360374f-8860-44c5-b74b-af53ca1a8af4"
+ },
+ "t:aegyptopithecus": {
+  "attribution": "JustAnArchosaur",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Aegyptopithecus zeuxis",
+  "uuid": "9f96b0c7-cd78-470d-a6f1-cbc79ac2584c"
+ },
+ "t:aepycamelus": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Aepycamelus giraffinus",
+  "uuid": "993af71b-e784-4694-bc5f-e050b334393f"
+ },
+ "t:aetosauria": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Stagonolepis robertsoni",
+  "uuid": "e779b623-ff1c-4777-8ba8-83f2df6bdb9f"
+ },
+ "t:agaricomycetes": {
+  "attribution": "Nikolas J. Kaplanis",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Boletus edulis",
+  "uuid": "e6657f45-70d7-42a8-b787-17b984bc8e04"
+ },
+ "t:aglaophyton-majus": {
+  "attribution": "Griensteidl and T. Michael Keesey",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Aglaophyton majora",
+  "uuid": "0cc1b731-9056-4981-9c45-30a633da0ede"
+ },
+ "t:allosaurus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Allosaurus jimmadseni",
+  "uuid": "9b427a5c-8c38-457d-8b58-fab118780871"
+ },
+ "t:ambulocetus": {
+  "attribution": "Conty (vectorized by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Ambulocetus natans",
+  "uuid": "efa0966c-65ca-433e-9e95-e4e18c15c790"
+ },
+ "t:anchiornis": {
+  "attribution": "TotalDino",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Anchiornis huxleyi",
+  "uuid": "f55638db-7db5-4214-b720-2766e76372fc"
+ },
+ "t:anomalocaris": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Anomalocaris canadensis",
+  "uuid": "c3b75f48-d943-422b-9234-dc56b39ae01a"
+ },
+ "t:araucariaceae": {
+  "attribution": "Mason McNair",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Araucaria araucana",
+  "uuid": "4b8bc61a-bc27-4cbe-a24b-71f1ac5f7518"
+ },
+ "t:arcellinida": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Difflugia oblonga",
+  "uuid": "276c8742-8bc7-4a68-acf6-2c7fb3ea57fa"
+ },
+ "t:archaefructus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Archaefructus liaoningensis",
+  "uuid": "c4c072af-b02a-4074-a867-6c00675650e8"
+ },
+ "t:archaeocalamites": {
+  "attribution": "Tree of Life App",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Archaeocalamites radiatus",
+  "uuid": "374095b2-2b16-4c78-814b-36df2bf0855c"
+ },
+ "t:archaeoceti": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Pakicetus attocki",
+  "uuid": "2a24db93-00dc-4dfb-b338-35c66154b6bf"
+ },
+ "t:archaeopteryx": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Archaeopteryx lithographica",
+  "uuid": "0df51444-e988-4b71-851e-d48d0b177f9c"
+ },
+ "t:archaeopteryx-lithographica": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Archaeopteryx lithographica",
+  "uuid": "0df51444-e988-4b71-851e-d48d0b177f9c"
+ },
+ "t:archelon": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Archelon ischyros",
+  "uuid": "84447dd6-0a90-44ac-96d6-8668be2709a4"
+ },
+ "t:armillaria-ostoyae": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Armillaria mellea",
+  "uuid": "d9c125a2-91c8-403a-a8d0-64b10571ac69"
+ },
+ "t:arthropleura": {
+  "attribution": "Jun",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Arthropleura armata",
+  "uuid": "7fd55470-802d-4a0a-9bdd-73e2f828c5a6"
+ },
+ "t:australopithecus": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Australopithecus africanus",
+  "uuid": "b384f4f0-49fe-4374-bf86-8f03cafdc263"
+ },
+ "t:australopithecus-afarensis": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Praeanthropus afarensis",
+  "uuid": "6fcfb4dd-14de-4449-8f99-c84d910dcc20"
+ },
+ "t:azolla": {
+  "attribution": "Pablo Amador Crespo",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Azolla filiculoides var. filiculoides",
+  "uuid": "4e0ace47-abb1-4983-96f5-91818f2f06a5"
+ },
+ "t:bacteria": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Abditibacteria",
+  "uuid": "10c3f068-abb7-43e0-8228-3406e603255c"
+ },
+ "t:balaena-mysticetus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Balaena mysticetus mysticetus",
+  "uuid": "3c526436-d40d-45b2-8b43-4f9838a43622"
+ },
+ "t:balaenoptera-musculus": {
+  "attribution": "(unattributed)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Balaenoptera musculus",
+  "uuid": "6ca9f0b7-cacb-45cc-9229-1b672d55b15b"
+ },
+ "t:basilosaurus": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Basilosaurus isis",
+  "uuid": "aeffb6cf-825a-4c12-9801-a4a46226add5"
+ },
+ "t:bivalvia": {
+  "attribution": "Katie S. Collins",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Yoldiella wareni",
+  "uuid": "84277bc9-cc8b-4ab2-9f53-3f1f03ec6f2e"
+ },
+ "t:bothriolepis": {
+  "attribution": "Steven Coombs",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Bothriolepis canadensis",
+  "uuid": "5ac3e6ad-bb40-4917-8cfd-810e4e3ba434"
+ },
+ "t:brachiopoda": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Lingula anatina",
+  "uuid": "d10b5c70-a467-4fec-a7cc-2b6a4eb05fd3"
+ },
+ "t:brachiosaurus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Brachiosaurus altithorax",
+  "uuid": "2003b4f6-7b8d-4c98-9797-1aca028dc2ac"
+ },
+ "t:cambaytherium": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Cambaytherium thewissi",
+  "uuid": "43ee50fe-c2c8-484f-8508-147a49a0b32a"
+ },
+ "t:canis-dirus": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Aenocyon dirus",
+  "uuid": "d913b75d-3055-48e2-b597-78cfbceac165"
+ },
+ "t:carcharodontosaurus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Carcharodontosaurus",
+  "uuid": "cab8d7d3-8a0f-4d56-b353-3ed5aef77155"
+ },
+ "t:carnotaurus": {
+  "attribution": "thetruespinofanboi",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Carnotaurus sastrei",
+  "uuid": "07ac345a-7b69-4f99-a3fd-84b4d08fcd80"
+ },
+ "t:castorocauda-lutrasimilis": {
+  "attribution": "Nobu Tamura (vectorized by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Castorocauda lutrasimilis",
+  "uuid": "9cb598e5-06c9-4f02-acc8-e16a41414eac"
+ },
+ "t:cephalaspis": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cephalaspis",
+  "uuid": "1bdef5cc-59bf-4c6a-b4a4-49082f0a002b"
+ },
+ "t:cetacea": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cetacea",
+  "uuid": "e68270c1-3091-4aee-92ae-51341a40e94a"
+ },
+ "t:cetiosaurus": {
+  "attribution": "Michael P. Taylor",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cetiosaurus oxoniensis",
+  "uuid": "2aef7918-8f7a-4b62-82e3-e88b8969d4a5"
+ },
+ "t:chaohusaurus": {
+  "attribution": "Gareth Monger",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Chaohusaurus geishanensis",
+  "uuid": "d940c3c4-2b59-4e68-b31b-2cf6c89130f3"
+ },
+ "t:charnia": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Charnia",
+  "uuid": "5711f5d3-b783-42a0-b217-56f3c4ef92d7"
+ },
+ "t:charnia-masoni": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Charnia",
+  "uuid": "5711f5d3-b783-42a0-b217-56f3c4ef92d7"
+ },
+ "t:chondrichthyes": {
+  "attribution": "Lankester Edwin Ray (vectorized by T. Michael Keesey)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Cladoselache fyleri",
+  "uuid": "e1997fdd-5f01-42f4-8415-7379854a7be6"
+ },
+ "t:cloudina": {
+  "attribution": "Nobu Tamura (modified by T. Michael Keesey)",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Cloudina hartmanae",
+  "uuid": "f840eb2d-2319-4b1a-9a78-76937484de87"
+ },
+ "t:coelodonta-antiquitatis": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Coelodonta antiquitatis",
+  "uuid": "e6d3526b-9ce9-4144-96e0-b2587b4c6a74"
+ },
+ "t:coelophysis": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Coelophysis bauri",
+  "uuid": "13cd74e3-5ced-4411-a39a-8f0a0feb428b"
+ },
+ "t:coelophysis-bauri": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Coelophysis bauri",
+  "uuid": "13cd74e3-5ced-4411-a39a-8f0a0feb428b"
+ },
+ "t:compsognathus": {
+  "attribution": "Marie Aim\u00e9e ALLARD",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Compsognathus longipes",
+  "uuid": "67970430-fb1c-467e-aab1-1c47cfb6aefc"
+ },
+ "t:confuciusornis": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Confuciusornis sanctus",
+  "uuid": "47c355d3-e797-4e60-8683-639d2e8ea1a4"
+ },
+ "t:cooksonia": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cooksonia",
+  "uuid": "c09ae2aa-8487-44fc-be16-fc834f10a618"
+ },
+ "t:cordaites": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cordaites",
+  "uuid": "6cc56ee7-3953-4b51-85a1-f6ee5e99a594"
+ },
+ "t:cryolophosaurus-ellioti": {
+  "attribution": "Brad McFeeters (vectorized by T. Michael Keesey)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cryolophosaurus ellioti",
+  "uuid": "6655838b-ba6a-4889-92f4-879444d1b931"
+ },
+ "t:cynognathus": {
+  "attribution": "Jacob Schick",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Cynognathus merenskyi",
+  "uuid": "9d9ebf4b-a970-471b-b796-e6911070812e"
+ },
+ "t:darwinius-masillae": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Darwinius masillae",
+  "uuid": "a1608588-82d4-4c97-b55c-87063c262c04"
+ },
+ "t:deinotherium": {
+  "attribution": "Dmitry Bogdanov",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Deinotherium giganteum",
+  "uuid": "fa5ea32e-55b7-476a-a530-898d125ab0ac"
+ },
+ "t:diatomea": {
+  "attribution": "Sarah Frail",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Triceratium morlandii",
+  "uuid": "e27ca2ef-8067-459d-9ead-67bd1dc75438"
+ },
+ "t:dickinsonia": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dickinsonia",
+  "uuid": "089629b8-c5a3-4214-8ee7-3160a6341628"
+ },
+ "t:dicynodontia": {
+  "attribution": "Jacob Schick",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Brachyprosopus broomi",
+  "uuid": "779329c5-c773-4ecc-bc84-4362af8a6c96"
+ },
+ "t:dilophosaurus": {
+  "attribution": "Marie Aim\u00e9e ALLARD",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dilophosaurus wetherilli",
+  "uuid": "36b898fe-0812-4832-8e6e-a5b2f26ee113"
+ },
+ "t:dimetrodon": {
+  "attribution": "Will Toosey",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Dimetrodon giganhomogenes",
+  "uuid": "c5dbbce1-9b2b-4236-a6e3-0d9cd9ab0ff6"
+ },
+ "t:dinocephalia": {
+  "attribution": "Dmitry Bogdanov (vectorized by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Titanosuchus ferox",
+  "uuid": "9ac4a91b-4750-498d-987d-c6c4b8420450"
+ },
+ "t:diplocaulus": {
+  "attribution": "Gareth Monger",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Diplocaulus",
+  "uuid": "b4e724c7-45c0-4c61-ba71-0ead12e51298"
+ },
+ "t:diprotodon": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Diprotodon optatum",
+  "uuid": "0dd852df-bb80-456f-ab3f-d8bf011ca2a1"
+ },
+ "t:docodonta": {
+  "attribution": "(unattributed)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Borealestes serendipitus",
+  "uuid": "62a8a623-e0bd-4165-a275-a54537f160c3"
+ },
+ "t:doedicurus": {
+  "attribution": "Becky Barnes",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Doedicurus clavicaudatus",
+  "uuid": "d4c04486-a358-4b04-a4a7-39b8b3c74630"
+ },
+ "t:dreissena": {
+  "attribution": "Nathan Jay Baker",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dreissena polymorpha",
+  "uuid": "234c9bf2-277f-4295-aa7e-a1b2481afe1b"
+ },
+ "t:dunkleosteus": {
+  "attribution": "Olof Moleman",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Dunkleosteus terrelli",
+  "uuid": "9521072f-2a2f-445c-b5de-a10414663764"
+ },
+ "t:edaphosaurus": {
+  "attribution": "Matt Celeskey",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Edaphosaurus pogonias",
+  "uuid": "495a81b7-ccf4-4342-ab9f-2302303893df"
+ },
+ "t:edmontosaurus": {
+  "attribution": "Ivan Iofrida",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Edmontosaurus regalis",
+  "uuid": "fb219ea5-5581-4dd8-a668-a600385e2b1d"
+ },
+ "t:elephas": {
+  "attribution": "Andy Wilson",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Elephas maximus",
+  "uuid": "db278f3b-d8c1-47e9-afce-0478980f5875"
+ },
+ "t:enaliarctos": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Enaliarctos emlongi",
+  "uuid": "c5b3dc5b-c8c0-4cec-b7c9-dc16a0255cfc"
+ },
+ "t:enchodus": {
+  "attribution": "Craig Dylke",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Enchodus",
+  "uuid": "00ae8a88-2582-4fef-918b-22edaf5dc178"
+ },
+ "t:endoceras": {
+  "attribution": "Tyler Greenfield",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Endoceras",
+  "uuid": "88edcbd6-dd46-4e4a-ba1b-20a71f0cfdeb"
+ },
+ "t:eohippus": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Eohippus angustidens",
+  "uuid": "342af629-dc39-48ba-8cf2-0029cfdf105b"
+ },
+ "t:eucalyptus": {
+  "attribution": "Rachel T Mason",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Eucalyptus socialis",
+  "uuid": "fc34b6dc-63da-4782-aadd-2e23a760fad8"
+ },
+ "t:eurypterus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Eurypterus remipes",
+  "uuid": "f12f8da4-d704-4b3b-8bfe-1b706d62a26d"
+ },
+ "t:eusthenopteron": {
+  "attribution": "Steven Coombs (vectorized by T. Michael Keesey)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Eusthenopteron foordi",
+  "uuid": "c81d7d12-7b4f-4ddd-bbb9-11dc0d856792"
+ },
+ "t:foraminifera": {
+  "attribution": "Jonathan Pople",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Platysolenites antiquissimus",
+  "uuid": "6106721c-f9d7-42b2-ba0d-621ed889840d"
+ },
+ "t:gastornis": {
+  "attribution": "Colin McElroy (vectorized by Andrew Schwartz)",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Gastornis",
+  "uuid": "4e08a814-ee4b-4179-a061-e3bd1c1e51da"
+ },
+ "t:giganotosaurus": {
+  "attribution": "Marie-Aim\u00e9e ALLARD",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Giganotosaurus carolinii",
+  "uuid": "a0f796bd-64f5-4533-bf01-b798fa519895"
+ },
+ "t:globigerinina": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Globigerina bulloides",
+  "uuid": "238493d5-cdb6-43c9-a573-a415b8e64127"
+ },
+ "t:glomeromycota": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Glomeromycetes",
+  "uuid": "44c27c08-400f-4304-92b4-997fdd85ec4b"
+ },
+ "t:glyptodon": {
+  "attribution": "Celeste Luna",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Glyptodon",
+  "uuid": "936735ed-c08a-4315-b291-1a19ca4e4ffd"
+ },
+ "t:goniatitida": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Goniatitida",
+  "uuid": "7f94ad46-8b4d-487c-8e86-f1fb392dcd6f"
+ },
+ "t:gorgonopsia": {
+  "attribution": "Dmitry Bogdanov",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Sauroctonus progressus",
+  "uuid": "ea1157a7-fe0f-429e-8c3c-fc60e334f001"
+ },
+ "t:halysites": {
+  "attribution": "Mark A. Wilson (photograph)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Halysites",
+  "uuid": "0cee27fd-51ff-4490-8391-9bce9d6a7681"
+ },
+ "t:helicoprion": {
+  "attribution": "Olof Moleman",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Helicoprion davisii",
+  "uuid": "2dc67937-9756-4639-91d1-77f5d748fe9e"
+ },
+ "t:hesperornis": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Hesperornis regalis",
+  "uuid": "de96e43d-eb1c-4703-8058-4aab05d4abf3"
+ },
+ "t:hexactinellida": {
+  "attribution": "Devon Hal Draedle (original illustration)",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Helicolocellus cantori",
+  "uuid": "7b06ceb2-fde9-4740-9a0b-2700a7aca230"
+ },
+ "t:homo-habilis": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Homo habilis",
+  "uuid": "49150989-686a-43d6-866f-1d107163394c"
+ },
+ "t:homo-neanderthalensis": {
+  "attribution": "T. Michael Keesey",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Homo neanderthalensis neanderthalensis",
+  "uuid": "312a3222-7e8d-4fe0-91e7-2923dde20389"
+ },
+ "t:homo-sapiens": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Homo longi",
+  "uuid": "f46f28c7-b3da-485e-9af0-9839b63138e0"
+ },
+ "t:hyaenodon": {
+  "attribution": "Robert Bruce Horsfall, from W.B. Scott's 1912 \"A History of Land Mammals in the Western Hemisphere\"",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Hyaenodon horridus",
+  "uuid": "8e3178f8-8171-4b2d-90cc-9b2dce76bdf8"
+ },
+ "t:ichthyosauria": {
+  "attribution": "Gareth Monger",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Cymbospondylus",
+  "uuid": "8162d84e-4578-4adf-98d5-2faad56bba19"
+ },
+ "t:ichthyosaurus": {
+  "attribution": "Jagged Fang Designs",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ichthyosaurus communis",
+  "uuid": "dd45c347-d7ff-4860-80a3-a4e00d4a8dc4"
+ },
+ "t:ichthyostega": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ichthyostega",
+  "uuid": "f002b543-ff02-4f15-8fb5-49d150c287e7"
+ },
+ "t:iguanodon": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Iguanodon bernissartensis",
+  "uuid": "0fd97fa9-7d64-4a36-b713-a72e073866f7"
+ },
+ "t:inostrancevia": {
+  "attribution": "artrociraptor",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Inostrancevia alexandri",
+  "uuid": "951b2182-d053-412f-86a7-1593e19a201c"
+ },
+ "t:isisaurus": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Isisaurus colberti",
+  "uuid": "952dfeab-8c3b-49a5-a43b-96d46b18885f"
+ },
+ "t:keichousaurus": {
+  "attribution": "Jonathan Pople",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Keichousaurus hui",
+  "uuid": "d2acf3a6-3474-4ab5-ac95-6a2aaeaf56c7"
+ },
+ "t:kimberella": {
+  "attribution": "T. Michael Keesey (after A. Y. Ivantsov)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Kimberella quadrata",
+  "uuid": "ec172f9a-4058-40a8-9461-c73d9b6ec7ac"
+ },
+ "t:knightia": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Knightia",
+  "uuid": "b275174b-3db2-4b19-94b7-11b536caacdc"
+ },
+ "t:kronosaurus": {
+  "attribution": "Dann Pigdon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Kronosaurus",
+  "uuid": "cc9e2603-b8f9-414c-a09b-8b8ae3da6343"
+ },
+ "t:latimeria": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Latimeria chalumnae",
+  "uuid": "9785c4ca-e881-4e42-b359-212dd9c38aee"
+ },
+ "t:lepidodendron": {
+  "attribution": "Eliana P. Coturel",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Lepidodendron",
+  "uuid": "b769d118-6fe8-4e52-b2d0-757f4b953f5f"
+ },
+ "t:lingula": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Lingula anatina",
+  "uuid": "d10b5c70-a467-4fec-a7cc-2b6a4eb05fd3"
+ },
+ "t:liopleurodon": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Liopleurodon",
+  "uuid": "52d69849-6f8c-40dc-8cfb-7f28e1506911"
+ },
+ "t:lystrosaurus": {
+  "attribution": "Matt Celeskey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Lystrosaurus murrayi",
+  "uuid": "03efb48d-b735-4812-bf65-39279d9f7067"
+ },
+ "t:macrauchenia": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Macrauchenia patachonica",
+  "uuid": "139ff436-05a5-42fa-acfa-94a2bfc7be0d"
+ },
+ "t:macrocystis": {
+  "attribution": "Harold N Eyster",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Macrocystis pyrifera",
+  "uuid": "9acf11fa-89dd-4a56-b3da-8665c406c6f5"
+ },
+ "t:mammut": {
+  "attribution": "artrociraptor",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mammut americanum",
+  "uuid": "7669386a-e936-4901-bb2a-74acf6b5d731"
+ },
+ "t:mammuthus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mammuthus primigenius",
+  "uuid": "6f0acd79-1f7d-402f-8679-dc3036b1a504"
+ },
+ "t:mammuthus-columbi": {
+  "attribution": "U.S. National Park Service (vectorized by William Gearty)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Mammuthus columbi",
+  "uuid": "3866663c-e4ac-426f-b1cc-0f73955d0ed6"
+ },
+ "t:mammuthus-primigenius": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mammuthus primigenius",
+  "uuid": "6f0acd79-1f7d-402f-8679-dc3036b1a504"
+ },
+ "t:massospondylus": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Massospondylus carinatus",
+  "uuid": "2da08fc6-7dc0-4d20-813c-58069902a96b"
+ },
+ "t:megacerops": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Megacerops coloradensis",
+  "uuid": "ba7eab6c-2d72-4292-97aa-24bae7a2b341"
+ },
+ "t:megalonyx": {
+  "attribution": "\u0414\u0438\u0411\u0433\u0434",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Megalonyx wheatleyi",
+  "uuid": "602b05d0-106f-41de-8626-5b8694bbd81e"
+ },
+ "t:megalosaurus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Megalosaurus bucklandii",
+  "uuid": "33a7e349-32ff-4f29-94a5-cb23ede45d60"
+ },
+ "t:meganeura": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Meganeura",
+  "uuid": "b7b2895c-f9c3-436a-8efa-d80b14fe0918"
+ },
+ "t:merychippus": {
+  "attribution": "Nobu Tamura",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Merychippus insignis",
+  "uuid": "ed61ed30-ec4b-4e0b-9259-d74a3a7aa86f"
+ },
+ "t:merycoidodon": {
+  "attribution": "Zimices",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Merycoidodon (Merycoidodon) culbertsoni",
+  "uuid": "5febaf63-71b2-425f-b44e-d1e1e6b6c3ed"
+ },
+ "t:mesohippus": {
+  "attribution": "Heinrich Harder (vectorized by T. Michael Keesey)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Mesohippus",
+  "uuid": "de4f0606-7e53-4439-8105-797546c7d1c4"
+ },
+ "t:mesolimulus": {
+  "attribution": "Dean Schnabel",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mesolimulus walchi",
+  "uuid": "d6fb08c4-9505-45ad-8efe-2da98bbdf1f2"
+ },
+ "t:microraptor": {
+  "attribution": "Brad McFeeters (vectorized by T. Michael Keesey)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Microraptor zhaoianus",
+  "uuid": "90bf7ae5-8653-4dbf-ae36-8854ac711dab"
+ },
+ "t:moeritherium": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Moeritherium",
+  "uuid": "8d681007-62df-4003-985b-3b112dc03872"
+ },
+ "t:monograptus": {
+  "attribution": "DW Bapst (Modified from photograph taken by Charles Mitchell)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Monograptus priodon",
+  "uuid": "33a37133-0373-4aab-9fa1-a1bf57e7544e"
+ },
+ "t:morganucodon": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Morganucodon watsoni",
+  "uuid": "be4fd4ac-7dfb-4dbc-bdb8-6be298aa9015"
+ },
+ "t:mosasauridae": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mosasauridae",
+  "uuid": "7cebc9af-3379-4c7a-9276-d23c67b50984"
+ },
+ "t:multituberculata": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Rugosodon eurasiaticus",
+  "uuid": "9dffb3c7-447e-4397-9d8e-8564ef40ed3b"
+ },
+ "t:myllokunmingia": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Myllokunmingia fengjiaoa",
+  "uuid": "0515c3e8-d194-4bad-a9e9-6d65759904f2"
+ },
+ "t:mysticeti": {
+  "attribution": "Jonathan Pople",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Cetotherium riabinini",
+  "uuid": "93d5c0be-5e91-4b88-a8be-8e24fd91fd42"
+ },
+ "t:nautilus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Nautilus",
+  "uuid": "18123696-8bde-49ee-9a72-10e607a09918"
+ },
+ "t:neseuretus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Neseuretus tristani",
+  "uuid": "6f063f43-5182-484c-84f0-7256aa151a35"
+ },
+ "t:nimbadon": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Nimbadon lavarackorum",
+  "uuid": "74da0e36-af45-4ae9-84df-24196f455db8"
+ },
+ "t:nothosaurus": {
+  "attribution": "Jonathan Pople",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Nothosaurus giganteus",
+  "uuid": "a490f49e-9d40-4ef7-a0ce-cf89779f5952"
+ },
+ "t:notothenioidei": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dissostichus mawsoni",
+  "uuid": "d18f6a1f-c545-44c5-a224-141ff79bc49d"
+ },
+ "t:nummulites": {
+  "attribution": "Ben Moon",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Nummulites",
+  "uuid": "77296cce-9e94-49d0-a093-45a62a335f57"
+ },
+ "t:olenellus": {
+  "attribution": "Charles Doolittle Walcott (vectorized by T. Michael Keesey)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Olenellus thompsoni",
+  "uuid": "411847f0-d585-42ce-b4c9-682a3b57088f"
+ },
+ "t:osteichthyes": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Guiyu oneiros",
+  "uuid": "c1bf8acf-7d75-48f3-a757-9ac4b5d37c3e"
+ },
+ "t:otodus-megalodon": {
+  "attribution": "(unattributed)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Otodus megalodon",
+  "uuid": "ce4f235f-7a3a-4f7b-b424-2a8792a82c76"
+ },
+ "t:ouranosaurus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ouranosaurus nigeriensis",
+  "uuid": "2d16ee00-8793-4c02-8208-94ed13b35dfe"
+ },
+ "t:palaeoniscum": {
+  "attribution": "R. H. Traquair",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Palaeoniscum freieslebeni",
+  "uuid": "7360374f-8860-44c5-b74b-af53ca1a8af4"
+ },
+ "t:paraceratherium": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Paraceratherium",
+  "uuid": "12fc9c0f-3b9e-4cc1-a184-df6abfbbe3e9"
+ },
+ "t:paralititan": {
+  "attribution": "Dmitry Bogdanov (vectorized by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Paralititan stromeri",
+  "uuid": "6a1bd3a4-f0f2-44dd-b6ea-e2cdf65b421a"
+ },
+ "t:paranthropus-boisei": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Paranthropus boisei",
+  "uuid": "72db44d2-686c-4c2b-8b4e-0c841a229996"
+ },
+ "t:phorusrhacos": {
+  "attribution": "Thomas W. LaBarge",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Phorusrhacos longissimus",
+  "uuid": "18cb977d-3365-44eb-b37b-3241bd246985"
+ },
+ "t:phytosauria": {
+  "attribution": "Miguel Hern\u00e1ndez",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Diandongosuchus fuyuanensis",
+  "uuid": "121a2008-b9de-4adb-bb03-33fcf21e5ae6"
+ },
+ "t:placenticeras": {
+  "attribution": "Chase Brownstein",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Placenticeras",
+  "uuid": "4dfa324f-3d20-4deb-8839-d29a5a90dcc3"
+ },
+ "t:placodontia": {
+  "attribution": "Nobu Tamura",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Paraplacodus broilii",
+  "uuid": "a4e86b85-978b-46a3-8ee6-e28c94f148e2"
+ },
+ "t:plateosaurus": {
+  "attribution": "Jack Mayer Wood",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Plateosaurus",
+  "uuid": "23027ce7-713d-4c28-97e2-aec0219266df"
+ },
+ "t:plesiosauria": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Rhomaleosaurus cramptoni",
+  "uuid": "40db43fb-581f-4743-8c79-bec7ff2ced43"
+ },
+ "t:porifera": {
+  "attribution": "Apokryltaros (original drawing), T. Michael Keesey (vectorization)",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Jawonya gurumal",
+  "uuid": "e3dfdfb1-6e2e-4f9b-99bc-7b3e9cb2dab0"
+ },
+ "t:postosuchus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Postosuchus kirkpatricki",
+  "uuid": "be9ace64-29f6-45d4-9cc9-9b035d1cc04c"
+ },
+ "t:procoptodon": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Procoptodon goliah",
+  "uuid": "32c52ba0-49c1-4a14-b758-954f68e00edc"
+ },
+ "t:proterosuchus": {
+  "attribution": "Dmitry Bogdanov",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Proterosuchus fergusi",
+  "uuid": "50514508-25e9-4f5b-9fc8-17994dff3edb"
+ },
+ "t:prototaxites": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Prototaxites",
+  "uuid": "33165df7-6b3f-4ab0-b58a-fa02b9dad7b7"
+ },
+ "t:pterodactylus": {
+  "attribution": "Julio Garza",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Pterodactylus antiquus",
+  "uuid": "97ce8bbd-68a1-4185-a23e-59dcad7d7f15"
+ },
+ "t:pterygotus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pterygotus anglicus",
+  "uuid": "735a22b0-0d8a-4eef-8561-0d9b8545f94c"
+ },
+ "t:purgatorius": {
+  "attribution": "Nobu Tamura",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Purgatorius",
+  "uuid": "25689083-598c-430e-8c1f-4c3fcd779607"
+ },
+ "t:pyrotherium": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pyrotherium",
+  "uuid": "7a042ed7-75eb-46b1-b81a-1daf16b85e32"
+ },
+ "t:rangea": {
+  "attribution": "(unattributed)",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Rangea",
+  "uuid": "4e15b6b3-9a6a-4aa8-90ef-2ab7dfc7dafd"
+ },
+ "t:repenomamus": {
+  "attribution": "Ivan Iofrida",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Repenomamus robustus",
+  "uuid": "3e02b0e1-9837-46fa-93eb-e5cc4b8849e5"
+ },
+ "t:rhamphorhynchus": {
+  "attribution": "Dmitry Bogdanov",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Rhamphorhynchus muensteri",
+  "uuid": "329a7dc2-5da9-4996-a91f-92d778ca2f91"
+ },
+ "t:rhizodus": {
+  "attribution": "Dmitry Bogdanov",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Rhizodus hibberti",
+  "uuid": "efbd060e-438b-4c44-8c42-ce2f80a2b62e"
+ },
+ "t:rhodophyta": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Galdieria sulphuraria",
+  "uuid": "5ece50ef-fe0a-4691-b88f-b499062a4bdd"
+ },
+ "t:riftia": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Riftia pachyptila",
+  "uuid": "d76df72f-2ae4-4604-ba94-f5567f94179c"
+ },
+ "t:rimicaris": {
+  "attribution": "Elodie Jacob",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Rimicaris exoculata",
+  "uuid": "b2c051dd-1497-4cbf-a4d6-ec7ad5e5b4e5"
+ },
+ "t:sahelanthropus-tchadensis": {
+  "attribution": "T. Michael Keesey",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Sahelanthropus tchadensis",
+  "uuid": "16735c42-c7d7-4394-a2c5-9493129cdf1c"
+ },
+ "t:scelidosaurus": {
+  "attribution": "Matt Dempsey",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Scelidosaurus harrisonii",
+  "uuid": "70af4784-a8ed-46aa-b94d-6d3c94cf3bd3"
+ },
+ "t:scleractinia": {
+  "attribution": "Kurtis Wothe and Giovanna Sainz",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Scleractinia",
+  "uuid": "8d67286a-367e-4e2c-8add-8e155e342697"
+ },
+ "t:scutosaurus": {
+  "attribution": "Chris Jennings (vectorized by A. Verri\u00e8re)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Scutosaurus karpinskii",
+  "uuid": "c5a448bf-0119-4735-8366-c237d855a1a0"
+ },
+ "t:selachii": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Brachaelurus",
+  "uuid": "32efa9f3-ab7a-4c4b-b301-efdbf9f9a2cb"
+ },
+ "t:sequoiadendron-giganteum": {
+  "attribution": "Andy Wilson",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Sequoiadendron giganteum",
+  "uuid": "fb9c2a60-4736-44c3-910b-f18ca98d42b4"
+ },
+ "t:seymouria": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Seymouria",
+  "uuid": "658621cf-b360-42bf-9832-02769367f0ee"
+ },
+ "t:shonisaurus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Shonisaurus popularis",
+  "uuid": "37684912-714b-473e-9aba-5d48add6c8da"
+ },
+ "t:sinosauropteryx": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Sinosauropteryx prima",
+  "uuid": "2b08dc0b-c601-48b1-96eb-7e3fa8ce3231"
+ },
+ "t:sirenia": {
+  "attribution": "Flurin Leugger",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Trichechus",
+  "uuid": "3f69e1ee-08bc-40d1-b4fd-75246024e2c6"
+ },
+ "t:smilodon": {
+  "attribution": "artrociraptor",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Smilodon fatalis",
+  "uuid": "6ab0dfd7-2baf-4d08-b437-738c779ee28d"
+ },
+ "t:smilodon-fatalis": {
+  "attribution": "artrociraptor",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Smilodon fatalis",
+  "uuid": "6ab0dfd7-2baf-4d08-b437-738c779ee28d"
+ },
+ "t:sparassodonta": {
+  "attribution": "Nobu Tamura",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Cladosictis patagonica",
+  "uuid": "7a1dfa63-38a5-4e23-9429-099adfac73b3"
+ },
+ "t:spinosaurus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Spinosaurus aegyptiacus",
+  "uuid": "0dd7eaf6-1caf-4579-9f42-340fa9f34c48"
+ },
+ "t:spinosaurus-aegyptiacus": {
+  "attribution": "Tasman Dixon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Spinosaurus aegyptiacus",
+  "uuid": "0dd7eaf6-1caf-4579-9f42-340fa9f34c48"
+ },
+ "t:spriggina": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Spriggina floundersi",
+  "uuid": "513e7198-3ad0-429b-8144-e0400924ed10"
+ },
+ "t:stegosaurus": {
+  "attribution": "Connor Ashbridge",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Stegosaurus priscus",
+  "uuid": "8c4e6e33-bf09-465a-b46d-fdf85fdd7728"
+ },
+ "t:tanystropheus": {
+  "attribution": "Amy Beauvois",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Tanystropheus hydroides",
+  "uuid": "9cee1c59-3334-47bd-bd14-6eeba624f211"
+ },
+ "t:teleoceras": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Teleoceras proterum",
+  "uuid": "47ece020-eef5-4951-9dfe-57d21f3b567c"
+ },
+ "t:thylacoleo": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Thylacoleo carnifex",
+  "uuid": "21dde05e-dcb4-416c-bb2a-0faec8bf4d9c"
+ },
+ "t:thylacoleo-carnifex": {
+  "attribution": "Steven Traver",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Thylacoleo carnifex",
+  "uuid": "21dde05e-dcb4-416c-bb2a-0faec8bf4d9c"
+ },
+ "t:tiktaalik-roseae": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Tiktaalik roseae",
+  "uuid": "10a9bdee-2c86-4f13-a8ae-5ff92dbed2a9"
+ },
+ "t:titanis-walleri": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Titanis walleri",
+  "uuid": "5fad3e3e-1b8d-44a6-b537-f06e3135c444"
+ },
+ "t:titanoboa": {
+  "attribution": "Nobu Tamura (modified by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Titanoboa cerrejonensis",
+  "uuid": "beca4a24-33ef-4659-a20f-7d6835703c1c"
+ },
+ "t:titanoboa-cerrejonensis": {
+  "attribution": "Nobu Tamura (modified by T. Michael Keesey)",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Titanoboa cerrejonensis",
+  "uuid": "beca4a24-33ef-4659-a20f-7d6835703c1c"
+ },
+ "t:triceratops": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Triceratops horridus",
+  "uuid": "075de9e2-1b71-49d3-8d22-9eb2a78248e4"
+ },
+ "t:trilobita": {
+  "attribution": "Sam Gon III",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Fallotaspis longa",
+  "uuid": "f73e5698-3cbe-4921-86fb-42a070918b41"
+ },
+ "t:tylosaurus": {
+  "attribution": "Scott Hartman",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Tylosaurus",
+  "uuid": "8ae20f15-d9c1-45ff-a117-77f001b6eb0a"
+ },
+ "t:tyrannosaurus-rex": {
+  "attribution": "Richard Rich",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Tyrannosaurus rex",
+  "uuid": "ccb9b896-20b5-4e0b-8979-001742a884c5"
+ },
+ "t:uintatherium": {
+  "attribution": "Zimices",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Uintatherium anceps",
+  "uuid": "5fe1c8ef-f7c4-47ff-9cc0-b528107fde98"
+ },
+ "t:ursus-spelaeus": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ursus spelaeus",
+  "uuid": "9c311a13-a032-400d-b7dc-5e18f392e286"
+ },
+ "t:varanus-priscus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Varanus caerulivirens",
+  "uuid": "7841b1e3-1bbe-4c13-b4ab-3dbd207bfee8"
+ },
+ "t:vegavis-iaai": {
+  "attribution": "Matt Martyniuk",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Vegavis iaai",
+  "uuid": "c90266aa-88c4-4a2d-ae52-dfaa1af27c91"
+ },
+ "t:volaticotherium": {
+  "attribution": "Michael Tripoli",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Volaticotherium antiquum",
+  "uuid": "1d0f3ca5-6fde-4508-9e36-23a4881fefae"
+ },
+ "t:vulcanodon": {
+  "attribution": "Roberto Diaz Sibaja, based on Domser",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Vulcanodon karibaensis",
+  "uuid": "8f7c165f-3561-4dad-afe7-0af5faa5a66f"
+ },
+ "t:westlothiana-lizziae": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Westlothiana lizziae",
+  "uuid": "ae7706a9-d85f-4f36-8773-e38261e9f3a6"
+ },
+ "t:wiwaxia": {
+  "attribution": "Martin R. Smith",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Wiwaxia corrugata",
+  "uuid": "69c07373-35d4-4592-8c65-d6b5f997f92e"
+ },
+ "temnospondyl": {
+  "attribution": "Will Toosey",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Metoposaurus diagnosticus",
+  "uuid": "5b83679d-f4ae-4ed1-a395-390b1483a481"
+ },
+ "tetrapod": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Ichthyostega",
+  "uuid": "f002b543-ff02-4f15-8fb5-49d150c287e7"
+ },
+ "theropod": {
+  "attribution": "Fred Wierum",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Tyrannosaurus",
+  "uuid": "832a47bd-0cd4-4b0e-af7b-db9d7ff81867"
+ },
+ "trilobite": {
+  "attribution": "Sam Gon III",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Fallotaspis longa",
+  "uuid": "f73e5698-3cbe-4921-86fb-42a070918b41"
+ },
+ "turtle": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Chelonia mydas",
+  "uuid": "6cebfd77-1ad5-449f-8440-c6f9f18f41d8"
+ },
+ "whale": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Physeter macrocephalus",
+  "uuid": "7a808331-75b4-4b5e-8399-4d6933313cd8"
+ },
+ "worm": {
+  "attribution": "Scott Hartman",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Annelida",
+  "uuid": "2dee030d-9f6d-4bab-87c4-c46869839b30"
+ }
+}

@@ -330,6 +330,15 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 #aboutPage .model .lab{font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ap-amber);padding-top:2px}
 #aboutPage .model p{margin:0;font-size:13.5px;color:var(--ap-dim);line-height:1.55}
 #aboutPage .sources{display:grid;gap:11px}
+/* Contributor credits for the traced silhouettes. CC-BY images REQUIRE
+   attribution, so this list is generated from the icon manifest rather than
+   maintained by hand -- it cannot fall out of step with what actually ships. */
+#aboutPage .silcredits{margin-top:9px;max-height:150px;overflow-y:auto;
+  display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;line-height:1.5;
+  padding:9px 11px;border:1px solid var(--ap-line);border-radius:8px;
+  background:rgba(255,255,255,.02)}
+#aboutPage .silcredits span{color:var(--ap-dim)}
+#aboutPage .silcredits b{color:var(--ap-ink);font-weight:500}
 #aboutPage .src{display:grid;grid-template-columns:146px 1fr;gap:16px;align-items:baseline;padding-bottom:11px;border-bottom:1px dashed var(--ap-line)}
 #aboutPage .src .role{font-family:var(--ap-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ap-dim2)}
 #aboutPage .src p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ap-dim)}
@@ -452,7 +461,8 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Haq/Hallam sea-level curves, Late-Paleozoic and Neoproterozoic glaciations). Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
     <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
     <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
-    <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith. The illustrations are schematic drawings, not reconstructions.</li>
+    <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith.</li>
+    <li><b>Illustrations</b> — most are silhouettes from <a href="https://www.phylopic.org/" target="_blank" rel="noopener">PhyloPic</a>, traced by their contributors from skeletal reconstructions and life restorations, used under CC0, Public Domain Mark or CC-BY and credited individually in the About page. A silhouette is one artist's reading of an incomplete fossil, not a photograph. Where PhyloPic has nothing to trace — an assemblage like a reef, a sedimentary structure like a stromatolite — the drawing is schematic.</li>
   </ul>
   <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
 </div>
@@ -570,6 +580,9 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
             <div class="src"><div class="role">Boundaries</div><p><span class="cite">Bird, P. (2003). An updated digital model of plate boundaries (PB2002).</span> <span class="dim">Geochem. Geophys. Geosyst. 4(3)</span> &mdash; the present-day network the reconstruction is pinned to.</p></div>
             <div class="src"><div class="role">Impacts</div><p><span class="cite">Impact Earth database (Osinski et al., Western University)</span> and <span class="cite">Schmieder &amp; Kring (2020)</span>, cross-checked against primary papers.</p></div>
             <div class="src"><div class="role">Software</div><p><span class="cite">pyGPlates / GPlates</span> for reconstruction; <span class="cite">three.js + GLSL</span> for the real-time globe.</p></div>
+            <div class="src"><div class="role">Illustrations</div><p><span class="cite">PhyloPic (phylopic.org)</span> <span class="dim">— organism silhouettes traced by its contributors from skeletal reconstructions and life restorations. Used only under CC0, Public Domain Mark or CC-BY; share-alike and non-commercial images are excluded. Every contributor whose work appears is named below.</span></p>
+              <div id="apSilhouettes" class="silcredits"></div>
+            </div>
           </div>
         </section>
 
@@ -2583,12 +2596,33 @@ $('#aboutClose').onclick=()=>$('#about').classList.remove('show');
 /* Full one-pager About overlay. Images are lazy: their src is swapped in from
    data-src on first open, so the viewer's initial load never fetches them. */
 const aboutPage=$('#aboutPage');
-let aboutImgsLoaded=false;
+let aboutImgsLoaded=false, silCreditsBuilt=false;
+/* Attribution for the traced silhouettes. Generated from the icon manifest that
+   actually shipped, so it can never credit an artist whose image was dropped or
+   omit one that was added. CC-BY images require this; CC0 ones do not, but a
+   contributor who gave the work away still gets named. */
+function buildSilhouetteCredits(){
+  const el=$('#apSilhouettes'), C=(DATA.life||{}).credits||{};
+  if(!el)return;
+  const by=new Map();
+  Object.values(C).forEach(c=>{
+    const who=(c.attribution||'').trim()||'unattributed';
+    if(!by.has(who))by.set(who,new Set());
+    by.get(who).add(c.licence||'');
+  });
+  if(!by.size){el.textContent='No traced silhouettes in this build.';return;}
+  const names=[...by.keys()].sort((a,b)=>a.localeCompare(b));
+  el.innerHTML=`<span style="width:100%">${Object.keys(C).length} silhouettes `+
+    `from ${names.length} contributors:</span>`+
+    names.map(n=>`<b>${esc(n)}</b> <span>(${esc([...by.get(n)].join(', '))})</span>`)
+      .join('<span>·</span>');
+}
 function openAboutPage(){
   if(!aboutImgsLoaded){
     aboutPage.querySelectorAll('img[data-src]').forEach(im=>{im.src=im.getAttribute('data-src');});
     aboutImgsLoaded=true;
   }
+  if(!silCreditsBuilt){buildSilhouetteCredits();silCreditsBuilt=true;}
   $('#about').classList.remove('show');           // close the little info panel if open
   aboutPage.classList.add('show');
   aboutPage.setAttribute('aria-hidden','false');
