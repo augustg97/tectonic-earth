@@ -187,7 +187,7 @@ LABELS = [
     ("continent", "Baltica",         10,  -35,  430, 540),
     ("continent", "Siberia",         90,  20,  430, 600),
     ("continent", "Avalonia",       -18,  -35,  430, 490),
-    ("continent", "Cimmeria",       105, -20,  180, 290),
+    ("continent", "Cimmeria",        60,  25,  180, 290),
     ("ocean", "Iapetus Ocean",      -30,  20,  400, 600),
     ("ocean", "Rheic Ocean",        -10, -20,  320, 490),
     ("ocean", "Panthalassic Ocean", -150,  0,  330, 540),

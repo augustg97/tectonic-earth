@@ -73,9 +73,20 @@ def _ramp(x, stops):
 
 
 def _smooth(a, k=1):
+    """Box smooth. Longitude WRAPS, latitude does not.
+
+    This padded both axes with mode="edge", which quietly put a discontinuity
+    down the antimeridian in every field derived through it. Columns either side
+    of 180 were averaged against a replicated edge instead of against the data
+    on the other side of the globe, so the map carried a stationary north-south
+    line from the Bering Strait past New Zealand to Antarctica -- most visible in
+    the deep Pacific, where smooth_bathymetry leans on this hardest and there is
+    no real relief to hide it. Longitude is periodic; latitude is not (the poles
+    are genuine edges), so the two axes are padded differently."""
     if k <= 0:
         return a
-    pad = np.pad(a, ((k, k), (k, k)), mode="edge")
+    pad = np.pad(a, ((k, k), (0, 0)), mode="edge")
+    pad = np.pad(pad, ((0, 0), (k, k)), mode="wrap")
     from numpy.lib.stride_tricks import sliding_window_view
     return sliding_window_view(pad, (2 * k + 1, 2 * k + 1)).mean(axis=(-1, -2))
 
@@ -234,11 +245,17 @@ def _L3(a, b, t):
 
 
 def resample_dem(z, out_h, out_w):
-    """Bilinear-resample a lat-ascending DEM to (out_h,out_w) with row 0 = north."""
+    """Bilinear-resample a lat-ascending DEM to (out_h,out_w) with row 0 = north.
+
+    Longitude is sampled as a PERIODIC axis: the output spans the full 360
+    degrees and the column after the last input column is the first one again.
+    Mapping onto 0..W0-1 and clamping instead (which is what this did) both
+    stretches the map by one input column and breaks the wrap at 180."""
     H0, W0 = z.shape
-    yi = np.linspace(0, H0 - 1, out_h); xi = np.linspace(0, W0 - 1, out_w)
+    yi = np.linspace(0, H0 - 1, out_h)
+    xi = np.linspace(0, W0, out_w, endpoint=False)
     y0 = np.floor(yi).astype(int); y1 = np.minimum(y0 + 1, H0 - 1); fy = (yi - y0)[:, None]
-    x0 = np.floor(xi).astype(int); x1 = np.minimum(x0 + 1, W0 - 1); fx = (xi - x0)[None, :]
+    x0 = np.floor(xi).astype(int) % W0; x1 = (x0 + 1) % W0; fx = (xi - np.floor(xi))[None, :]
     a = z.astype(float)
     top = a[y0][:, x0] * (1 - fx) + a[y0][:, x1] * fx
     bot = a[y1][:, x0] * (1 - fx) + a[y1][:, x1] * fx
@@ -267,9 +284,10 @@ def compute_fields(z, age, out_h=512, out_w=1024):
     """
     cl = climate_at(age)
     H0, W0 = z.shape
-    yi = np.linspace(0, H0 - 1, out_h); xi = np.linspace(0, W0 - 1, out_w)
+    # longitude is periodic here too -- see resample_dem
+    yi = np.linspace(0, H0 - 1, out_h); xi = np.linspace(0, W0, out_w, endpoint=False)
     y0 = np.floor(yi).astype(int); y1 = np.minimum(y0 + 1, H0 - 1); fy = (yi - y0)[:, None]
-    x0 = np.floor(xi).astype(int); x1 = np.minimum(x0 + 1, W0 - 1); fx = (xi - x0)[None, :]
+    x0 = np.floor(xi).astype(int) % W0; x1 = (x0 + 1) % W0; fx = (xi - np.floor(xi))[None, :]
 
     def samp(a):
         top = a[y0][:, x0] * (1 - fx) + a[y0][:, x1] * fx

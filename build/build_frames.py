@@ -124,7 +124,44 @@ def read_dem(f):
     lat = np.asarray(ds.variables[latname][:])
     if lat[0] > lat[-1]:          # descending (north first) -> flip to ascending
         z = z[::-1]
+    return make_periodic(z)
+
+
+def make_periodic(z, taper_deg=4.0):
+    """Make the longitude axis genuinely periodic.
+
+    The PaleoDEMs are stored on lon -180..+180 INCLUSIVE -- 3601 columns for
+    3600 cells (361 for the 1-degree set) -- so the first and last columns are
+    the SAME meridian stored twice. They disagree: by ~550 m at 150 Ma, and at
+    100 Ma the final column is plain corrupt, 4352 m from its own twin while its
+    neighbour sits 565 m away. Rendered on a sphere that is a false cliff from
+    the Bering Strait past New Zealand to Antarctica -- a stationary north-south
+    line down the Pacific that terrain visibly distorts across.
+
+    The duplicated column is identified STRUCTURALLY, by the grid having an odd
+    width, not by comparing values. A value test looks reasonable and fails
+    exactly where the data is worst: at 100 Ma it decided the corrupt column was
+    NOT a duplicate, kept it, and welded the corruption into the seam.
+
+    So: drop the duplicate, then split whatever mismatch remains between the two
+    sides and taper it to nothing over a few degrees. The correction works out at
+    a few metres per column, far below the DEM's own uncertainty, and it only
+    touches the band either side of 180.
+    """
+    if z.shape[1] < 8:
+        return z
+    if z.shape[1] % 2 == 1:            # inclusive grid: last column repeats the first
+        z = z[:, :-1].copy()
+    else:
+        z = z.copy()
+    delta = (z[:, 0] - z[:, -1]) * 0.5
+    W = z.shape[1]
+    band = max(2, int(round(taper_deg / 360.0 * W)))
+    ramp = np.linspace(1.0, 0.0, band, endpoint=False)
+    z[:, :band] -= delta[:, None] * ramp[None, :]
+    z[:, W - band:] += delta[:, None] * ramp[::-1][None, :]
     return z
+
 
 def main():
     idx = index_dems()

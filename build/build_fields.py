@@ -173,9 +173,30 @@ def future_grid(frac, gid, Zsrc, h, w):
     T = BS.unit(LON.ravel(), LAT.ravel())
     # low-frequency ridge/basin backdrop for unclaimed ocean, centred near the
     # mid-ocean depth and never as shallow as a shelf
-    fx = np.sin(np.radians(LON) * 2.3 + 0.7) + 0.6 * np.sin(np.radians(LON) * 5.1 + 2.1)
+    # INTEGER harmonics only: sin(2.3*lon) does not repeat over 360 degrees, so
+    # the backdrop itself carried a step at the antimeridian wherever unclaimed
+    # new ocean showed through -- which is most of the Pacific in the future
+    # frames, and the other half of the stationary north-south line.
+    fx = np.sin(np.radians(LON) * 2.0 + 0.7) + 0.6 * np.sin(np.radians(LON) * 5.0 + 2.1)
     fy = np.sin(np.radians(LAT) * 3.1 + 1.3) + 0.5 * np.cos(np.radians(LAT) * 6.7)
     out = (-4300.0 + 700.0 * fx * fy).astype(float)
+
+    # Rifted margins are not straight lines. The group masks are rasterised
+    # PB2002 boundary POLYLINES, so when two groups pull apart the new coastline
+    # inherits that surveyed geometry exactly -- which is why the far eastern tip
+    # of Eurasia broke away along a ruler-straight edge from the first future
+    # keyframe onward. Fray the boundary with fractal noise on the sphere: the
+    # direction used for the CLAIM TEST is perturbed by a degree or two while the
+    # elevation is still sampled at the true position, so margins gain headlands
+    # and embayments and plate interiors are untouched. Evaluated in 3D, so it is
+    # seamless across the antimeridian and the poles.
+    Tc = T.copy()
+    for scale, amp, seed in ((2.6, 0.026, 1301), (6.1, 0.013, 1607), (14.3, 0.006, 1913)):
+        Tc = Tc + amp * np.stack([
+            PRE.fbm3(T * scale, seed, octaves=2) - 0.5,
+            PRE.fbm3(T * scale + 4.7, seed + 31, octaves=2) - 0.5,
+            PRE.fbm3(T * scale + 9.1, seed + 61, octaves=2) - 0.5])
+    Tc /= np.linalg.norm(Tc, axis=0)
 
     # present centroid of each group, on the sphere
     cent = {}
@@ -200,13 +221,20 @@ def future_grid(frac, gid, Zsrc, h, w):
         S = Rm.T @ T
         slat = np.degrees(np.arcsin(np.clip(S[2], -1, 1)))
         slon = np.degrees(np.arctan2(S[1], S[0]))
-        gy = np.clip(((90 - slat) / 180 * gh).astype(int), 0, gh - 1)
-        gx = np.clip(((slon + 180) / 360 * gw).astype(int), 0, gw - 1)
+        # claim test on the frayed direction; elevation from the true one
+        Sc = Rm.T @ Tc
+        clat = np.degrees(np.arcsin(np.clip(Sc[2], -1, 1)))
+        clon = np.degrees(np.arctan2(Sc[1], Sc[0]))
+        gy = np.clip(((90 - clat) / 180 * gh).astype(int), 0, gh - 1)
+        # longitude is periodic -- clipping it instead of wrapping smears the
+        # column at 180 across the whole height and is half of the stationary
+        # north-south line that ran down the Pacific.
+        gx = ((clon + 180) / 360 * gw).astype(int) % gw
         claims = gid[gy, gx] == i
         if not claims.any():
             continue
         sy = np.clip(((90 - slat) / 180 * Zsrc.shape[0]).astype(int), 0, Zsrc.shape[0] - 1)
-        sx = np.clip(((slon + 180) / 360 * Zsrc.shape[1]).astype(int), 0, Zsrc.shape[1] - 1)
+        sx = ((slon + 180) / 360 * Zsrc.shape[1]).astype(int) % Zsrc.shape[1]
         z = np.where(claims, Zsrc[sy, sx], -9999.0).reshape(h, w)
         out = np.maximum(out, z)          # overlap -> collision keeps the high ground
     return out
