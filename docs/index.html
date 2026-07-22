@@ -748,7 +748,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260722-0450';
+const DATA_V='20260722-0511';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1485,7 +1485,7 @@ function snapLabel(l,fi){
       // as the track's; staying put is then the honest answer.
       // Untracked keeps the wide search (to 90°) — a static coord authored in
       // the present frame really can sit far from where the world moved it.
-      const maxrad=tracked?10:90, astep=tracked?15:10;
+      const maxrad=tracked?14:90, astep=tracked?15:10;
       let best=null;
       for(let rad=4;rad<=maxrad&&!best;rad+=4){
         for(let a=0;a<360;a+=astep){
@@ -2236,7 +2236,13 @@ const PRI={continent:100,ocean:90,sea:72,region:66,orogen:60,ice:58,desert:56,
    whose windows are only thousands of years: a flat 2.5 Myr slack floated
    Pleistocene lakes (Agassiz, Bonneville) onto the present-day map, so cap the
    slack at half the window for anything shorter than 5 Myr. */
-function labelVisible(l){const a=state.age,t=Math.min(2.5,Math.abs(l.a1-l.a0)*0.5);
+/* The slack keeps a name from flickering on and off as the age crosses its
+   window edge during playback. It used to be 2.5 Myr, which is half a keyframe
+   — long enough for a label to outlive the thing it names: the Western Interior
+   Seaway drains out of the terrain by 70 Ma and the name hung on to 67.5.
+   0.8 Myr still covers the jitter without claiming a feature exists after the
+   map has stopped drawing it. */
+function labelVisible(l){const a=state.age,t=Math.min(0.8,Math.abs(l.a1-l.a0)*0.5);
   return a>=Math.min(l.a0,l.a1)-t&&a<=Math.max(l.a0,l.a1)+t;}
 function ensureLabels(){
   const box=$('#labels');

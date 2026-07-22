@@ -306,6 +306,34 @@ def build_hotspots():
           f"({len(imp)} craters, {tracked} given plate-motion tracks; {src})")
 
 # ---------- era labels (time-aware, full timeline) ----------
+_DEM_CACHE = {}
+
+
+def _present_elevation():
+    """The shipped present-day elevation raster, for sanity-checking coords."""
+    if "p" in _DEM_CACHE:
+        return _DEM_CACHE["p"]
+    path = os.path.join(WEB, "fields", "phan_0000_e.webp")
+    try:
+        from PIL import Image
+        im = Image.open(path).convert("L")
+        _DEM_CACHE["p"] = (im.load(), im.width, im.height)
+    except Exception as e:
+        print(f"  note: present-day DEM unavailable ({e}); "
+              f"skipping label coordinate check")
+        _DEM_CACHE["p"] = None
+    return _DEM_CACHE["p"]
+
+
+def _elev_lookup(dem, lon, lat):
+    px, w, h = dem
+    x = int((lon + 180.0) / 360.0 * w) % w
+    y = max(0, min(h - 1, int((90.0 - lat) / 180.0 * (h - 1))))
+    e = px[x, y] / 255.0
+    sgn = 2.0 * e - 1.0
+    return (1 if sgn >= 0 else -1) * sgn * sgn * 8000.0
+
+
 def build_labels():
     out = features.labels()
     desc = features.descriptions()
@@ -320,6 +348,35 @@ def build_labels():
     # (>=540 Ma, e.g. Timanian Belt) are left to snapLabel with their paleo coord.
     rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
     tracked = 0
+    untracked_bad_coord = []
+    # A track back-advects a PRESENT-DAY coordinate. Many labels here are not
+    # authored that way: paleo-entities (Gondwana, Baltica, Avalonia, Cimmeria,
+    # the Glossopteris flora) carry the position they occupied in their own era's
+    # reconstruction, and back-advecting one of those is meaningless -- it moves
+    # a point that was never at that place today. The give-away is that the coord
+    # sits on the wrong side of TODAY's coastline for the kind of feature it is:
+    # the Appalachians are a real mountain range, so their coordinate had better
+    # be on land today, and (-75, 30) is 4400 m of open Atlantic.
+    # Those labels are left untracked and keep snapLabel's wide terrain search,
+    # which is how they were placed before tracking existed.
+    present_dem = _present_elevation()
+
+    def coord_is_present_day(l):
+        """Is this coordinate a real present-day position on trackable crust?
+
+        The test is LAND today, whatever the feature was. A track follows crust,
+        and only crust that still exists can be followed — an epicontinental sea
+        like the Western Interior Seaway sat on continental crust that is now dry
+        South Dakota, so it tracks perfectly well. A coordinate out on today's
+        abyssal plain is either authored in its own era's reconstruction frame
+        (Gondwana at 30E 40S, Avalonia in the South Atlantic) or sits on ocean
+        floor that has since been subducted. Neither can be back-advected, so
+        both keep snapLabel's terrain search instead.
+        """
+        if present_dem is None:
+            return True
+        return _elev_lookup(present_dem, l["lon"], l["lat"]) > 0
+
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
@@ -331,11 +388,13 @@ def build_labels():
         # were mislaid — that is the fix.
         if rec and l["t"] != "ocean" and min(l["a0"], l["a1"]) < 540:
             span = min(540, max(l["a0"], l["a1"]))
-            if span >= 5:
+            if span >= 5 and coord_is_present_day(l):
                 tr, _ = rec.track(l["lon"], l["lat"], span)
                 if len(tr) > 1:
                     l["tr"] = tr
                     tracked += 1
+            elif span >= 5:
+                untracked_bad_coord.append(l["n"])
         # lakes carry a rendered radius (deg) plus real morphology (oriented,
         # multi-lobe ellipses) so the app can draw them as their actual shapes
         if l["t"] == "lake":
@@ -353,6 +412,11 @@ def build_labels():
                 if min(p["a0"], p["a1"]) < lo - 1 or max(p["a0"], p["a1"]) > hi + 1:
                     print(f"  WARNING unreachable phase: {l['n']} "
                           f"{p['a0']}-{p['a1']} outside label window {lo}-{hi}")
+    if untracked_bad_coord:
+        print(f"  {len(untracked_bad_coord)} labels left untracked — their coord is "
+              f"not a present-day position: "
+              f"{', '.join(sorted(untracked_bad_coord)[:8])}"
+              + (" ..." if len(untracked_bad_coord) > 8 else ""))
     json.dump(out, open(f"{WEB}/labels.json", "w"), separators=(",", ":"))
     have = sum(1 for l in out if "d" in l)
     phased = sum(1 for l in out if "ph" in l)

@@ -168,7 +168,7 @@ LABELS = [
     ("continent", "Gondwana",        30, -40,  150, 540),
     ("ocean", "Tethys Ocean",        90,   5,  120, 260),
     ("ocean", "Panthalassa",       -150,   0,  160, 320),
-    ("sea", "Western Interior Seaway", -95, 45, 70, 100),
+    ("sea", "Western Interior Seaway", -95, 45, 72, 100),
     ("sea", "Turgai Strait",         65,  50,   29, 160),
     ("sea", "Eromanga Sea",         140, -28,   95, 125),
     ("orogen", "Cordillera",       -115,  40,   60, 150),
@@ -179,7 +179,7 @@ LABELS = [
     ("sea", "Zechstein Sea",         12,  25,  252, 262),
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
     ("orogen", "Ural Mountains",     58,  55,  240, 320),
-    ("orogen", "Appalachians",      -75,  30,  0, 470),
+    ("orogen", "Appalachians",      -80,  38,  0, 470),
     ("orogen", "Variscan Belt",       5,  22,  280, 360),
     # ---------- Paleozoic ----------
     ("continent", "Laurussia (Euramerica)", -20, 10, 300, 425),
@@ -1680,7 +1680,7 @@ PHASES = {
             "flooding the foreland basin behind the rising Sevier mountains."),
   (75, 90, "At its widest -- a thousand kilometres of shallow sea splitting North America in two, "
            "warm, oxygen-poor at depth, and full of mosasaurs, plesiosaurs and giant fish."),
-  (70, 75, "Draining away as sea level falls and the Laramide uplifts rise through its floor. "
+  (72, 75, "Draining away as sea level falls and the Laramide uplifts rise through its floor. "
            "The Bearpaw flooding is its last, and by about 70 Ma the through-going connection "
            "from Arctic to Gulf is gone, leaving the chalk and shale under the Great Plains."),
  ],
