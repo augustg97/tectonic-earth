@@ -31,7 +31,9 @@ from fieldpack import enc_elev, RF_MAX
 from build_frames import period_for, sealevel_for, index_dems, read_dem
 import build_synthetic as BS
 import precambrian as PRE
+import epeiric as EP
 import motion as MO
+import paleo_tracks
 
 OUT = "../web/fields"
 os.makedirs(OUT, exist_ok=True)
@@ -314,9 +316,12 @@ def main():
         return read_dem(idx[near])
 
     # ---- Phanerozoic ----
+    _rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
     for age in range(0, 541, STEP):
         z = dem_for(age)
         Zhi = resample_dem(z, ELEV_H, ELEV_W)
+        # flood the epicontinental seas this grid cannot resolve (see epeiric.py)
+        Zhi = EP.carve(Zhi, age, _rec)
         coarse[age] = MO.coarsen(Zhi)
         m, n = export(age, Zhi, z, "phan")
         manifest.append(m); total += n

@@ -217,7 +217,12 @@ LABELS = [
     ("ocean", "Ural Ocean",          58,  50,  255, 490),
     ("sea",   "Sundance Sea",      -108,  44,  155, 172),
     ("sea",   "Trans-Saharan Sea",    5,  20,   50, 100),
-    ("sea",   "Central American Sea", -80,  9,    3,  40),
+    # Ends at 10 Ma, not 3 Ma, because that is where THIS MAP closes it. The
+    # last shallow connection really did survive to ~2.8 Ma, but a strait a few
+    # tens of km wide is finer than a 20 km global DEM can hold, so a label
+    # running to 3 Ma sat over a seaway the viewer could not see. The remaining
+    # history is in the description instead of being asserted by a label.
+    ("sea",   "Central American Sea", -80,  9,   10,  40),
     ("sea",   "Hudson Seaway",      -85,  58,   66, 100),
     ("orogen", "Alleghanian Belt",  -80,  36,  258, 325),
     ("orogen", "Ouachita Belt",     -94,  34,  278, 320),
@@ -321,7 +326,7 @@ LABELS = [
     ("orogen", "East African Orogen", 42, -10, 550, 650),
     ("orogen", "Damara Belt", 16, -30, 530, 590),
     ("orogen", "Kuunga Orogen", 70, -45, 500, 570),
-    ("orogen", "Central Asian Orogenic Belt", 88, 40, 250, 550),
+    ("orogen", "Central Asian Orogenic Belt", 88, 40, 250, 420),
     ("orogen", "Famatinian Belt", -65, -45, 440, 482),
     ("orogen", "Cape Fold Belt", 20, -62, 248, 290),
     ("orogen", "Qinling-Dabie Belt", 110, 25, 200, 250),
@@ -558,6 +563,75 @@ def lake_shape(name):
 # one, so whoever goes first gets the pick -- a supercontinent must claim the
 # supercontinent before a craton-sized name can take it. Pannotia and Gondwana
 # were last in this list and ended up on leftovers, in open water.
+
+# --- water features and belts, positioned the same way -------------------------
+# An ocean basin has no surviving crust to track, but its MARGINS do: put anchors
+# on both shores and the centroid falls in the basin between them. An
+# epicontinental sea sits on crust that is dry land today, so its own footprint
+# works. "target": "sea" snaps to water instead of land.
+#
+# Before this, every one of these was a static present-day coordinate evaluated
+# in a reconstruction frame, so the Gulf of Mexico label sat at (-90, 25) at
+# every age -- which at 170 Ma is open Panthalassa, not a gulf.
+COMPOSITE_WATER = {
+    "Gulf of Mexico": {
+        "modern": [(-89, 20), (-82, 28), (-95, 29), (-91, 30), (-86, 22)],
+        "target": "sea"},
+    "Hudson Seaway": {
+        "modern": [(-95, 58), (-78, 58), (-85, 52), (-88, 64)],
+        "target": "sea"},
+    "Central American Sea": {
+        # the seaway between the Americas, before the isthmus closed it
+        "modern": [(-80, 9), (-84, 10), (-76, 8), (-85, 12)],
+        "target": "sea"},
+    "Cannonball Sea": {
+        "modern": [(-100, 47), (-101, 48), (-99, 46)], "target": "sea"},
+    "Trans-Saharan Sea": {
+        "modern": [(0, 18), (8, 16), (3, 13), (-2, 16)], "target": "sea"},
+    "Western Interior Seaway": {
+        "modern": [(-100, 45), (-104, 50), (-97, 40), (-101, 55)],
+        "target": "sea"},
+    "Turgai Strait": {
+        "modern": [(65, 52), (68, 48), (62, 55)], "target": "sea"},
+    "West Siberian Sea": {
+        "modern": [(72, 62), (78, 65), (68, 58)], "target": "sea"},
+    "Paratethys": {
+        "modern": [(40, 45), (48, 44), (32, 46)], "target": "sea"},
+    "Iapetus Ocean": {
+        # Laurentian shore + Baltic/Avalonian shore: the centroid is the ocean
+        "modern": [(-70, 47), (-55, 50), (-30, 70), (10, 60), (-3, 54), (16, 62)],
+        "target": "sea"},
+    "Rheic Ocean": {
+        # north Gondwana against Avalonia and Laurussia
+        "modern": [(-7, 32), (-12, 20), (5, 12), (-3, 52), (-63, 45), (2, 50)],
+        "target": "sea"},
+    "Paleo-Tethys": {
+        # north Gondwana / Cimmeria against Laurasia
+        "modern": [(33, 39), (55, 32), (88, 32), (68, 48), (95, 58), (78, 45)],
+        "target": "sea"},
+    "Ural Ocean": {
+        "modern": [(52, 58), (58, 55), (85, 62), (75, 60), (65, 50)],
+        "target": "sea"},
+    "Tornquist Sea": {
+        "modern": [(14, 55), (20, 52), (8, 58), (-3, 52)], "target": "sea"},
+    "Adamastor Ocean": {
+        # Precambrian: between the South American and African cratons
+        "cratons": ["Amazonia", "SaoFrancisco", "WestAfrica", "Congo", "Kalahari"],
+        "target": "sea"},
+    "Mozambique Ocean": {
+        # Precambrian: between the Congo/Kalahari side and India/East Antarctica
+        "cratons": ["Congo", "Kalahari", "India", "EAntarctica"],
+        "target": "sea"},
+}
+
+# Belts are land, but a single point cannot stand for a 5000 km orogen that
+# assembled piecemeal. The Central Asian Orogenic Belt's coordinate sat off its
+# terrain at every sampled age and jumped 30-40 degrees between frames.
+COMPOSITE_BELTS = {
+    "Central Asian Orogenic Belt": {
+        "modern": [(60, 44), (68, 45), (80, 46), (90, 48), (103, 48)]},
+}
+
 COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
                    "Laurussia (Euramerica)", "Laurentia", "Siberia",
                    "Baltica", "Avalonia"]
@@ -619,7 +693,13 @@ DESCRIPTIONS = {
  "Ural Ocean": "The ocean between Baltica and Siberia. Closing it raised the Urals and welded the last major piece of Pangaea into place.",
  "Sundance Sea": "A Jurassic arm of the Arctic reaching south into western North America, leaving the marine shales that underlie the Rocky Mountain foreland.",
  "Trans-Saharan Sea": "A shallow seaway flooding across West Africa during the Cretaceous high-stand, briefly separating the Sahara into islands.",
- "Central American Sea": "The open gap between North and South America. Its closure by the Isthmus of Panama rerouted ocean currents and let the two continents exchange their animals.",
+ "Central American Sea": "The open gap between North and South America, and the "
+   "last place the Atlantic and Pacific were one ocean at the equator. The volcanic "
+   "arc rising through it shoaled the seaway from the Miocene onward, which is where "
+   "this map loses it; a narrow, shallow and probably intermittent connection "
+   "survived until final closure around 2.8 Ma. Shutting it rerouted the Gulf "
+   "Stream, and the land bridge that replaced it let the two continents swap their "
+   "mammals -- the Great American Biotic Interchange.",
  "Hudson Seaway": "A Cretaceous arm of the sea across what is now Hudson Bay, splitting the eastern remnant of North America off from the rest and linking the Western Interior Seaway toward the opening Labrador Sea.",
  "Alleghanian Belt": "The final Appalachian collision, as Gondwana drove into Laurussia to close Pangaea. At its peak this chain rivalled the Himalaya; what remains is its worn-down root.",
  "Ouachita Belt": "The south-western continuation of the Alleghanian collision, now largely buried beneath the Gulf coastal plain.",
@@ -780,10 +860,7 @@ DESCRIPTIONS = {
  "Catskill Delta": "A vast wedge of river and delta sediment shed westward from the rising Acadian "
   "mountains into an inland sea. Its red beds preserve the earliest tetrapod trackways of "
   "North America.",
- "Central Asian Orogenic Belt": "The largest accretionary mountain system on Earth, built over 300 million years by "
-  "sweeping together island arcs, seamounts and microcontinents between Siberia, Baltica "
-  "and China. More new continental crust was made here than anywhere else in the "
-  "Phanerozoic.",
+ "Central Asian Orogenic Belt": "The Altaids: the largest belt of accreted island arcs on Earth, built as arcs, microcontinents and seamounts were swept together between Baltica and Siberia through the Devonian to Permian, and welded when those two continents finally closed on each other. Much of central Asia is crust that was never part of an older continent.",
  "Centralian Superbasin": "A single vast basin across central Australia, later broken into the Amadeus, Officer, "
   "Ngalia, Georgina and Savory basins by Palaeozoic mountain building. It began sagging "
   "around 830 Ma as Rodinia stretched.",

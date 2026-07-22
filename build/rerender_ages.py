@@ -17,6 +17,8 @@ from build_fields import (export, handoff_blend,
 from build_frames import index_dems, read_dem
 from render import resample_dem
 import precambrian as PRE
+import epeiric as EP
+import paleo_tracks
 
 MAN = os.path.join(OUT, "manifest.json")
 _IDX = index_dems()
@@ -48,7 +50,16 @@ def main(ages):
             continue
         if age <= 540:
             z = dem_for_age(age)
-            rec, _ = export(age, resample_dem(z, ELEV_H, ELEV_W), z, "phan")
+            Zhi = resample_dem(z, ELEV_H, ELEV_W)
+            # same seeded seas build_fields applies, or a per-frame re-render
+            # would quietly drain them again
+            global _REC
+            try:
+                _REC
+            except NameError:
+                _REC = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
+            Zhi = EP.carve(Zhi, age, _REC)
+            rec, _ = export(age, Zhi, z, "phan")
         else:
             if a_hi is None:                      # anchor, loaded once
                 z540 = dem_for_age(540)

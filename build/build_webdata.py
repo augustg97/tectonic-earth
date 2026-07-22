@@ -512,6 +512,82 @@ def _arc(lon0, lat0, lon1, lat1):
 MAX_SNAP_DEG = 75.0
 
 
+
+_GRID_CACHE = {}
+
+
+def elev_grid(age, nx=720, ny=360):
+    """Low-res elevation for an age, for water snapping."""
+    key = int(round(age / 5.0)) * 5
+    if key in _GRID_CACHE:
+        return _GRID_CACHE[key]
+    import numpy as np
+    from PIL import Image
+    name = (f"pre_{key:04d}_e.webp" if key > 540 else
+            (f"fut_{abs(key):04d}_e.webp" if key < 0 else f"phan_{key:04d}_e.webp"))
+    path = os.path.join(WEB, "fields", name)
+    if not os.path.exists(path):
+        _GRID_CACHE[key] = None
+        return None
+    a = np.asarray(Image.open(path).convert("L").resize((nx, ny)), np.float32) / 255.0
+    sg = 2 * a - 1
+    _GRID_CACHE[key] = np.sign(sg) * sg * sg * 8000.0
+    return _GRID_CACHE[key]
+
+
+def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
+                  min_depth=40.0, prefer=None):
+    """Closest sea cell to a position, keeping clear of already-placed names.
+
+    Ocean labels used to be static present-day coordinates evaluated in a
+    reconstruction frame, so they drifted over continents; and the Precambrian
+    pair (Adamastor, Mozambique) ended up sitting on top of each other. Snapping
+    to real water with a separation rule fixes both.
+    """
+    import numpy as np
+    z = elev_grid(age)
+    if z is None:
+        return None
+    ny, nx = z.shape
+    la = np.radians(90 - (np.arange(ny) + 0.5) / ny * 180)[:, None]
+    lo = np.radians((np.arange(nx) + 0.5) / nx * 360 - 180)[None, :]
+    a, b = math.radians(lat), math.radians(lon)
+    dot = (np.cos(la) * np.cos(lo) * math.cos(a) * math.cos(b)
+           + np.cos(la) * np.sin(lo) * math.cos(a) * math.sin(b)
+           + np.sin(la) * math.sin(a))
+    # Require water, not the waterline: a low-res cell can read as sea while the
+    # full-resolution texture there is a few metres above it, which is how these
+    # labels ended up on their own coastline. Keep the floor SHALLOW though --
+    # an epicontinental seaway is only 100-150 m deep, and a 200 m floor sent
+    # the Trans-Saharan label out into the Atlantic instead.
+    ok = z < -min_depth
+    if not ok.any():
+        ok = z < 0
+    for (alon, alat) in avoid:
+        aa, bb = math.radians(alat), math.radians(alon)
+        d2 = (np.cos(la) * np.cos(lo) * math.cos(aa) * math.cos(bb)
+              + np.cos(la) * np.sin(lo) * math.cos(aa) * math.sin(bb)
+              + np.sin(la) * math.sin(aa))
+        ok &= d2 < math.cos(math.radians(avoid_deg))
+    if not ok.any():
+        return None
+    # continuity: a basin name should stay in the basin it was in, or it flips
+    # between neighbouring seas as the coastline shifts frame to frame
+    if prefer is not None:
+        pa, pb = math.radians(prefer[1]), math.radians(prefer[0])
+        dp = (np.cos(la) * np.cos(lo) * math.cos(pa) * math.cos(pb)
+              + np.cos(la) * np.sin(lo) * math.cos(pa) * math.sin(pb)
+              + np.sin(la) * math.sin(pa))
+        dot = dot + 0.6 * dp
+    d = np.where(ok, dot, -4.0)
+    k = int(np.argmax(d))
+    y, x = divmod(k, nx)
+    ang = math.degrees(math.acos(max(-1.0, min(1.0, float(np.clip(dot.flat[k], -1, 1))))))
+    if prefer is None and ang > max_deg:
+        return None
+    return (float((x + 0.5) / nx * 360 - 180), float(90 - (y + 0.5) / ny * 180))
+
+
 def resolve_to_landmasses(tracks, windows, order):
     """Put each paleocontinent ON a landmass, and never two on the same one.
 
@@ -635,35 +711,20 @@ def build_labels():
             return True
         return _elev_lookup(present_dem, l["lon"], l["lat"]) > 0
 
-    composites = getattr(features, "COMPOSITE_LABELS", {})
+    composites = dict(getattr(features, "COMPOSITE_LABELS", {}))
+    water_specs = dict(getattr(features, "COMPOSITE_WATER", {}))
+    composites.update(getattr(features, "COMPOSITE_BELTS", {}))
     n_comp = 0
     raw_comp, comp_window, comp_label = {}, {}, {}
+    water_placed, n_water = {}, 0
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
-        # Not oceans: an ocean basin is a body of water, not a patch of crust, so
-        # carrying a present-day ocean point back on its plate follows the wrong
-        # thing (Tethys would ride the Indian plate south, away from the Tethyan
-        # seaway). Broad ocean names keep snapLabel. Seas (epicontinental, ON
-        # continental crust) DO ride the plate correctly and are the ones that
-        # were mislaid — that is the fix.
-        spec = composites.get(l["n"])
-        if rec and spec is not None:
-            tr = composite_track(spec, max(l["a0"], l["a1"]), rec)
-            if len(tr) > 1:
-                raw_comp[l["n"]] = tr
-                comp_window[l["n"]] = (min(l["a0"], l["a1"]), max(l["a0"], l["a1"]))
-                comp_label[l["n"]] = l
-            continue
-        if rec and l["t"] != "ocean" and min(l["a0"], l["a1"]) < 540:
-            span = min(540, max(l["a0"], l["a1"]))
-            if span >= 5 and coord_is_present_day(l):
-                tr, _ = rec.track(l["lon"], l["lat"], span)
-                if len(tr) > 1:
-                    l["tr"] = tr
-                    tracked += 1
-            elif span >= 5:
-                untracked_bad_coord.append(l["n"])
+        # Attach the per-label extras FIRST. Each tracking branch below ends in
+        # `continue`, so anything after them is skipped for the labels that take
+        # one -- which silently cost six seas their phase descriptions when the
+        # water branch was added.
+        #
         # lakes carry a rendered radius (deg) plus real morphology (oriented,
         # multi-lobe ellipses) so the app can draw them as their actual shapes
         if l["t"] == "lake":
@@ -681,6 +742,101 @@ def build_labels():
                 if min(p["a0"], p["a1"]) < lo - 1 or max(p["a0"], p["a1"]) > hi + 1:
                     print(f"  WARNING unreachable phase: {l['n']} "
                           f"{p['a0']}-{p['a1']} outside label window {lo}-{hi}")
+        # Not oceans: an ocean basin is a body of water, not a patch of crust, so
+        # carrying a present-day ocean point back on its plate follows the wrong
+        # thing (Tethys would ride the Indian plate south, away from the Tethyan
+        # seaway). Broad ocean names keep snapLabel. Seas (epicontinental, ON
+        # continental crust) DO ride the plate correctly and are the ones that
+        # were mislaid — that is the fix.
+        wspec = water_specs.get(l["n"])
+        if rec and wspec is not None:
+            tr = composite_track(wspec, max(l["a0"], l["a1"]), rec)
+            out_tr = []
+            avoid_at = {}
+            for a, lo_, la_ in tr:
+                if not (min(l["a0"], l["a1"]) - 5 <= a <= max(l["a0"], l["a1"]) + 5):
+                    continue
+                w = nearest_water(a, lo_, la_, avoid=water_placed.get(a, ()),
+                                  prefer=avoid_at.get("prev"))
+                if w is not None:
+                    avoid_at["prev"] = w
+                if w is None:
+                    out_tr.append([a, lo_, la_])
+                else:
+                    out_tr.append([a, round(w[0], 1), round(w[1], 1)])
+                    water_placed.setdefault(a, []).append(w)
+            if len(out_tr) > 1:
+                l["tr"] = out_tr
+                tracked += 1
+                n_water += 1
+            continue
+        # Every OTHER sea and ocean gets snapped to water too.
+        #
+        # COMPOSITE_WATER hand-defines the 16 basins whose position genuinely
+        # needs two margins to pin down. The rest were left to the app's
+        # snapLabel, and an audit against the shipped terrain found eleven of
+        # them standing on dry land for a third or more of their window --
+        # Mid-Atlantic Ridge on Africa at 100 Ma, the Boreal Sea 692 m up. Same
+        # cause as the sixteen, so the same cure: sample the label's own
+        # position per keyframe and move it to the nearest real water.
+        #
+        # A SEA rides the crust it floods, so its base position comes from the
+        # plate track. An OCEAN does not -- a basin is water, and carrying a
+        # present-day point back on its plate follows the wrong thing (Tethys
+        # would ride India south) -- so an ocean's base stays its authored coord
+        # and only the water snap moves it.
+        if l["t"] in ("sea", "ocean"):
+            lo_w, hi_w = min(l["a0"], l["a1"]), max(l["a0"], l["a1"])
+            base = {}
+            if (rec and l["t"] == "sea" and lo_w < 540
+                    and coord_is_present_day(l)):
+                span = min(540, max(5, hi_w))
+                try:
+                    btr, _ = rec.track(l["lon"], l["lat"], span)
+                    for a_, x_, y_ in btr:
+                        base[int(round(a_ / 5.0)) * 5] = (x_, y_)
+                except Exception:
+                    base = {}
+            a_ = math.floor(lo_w / 5.0) * 5.0
+            out_tr, prev_w = [], None
+            while a_ <= math.ceil(hi_w / 5.0) * 5.0 + 0.01:
+                key = int(round(a_ / 5.0)) * 5
+                if base:
+                    near = min(base, key=lambda k: abs(k - key))
+                    bx, by = base[near]
+                else:
+                    bx, by = l["lon"], l["lat"]
+                w = nearest_water(key, bx, by, avoid=water_placed.get(key, ()),
+                                  prefer=prev_w)
+                if w is None:
+                    out_tr.append([key, round(bx, 1), round(by, 1)])
+                else:
+                    prev_w = w
+                    out_tr.append([key, round(w[0], 1), round(w[1], 1)])
+                    water_placed.setdefault(key, []).append(w)
+                a_ += 5.0
+            if len(out_tr) > 1:
+                l["tr"] = out_tr
+                tracked += 1
+                n_water += 1
+            continue
+        spec = composites.get(l["n"])
+        if rec and spec is not None:
+            tr = composite_track(spec, max(l["a0"], l["a1"]), rec)
+            if len(tr) > 1:
+                raw_comp[l["n"]] = tr
+                comp_window[l["n"]] = (min(l["a0"], l["a1"]), max(l["a0"], l["a1"]))
+                comp_label[l["n"]] = l
+            continue
+        if rec and l["t"] != "ocean" and min(l["a0"], l["a1"]) < 540:
+            span = min(540, max(l["a0"], l["a1"]))
+            if span >= 5 and coord_is_present_day(l):
+                tr, _ = rec.track(l["lon"], l["lat"], span)
+                if len(tr) > 1:
+                    l["tr"] = tr
+                    tracked += 1
+            elif span >= 5:
+                untracked_bad_coord.append(l["n"])
     if raw_comp:
         order = getattr(features, "COMPOSITE_ORDER", None) or list(composites)
         order = [n for n in order if n in raw_comp] + \
@@ -693,6 +849,8 @@ def build_labels():
                 n_comp += 1
     if n_comp:
         print(f"  {n_comp} paleocontinents positioned from their modern fragments")
+    if n_water:
+        print(f"  {n_water} seas and oceans positioned from their margins")
     if untracked_bad_coord:
         print(f"  {len(untracked_bad_coord)} labels left untracked — their coord is "
               f"not a present-day position: "

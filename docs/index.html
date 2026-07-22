@@ -57,9 +57,13 @@ canvas{display:block}
 #extinctChev{position:absolute;right:11px;top:10px;color:#e8794c;font-size:11px;transition:transform .25s}
 #extinctBox.open #extinctChev{transform:rotate(180deg)}
 #extinctBody{max-height:0;overflow-y:auto;font-size:11.5px;line-height:1.52;color:#c2cad4;padding:0 12px;transition:max-height .32s ease}
-#extinctBox.open #extinctBody{max-height:158px;padding:2px 12px 12px}
-@media (min-height:1000px){#extinctBox.open #extinctBody{max-height:230px}}
-@media (min-height:1300px){#extinctBox.open #extinctBody{max-height:330px}}
+#extinctBox.open #extinctBody{max-height:238px;padding:2px 12px 12px}
+@media (min-height:1000px){#extinctBox.open #extinctBody{max-height:320px}}
+@media (min-height:1300px){#extinctBox.open #extinctBody{max-height:430px}}
+/* This card is a 210px-wide dropdown, not a panel — the figure rides as a
+   cropped banner so it does not swallow the whole body. */
+#extinctBody .cardfig{margin:2px 0 8px}
+#extinctBody .cardfig svg{height:50px}
 body.ambient #extinctBox{opacity:0;pointer-events:none}
 .grp{margin-bottom:12px}
 .grp:last-child{margin-bottom:0}
@@ -150,6 +154,14 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 #info .tag{font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
 #info .row{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:4px 0;border-top:1px solid var(--line);color:var(--dim)}
 #info .row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+/* Schematic figure at the head of a card. Cards that describe an organism get a
+   silhouette; everything else — a rift, a crater, a flood basalt — was text
+   only. These are diagrams of the KIND of thing, which the caption says. */
+.cardfig{margin:11px 0 2px}
+.cardfig svg{display:block;width:100%;height:auto;border-radius:7px;
+  border:1px solid var(--line)}
+.cardfig figcaption{font-size:9.5px;font-style:italic;color:var(--dim2);
+  line-height:1.5;margin-top:5px}
 #info p.desc{font-size:11px;color:var(--dim);line-height:1.6;margin-top:8px}
 #info p.desc+p.desc{margin-top:6px}
 .ihead{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:13px 0 7px;padding-top:9px;border-top:1px solid var(--line)}
@@ -443,6 +455,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <h3><span id="infoName">—</span><span class="close" id="infoClose">×</span></h3>
   <div class="tag" id="infoTag"></div>
   <div id="infoRows"></div>
+  <div id="infoArt" hidden></div>
   <p class="desc" id="infoDesc"></p>
   <div id="infoExtra"></div>
 </div>
@@ -748,13 +761,14 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260722-0748';
+const DATA_V='20260722-0913';
 async function loadAll(){
-  const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life'];
+  const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json?v='+DATA_V).then(r=>r.json()).catch(()=>null)));files.forEach((f,i)=>DATA[f]=res[i]);}
   DATA.eras=DATA.eras||{intervals:[],supercontinents:[]};
   DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
+  DATA.art=DATA.art||{art:{},byType:{}};
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
   let done=0; const total=tl.length*4;
@@ -1928,7 +1942,8 @@ function showEvent(h){
     `Plumes are anchored in the mantle while plates slide over them, so this marker `+
     `stays put and the crust moves past it. That is an approximation: Hawaii is known `+
     `to have drifted about 15° south between 81 and 47 Ma.</p>`;
-  openInfo({name:h.n,tag,rows,desc:h.d1||'',extra,wide:!!extra});
+  openInfo({name:h.n,tag,rows,desc:h.d1||'',extra,wide:!!extra,
+    art:artFor(h.k==='impact'?'crater':h.k==='lip'?'volcanism':'plume')});
 }
 const COMPASS=['north','north-east','east','south-east','south','south-west','west','north-west'];
 function bearingName(vx,vy){
@@ -1939,7 +1954,13 @@ function showFeature(l,lon,lat){
   const at=snapLabel(l,curFrame().i);
   const useLon=(lon===undefined?at[0]:lon), useLat=(lat===undefined?at[1]:lat);
   $('#infoName').textContent=l.n;
-  const kind={continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',orogen:'Mountain belt'}[l.t];
+  /* Every type needs an entry. Only four were listed, so the other ten drew the
+     card header as "UNDEFINED · 5 MA" — clicking any rift, lake, desert or
+     crater in the app hit it. */
+  const kind={continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',
+    orogen:'Mountain belt',rift:'Rift',lake:'Lake',desert:'Desert',
+    island:'Island',ice:'Ice sheet',basin:'Basin',forest:'Forest',
+    region:'Region',plateau:'Plateau',grassland:'Grassland'}[l.t]||'Feature';
   $('#infoTag').textContent=kind+' · '+fmtAge(Math.round(state.age));
   const rows=[];
   // live measurement from the derived motion field, so the panel describes
@@ -1975,7 +1996,8 @@ function showFeature(l,lon,lat){
   if(BIG.has(l.t))extra+=lifeSection(l);
   openInfo({name:l.n,
     tag:kind+' · '+fmtAge(Math.round(state.age)),
-    rows, desc:ph||l.d||featureDesc(l.n), extra, wide:!!extra});
+    rows, desc:ph||l.d||featureDesc(l.n), extra, wide:!!extra,
+    art:artFor(l.t,undefined,l.n)});
 }
 function closeInfo(){$('#info').classList.remove('show');state.selPlate=null;}
 $('#infoClose').onclick=closeInfo;
@@ -2105,10 +2127,41 @@ function listHTML(title,items){
   return `<div class="ihead">${esc(title)}</div><ul class="evlist">`+
     items.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';
 }
+/* A schematic for a card that has no organism to draw.
+
+   `kind` is a feature type ("rift", "crater", "supercontinent", ...). Returns
+   null when nothing is mapped, and the caller simply gets no figure — better a
+   text-only card than a picture of the wrong thing. The caption is deliberately
+   generic in its wording ("a rift, in cross-section") because that is what the
+   drawing is: nobody surveyed THIS rift for it. */
+const ART_NOTE='Generic diagram of this kind of feature, not a survey of this one.';
+function artFor(kind,note,name){
+  const A=DATA.art||{};
+  // A named override wins: an Andean arc and a continental collision are both
+  // "orogen" but are built by different mechanisms, and the generic diagram
+  // would be wrong for one of them.
+  const id=(name&&(A.byName||{})[name])||(A.byType||{})[kind];
+  const a=id&&(A.art||{})[id];
+  if(!a)return null;
+  return {svg:a.svg, caption:a.caption+' '+(note===undefined?ART_NOTE:note)};
+}
+function figHTML(a){
+  if(!a||!a.svg)return '';
+  /* "slice" so that anywhere the figure is given a fixed height (the extinction
+     card's dropdown is only ~158px tall in total) it crops to a banner instead
+     of squashing the drawing. Where height is left to the width, the aspect
+     matches the viewBox exactly and slice and meet are the same thing. */
+  return `<figure class="cardfig"><svg viewBox="0 0 300 118" role="img"`+
+    ` preserveAspectRatio="xMidYMid slice" aria-label="${esc(a.caption)}">`+
+    `${a.svg}</svg><figcaption>${esc(a.caption)}</figcaption></figure>`;
+}
 function openInfo(o){
   $('#infoName').textContent=o.name;
   $('#infoTag').textContent=o.tag||'';
   $('#infoRows').innerHTML=(o.rows||[]).map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
+  const fig=$('#infoArt');
+  fig.innerHTML=figHTML(o.art);
+  fig.hidden=!fig.innerHTML;
   $('#infoDesc').textContent=o.desc||'';
   $('#infoExtra').innerHTML=o.extra||'';
   $('#info').classList.toggle('wide',!!o.wide);
@@ -2146,7 +2199,10 @@ function showSupercontinent(s){
     `This one is not settled. It is shown because it is in the published literature, `+
     `not because the reconstruction is agreed.</p>`;
   openInfo({name:s.name,tag:(s.disputed?'Disputed · ':'')+'Supercontinent',
-            rows,desc:s.summary,extra,wide:true});
+            rows,desc:s.summary,extra,wide:true,
+            art:artFor('supercontinent',
+              'Schematic, not a reconstruction — for the real shape of '+
+              s.name+', use the map.')});
   jumpTo(s.jump_age);
 }
 function buildEraList(){
@@ -2484,7 +2540,17 @@ function updateExtinction(){
     eb.textContent=after?'Aftermath':(cur.ev.proposed?'Proposed Extinction':'Mass Extinction');
     eb.className=after?'after':'';
     $('#extinctTitle').textContent=cur.p.t.replace(/^Aftermath: /,'');
-    $('#extinctBody').innerHTML=cur.p.b;
+    // The figure goes in the collapsible body, so it costs nothing until the
+    // card is opened. Aftermath phases describe recovery, not the boundary
+    // itself, so they get no figure rather than a misleading one.
+    // Shorter note than ART_NOTE: this card is 210px wide, and the standard
+    // three-line disclaimer would outweigh the figure it qualifies.
+    const xa=after?null:artFor('extinction',
+      cur.ev.proposed
+        ? 'This one has no boundary layer yet — it is measured in living '+
+          'populations, not read from rock.'
+        : 'Generic diagram, not this event’s own section.');
+    $('#extinctBody').innerHTML=(xa?figHTML(xa):'')+cur.p.b;
     box.classList.toggle('open', extinctExpanded);
     markExtinctList(cur);
   }

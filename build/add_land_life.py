@@ -46,11 +46,21 @@ GLOBAL = {
    "than a plant, making it the largest organism on land for 40 million "
    "years.")],
  "Early Devonian": [
+  ("Prototaxites", "genus", "land",
+   "Still the tallest thing alive on land: tapering trunks up to eight metres "
+   "over a flora that barely reached the knee. Not a forest -- these stood as "
+   "scattered giants, and the fungal reading of them means the biggest organism "
+   "on Devonian land was not a plant at all."),
   ("Aglaophyton majus", "species", "land",
    "A rootless Rhynie plant with arbuscular fungi preserved alive inside its "
    "stems, the oldest direct fossil of the symbiosis that got plants onto "
    "land.")],
  "Middle Devonian": [
+  ("Prototaxites", "genus", "land",
+   "Its last act. Archaeopteris was now growing into real forests with woody "
+   "trunks and deep roots, and the giant spires that had towered over the "
+   "landscape for forty million years were overtaken and gone by the end of the "
+   "Devonian."),
   ("Calamophyton", "genus", "land",
    "A cladoxylopsid tree from the oldest forest floors known. It shed whole "
    "branches rather than leaves, and its roots began cracking rock into soil "
