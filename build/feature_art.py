@@ -420,6 +420,37 @@ art("extinction",
     "those species never appear again. The sharpness of that line is the main "
     "evidence for how fast the event was.")
 
+art("tundra",
+    f'<rect x="0" y="70" width="{W}" height="48" fill="#4a4436"/>'
+    f'<path d="M0 70q44-5 76 0t74-3 76 3 74-5v50H0z" fill="#5b5642"/>'
+    # patterned ground: freeze-thaw sorts the surface into polygons, which is
+    # the one thing that makes tundra unmistakable from the air
+    + "".join(
+        f'<path d="M{x} {y}l16-7 17 7-6 15h-22z" fill="none" stroke="#736d55"'
+        f' stroke-width="1.1" opacity=".75"/>'
+        for y in (78, 96) for x in range(-6, 300, 33))
+    + "".join(
+        f'<ellipse cx="{x}" cy="{y}" rx="{r}" ry="{r*0.55:.1f}" fill="#6d7a4e"'
+        f' opacity=".8"/>' for x, y, r in (
+            (34, 86, 9), (96, 102, 7), (158, 84, 8), (214, 100, 6), (268, 88, 9),
+            (66, 108, 6), (188, 110, 7), (128, 92, 5)))
+    + f'<path d="M0 70q44-5 76 0t74-3 76 3 74-5" stroke="#7d8358"'
+      f' stroke-width="2.2" fill="none"/>'
+    # meltwater ponds -- the frozen layer below stops it draining away
+    + "".join(f'<ellipse cx="{x}" cy="{y}" rx="{r}" ry="{r*0.42:.1f}"'
+              f' fill="#3f6a7c" opacity=".85"/>'
+              for x, y, r in ((78, 90, 13), (204, 92, 11), (150, 108, 9),
+                              (262, 104, 8), (18, 100, 7)))
+    + f'<path d="M0 118h300" stroke="#2c2822" stroke-width="8"/>'
+    + f'<path d="M22 56q16-4 30 2M100 50q18-5 32 3M206 54q17-4 31 2"'
+      f' stroke="{LINE}" stroke-width="1.1" fill="none" opacity=".3"/>',
+    "Tundra. Too cold and the season too short for any tree, so the cover is "
+    "moss, sedge, lichen and dwarf shrub over permafrost. The ground freezes "
+    "and thaws into polygons, and because the frozen layer beneath will not let "
+    "meltwater drain, a landscape with very little rainfall is covered in "
+    "shallow pools all summer.")
+
+
 # ------------------------------------------- where the type art is wrong ---
 # A few families of feature are built by a mechanism the generic diagram gets
 # wrong, and there are enough of them to be worth their own drawing.
@@ -543,7 +574,7 @@ TYPE_ART = {
     "rift": "rift", "orogen": "orogen", "ocean": "ocean", "sea": "sea",
     "lake": "lake", "island": "island", "desert": "desert", "forest": "forest",
     "grassland": "grassland", "ice": "ice", "basin": "basin",
-    "plateau": "plateau", "continent": "continent", "region": "region",
+    "plateau": "plateau", "continent": "continent", "region": "region", "tundra": "tundra",
     "crater": "crater", "volcanism": "volcanism", "plume": "plume",
     "supercontinent": "supercontinent", "extinction": "extinction",
 }

@@ -10,6 +10,12 @@ Royer CO2 curves). Each entry: age (Ma), with:
 Intermediate ages are linearly interpolated.
 """
 
+# The ice lines are not decoration: render.glaciation() turns the equatorward
+# one into the temperature threshold the shader glaciates at, so each line is a
+# claim about how much of the world was under ice -- and ice_audit.py checks that
+# claim against the area the app actually draws. Six were corrected when that
+# audit first ran: they had been set by eye back when nothing downstream
+# depended on their exact value.
 CLIMATE = [
     # age  temp   iceN   iceS   veg   arid   note
     (0,   -0.55,  68,    62,   1.00, 0.55),  # Holocene icehouse, bipolar ice
@@ -37,24 +43,24 @@ CLIMATE = [
     (247,  0.70,  None,  None, 0.44, 0.80),  # coal gap: no peat-formers left
     (251,  0.72,  None,  None, 0.34, 0.82),  # collapse, at the Siberian Traps
     (253,  0.45,  None,  None, 0.86, 0.70),  # latest Permian, still forested
-    (260,  0.30,  None,  None, 0.92, 0.68),
-    (280,  -0.30, None,  60,   0.95, 0.58),  # early Permian, waning Gondwana ice
+    (260,  0.30,  None,  70,   0.92, 0.68),  # last Australian ice, nearly gone
+    (280,  -0.30, None,  66,   0.95, 0.58),  # early Permian, waning Gondwana ice
     (300,  -0.70, 72,    58,   0.95, 0.50),  # LPIA peak, bipolar-ish coal forests
     (315,  -0.65, 74,    58,   0.98, 0.48),  # Carboniferous coal swamps
-    (330,  -0.25, None,  64,   0.95, 0.48),
+    (330,  -0.25, None,  70,   0.95, 0.48),  # mid-Carboniferous, ice building
     (340,   0.05, None,  None, 0.90, 0.50),
     (360,   0.10, None,  None, 0.82, 0.52),  # Devono-Carb, early forests
     (380,   0.30, None,  None, 0.60, 0.55),  # Devonian greening underway
     (400,   0.35, None,  None, 0.35, 0.58),  # early Devonian, sparse land plants
     (420,   0.30, None,  None, 0.18, 0.58),  # Silurian, first vascular plants
     (440,  -0.20, None,  62,   0.05, 0.55),  # end-Ordovician recovery
-    (445,  -0.65, None,  58,   0.03, 0.52),  # Hirnantian glaciation, barren land
-    (460,   0.15, None,  70,   0.02, 0.55),  # Ordovician warm, barren
+    (445,  -0.65, None,  64,   0.03, 0.52),  # Hirnantian glaciation, barren land
+    (460,   0.15, None,  78,   0.02, 0.55),  # Ordovician warm, barren
     (490,   0.35, None,  None, 0.00, 0.58),  # Cambrian, barren rock land
     (520,   0.30, None,  None, 0.00, 0.58),
     (540,   0.20, None,  75,   0.00, 0.55),  # Ediacaran/Cambrian boundary
     # ---- Precambrian (authored keyframes) ----
-    (570,  -0.35, 52,    52,   0.00, 0.48),  # late Ediacaran cool interval
+    (570,  -0.35, 66,    66,   0.00, 0.48),  # late Ediacaran cool interval
     (600,  -0.10, 70,    70,   0.00, 0.50),  # Ediacaran, ice retreating
     (615,  -0.25, 64,    64,   0.00, 0.48),
     # The Cryogenian needs a far deeper anomaly than the rest of the record:

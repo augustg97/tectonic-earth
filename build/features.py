@@ -288,6 +288,19 @@ LABELS = [
     ("grassland", "Great Plains", -100, 41, 0, 18),
     ("grassland", "Eurasian Steppe", 65, 48, 0, 14),
     ("grassland", "African Savanna", 30, -3, 0, 10),
+
+    # Tundra. Treeless ground where the growing season is too short and too
+    # cold for wood, not simply "cold desert" -- it is one of the largest
+    # biomes on Earth and the app had no name for any of it. Coordinates are
+    # present-day and ride the plate tracks like every other land label.
+    ("tundra", "Arctic Tundra", 100, 71, 0, 5),
+    ("tundra", "Nearctic Tundra", -95, 67, 0, 5),
+    # On the Alaskan side, not in the strait: Beringia was land only while sea
+    # level was low, so a label at 170W today sits in 44 m of water.
+    ("tundra", "Beringian Steppe-Tundra", -157, 66, 0, 2.6),
+    ("tundra", "Tibetan Alpine Tundra", 88, 33, 0, 15),
+    ("tundra", "Antarctic Tundra", 65, -70, 16, 34),
+    ("tundra", "Gondwanan Polar Tundra", 25, -75, 285, 320),
     # -- ice --
     ("ice", "Sturtian Snowball Earth", 0, 0, 661, 717),
     ("ice", "Marinoan Snowball Earth", 120, 0, 635, 650),
@@ -398,6 +411,16 @@ LABELS = [
     ("lake", "Lake Lahontan", -119.0, 40.0, 0.013, 0.03),
     ("lake", "Lake Tauca", -68.0, -19.5, 0.0141, 0.0181),
     ("lake", "Lake Agassiz", -95.0, 50.0, 0.0082, 0.015),
+    # Proglacial lakes: meltwater dammed BY the ice itself, against the sheet's
+    # own margin or behind the moraine it left. They exist only while the ice is
+    # going, which makes them the shortest-lived large lakes there are -- and
+    # the most violent, because the dam is made of the thing that is melting.
+    ("lake", "Glacial Lake Missoula", -114.5, 47.3, 0.0135, 0.0185),
+    ("lake", "Glacial Lake Ojibway", -79.5, 50.5, 0.0082, 0.0105),
+    ("lake", "Lake Algonquin", -83.5, 45.5, 0.0102, 0.0135),
+    ("lake", "Baltic Ice Lake", 19.0, 58.5, 0.0116, 0.0143),
+    ("lake", "West Siberian Ice-Dammed Lake", 72.0, 61.0, 0.058, 0.09),
+    ("lake", "Karoo Proglacial Lakes", 24.0, -31.0, 292.0, 302.0),
     ("lake", "Laurentian Great Lakes", -84.0, 45.5, 0.0, 0.014),
     ("lake", "Lake Mega-Chad", 15.0, 13.0, 0.005, 0.011),
     # ---------- timeline audit additions: key features that were missing.
@@ -458,7 +481,11 @@ def labels():
 LAKE_R_DEF = 0.6
 LAKE_R = {
     "Caspian Sea (Paratethys remnant)": 3.0, "Black Sea (Paratethys remnant)": 2.2,
-    "Laurentian Great Lakes": 2.2, "Lake Agassiz": 3.2, "Lake Bonneville": 1.4,
+    "Laurentian Great Lakes": 2.2,
+    "Lake Agassiz": 3.2, "Lake Bonneville": 1.4,
+    "Glacial Lake Missoula": 1.5, "Glacial Lake Ojibway": 2.6,
+    "Lake Algonquin": 2.0, "Baltic Ice Lake": 2.8,
+    "West Siberian Ice-Dammed Lake": 4.2, "Karoo Proglacial Lakes": 2.4,
     "Lake Lahontan": 1.2, "Lake Mega-Chad": 2.6, "Lake Pannon": 2.6,
     "Pebas Mega-Wetland": 3.2, "Songliao Palaeolake": 2.0, "Jehol Lakes": 1.6,
     "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Tanganyika": 0.9,
@@ -513,6 +540,17 @@ LAKE_SHAPE = {
     "Lake Lahontan":          [(0, 0, 430, 260, 340)],
     "Lake Tauca":             [(0, 0, 660, 210, 340)],
     "Lake Agassiz":           [(0, 0, 1100, 400, 335)],
+    # Missoula filled the Clark Fork valleys behind an ice dam in the Purcell
+    # Trench -- a branching lake in mountain valleys, not an open sheet.
+    "Glacial Lake Missoula":  [(0, 0, 330, 60, 300), (-0.6, -0.5, 210, 55, 20),
+                               (0.9, 0.4, 190, 50, 345)],
+    "Glacial Lake Ojibway":   [(0, 0, 900, 320, 285)],
+    "Lake Algonquin":         [(0, 0, 520, 190, 300), (1.6, -0.9, 330, 150, 260)],
+    "Baltic Ice Lake":        [(0, 0, 950, 330, 30)],
+    # The Barents-Kara ice sheet blocked every north-flowing Siberian river at
+    # once, so the Ob and Yenisei backed up into a lake the size of a sea.
+    "West Siberian Ice-Dammed Lake": [(0, 0, 1600, 750, 10)],
+    "Karoo Proglacial Lakes": [(0, 0, 620, 240, 275), (-3.5, 1.2, 420, 180, 300)],
     "Lake Mega-Chad":         [(0, 0, 700, 620, 0)],
     "Pebas Mega-Wetland":     [(0, 0, 1050, 720, 340)],
     "Caspian Sea (Paratethys remnant)": [(0, 0, 1200, 320, 358)],
@@ -887,6 +925,30 @@ DESCRIPTIONS = {
  "Euramerican Coal Forests": "Equatorial swamp forest of thirty-metre lycopod trees, running from Appalachia through "
   "Britain into Poland. Its buried peat became the coal that powered the Industrial "
   "Revolution -- and its burial drew down enough CO2 to help freeze Gondwana.",
+ "Arctic Tundra": "Treeless ground ringing the Arctic Ocean, on permafrost that "
+   "thaws only at the surface each summer. Nothing woody can hold on -- the growing "
+   "season is too short and the frozen layer beneath blocks roots and drainage alike -- "
+   "so it is moss, sedge, lichen and dwarf willow over waterlogged, patterned ground.",
+ "Nearctic Tundra": "The North American arm of the circumpolar tundra, across the "
+   "Canadian Shield and the Arctic islands. It sits on ground the Laurentide ice sheet "
+   "scraped to bedrock and left barely drained, which is why so much of it is lake.",
+ "Beringian Steppe-Tundra": "The mammoth steppe: a cold, DRY grassland-tundra "
+   "stretching from Iberia to Yukon during the glacials, with no modern counterpart. "
+   "Low sea level joined Siberia to Alaska across a plain of grass and herbs that "
+   "supported mammoth, horse and bison at densities no living tundra approaches. It "
+   "existed at the glacial maxima, far briefer than the 5-Myr keyframes this map steps "
+   "through.",
+ "Tibetan Alpine Tundra": "Tundra held up by altitude rather than latitude. The "
+   "plateau stands so high that it is above the tree line at 33 degrees north, and its "
+   "cold, thin, arid air supports alpine steppe and cushion plants across an area the "
+   "size of Western Europe.",
+ "Antarctic Tundra": "What came between the forest and the ice. As Antarctica cooled "
+   "after the Eocene, its southern beech woodland thinned to tundra -- mosses, cushion "
+   "plants and dwarf shrubs -- before the ice sheet finally overran it in the Miocene.",
+ "Gondwanan Polar Tundra": "The periglacial fringe of the Karoo ice sheet, poleward of "
+   "the Glossopteris forests. Cold, seasonal, and marked in the rock by frost-shattered "
+   "debris, permafrost wedges and growth rings on stumps that had to survive a dark "
+   "polar winter.",
  "Eurasian Steppe": "An unbroken grassland corridor from Hungary to Manchuria, opened as Central Asia dried "
   "behind the rising Tibetan Plateau. It became the highway along which horses, peoples "
   "and languages crossed the continent.",
@@ -1091,6 +1153,36 @@ DESCRIPTIONS = {
  "Lake Manly": "A lake 130 kilometres long and 180 metres deep in what is now the driest place in "
   "North America. Death Valley sat at the end of a chain of overflowing pluvial lakes, "
   "and filled whenever the chain upstream ran full.",
+ "Glacial Lake Missoula": "Meltwater held back by a finger of the Cordilleran ice "
+   "sheet that blocked the Clark Fork. The dam floated and failed again and again -- "
+   "each time releasing some 2,000 cubic kilometres of water in a couple of days, at a "
+   "flow greater than every river on Earth combined, which is what carved the "
+   "Channeled Scablands of eastern Washington.",
+ "Glacial Lake Ojibway": "The last great lake against the dying Laurentide sheet, "
+   "merged with Agassiz behind an ice dam over Hudson Bay. When that dam failed around "
+   "8,200 years ago the whole volume drained to the North Atlantic at once, freshening "
+   "the surface enough to slow the overturning circulation -- the 8.2 ka cold event, "
+   "the sharpest climate lurch of the Holocene.",
+ "Lake Algonquin": "The ancestral upper Great Lakes as one body of water, ponded "
+   "between the retreating ice front and the height of land. As the ice uncovered "
+   "lower outlets it drained in stages, and the crust it had been pressing down has "
+   "been rebounding ever since -- tilting its old shorelines, which now run uphill to "
+   "the north.",
+ "Baltic Ice Lake": "Fresh meltwater trapped in the Baltic depression between the "
+   "Fennoscandian ice margin and the land to the south. It drained catastrophically "
+   "through central Sweden when the ice cleared Billingen, dropping about 25 m in a "
+   "year or two; the basin then flipped between fresh and brackish several times "
+   "before becoming the sea it is now.",
+ "West Siberian Ice-Dammed Lake": "Siberia's great rivers run north, and during the "
+   "glacials the Barents-Kara ice sheet blocked every one of their mouths at once. The "
+   "Ob and Yenisei backed up over the West Siberian Plain into a lake of continental "
+   "size, which overflowed south and drained across Eurasia to the Caspian and Black "
+   "Sea instead -- reversing the drainage of a third of a continent.",
+ "Karoo Proglacial Lakes": "Meltwater lakes along the margin of the Gondwana ice "
+   "sheet, in the basin that became the Karoo. Their floors preserve varves -- paired "
+   "light and dark layers, one couplet a year -- with dropstones punched into them "
+   "where icebergs floated over and melted. It is some of the best direct evidence "
+   "that the Late Palaeozoic Ice Age was seasonal, and how long it lasted.",
  "Lake Agassiz": "Meltwater ponded against the southern edge of the Laurentide ice sheet, larger than "
   "all the modern Great Lakes combined. When it finally burst north into Hudson Strait "
   "around 8,200 years ago it released some 163,000 cubic kilometres of fresh water into "

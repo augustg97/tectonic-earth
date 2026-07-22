@@ -761,7 +761,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260722-1844';
+const DATA_V='20260722-2216';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1025,6 +1025,24 @@ void main(){
                        : mix(vec3(0.298,0.453,0.251), vec3(0.169,0.396,0.192), clamp((w-0.5)*2.0,0.0,1.0));
     col = (h<0.45) ? mix(dry,mid,clamp(h/0.45,0.0,1.0))
                    : mix(mid,wet,clamp((h-0.45)/0.55,0.0,1.0));
+    /* The tree line. Cold and wet used to come out dark forest green, because
+       the lookup only ever asked how WET the ground was -- so the Arctic coast,
+       Patagonia and every high plateau were painted as rainforest. No tree
+       grows where the mean annual temperature is much below freezing however
+       much it rains: what grows is tundra, a mosaic of moss, sedge, lichen and
+       bare frost-shattered rock, and it is one of the largest biomes on Earth.
+
+       Blend toward it through the band where forest actually fails, and give
+       it its OWN mottle -- tundra is patchier at close range than anything
+       else on land, because the pattern comes from frozen ground rather than
+       from a canopy. */
+    float treeline=clamp((-1.5-T)/6.5,0.0,1.0);
+    float peat=clamp(h*1.15,0.0,1.0);
+    vec3 tund=mix(vec3(0.494,0.463,0.396), vec3(0.400,0.447,0.361), peat);
+    float polar=fbm3(sdir*38.0+63.0)-0.5;
+    tund*=1.0+polar*0.20;
+    tund=mix(tund, vec3(0.545,0.529,0.494), clamp(zp/2600.0,0.0,1.0)*0.45);
+    col=mix(col, tund, treeline*0.92);
     /* Fine within-biome mottle: real vegetation is never one flat colour -- it
        is canopy, clearing and slope mixed at every scale. Two high-frequency
        noises vary the tone, strongest on well-watered ground, so forest and
@@ -1056,25 +1074,84 @@ void main(){
        whole shader.) */
     float T0=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
     float arid=1.0-clamp(Rf/0.85,0.0,1.0);
-    float Tela=1.0-7.0*arid;
+    /* The -5.0 is calibrated, not chosen. At +1.0 this put the wet mid-latitude
+       ELA near 1,700 m -- the Alps glaciate from 1,700 m in this model and from
+       about 2,900 in the world -- and the app carried seven times the mountain
+       ice that exists. At -5.0 the same line lands at 2,720 m, mountain glacier
+       covers 0.6% of land against a real 0.5%, and perennial snow covers 2.4%.
+       Three independent checks off one constant. See build/ice_audit.py. */
+    float Tela=-5.0-7.0*arid;
     float ela=clamp((T0-Tela)/0.0058, 300.0, 6200.0);
     // Ice flows below the ELA down valleys, so the margin is ragged, not a
     // clean contour; nudge it with noise and let it reach a little lower.
     float tongue=(fbm3(sdir*22.0+5.5)-0.5)*1.7;
     float glac=clamp((zp-ela)/520.0+tongue+0.08,0.0,1.0);
+    /* Perennial snow sits BELOW the glacier line. A glacier needs enough snow
+       to survive the summer and then keep piling until it flows; snow only
+       needs to survive the summer, which it manages a few hundred metres
+       lower on a shaded slope or in a hollow. Drawing only the glacier left
+       ranges bare to their summits -- the Himalaya read as rock with a white
+       cap the size of the cap alone. This is the band that makes a mountain
+       range look like a mountain range from orbit.
+
+       It still has to answer to snowfall: an arid massif can stand above its
+       own freezing level and stay brown, which is why the Atacama's 6 km
+       volcanoes are bare while wetter peaks a thousand metres lower are white
+       all year.
+
+       The drop below the ELA is kept modest -- a few hundred metres, not the
+       kilometre it would take to make every range dramatic. This ELA already
+       runs low in the wet tropics (it puts the line near 4.3 km at the equator
+       where the real one is closer to 5), and widening the snow band on top of
+       that would hang snow on Andean peaks that are bare all year. */
+    float snowline=ela-380.0;
+    float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
+    float snow=clamp((zp-snowline)/400.0+tongue*0.6,0.0,1.0)*snowfall;
+    snow=max(snow,glac);
+    col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
   float lobe=(fbm3(sdir*9.0)-0.5)*3.4;
   float packn=fbm3(sdir*16.0+31.7);
+  /* An ice sheet needs snow as much as it needs cold. The dry side of a polar
+     continent glaciates reluctantly -- the McMurdo Dry Valleys are bare gravel
+     at the same latitude as the ice shelf a few kilometres away, because
+     almost nothing falls on them. Swing the threshold either side of the
+     era's calibrated value by how wet the ground is: this MOVES ice toward
+     the wet margins rather than adding or removing it, so the area the audit
+     measured still holds. */
+  float acc=clamp(Rf/0.34,0.0,1.0);
+  float iceThr=uIceT+(acc-0.5)*5.0;
   float landIce=0.0;
   if(z>=0.0){
-    landIce=clamp((uIceT-(T+lobe))/4.5,0.0,1.0);
+    landIce=clamp((iceThr-(T+lobe))/4.5,0.0,1.0);
     col=mix(col, vec3(0.906,0.941,0.965), landIce);
   }else{
-    float sa=clamp((uSeaT-(T+lobe*2.6+(packn-0.5)*5.0))/3.5,0.0,1.0)*clamp((packn-0.30)/0.14,0.0,1.0);
-    col=mix(col, vec3(0.812,0.878,0.910)*(0.94+0.10*packn), sa);
+    /* Ice shelves. A sheet that reaches the coast does not stop there -- it
+       floats out over shallow water and grounds on the shelf, which is what
+       Ross and Ronne are, nearly a million square kilometres of ice that is
+       not on land. So shallow water next to a glaciated coast is judged by
+       the LAND threshold and deep ocean by the sea one, which also encodes
+       the thing that makes the two poles so unalike: at the same temperature
+       land grows a sheet and open ocean grows a seasonal skin, because the
+       ocean mixes its heat downward and carries more of it in from lower
+       latitudes. */
+    /* This reaches DEEP, not just onto the shelf edge, because the paleo-DEM
+       gives Antarctica as bedrock with the ice removed -- and a third of that
+       bedrock is below sea level, some of it 2 km down. Judged as ocean it
+       came out as teal lagoons scattered through the ice sheet. Ice grounded
+       below sea level is still ice: what decides it is the temperature, not
+       the depth, so let the land threshold reach down to where the real
+       subglacial basins bottom out. */
+    float shelf=smoothstep(-2400.0,-150.0,z);
+    float thr=mix(uSeaT, iceThr, shelf);
+    float sa=clamp((thr-(T+lobe*2.6+(packn-0.5)*5.0*(1.0-shelf)))/3.5,0.0,1.0)
+             *clamp((packn-0.30)/0.14+shelf,0.0,1.0);
+    vec3 shelfCol=mix(vec3(0.812,0.878,0.910)*(0.94+0.10*packn),
+                      vec3(0.898,0.929,0.953), shelf);
+    col=mix(col, shelfCol, sa);
   }
 
   // per-pixel relief from the elevation gradient
@@ -1867,7 +1944,7 @@ function selectAt(lon,lat,ev){
   // 4. nearest label of the right kind: clicking water should name the ocean,
   //    not the continent beside it
   const onLand=z?elevAtLL(z,lon,lat)>0:true;
-  const LANDY=new Set(['continent','orogen','desert','forest','grassland','basin','plateau','rift','ice','region']);
+  const LANDY=new Set(['continent','orogen','desert','forest','grassland','tundra','basin','plateau','rift','ice','region']);
   const wanted=[...spos.keys()].filter(l=>LANDY.has(l.t)===onLand);
   const pool=wanted.length?wanted:[...spos.keys()];
   best=null;bd=1e9;
@@ -1959,7 +2036,7 @@ function showFeature(l,lon,lat){
      crater in the app hit it. */
   const kind={continent:'Landmass',ocean:'Ocean basin',sea:'Epeiric sea',
     orogen:'Mountain belt',rift:'Rift',lake:'Lake',desert:'Desert',
-    island:'Island',ice:'Ice sheet',basin:'Basin',forest:'Forest',
+    island:'Island',ice:'Ice sheet',basin:'Basin',forest:'Forest',tundra:'Tundra',
     region:'Region',plateau:'Plateau',grassland:'Grassland'}[l.t]||'Feature';
   $('#infoTag').textContent=kind+' · '+fmtAge(Math.round(state.age));
   const rows=[];
@@ -1992,7 +2069,7 @@ function showFeature(l,lon,lat){
   const reg=regionalAt(l.n,state.age);
   if(reg)extra+=`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`;
   // Life of the age, for anything big enough to host a biota.
-  const BIG=new Set(['continent','ocean','sea','forest','grassland','island','region']);
+  const BIG=new Set(['continent','ocean','sea','forest','grassland','tundra','island','region']);
   if(BIG.has(l.t))extra+=lifeSection(l);
   openInfo({name:l.n,
     tag:kind+' · '+fmtAge(Math.round(state.age)),
@@ -2284,7 +2361,7 @@ function featureDesc(n){const d={
 const labelEls=new Map();
 const plateEls=[];
 const PRI={continent:100,ocean:90,sea:72,region:66,orogen:60,ice:58,desert:56,
-           forest:55,grassland:52,plateau:50,basin:48,rift:47,island:44,plate:30};
+           forest:55,tundra:53,grassland:52,plateau:50,basin:48,rift:47,island:44,plate:30};
 /* A little slack either side stops names strobing on and off as the slider
    crosses a window edge, but 6 Myr was enough to float future-only features
    like Baja Island over the present-day map. Keyframes are 5 Myr apart, so

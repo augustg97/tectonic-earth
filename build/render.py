@@ -306,15 +306,63 @@ def compute_fields(z, age, out_h=512, out_w=1024):
     return Z, T, Rf, lat, cl
 
 
+#: How much colder an ice-sheet MARGIN is than the latitude band it reaches.
+#: The climate table's ice line is where ice gets TO, and a sheet's edge sits in
+#: air a few degrees below the zonal mean for that latitude -- it is over ice,
+#: which is bright and cold, and it is usually inland or upslope of the parallel
+#: it touches. Six degrees is what the present day needs, and the same six
+#: degrees independently lands the Late Palaeozoic Ice Age peak on its measured
+#: extent, which is the check that makes it a constant rather than a fudge.
+MARGIN_OFFSET = -6.0
+
+
+def zonal_T(lat_deg, temp):
+    """Sea-level mean annual temperature at a latitude, as the SHADER computes it.
+
+    Duplicated from the GLSL on purpose. The threshold has to be expressed in
+    the same temperature field it will be compared against, or the number means
+    nothing; and the alternative -- shipping the curve as data -- would put a
+    second copy in flight anyway. If the GLSL curve changes, change it here.
+    """
+    s2 = np.sin(np.radians(lat_deg)) ** 2
+    return (26.0 - 24.0 * s2 - 26.0 * s2 ** 3) + (temp + 0.55) * (4.0 + 15.0 * s2)
+
+
 def glaciation(cl):
-    """Per-era ice thresholds (deg C) for land ice and pack ice."""
-    iceN, iceS = cl["iceN"], cl["iceS"]
-    if iceN is None and iceS is None:
-        glac = 0.0
-    else:
-        line = min(x for x in (iceN, iceS) if x is not None)
-        glac = float(np.clip((90.0 - line) / 40.0, 0, 1))
-    return -30.0 + 12.0 * glac, -14.0 + 5.0 * glac
+    """Per-era ice thresholds (deg C) for land ice and sea ice.
+
+    This used to map the ice line onto the threshold through a hand-fitted
+    linear ramp, `-30 + 12*glac`, and it was wrong by about eleven degrees:
+    land ice needed a mean annual temperature below -21 C, when a real ice
+    sheet's margin sits nearer -10. Measured against the record the app was
+    under-iced at EVERY ice-bearing keyframe and over-iced at none -- the
+    present drew 4.0 Mkm2 of land ice against an actual 15.7. The ramp also
+    saturated at an ice line of 50 degrees, so every Cryogenian snowball got
+    an identical threshold no matter how far the ice actually reached.
+
+    Now the threshold is simply the temperature at the ice line the table
+    already states, less the margin offset. That makes the table's number mean
+    what it says -- "land poleward of this carries ice" -- so when the drawn
+    area disagrees with the literature the fix is to correct a latitude a
+    reader can check, not a magic constant. See ice_audit.py.
+
+    Sea ice is COLDER than land ice, which is the other way round from before.
+    At the same mean annual temperature land grows a sheet and open ocean does
+    not: the ocean mixes heat down and carries it poleward, so it resists
+    freezing, and what it does grow is a thin seasonal skin rather than the
+    permanent white this map draws. Antarctica is the demonstration -- land at
+    the pole is 14 Mkm2 of ice kilometres thick, while ocean at the other pole
+    holds a few metres that half melts every summer.
+    """
+    lines = [x for x in (cl["iceN"], cl["iceS"]) if x is not None]
+    if not lines:
+        return -30.0, -14.0          # ice-free hothouse; nothing to place
+    # The shader's temperature field is hemisphere-symmetric, so one threshold
+    # serves both poles and the equatorward line has to win -- otherwise an era
+    # with ice at one pole only would lose it.
+    line = min(lines)
+    ice_T = float(zonal_T(line, cl["temp"])) + MARGIN_OFFSET
+    return ice_T, ice_T - 4.0
 
 
 def render(z, age, out_h=512, out_w=1024, hillshade=True):
