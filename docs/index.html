@@ -1976,7 +1976,7 @@ function lifeSection(l){
   const age=state.age, when=fmtAge(Math.round(age)), marine=MARINE_T.has(l.t);
   const rt=regionTaxaAt(l.n,age);
   if(rt&&rt.taxa&&rt.taxa.length){
-    let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(rt.taxa,5);
+    let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(rt.taxa,6);
     if(rt.shared)h+=`<p class="desc">${esc(rt.shared)}</p>`;
     return h;
   }
@@ -1990,7 +1990,7 @@ function lifeSection(l){
     // Global, not local — label it as such so it does not read as a claim
     // that these lived in this particular basin.
     return `<div class="ihead">${marine?'In the sea':'On land'} at ${when}</div>`+
-           lifeHTML(pick,4);
+           lifeHTML(pick,5);
   }
   if(marine){
     return `<div class="ihead">In the sea at ${when}</div><p class="desc">`+
@@ -2036,7 +2036,7 @@ function showInterval(i){
   extra+=listHTML('Key events',i.key_events);
   if(bio.length)extra+=`<div class="ihead">Biomes</div><ul class="evlist">`+
     bio.map(b=>`<li><b style="color:#c6d0dd">${esc(b.name)}</b> — ${esc(b.note)}</li>`).join('')+'</ul>';
-  if(L&&L.taxa&&L.taxa.length)extra+=`<div class="ihead">Life</div>`+lifeHTML(L.taxa,6);
+  if(L&&L.taxa&&L.taxa.length)extra+=`<div class="ihead">Life</div>`+lifeHTML(L.taxa,8);
   openInfo({name:i.name,
     tag:(i.rank==='projected'?'Projected interval · ':'')+fmtSpan(i.a0,i.a1),
     rows:[['Span',fmtSpan(i.a0,i.a1)],['Part of',`${i.era}`]],

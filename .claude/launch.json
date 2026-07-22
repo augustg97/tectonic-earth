@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "/Users/augustgweon/Desktop/Tectonic Plate Model/venv/bin/python",
+      "runtimeExecutable": "/usr/bin/python3",
       "runtimeArgs": ["/Users/augustgweon/Desktop/Tectonic Plate Model/build/serve.py", "8899"],
       "port": 8899
     }
