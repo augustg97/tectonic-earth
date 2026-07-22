@@ -50,6 +50,8 @@ ICON_RULES = [
     ("claraia", "bivalve"), ("cloudina", "worm"), ("enaliarctos", "whale"),
     ("eryops", "temnospondyl"), ("eurypterus", "eurypterid"),
     ("fusulin", "plankton"), ("globigerin", "plankton"),
+    ("globotruncan", "plankton"), ("orthocerat", "nautiloid"),
+    ("vase-shaped", "plankton"),
     ("hallucigenia", "worm"), ("halysites", "coral"),
     ("helicoprion", "shark"), ("hexactinellid", "sponge"),
     ("hirnantia", "brachiopod"), ("hyneria", "lobefin"),
@@ -352,6 +354,29 @@ RANK_FALLBACK = {"sea": "fish", "land": "reptile", "air": "bird",
                  "fresh": "fish"}
 
 
+# Rules that are MEANT to match inside a word. Everything else must match at a
+# word start, because a bare substring test does not know the difference between
+# "Ceratites" and "OrthoCERATITe", or between a canid and GlobotrunCANIDae --
+# which is how a Cretaceous planktonic foraminifer came to be drawn as a fox.
+INFIX_OK = {"sequoia", "agaracites", "fusulin", "myces", "mycota", "myco",
+            "basidiomyc", "ascomyc", "mycorrhiz", "graptus", "pteris",
+            "phyt", "saur", "cerat"}
+
+
+def _rule_hits(key, n):
+    """Does this rule match the taxon name? At a word start unless allowed."""
+    i = n.find(key)
+    if i < 0:
+        return False
+    if key in INFIX_OK:
+        return True
+    while i >= 0:
+        if i == 0 or not n[i - 1].isalpha():
+            return True
+        i = n.find(key, i + 1)
+    return False
+
+
 def taxon_key(name):
     """The per-taxon icon key, if this taxon has a silhouette of its own."""
     return "t:" + re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")
@@ -370,7 +395,7 @@ def icon_for(name, realm="sea"):
         return own
     n = (name or "").lower()
     for key, icon in ICON_RULES:
-        if key in n:
+        if _rule_hits(key, n):
             return icon
     return RANK_FALLBACK.get(realm, "microbe")
 

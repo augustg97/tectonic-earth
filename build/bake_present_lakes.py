@@ -33,6 +33,44 @@ DEEP_NAMED = {"Lake Baikal": 3.0, "Lake Tanganyika": 2.6, "Lake Malawi": 2.4,
               "Lake Nyasa": 2.4, "Issyk Kul": 1.8, "Lake Tahoe": 2.0,
               "Crater Lake": 2.5, "Great Slave Lake": 1.6, "Lake Toba": 2.2}
 
+# Most of the world's large lakes are HOLOCENE: they sit in basins scoured or
+# dammed by the last ice sheets and are ~14,000 years old. The Great Lakes are
+# the obvious case, and showing them in the Pliocene -- or several million years
+# into the future -- is simply wrong. They are baked into a separate file so the
+# app can draw them only within the window they actually occupy.
+#
+# The test is whether the lake lies inside the Last Glacial Maximum ice
+# footprint. Margins are approximate but the distinction is not subtle: the
+# Laurentide reached the Ohio valley, the Fennoscandian sheet northern Germany,
+# while Siberia east of the Urals was largely ice-free.
+LGM_MARGIN = [  # (lon_min, lon_max, lat_min)  -- north of lat_min was ice
+    (-170, -55, 41.0),     # Laurentide + Cordilleran
+    (-55, -10, 60.0),      # Greenland / Iceland margin
+    (-12, 42, 51.0),       # Fennoscandian, reaching northern Germany and Poland
+    (42, 120, 66.0),       # Barents-Kara; western Siberia only in the far north
+    (120, 180, 70.0),      # eastern Siberia was largely unglaciated
+]
+# Tectonic, rift and caldera lakes that predate the glaciations and must stay in
+# the long-lived field even if they fall inside a margin box.
+ANCIENT_NAMES = ("baikal", "tanganyika", "malawi", "nyasa", "victoria",
+                 "turkana", "albert", "edward", "kivu", "issyk", "caspian",
+                 "aral", "titicaca", "ohrid", "prespa", "biwa", "tahoe",
+                 "khanka", "zaysan", "balkhash", "nicaragua", "maracaibo",
+                 "chad", "eyre", "poopo", "van ", "urmia")
+
+
+def is_holocene(name, lon, lat):
+    """Was this lake made by the last ice sheets?"""
+    n = (name or "").lower()
+    if any(a in n for a in ANCIENT_NAMES):
+        return False
+    for lo, hi, lat_min in LGM_MARGIN:
+        if lo <= lon <= hi and lat >= lat_min:
+            return True
+    if -80 <= lon <= -62 and lat <= -38:       # Patagonian ice field
+        return True
+    return False
+
 
 def enc_depth(d):
     return np.clip(np.sqrt(np.clip(d / DMAX, 0.0, 1.0)), 0.0, 1.0)
@@ -62,11 +100,19 @@ def rasterize(rings_list):
     return np.asarray(im, np.uint8)
 
 
+def _encode(mask, deep):
+    edt = distance_transform_edt(mask)
+    depth = np.clip(edt * PX_DEPTH * deep, 0.0, DEPTH_CAP)
+    depth[mask == 0] = 0.0
+    return (enc_depth(depth) * 255.0 + 0.5).astype(np.uint8), depth
+
+
 def main():
     feats = json.load(open(LAKES))["features"]
-    mask = np.zeros((H, W), np.uint8)
+    mask = np.zeros((H, W), np.uint8)          # every lake
+    old = np.zeros((H, W), np.uint8)           # only the long-lived ones
     deep = np.ones((H, W), np.float32)
-    kept = 0
+    kept = young = 0
     for f in feats:
         name = f["properties"].get("name")
         polys = list(polys_of(f["geometry"]))
@@ -77,15 +123,23 @@ def main():
         mask |= m
         if name in DEEP_NAMED:
             deep[m > 0] = DEEP_NAMED[name]
-    # depth = distance to the nearest shore, deeper for the deep-named lakes
-    edt = distance_transform_edt(mask)
-    depth = np.clip(edt * PX_DEPTH * deep, 0.0, DEPTH_CAP)
-    depth[mask == 0] = 0.0
-    enc = (enc_depth(depth) * 255.0 + 0.5).astype(np.uint8)
+        ys, xs = np.nonzero(m)
+        lon = xs.mean() / W * 360.0 - 180.0
+        lat = 90.0 - ys.mean() / H * 180.0
+        if is_holocene(name, lon, lat):
+            young += 1
+        else:
+            old |= m
+    enc, depth = _encode(mask, deep)
     Image.fromarray(enc, "L").save(os.path.join(FIELDS, "phan_0000_w.webp"),
                                    "WEBP", lossless=True, method=6)
+    enc_old, _ = _encode(old, deep)
+    Image.fromarray(enc_old, "L").save(os.path.join(FIELDS, "phan_0000_wold.webp"),
+                                       "WEBP", lossless=True, method=6)
     print(f"present: {kept} real lakes rasterized  max depth {depth.max():.0f} m  "
           f"cover {100.0*(mask>0).mean():.2f}% of grid  -> phan_0000_w.webp")
+    print(f"  of which {young} are Holocene/glacial and are held back to the "
+          f"present window; {kept-young} long-lived -> phan_0000_wold.webp")
 
 
 if __name__ == "__main__":

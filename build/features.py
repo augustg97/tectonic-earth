@@ -168,7 +168,7 @@ LABELS = [
     ("continent", "Gondwana",        30, -40,  150, 540),
     ("ocean", "Tethys Ocean",        90,   5,  120, 260),
     ("ocean", "Panthalassa",       -150,   0,  160, 320),
-    ("sea", "Western Interior Seaway", -95, 45, 66, 100),
+    ("sea", "Western Interior Seaway", -95, 45, 70, 100),
     ("sea", "Turgai Strait",         65,  50,   29, 160),
     ("sea", "Eromanga Sea",         140, -28,   95, 125),
     ("orogen", "Cordillera",       -115,  40,   60, 150),
@@ -1680,8 +1680,9 @@ PHASES = {
             "flooding the foreland basin behind the rising Sevier mountains."),
   (75, 90, "At its widest -- a thousand kilometres of shallow sea splitting North America in two, "
            "warm, oxygen-poor at depth, and full of mosasaurs, plesiosaurs and giant fish."),
-  (66, 75, "Draining away as sea level falls and the Laramide uplifts rise through its floor, "
-           "leaving the chalk and shale that underlie the Great Plains."),
+  (70, 75, "Draining away as sea level falls and the Laramide uplifts rise through its floor. "
+           "The Bearpaw flooding is its last, and by about 70 Ma the through-going connection "
+           "from Arctic to Gulf is gone, leaving the chalk and shale under the Great Plains."),
  ],
 
  "Mediterranean": [

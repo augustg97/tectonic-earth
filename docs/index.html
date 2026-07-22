@@ -100,6 +100,12 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 .pbtn svg{width:15px;height:15px;fill:currentColor}
 #dir{width:34px;height:34px}
 #speedwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+/* Single-step controls. The slider spans 1250 Myr in ~1200 px, so one pixel is
+   about a million years and fine positioning by drag is not possible. */
+#steprow{display:flex;align-items:center;gap:7px;flex:none}
+#steplbl{color:var(--dim2);font-size:10px;letter-spacing:.1em;min-width:34px;text-align:center}
+.pbtn.small{width:30px;height:30px}
+.pbtn.small svg{width:15px;height:15px}
 #speed{width:96px}
 input[type=range].mini{-webkit-appearance:none;appearance:none;height:3px;background:#2b3240;border-radius:2px;outline:none}
 input[type=range].mini::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
@@ -614,6 +620,15 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
       <svg id="dirIcon" viewBox="0 0 24 24"><path d="M4 12h13l-5-5 1.4-1.4L21.8 12l-8.4 6.4L12 17l5-5H4z"/></svg>
     </button>
     <div id="speedwrap"><span>Speed</span><input type="range" id="speed" class="mini" min="1" max="60" value="18"><span id="speedVal">18 Myr/s</span></div>
+    <div id="steprow">
+      <button class="pbtn small" id="stepBack" title="Back 1 Myr (←)" aria-label="Back one million years">
+        <svg viewBox="0 0 24 24"><path d="M15.4 5.6 8.9 12l6.5 6.4L14 19.8 6.2 12 14 4.2z"/></svg>
+      </button>
+      <span id="steplbl">1 Myr</span>
+      <button class="pbtn small" id="stepFwd" title="Forward 1 Myr (→)" aria-label="Forward one million years">
+        <svg viewBox="0 0 24 24"><path d="M8.6 5.6 15.1 12l-6.5 6.4L10 19.8 17.8 12 10 4.2z"/></svg>
+      </button>
+    </div>
     <button class="txtbtn" id="ambientBtn">Ambient</button>
   </div>
 </div>
@@ -657,6 +672,7 @@ const state={
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
 let ELI=[], RNI=[], MOI=[], WLI=[];   // elevation / rainfall / motion / lake-depth fields
+let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene ones
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
@@ -685,6 +701,41 @@ function getTex(kind,i){
   }
   return e.t;
 }
+/* The present frame's lake field holds the REAL lakes, traced from Natural
+   Earth. Most of the big ones are Holocene: the Great Lakes date from about
+   14 ka, when the Laurentide ice sheet withdrew, and Ladoga and Great Slave are
+   the same story. The keyframes are 5 Myr apart, so interpolating those lakes
+   out of the present frame left them visible ~4 Myr either side of today —
+   the Great Lakes sitting there in the Pliocene, which is simply false.
+
+   So they are baked separately (phan_0000_wold.webp is the present WITHOUT
+   them) and the present frame's texture is swapped for that one outside the
+   window they actually occupy. Forward, glacial isostatic rebound is expected
+   to tilt the basins and reorganise the drainage over 10^4–10^5 years, so the
+   projection stops well before the first future keyframe rather than pretending
+   to 5 Myr. */
+function youngLakeWeight(age){
+  if(age>0.02)return 0;      // before ~20 ka they did not exist
+  if(age<-0.4)return 0;      // beyond any defensible projection forward
+  return 1;
+}
+function presentIndex(){
+  if(presentIndex._i===undefined)
+    presentIndex._i=DATA.timeline.findIndex(f=>Math.abs(f.age)<1e-9);
+  return presentIndex._i;
+}
+function oldLakeTex(){
+  if(!WOLD)return null;
+  if(!WOLD_TEX){
+    WOLD_TEX=new THREE.Texture(WOLD);
+    WOLD_TEX.colorSpace=THREE.NoColorSpace;
+    WOLD_TEX.minFilter=THREE.LinearFilter; WOLD_TEX.magFilter=THREE.LinearFilter;
+    WOLD_TEX.generateMipmaps=false;
+    WOLD_TEX.wrapS=THREE.RepeatWrapping; WOLD_TEX.wrapT=THREE.ClampToEdgeWrapping;
+    WOLD_TEX.needsUpdate=true;
+  }
+  return WOLD_TEX;
+}
 
 /* ================= data load =================
 
@@ -697,7 +748,7 @@ function getTex(kind,i){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260722-0418';
+const DATA_V='20260722-0450';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -720,6 +771,9 @@ async function loadAll(){
   // and the shader shows no lake there — the build degrades gracefully.
   await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),
                                         one(fr.e.replace('_e.webp','_w.webp'),WLI,i)]));
+  // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
+  await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
+    im.onerror=()=>res();im.src=src('phan_0000_wold.webp');});
 }
 
 /* map timeline (sorted asc by age) to helpers */
@@ -1422,9 +1476,16 @@ function snapLabel(l,fi){
     };
     if(!solid(base[0],base[1])){
       // Tracked: the plate track already puts the name in the right place, so
-      // only nudge onto nearby matching terrain (<=24°). Untracked: search wide
-      // (to 90°), since a static coord can sit far from where the world moved it.
-      const maxrad=tracked?24:90, astep=tracked?15:10;
+      // only NUDGE onto nearby matching terrain. The radius used to be 24°,
+      // which is ~2600 km at the equator — far enough that a sea whose water had
+      // drained would find the next ocean over and sit there, which is how the
+      // Western Interior Seaway ended up labelled off the southeast US coast.
+      // The paleo-DEM also under-resolves shallow epicontinental seas, so a
+      // "no matching terrain" result is at least as likely to be the DEM's fault
+      // as the track's; staying put is then the honest answer.
+      // Untracked keeps the wide search (to 90°) — a static coord authored in
+      // the present frame really can sit far from where the world moved it.
+      const maxrad=tracked?10:90, astep=tracked?15:10;
       let best=null;
       for(let rad=4;rad<=maxrad&&!best;rad+=4){
         for(let a=0;a<360;a+=astep){
@@ -2481,7 +2542,11 @@ function bindTextures(){
   const f=curFrame();
   const ea=getTex('e',f.i), eb=getTex('e',f.j);
   const ra=getTex('r',f.i), rb=getTex('r',f.j);
-  const wa=getTex('w',f.i), wb=getTex('w',f.j);
+  // Outside the Holocene window, the present frame contributes its long-lived
+  // lakes only — otherwise the Great Lakes bleed several Myr into the past.
+  const P=presentIndex(), swap=youngLakeWeight(state.age)<0.5 && oldLakeTex();
+  const wa=(swap&&f.i===P)?oldLakeTex():getTex('w',f.i);
+  const wb=(swap&&f.j===P)?oldLakeTex():getTex('w',f.j);
   if(ea)mat.uniforms.elevA.value=ea;
   if(eb||ea)mat.uniforms.elevB.value=eb||ea;
   if(ra)mat.uniforms.rainA.value=ra;
@@ -2585,6 +2650,13 @@ $('#playBtn').onclick=()=>{state.playing=!state.playing;syncPlay();};
    which meant the arrow contradicted the scrubber underneath it. */
 function syncDir(){$('#dirIcon').style.transform=state.dir>0?'scaleX(-1)':'none';}
 $('#dir').onclick=()=>{state.dir*=-1;syncDir();};
+/* Step exactly one million years. jumpTo pauses playback, clamps to the ends of
+   the timeline and rebuilds every derived layer, which is what a single step
+   needs — scrubbing the slider cannot resolve 1 Myr, since it spans 1250 Myr in
+   about as many pixels. Age DECREASES going forward in time. */
+function stepAge(d){ jumpTo(Math.round(state.age)+d); }
+$('#stepBack').onclick=()=>stepAge(1);
+$('#stepFwd').onclick=()=>stepAge(-1);
 syncDir();
 $('#speed').addEventListener('input',e=>{state.speed=+e.target.value;$('#speedVal').textContent=state.speed+' Myr/s';});
 document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
@@ -2671,7 +2743,16 @@ function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambie
 document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
   // In full screen the browser's own Escape exits full screen first; a second
   // Escape then leaves ambient. Outside full screen, Escape leaves ambient.
-  if(e.key==='Escape'&&state.ambient&&!fsElement())enterAmbient(false);});
+  if(e.key==='Escape'&&state.ambient&&!fsElement())enterAmbient(false);
+  // Arrow keys step one million years. Right is rightward on the timeline,
+  // which is FORWARD in time and therefore a DECREASE in age. Ignored while a
+  // text field or the range input has focus so it cannot fight them.
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+    const t=e.target&&e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+    e.preventDefault();
+    stepAge(e.key==='ArrowRight'?-1:1);
+  }});
 
 /* ---- markers ---- */
 const MARKERS=[[1000,'Rodinia'],[720,'Cryogenian'],[541,'Cambrian'],[445,'Ordovician'],[300,'Pangaea'],[252,'End-Permian'],[66,'K–Pg'],[0,'Now'],[-250,'+250 Myr']];
