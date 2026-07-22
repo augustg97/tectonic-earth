@@ -728,11 +728,11 @@
   "uuid": "13cd74e3-5ced-4411-a39a-8f0a0feb428b"
  },
  "t:compsognathus": {
-  "attribution": "Marie Aim\u00e9e ALLARD",
+  "attribution": "Jagged Fang Designs",
   "licence": "CC0",
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Compsognathus longipes",
-  "uuid": "67970430-fb1c-467e-aab1-1c47cfb6aefc"
+  "uuid": "f70e2a0a-6933-43a8-a133-a203cdb8a6b0"
  },
  "t:confuciusornis": {
   "attribution": "Scott Hartman",
@@ -805,11 +805,11 @@
   "uuid": "779329c5-c773-4ecc-bc84-4362af8a6c96"
  },
  "t:dilophosaurus": {
-  "attribution": "Marie Aim\u00e9e ALLARD",
+  "attribution": "Tasman Dixon",
   "licence": "CC0",
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Dilophosaurus wetherilli",
-  "uuid": "36b898fe-0812-4832-8e6e-a5b2f26ee113"
+  "uuid": "a850f783-f3ae-4bd7-abe2-649c890367d1"
  },
  "t:dimetrodon": {
   "attribution": "Will Toosey",
@@ -952,11 +952,11 @@
   "uuid": "4e08a814-ee4b-4179-a061-e3bd1c1e51da"
  },
  "t:giganotosaurus": {
-  "attribution": "Marie-Aim\u00e9e ALLARD",
+  "attribution": "Tasman Dixon",
   "licence": "CC0",
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Giganotosaurus carolinii",
-  "uuid": "a0f796bd-64f5-4533-bf01-b798fa519895"
+  "uuid": "cf75413c-6985-400e-9389-81d7007e5d91"
  },
  "t:globigerinina": {
   "attribution": "(unattributed)",
@@ -1729,18 +1729,18 @@
   "uuid": "5fad3e3e-1b8d-44a6-b537-f06e3135c444"
  },
  "t:titanoboa": {
-  "attribution": "Nobu Tamura (modified by T. Michael Keesey)",
-  "licence": "CC BY 3.0",
-  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
-  "taxon": "Titanoboa cerrejonensis",
-  "uuid": "beca4a24-33ef-4659-a20f-7d6835703c1c"
+  "attribution": "Henry C. Astley",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Boa constrictor imperator",
+  "uuid": "a314ee8a-3690-49b5-ab43-a63c4aabfd36"
  },
  "t:titanoboa-cerrejonensis": {
-  "attribution": "Nobu Tamura (modified by T. Michael Keesey)",
-  "licence": "CC BY 3.0",
-  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
-  "taxon": "Titanoboa cerrejonensis",
-  "uuid": "beca4a24-33ef-4659-a20f-7d6835703c1c"
+  "attribution": "Henry C. Astley",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Boa constrictor imperator",
+  "uuid": "a314ee8a-3690-49b5-ab43-a63c4aabfd36"
  },
  "t:triceratops": {
   "attribution": "(unattributed)",
