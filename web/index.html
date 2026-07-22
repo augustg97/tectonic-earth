@@ -153,7 +153,14 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 /* life gallery */
 .life{display:flex;flex-direction:column;gap:8px}
 .lifeitem{display:flex;gap:9px;align-items:flex-start}
-.lifeicon{width:46px;height:31px;flex:none;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#cfd9e6}
+/* --ko is the knockout colour the illustrations cut their interior detail with
+   (eyes, gill slits, shell sutures, a trilobite's three lobes). It was never
+   defined, so every var(--ko) fill was invalid-at-computed-value-time and
+   inherited currentColor instead — the detail was drawn in the SAME colour as
+   the body and vanished. Dickinsonia rendered as a bare oval, 19 icons lost
+   their eyes. It has to stay dark enough to read as an engraved cut on all
+   four realm tints below. */
+.lifeicon{--ko:#161d25;width:46px;height:31px;flex:none;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#cfd9e6}
 .lifeicon svg{width:44px;height:29px;display:block;fill:currentColor;stroke-linecap:round;stroke-linejoin:round}
 .lifeicon.sea{background:rgba(94,169,196,.13);color:#a9d6e8}
 .lifeicon.land{background:rgba(150,190,120,.13);color:#c2debb}
