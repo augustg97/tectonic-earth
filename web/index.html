@@ -686,11 +686,22 @@ function getTex(kind,i){
   return e.t;
 }
 
-/* ================= data load ================= */
+/* ================= data load =================
+
+   DATA_V busts the browser cache on the JSON data files. Pages serves them with
+   max-age=600 and an ETag, but a returning viewer can sit on a stale copy well
+   past that — bfcache, a background tab that never revalidates, a heuristic
+   freshness window — and the symptom is silent: the app runs fine and simply
+   shows yesterday's content. That has now bitten labels.json, plates_time.json
+   and life.json in turn. Stamped by build/stamp_data_version.py, which
+   build_site.py runs, so a deploy always changes the URL.
+   Deliberately NOT applied to fields/ — those are 750 textures that rarely
+   change and busting them would re-download ~24 MB for a data-only edit. */
+const DATA_V='20260722-0418';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
-  else{const res=await Promise.all(files.map(f=>fetch(f+'.json').then(r=>r.json()).catch(()=>null)));files.forEach((f,i)=>DATA[f]=res[i]);}
+  else{const res=await Promise.all(files.map(f=>fetch(f+'.json?v='+DATA_V).then(r=>r.json()).catch(()=>null)));files.forEach((f,i)=>DATA[f]=res[i]);}
   DATA.eras=DATA.eras||{intervals:[],supercontinents:[]};
   DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
   const tl=DATA.timeline;

@@ -11,8 +11,15 @@ Cloudflare Pages, or any web server. No build step, no dependencies.
 """
 import os, shutil, json
 
+import stamp_data_version
+
 WEB = "../web"
 SITE = "../docs"   # GitHub Pages serves main:/docs natively
+
+# Bump the cache-busting stamp BEFORE index.html is copied, or a returning
+# viewer keeps whatever JSON their browser already has and the deploy looks like
+# it never happened. See stamp_data_version.py.
+stamp_data_version.stamp()
 
 os.makedirs(SITE, exist_ok=True)
 dst = os.path.join(SITE, "fields")
