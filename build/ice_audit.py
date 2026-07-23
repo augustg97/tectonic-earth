@@ -58,6 +58,7 @@ TARGETS = {
     300: (0.10, 0.22, "LPIA peak -- ice volume at or above LGM"),
     315: (0.10, 0.22, "LPIA peak"),
     330: (0.02, 0.09, "mid-Carboniferous, ice building"),
+    360: (0.01, 0.07, "late Famennian glaciation, high-latitude Gondwana"),
     445: (0.05, 0.16, "Hirnantian: Gondwana sheet, ~100 m of sea-level fall"),
     460: (0.00, 0.03, "Ordovician warm"),
     570: (0.02, 0.10, "late Ediacaran cool interval"),

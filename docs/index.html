@@ -761,7 +761,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0044';
+const DATA_V='20260723-0205';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -2514,7 +2514,17 @@ function updateReadout(){
     epoch = state.age<=-170?'Pangaea Proxima':state.age<=-60?'Atlantic closing':'Near future';
   }
   $('#eraName').textContent=epoch;$('#periodName').textContent=period;
-  const ice=m.iceT>-29.0;   // -30 is the ice-free hothouse threshold
+  /* What the map DRAWS, not what the table intends. This used to read the
+     threshold -- anything warmer than the ice-free sentinel counted as polar
+     caps -- and announced ice caps at 41 keyframes that drew none, because an
+     interpolated ice line at 88 degrees is a cap five degrees across that
+     nothing can render. iceLand/iceSea are measured per keyframe by
+     refresh_manifest and describe the picture in front of you. */
+  const iceL=m.iceLand||0, iceS=m.iceSea||0;
+  const iceWord = iceL>0.06 ? 'continental sheets'
+                : iceL>0.01 ? 'polar caps'
+                : (iceL>0.002||iceS>0.02) ? 'small polar ice'
+                : iceS>0.002 ? 'sea ice only' : 'ice-free';
   const tw=m.temp>0.4?'Hothouse':m.temp>0.05?'Warm':m.temp>-0.25?'Cool':'Icehouse';
   /* The vegetation label describes extent, but direction matters: in the past
      a partly-vegetated world is greening, in the projected future it is a
@@ -2555,7 +2565,7 @@ function updateReadout(){
   $('#env').innerHTML=
      `<b>Avg temp</b> ${gmst.toFixed(1)}&deg;C &nbsp;·&nbsp; <b>Sea level</b> ${m.sealevel>=0?'+':''}${m.sealevel} m<br>`
     +`<b>CO<sub>2</sub></b> ${Math.round(co2).toLocaleString()} ppm &nbsp;·&nbsp; <b>O<sub>2</sub></b> ${o2.toFixed(1)}%${tag}<br>`
-    +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${ice?'polar caps':'ice-free'}${sunStr}<br>`
+    +`<b>Climate</b> ${tw} &nbsp;·&nbsp; <b>Ice</b> ${iceWord}${sunStr}<br>`
     +`<b>Extinction rate</b> ~${xrStr} E/MSY <span style="color:#8790a0">(${xr.label})</span><br>`
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');

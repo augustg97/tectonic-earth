@@ -29,7 +29,11 @@ CLIMATE = [
     (66,   0.55,  None,  None, 1.00, 0.45),  # K-Pg
     (90,   0.85,  None,  None, 1.00, 0.42),  # mid-Cretaceous hothouse, ice-free
     (120,  0.55,  None,  None, 1.00, 0.45),
-    (145,  0.35,  None,  85,   1.00, 0.50),  # J-K boundary, cool snap
+    # The Early Cretaceous cool intervals are real and the high-latitude ice
+    # is contested -- glendonites and dropstones in Australia and the Arctic
+    # against no accepted ice sheet. 85 was a claim of ice too small to draw,
+    # which is the worst of both. A small cap that renders states the case.
+    (145,  0.35,  None,  75,   1.00, 0.50),  # J-K boundary, cool snap
     (160,  0.35,  None,  None, 1.00, 0.52),
     (200,  0.55,  None,  None, 0.95, 0.62),  # Tr-J, Pangaea, arid
     (230,  0.60,  None,  None, 0.88, 0.70),  # Late Triassic megamonsoon; peat is back
@@ -49,7 +53,11 @@ CLIMATE = [
     (315,  -0.65, 74,    58,   0.98, 0.48),  # Carboniferous coal swamps
     (330,  -0.25, None,  70,   0.95, 0.48),  # mid-Carboniferous, ice building
     (340,   0.05, None,  None, 0.90, 0.50),
-    (360,   0.10, None,  None, 0.82, 0.52),  # Devono-Carb, early forests
+    # The late Famennian glaciation. Diamictites and striated pavements across
+    # Bolivia, Peru and Brazil put ice on high-latitude Gondwana at the end of
+    # the Devonian -- a real icehouse pulse, shorter and smaller than the Late
+    # Palaeozoic one that follows, and it was missing from this table entirely.
+    (360,   0.10, None,  72,   0.82, 0.52),  # Devono-Carb, Famennian ice
     (380,   0.30, None,  None, 0.60, 0.55),  # Devonian greening underway
     (400,   0.35, None,  None, 0.35, 0.58),  # early Devonian, sparse land plants
     (420,   0.30, None,  None, 0.18, 0.58),  # Silurian, first vascular plants
@@ -86,7 +94,10 @@ CLIMATE = [
     (750,   0.10, None,  None, 0.00, 0.55),  # Rodinia rifting, warm
     (850,   0.20, None,  None, 0.00, 0.58),  # Rodinia
     (900,   0.15, None,  None, 0.00, 0.58),  # Rodinia assembled
-    (1000,  0.10, None,  80,   0.00, 0.55),  # Rodinia
+    # No ice at 1000 Ma. The first Neoproterozoic glaciation is the Sturtian
+    # at 717 Ma; the 80-degree line here was a phantom that then interpolated
+    # across ninety million years of keyframes.
+    (1000,  0.10, None, None, 0.00, 0.55),  # Rodinia
     # ---- Future (Pangaea Proxima scenario, Scotese geography; climate after
     # Farnsworth et al. 2024, whose reconstruction IS this one -- Scotese is a
     # co-author). The old table showed a merely-warm supercontinent with
