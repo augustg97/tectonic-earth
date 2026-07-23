@@ -4238,26 +4238,38 @@
   ],
   "Siberia": [
    {
-    "a0": 515,
-    "a1": 541,
+    "a0": 250,
+    "a1": 300,
     "taxa": [
      [
-      "Small shelly fauna",
-      "phylum",
-      "sea",
-      "The Siberian Platform yields the type Tommotian assemblage - the first mineralised skeletons, mostly millimetre tubes and spines."
+      "Siberian Traps flora",
+      "class",
+      "land",
+      "The last forests before the Great Dying, buried under the largest volcanic eruption of the eon -- the coal seams of Tunguska are their remains."
      ],
      [
-      "Archaeocyatha",
+      "Permian tetrapods",
       "class",
+      "land",
+      "Amphibians and early reptiles of the Permian rivers, the northern counterparts of the Karoo fauna."
+     ]
+    ]
+   },
+   {
+    "a0": 430,
+    "a1": 443,
+    "taxa": [
+     [
+      "Rugosa",
+      "order",
       "sea",
-      "Siberian archaeocyath reefs are the largest and best-dated of the Early Cambrian world."
+      "Solitary and colonial 'horn corals' on Siberian Silurian carbonate banks."
      ],
      [
-      "Sinsk biota",
-      "class",
+      "Stromatoporoidea",
+      "order",
       "sea",
-      "An Early Cambrian soft-bodied Lagerstatte in anoxic Siberian shelf muds, older than the Burgess Shale."
+      "Reef-building sponges continuing the long carbonate history of the isolated craton."
      ]
     ]
    },
@@ -4286,20 +4298,26 @@
     ]
    },
    {
-    "a0": 430,
-    "a1": 443,
+    "a0": 515,
+    "a1": 541,
     "taxa": [
      [
-      "Rugosa",
-      "order",
+      "Small shelly fauna",
+      "phylum",
       "sea",
-      "Solitary and colonial 'horn corals' on Siberian Silurian carbonate banks."
+      "The Siberian Platform yields the type Tommotian assemblage - the first mineralised skeletons, mostly millimetre tubes and spines."
      ],
      [
-      "Stromatoporoidea",
-      "order",
+      "Archaeocyatha",
+      "class",
       "sea",
-      "Reef-building sponges continuing the long carbonate history of the isolated craton."
+      "Siberian archaeocyath reefs are the largest and best-dated of the Early Cambrian world."
+     ],
+     [
+      "Sinsk biota",
+      "class",
+      "sea",
+      "An Early Cambrian soft-bodied Lagerstatte in anoxic Siberian shelf muds, older than the Burgess Shale."
      ]
     ]
    }
@@ -5222,80 +5240,50 @@
   ],
   "Africa": [
    {
-    "a0": 100,
-    "a1": 150,
+    "a0": -40,
+    "a1": 2.6,
     "taxa": [
      [
-      "Spinosaurus",
-      "genus",
+      "Homo habilis",
+      "species",
       "land",
-      "A sail-backed, semi-aquatic theropod larger than T. rex, from the Kem Kem rivers of the Sahara."
+      "An early tool-making human from Olduvai Gorge, at the base of our own genus."
      ],
      [
-      "Carcharodontosaurus",
-      "genus",
+      "Paranthropus boisei",
+      "species",
       "land",
-      "A shark-toothed giant predator of the mid-Cretaceous North African floodplains."
+      "A robust, massive-jawed hominin ('Nutcracker Man') sharing the Pleistocene rift with early Homo."
      ],
      [
-      "Ouranosaurus",
+      "African megafauna",
+      "order",
+      "land",
+      "Africa keeps the intact big-mammal community - elephants, rhinos, hippos - that other continents lost."
+     ],
+     [
+      "Termitomyces",
       "genus",
       "land",
-      "A sail-backed iguanodont sharing the lush Cretaceous river deltas of what is now the desert."
+      "Fungus farmed in gardens inside African termite mounds, an agriculture tens of millions of years older than our own."
      ]
     ]
    },
    {
-    "a0": 66,
-    "a1": 100,
+    "a0": 2.6,
+    "a1": 5,
     "taxa": [
      [
-      "Paralititan",
-      "genus",
+      "Australopithecus afarensis",
+      "species",
       "land",
-      "A colossal titanosaur from the mangrove coasts of Late Cretaceous Egypt (Bahariya)."
+      "'Lucy' and her kin - upright-walking hominins of the Pliocene East African savanna."
      ],
      [
-      "Rukwatitan",
+      "Australopithecus",
       "genus",
       "land",
-      "A titanosaur from the East African rift sediments, part of a distinct southern fauna."
-     ],
-     [
-      "Weichselia",
-      "genus",
-      "land",
-      "A fire- and drought-tolerant tree fern that carpeted the Cretaceous North African floodplains where Spinosaurus and Paralititan lived."
-     ]
-    ]
-   },
-   {
-    "a0": 30,
-    "a1": 56,
-    "taxa": [
-     [
-      "Aegyptopithecus",
-      "genus",
-      "land",
-      "A key early anthropoid from the Fayum of Egypt, near the root of monkeys and apes."
-     ],
-     [
-      "Moeritherium",
-      "genus",
-      "land",
-      "A pig-sized, semi-aquatic early proboscidean - a distant, low-slung ancestor of elephants."
-     ],
-     [
-      "Arsinoitherium",
-      "genus",
-      "land",
-      "A rhino-like herbivore with two enormous horns, endemic to the Fayum swamps."
-     ],
-     [
-      "Nypa",
-      "genus",
-      "land",
-      "Mangrove-palm swamp fringed the Tethyan coast of Africa. The Fayum primates lived in forest right at the water's edge."
+      "The Laetoli trackway in Tanzania records these hominins walking bipedally through volcanic ash."
      ]
     ]
    },
@@ -5330,50 +5318,128 @@
     ]
    },
    {
-    "a0": 2.6,
-    "a1": 5,
+    "a0": 30,
+    "a1": 56,
     "taxa": [
      [
-      "Australopithecus afarensis",
-      "species",
-      "land",
-      "'Lucy' and her kin - upright-walking hominins of the Pliocene East African savanna."
-     ],
-     [
-      "Australopithecus",
+      "Aegyptopithecus",
       "genus",
       "land",
-      "The Laetoli trackway in Tanzania records these hominins walking bipedally through volcanic ash."
+      "A key early anthropoid from the Fayum of Egypt, near the root of monkeys and apes."
+     ],
+     [
+      "Moeritherium",
+      "genus",
+      "land",
+      "A pig-sized, semi-aquatic early proboscidean - a distant, low-slung ancestor of elephants."
+     ],
+     [
+      "Arsinoitherium",
+      "genus",
+      "land",
+      "A rhino-like herbivore with two enormous horns, endemic to the Fayum swamps."
+     ],
+     [
+      "Nypa",
+      "genus",
+      "land",
+      "Mangrove-palm swamp fringed the Tethyan coast of Africa. The Fayum primates lived in forest right at the water's edge."
      ]
     ]
    },
    {
-    "a0": -40,
-    "a1": 2.6,
+    "a0": 33,
+    "a1": 56,
     "taxa": [
      [
-      "Homo habilis",
-      "species",
-      "land",
-      "An early tool-making human from Olduvai Gorge, at the base of our own genus."
+      "Basilosaurus",
+      "genus",
+      "sea",
+      "A fully aquatic early whale, 18 m of serpent-bodied predator, from the Eocene sea that covered Egypt -- the Valley of the Whales is full of them."
      ],
      [
-      "Paranthropus boisei",
-      "species",
-      "land",
-      "A robust, massive-jawed hominin ('Nutcracker Man') sharing the Pleistocene rift with early Homo."
-     ],
-     [
-      "African megafauna",
-      "order",
-      "land",
-      "Africa keeps the intact big-mammal community - elephants, rhinos, hippos - that other continents lost."
-     ],
-     [
-      "Termitomyces",
+      "Arsinoitherium",
       "genus",
       "land",
-      "Fungus farmed in gardens inside African termite mounds, an agriculture tens of millions of years older than our own."
+      "A twin-horned rhino-like herbivore of the Egyptian Eocene, belonging to no living group."
+     ],
+     [
+      "Aegyptopithecus",
+      "genus",
+      "land",
+      "A small early anthropoid from the Fayum, close to the split between Old World monkeys and apes."
+     ]
+    ]
+   },
+   {
+    "a0": 66,
+    "a1": 100,
+    "taxa": [
+     [
+      "Paralititan",
+      "genus",
+      "land",
+      "A colossal titanosaur from the mangrove coasts of Late Cretaceous Egypt (Bahariya)."
+     ],
+     [
+      "Rukwatitan",
+      "genus",
+      "land",
+      "A titanosaur from the East African rift sediments, part of a distinct southern fauna."
+     ],
+     [
+      "Weichselia",
+      "genus",
+      "land",
+      "A fire- and drought-tolerant tree fern that carpeted the Cretaceous North African floodplains where Spinosaurus and Paralititan lived."
+     ]
+    ]
+   },
+   {
+    "a0": 100,
+    "a1": 150,
+    "taxa": [
+     [
+      "Spinosaurus",
+      "genus",
+      "land",
+      "A sail-backed, semi-aquatic theropod larger than T. rex, from the Kem Kem rivers of the Sahara."
+     ],
+     [
+      "Carcharodontosaurus",
+      "genus",
+      "land",
+      "A shark-toothed giant predator of the mid-Cretaceous North African floodplains."
+     ],
+     [
+      "Ouranosaurus",
+      "genus",
+      "land",
+      "A sail-backed iguanodont sharing the lush Cretaceous river deltas of what is now the desert."
+     ]
+    ]
+   },
+   {
+    "a0": 180,
+    "a1": 260,
+    "taxa": [
+     [
+      "Karoo therapsids",
+      "class",
+      "land",
+      "The Karoo Basin of South Africa preserves the mammal-like reptiles in unbroken sequence across the end-Permian extinction -- the best record anywhere of that catastrophe on land."
+     ],
+     [
+      "Lystrosaurus",
+      "genus",
+      "land",
+      "The tusked, barrel-bodied survivor that dominated the emptied Early Triassic world, a quarter of all land-vertebrate fossils of its age."
+     ],
+     [
+      "Gorgonops",
+      "genus",
+      "land",
+      "A sabre-toothed predator of the Late Permian Karoo, top of the food chain before the Great Dying."
      ]
     ]
    }
@@ -5628,47 +5694,52 @@
   ],
   "Australia": [
    {
-    "a0": 550,
-    "a1": 565,
+    "a0": -20,
+    "a1": 2.6,
     "taxa": [
      [
-      "Dickinsonia",
+      "Diprotodon",
       "genus",
-      "sea",
-      "The Ediacara Hills type locality: quilted soft bodies up to a metre across, with cholesterol biomarkers that make Dickinsonia an animal."
+      "land",
+      "A three-tonne wombat relative, the largest marsupial ever to live."
      ],
      [
-      "Spriggina",
-      "genus",
-      "sea",
-      "A segmented Ediacaran form with a shield-like head end, argued over for decades as a possible early arthropod relative."
+      "Thylacoleo carnifex",
+      "species",
+      "land",
+      "The marsupial lion, a powerful ambush predator with the strongest bite of any known mammal for its size."
      ],
      [
-      "Charnia",
+      "Procoptodon",
       "genus",
-      "sea",
-      "Frond-shaped rangeomorphs anchored to the sea floor, feeding without a mouth or a gut."
+      "land",
+      "A short-faced giant kangaroo browsing shrubs on one-toed feet."
+     ],
+     [
+      "Varanus priscus",
+      "species",
+      "land",
+      "A seven-metre monitor lizard (Megalania), Australia's largest land predator until the megafauna vanished."
      ]
     ]
    },
    {
-    "a0": 23,
-    "a1": 45,
+    "a0": 2.6,
+    "a1": 5,
     "taxa": [
      [
-      "Tingamarra fauna",
+      "Chinchilla fauna",
       "order",
       "land",
-      "The lone substantial early-Cenozoic Queensland site (~55 Ma), hinting at South American mammal links, then near silence."
+      "The Chinchilla Sand records the Pliocene shift from rainforest to open woodland as Australia dries."
      ],
      [
-      "Nothofagus",
-      "genus",
+      "Macropodidae",
+      "family",
       "land",
-      "Cool-temperate southern beech rainforest covered Australia before it dried. Its pollen dominates Eocene cores from the coast to the interior."
+      "Kangaroos radiate as grasslands spread across the drying interior."
      ]
-    ],
-    "shared": "After Tingamarra the continent's record goes nearly blank until the Oligocene - the origins of the marsupial groups are poorly constrained here."
+    ]
    },
    {
     "a0": 5,
@@ -5701,50 +5772,93 @@
     ]
    },
    {
-    "a0": 2.6,
-    "a1": 5,
-    "taxa": [
-     [
-      "Chinchilla fauna",
-      "order",
-      "land",
-      "The Chinchilla Sand records the Pliocene shift from rainforest to open woodland as Australia dries."
-     ],
-     [
-      "Macropodidae",
-      "family",
-      "land",
-      "Kangaroos radiate as grasslands spread across the drying interior."
-     ]
-    ]
-   },
-   {
-    "a0": -20,
-    "a1": 2.6,
+    "a0": 1,
+    "a1": 30,
     "taxa": [
      [
       "Diprotodon",
       "genus",
       "land",
-      "A three-tonne wombat relative, the largest marsupial ever to live."
+      "The largest marsupial that ever lived, a two-tonne wombat relative of the Pleistocene, hunted by the first Australians."
      ],
      [
-      "Thylacoleo carnifex",
-      "species",
+      "Thylacoleo",
+      "genus",
       "land",
-      "The marsupial lion, a powerful ambush predator with the strongest bite of any known mammal for its size."
+      "The marsupial lion, with bolt-cutter premolars and the strongest bite for its size of any known mammal."
      ],
      [
       "Procoptodon",
       "genus",
       "land",
-      "A short-faced giant kangaroo browsing shrubs on one-toed feet."
+      "A short-faced kangaroo standing two metres tall, browsing with a single large toe on each foot."
      ],
      [
-      "Varanus priscus",
-      "species",
+      "Genyornis",
+      "genus",
+      "air",
+      "A flightless bird twice the weight of an emu, whose eggshell in human campfires helps date people's arrival."
+     ]
+    ]
+   },
+   {
+    "a0": 23,
+    "a1": 45,
+    "taxa": [
+     [
+      "Tingamarra fauna",
+      "order",
       "land",
-      "A seven-metre monitor lizard (Megalania), Australia's largest land predator until the megafauna vanished."
+      "The lone substantial early-Cenozoic Queensland site (~55 Ma), hinting at South American mammal links, then near silence."
+     ],
+     [
+      "Nothofagus",
+      "genus",
+      "land",
+      "Cool-temperate southern beech rainforest covered Australia before it dried. Its pollen dominates Eocene cores from the coast to the interior."
+     ]
+    ],
+    "shared": "After Tingamarra the continent's record goes nearly blank until the Oligocene - the origins of the marsupial groups are poorly constrained here."
+   },
+   {
+    "a0": 30,
+    "a1": 60,
+    "taxa": [
+     [
+      "Nimbadon",
+      "genus",
+      "land",
+      "A sheep-sized tree-dwelling marsupial from the Riversleigh deposits, found in caves it fell into by the herd."
+     ],
+     [
+      "Obdurodon",
+      "genus",
+      "fresh",
+      "A toothed platypus of the Australian rivers, from a lineage older than the toothless one alive now."
+     ]
+    ]
+   },
+   {
+    "a0": 550,
+    "a1": 565,
+    "taxa": [
+     [
+      "Dickinsonia",
+      "genus",
+      "sea",
+      "The Ediacara Hills type locality: quilted soft bodies up to a metre across, with cholesterol biomarkers that make Dickinsonia an animal."
+     ],
+     [
+      "Spriggina",
+      "genus",
+      "sea",
+      "A segmented Ediacaran form with a shield-like head end, argued over for decades as a possible early arthropod relative."
+     ],
+     [
+      "Charnia",
+      "genus",
+      "sea",
+      "Frond-shaped rangeomorphs anchored to the sea floor, feeding without a mouth or a gut."
      ]
     ]
    }
@@ -5833,20 +5947,32 @@
   ],
   "India": [
    {
-    "a0": 60,
-    "a1": 75,
+    "a0": 0,
+    "a1": 5,
     "taxa": [
      [
-      "Rajasaurus",
+      "Elephas",
       "genus",
       "land",
-      "A horned abelisaur theropod from the Lameta beds, hunting amid the erupting Deccan Traps."
+      "The Asian elephant lineage and a rich Siwalik-derived mammal fauna occupy the subcontinent."
+     ]
+    ]
+   },
+   {
+    "a0": 5,
+    "a1": 23,
+    "taxa": [
+     [
+      "Sivapithecus",
+      "genus",
+      "land",
+      "A great ape of the Siwalik foreland forests shed from the rising Himalaya."
      ],
      [
-      "Isisaurus",
+      "Stegodon",
       "genus",
       "land",
-      "A titanosaur of latest-Cretaceous India whose nesting grounds are preserved as fossil egg clutches."
+      "A large proboscidean of the Miocene-Pliocene Siwalik faunas."
      ]
     ]
    },
@@ -5881,32 +6007,62 @@
     ]
    },
    {
-    "a0": 5,
-    "a1": 23,
+    "a0": 40,
+    "a1": 56,
     "taxa": [
      [
-      "Sivapithecus",
+      "Cambaytherium",
       "genus",
       "land",
-      "A great ape of the Siwalik foreland forests shed from the rising Himalaya."
+      "An early hoofed mammal from the Eocene of Gujarat, close to the origin of horses, rhinos and tapirs -- evolving in the isolation before India docked."
      ],
      [
-      "Stegodon",
+      "Icaronycteris",
       "genus",
-      "land",
-      "A large proboscidean of the Miocene-Pliocene Siwalik faunas."
+      "air",
+      "Among the oldest fully-flying bats, from the Indian Eocene ambers and shales."
      ]
     ]
    },
    {
-    "a0": 0,
-    "a1": 5,
+    "a0": 60,
+    "a1": 75,
     "taxa": [
      [
-      "Elephas",
+      "Rajasaurus",
       "genus",
       "land",
-      "The Asian elephant lineage and a rich Siwalik-derived mammal fauna occupy the subcontinent."
+      "A horned abelisaur theropod from the Lameta beds, hunting amid the erupting Deccan Traps."
+     ],
+     [
+      "Isisaurus",
+      "genus",
+      "land",
+      "A titanosaur of latest-Cretaceous India whose nesting grounds are preserved as fossil egg clutches."
+     ]
+    ]
+   },
+   {
+    "a0": 66,
+    "a1": 100,
+    "taxa": [
+     [
+      "Isisaurus",
+      "genus",
+      "land",
+      "A titanosaur of the Indian Cretaceous, its bones found in the same beds as the nests it may have laid."
+     ],
+     [
+      "Rajasaurus",
+      "genus",
+      "land",
+      "A horned predatory dinosaur of India, hunting on the drifting island continent just before it struck Asia."
+     ],
+     [
+      "Sahni's nests",
+      "class",
+      "land",
+      "Titanosaur nesting grounds across the Deccan, eggs laid on the flood basalt itself between eruptions."
      ]
     ]
    }

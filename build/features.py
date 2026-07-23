@@ -299,7 +299,7 @@ LABELS = [
     ("forest", "Jehol Forests", 120, 43, 121, 135),
     ("forest", "Antarctic Nothofagus Forest", -60, -67, 30, 58),
     ("forest", "Arctic Azolla Bloom", 10, 84, 48, 50),
-    ("forest", "Pebas Mega-Wetland", -70, -5, 10, 23),
+    ("forest", "Pebas Mega-Wetland", -70, -5, 8, 21),
     ("forest", "Amazon Rainforest", -62, -4, 0, 10),
     # -- grassland --
     ("grassland", "Great Plains", -100, 41, 0, 18),
@@ -351,6 +351,17 @@ LABELS = [
     ("island", "Wrangellia Terrane", -142, 61, 150, 232),
     ("island", "Greater India", 78, 22, 60, 130),
     ("island", "Kerguelen Microcontinent", 72, -52, 90, 118),
+    # Continental fragments and submerged continents, verified against the
+    # Wikipedia continental-fragment and submerged-continent surveys. Most
+    # are underwater now, so like Kerguelen the elevation grid cannot draw
+    # them and the label carries them at their present position.
+    ("island", "Mauritia", 57, -25, 60, 85),
+    ("island", "Jan Mayen Microcontinent", -8, 70, 25, 55),
+    ("island", "Seychelles Microcontinent", 55, -6, 63, 90),
+    ("island", "Argoland", 114, -16, 120, 165),
+    ("region", "Broken Ridge", 96, -31, 0, 95),
+    ("island", "East Tasman Plateau", 156, -44, 0, 80),
+
     ("island", "Zealandia", 172, -43, 0, 80),
     ("island", "Baja Island", -118, 34, -40, -5),
     ("island", "Somalia", 48, 0, -100, -15),
@@ -1088,6 +1099,12 @@ DESCRIPTIONS = {
   "continents.",
  "Kaskaskia Sea": "The Devonian-Mississippian flooding of North America, laying down black shale and then "
   "the crinoid limestone that underlies much of the Midwest.",
+ "Mauritia": "A sliver of continental crust stranded between India and Madagascar as they parted, and drowned as the Indian Ocean widened over it. Zircon grains up to three billion years old, dredged from the young basalt of Mauritius that now sits on top of it, are what gave it away.",
+ "Jan Mayen Microcontinent": "A ribbon of continental crust rifted from Greenland as the North Atlantic opened, then left behind on the wrong side of the ridge and submerged. The volcanic island of Jan Mayen sits at its northern tip.",
+ "Seychelles Microcontinent": "A block of ancient granite that rode between India and Madagascar and was cut loose when India tore away over the Reunion plume. The granite islands of the Seychelles are the only part still above water -- continental rock alone in the middle of an ocean.",
+ "Argoland": "A continental ribbon that rifted off northwestern Australia in the Jurassic -- the deep Argo Abyssal Plain is the gap it left -- and drifted north to break apart and scatter beneath Southeast Asia. Its fragments are now threaded through Myanmar, Sumatra and Borneo.",
+ "Broken Ridge": "A drowned volcanic plateau in the Indian Ocean, once continuous with the Kerguelen Plateau until the Southeast Indian Ridge split the two apart and carried them a thousand kilometres from each other.",
+ "East Tasman Plateau": "A submerged continental block southeast of Tasmania, a fragment left in the Tasman Sea when Australia and Zealandia went their separate ways.",
  "Kerguelen Microcontinent": "A continent-sized volcanic plateau in the southern Indian Ocean, built by the Kerguelen plume as India tore away from Antarctica. Parts of it stood above sea level for tens of millions of years -- drill cores have brought up wood, spores and coal from a Late Cretaceous conifer forest growing on it -- before it subsided.\n\nIT IS NOT DRAWN ON THIS MAP, and the reason is worth stating: almost all of it now lies one to two kilometres below sea level, so it is submarine terrain, and the elevation field this globe is built from resolves about 20 km per pixel. A drowned plateau reads as ordinary sea floor at that scale, and the reconstruction this app uses does not restore its Cretaceous height either. The label carries it because an island the map cannot draw is still better named than silently missing.",
  "Kuunga Orogen": "The last suture of Gondwana, closing between India-Antarctica and Australia. It "
   "finished welding the southern supercontinent together only as the Cambrian explosion "
