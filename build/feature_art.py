@@ -477,6 +477,128 @@ art("tundra",
     "shallow pools all summer.")
 
 
+art("orogen_accretion",
+    # Not two continents meeting -- a COLLAGE. Arcs, seamounts and slivers of
+    # microcontinent swept together over 300 Myr, each welded on and the next
+    # one arriving behind it. The Altaids are the largest of these on Earth.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{MANTLE}"/>'
+    f'<rect x="0" y="46" width="{W}" height="72" fill="{SEA}"/>'
+    f'<path d="M0 62h300v56H0z" fill="{CRUST_D}"/>'
+    + "".join(
+        f'<path d="M{x} 62l{w//2} -{h} {w//2} {h}z" fill="{c}"/>'
+        f'<path d="M{x} 62l{w//2} -{h} {w//2} {h}" stroke="{LINE}"'
+        f' stroke-width="1.2" fill="none" opacity=".6"/>'
+        for x, w, h, c in ((2, 46, 20, "#6f6250"), (44, 40, 30, "#5f6357"),
+                           (80, 52, 17, "#77694f"), (128, 36, 26, "#5a5a55"),
+                           (160, 48, 34, "#6d6152"), (204, 40, 21, "#616454"),
+                           (240, 58, 28, "#75674e")))
+    + "".join(f'<path d="M{x} 62v40" stroke="#39424a" stroke-width="1.6"'
+              f' opacity=".8" stroke-dasharray="4 3"/>'
+              for x in (44, 80, 128, 160, 204, 240))
+    + f'<path d="M12 24h60M72 24l-9-5M72 24l-9 5" stroke="#e0a878"'
+      f' stroke-width="2" fill="none"/>'
+    + f'<path d="M288 24h-60M228 24l9-5M228 24l9 5" stroke="#e0a878"'
+      f' stroke-width="2" fill="none"/>',
+    "An accretionary belt: not two continents meeting but a collage. Island "
+    "arcs, seamounts and slivers of microcontinent are swept against a margin "
+    "one after another, each welded on before the next arrives, and the dashed "
+    "lines are the sutures between them. Built over hundreds of millions of "
+    "years, these add more new continental crust than collisions do.")
+
+art("orogen_old",
+    # What a range looks like after the mountains have gone: the ROOT, exhumed.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{MANTLE}"/>'
+    f'<path d="M0 56h300v62H0z" fill="{CRUST_D}"/>'
+    f'<path d="M0 56q34-16 72-8t70 12 76-14 82-4v10q-44-4-82 4t-76 14-70-12-72 8z"'
+    f' fill="{CRUST}"/>'
+    f'<path d="M0 56q34-16 72-8t70 12 76-14 82-4" stroke="{LAND}"'
+    f' stroke-width="4" fill="none"/>'
+    # steeply-dipping old fabric, truncated flat by erosion
+    + "".join(f'<path d="M{x} 118L{x+26} 58" stroke="#8a7b64" stroke-width="2"'
+              f' opacity=".7"/>' for x in range(-24, 300, 20))
+    + f'<path d="M0 56q34-16 72-8t70 12 76-14 82-4" stroke="#cfd8e2"'
+      f' stroke-width="1.6" fill="none" opacity=".55"/>'
+    # ghost of the range that used to be here
+    + f'<path d="M28 56l52-40 46 26 56-34 62 44" stroke="{LINE}"'
+      f' stroke-width="1.5" fill="none" opacity=".28" stroke-dasharray="6 5"/>'
+    + f'<path d="M150 12v-6M120 8h60" stroke="{LINE}" stroke-width="1"'
+      f' opacity=".25"/>',
+    "An old mountain belt, long after the mountains. The peaks are gone -- the "
+    "dashed line is roughly where they were -- and what is exposed now is the "
+    "ROOT: rock that was once ten or fifteen kilometres down, its steep fabric "
+    "planed off flat. As the range erodes the crust below rebounds upward, "
+    "which keeps feeding deeper rock to the surface long after uplift stops.")
+
+art("lake_rift",
+    # Deep, steep-sided, long-lived: the opposite of a glacial scrape.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{SKY}"/>'
+    f'<rect x="0" y="40" width="{W}" height="78" fill="{CRUST}"/>'
+    f'<path d="M0 40h104l16 22v56H0z" fill="{CRUST}"/>'
+    f'<path d="M300 40H196l-16 22v56h120z" fill="{CRUST}"/>'
+    f'<path d="M104 40l16 22v56h60V62l16-22z" fill="{CRUST_D}"/>'
+    f'<path d="M0 40h104M196 40h104" stroke="{LAND}" stroke-width="4"/>'
+    f'<path d="M104 40l16 22M196 40l-16 22" stroke="{LINE}" stroke-width="1.8"'
+    f' fill="none"/>'
+    f'<path d="M120 50h60v58h-60z" fill="#1d3f52"/>'
+    f'<path d="M120 50h60v14h-60z" fill="#2f5f78"/>'
+    f'<path d="M120 50h60" stroke="#8fc6dc" stroke-width="1.4" opacity=".8"/>'
+    f'<path d="M126 96h48M132 104h36" stroke="#0f2a38" stroke-width="2"'
+    f' opacity=".8"/>'
+    f'<path d="M60 34l-8-12M232 34l8-12" stroke="{LINE}" stroke-width="1.4"'
+    f' opacity=".5"/>'
+    f'<path d="M28 22h56M216 22h56" stroke="{LINE}" stroke-width="1" opacity=".3"/>',
+    "A rift lake. The floor is a dropped fault block, so the water is deep, the "
+    "sides are steep and the basin lasts for millions of years -- long enough "
+    "for its fish to evolve into whole endemic faunas. Baikal is 1,600 m deep "
+    "and 25 million years old; a lake left by an ice sheet is 100 m deep and "
+    "lasts ten thousand.")
+
+art("sea_backarc",
+    # A sea opened BEHIND an arc by slab rollback -- not a flooded continent.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{MANTLE}"/>'
+    f'<rect x="0" y="34" width="{W}" height="30" fill="{SEA}"/>'
+    f'<path d="M0 56h96v62H0z" fill="{CRUST}"/>'
+    f'<path d="M0 56h96" stroke="{LAND}" stroke-width="4"/>'
+    f'<path d="M96 64h96v10H96z" fill="{CRUST_D}"/>'
+    f'<path d="M180 64l24-16 22 16z" fill="{CRUST}"/>'
+    f'<path d="M204 48c-4-10-2-15 0-19 3 5 4 10 0 19z" fill="{HOT_L}"/>'
+    f'<path d="M226 64h74v10h-74z" fill="{CRUST_D}"/>'
+    f'<path d="M226 74q24 26 48 44" stroke="{CRUST_D}" stroke-width="11"'
+    f' fill="none"/>'
+    f'<path d="M120 62c-8-12-8-20 0-26 8 6 8 14 0 26z" fill="{HOT}" opacity=".85"/>'
+    f'<path d="M108 46h-30M78 46l8-5M78 46l8 5M132 46h30M162 46l-8-5M162 46l-8 5"'
+    f' stroke="{LINE}" stroke-width="1.6" fill="none"/>'
+    f'<path d="M266 26l-10 8 10 8" stroke="{LINE}" stroke-width="1.6"'
+    f' fill="none" opacity=".7"/>',
+    "A back-arc sea. As a sinking slab rolls backwards the arc above it "
+    "migrates seaward, and the crust behind is stretched until it splits and "
+    "makes new sea floor. The Sea of Japan opened this way in the Miocene, "
+    "swinging the whole archipelago out from Asia like a door.")
+
+art("desert_shadow",
+    # Dry because something is in the way, not because of latitude.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{SKY}"/>'
+    f'<rect x="0" y="70" width="{W}" height="48" fill="#9a8355"/>'
+    f'<path d="M0 62h60l48-40 40 34 26-14 34 20h92v56H0z" fill="#8d7649"/>'
+    f'<path d="M0 62h60l48-40 40 34" fill="#6d7a52"/>'
+    f'<path d="M60 62l48-40 40 34 26-14 34 20" stroke="#cfd8e2"'
+    f' stroke-width="2.2" fill="none" stroke-linejoin="round"/>'
+    # moist air arriving, raining out on the windward side
+    + "".join(f'<path d="M{x} {y}q10-7 20 0" stroke="#8fb8cc" stroke-width="1.6"'
+              f' fill="none" opacity=".75"/>' for x, y in ((6, 22), (30, 14), (54, 26)))
+    + "".join(f'<path d="M{x} 34v12" stroke="#7fb4cc" stroke-width="1.5"'
+              f' opacity=".8"/>' for x in (18, 30, 42, 54, 66, 78))
+    + f'<path d="M170 18h96M266 18l-9-5M266 18l-9 5" stroke="{LINE}"'
+      f' stroke-width="1.5" fill="none" opacity=".55"/>'
+    + f'<path d="M180 76q46-12 84 0M196 92q40-10 72 0" stroke="#b0955f"'
+      f' stroke-width="1.6" fill="none" opacity=".8"/>',
+    "A rain-shadow desert. Moist air is forced up the windward slope, cools, "
+    "and rains out before it reaches the top; what comes down the far side has "
+    "nothing left in it. This is why the Atacama sits beside the Pacific and is "
+    "still the driest place on Earth, and why Patagonia is a desert at the same "
+    "latitude as rainforest across the Andes.")
+
+
 # ------------------------------------------- where the type art is wrong ---
 # A few families of feature are built by a mechanism the generic diagram gets
 # wrong, and there are enough of them to be worth their own drawing.
@@ -593,6 +715,26 @@ NAME_ART["Gilboa Forest"] = "forest_devonian"
 # An oceanic gateway, not water standing on a continent -- the epeiric-sea
 # caption would be flatly wrong about what this one was.
 NAME_ART["Central American Sea"] = "ocean_closing"
+
+for _n in ("Central Asian Orogenic Belt", "Altai Belt", "Lachlan Orogen",
+           "Qilian Belt", "Kunlun Belt", "Tien Shan", "Innuitian Belt",
+           "Baikalian Belt", "Timanian Belt", "Verkhoyansk Belt"):
+    NAME_ART[_n] = "orogen_accretion"
+for _n in ("Appalachians", "Caledonides", "Ural Mountains", "Variscan Belt",
+           "Alleghanian Belt", "Acadian Belt", "Taconic Belt", "Grenville Belt",
+           "Bohemian Massif", "Iberian Massif", "Massif Central",
+           "Sveconorwegian Belt", "Cadomian Belt", "Ouachita Belt",
+           "Ellesmerian Belt", "Damara Belt", "Irumide Belt", "Sunsas Belt"):
+    NAME_ART[_n] = "orogen_old"
+for _n in ("Lake Baikal", "Lake Tanganyika", "East African Rift soda lakes",
+           "Lake Titicaca", "Jehol Lakes", "Songliao Palaeolake"):
+    NAME_ART[_n] = "lake_rift"
+for _n in ("Sea of Japan", "Okhotsk Sea", "Paratethys", "Bearpaw Sea"):
+    NAME_ART[_n] = "sea_backarc"
+for _n in ("Patagonian Desert", "Atacama Desert", "Gobi Desert",
+           "Taklamakan Desert", "Qaidam Basin", "Great Basin Desert"):
+    NAME_ART[_n] = "desert_shadow"
+
 
 
 # ------------------------------------------------------ per-type mapping ----

@@ -210,9 +210,17 @@ def _rainfall(Z, land, lat, cl):
     # gating it: the belt never clamps to zero, so whether a subtropical region
     # is desert or monsoon is decided by its geography (fetch, coasts, relief).
     arid = cl["arid"]
+    # The subtropical high is the strongest single control on where deserts are,
+    # and it was too weak. Arabia came out as wet as the Amazon -- 0.294 against
+    # 0.295 -- because it sits at 20 N with the Indian Ocean immediately upwind,
+    # so it kept a short-fetch moisture supply AND took the full monsoon bonus.
+    # The Sahara at the same latitude was correctly bone dry only because its
+    # easterlies had already crossed a continent. Fetch alone cannot separate
+    # them: the Rub al Khali is dry because air is DESCENDING over it, not
+    # because moisture failed to arrive.
     B = (0.42
          + 0.52 * np.exp(-(lat ** 2) / (2 * 13.0 ** 2))
-         - (0.26 + 0.20 * arid) * np.exp(-((absl - 24) ** 2) / (2 * 10.0 ** 2))
+         - (0.40 + 0.24 * arid) * np.exp(-((absl - 24) ** 2) / (2 * 11.0 ** 2))
          + 0.24 * np.exp(-((absl - 50) ** 2) / (2 * 13.0 ** 2))
          - 0.34 * np.exp(-((absl - 88) ** 2) / (2 * 18.0 ** 2)))
     B = np.clip(B, 0.10, 1.15)
@@ -221,7 +229,10 @@ def _rainfall(Z, land, lat, cl):
     # land in the tropics/subtropics, but still gated by R, so a coast with a
     # short sea fetch (India) floods while a deep interior (Sahara) does not.
     land_s = _smooth(land.astype(float), 2)
-    monsoon = 0.62 * np.exp(-((absl - 18) ** 2) / (2 * 12.0 ** 2)) * land_s
+    # Narrower and weaker than it was. A monsoon is driven by a large heated
+    # landmass, and applying the full bonus to every scrap of land in the band
+    # handed one to peninsulas that have never had one.
+    monsoon = 0.50 * np.exp(-((absl - 16) ** 2) / (2 * 10.0 ** 2)) * land_s
 
     # a warmer world evaporates more; `arid` already shapes the belts above so
     # it is deliberately not applied twice here

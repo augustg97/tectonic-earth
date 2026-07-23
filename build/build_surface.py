@@ -45,7 +45,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FIELDS = os.path.join(HERE, "..", "web", "fields")
 Z_RANGE = 8000.0
 RF_MAX = 1.3
-H, W = 512, 1024                 # working and output grid
+# Match the elevation field. At half its resolution a river channel was two
+# pixels wide on a 2048-wide texture and vanished into the interpolation.
+H, W = 1024, 2048
 
 
 def _read(path, size=None):
@@ -231,9 +233,27 @@ def build_one(base, verbose=False):
     acc = flow_accumulation(zf, rain, sea)
     hard = substrate(z, zf, acc, sea)
     fet = fetch(z, sea, lat)
-    # log-compress: accumulation spans six orders of magnitude and only the
-    # top three are a river
-    drain = np.clip(np.log1p(acc) / 7.5, 0, 1)
+    # Normalise PER FRAME, against this age's own distribution.
+    #
+    # A fixed divisor was tuned on the present day and was wrong everywhere
+    # else: total accumulation depends on how much land there is, how wet it
+    # is, and how much relief there is to concentrate flow, all of which move
+    # by an order of magnitude across the timeline. At 60 Ma -- low relief,
+    # a drowned interior -- the whole of North America peaked at 0.26 on a
+    # scale where the shader does not draw a channel until 0.50, so the
+    # continent had no rivers at all on it.
+    #
+    # Anchoring on a high percentile of the land distribution instead means
+    # the top fraction of a percent of any age's land is always river, which
+    # is what a drainage network actually looks like from orbit: a thin
+    # dendritic minority of the surface, at every age.
+    land = ~sea
+    lo = float(np.percentile(acc[land], 90.0)) if land.any() else 1.0
+    hi = float(np.percentile(acc[land], 99.85)) if land.any() else 10.0
+    lo, hi = max(lo, 1e-3), max(hi, lo * 4.0)
+    drain = np.clip((np.log1p(acc) - np.log1p(lo)) / (np.log1p(hi) - np.log1p(lo)), 0, 1)
+    drain = drain * 0.55 + 0.30 * (drain > 0.001)      # channels land near 0.85
+    drain = np.clip(drain, 0, 1)
     drain[sea] = 0.0
     rgb = np.stack([drain, hard, fet], -1)
     img = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8), "RGB")
