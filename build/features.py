@@ -299,7 +299,6 @@ LABELS = [
     ("forest", "Jehol Forests", 120, 43, 121, 135),
     ("forest", "Antarctic Nothofagus Forest", -60, -67, 30, 58),
     ("forest", "Arctic Azolla Bloom", 10, 84, 48, 50),
-    ("forest", "Pebas Mega-Wetland", -70, -5, 8, 21),
     ("forest", "Amazon Rainforest", -62, -4, 0, 10),
     # -- grassland --
     ("grassland", "Great Plains", -100, 41, 0, 18),
@@ -431,7 +430,7 @@ LABELS = [
     ("lake", "Fossil Lake", -110.8, 41.9, 50.0, 52.0),
     ("lake", "Messel Lake", 8.75, 49.9, 47.0, 48.0),
     ("lake", "Lake Baikal", 108.0, 53.5, 0.0, 30.0),
-    ("lake", "Pebas Mega-Wetland", -70.0, -5.0, 10.0, 23.0),
+    ("lake", "Pebas Mega-Wetland", -70.0, -5.0, 8.0, 21.0),
     ("lake", "Lake Vostok", 106.0, -77.0, 0.0, 15.0),
     ("lake", "Lake Tanganyika", 29.5, -6.0, 0.0, 12.0),
     ("lake", "Lake Pannon", 19.0, 46.0, 4.5, 11.6),
@@ -1351,9 +1350,6 @@ DESCRIPTIONS = {
  "Lake Titicaca": "The highest large lake on Earth, held in a basin between two arms of the Andes as the "
   "range rose around it. It is the deepest surviving piece of a series of far larger Ice "
   "Age lakes that once covered the Altiplano.",
- "Pebas Mega-Wetland": "Before the Amazon flowed east, western Amazonia was a million square kilometres of "
-  "shallow lake and swamp draining north to the Caribbean, with tides reaching far "
-  "inland. Andean uplift eventually tipped the continent the other way and drained it.",
  "Lake Vostok": "A lake the size of Lake Ontario, sealed under four kilometres of Antarctic ice and "
   "kept liquid by the pressure and the heat of the rock beneath. It is one of roughly "
   "four hundred subglacial lakes, and it has been cut off from the sky for millions of "
