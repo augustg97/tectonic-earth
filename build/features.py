@@ -306,6 +306,15 @@ LABELS = [
     ("ice", "Marinoan Snowball Earth", 120, 0, 635, 650),
     ("ice", "Gaskiers Glaciation", -30, -45, 579, 582),
     ("ice", "Hirnantian Ice Sheet", 0, -80, 443, 447),
+    # The Famennian ice on high-latitude Gondwana. Anchored on the Parana
+    # Basin, whose crust sat at 73 S at 360 Ma -- the Andean deposits are
+    # closer to the type sections but their crust tracks back to open ocean.
+    # Contested, and labelled as such. The Early Cretaceous glendonites and
+    # dropstones are in SE Australia, whose crust sat inside the Antarctic
+    # circle at 145 Ma. No continental sheet is accepted -- this marks a cold
+    # polar region, not an ice age.
+    ("ice", "Cretaceous Polar Ice (disputed)", 145, -38, 125, 152),
+    ("ice", "Late Devonian Ice Sheet", -50, -25, 355, 368),
     ("ice", "Karoo Ice Sheet", 20, -70, 258, 340),
     ("ice", "East Antarctic Ice Sheet", 90, -78, 0, 34),
     ("ice", "Laurentide Ice Sheet", -90, 58, 0, 3),
@@ -997,6 +1006,8 @@ DESCRIPTIONS = {
  "Karoo Basin": "A foreland basin in southern Gondwana that filled continuously for a hundred million "
   "years, from glacial tillite through coal swamps to desert. Its strata contain the best "
   "record anywhere of the end-Permian extinction on land.",
+ "Cretaceous Polar Ice (disputed)": "The most contested ice on this map. Glendonites -- a mineral that only forms near freezing -- and scattered dropstones in what is now southeastern Australia and the Arctic point to ice at high latitudes during the Early Cretaceous cool intervals. No continental ice sheet is accepted for the Cretaceous, and the world either side of this was among the hottest of the last 200 million years. Shown as small polar ice because the field evidence is real even where its interpretation is not agreed.",
+ "Late Devonian Ice Sheet": "Ice on high-latitude Gondwana at the end of the Devonian, recorded by diamictites and striated pavements now exposed across Bolivia, Peru and Brazil. Shorter and smaller than the ice ages either side of it, and probably a consequence of the forests: deep-rooted trees weather rock far faster than anything before them, and burying their carbon pulled CO2 down hard. The greening that made the land habitable also made the world cold.",
  "Karoo Ice Sheet": "The ice of the Late Palaeozoic Ice Age, spread across southern Gondwana for some "
   "eighty million years. Its striated pavements and tillites turn up in South Africa, "
   "Brazil, India, Australia and Antarctica -- once continuous, now scattered across five "

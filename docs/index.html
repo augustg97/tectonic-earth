@@ -236,6 +236,17 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 .exsub{font-size:9.5px;color:#98a2b0;padding:2px 11px 3px 20px;cursor:pointer;transition:background .13s,color .13s}
 .exsub:hover{background:rgba(255,255,255,.05);color:#c8d0da}
 .exsub.cur{color:#e8b98a}
+/* Glaciations get their own colour. Red already means extinction in this
+   rail and the two lists sit next to each other; ice blue keeps a reader
+   from mistaking one for the other at a glance. */
+.glrow{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 11px 4px;cursor:pointer;transition:background .13s}
+.glrow:hover{background:rgba(255,255,255,.055)}
+.glrow.cur{background:rgba(126,186,214,.16);box-shadow:inset 2px 0 0 #7ebad6}
+.glrow .gn{font-size:11px;color:var(--ink);letter-spacing:.02em}
+.glrow.cur .gn{color:#a8d8ee}
+.glrow.snow .gn{color:#cfe4f2}
+.glrow .gd{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.glrow .gk{font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:#7d8b9c;display:block;margin-top:1px}
 
 /* ---- loading ---- */
 #load{position:fixed;inset:0;background:var(--bg);z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s}
@@ -411,6 +422,10 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <div class="panel" id="exPanel">
     <div class="ph"><span>Mass extinctions</span><span class="chev">▾</span></div>
     <div class="pb" id="exList"></div>
+  </div>
+  <div class="panel" id="glPanel">
+    <div class="ph"><span>Glaciations</span><span class="chev">▾</span></div>
+    <div class="pb" id="glList"></div>
   </div>
 </div>
 
@@ -761,7 +776,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0205';
+const DATA_V='20260723-0301';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -2258,7 +2273,7 @@ function jumpTo(age){
   state.age=Math.max(-250,Math.min(1000,age));
   state.playing=false;syncPlay();syncSlider();
   bindTextures();buildBoundaries();buildHotspots();buildVectors();updateReadout();
-  markSidebarCurrent();
+  markSidebarCurrent();markGlaciationList();
 }
 function showInterval(i){
   const mid=(i.a0+i.a1)/2;
@@ -2700,6 +2715,60 @@ function buildExtinctionList(){
   box.innerHTML=html;
   box.querySelectorAll('[data-ev]').forEach(el=>{ el.onclick=()=>jumpToExtinction(el.dataset.ev, +el.dataset.ph); });
 }
+/* Glaciations: the third navigable structure in the left rail, after the
+   intervals and the supercontinents. It is deliberately NOT a list of
+   intervals -- an ice age cuts across the timescale's divisions -- and not a
+   list of features either, because it is a state of the whole system rather
+   than a place. Data comes from eras.json; the card reuses openInfo so it
+   gets the ice-sheet figure and the same layout as everything else. */
+function glaciationsList(){
+  return ((DATA.eras&&DATA.eras.glaciations)||[]).slice()
+    .sort((a,b)=>a.a1-b.a1);   // recent first, matching the extinctions above
+}
+function buildGlaciationList(){
+  const box=$('#glList'); if(!box) return;
+  const gs=glaciationsList();
+  box.innerHTML=gs.map((g,i)=>{
+    const snow=/snowball/i.test(g.kind||'');
+    return `<div class="glrow${snow?' snow':''}" data-gl="${i}">`
+      +`<span class="gn">${esc(g.name)}<span class="gk">${esc(g.kind||'')}</span></span>`
+      +`<span class="gd">${esc(fmtSpan(g.a0,g.a1))}</span></div>`;
+  }).join('');
+  box.querySelectorAll('[data-gl]').forEach(el=>{
+    el.onclick=()=>{ const g=glaciationsList()[+el.dataset.gl]; if(g) showGlaciation(g); };
+  });
+}
+function glaciationAt(age){
+  return glaciationsList().find(g=>age>=Math.min(g.a0,g.a1)&&age<=Math.max(g.a0,g.a1))||null;
+}
+function markGlaciationList(){
+  const cur=glaciationAt(state.age), gs=glaciationsList();
+  document.querySelectorAll('#glList [data-gl]').forEach(el=>
+    el.classList.toggle('cur', !!cur && gs[+el.dataset.gl]===cur));
+}
+function showGlaciation(g){
+  const rows=[['Span',fmtSpan(g.a0,g.a1)],['Kind',g.kind||'Glaciation']];
+  /* The measured ice, not the claim: iceLand/iceSea come from the manifest and
+     say how much of this world the app actually draws under ice. */
+  const A=ages(); let bi=0,bd=1e9;
+  A.forEach((v,i)=>{const d=Math.abs(v-g.peak);if(d<bd){bd=d;bi=i;}});
+  const m=DATA.timeline[bi];
+  if(m){
+    rows.push(['Ice at peak',`${((m.iceLand||0)*100).toFixed(0)}% of land`]);
+    rows.push(['Sea ice',`${((m.iceSea||0)*100).toFixed(0)}% of ocean`]);
+    rows.push(['World then',`${m.gmst.toFixed(1)}°C · ${m.co2} ppm CO₂`]);
+  }
+  let extra='';
+  if(g.cause)extra+=`<div class="ihead">What caused it</div><p class="desc">${esc(g.cause)}</p>`;
+  if(g.end)extra+=`<div class="ihead">How it ended</div><p class="desc">${esc(g.end)}</p>`;
+  if(g.life)extra+=`<div class="ihead">What it did to life</div><p class="desc">${esc(g.life)}</p>`;
+  if(g.contested)extra+=`<div class="ihead">Still argued over</div><p class="desc">${esc(g.contested)}</p>`;
+  openInfo({name:g.name, tag:(g.kind||'Glaciation')+' · '+fmtSpan(g.a0,g.a1),
+            rows, desc:g.summary, extra, wide:true,
+            art:artFor('ice',undefined,g.name)});
+  jumpTo(g.jump_age);
+  markGlaciationList();
+}
 function markExtinctList(cur){
   document.querySelectorAll('#exList [data-ev]').forEach(el=>
     el.classList.toggle('cur', !!cur && el.dataset.ev===cur.ev.name && (+el.dataset.ph)===cur.i));
@@ -2974,7 +3043,7 @@ function buildLegend(){
   initGL();
   await loadAll();
   ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
-  buildEraList();buildScList();buildExtinctionList();markSidebarCurrent();
+  buildEraList();buildScList();buildExtinctionList();buildGlaciationList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
      so when something does not appear on screen the only way to find out which

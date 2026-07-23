@@ -25,6 +25,7 @@ with open(_PATH) as _f:
 
 INTERVALS = _DATA["intervals"]
 SUPERCONTINENTS = _DATA["supercontinents"]
+GLACIATIONS = _DATA.get("glaciations", [])
 SOURCES = _DATA.get("sources", [])
 
 
@@ -34,6 +35,18 @@ def intervals():
 
 def supercontinents():
     return SUPERCONTINENTS
+
+
+def glaciations():
+    """Named icehouses and snowballs, youngest first when displayed.
+
+    Separate from intervals and supercontinents because a glaciation is
+    neither: it cuts across the timescale's divisions and it is a state of the
+    whole system rather than a piece of geography. Each carries what caused it,
+    what ended it, what it did to life, and what about it is still argued over
+    -- the last one matters, because several of these are not settled.
+    """
+    return GLACIATIONS
 
 
 def interval_at(age):

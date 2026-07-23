@@ -865,10 +865,12 @@ def build_labels():
 # ---------- browsable intervals + supercontinents ----------
 def build_eras():
     out = {"intervals": eras.intervals(),
-           "supercontinents": eras.supercontinents()}
+           "supercontinents": eras.supercontinents(),
+           "glaciations": eras.glaciations()}
     json.dump(out, open(f"{WEB}/eras.json", "w"), separators=(",", ":"))
     print(f"eras: {len(out['intervals'])} intervals, "
-          f"{len(out['supercontinents'])} supercontinents")
+          f"{len(out['supercontinents'])} supercontinents, "
+          f"{len(out['glaciations'])} glaciations")
 
 
 # ---------- biomes, life through time, regional fossil record ----------
