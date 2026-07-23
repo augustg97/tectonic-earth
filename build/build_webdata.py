@@ -396,6 +396,31 @@ def smooth_track(tr, win=5):
     return out
 
 
+#: Rough continent boxes on PRESENT-DAY coordinates. Crude on purpose: the only
+#: job is to say which continent a label's modern anchor sits on, so the biota
+#: fallback can stop listing an African ape under the Amazon. Overlaps are kept
+#: rather than resolved -- a point in the eastern Mediterranean is genuinely
+#: both European and Asian, and a label there should filter loosely, not wrongly.
+REGION_BOXES = [
+    ("na", -170, -52, 8, 85), ("na", -180, -168, 50, 72),
+    ("sa", -85, -33, -57, 14),
+    ("eu", -25, 62, 35, 72),
+    ("af", -20, 52, -36, 38),
+    ("as", 25, 180, 5, 80), ("as", -180, -168, 60, 72),
+    ("au", 108, 180, -50, -8),
+    ("an", -180, 180, -90, -60),
+]
+
+
+def region_tags(lon, lat):
+    """Continent tags for a present-day coordinate, or None if it matches none."""
+    out = set()
+    for tag, lo0, lo1, la0, la1 in REGION_BOXES:
+        if lo0 <= lon <= lo1 and la0 <= lat <= la1:
+            out.add(tag)
+    return sorted(out) or None
+
+
 def composite_track(spec, a_old, rec, step=5):
     """Per-age position of a paleocontinent, from where its fragments were.
 
@@ -792,6 +817,23 @@ def build_labels():
     for l in out:
         if l["n"] in desc:
             l["d"] = desc[l["n"]]
+        # Region tag, for the biota fallback. Derived from the label's own
+        # present-day anchor rather than hand-listed: there are 103 labels that
+        # show a biota panel and hand-tagging them was never going to stay
+        # current. Composites use the centroid of their modern fragments.
+        spec_r = (getattr(features, "COMPOSITE_LABELS", {}).get(l["n"]) or {})
+        mods = spec_r.get("modern")
+        if mods:
+            rg = set()
+            for mlon, mlat in mods:
+                for t in (region_tags(mlon, mlat) or []):
+                    rg.add(t)
+            if rg:
+                l["rg"] = sorted(rg)
+        elif coord_is_present_day(l):
+            rg = region_tags(l["lon"], l["lat"])
+            if rg:
+                l["rg"] = rg
         # Attach the per-label extras FIRST. Each tracking branch below ends in
         # `continue`, so anything after them is skipped for the labels that take
         # one -- which silently cost six seas their phase descriptions when the

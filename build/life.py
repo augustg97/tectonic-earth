@@ -550,7 +550,13 @@ ENDEMIC = {
     "Procoptodon goliah": {"au"}, "Nimbadon lavarackorum": {"au"},
     "Macropus fuliginosus": {"au"},
     # Eurasia
-    "Coelodonta antiquitatis": {"eu", "as"}, "Paraceratherium": {"as", "eu"},
+    "Coelodonta antiquitatis": {"eu", "as"},
+    "Mammuthus primigenius": {"na", "eu", "as"}, "Mammuthus": {"na", "eu", "as", "af"},
+"Megaloceros giganteus": {"eu", "as"},
+    "Ursus spelaeus": {"eu"}, "Panthera spelaea": {"na", "eu", "as"},
+    "Gastornis": {"na", "eu"}, "Hyaenodon horridus": {"na"},
+    "Basilosaurus isis": {"af"}, "Pakicetus attocki": {"as"},
+    "Ambulocetus natans": {"as"}, "Aegyptopithecus": {"af"}, "Paraceratherium": {"as", "eu"},
     "Darwinius masillae": {"eu"}, "Homo neanderthalensis": {"eu", "as"},
     "Elephas maximus": {"as"}, "Mammut americanum": {"na"},
     # Southern-hemisphere plants

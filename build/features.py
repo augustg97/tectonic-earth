@@ -149,6 +149,11 @@ def hotspots():
 # correctly rejected, so they went untracked and fell back to snapLabel's
 # 90-degree search for any matching terrain. That search finds whatever is
 # nearest, not whatever is right. Anchor a terrane on the ground it BECAME.
+# A window that ends before 0 is a claim that the feature is GONE. Ten belts
+# that are still standing said so -- the Urals, the Pyrenees, the
+# Transantarctics, the Caledonian remnant in Scotland and Norway -- and
+# simply vanished off the map partway through the Cenozoic. Eroded is not
+# the same as absent, and the Appalachians (470-0) already had it right.
 LABELS = [
     # ---------- present / Cenozoic ----------
     ("continent", "North America", -100,  45,  -30,  150),
@@ -178,14 +183,14 @@ LABELS = [
     ("sea", "Western Interior Seaway", -95, 45, 72, 100),
     ("sea", "Turgai Strait",         65,  50,   29, 160),
     ("sea", "Eromanga Sea",         140, -28,   95, 125),
-    ("orogen", "Cordillera",       -115,  40,   60, 150),
+    ("orogen", "Cordillera",       -115,  40,   0, 150),
     ("orogen", "Sevier-Laramide",  -108,  42,   55,  95),
     # ---------- Pangaea ----------
     ("continent", "Pangaea",         10,   5,  175, 330),
     ("ocean", "Paleo-Tethys",       100,   0,  200, 420),
     ("sea", "Zechstein Sea",         12,  25,  252, 262),
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
-    ("orogen", "Ural Mountains",     58,  55,  240, 320),
+    ("orogen", "Ural Mountains",     58,  55,  0, 320),
     ("orogen", "Appalachians",      -80,  38,  0, 470),
     ("orogen", "Variscan Belt",       5,  22,  280, 360),
     # ---------- Paleozoic ----------
@@ -199,7 +204,7 @@ LABELS = [
     ("ocean", "Rheic Ocean",        -10, -20,  320, 490),
     ("ocean", "Panthalassic Ocean", -150,  0,  330, 540),
     ("sea", "Sauk Sea",             -70,  10,  480, 530),
-    ("orogen", "Caledonides",       -12,  25,  390, 440),
+    ("orogen", "Caledonides",       -12,  25,  0, 440),
     ("orogen", "Acadian Belt",      -48,  -10,  355, 420),
     ("orogen", "Taconic Belt",      -55,  12,  440, 470),
     # ---------- Precambrian ----------
@@ -234,8 +239,8 @@ LABELS = [
     ("orogen", "Alleghanian Belt",  -80,  36,  258, 325),
     ("orogen", "Ouachita Belt",     -94,  34,  278, 320),
     ("orogen", "Antler Belt",      -117,  40,  318, 360),
-    ("orogen", "Transantarctic Mts", 160, -80,  480, 560),
-    ("orogen", "Verkhoyansk Belt",   130,  67,  118, 162),
+    ("orogen", "Transantarctic Mts", 160, -80,  0, 560),
+    ("orogen", "Verkhoyansk Belt",   130,  67,  0, 162),
     ("orogen", "Cadomian Belt",       -2,  48,  538, 650),
     ("orogen", "Timanian Belt",       -8, -14,  548, 620),
     ("orogen", "Cimmerian Belt",      55,  35,  190, 250),
@@ -357,9 +362,9 @@ LABELS = [
     ("orogen", "Kuunga Orogen", 80, 7, 500, 570),
     ("orogen", "Central Asian Orogenic Belt", 88, 40, 250, 420),
     ("orogen", "Famatinian Belt", -66, -29, 440, 482),
-    ("orogen", "Cape Fold Belt", 21, -33, 248, 290),
-    ("orogen", "Qinling-Dabie Belt", 110, 25, 200, 250),
-    ("orogen", "Sierra Nevada Arc", -119, 37, 85, 160),
+    ("orogen", "Cape Fold Belt", 21, -33, 0, 290),
+    ("orogen", "Qinling-Dabie Belt", 110, 25, 0, 250),
+    ("orogen", "Sierra Nevada Arc", -119, 37, 0, 160),
     ("orogen", "Australasian Belt", 128, 3, -80, -10),
     # -- plateau --
     ("plateau", "Tibetan Plateau", 88, 33, 0, 40),
@@ -447,11 +452,11 @@ LABELS = [
     # -- Alpine-Himalayan and other orogens --
     ("orogen", "Zagros Mts", 50, 32, 0, 35),
     ("orogen", "Greater Caucasus", 44, 43, 0, 30),
-    ("orogen", "Pyrenees", 1, 43, 20, 83),
+    ("orogen", "Pyrenees", 1, 43, 0, 83),
     ("orogen", "Carpathians", 24, 48, 0, 34),
     ("orogen", "Apennines", 13, 43, 0, 23),
     ("orogen", "Sonoma Orogeny", -117, 41, 240, 260),
-    ("orogen", "Lachlan Orogen", 148, -35, 340, 485),
+    ("orogen", "Lachlan Orogen", 148, -35, 0, 485),
     # -- rifts / extensional provinces --
     ("rift", "Rio Grande Rift", -106, 34, 0, 36),
     ("rift", "Basin and Range", -117, 39, 0, 36),

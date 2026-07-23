@@ -39,8 +39,18 @@ OUT = "../web/fields"
 os.makedirs(OUT, exist_ok=True)
 
 ELEV_H, ELEV_W = 1024, 2048     # coastline resolution
-RAIN_H, RAIN_W = 384, 768       # higher res so moisture drives fine biome detail
-CLIM_H, CLIM_W = 384, 768       # resolution the wind solve runs at
+# Rainfall drives biome colour, the glacier equilibrium line AND the weighting
+# on the drainage network, so it is the field that decides how varied a
+# continent looks -- and at 768x384 it was the coarsest input in the pipeline,
+# a quarter the linear resolution of the elevation it is painted over. That
+# mismatch is most of why large landmasses came out in flat patches.
+#
+# CLIM is the resolution the wind solve actually RUNS at, and raising only the
+# export would have bought nothing: the detail has to exist before it can be
+# saved. Both go up together.
+RAIN_H, RAIN_W = 768, 1536      # rainfall texture, 4x the pixels
+CLIM_H, CLIM_W = 768, 1536      # the wind solve runs here too, or there is
+                                # no new detail to export
 ELEV_Q, RAIN_Q = 92, 90
 STEP = 5                         # Myr between keyframes, everywhere
 

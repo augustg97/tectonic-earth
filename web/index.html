@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0719';
+const DATA_V='20260723-0826';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1063,9 +1063,15 @@ void main(){
 
   // How broken is the shipped field around here? Measured once and reused, so
   // the five elevAt taps below all agree on what kind of terrain this is.
+  /* Local ruggedness, on the same physical footing as the relief normal below.
+     A fixed uv step measures over a few metres of ground at high latitude and
+     reports near-zero roughness for real mountains -- the opposite failure to
+     the gradient's, from the same cause. Widen the longitude step so both
+     probes are the same distance apart wherever they are. */
   vec2 rs=uTexel*1.6;
+  float rugdu=rs.x/max(cos(radians(lat)),0.03);
   float rug=clamp(length(vec2(
-      baseElev(uv+vec2(rs.x,0.0))-baseElev(uv-vec2(rs.x,0.0)),
+      baseElev(uv+vec2(rugdu,0.0))-baseElev(uv-vec2(rugdu,0.0)),
       baseElev(uv+vec2(0.0,rs.y))-baseElev(uv-vec2(0.0,rs.y))))/460.0,0.0,1.0);
   float z=elevAt(uv,rug);
   float zp=max(z,0.0);
@@ -1343,12 +1349,28 @@ void main(){
     col=mix(col, shelfCol, sa);
   }
 
-  // per-pixel relief from the elevation gradient
+  /* Per-pixel relief from the elevation gradient -- and the reason the poles
+     used to smear.
+
+     An equirectangular texture packs the same number of texels into every
+     latitude row, so near a pole two horizontally adjacent texels are a few
+     metres apart on the ground rather than twenty kilometres. The old code
+     sampled a FIXED uv offset and then divided the difference by cos(lat) to
+     convert it to a physical gradient. That is arithmetically right and
+     visually disastrous: it multiplies whatever is in those two texels --
+     including compression noise and interpolation ripple -- by up to twelve,
+     which is exactly the radial streaking that appeared over both poles and
+     smeared anything crossing them.
+
+     Sample further apart instead. Widening the step by 1/cos(lat) keeps the
+     two probes the same PHYSICAL distance apart at every latitude, so the
+     plain difference already IS the gradient and nothing needs amplifying. */
   vec2 st=uTexel*0.75;
-  float ex1=elevAt(uv+vec2(st.x,0.0),rug), ex0=elevAt(uv-vec2(st.x,0.0),rug);
+  float coslat=max(cos(radians(lat)),0.03);
+  float du=st.x/coslat;
+  float ex1=elevAt(uv+vec2(du,0.0),rug), ex0=elevAt(uv-vec2(du,0.0),rug);
   float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
-  float coslat=max(cos(radians(lat)),0.08);
-  vec3 nrm=normalize(vec3(-(ex1-ex0)/coslat, -(ey1-ey0), 320.0));
+  vec3 nrm=normalize(vec3(-(ex1-ex0), -(ey1-ey0), 320.0));
 
   if(z>=0.0){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -2394,7 +2416,11 @@ function lifeSection(l){
      Second, the heading. It used to read "On land at 15 Ma", which on a card
      titled North America reads as a claim about North America however global
      the intent. Say "elsewhere". */
-  const reg=(DATA.life.labelRegion||{})[l.n]||null;
+  // The label's own derived tag first (build_labels puts it there from the
+  // present-day anchor), then the hand-curated table as a fallback. Without
+  // the derived one this filter only ever fired on continents, so Proconsul
+  // stayed in the Amazon Rainforest and mammoths stayed with it.
+  const reg=l.rg||(DATA.life.labelRegion||{})[l.n]||null;
   const pick=L.taxa.filter(t=>{
     if(!want.includes(t.realm))return false;
     if(reg&&t.en&&!t.en.some(r=>reg.includes(r)))return false;
