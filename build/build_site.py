@@ -32,7 +32,7 @@ shutil.copytree(os.path.join(WEB, "fields"), dst,
 
 DATA_FILES = ("index.html", "three.min.js", "timeline.json", "boundaries.json",
               "plates_time.json", "plates.json", "hotspots.json", "labels.json",
-              "eras.json", "life.json", "art.json",
+              "eras.json", "life.json", "art.json", "photos.json",
               # screenshots for the in-app About one-pager overlay
               "about-globe.jpg", "about-map.jpg", "about-pangaea.jpg", "about-hydro.jpg")
 for name in DATA_FILES:
@@ -47,6 +47,17 @@ for name in DATA_FILES:
 
 # GitHub Pages otherwise runs the tree through Jekyll, which ignores files and
 # folders beginning with an underscore and slows the build for no benefit.
+# Photographs for the feature cards. A directory rather than a file list --
+# photos.py adds to it whenever a new feature gets one, and a hard-coded list
+# would silently stop shipping the new ones.
+psrc = os.path.join(WEB, "photos")
+if os.path.isdir(psrc):
+    pdst = os.path.join(SITE, "photos")
+    if os.path.isdir(pdst):
+        shutil.rmtree(pdst)
+    shutil.copytree(psrc, pdst)
+    print(f"photos: {len(os.listdir(pdst))} files")
+
 open(os.path.join(SITE, ".nojekyll"), "w").close()
 
 open(os.path.join(SITE, "README.md"), "w").write(

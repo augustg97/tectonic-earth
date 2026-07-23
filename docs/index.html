@@ -191,6 +191,20 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
    silhouette; everything else — a rift, a crater, a flood basalt — was text
    only. These are diagrams of the KIND of thing, which the caption says. */
 .cardfig{margin:11px 0 2px}
+/* Photograph figure. Sits BELOW the schematic, not instead of it: the diagram
+   says what kind of thing this is, the photograph says what it looks like, and
+   for anything with a modern counterpart both are worth having. Attribution is
+   part of the caption, not a footnote -- CC-BY requires it and public domain
+   deserves it. */
+.cardphoto{margin:12px 0 2px}
+.cardphoto img{display:block;width:100%;height:auto;border-radius:7px;
+  border:1px solid var(--line)}
+.cardphoto figcaption{font-size:9.5px;font-style:italic;color:var(--dim2);
+  line-height:1.5;margin-top:5px}
+.cardphoto .cred{display:block;font-style:normal;color:#6d7887;margin-top:3px;
+  font-size:8.5px;letter-spacing:.02em}
+.cardphoto .cred a{color:#8794a4;text-decoration:none;border-bottom:1px dotted #4a5464}
+
 .cardfig svg{display:block;width:100%;height:auto;border-radius:7px;
   border:1px solid var(--line)}
 .cardfig figcaption{font-size:9.5px;font-style:italic;color:var(--dim2);
@@ -815,14 +829,15 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0445';
+const DATA_V='20260723-0640';
 async function loadAll(){
-  const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
+  const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
   else{const res=await Promise.all(files.map(f=>fetch(f+'.json?v='+DATA_V).then(r=>r.json()).catch(()=>null)));files.forEach((f,i)=>DATA[f]=res[i]);}
   DATA.eras=DATA.eras||{intervals:[],supercontinents:[]};
   DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
   DATA.art=DATA.art||{art:{},byType:{}};
+  DATA.photos=DATA.photos||{};
   const tl=DATA.timeline;
   const src=n=>'fields/'+n;
   let done=0; const total=tl.length*4;
@@ -2414,6 +2429,20 @@ function artFor(kind,note,name){
   if(!a)return null;
   return {svg:a.svg, caption:a.caption+' '+(note===undefined?ART_NOTE:note)};
 }
+/* A real photograph for this feature, if one exists under a licence this
+   project will ship. photos.py fetches from Wikimedia Commons and accepts only
+   public domain, CC0 and plain CC-BY -- share-alike is refused for the same
+   reason it is for the silhouettes. */
+function photoHTML(name){
+  const p=(DATA.photos||{})[name];
+  if(!p)return '';
+  const by=p.artist&&p.artist!=='(unattributed)'?esc(p.artist):'unattributed';
+  const link=p.page?`<a href="${esc(p.page)}" target="_blank" rel="noopener">Wikimedia Commons</a>`:'Wikimedia Commons';
+  return `<figure class="cardphoto"><img src="${esc(p.file)}" alt="${esc(p.title)}" loading="lazy">`
+    +`<figcaption>${esc(p.caption)}`
+    +`<span class="cred">${by} · ${esc(p.licence)} · ${link}</span>`
+    +`</figcaption></figure>`;
+}
 function figHTML(a){
   if(!a||!a.svg)return '';
   /* "slice" so that anywhere the figure is given a fixed height (the extinction
@@ -2429,7 +2458,7 @@ function openInfo(o){
   $('#infoTag').textContent=o.tag||'';
   $('#infoRows').innerHTML=(o.rows||[]).map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
   const fig=$('#infoArt');
-  fig.innerHTML=figHTML(o.art);
+  fig.innerHTML=figHTML(o.art)+photoHTML(o.name);
   fig.hidden=!fig.innerHTML;
   $('#infoDesc').textContent=o.desc||'';
   $('#infoExtra').innerHTML=o.extra||'';
