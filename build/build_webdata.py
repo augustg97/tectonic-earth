@@ -358,6 +358,44 @@ def _centroid(points):
     return (math.degrees(math.atan2(y, x)), math.degrees(math.asin(max(-1, min(1, z)))))
 
 
+def smooth_track(tr, win=5):
+    """Take the teleports out of a resolved composite track.
+
+    A composite name is placed by choosing, per keyframe, which landmass it
+    belongs to. When two candidates are close the choice can flip, and the name
+    crosses an ocean between one frame and the next -- Siberia moved 60 degrees
+    between 565 and 570 Ma, Laurussia 57 between 350 and 355. The choice is
+    usually defensible at BOTH frames; what is indefensible is arriving there
+    instantly.
+
+    So smooth the result: a short rolling mean over the track turns a step into
+    a ramp across a few keyframes, which reads as a continent drifting rather
+    than a caption jumping. Real motion survives it -- plates move slowly enough
+    that a five-frame window barely touches them.
+
+    Longitude is averaged as a unit vector, or a track crossing the
+    antimeridian would be smeared right across the map on its way through.
+    """
+    if len(tr) < 3:
+        return tr
+    ages = [int(a) for a, _, _ in tr]
+    xs = [math.cos(math.radians(lo)) for _, lo, _ in tr]
+    ys = [math.sin(math.radians(lo)) for _, lo, _ in tr]
+    la = [v for _, _, v in tr]
+    n = len(tr)
+    h = win // 2
+    out = []
+    for i in range(n):
+        j0, j1 = max(0, i - h), min(n, i + h + 1)
+        k = j1 - j0
+        cx = sum(xs[j0:j1]) / k
+        cy = sum(ys[j0:j1]) / k
+        lon = math.degrees(math.atan2(cy, cx)) if (cx or cy) else tr[i][1]
+        out.append([ages[i], round(((lon + 180.0) % 360.0) - 180.0, 1),
+                    round(sum(la[j0:j1]) / k, 1)])
+    return out
+
+
 def composite_track(spec, a_old, rec, step=5):
     """Per-age position of a paleocontinent, from where its fragments were.
 
@@ -384,6 +422,13 @@ def composite_track(spec, a_old, rec, step=5):
             pre = BS.pre_placement
         except Exception:
             pre = None
+    # The craton centroid has to be taken over a CONSTANT set. build_synthetic's
+    # placement does not return every craton at every age, and a name whose
+    # centroid is averaged over eight blocks at one keyframe and five at the
+    # next lurches by tens of degrees for no reason on the map -- Siberia moved
+    # 60 degrees between 565 and 570 Ma this way. Carry a missing block forward
+    # from where it last was instead of dropping it out of the average.
+    carried = {}
     out = []
     for age in range(0, int(math.ceil(a_old)) + step, step):
         m = None
@@ -393,7 +438,10 @@ def composite_track(spec, a_old, rec, step=5):
         c = None
         if pre is not None and age > 540:
             place = {n: (lo, la) for n, lo, la, _sp in pre(age)}
-            pts = [place[n] for n in cratons if n in place]
+            for n in cratons:
+                if n in place:
+                    carried[n] = place[n]
+            pts = [carried[n] for n in cratons if n in carried]
             c = _centroid(pts)
         if m is None and c is None:
             continue
@@ -766,6 +814,11 @@ def build_labels():
                     out_tr.append([a, round(w[0], 1), round(w[1], 1)])
                     water_placed.setdefault(a, []).append(w)
             if len(out_tr) > 1:
+                # NOT smoothed, unlike the composites. nearest_water picks a
+                # specific water cell per keyframe, and a rolling mean walks the
+                # result off it -- smoothing these put ten sea labels back onto
+                # land. A basin name that hops 20 degrees between frames is a
+                # smaller error than one standing on a beach.
                 l["tr"] = out_tr
                 tracked += 1
                 n_water += 1
@@ -816,6 +869,11 @@ def build_labels():
                     water_placed.setdefault(key, []).append(w)
                 a_ += 5.0
             if len(out_tr) > 1:
+                # NOT smoothed, unlike the composites. nearest_water picks a
+                # specific water cell per keyframe, and a rolling mean walks the
+                # result off it -- smoothing these put ten sea labels back onto
+                # land. A basin name that hops 20 degrees between frames is a
+                # smaller error than one standing on a beach.
                 l["tr"] = out_tr
                 tracked += 1
                 n_water += 1
@@ -844,7 +902,7 @@ def build_labels():
         fixed = resolve_to_landmasses(raw_comp, comp_window, order)
         for name, tr in fixed.items():
             if len(tr) > 1:
-                comp_label[name]["tr"] = tr
+                comp_label[name]["tr"] = smooth_track(tr)
                 tracked += 1
                 n_comp += 1
     if n_comp:

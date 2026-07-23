@@ -142,6 +142,13 @@ def hotspots():
 
 # ------------------------------------------------------------------ labels --
 # t: continent | ocean | sea | orogen ; a0/a1 = age window (future negative)
+# Coordinates here are PRESENT-DAY positions, and that is load-bearing: it is
+# what lets build_labels back-advect a name along the plate that carries it.
+# Eighteen terranes had been authored at their PALAEO-positions instead --
+# where they sat in their own era -- which the "is this land today" gate
+# correctly rejected, so they went untracked and fell back to snapLabel's
+# 90-degree search for any matching terrain. That search finds whatever is
+# nearest, not whatever is right. Anchor a terrane on the ground it BECAME.
 LABELS = [
     # ---------- present / Cenozoic ----------
     ("continent", "North America", -100,  45,  -30,  150),
@@ -240,7 +247,7 @@ LABELS = [
     # Reaches into the Early Cretaceous so the Jehol biota (~135-120 Ma) is
     # clickable where it belongs: the block is a recognisable part of Asia
     # through the Mesozoic even after it welds on.
-    ("continent", "North China", 114, 38, 120, 420),
+    ("continent", "North China", 115, 39, 120, 420),
     ("continent", "North China", 130, 5, 420, 900),
     ("continent", "South China", 110, 26, 200, 420),
     ("continent", "South China", 125, -10, 420, 900),
@@ -323,18 +330,18 @@ LABELS = [
     # and letting this one reach 0 printed both names on the present-day map
     ("ice", "Antarctic Ice Sheet", 20, -84, -35, -1),
     # -- island --
-    ("island", "Carolina Terrane", -35, -30, 470, 600),
-    ("island", "Oaxaquia", -75, -20, 450, 540),
-    ("island", "Perunica", 5, -35, 440, 500),
-    ("island", "Armorica", 0, -25, 380, 470),
+    ("island", "Carolina Terrane", -80, 35, 470, 600),
+    ("island", "Oaxaquia", -96, 17, 450, 540),
+    ("island", "Perunica", 14, 50, 440, 500),
+    ("island", "Armorica", -3, 48, 380, 470),
     ("island", "Hun Superterrane", 20, -30, 380, 455),
-    ("island", "Sibumasu", 95, -25, 210, 300),
-    ("island", "Lhasa Terrane", 80, -12, 130, 250),
-    ("island", "Greater Adria", 18, 32, 140, 240),
-    ("island", "Wrangellia Terrane", -150, 15, 150, 232),
-    ("island", "Greater India", 75, -28, 60, 130),
+    ("island", "Sibumasu", 99, 17, 210, 300),
+    ("island", "Lhasa Terrane", 91, 30, 130, 250),
+    ("island", "Greater Adria", 16, 41, 140, 240),
+    ("island", "Wrangellia Terrane", -142, 61, 150, 232),
+    ("island", "Greater India", 78, 22, 60, 130),
     ("island", "Kerguelen Microcontinent", 72, -52, 90, 118),
-    ("island", "Zealandia", 170, -40, 0, 80),
+    ("island", "Zealandia", 172, -43, 0, 80),
     ("island", "Baja Island", -118, 34, -40, -5),
     ("island", "Somalia", 48, 0, -100, -15),
     # -- ocean --
@@ -346,13 +353,13 @@ LABELS = [
     ("orogen", "Irumide Belt", 25, -12, 950, 1000),
     ("orogen", "Brasiliano Belt", -45, -25, 540, 650),
     ("orogen", "East African Orogen", 42, -10, 550, 650),
-    ("orogen", "Damara Belt", 16, -30, 530, 590),
-    ("orogen", "Kuunga Orogen", 70, -45, 500, 570),
+    ("orogen", "Damara Belt", 16, -22, 530, 590),
+    ("orogen", "Kuunga Orogen", 80, 7, 500, 570),
     ("orogen", "Central Asian Orogenic Belt", 88, 40, 250, 420),
-    ("orogen", "Famatinian Belt", -65, -45, 440, 482),
-    ("orogen", "Cape Fold Belt", 20, -62, 248, 290),
+    ("orogen", "Famatinian Belt", -66, -29, 440, 482),
+    ("orogen", "Cape Fold Belt", 21, -33, 248, 290),
     ("orogen", "Qinling-Dabie Belt", 110, 25, 200, 250),
-    ("orogen", "Sierra Nevada Arc", -119, 32, 85, 160),
+    ("orogen", "Sierra Nevada Arc", -119, 37, 85, 160),
     ("orogen", "Australasian Belt", 128, 3, -80, -10),
     # -- plateau --
     ("plateau", "Tibetan Plateau", 88, 33, 0, 40),
@@ -361,7 +368,7 @@ LABELS = [
     # -- region --
     ("region", "Avalon Deep-Water Realm", -30, -50, 559, 580),
     ("region", "White Sea Realm", 40, -35, 550, 560),
-    ("region", "Old Red Sandstone Continent", -20, 0, 360, 418),
+    ("region", "Old Red Sandstone Continent", -3, 52, 360, 418),
     ("region", "Wallacea", 122, -3, 0, 15),
     ("region", "Beringia", -168, 65, 0, 3),
     ("region", "Sundaland", 108, 3, 0, 3),
@@ -681,9 +688,25 @@ COMPOSITE_BELTS = {
 
 COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
                    "Laurussia (Euramerica)", "Laurentia", "Siberia",
-                   "Baltica", "Avalonia"]
+                   "Baltica", "Avalonia", "Cimmeria"]
 
 COMPOSITE_LABELS = {
+    # Cimmeria is a RIBBON: a string of fragments that rifted off the northern
+    # margin of Gondwana in the Permian and drifted north across Palaeo-Tethys,
+    # closing it ahead and opening Neotethys behind. Its pieces are Turkey,
+    # Iran, Afghanistan, the Pamir, Tibet (Lhasa and Qiangtang) and Indochina.
+    #
+    # As a single authored coordinate it was untracked -- (60,25) is the Gulf of
+    # Oman, so it failed the "is this land today" gate -- and snapLabel then
+    # searched 90 degrees for any matching terrain and attached it to Laurasia
+    # beside the Urals, a continent it had not reached and would collide with
+    # rather than belong to. At 243 Ma the search found somewhere better and the
+    # name jumped the width of an ocean.
+    "Cimmeria": {
+        "modern": [(33, 39), (52, 33), (65, 34), (72, 37),     # Turkey, Iran, Afghan
+                   (88, 31), (95, 32), (101, 30),              # Lhasa, Qiangtang, E Tibet
+                   (103, 20)],                                 # Indochina
+    },
     "Gondwana": {
         "modern": [(-60, -5), (-55, -20), (-64, -33), (-45, -12),      # S America
                    (15, 5), (25, -20), (-6, 12), (33, 2), (28, -28),   # Africa
