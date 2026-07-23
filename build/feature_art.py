@@ -76,23 +76,49 @@ art("rift",
     "level and the rift floods.")
 
 art("orogen",
-    f'<rect x="0" y="72" width="{W}" height="46" fill="{CRUST_D}"/>'
-    f'<path d="M0 72h300v46H0z" fill="{CRUST_D}"/>'
-    f'<path d="M18 72h120l60-30 60 30h24v-8l-84-42-96 44H18z" fill="{CRUST}"/>'
-    f'<path d="M92 72l58-34 58 34" stroke="{LINE}" stroke-width="1.5" fill="none"'
-    f' opacity=".7"/>'
-    f'<path d="M112 72l38-22 38 22" stroke="{LINE}" stroke-width="1.2" fill="none"'
-    f' opacity=".5"/>'
-    f'<path d="M150 38l-26 34h52z" fill="{LAND}" opacity=".55"/>'
-    f'<path d="M0 118h300" stroke="{MANTLE}" stroke-width="10"/>'
-    f'<path d="M40 96l16-8M70 100l16-8M230 96l-16-8M260 100l-16-8"'
-    f' stroke="{LINE}" stroke-width="1.4" opacity=".55"/>'
-    f'<path d="M30 60l10 8-10 8M270 60l-10 8 10 8" stroke="{LINE}"'
-    f' stroke-width="1.6" fill="none" opacity=".75"/>',
-    "A collisional mountain belt in cross-section. Two masses of continental "
-    "crust converge, the rocks between them stack up along thrust faults, and "
-    "the crust thickens downward as well as upward -- the range has a root "
-    "several times deeper than it is high.")
+    # The old version was one grey mass with arrows on it, which told you
+    # nothing about what had happened. The whole point of a collisional belt is
+    # that TWO things came together, so give the two plates different colours,
+    # put a suture between them, stack the thrust sheets so the doubling is
+    # visible, and show the root -- a range like this is three times deeper
+    # than it is tall, and that is the fact the picture should carry.
+    f'<rect x="0" y="0" width="{W}" height="{H}" fill="{MANTLE}"/>'
+    # left plate
+    f'<path d="M0 60h108l30 22v36H0z" fill="#6f6250"/>'
+    f'<path d="M0 72h104M0 86h112M0 100h120" stroke="#8a7b64" stroke-width="1.6"'
+    f' opacity=".55"/>'
+    # right plate, a different rock
+    f'<path d="M300 60H176l-24 22v36h148z" fill="#5c5a52"/>'
+    f'<path d="M300 72H180M300 86H172M300 100H164" stroke="#7b796d"'
+    f' stroke-width="1.6" opacity=".55"/>'
+    # the stack: thrust sheets riding up over the suture
+    f'<path d="M96 60l38-22 30 18 32-20 26 24-30 12h-64z" fill="#7d7059"/>'
+    f'<path d="M110 46l30-16 26 15 30-17" stroke="#9a8b6e" stroke-width="2"'
+    f' fill="none"/>'
+    f'<path d="M124 34l22-12 22 13 24-14" stroke="#a8987a" stroke-width="1.7"'
+    f' fill="none" opacity=".9"/>'
+    # summit line
+    f'<path d="M96 60l38-22 30 18 32-20 26 24" stroke="#cfd8e2" stroke-width="2.4"'
+    f' fill="none" stroke-linejoin="round"/>'
+    # the suture: crushed sea floor caught between them
+    f'<path d="M150 36v72" stroke="#2f4a52" stroke-width="4" opacity=".85"/>'
+    f'<path d="M150 36v72" stroke="#4d7a86" stroke-width="1.4"'
+    f' stroke-dasharray="5 4"/>'
+    # the root
+    f'<path d="M112 108q38 30 78 0z" fill="#6f6250" opacity=".9"/>'
+    f'<path d="M112 108q38 30 78 0" stroke="#8a7b64" stroke-width="1.4"'
+    f' fill="none"/>'
+    # convergence
+    f'<path d="M14 22h54M68 22l-9-6M68 22l-9 6" stroke="#e0a878" stroke-width="2.2"'
+    f' fill="none"/>'
+    f'<path d="M286 22h-54M232 22l9-6M232 22l9 6" stroke="#e0a878"'
+    f' stroke-width="2.2" fill="none"/>',
+    "A collisional mountain belt. Two continents converge and neither will "
+    "subduct, so the rock between them stacks up along thrust faults -- the "
+    "same layers repeated over themselves, which is why these ranges are built "
+    "of sheets. The dashed line is the suture, crushed ocean floor caught "
+    "between the two. Most of the thickening goes DOWN: the root reaches three "
+    "times deeper than the peaks are high, and it is what holds them up.")
 
 art("ocean",
     f'{_sea(30)}'

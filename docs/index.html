@@ -47,6 +47,39 @@ canvas{display:block}
 
 /* ---- right controls ---- */
 #controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
+/* Context-card stack. Sits under the extinction card and flows downward; each
+   card carries its own accent so the three are told apart at a glance without
+   reading them -- interval amber, supercontinent green, glaciation ice blue. */
+#ctxStack{position:fixed;right:20px;top:582px;width:210px;z-index:20;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.ctxCard{background:var(--panel);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border:1px solid var(--ck);border-radius:12px;
+  overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);pointer-events:auto;
+  transition:opacity .35s}
+.ctxCard .ch{cursor:pointer;padding:8px 12px 9px;position:relative;
+  background:linear-gradient(to right,var(--cg),transparent)}
+.ctxCard .ch:hover{filter:brightness(1.25)}
+.ctxCard .ceb{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ca);font-weight:700}
+.ctxCard .ct{font-size:12px;font-weight:600;color:#e9edf2;margin-top:2px;
+  line-height:1.26;padding-right:16px}
+.ctxCard .cs{font-size:9px;color:var(--dim2);margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.ctxCard .cv{position:absolute;right:11px;top:9px;color:var(--ca);font-size:11px;
+  transition:transform .25s}
+.ctxCard.open .cv{transform:rotate(180deg)}
+.ctxCard .cb{max-height:0;overflow-y:auto;font-size:11px;line-height:1.5;
+  color:#c2cad4;padding:0 12px;transition:max-height .32s ease}
+.ctxCard.open .cb{max-height:190px;padding:2px 12px 11px}
+@media (min-height:1000px){.ctxCard.open .cb{max-height:250px}}
+@media (min-height:1300px){.ctxCard.open .cb{max-height:340px}}
+.ctxCard .cmore{display:inline-block;margin-top:7px;font-size:9.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ca);cursor:pointer}
+.ctxCard .cmore:hover{filter:brightness(1.3)}
+.ctx-interval{--ck:rgba(201,168,106,.5);--ca:#c9a86a;--cg:rgba(201,168,106,.15)}
+.ctx-super{--ck:rgba(122,168,116,.5);--ca:#8ec48a;--cg:rgba(122,168,116,.15)}
+.ctx-glacial{--ck:rgba(126,186,214,.5);--ca:#8fc9e4;--cg:rgba(126,186,214,.15)}
+body.ambient #ctxStack{opacity:0;pointer-events:none}
 #extinctBox{position:fixed;right:20px;top:582px;width:210px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(224,118,74,.55);border-radius:12px;z-index:21;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);transition:opacity .4s}
 #extinctBox.hidden{opacity:0;pointer-events:none}
 #extinctHead{cursor:pointer;padding:9px 12px 10px;position:relative;background:linear-gradient(to right,rgba(224,118,74,.16),rgba(224,118,74,.03))}
@@ -457,6 +490,12 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   </div>
 </div>
 
+<!-- Context cards. The mass-extinction card proved the idea: something that
+     appears on its own as the timeline reaches it, rather than waiting to be
+     found in a sidebar. These are the other three things that are true of a
+     moment in time -- which interval you are in, which supercontinent, which
+     glaciation -- built from one template and stacked under it. -->
+<div id="ctxStack"></div>
 <div id="extinctBox" class="hidden">
   <div id="extinctHead">
     <div id="extinctEyebrow">Mass Extinction</div>
@@ -699,7 +738,7 @@ const state={
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[], WLI=[];   // elevation / rainfall / motion / lake-depth fields
+let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[];   // elevation / rainfall / motion / lake-depth / surface-process fields
 let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene ones
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
@@ -707,7 +746,7 @@ const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:MOI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -776,7 +815,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0400';
+const DATA_V='20260723-0445';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -799,7 +838,9 @@ async function loadAll(){
   // timeline JSON. If a _w file is missing the loader just leaves that slot empty
   // and the shader shows no lake there — the build degrades gracefully.
   await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),
-                                        one(fr.e.replace('_e.webp','_w.webp'),WLI,i)]));
+                                        one(fr.e.replace('_e.webp','_w.webp'),WLI,i),
+                                        // surface-process field: drainage, substrate, fetch
+                                        one(fr.e.replace('_e.webp','_d.webp'),SFI,i)]));
   // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
   await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
     im.onerror=()=>res();im.src=src('phan_0000_wold.webp');});
@@ -848,6 +889,11 @@ const FRAG=`
 precision highp float;
 uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform sampler2D waterA, waterB;   // baked lake-depth field (sqrt-encoded metres), per keyframe
+/* Surface-process field, derived per keyframe by build_surface.py.
+   R drainage  log flow accumulation -- where the water of this age goes
+   G substrate 0 soft sediment basin .. 1 hard shield or resistant orogen
+   B fetch     how far the prevailing wind has run over land to get here */
+uniform sampler2D surfA, surfB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
@@ -1010,6 +1056,11 @@ void main(){
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
   float Rf=rainAt(uv);
+  /* Surface process: drainage, substrate, fetch. Interpolated between
+     keyframes like everything else, so a river migrates with its valley
+     instead of cross-fading between two of them. */
+  vec3 SP=mix(texture2D(surfA,uv).rgb, texture2D(surfB,uv).rgb, mixf);
+  float drain=SP.r, hardness=SP.g, fetchv=SP.b;
 
   vec3 sdir=dirFromUv(uv);
   vec3 col;
@@ -1086,8 +1137,13 @@ void main(){
        shader took it past what software GL would link at all -- a black
        globe, with no compile error, just "program not valid". Every noise
        tap here is on the per-pixel path for the whole planet. */
+    /* Substrate drives the rock colour now, not noise alone. A soft sediment
+       basin, an old planed-down shield and a freshly exposed orogen are three
+       different-looking grounds, and the surface field can tell them apart
+       from the terrain -- so the noise only decides WHICH red bed or which
+       shield, while hardness decides the family. */
     float lith=vnoise3(sdir*3.7+61.0);
-    float lith2=vnoise3(sdir*11.0+29.0);
+    float lith2=mix(vnoise3(sdir*11.0+29.0), hardness, 0.55);
     vec3 redbed = vec3(0.639,0.451,0.325);
     vec3 carb   = vec3(0.769,0.741,0.639);
     vec3 shield = vec3(0.494,0.482,0.427);
@@ -1109,6 +1165,31 @@ void main(){
     float lowl=clamp((900.0-zp)/1100.0,0.0,1.0);
     float allu=flatn*lowl*clamp(h*1.8,0.0,1.0);
     col=mix(col, mix(vec3(0.373,0.404,0.267), vec3(0.267,0.361,0.220), h), allu*0.42);
+
+    /* Continentality. Air that has crossed two thousand kilometres of land
+       arrives with nothing left in it, and the ground shows it: dust, loess and
+       salt rather than soil. This is why a supercontinent has a dead heart and
+       a wet rim, and the fetch field is the only thing in the shader that knows
+       how far inland a pixel really is -- latitude cannot tell you. */
+    float inland=clamp((fetchv-0.35)/0.5,0.0,1.0);
+    col=mix(col, mix(vec3(0.741,0.678,0.541), vec3(0.667,0.612,0.502), lith),
+            inland*0.30*clamp(1.0-h*1.1,0.0,1.0));
+
+    /* Rivers. Not drawn as lines over the terrain but as what a river actually
+       is on the ground: a corridor of wetter, greener land with a channel in
+       it. The corridor comes first and is much wider, which is what makes a
+       floodplain read; the channel is anti-aliased in SCREEN space so it stays
+       a clean thread at any zoom instead of a staircase.
+
+       Rivers do not run over an ice sheet, and they do not show under closed
+       canopy from orbit, so both suppress it. */
+    float rip=smoothstep(0.20,0.46,drain);
+    col=mix(col, mix(vec3(0.325,0.427,0.267), vec3(0.243,0.404,0.235), h), rip*0.45);
+    float chan=drain-0.50;
+    float aac=max(fwidth(drain),0.0007);
+    float river=clamp(chan/aac*0.9+0.5,0.0,1.0);
+    river*=1.0-clamp(uSchem,0.0,1.0);
+    col=mix(col, mix(vec3(0.180,0.353,0.404), vec3(0.129,0.286,0.361), h), river*0.85);
     /* The tree line. Cold and wet used to come out dark forest green, because
        the lookup only ever asked how WET the ground was -- so the Arctic coast,
        Patagonia and every high plateau were painted as rainforest. No tree
@@ -1433,6 +1514,7 @@ function initGL(){
   mat=new THREE.ShaderMaterial({uniforms:{
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
     motA:{value:null},waterA:{value:null},waterB:{value:null},
+    surfA:{value:null},surfB:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
@@ -2671,7 +2753,7 @@ function updateReadout(){
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
   markSidebarCurrent();
-  updateExtinction();
+  updateExtinction();updateContextCards();
 }
 
 /* Mass-extinction events. Each has phases keyed to age windows: the extinction
@@ -2728,7 +2810,7 @@ function positionExtinct(){
 function updateExtinction(){
   const box=$('#extinctBox'); if(!box) return;
   const cur=extinctPhaseAt(state.age);
-  if(!cur){ if(extinctShown){box.classList.add('hidden');extinctShown=false;extinctKey=null;markExtinctList(null);} return; }
+  if(!cur){ if(extinctShown){box.classList.add('hidden');extinctShown=false;extinctKey=null;markExtinctList(null);positionContext();} return; }
   const key=cur.ev.name+'|'+cur.p.t;
   if(key!==extinctKey){
     extinctKey=key;
@@ -2751,7 +2833,7 @@ function updateExtinction(){
     box.classList.toggle('open', extinctExpanded);
     markExtinctList(cur);
   }
-  if(!extinctShown){ box.classList.remove('hidden'); extinctShown=true; positionExtinct(); }
+  if(!extinctShown){ box.classList.remove('hidden'); extinctShown=true; positionExtinct(); positionContext(); }
 }
 $('#extinctHead').addEventListener('click',()=>{
   extinctExpanded=!extinctExpanded;
@@ -2855,6 +2937,73 @@ function showGlaciation(g){
   jumpTo(g.jump_age);
   markGlaciationList();
 }
+/* One template, three kinds of context. Rebuilt only when the SET of things
+   true at this age changes -- scrubbing inside one interval touches no DOM --
+   and each card remembers whether it was left open, so opening the interval
+   card once keeps it open as you travel through the Jurassic. */
+const ctxOpen={};
+let ctxKey=null;
+function ctxItems(){
+  const age=state.age, out=[];
+  const iv=intervalAt(age);
+  if(iv)out.push({k:'interval',cls:'ctx-interval',
+    eyebrow:(iv.rank==='projected'?'Projected interval':'Geological interval'),
+    title:iv.name, sub:fmtSpan(iv.a0,iv.a1)+' · '+iv.era,
+    body:iv.summary, open:()=>showInterval(iv)});
+  const sc=(DATA.eras.supercontinents||[]).find(x=>{
+    const lo=Math.min(x.assembly[0],x.assembly[1],x.peak[0],x.peak[1],x.breakup[0],x.breakup[1]);
+    const hi=Math.max(x.assembly[0],x.assembly[1],x.peak[0],x.peak[1],x.breakup[0],x.breakup[1]);
+    return age>=lo&&age<=hi;});
+  if(sc){
+    const inPeak=age>=Math.min(sc.peak[0],sc.peak[1])&&age<=Math.max(sc.peak[0],sc.peak[1]);
+    const assembling=age>Math.max(sc.peak[0],sc.peak[1]);
+    out.push({k:'super',cls:'ctx-super',
+      eyebrow:(sc.disputed?'Disputed supercontinent':'Supercontinent'),
+      title:sc.name, sub:(inPeak?'Coherent':assembling?'Assembling':'Breaking up')
+        +' · '+fmtSpan(sc.peak[0],sc.peak[1]),
+      body:sc.summary, open:()=>showSupercontinent(sc)});
+  }
+  const g=glaciationAt(age);
+  if(g)out.push({k:'glacial',cls:'ctx-glacial',eyebrow:g.kind||'Glaciation',
+    title:g.name, sub:fmtSpan(g.a0,g.a1), body:g.summary, open:()=>showGlaciation(g)});
+  return out;
+}
+function updateContextCards(){
+  const box=$('#ctxStack'); if(!box||!DATA.eras)return;
+  const items=ctxItems();
+  const key=items.map(i=>i.k+':'+i.title).join('|');
+  if(key===ctxKey){
+    // same set: only the sub-line can change (phase of a supercontinent)
+    items.forEach((it,n)=>{const el=box.children[n];
+      if(el)el.querySelector('.cs').textContent=it.sub;});
+    return;
+  }
+  ctxKey=key;
+  box.innerHTML=items.map(it=>
+    `<div class="ctxCard ${it.cls}${ctxOpen[it.k]?' open':''}" data-k="${it.k}">`
+    +`<div class="ch"><div class="ceb">${esc(it.eyebrow)}</div>`
+    +`<div class="ct">${esc(it.title)}</div><div class="cs">${esc(it.sub)}</div>`
+    +`<span class="cv">▾</span></div>`
+    +`<div class="cb"><p style="margin:0">${esc(it.body||'')}</p>`
+    +`<span class="cmore">Full card →</span></div></div>`).join('');
+  [...box.children].forEach((el,n)=>{
+    const it=items[n];
+    el.querySelector('.ch').onclick=()=>{
+      ctxOpen[it.k]=!ctxOpen[it.k]; el.classList.toggle('open',ctxOpen[it.k]);
+    };
+    el.querySelector('.cmore').onclick=e=>{e.stopPropagation(); it.open();};
+  });
+  positionContext();
+}
+/* Sit below whatever the extinction card is doing -- it appears and vanishes on
+   its own schedule, and two fixed elements at the same top would overlap. */
+function positionContext(){
+  const box=$('#ctxStack'); if(!box)return;
+  const eb=$('#extinctBox');
+  const vis=eb&&!eb.classList.contains('hidden');
+  const r=vis?eb.getBoundingClientRect():null;
+  box.style.top=(vis&&r.bottom>80?r.bottom+10:($('#controls').getBoundingClientRect().bottom+12))+'px';
+}
 function markExtinctList(cur){
   document.querySelectorAll('#exList [data-ev]').forEach(el=>
     el.classList.toggle('cur', !!cur && el.dataset.ev===cur.ev.name && (+el.dataset.ph)===cur.i));
@@ -2877,6 +3026,9 @@ function bindTextures(){
   // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
   if(wa)mat.uniforms.waterA.value=wa;
   if(wb||wa)mat.uniforms.waterB.value=wb||wa;
+  const sa=getTex('d',f.i), sb=getTex('d',f.j);
+  if(sa)mat.uniforms.surfA.value=sa;
+  if(sb||sa)mat.uniforms.surfB.value=sb||sa;
   // Linear in t: the shader interpolates the height field, so this drives the
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
@@ -2912,6 +3064,7 @@ function loop(now){
   }
   if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
+  updateContextCards(); // and the interval / supercontinent / glaciation cards
   // Drives only the sea-surface sheen; nothing about world state depends on it,
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
