@@ -627,6 +627,30 @@ def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
               + np.cos(la) * np.sin(lo) * math.cos(pa) * math.sin(pb)
               + np.sin(la) * math.sin(pa))
         dot = dot + 0.6 * dp
+    # OPENNESS: prefer the wide part of a basin, not merely a wet cell.
+    #
+    # A cell can be under water and still be a bad place for a name, because
+    # the water there is a strait two pixels across and the TEXT covers the
+    # land either side. That is what "the Ural Ocean hovers over land" actually
+    # was: at low resolution its position was correctly wet, and at the
+    # resolution the globe draws, the last 25 Myr of the basin is a thread.
+    #
+    # Every ocean in the set showed this at the YOUNGEST end of its window --
+    # Ural 255-280 Ma, Rheic 320-360, Palaeo-Tethys 200-225 -- because that is
+    # when a closing ocean stops being a place and becomes a seam. Scoring by
+    # how much of a ~5-degree neighbourhood is water pushes the name into
+    # whatever open sea is left, and when there is none it at least finds the
+    # widest remaining part.
+    water = (z < 0).astype(np.float32)
+    k = max(2, int(round(5.0 / (180.0 / z.shape[0]))))
+    pad = np.pad(water, ((k, k), (0, 0)), mode="edge")
+    pad = np.pad(pad, ((0, 0), (k, k)), mode="wrap")
+    csum = pad.cumsum(0).cumsum(1)
+    n = 2 * k + 1
+    box = (csum[n - 1:, n - 1:] - csum[:-n + 1 or None, n - 1:]
+           - csum[n - 1:, :-n + 1 or None] + csum[:-n + 1 or None, :-n + 1 or None])
+    openness = box[:z.shape[0], :z.shape[1]] / float(n * n)
+    dot = dot + 0.45 * openness
     d = np.where(ok, dot, -4.0)
     k = int(np.argmax(d))
     y, x = divmod(k, nx)
@@ -933,9 +957,21 @@ def build_eras():
 
 # ---------- biomes, life through time, regional fossil record ----------
 def build_life():
-    out = {"biomes": life.biomes(), "life": life.life(),
+    # Tag the global list with what was NOT global, so the app's fallback can
+    # stop listing an African ape under North America.
+    gl = life.life()
+    tagged = 0
+    for e in gl:
+        for t in e.get("taxa", []):
+            en = life.endemic(t.get("n") or t.get("name", ""))
+            if en:
+                t["en"] = en
+                tagged += 1
+    print(f"  {tagged} global taxa tagged with a region restriction")
+    out = {"biomes": life.biomes(), "life": gl,
            "regional": life.regional(), "icons": life.icons(),
            "regionTaxa": life.region_taxa(), "sparse": life.sparse(),
+           "labelRegion": {k: sorted(v) for k, v in life.LABEL_REGION.items()},
            "credits": life.credits()}
     json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
     spans = sum(len(v) for v in out["regionTaxa"].values())

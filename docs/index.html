@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0640';
+const DATA_V='20260723-0719';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -2383,12 +2383,31 @@ function lifeSection(l){
   const L=lifeAt(age);
   if(!L||!L.taxa||!L.taxa.length)return '';
   const want=marine?['sea']:['land','air','fresh'];
-  const pick=L.taxa.filter(t=>want.includes(t.realm));
+  /* This is the GLOBAL list for the interval, shown because this landmass has
+     no biota catalogued of its own. Two things had to change.
+
+     First, drop what plainly did not live here. Taxa carry `en`, a set of
+     region tags, when they were restricted -- and if this card's landmass has
+     a known region that does not intersect, the animal is not shown. The app
+     was listing Proconsul, an African ape, under North America.
+
+     Second, the heading. It used to read "On land at 15 Ma", which on a card
+     titled North America reads as a claim about North America however global
+     the intent. Say "elsewhere". */
+  const reg=(DATA.life.labelRegion||{})[l.n]||null;
+  const pick=L.taxa.filter(t=>{
+    if(!want.includes(t.realm))return false;
+    if(reg&&t.en&&!t.en.some(r=>reg.includes(r)))return false;
+    return true;
+  });
   if(pick.length){
-    // Global, not local — label it as such so it does not read as a claim
-    // that these lived in this particular basin.
-    return `<div class="ihead">${marine?'In the sea':'On land'} at ${when}</div>`+
-           lifeHTML(pick,5);
+    const head = reg
+      ? (marine?`Elsewhere in the sea at ${when}`:`Elsewhere on Earth at ${when}`)
+      : (marine?`In the sea at ${when}`:`On land at ${when}`);
+    return `<div class="ihead">${head}</div>`+lifeHTML(pick,5)+
+      `<p class="desc">Nothing is catalogued for this landmass at this age yet, `+
+      `so these are the interval's characteristic groups worldwide — not a claim `+
+      `that they lived here.</p>`;
   }
   if(marine){
     return `<div class="ihead">In the sea at ${when}</div><p class="desc">`+

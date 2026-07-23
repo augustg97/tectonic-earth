@@ -116,6 +116,15 @@
   "page": "https://commons.wikimedia.org/wiki/File:VIEW_OF_TALLGRASS_PRAIRIE_PLANTS_SEEN_ON_THE_KONZA_PRAIRIE_1,000_ACRES_OF_VIRGIN_TALLGRASS_PRAIRIE_NEAR_MANHATTAN..._-_NARA_-_557191.jpg",
   "title": "VIEW OF TALLGRASS PRAIRIE PLANTS SEEN ON THE KONZA PRAIRIE 1,000 ACRES OF VIRGIN TALLGRASS PRAIRIE NEAR MANHATTAN... - NARA - 557191.jpg"
  },
+ "Greater Caucasus": {
+  "artist": "Vyacheslav Argenberg",
+  "bytes": 286805,
+  "caption": "The Greater Caucasus, another strand of the same Alpine-Himalayan collision.",
+  "file": "photos/greater-caucasus.jpg",
+  "licence": "CC BY 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Zagedan_Ridge,_Zagedan_Valley,_Caucasus_Mountains,_Karachay-Cherkessia.jpg",
+  "title": "Zagedan Ridge, Zagedan Valley, Caucasus Mountains, Karachay-Cherkessia.jpg"
+ },
  "Greenland Ice Sheet": {
   "artist": "NASA Earth Observatory images by Joshua Stevens, using Landsat data from the U.S. Geological Survey, and data courtesy o",
   "bytes": 215898,
@@ -188,6 +197,15 @@
   "page": "https://commons.wikimedia.org/wiki/File:Upsala_Glacier,_Argentina.jpg",
   "title": "Upsala Glacier, Argentina.jpg"
  },
+ "Pyrenees": {
+  "artist": "Tournasol7",
+  "bytes": 124340,
+  "caption": "The Pyrenees, where Iberia was pressed against France.",
+  "file": "photos/pyrenees.jpg",
+  "licence": "CC BY 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Landscape_of_Pyrenees_(7).jpg",
+  "title": "Landscape of Pyrenees (7).jpg"
+ },
  "Red Sea Rift": {
   "artist": "Expedition 35 Crew\nImage courtesy of the NASA Johnson Space Center, Image Science & Analysis Laboratory\nDerivative work ",
   "bytes": 155957,
@@ -241,6 +259,15 @@
   "licence": "Public domain",
   "page": "https://commons.wikimedia.org/wiki/File:Transantarctic_pho_2017334_lrg.jpg",
   "title": "Transantarctic pho 2017334 lrg.jpg"
+ },
+ "Western Interior Seaway": {
+  "artist": "Henry Fairfield Osborn",
+  "bytes": 49489,
+  "caption": "The seaway is gone; its animals are not. A mosasaur -- the top predator of the shallow sea that split North America in two.",
+  "file": "photos/western-interior-seaway.jpg",
+  "licence": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Tylosaurus_dyspelor_Osborn_1899.png",
+  "title": "Tylosaurus dyspelor Osborn 1899.png"
  },
  "Zagros Mts": {
   "artist": "NASA",

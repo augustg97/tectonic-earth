@@ -45,9 +45,10 @@ BAD_LICENCE = re.compile(r"(sa|nc|nd)\b", re.I)
 
 #: feature name -> (search terms, what the picture is showing and why)
 #: Kept to features with a real modern counterpart. A photograph of a place
-#: that no longer exists would be a lie, however pretty.
+#: that no longer exists would be a lie, however pretty -- so for those the
+#: subject is a FOSSIL or an outcrop instead, which is a real thing you can go
+#: and look at.
 WANT = {
-    # --- mountain belts -----------------------------------------------------
     "Appalachians": ("Appalachian Mountains ridge forest",
                      "The modern Appalachians. What is left of a range that "
                      "once rivalled the Himalaya, worn down for 250 million "
@@ -55,22 +56,20 @@ WANT = {
     "Himalaya": ("Himalaya Everest range NASA",
                  "The Himalaya today, still rising as India drives into Asia."),
     "Alps": ("Alps peaks snow landscape",
-             "The Alps, raised by Africa closing against Europe and consuming "
-             "the Tethys between them."),
+             "The Alps, raised by Africa closing against Europe."),
     "Andes": ("Andes mountains Chile NASA",
               "The Andes: a subduction belt, built by the Nazca plate sinking "
               "beneath South America rather than by two continents colliding."),
     "Rocky Mountains": ("Rocky Mountains Colorado NPS",
                         "The Rockies, raised far inland from any plate margin "
                         "by a shallow-angle slab under North America."),
-    "Ural Mountains": ("Ural mountains range landscape",
+    "Ural Mountains": ("Ural mountains taiga hills forest",
                        "The Urals: the suture where Siberia met Baltica to "
                        "complete Pangaea, still marking the join."),
     "Atlas": ("Atlas Mountains Morocco",
               "The Atlas, on the leading edge of Africa's collision with Europe."),
     "Zagros Mts": ("Zagros Mountains Iran NASA",
-                   "The Zagros, where Arabia is currently colliding with Iran -- "
-                   "a collision belt caught in the act."),
+                   "The Zagros, where Arabia is colliding with Iran now."),
     "Transantarctic Mts": ("Transantarctic mountains glacier landscape",
                            "The Transantarctic Mountains, dividing the East "
                            "Antarctic shield from the West Antarctic rift."),
@@ -78,107 +77,130 @@ WANT = {
                     "The Scottish Highlands: the eroded stump of the "
                     "Caledonian belt, whose other half is in Norway and "
                     "Appalachia."),
-    # --- rifts --------------------------------------------------------------
+    "Pyrenees": ("Pyrenees mountains landscape",
+                 "The Pyrenees, where Iberia was pressed against France."),
+    "Greater Caucasus": ("Caucasus mountains landscape",
+                         "The Greater Caucasus, another strand of the same "
+                         "Alpine-Himalayan collision."),
     "East African Rift": ("East African Rift valley NASA",
                           "The East African Rift, a continent in the act of "
-                          "splitting -- the same process that opened the "
-                          "Atlantic, caught early."),
+                          "splitting."),
     "Red Sea Rift": ("Red Sea NASA satellite",
                      "The Red Sea: a rift that has gone all the way, now "
                      "flooded and making new ocean floor."),
-    "Basin and Range": ("Nevada basin range valley landscape",
+    "Basin and Range": ("Great Basin Nevada mountain valley landscape",
                         "Basin and Range: crust stretched until it broke into "
-                        "parallel blocks, each tilted, with the valleys "
-                        "between them filling with their own debris."),
+                        "tilted blocks, with the valleys between them filling "
+                        "with their own debris."),
     "Baikal Rift": ("Baikal rift valley satellite image",
-                    "The Baikal Rift, holding the deepest and oldest lake on "
-                    "Earth in its trough."),
-    # --- deserts and drylands ----------------------------------------------
+                    "The Baikal Rift, holding the deepest lake on Earth."),
+    "Rhine Graben": ("Rhine rift valley Black Forest landscape",
+                     "The Rhine Graben, a failed rift that never opened an "
+                     "ocean."),
+    "Gulf of California": ("Gulf of California NASA satellite",
+                           "A rift that has opened far enough to let the sea "
+                           "in, tearing Baja from the mainland."),
     "Sahara": ("Sahara desert dunes NASA",
-               "The Sahara. A continental interior far from any ocean, under "
-               "descending dry air -- the same recipe that made the Pangaean "
-               "heart a desert."),
-    "Patagonian Desert": ("Patagonia steppe landscape arid",
+               "The Sahara: a continental interior far from any ocean, under "
+               "descending dry air -- the recipe that made the Pangaean heart "
+               "a desert."),
+    "Patagonian Desert": ("Patagonia steppe guanaco landscape",
                           "The Patagonian Desert, dry because the Andes take "
-                          "the rain before it can arrive."),
+                          "the rain first."),
     "Great Plains": ("tallgrass prairie North America",
                      "The Great Plains: grassland that spread only in the "
                      "Cenozoic, as the world cooled and dried."),
     "African Savanna": ("African savanna acacia grassland",
-                        "Savanna -- grass with scattered trees, the biome that "
-                        "grazing mammals and, later, hominins evolved into."),
+                        "Savanna -- grass with scattered trees, the biome "
+                        "grazing mammals and later hominins evolved into."),
     "Eurasian Steppe": ("Eurasian steppe grassland Mongolia",
                         "The Eurasian steppe, an unbroken grass corridor from "
                         "Hungary to Manchuria."),
-    # --- ice ----------------------------------------------------------------
+    "Amazon Rainforest": ("rainforest canopy aerial Brazil trees",
+                          "Closed equatorial rainforest: the wettest, darkest "
+                          "end of the biome range."),
     "East Antarctic Ice Sheet": ("Antarctica ice sheet NASA",
                                  "The East Antarctic ice sheet, the largest "
-                                 "body of ice on Earth and the oldest, "
-                                 "established at the Eocene-Oligocene boundary."),
+                                 "and oldest body of ice on Earth."),
     "Greenland Ice Sheet": ("Greenland ice sheet NASA",
-                            "The Greenland ice sheet, which presses the crust "
+                            "The Greenland ice sheet, pressing the crust "
                             "beneath it hundreds of metres down."),
     "Patagonian Ice Sheet": ("Patagonian ice field glacier",
-                             "What remains of the Patagonian ice: the "
-                             "Southern Patagonian Ice Field, the largest "
-                             "outside the poles."),
+                             "The Southern Patagonian Ice Field, the largest "
+                             "ice outside the poles."),
     "Arctic Tundra": ("tundra Alaska landscape summer",
-                      "Arctic tundra, with the polygonal ground that "
-                      "freeze-thaw cycles sort into shape."),
-    # --- lakes --------------------------------------------------------------
-    "Lake Baikal": ("Baikal lake shore landscape",
+                      "Arctic tundra, with meltwater standing on ground that "
+                      "will not drain because it is frozen beneath."),
+    "Laurentian Great Lakes": ("Great Lakes Michigan Huron satellite image",
+                               "The Great Lakes, in basins the Laurentide ice "
+                               "sheet scoured out, and only 14,000 years old."),
+    "Lake Baikal": ("Baikal lake satellite image",
                     "Lake Baikal: a rift lake holding a fifth of the world's "
                     "unfrozen fresh water."),
-    "Laurentian Great Lakes": ("Great Lakes Michigan Huron satellite image",
-                               "The Great Lakes, sitting in basins the "
-                               "Laurentide ice sheet scoured out, and only "
-                               "14,000 years old."),
-    "Lake Tanganyika": ("Tanganyika lake shore water",
-                        "Lake Tanganyika, in the western branch of the East "
-                        "African Rift."),
-    # --- impact and volcanism ----------------------------------------------
     "Manicouagan": ("Manicouagan reservoir crater satellite",
                     "Manicouagan, 215 million years old and still the most "
-                    "recognisable crater on Earth -- cratonic rock keeps a "
-                    "scar that a marine impact loses in a couple of million "
-                    "years."),
+                    "recognisable crater on Earth."),
     "Chicxulub": ("cenote Yucatan sinkhole",
                   "Chicxulub has no surface expression -- it was buried within "
-                  "about two million years. The ring of cenotes over its rim "
-                  "is the only thing you can see from the ground."),
-    "Deccan Traps": ("Deccan plateau India landscape",
-                     "The Deccan Traps: flood basalt in stacked sheets, "
-                     "erupted across western India at the end of the "
-                     "Cretaceous."),
-    "Columbia River Basalts": ("Columbia river gorge basalt cliffs",
-                              "Columbia River flood basalts, the youngest "
-                              "large igneous province on land."),
+                  "two million years. The ring of cenotes over its rim is all "
+                  "you can see from the ground."),
     "Siberian Traps": ("Putorana plateau landscape",
                        "The Putorana Plateau, the surviving heart of the "
                        "Siberian Traps -- the eruption that sits at the "
                        "end-Permian extinction."),
-    # --- other --------------------------------------------------------------
-    "Amazon Rainforest": ("Amazon rainforest canopy trees",
-                          "The Amazon: closed equatorial rainforest, the "
-                          "wettest and darkest end of the biome range."),
+    "Deccan Traps": ("Western Ghats basalt plateau India landscape",
+                     "The Deccan: flood basalt in stacked sheets, eroded into "
+                     "the step-sided hills that gave the traps their name."),
+    "Columbia River Basalts": ("Columbia River Gorge basalt columns cliff",
+                               "Columbia River flood basalt, cooled into "
+                               "columns -- the youngest large igneous province "
+                               "on land."),
     "Tibetan Plateau": ("Tibetan Plateau landscape NASA",
                         "The Tibetan Plateau, held up by doubled crust and "
-                        "high enough to sit above the tree line at 33 degrees "
-                        "north."),
+                        "above the tree line at 33 degrees north."),
     "Mid-Atlantic Ridge": ("Thingvellir rift Iceland",
-                           "Thingvellir in Iceland, where the Mid-Atlantic "
-                           "Ridge runs above sea level and the spreading "
-                           "boundary can be walked across."),
-    "Gulf of California": ("Gulf of California NASA satellite",
-                           "The Gulf of California: a rift that has opened far "
-                           "enough to let the sea in, tearing Baja from the "
-                           "mainland."),
-    "Zealandia": ("Southern Alps New Zealand",
-                  "New Zealand -- the six per cent of Zealandia that is above "
-                  "water."),
+                           "Thingvellir, where the Mid-Atlantic Ridge runs "
+                           "above sea level and you can walk across the "
+                           "spreading boundary."),
     "Iceland": ("Iceland landscape volcanic NASA",
-                "Iceland, where a mantle plume sits under a spreading ridge "
-                "and builds enough crust to stand above the sea."),
+                "Iceland, where a plume sits under a spreading ridge and "
+                "builds enough crust to stand above the sea."),
+    "Zealandia": ("Southern Alps New Zealand",
+                  "New Zealand -- the six per cent of Zealandia above water."),
+    "Hawaii": ("Hawaii volcano lava landscape",
+               "Hawaii: the active end of a chain that gets older to the "
+               "north-west as the Pacific plate carries it off the plume."),
+    "Yellowstone": ("Yellowstone caldera geyser basin",
+                    "Yellowstone, a continental hotspot -- the same kind of "
+                    "plume as Hawaii, under thick crust instead of thin."),
+    # --- no modern counterpart: show the fossil evidence instead -------------
+    "Western Interior Seaway": ("Tylosaurus mosasaur fossil skeleton",
+                                "The seaway is gone; its animals are not. A "
+                                "mosasaur -- the top predator of the shallow "
+                                "sea that split North America in two."),
+    "Solnhofen Lagoon": ("Archaeopteryx fossil Berlin specimen",
+                         "Archaeopteryx from the Solnhofen limestone. The "
+                         "lagoon floor was airless, so nothing disturbed what "
+                         "sank into it -- feathers and all."),
+    "Burgess Shale": ("Burgess Shale fossil Cambrian",
+                      "Burgess Shale material: soft-bodied Cambrian animals "
+                      "preserved as films of carbon, which is why we know the "
+                      "Cambrian was stranger than its shells suggest."),
+    "Messel Lake": ("Messel Pit fossil site Germany",
+                    "The Messel Pit, an Eocene maar lake whose anoxic bottom "
+                    "kept bats, horses and gut contents intact."),
+    "Karoo Ice Sheet": ("Dwyka tillite glacial striations South Africa",
+                        "Glacial pavement from the Karoo: rock scoured and "
+                        "grooved by ice, in a place that is now sub-tropical. "
+                        "This is the direct evidence for the Late Palaeozoic "
+                        "Ice Age."),
+    "Gilboa Forest": ("Devonian fossil tree stump Gilboa",
+                      "A Gilboa stump -- one of the oldest trees on Earth, "
+                      "preserved in growth position where it stood."),
+    "Euramerican Coal Forests": ("Lepidodendron fossil bark Carboniferous",
+                                 "Lepidodendron bark. A giant club moss, and "
+                                 "the reason the Carboniferous left so much "
+                                 "coal."),
 }
 
 

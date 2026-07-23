@@ -514,3 +514,71 @@ if __name__ == "__main__":
           " regions:", len(regional()), " icons:", len(ICONS))
     for k, v in miss.items():
         print(f"  fell through to {k}: {sorted(set(v))}")
+
+
+# --------------------------------------------------------------- endemism --
+#: Taxa in the GLOBAL per-interval list that were NOT global. The global list is
+#: what the app falls back to when a clicked landmass has no biota of its own,
+#: and without this it will happily list Proconsul -- an African ape -- under
+#: North America, which is what it did. Tagging the clear cases lets the
+#: fallback drop anything that plainly did not live there.
+#:
+#: Only unambiguous restrictions are listed. A taxon absent from here is treated
+#: as unrestricted, which is the safe default: over-filtering would silently
+#: hide real animals, and the fallback already announces itself as a global list.
+ENDEMIC = {
+    # Africa
+    "Proconsul": {"af"}, "Sahelanthropus tchadensis": {"af"},
+    "Aegyptopithecus": {"af"}, "Australopithecus afarensis": {"af"},
+    "Homo habilis": {"af"}, "Deinotherium": {"af", "eu", "as"},
+    # South America
+    "Megatherium": {"sa"}, "Glyptodon": {"sa"}, "Titanoboa cerrejonensis": {"sa"},
+    "Platyrrhini": {"sa"}, "Titanis walleri": {"sa", "na"},
+    "Phorusrhacos longissimus": {"sa"}, "Macrauchenia patachonica": {"sa"},
+    "Pyrotherium": {"sa"}, "Doedicurus clavicaudatus": {"sa"},
+    "Cladosictis patagonica": {"sa"}, "Toxodon": {"sa"},
+    # North America
+    "Megacerops": {"na"}, "Mesohippus": {"na"}, "Uintatherium": {"na"},
+    "Smilodon": {"na", "sa"}, "Smilodon fatalis": {"na", "sa"},
+    "Aepycamelus giraffinus": {"na"}, "Merychippus insignis": {"na"},
+    "Teleoceras proterum": {"na"}, "Hyracotherium": {"na", "eu"},
+    "Icaronycteris": {"na"}, "Carpolestes": {"na"},
+    # Australia and New Guinea
+    "Diprotodon": {"au"}, "Diprotodon optatum": {"au"},
+    "Thylacoleo carnifex": {"au"}, "Obdurodon": {"au"},
+    "Varanus priscus": {"au"}, "Genyornis newtoni": {"au"},
+    "Procoptodon goliah": {"au"}, "Nimbadon lavarackorum": {"au"},
+    "Macropus fuliginosus": {"au"},
+    # Eurasia
+    "Coelodonta antiquitatis": {"eu", "as"}, "Paraceratherium": {"as", "eu"},
+    "Darwinius masillae": {"eu"}, "Homo neanderthalensis": {"eu", "as"},
+    "Elephas maximus": {"as"}, "Mammut americanum": {"na"},
+    # Southern-hemisphere plants
+    "Nothofagus": {"sa", "au", "an"},
+    "Sequoiadendron giganteum": {"na"},
+}
+
+#: Broad region tags for the LANDMASS labels the app can show a card for. Deep
+#: time makes this fuzzy on purpose -- a Palaeozoic continent is not a modern
+#: one -- so only names with an unambiguous modern descendant are mapped, and
+#: anything unmapped skips the filter entirely.
+LABEL_REGION = {
+    "North America": {"na"}, "Laurentia": {"na"}, "Laurussia (Euramerica)": {"na", "eu"},
+    "South America": {"sa"}, "Amazonia": {"sa"}, "Patagonia": {"sa"},
+    "Africa": {"af"}, "Congo Craton": {"af"}, "Kalahari Craton": {"af"},
+    "West Africa Craton": {"af"}, "Sao Francisco Craton": {"sa"},
+    "Eurasia": {"eu", "as"}, "Europe": {"eu"}, "Baltica": {"eu"},
+    "Siberia": {"as"}, "North China": {"as"}, "South China": {"as"},
+    "India": {"as"}, "Greater India": {"as"},
+    "Australia": {"au"}, "Sahul": {"au"}, "Zealandia": {"au"},
+    "Antarctica": {"an"}, "Australia-East Antarctica": {"au", "an"},
+}
+
+
+def endemic(name):
+    """Region tags a taxon is restricted to, or None if unrestricted."""
+    return sorted(ENDEMIC.get(name, [])) or None
+
+
+def label_region(name):
+    return sorted(LABEL_REGION.get(name, [])) or None
