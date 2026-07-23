@@ -154,6 +154,11 @@ def hotspots():
 # Transantarctics, the Caledonian remnant in Scotland and Norway -- and
 # simply vanished off the map partway through the Cenozoic. Eroded is not
 # the same as absent, and the Appalachians (470-0) already had it right.
+# Supercontinent label windows are kept in step with the spans their cards
+# claim in the left rail. They had drifted apart -- the panel said Gondwana
+# was still breaking up at 30 Ma while its name left the map at 150, and
+# every one of the nine disagreed at one end or the other. A reader who
+# checks one against the other should not find two different answers.
 LABELS = [
     # ---------- present / Cenozoic ----------
     ("continent", "North America", -100,  45,  -30,  150),
@@ -177,7 +182,7 @@ LABELS = [
     ("orogen", "Atlas",              -4,  32,    0,  40),
     # ---------- Mesozoic ----------
     ("continent", "Laurasia",        40,  50,  150, 250),
-    ("continent", "Gondwana",        30, -40,  150, 540),
+    ("continent", "Gondwana",        30, -40,  120, 650),
     ("ocean", "Tethys Ocean",        90,   5,  120, 260),
     ("ocean", "Panthalassa",       -150,   0,  160, 320),
     ("sea", "Western Interior Seaway", -95, 45, 72, 100),
@@ -186,7 +191,7 @@ LABELS = [
     ("orogen", "Cordillera",       -115,  40,   0, 150),
     ("orogen", "Sevier-Laramide",  -108,  42,   55,  95),
     # ---------- Pangaea ----------
-    ("continent", "Pangaea",         10,   5,  175, 330),
+    ("continent", "Pangaea",         10,   5,  130, 340),
     ("ocean", "Paleo-Tethys",       100,   0,  200, 420),
     ("sea", "Zechstein Sea",         12,  25,  252, 262),
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
@@ -194,7 +199,7 @@ LABELS = [
     ("orogen", "Appalachians",      -80,  38,  0, 470),
     ("orogen", "Variscan Belt",       5,  22,  280, 360),
     # ---------- Paleozoic ----------
-    ("continent", "Laurussia (Euramerica)", -20, 10, 300, 425),
+    ("continent", "Laurussia (Euramerica)", -20, 10, 175, 430),
     ("continent", "Laurentia",      -60,   5,  430, 600),
     ("continent", "Baltica",         10,  -35,  430, 540),
     ("continent", "Siberia",         90,  20,  430, 600),
@@ -209,14 +214,14 @@ LABELS = [
     ("orogen", "Taconic Belt",      -55,  12,  440, 470),
     # ---------- Precambrian ----------
     ("continent", "Gondwana (assembling)", 25, -45, 540, 600),
-    ("continent", "Pannotia",        10, -40,  580, 620),
+    ("continent", "Pannotia",        10, -40,  540, 650),
     ("continent", "Rodinia",        -10,   0,  700, 1000),
     ("ocean", "Mirovia",           -140,   0,  720, 1000),
     ("ocean", "Panthalassic (proto)", 150, -10, 600, 720),
     ("orogen", "Pan-African Belt",   20, -25,  550, 650),
     ("orogen", "Grenville Belt",    -25,  15,  900, 1000),
     # ---------- future ----------
-    ("continent", "Pangaea Proxima", 30,   5, -250, -120),
+    ("continent", "Pangaea Proxima", 30,   5, -250, -80),
     ("ocean", "Neo-Panthalassa",  -150,    0, -250,  -60),
     ("sea", "Mediterranean (closing)", 18, 36, -90,  -20),
     ("orogen", "Afro-European Belt", 20,  34, -200,  -50),
@@ -274,7 +279,7 @@ LABELS = [
     ("continent", "West Africa Craton", -12, -5, 545, 1000),
     ("continent", "Australia-East Antarctica", 130, -30, 700, 1000),
     ("continent", "Sao Francisco Craton", -42, -13, 545, 950),
-    ("continent", "Amasia", 70, 75, -300, -180),
+    ("continent", "Amasia", 70, 75, -250, -150),
     # -- desert --
     ("desert", "Rotliegend Desert", 10, 16, 288, 299),
     ("desert", "Coconino Erg", -105, 6, 272, 285),
