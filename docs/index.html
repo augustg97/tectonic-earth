@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-0934';
+const DATA_V='20260723-1928';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1204,13 +1204,30 @@ void main(){
 
        Rivers do not run over an ice sheet, and they do not show under closed
        canopy from orbit, so both suppress it. */
-    float rip=smoothstep(0.20,0.46,drain);
-    col=mix(col, mix(vec3(0.325,0.427,0.267), vec3(0.243,0.404,0.235), h), rip*0.45);
-    float chan=drain-0.50;
-    float aac=max(fwidth(drain),0.0007);
-    float river=clamp(chan/aac*0.9+0.5,0.0,1.0);
-    river*=1.0-clamp(uSchem,0.0,1.0);
-    col=mix(col, mix(vec3(0.180,0.353,0.404), vec3(0.129,0.286,0.361), h), river*0.85);
+    /* Rivers, drawn so they read at every zoom.
+
+       The lesson from the last try: a thin blue channel is SUB-PIXEL at
+       continental scale, so from a whole-continent view the interior still
+       looked riverless even though the network was there. What you actually
+       see of a river system from orbit is not the water -- it is the corridor
+       of greener, denser vegetation along it, a dendritic tracery that is
+       visible precisely because it is WIDE. So lead with that.
+
+       Three nested bands, widest and palest first: a broad valley greening,
+       then a darker riparian core, then the water channel itself -- the last
+       still anti-aliased in screen space so it sharpens to a clean thread when
+       you zoom in. drain is normalised per age so the network is a fixed thin
+       fraction of land at any time, which keeps this from swamping a wet age. */
+    float rvalley=smoothstep(0.14,0.44,drain);
+    col=mix(col, mix(vec3(0.298,0.420,0.259), vec3(0.220,0.392,0.224), h), rvalley*0.60);
+    float ripcore=smoothstep(0.34,0.58,drain);
+    col=mix(col, mix(vec3(0.231,0.388,0.263), vec3(0.157,0.337,0.212), h), ripcore*0.65);
+    float base=smoothstep(0.50,0.66,drain);
+    float chan=drain-0.54;
+    float aac=max(fwidth(drain),0.0011);
+    float sharp=clamp(chan/aac*0.9+0.5,0.0,1.0);
+    float river=max(base, sharp)*(1.0-clamp(uSchem,0.0,1.0));
+    col=mix(col, mix(vec3(0.157,0.333,0.412), vec3(0.102,0.259,0.353), h), river*0.95);
     /* The tree line. Cold and wet used to come out dark forest green, because
        the lookup only ever asked how WET the ground was -- so the Arctic coast,
        Patagonia and every high plateau were painted as rainforest. No tree

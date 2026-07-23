@@ -220,7 +220,7 @@ def _rainfall(Z, land, lat, cl):
     # because moisture failed to arrive.
     B = (0.42
          + 0.52 * np.exp(-(lat ** 2) / (2 * 13.0 ** 2))
-         - (0.40 + 0.24 * arid) * np.exp(-((absl - 24) ** 2) / (2 * 11.0 ** 2))
+         - (0.30 + 0.22 * arid) * np.exp(-((absl - 24) ** 2) / (2 * 11.0 ** 2))
          + 0.24 * np.exp(-((absl - 50) ** 2) / (2 * 13.0 ** 2))
          - 0.34 * np.exp(-((absl - 88) ** 2) / (2 * 18.0 ** 2)))
     B = np.clip(B, 0.10, 1.15)
@@ -229,10 +229,30 @@ def _rainfall(Z, land, lat, cl):
     # land in the tropics/subtropics, but still gated by R, so a coast with a
     # short sea fetch (India) floods while a deep interior (Sahara) does not.
     land_s = _smooth(land.astype(float), 2)
-    # Narrower and weaker than it was. A monsoon is driven by a large heated
-    # landmass, and applying the full bonus to every scrap of land in the band
-    # handed one to peninsulas that have never had one.
-    monsoon = 0.50 * np.exp(-((absl - 16) ** 2) / (2 * 10.0 ** 2)) * land_s
+    monsoon = 0.60 * np.exp(-((absl - 17) ** 2) / (2 * 11.5 ** 2)) * land_s
+
+    # MONSOON-INDUCED SUBSIDENCE (the Rodwell-Hoskins mechanism).
+    #
+    # Arabia came out as wet as the Amazon, and weakening the monsoon globally
+    # to dry it also dried India and southeast Asia, which was the wrong trade.
+    # The real asymmetry is not that Arabia gets less moisture -- the Indian
+    # Ocean is right there -- it is that Arabia sits in air that is actively
+    # DESCENDING, and what makes it descend is the Indian monsoon itself.
+    #
+    # Deep convection over a monsoon heat source drives a compensating
+    # circulation that sinks to its WEST, and that descent is what maintains
+    # the Arabian, Saharan and Middle Eastern deserts. Modelling it is simple:
+    # take the monsoon field, smear it, shift it west, and subtract. The wet
+    # source keeps its rain and dries the land behind it, which is exactly the
+    # observed pattern -- Kerala green, the Rub al Khali the driest sand on
+    # Earth, at the same latitude a couple of thousand kilometres apart.
+    ms = _smooth(monsoon, max(2, int(W / 90)))
+    shift = max(1, int(W * 0.11))          # ~40 degrees of longitude
+    induced = np.zeros_like(ms)
+    for k in range(1, 4):                  # a few lags, so the shadow has depth
+        induced += np.roll(ms, shift * k, axis=1) / k
+    induced *= 0.42 / (1.0 + 1 / 2 + 1 / 3)
+    monsoon = np.clip(monsoon - induced, 0.0, None)
 
     # a warmer world evaporates more; `arid` already shapes the belts above so
     # it is deliberately not applied twice here

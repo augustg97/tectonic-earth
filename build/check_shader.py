@@ -80,6 +80,44 @@ def main():
         # 3. braces
         if body.count("{") != body.count("}"):
             bad.append(f"{name}: braces {body.count('{')}/{body.count('}')}")
+        # duplicate variable declaration at the SAME brace depth. GLSL allows a
+        # nested block (a for-loop body, an if) to shadow, so only a collision
+        # at the same scope level is the "redefinition" error -- which, like the
+        # others, shows only as a black globe. `valley` declared twice in the
+        # main function body was one; loop counters reused in separate loops are
+        # not. Track depth and only compare within a depth level; exclude
+        # for-headers, whose counter lives in its own scope.
+        depth = 0
+        seen = [{}]
+        i = 0
+        while i < len(body):
+            ch = body[i]
+            if ch == "{":
+                depth += 1
+                if len(seen) <= depth:
+                    seen.append({})
+                else:
+                    seen[depth] = {}
+            elif ch == "}":
+                depth = max(0, depth - 1)
+            else:
+                m = DECL.match(body, i)
+                # A real variable definition is followed by "=" or ";". A
+                # function PARAMETER is followed by "," or ")", and a for-header
+                # counter lives in its own scope -- exclude both, or every
+                # `float rug` parameter collides with the body variable of the
+                # same name in a different function.
+                tail = body[m.end():m.end() + 1] if m else ""
+                head = body[max(0, i - 5):i]
+                if m and tail in "=;" and "for" not in head:
+                    v = m.group(1)
+                    ln = body[:i].count("\n") + 1
+                    if v in seen[depth]:
+                        bad.append(f"{name} line {ln}: '{v}' redeclared at the "
+                                   f"same scope (first at line {seen[depth][v]})")
+                    else:
+                        seen[depth][v] = ln
+            i += 1
         print(f"{name}: {len(body)} chars, {body.count('{')} blocks, ok"
               if not stray and not d else f"{name}: PROBLEMS")
 

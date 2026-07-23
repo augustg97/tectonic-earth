@@ -756,6 +756,31 @@ def resolve_to_landmasses(tracks, windows, order):
             placed[n] = (plon, plat)
             last[n] = (plon, plat)
             resolved[n].append([age, round(plon, 1), round(plat, 1)])
+        # The biggest landmass must not go nameless. During assembly the
+        # composite centroids sit out on the fragments -- Gondwana on Australia,
+        # Pannotia on Laurentia -- and the great welded core of the
+        # supercontinent, the largest single mass on the map, could end up with
+        # no label within 25 degrees of it. That is the "huge unlabelled island"
+        # in the Ediacaran. If the largest mass is unclaimed, hand it to the
+        # most senior in-window composite (the priority order leads with the
+        # supercontinent of the age), MOVING that name there rather than adding
+        # a second copy.
+        if masses:
+            biggest = max(masses, key=lambda m: m[0])
+            barea, bclon, bclat, bcells = biggest
+            claimed_near = any(
+                _arc(p[0], p[1], bclon, bclat) < 22.0 for p in placed.values())
+            if barea > 4000 and not claimed_near:
+                for n in here:                       # here is in priority order
+                    plon, plat, d = _nearest_cell(bcells, *(
+                        placed.get(n) or last.get(n) or (bclon, bclat)))
+                    if resolved[n] and resolved[n][-1][0] == age:
+                        resolved[n][-1] = [age, round(plon, 1), round(plat, 1)]
+                    else:
+                        resolved[n].append([age, round(plon, 1), round(plat, 1)])
+                    placed[n] = (plon, plat)
+                    last[n] = (plon, plat)
+                    break
         for n in here:
             if n in placed:
                 continue
