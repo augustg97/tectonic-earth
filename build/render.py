@@ -313,7 +313,7 @@ def compute_fields(z, age, out_h=512, out_w=1024):
 #: it touches. Six degrees is what the present day needs, and the same six
 #: degrees independently lands the Late Palaeozoic Ice Age peak on its measured
 #: extent, which is the check that makes it a constant rather than a fudge.
-MARGIN_OFFSET = -6.0
+MARGIN_OFFSET = -5.0
 
 
 def zonal_T(lat_deg, temp):
@@ -346,13 +346,20 @@ def glaciation(cl):
     area disagrees with the literature the fix is to correct a latitude a
     reader can check, not a magic constant. See ice_audit.py.
 
-    Sea ice is COLDER than land ice, which is the other way round from before.
-    At the same mean annual temperature land grows a sheet and open ocean does
-    not: the ocean mixes heat down and carries it poleward, so it resists
-    freezing, and what it does grow is a thin seasonal skin rather than the
-    permanent white this map draws. Antarctica is the demonstration -- land at
-    the pole is 14 Mkm2 of ice kilometres thick, while ocean at the other pole
-    holds a few metres that half melts every summer.
+    Sea ice is WARMER than land ice, not colder. An earlier version of this
+    had it the other way round on the reasoning that land glaciates where ocean
+    does not -- which is true of ICE SHEETS and false of what the sea actually
+    grows. Pack ice is a thin skin that forms as soon as the surface freezes,
+    and it reaches further from the pole than any sheet does: today it covers
+    the Southern Ocean out past 60S every winter while the Antarctic sheet
+    stops at the coast. Getting this backwards left a bare gap between the ice
+    sheet's edge and the nearest sea ice, all the way round the continent.
+
+    The real land/ocean asymmetry is elsewhere, and it is about thickness and
+    what the ice rests on: a sheet is kilometres thick and grounds on rock, so
+    where the water is shallow enough to ground on, the LAND threshold applies
+    (see the shelf term in the shader). That is what makes Antarctica and the
+    Arctic look so unalike, not the ocean resisting freezing.
     """
     lines = [x for x in (cl["iceN"], cl["iceS"]) if x is not None]
     if not lines:
@@ -362,7 +369,7 @@ def glaciation(cl):
     # with ice at one pole only would lose it.
     line = min(lines)
     ice_T = float(zonal_T(line, cl["temp"])) + MARGIN_OFFSET
-    return ice_T, ice_T - 4.0
+    return ice_T, ice_T + 3.0
 
 
 def render(z, age, out_h=512, out_w=1024, hillshade=True):

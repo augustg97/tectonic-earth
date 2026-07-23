@@ -761,7 +761,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260722-2216';
+const DATA_V='20260723-0044';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1115,40 +1115,49 @@ void main(){
   // ice: a continuous ramp so sheets advance and retreat instead of popping
   float lobe=(fbm3(sdir*9.0)-0.5)*3.4;
   float packn=fbm3(sdir*16.0+31.7);
-  /* An ice sheet needs snow as much as it needs cold. The dry side of a polar
-     continent glaciates reluctantly -- the McMurdo Dry Valleys are bare gravel
-     at the same latitude as the ice shelf a few kilometres away, because
-     almost nothing falls on them. Swing the threshold either side of the
-     era's calibrated value by how wet the ground is: this MOVES ice toward
-     the wet margins rather than adding or removing it, so the area the audit
-     measured still holds. */
-  float acc=clamp(Rf/0.34,0.0,1.0);
-  float iceThr=uIceT+(acc-0.5)*5.0;
+  /* Ice, in one place, for land and sea.
+
+     Two things were wrong here and both showed up as the same symptom -- ice
+     that looked splotchy, with bare low ground next to white mountains.
+
+     First, an accumulation term swung the threshold with local rainfall. The
+     reasoning was sound (a polar desert glaciates reluctantly) but polar
+     rainfall in these fields is tiny AND noisy, so instead of separating dry
+     interiors from wet margins it jittered the threshold a couple of degrees
+     between neighbouring cells and shattered the sheet. Removed.
+
+     Second, the lobe noise was added to the temperature EVERYWHERE. At +-1.7 C
+     against a 4.5 C ramp it was wide enough to punch holes clean through
+     ground that should be solid, and it bit hardest exactly where the margin
+     was thinnest -- low ground near the pole, which sits just inside the
+     threshold, while the mountains beside it sit far inside and stayed white.
+     Now the noise is scaled by how CLOSE a cell is to its own threshold, so it
+     frays the edge and leaves the interior alone. */
+  float dT=uIceT-T;
+  float nearL=exp(-(dT*dT)/(2.0*3.2*3.2));
   float landIce=0.0;
   if(z>=0.0){
-    landIce=clamp((iceThr-(T+lobe))/4.5,0.0,1.0);
+    landIce=clamp((dT+lobe*nearL)/6.0,0.0,1.0);
     col=mix(col, vec3(0.906,0.941,0.965), landIce);
   }else{
-    /* Ice shelves. A sheet that reaches the coast does not stop there -- it
-       floats out over shallow water and grounds on the shelf, which is what
-       Ross and Ronne are, nearly a million square kilometres of ice that is
-       not on land. So shallow water next to a glaciated coast is judged by
-       the LAND threshold and deep ocean by the sea one, which also encodes
-       the thing that makes the two poles so unalike: at the same temperature
-       land grows a sheet and open ocean grows a seasonal skin, because the
-       ocean mixes its heat downward and carries more of it in from lower
-       latitudes. */
-    /* This reaches DEEP, not just onto the shelf edge, because the paleo-DEM
-       gives Antarctica as bedrock with the ice removed -- and a third of that
-       bedrock is below sea level, some of it 2 km down. Judged as ocean it
-       came out as teal lagoons scattered through the ice sheet. Ice grounded
-       below sea level is still ice: what decides it is the temperature, not
-       the depth, so let the land threshold reach down to where the real
-       subglacial basins bottom out. */
+    /* Sea ice is PACK ice, and it forms MORE readily than an ice sheet, not
+       less. An earlier version had this backwards -- sea ice colder than land
+       ice -- which left a bare ring of open water between every ice sheet and
+       the nearest sea ice. Today the Southern Ocean freezes out past 60S every
+       winter while the sheet stops at the coast.
+
+       The real land/ocean asymmetry is about thickness and what the ice rests
+       on. A sheet is kilometres thick and grounds on rock, so where the water
+       is shallow enough to ground on, the LAND threshold applies. That reaches
+       DEEP here, not just to the shelf edge, because the paleo-DEM gives
+       Antarctica as bedrock with the ice stripped off and a third of that
+       bedrock is below sea level -- judged as ocean it came out as teal
+       lagoons scattered through the ice sheet. */
     float shelf=smoothstep(-2400.0,-150.0,z);
-    float thr=mix(uSeaT, iceThr, shelf);
-    float sa=clamp((thr-(T+lobe*2.6+(packn-0.5)*5.0*(1.0-shelf)))/3.5,0.0,1.0)
-             *clamp((packn-0.30)/0.14+shelf,0.0,1.0);
+    float thr=mix(uSeaT, uIceT, shelf);
+    float dS=thr-T;
+    float nearS=exp(-(dS*dS)/(2.0*3.2*3.2));
+    float sa=clamp((dS+lobe*nearS*1.6+(packn-0.5)*2.2*nearS*(1.0-shelf))/4.5,0.0,1.0);
     vec3 shelfCol=mix(vec3(0.812,0.878,0.910)*(0.94+0.10*packn),
                       vec3(0.898,0.929,0.953), shelf);
     col=mix(col, shelfCol, sa);

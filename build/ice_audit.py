@@ -97,7 +97,13 @@ def fields(base, H=512, W=1024):
     return z, rf
 
 
-def ice_masks(z, rf, age, iceT, seaT):
+LAND_RAMP = 6.0
+SEA_RAMP = 4.5
+MARGIN_W = 3.2
+LOBE_AMP = 0.0      # audit runs noise-free; the app perturbs the margin
+
+
+def ice_masks(z, rf, age, iceT, seaT, lobe=0.0):
     """The shader's ice arithmetic, minus the zero-mean noise.
 
     Kept deliberately literal -- same constants, same order -- so that a change
@@ -112,17 +118,35 @@ def ice_masks(z, rf, age, iceT, seaT):
     T = base - zp * 0.0058
 
     land = z >= 0.0
-    # Accumulation swings the threshold either side of the era's value: a wet
-    # margin glaciates warmer, a polar desert needs it colder. Zero-mean by
-    # construction, so it redistributes ice rather than changing how much.
-    acc = np.clip(rf / 0.34, 0, 1)
-    ice_thr = iceT + (acc - 0.5) * 5.0
-    land_ice = np.clip((ice_thr - T) / 4.5, 0, 1) * land
-    # Shallow water beside a glaciated coast carries shelf ice, and is judged
-    # by the land threshold; deep ocean by the (colder) sea one.
+    # There is no accumulation term here any more. One was added -- a swing of
+    # the threshold with local rainfall, on the reasoning that a polar desert
+    # glaciates reluctantly -- and it made the ice WORSE. Polar rainfall in
+    # these fields is both tiny and noisy (medians 0.005 to 0.04), so the term
+    # did not separate dry interiors from wet margins; it jittered the
+    # threshold by a couple of degrees from cell to neighbouring cell and broke
+    # the ice into patches. The effect it was reaching for is real but it is
+    # the size of the Dry Valleys, which a 20 km grid cannot resolve anyway.
+    ice_thr = iceT
+    # Ragged margins, solid interiors. The lobe noise used to be added to the
+    # temperature everywhere, and at +-1.7 C against a 4.5 C ramp it was wide
+    # enough to punch holes clean through ground that should be solid ice --
+    # which is why the ice looked splotchy and why low polar ground came out
+    # bare while the mountains beside it were white. Scale it by how close the
+    # cell is to its own threshold instead, so it frays the edge and leaves
+    # the middle alone.
+    dT = ice_thr - T
+    near = np.exp(-(dT * dT) / (2.0 * MARGIN_W * MARGIN_W))
+    land_ice = np.clip((dT + lobe * near) / LAND_RAMP, 0, 1) * land
+    # Sea ice is PACK ice -- a thin skin, not a sheet -- and it forms more
+    # readily than an ice sheet does, not less. Where the water is shallow
+    # enough for a sheet to ground on it, the land threshold applies instead:
+    # that is the real land/ocean asymmetry, and it is about thickness and
+    # what the ice is sitting on, not about the ocean resisting freezing.
     shelf = np.clip((z + 2400.0) / 2250.0, 0, 1) * (~land)
     sea_thr = seaT + (ice_thr - seaT) * shelf
-    sea_ice = np.clip((sea_thr - T) / 3.5, 0, 1) * (~land)
+    dS = sea_thr - T
+    nearS = np.exp(-(dS * dS) / (2.0 * MARGIN_W * MARGIN_W))
+    sea_ice = np.clip((dS + lobe * nearS * 1.6) / SEA_RAMP, 0, 1) * (~land)
 
     arid = 1.0 - np.clip(rf / 0.85, 0, 1)
     ela = np.clip((base - (-5.0 - 7.0 * arid)) / 0.0058, 300.0, 6200.0)
