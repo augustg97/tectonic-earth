@@ -500,7 +500,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <div class="grp">
     <div class="grp-h">Annotation</div>
     <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
-    <div class="tog on" data-layer="rotate"><span>Auto-rotate</span><div class="sw"></div></div>
+    <div class="tog" data-layer="rotate"><span>Auto-rotate</span><div class="sw"></div></div>
   </div>
 </div>
 
@@ -748,11 +748,11 @@ const $=s=>document.querySelector(s);
    a specialist overlay and they crowd the first look at the globe. */
 const state={
   age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:18,
-  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:true},
+  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false},
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[];   // elevation / rainfall / motion / lake-depth / surface-process fields
+let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[], OCI=[];   // elevation / rainfall / motion / lake-depth / surface-process / ocean-structure fields
 let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene ones
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
@@ -760,7 +760,7 @@ const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:MOI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260724-0602';
+const DATA_V='20260724-1605';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -855,7 +855,9 @@ async function loadAll(){
   await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),
                                         one(fr.e.replace('_e.webp','_w.webp'),WLI,i),
                                         // surface-process field: drainage, substrate, fetch
-                                        one(fr.e.replace('_e.webp','_d.webp'),SFI,i)]));
+                                        one(fr.e.replace('_e.webp','_d.webp'),SFI,i),
+                                        // ocean-structure field: crustal age + spreading direction
+                                        one(fr.e.replace('_e.webp','_o.webp'),OCI,i)]));
   // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
   await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
     im.onerror=()=>res();im.src=src('phan_0000_wold.webp');});
@@ -909,6 +911,13 @@ uniform sampler2D waterA, waterB;   // baked lake-depth field (sqrt-encoded metr
    G substrate 0 soft sediment basin .. 1 hard shield or resistant orogen
    B fetch     how far the prevailing wind has run over land to get here */
 uniform sampler2D surfA, surfB;
+/* Ocean-structure field, baked per keyframe by seafloor.py.
+   R crustal age  0 young at the ridge .. 1 old (>180 Myr)
+   G,B spreading  the frozen-in spreading direction as a unit vector (east,
+                  north), 0.5-centred. The abyssal-hill fabric is grown from
+                  this in the shader -- it runs PERPENDICULAR to this direction
+                  (parallel to the ridge) -- rather than baked as fixed lines. */
+uniform sampler2D oceanA, oceanB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
@@ -946,6 +955,14 @@ vec3 dirFromUv(vec2 uv){
   float lon=radians(uv.x*360.0-180.0);
   float lat=radians(90.0-uv.y*180.0);
   return vec3(cos(lat)*cos(lon), sin(lat), cos(lat)*sin(lon));
+}
+// Inverse of dirFromUv: a point on the unit sphere back to equirectangular uv.
+// Lets the relief normal step in a true tangent frame on the sphere and read
+// the field at the RESULT, so nothing is divided by cos(lat) near the poles.
+vec2 uvFromDir(vec3 d){
+  float lat=asin(clamp(d.y,-1.0,1.0));
+  float lon=atan(d.z, d.x);
+  return vec2(lon/(2.0*PI)+0.5, 0.5 - lat/PI);
 }
 float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
 float vnoise3(vec3 p){
@@ -1073,6 +1090,7 @@ void main(){
   float polecap=1.0-smoothstep(70.0,86.0,abs(lat));
   float lonD=uv.x*360.0-180.0;
   float s2=sin(radians(lat)); s2*=s2;
+  vec3 sdir=dirFromUv(uv);   // 3D position on the unit sphere (hoisted: the pole de-streak needs it)
 
   // How broken is the shipped field around here? Measured once and reused, so
   // the five elevAt taps below all agree on what kind of terrain this is.
@@ -1081,28 +1099,69 @@ void main(){
      reports near-zero roughness for real mountains -- the opposite failure to
      the gradient's, from the same cause. Widen the longitude step so both
      probes are the same distance apart wherever they are. */
-  vec2 rs=uTexel*1.6;
-  float rugdu=rs.x/max(cos(radians(lat)),0.125);
+  /* Ruggedness on the SAME pole-stable footing as the relief normal below -- a
+     tangent frame on the sphere, not a cos(lat)-widened uv step. The old step
+     read clear across the pole, so rug picked up the field's azimuthal variation
+     and modulated the grain into radial spokes (the pole pinwheel the hillshade
+     was then flattened to hide). */
+  vec3 rEax=cross(vec3(0.0,1.0,0.0), sdir); float _rl=length(rEax);
+  rEax = _rl>1e-4 ? rEax/_rl : vec3(1.0,0.0,0.0);
+  vec3 rNax=cross(sdir, rEax);
+  float rda=1.6/1024.0*PI;
   float rug=clamp(length(vec2(
-      baseElev(uv+vec2(rugdu,0.0))-baseElev(uv-vec2(rugdu,0.0)),
-      baseElev(uv+vec2(0.0,rs.y))-baseElev(uv-vec2(0.0,rs.y))))/460.0,0.0,1.0);
+      baseElev(uvFromDir(normalize(sdir+rEax*rda)))-baseElev(uvFromDir(normalize(sdir-rEax*rda))),
+      baseElev(uvFromDir(normalize(sdir+rNax*rda)))-baseElev(uvFromDir(normalize(sdir-rNax*rda)))))/460.0,0.0,1.0);
   float z=elevAt(uv,rug);
+  /* POLE COLOUR/DEPTH DE-STREAK. Near the pole longitude is so oversampled that
+     a few degrees of it is a few km of ground, so the base field's east-west
+     variation fans out of the pole as radial colour and depth bands (the water
+     pinwheel). Shift the BASE toward its mean around the latitude ring -- while
+     keeping this pixel's own isotropic detail -- so the cap reads like open
+     terrain, not a pinwheel. Runs only in the last ~10 degrees. */
+  float polemix=smoothstep(70.0,87.0,abs(lat));
+  float sy=sdir.y, cy=sqrt(max(0.0,1.0-sy*sy));
+  // The de-streak ring must not collapse to the pole point (cy->0), or the last
+  // pixels average nothing and keep their raw value -- the tan disc that sat
+  // right at the pole. Hold a minimum ring radius (~2.3 deg off the pole).
+  float cyR=max(cy,0.04);
+  float syR=(sy<0.0?-1.0:1.0)*sqrt(max(0.0,1.0-cyR*cyR));
+  if(polemix>0.01){
+    float ring=0.0;
+    for(int k=0;k<12;k++){    // 12 azimuths -> a clean mean even of dense strips
+      float az=(float(k)+0.5)/12.0*2.0*PI;
+      ring+=baseElev(uvFromDir(vec3(cyR*cos(az),syR,cyR*sin(az))));
+    }
+    z += (ring/12.0 - baseElev(uv))*polemix;
+  }
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
   float Rf=rainAt(uv);
+  if(polemix>0.01){          // de-streak rainfall (drives vegetation colour) the same way
+    float rr=0.0;
+    for(int k=0;k<8;k++){
+      float az=(float(k)+0.5)/8.0*2.0*PI;
+      rr+=rainAt(uvFromDir(vec3(cyR*cos(az),syR,cyR*sin(az))));
+    }
+    Rf=mix(Rf, rr/8.0, polemix);
+  }
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
-  vec3 sdir=dirFromUv(uv);
   /* Meander the drainage sample. D8 flow routing can only send water in eight
      compass directions, so on low-relief ground the channels come out straight
      and angular -- the "unnaturally straight rivers" a reader noticed. Warping
      the sample point with fractal noise at two scales bends those segments into
      natural meanders and frays the tributary tips, the same trick that
      de-blocks the lake shorelines. It costs one extra texture read on land. */
-  vec2 rwarp=(vec2(fbm3(sdir*70.0)-0.5, fbm3(sdir*70.0+41.0)-0.5)*3.4
-            + vec2(fbm3(sdir*160.0+7.0)-0.5, fbm3(sdir*160.0+63.0)-0.5)*2.0
-            + vec2(fbm3(sdir*360.0+19.0)-0.5, fbm3(sdir*360.0+81.0)-0.5)*1.0)*uTexel;
+  /* Weighted toward the HIGH frequencies: a low-frequency warp just slides a
+     whole river sideways, it is the mid/high octaves that vary ALONG the channel
+     and so bend a straight D8 segment into a meander. Four octaves to ~820 (the
+     top two single-octave, to stay inside the fragment budget) fold the blocky
+     flow-accumulation into curving rivers and frayed tributary tips. */
+  vec2 rwarp=(vec2(fbm3(sdir*85.0)-0.5,      fbm3(sdir*85.0+41.0)-0.5)*2.3
+            + vec2(fbm3(sdir*190.0+7.0)-0.5, fbm3(sdir*190.0+63.0)-0.5)*2.3
+            + vec2(vnoise3(sdir*400.0+19.0)-0.5, vnoise3(sdir*400.0+81.0)-0.5)*1.8
+            + vec2(vnoise3(sdir*820.0+5.0)-0.5,  vnoise3(sdir*820.0+37.0)-0.5)*1.05)*uTexel;
   vec3 SP=mix(texture2D(surfA,uv+rwarp).rgb, texture2D(surfB,uv+rwarp).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
 
@@ -1259,12 +1318,19 @@ void main(){
     col=mix(col, mix(vec3(0.298,0.420,0.259), vec3(0.220,0.392,0.224), h), rvalley*0.60);
     float ripcore=smoothstep(0.34,0.58,drain);
     col=mix(col, mix(vec3(0.231,0.388,0.263), vec3(0.157,0.337,0.212), h), ripcore*0.65);
-    float base=smoothstep(0.50,0.66,drain);
-    float chan=drain-0.54;
-    float aac=max(fwidth(drain),0.0011);
-    float sharp=clamp(chan/aac*0.9+0.5,0.0,1.0);
-    float river=max(base, sharp)*(1.0-clamp(uSchem,0.0,1.0));
-    col=mix(col, mix(vec3(0.157,0.333,0.412), vec3(0.102,0.259,0.353), h), river*0.95);
+    /* A THIN meandering thread, not a solid slab. The flow-accumulation field is
+       valley-scale (~20 km), so thresholding it into solid blue fills a wide,
+       low-relief basin (the Amazon, the Pangaean interiors) as rectangular
+       blocks -- the "blocky rivers" a reader saw. Draw the water as the AA'd
+       CHANNEL CORE (a screen-space-sharp line that stays one thread wide at any
+       zoom) plus only a faint solid at the very trunk, so it reads as a river
+       following its green corridor rather than a flooded rectangle. */
+    float chan=drain-0.60;
+    float aac=max(fwidth(drain),0.0016);
+    float sharp=clamp(chan/aac*0.8+0.5,0.0,1.0);          // thin AA channel line
+    float trunk2=smoothstep(0.72,0.86,drain)*0.6;         // faint fill only on the biggest trunks
+    float river=max(trunk2, sharp)*(1.0-clamp(uSchem,0.0,1.0));
+    col=mix(col, mix(vec3(0.157,0.333,0.412), vec3(0.102,0.259,0.353), h), river*0.9);
     /* The tree line. Cold and wet used to come out dark forest green, because
        the lookup only ever asked how WET the ground was -- so the Arctic coast,
        Patagonia and every high plateau were painted as rainforest. No tree
@@ -1419,36 +1485,38 @@ void main(){
     col=mix(col, shelfCol, sa);
   }
 
-  /* Per-pixel relief from the elevation gradient -- and the reason the poles
-     used to smear.
-
-     An equirectangular texture packs the same number of texels into every
-     latitude row, so near a pole two horizontally adjacent texels are a few
-     metres apart on the ground rather than twenty kilometres. The old code
-     sampled a FIXED uv offset and then divided the difference by cos(lat) to
-     convert it to a physical gradient. That is arithmetically right and
-     visually disastrous: it multiplies whatever is in those two texels --
-     including compression noise and interpolation ripple -- by up to twelve,
-     which is exactly the radial streaking that appeared over both poles and
-     smeared anything crossing them.
-
-     Sample further apart instead. Widening the step by 1/cos(lat) keeps the
-     two probes the same PHYSICAL distance apart at every latitude, so the
-     plain difference already IS the gradient and nothing needs amplifying. */
-  vec2 st=uTexel*0.75;
-  /* Widen the longitude step by 1/cos(lat) so both probes stay the same
-     physical distance apart -- but CAP it. At the very pole cos(lat) -> 0, the
-     step -> the whole width of the map, and the east-west difference is then
-     taken between two random far-apart points, which threw a radial white
-     starburst out of the pole (worst on ice, where the broken normal lit up as
-     snow). Clamp the widening to 8x and, inside the last few degrees, fade the
-     east-west gradient out entirely and let the normal stand vertical -- there
-     is no meaningful east-west relief at a pole anyway. */
-  float coslat=max(cos(radians(lat)),0.125);
-  float du=min(st.x/coslat, st.x*6.0);   // never probe so far east-west it wraps the pole
-  float ex1=elevAt(uv+vec2(du,0.0),rug), ex0=elevAt(uv-vec2(du,0.0),rug);
-  float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
-  vec3 nrm=normalize(vec3(-(ex1-ex0)*polecap, -(ey1-ey0)*polecap, 320.0));
+  /* POLE-STABLE relief normal. The old code stepped a fixed uv offset and
+     divided by cos(lat) to get a physical gradient -- arithmetically right,
+     visually disastrous: near a pole 1/cos(lat) blows up and multiplies the
+     compression noise in two adjacent texels into a radial starburst, so it had
+     to be faded to flat (which is why the poles lost all their relief detail).
+     Instead build a true tangent frame ON THE SPHERE (east/north about the +Y
+     pole axis) and read the field a fixed ARC apart in each direction. Nothing
+     is divided by cos(lat); the normal is well-defined at every latitude and
+     the terrain keeps its detail right up to the pole. The one residual pole
+     artefact is azimuthal -- pixels ringing the pole read very different
+     longitudes, so the EAST-WEST field gradient still wants to spoke -- so damp
+     JUST that component inside the cap, keeping the north-south relief and the
+     isotropic 3D grain that give the pole its texture. */
+  vec3 pax=vec3(0.0,1.0,0.0);
+  vec3 Eax=cross(pax, sdir); float _el=length(Eax);
+  Eax = _el>1e-4 ? Eax/_el : vec3(1.0,0.0,0.0);   // east tangent (degenerate only AT the pole)
+  vec3 Nax=cross(sdir, Eax);                        // north tangent
+  float da=0.9/1024.0*PI;                           // ~a texel-row of arc, matches the old off-pole step
+  float gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)
+          -elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
+  float gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)
+          -elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+  /* The EAST-WEST gradient is what fans into radial spokes at the pole: near the
+     pole every pixel around the ring reads a different longitude, so the field's
+     (real but massively oversampled) azimuthal variation shows up as a pinwheel.
+     Fade that component out over a wide polar zone. The NORTH-SOUTH (radial)
+     gradient does NOT spoke -- it reads as smooth dome shading -- so keep it
+     almost to the pole. The isotropic 3D grain added below is never faded, so the
+     cap keeps a uniform texture and reads like any other ground. */
+  float eastfade=1.0-smoothstep(63.0,84.0,abs(lat));
+  float northfade=1.0-smoothstep(84.0,89.5,abs(lat));
+  vec3 nrm=normalize(vec3(-gE*eastfade, gN*northfade, 300.0));
 
   if(z>=0.0){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -1470,10 +1538,14 @@ void main(){
        plume already drawn offshore. All derived from the fields, so it migrates
        with plates and climate across the timeline: modelled drainage, not mapped
        rivers. ("flatf" not "flat": flat is a reserved GLSL keyword.) */
-    vec2 rv=uTexel*2.4;
+    // Drainage base level over a small ring -- tangent-frame stepped (Eax/Nax
+    // from the normal above) so it does NOT read across the pole. The old fixed
+    // uv step did, which turned every polar basin into a pinwheel of radial
+    // rivers (the dark spokes over Gondwana's south-pole terrain).
+    float rvA=2.4/1024.0*PI;
     float zc=baseElev(uv);
-    float ring=(baseElev(uv+vec2(rv.x,0.0))+baseElev(uv-vec2(rv.x,0.0))
-               +baseElev(uv+vec2(0.0,rv.y))+baseElev(uv-vec2(0.0,rv.y)))*0.25;
+    float ring=(baseElev(uvFromDir(normalize(sdir+Eax*rvA)))+baseElev(uvFromDir(normalize(sdir-Eax*rvA)))
+               +baseElev(uvFromDir(normalize(sdir+Nax*rvA)))+baseElev(uvFromDir(normalize(sdir-Nax*rvA))))*0.25;
     float below=clamp((ring-zc)/85.0,0.0,1.0);       // how far into a local low
     float supply=clamp((Rf-0.10)/0.60,0.0,1.0);      // rainfall available to run off
     float warm=clamp((T+2.0)/6.0,0.0,1.0);           // liquid water, not frozen
@@ -1501,11 +1573,80 @@ void main(){
     float nx=vnoise3(sdir*145.0+1.0)-0.5;
     float ny=vnoise3(sdir*145.0+9.0)-0.5;
     nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.30+0.45*rug));
+  } else {
+    /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
+       Real ocean floor is corrugated: long, low hills 2-5 km across, elongated
+       ~4:1, running PARALLEL to the spreading ridge (perpendicular to the plate
+       motion that made them). At 20 km per pixel they sit far below the shipped
+       bathymetry, so they cannot be baked -- and baking them as fixed sine
+       lines is exactly what turned the old floor into a grid of straight
+       ridges. Here they are grown procedurally from the baked ocean-structure
+       field: gb is the frozen-in spreading direction, r the crustal age. We
+       tilt the SHADING normal across the ridge and suppress the along-ridge
+       slope, so noise reads as ridge-parallel lineations -- wavy and broken,
+       not a repeating wave. Young crust near the ridge is sharp; old crust is
+       smoothed as sediment buries it. Nothing here touches the height field, so
+       the coastline and the baked large structure (ridges, fracture zones,
+       plateaus, seamounts) are untouched. */
+    vec3 ocn = mix(texture2D(oceanA,uv).rgb, texture2D(oceanB,uv).rgb, mixf);
+    float crustAge = ocn.r;
+    vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
+    float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
+    float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
+    if(aniso*deepw > 0.02){
+      vec2 sN = spr/max(length(spr),1e-3);            // across-ridge unit (E,N)
+      // local tangent frame on the sphere, to step the noise along real bearings.
+      // dirFromUv puts the pole axis on +Y (y = sin lat), so east and north are
+      // taken about THAT axis -- getting this wrong rotates the whole grain off
+      // the true spreading direction. Near the poles cross()->0, but amp*polecap
+      // is ~0 there anyway; the epsilon fallback just avoids a normalize(0).
+      vec3 pax = vec3(0.0,1.0,0.0);
+      vec3 e3 = cross(pax, sdir); float el = length(e3);
+      e3 = el>1e-4 ? e3/el : vec3(1.0,0.0,0.0);        // east-ish (sign is immaterial here)
+      vec3 n3 = cross(sdir, e3);                        // toward the pole (north-ish)
+      vec3 across3 = normalize(sN.x*e3 + sN.y*n3);     // along spreading = across ridge
+      vec3 along3  = normalize(-sN.y*e3 + sN.x*n3);    // along the ridge
+      // two octaves, slope taken mostly ACROSS the ridge (cheap forward diffs)
+      // Three octaves of slope, measured mostly ACROSS the ridge (cheap forward
+      // diffs). The finer octaves keep the fabric crisp as you zoom in -- the
+      // hills are synthesised per pixel, so there is no resolution limit.
+      float F=140.0, hs0=0.7/F;
+      float c0=vnoise3(sdir*F);
+      float ca=vnoise3((sdir+across3*hs0)*F);
+      float cl=vnoise3((sdir+along3 *hs0)*F);
+      float F2=330.0, hs2=0.7/F2;
+      float d0=vnoise3(sdir*F2);
+      float da=vnoise3((sdir+across3*hs2)*F2);
+      float F3=760.0, hs3=0.7/F3;
+      float e0=vnoise3(sdir*F3);
+      float ea=vnoise3((sdir+across3*hs3)*F3);
+      float sAcross=(ca-c0) + (da-d0)*0.62 + (ea-e0)*0.34;
+      float sAlong =(cl-c0)*0.24;                      // small -> hills stay long
+      vec2 sUV = vec2(sN.x, -sN.y);                     // across-ridge, in uv basis
+      vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
+      vec2 gUV = sUV*sAcross + rUV*sAlong;
+      // Old crust is buried under sediment and smoother, but never glassy: the
+      // deep abyss still carries fossil hills, so the floor keeps a base grain.
+      float rough = mix(1.0, 0.34, smoothstep(0.06,0.72,crustAge));
+      float amp = 2.9 * rough * aniso * deepw * polecap;
+      nrm = normalize(nrm + vec3(gUV*amp, 0.0));
+      // the same grain in tone, so it reads face-on and not only where it is lit
+      col *= 1.0 + sAcross*0.42*rough*aniso*deepw;
+    }
+  }
+  /* Near the pole the depth-colour thresholds, applied to an azimuthally-smoothed
+     (radially symmetric) depth, would ring the ocean into a bullseye. Blend the
+     sea toward a single deep tone there so it reads as uniform open ocean rather
+     than concentric bands -- the honest choice at a point the projection cannot
+     resolve into real shelves anyway. */
+  if(z<0.0 && polemix>0.01){
+    vec3 deepPole=mix(vec3(0.05,0.15,0.16), vec3(0.03,0.11,0.20), uSeaTint);
+    col=mix(col, deepPole, polemix*0.85);
   }
   float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
-  // Toward the pole, blend the hillshade to flat -- the normal is meaningless
-  // there and any relief it reports is the projection singularity, not terrain.
-  hs=mix(hs, 0.5, 1.0-polecap);
+  // The base gradient is faded out into the cap and the pole is carried by the
+  // isotropic grain, so the hillshade no longer has to be flattened to hide a
+  // starburst -- leaving it intact is what keeps the pole's texture visible.
   float shade=clamp(0.70+0.62*hs, 0.0, 1.18);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
@@ -1516,7 +1657,7 @@ void main(){
   // strongly as land -- the abyssal hills, seamounts and ridge flanks should
   // read as terrain, not a faint wash. Kept a touch softer than land so the
   // deepest plains still calm down.
-  float hw=(z<0.0)? mix(0.85,0.55,clamp(-z/5200.0,0.0,1.0)) : 1.0;
+  float hw=(z<0.0)? mix(0.88,0.72,clamp(-z/5200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
 
   if(z<0.0 && uSchem<0.5){
@@ -1637,6 +1778,7 @@ function initGL(){
     elevA:{value:null},elevB:{value:null},rainA:{value:null},rainB:{value:null},
     motA:{value:null},waterA:{value:null},waterB:{value:null},
     surfA:{value:null},surfB:{value:null},
+    oceanA:{value:null},oceanB:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
@@ -1648,6 +1790,13 @@ function initGL(){
   // the flat map is the same shader on a plane, so both views agree exactly
   mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
   mapMesh.visible=false; scene.add(mapMesh);
+  // Neutral fallback for the ocean-structure field: mid-grey is "no data" (age
+  // 0.5, spreading vector 0 -> aniso 0), so a keyframe whose _o failed to load
+  // draws NO abyssal fabric rather than reading a black texture as a fixed
+  // diagonal grain. Real _o textures overwrite this per frame in bindTextures.
+  const _oceanGray=new THREE.DataTexture(new Uint8Array([128,128,128,255]),1,1,THREE.RGBAFormat);
+  _oceanGray.needsUpdate=true;
+  mat.uniforms.oceanA.value=_oceanGray; mat.uniforms.oceanB.value=_oceanGray;
   // atmosphere
   const ageo=new THREE.SphereGeometry(1.03,64,32);
   const amat=new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,uniforms:{},
@@ -2488,17 +2637,29 @@ function sparseAt(name,age){
 }
 function lifeSection(l){
   const age=state.age, when=fmtAge(Math.round(age)), marine=MARINE_T.has(l.t);
+  /* Which realms belong on THIS feature. An ocean/sea shows sea life only; land
+     features show land/air/fresh; a lake shows freshwater and its shore. This is
+     applied to EVERY list below (curated and global alike) so an ocean card can
+     never list land animals nor a continent list fish -- the "mixed cards" a
+     reader flagged. ("air" rides with the land, since birds/pterosaurs are read
+     as over-land here, not marine.) */
+  const wantR = marine?['sea']:(l.t==='lake'?['fresh','land','air']:['land','air','fresh']);
   const rt=regionTaxaAt(l.n,age);
   if(rt&&rt.taxa&&rt.taxa.length){
-    let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(rt.taxa,6);
-    if(rt.shared)h+=`<p class="desc">${esc(rt.shared)}</p>`;
-    return h;
+    const ftx=rt.taxa.filter(t=>wantR.includes(t.realm));
+    if(ftx.length){
+      let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(ftx,6);
+      if(rt.shared)h+=`<p class="desc">${esc(rt.shared)}</p>`;
+      return h;
+    }
+    // the curated list held nothing of this feature's realm -> fall through to
+    // the realm-correct global list rather than showing the wrong realm.
   }
   const why=sparseAt(l.n,age);
   if(why)return `<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;
   const L=lifeAt(age);
   if(!L||!L.taxa||!L.taxa.length)return '';
-  const want=marine?['sea']:['land','air','fresh'];
+  const want=wantR;
   /* This is the GLOBAL list for the interval, shown because this landmass has
      no biota catalogued of its own. Two things had to change.
 
@@ -2521,13 +2682,20 @@ function lifeSection(l){
     return true;
   });
   if(pick.length){
-    const head = reg
-      ? (marine?`Elsewhere in the sea at ${when}`:`Elsewhere on Earth at ${when}`)
-      : (marine?`In the sea at ${when}`:`On land at ${when}`);
-    return `<div class="ihead">${head}</div>`+lifeHTML(pick,5)+
+    /* At (and just before) the present the interval's characteristic biota IS
+       the real biota, so present it plainly as what lives here today rather than
+       with the "nothing catalogued" caveat that made present-day cards read as
+       empty. The region filter above already narrows it to this landmass. */
+    const recent = age<=2.6;
+    const head = recent
+      ? (marine?`In the sea here today`:`Living here today`)
+      : reg ? (marine?`Elsewhere in the sea at ${when}`:`Elsewhere on Earth at ${when}`)
+            : (marine?`In the sea at ${when}`:`On land at ${when}`);
+    const caveat = recent ? '' :
       `<p class="desc">Nothing is catalogued for this landmass at this age yet, `+
       `so these are the interval's characteristic groups worldwide — not a claim `+
       `that they lived here.</p>`;
+    return `<div class="ihead">${head}</div>`+lifeHTML(pick,5)+caveat;
   }
   if(marine){
     return `<div class="ihead">In the sea at ${when}</div><p class="desc">`+
@@ -3197,6 +3365,11 @@ function bindTextures(){
   const sa=getTex('d',f.i), sb=getTex('d',f.j);
   if(sa)mat.uniforms.surfA.value=sa;
   if(sb||sa)mat.uniforms.surfB.value=sb||sa;
+  // Ocean-structure field (crustal age + spreading direction), interpolated
+  // like elevation so the abyssal-hill grain drifts and re-orients with the plates.
+  const oa=getTex('o',f.i), ob=getTex('o',f.j);
+  if(oa)mat.uniforms.oceanA.value=oa;
+  if(ob||oa)mat.uniforms.oceanB.value=ob||oa;
   // Linear in t: the shader interpolates the height field, so this drives the
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.

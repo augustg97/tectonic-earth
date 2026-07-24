@@ -52,7 +52,11 @@ ELEV_H, ELEV_W = 1024, 2048     # coastline resolution
 RAIN_H, RAIN_W = 768, 1536      # rainfall texture, 4x the pixels
 CLIM_H, CLIM_W = 768, 1536      # the wind solve runs here too, or there is
                                 # no new detail to export
-ELEV_Q, RAIN_Q = 92, 90
+# Ocean-structure field: crustal age + spreading direction. It is smooth (the
+# fine abyssal-hill fabric is synthesised in the shader from it, not stored), so
+# half the elevation resolution is ample and keeps the extra webp small.
+OCEAN_H, OCEAN_W = 512, 1024
+ELEV_Q, RAIN_Q, OCEAN_Q = 92, 90, 90
 STEP = 5                         # Myr between keyframes, everywhere
 
 
@@ -108,12 +112,18 @@ def export(age, Z_hi, z_for_climate, tag):
     # from ridge distance, fracture zones, and Kerguelen / Ontong Java / the
     # Seychelles seeded so they drown and re-emerge on cue. See seafloor.py.
     mot = _load_motion(age, tag)
-    Z_hi = SF.apply(Z_hi, age, reconstructor=_sf_reconstructor(), motion=mot)
+    Z_hi, ofield = SF.apply(Z_hi, age, reconstructor=_sf_reconstructor(), motion=mot)
     e = _gray(enc_elev(smooth_bathymetry(Z_hi)))
     r = _gray(rain)
+    # ocean-structure field: R = crustal age, G/B = spreading direction. The
+    # shader grows the abyssal-hill fabric from it, so it need only be smooth.
+    o = Image.fromarray((np.clip(ofield, 0, 1) * 255 + 0.5).astype(np.uint8)
+                        ).resize((OCEAN_W, OCEAN_H), Image.BILINEAR)
     ef = f"{tag}_{abs(age):04d}_e.webp"
     rf = f"{tag}_{abs(age):04d}_r.webp"
-    n = _save(e, os.path.join(OUT, ef), ELEV_Q) + _save(r, os.path.join(OUT, rf), RAIN_Q)
+    of = f"{tag}_{abs(age):04d}_o.webp"
+    n = (_save(e, os.path.join(OUT, ef), ELEV_Q) + _save(r, os.path.join(OUT, rf), RAIN_Q)
+         + _save(o, os.path.join(OUT, of), OCEAN_Q))
     ice_T, sea_T = glaciation(cl)
     ep, per = period_for(age)
     sysd = system_at(age)

@@ -188,99 +188,65 @@ def _plateau_field(shape, age, reconstructor):
 def apply(z, age, reconstructor=None, motion=None, verbose=False):
     """Add evolving sea-floor structure and plateaus to an elevation grid.
 
-    z is (H, W), row 0 = north. Returns a new grid. `motion` is an optional
-    (vx, vy) tuple on the same grid, used to find spreading ridges; if absent,
-    the age-depth grading is skipped and only the plateaus are seeded.
+    z is (H, W), row 0 = north. Returns (grid, ofield) where ofield is a HxWx3
+    OCEAN-STRUCTURE field the shader grows the fine sea floor from:
+      R  roughness age  0 rough young crust (shallow, near a ridge) .. 1 smooth
+                        old crust (deep, sediment-buried), taken from depth.
+      G,B spreading dir the regional-slope direction as (east, north), 0.5-centred
+                        and scaled by CONFIDENCE (its length): full where the floor
+                        has a clear regional tilt, ~0 on a flat abyssal plain.
+    `motion` is accepted for compatibility but no longer needed.
+
+    Nothing of the abyssal-hill FABRIC is baked into the ELEVATION: at 20 km per
+    pixel a 2-5 km hill is sub-pixel, and baking it as fixed sine lines is exactly
+    what made the old floor a grid of straight ridges. The shader grows it from
+    ofield instead. Why the depth GRADIENT for the spreading direction: ocean
+    crust deepens monotonically away from the ridge that made it (half-space
+    cooling), so the large-scale slope points along the spreading direction,
+    perpendicular to the ridge axis -- and unlike ridge-detection from the motion
+    field (which is blank over open abyss and gave a Voronoi mesh of false
+    ridges), it is smooth and defined wherever the floor tilts at all.
     """
     out = z.astype(np.float32).copy()
     h, w = out.shape
     sea = out < 0
+    ofield = np.zeros((h, w, 3), np.float32)
+    ofield[..., 0] = 1.0        # default (land / undefined): old, quiet crust
+    ofield[..., 1] = 0.5        # default: no spreading direction, zero confidence
+    ofield[..., 2] = 0.5
 
-    # 1) age-graded abyssal relief from ridge distance --------------------
-    if motion is not None:
-        vx, vy = motion
-        # the motion field ships at a coarser resolution than the elevation
-        # grid; bring it up so the masks below line up cell for cell
-        if vx.shape != out.shape:
-            from PIL import Image as _I
-            def _up(a):
-                return np.asarray(_I.fromarray(a.astype(np.float32)).resize(
-                    (w, h), _I.BILINEAR), np.float32)
-            vx, vy = _up(vx), _up(vy)
-        # divergence of the velocity field -> spreading centres are maxima
-        dvx = np.gradient(vx, axis=1)
-        dvy = np.gradient(vy, axis=0)
-        div = dvx + dvy
-        ridge = div > np.percentile(div[sea], 88) if sea.any() else div > 1e9
-        # geodesic-ish distance to the nearest ridge cell, in degrees
-        try:
-            from scipy import ndimage
-            # distance transform on the non-ridge cells
-            dist = ndimage.distance_transform_edt(~ridge).astype(np.float32)
-            dist *= 180.0 / h                       # cells -> degrees
-        except Exception:
-            dist = np.full(out.shape, 20.0, np.float32)
-        # degrees -> crude crustal age: spreading ~40 mm/yr => ~0.36 deg/Myr,
-        # so age_Myr ~ dist_deg / 0.36, capped where the abyss saturates
-        age_myr = np.clip(dist / 0.36, 0.0, 180.0)
-        model_depth = -(RIDGE_DEPTH + DEPTH_PER_SQRT_MYR * np.sqrt(age_myr))
-        model_depth = np.clip(model_depth, -MAX_ABYSS, -RIDGE_DEPTH)
-        # Poleward of ~72 degrees the equirectangular grid is so compressed that
-        # the ridge-distance transform is meaningless and threw bright speckle
-        # all round the poles. Fade the whole model out there and keep whatever
-        # the DEM already had.
-        lat1d = 90.0 - (np.arange(h) + 0.5) / h * 180.0
-        polefade = np.clip((72.0 - np.abs(lat1d)) / 12.0, 0.0, 1.0)[:, None]
-        # blend the model depth in over deep ocean only, leaving shelves and any
-        # real bathymetry (the present day) alone
-        deep = np.clip((-out - 3000.0) / 2500.0, 0.0, 1.0) * sea * polefade
-        out = out * (1.0 - deep * 0.55) + model_depth * (deep * 0.55)
+    from scipy import ndimage as _nd
+    lat1d = 90.0 - (np.arange(h) + 0.5) / h * 180.0
+    # Poleward the equirectangular grid is badly squeezed; fade the fabric out.
+    polefade = np.clip((74.0 - np.abs(lat1d)) / 14.0, 0.0, 1.0)[:, None]
 
-        # REAL RELIEF, not a faint tone. The sea floor has as much structure as
-        # the land, and the previous fabric (70 m, tone only) was far too timid
-        # -- so this builds several hundred metres of it and lets the hillshade
-        # render it as terrain. Everything keys off the ridge-distance field so
-        # it is organised around the spreading centres, and travels with them.
-        from scipy import ndimage as _nd
-        rng = np.random.default_rng(11)
+    if sea.any():
+        # regional depth: smooth the floor over SEA ONLY (normalised convolution),
+        # so a coastline step does not masquerade as a huge slope and ring every
+        # continent with fabric. ~9-cell blur keeps basin-scale tilt, drops bumps.
+        seaf = sea.astype(np.float32)
+        dep = np.where(sea, out, 0.0).astype(np.float32)
+        num = _nd.gaussian_filter(dep, 9.0)
+        den = _nd.gaussian_filter(seaf, 9.0)
+        reg = num / np.maximum(den, 1e-3)
+        gy, gx = np.gradient(reg)
+        coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
+        east = gx / coslat
+        north = -gy                                   # row index increases south
+        slope = np.hypot(east, north)                 # metres of depth per cell
+        conf = np.clip(slope / 11.0, 0.0, 1.0) * polefade
+        inv = 1.0 / (slope + 1e-6)
+        u = east * inv
+        v = north * inv
+        # roughness age straight from depth: crest depth -> 0 (rough), abyss -> 1
+        # (smooth). Half-space cooling makes deep == old == buried, so this needs
+        # no separate age model and tracks the real basins on every keyframe.
+        age01 = np.clip((-out - RIDGE_DEPTH) / (MAX_ABYSS - RIDGE_DEPTH), 0.0, 1.0)
+        ofield[..., 0] = np.where(sea, age01, 1.0)
+        ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
+        ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
 
-        # (a) abyssal hills: ridge-PARALLEL corrugations, the grain covering most
-        # of the sea floor. Phase is the distance field, so they run along the
-        # ridge by construction; three scales stacked, blurred to read as hills.
-        hills = (np.sin(dist * 5.0) * 0.55
-                 + np.sin(dist * 11.0 + 0.7) * 0.30
-                 + np.sin(dist * 23.0 + 1.9) * 0.15)
-        hills = _nd.gaussian_filter(hills, sigma=(0.9, 0.9))
-        # young crust has sharp hills; old crust is buried under sediment
-        hill_amp = 340.0 * np.clip(1.05 - age_myr / 120.0, 0.18, 1.0)
-        relief = hills * hill_amp
-
-        # (b) seamounts: isolated volcanic cones dotted across the abyss, tallest
-        # on young crust near the ridge. A sparse random field, raised to a high
-        # power so only the peaks survive, then each becomes a smooth cone.
-        smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.0)
-        smt = np.clip((smt - 0.62) / 0.38, 0.0, 1.0) ** 2
-        smt = _nd.gaussian_filter(smt, 1.1)
-        relief = relief + smt * 900.0 * np.clip(1.1 - age_myr / 90.0, 0.15, 1.0)
-
-        # (c) fracture zones: long troughs running ACROSS the grain (along the
-        # distance gradient), offsetting the fabric -- the transform-fault scars.
-        gy, gx = np.gradient(_nd.gaussian_filter(dist, 2.0))
-        across = np.arctan2(gy, gx)
-        fz = np.sin(across * 9.0 + dist * 0.6)
-        fzt = np.clip((np.abs(fz) - 0.86) / 0.14, 0.0, 1.0)
-        relief = relief - fzt * 500.0
-
-        # (d) the ridge itself: a shallow crest split by a narrow axial VALLEY,
-        # the way a slow ridge actually looks in section.
-        axial = np.exp(-(dist / 1.4) ** 2)
-        relief = relief + axial * 700.0 - np.exp(-(dist / 0.4) ** 2) * 900.0
-
-        relief *= polefade
-        out = out + np.where(sea & (out < -1800), relief, 0.0)
-        out = np.clip(out, -MAX_ABYSS, None)
-
-    # 2) plateaus and microcontinents ------------------------------------
+    # plateaus and microcontinents ------------------------------------
     if PLATEAUS:
         target, pmask = _plateau_field(out.shape, age, reconstructor)
         valid = target > -1e8
@@ -290,9 +256,12 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
         raise_to = (valid & ((target > out) | sea))
         blend = np.clip(pmask, 0.0, 1.0) * raise_to
         out = np.where(raise_to, out * (1.0 - blend) + target * blend, out)
+        # plateaus are their own crust: mark them as old/quiet so the shader does
+        # not draw ridge-fabric across them
+        ofield[..., 0] = np.where(pmask > 0.3, 1.0, ofield[..., 0])
         if verbose:
             em = emergent_names(age)
             print(f"    plateaus: {int((pmask > 0.05).sum())} cells seeded, "
                   f"emergent: {em or 'none'}")
 
-    return out
+    return out, ofield

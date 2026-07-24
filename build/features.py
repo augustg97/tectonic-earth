@@ -375,7 +375,7 @@ LABELS = [
     ("ocean", "Reykjanes Ridge", -30, 60, 0, 60),
     ("ocean", "Gakkel Ridge", 60, 82, 0, 55),
     ("ocean", "Nazca Ridge", -80, -18, 0, 30),
-    ("island", "Kerguelen Microcontinent", 72, -52, 90, 118),
+    ("island", "Kerguelen Microcontinent", 72, -52, 90, 122),
     # Submarine oceanic plateaus. seafloor.py seeds them into the elevation
     # field; these name them, tracked from the same anchors.
     ("region", "Ontong Java Plateau", 160, -3, 0, 126),
@@ -531,6 +531,11 @@ LABELS = [
     ("ice", "Cordilleran Ice Sheet", -125, 54, 0, 2.6),
     ("ice", "Greenland Ice Sheet", -42, 72, 0, 3.5),
     ("ice", "Patagonian Ice Sheet", -73, -48, 0, 2.6),
+    # -- Greenland as a landmass (the ICE label above is only the Pleistocene cap).
+    # It becomes a distinct island as the North Atlantic and Labrador Sea open in
+    # the Paleogene; before that its craton rode inside Laurentia, so the window
+    # starts once it stands apart. It is land-today, so it tracks with the crust.
+    ("region", "Greenland", -42, 71, 0, 66),
     # -- plateaus / uplifts --
     # Named for the flood basalt, not just the landform. The Deccan Traps have
     # a marker in the volcanism layer, but that layer is OFF by default, so
@@ -773,6 +778,25 @@ COMPOSITE_WATER = {
         # Precambrian: between the Congo/Kalahari side and India/East Antarctica
         "cratons": ["Congo", "Kalahari", "India", "EAntarctica"],
         "target": "sea"},
+    "Mowry Sea": {
+        # the first, Arctic-fed pulse of the Western Interior Seaway -- anchors in
+        # the western interior of Laurentia (land today) so it sits in the seaway,
+        # not on the Cordilleran west coast where the static coord had drifted
+        "modern": [(-108, 47), (-105, 49), (-110, 45), (-103, 51), (-106, 43)],
+        "target": "sea"},
+    "Piedmont-Ligurian Ocean": {
+        # the Alpine branch of Tethys: European margin (N France/Switzerland)
+        # against the Adriatic/African margin (Italy), so the centroid falls in
+        # the narrow ocean BETWEEN Europe and Africa, as its description says --
+        # not up in the North Atlantic where an untracked ocean label snapped
+        "modern": [(6, 45), (8, 46), (11, 44), (13, 42), (9, 43)],
+        "target": "sea"},
+    "Indian Ocean": {
+        # weighted to the India-Antarctica-Australia gap (not the African side),
+        # so the centroid falls SOUTH of India -- the basin India opened as it
+        # tore north off Antarctica, which is what the card describes
+        "modern": [(78, 12), (81, 7), (78, -70), (90, -66), (114, -28)],
+        "target": "sea"},
 }
 
 # Belts are land, but a single point cannot stand for a 5000 km orogen that
@@ -781,6 +805,13 @@ COMPOSITE_WATER = {
 COMPOSITE_BELTS = {
     "Central Asian Orogenic Belt": {
         "modern": [(60, 44), (68, 45), (80, 46), (90, 48), (103, 48)]},
+    "Caledonides": {
+        # the belt is now split across Scotland, Scandinavia and East Greenland,
+        # so a single centroid of all three lands in the North Atlantic. Anchor it
+        # on the Scottish Highlands fragment (land at every age in its window);
+        # back-advected it tracks to the Iapetus suture where the range was raised,
+        # instead of the static coord that jumped between continents and ocean.
+        "modern": [(-4, 57), (-5, 58), (-3, 56), (-4.5, 57.5)]},
 }
 
 COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
@@ -1470,6 +1501,7 @@ DESCRIPTIONS = {
  "East Pacific Rise": "The fastest-spreading ridge on Earth, making Pacific sea floor at more than ten centimetres a year. It is the living successor to the ancestral Pacific-Farallon spreading system.",
  "Atacama Desert": "The driest place on Earth, held arid for millions of years between the Andean rain shadow and the cold, upwelling Humboldt Current. Parts of it may not have seen real rain in centuries.",
  "Arabian Desert": "The great sand sea of Arabia, including the Rub' al Khali or Empty Quarter, the largest unbroken body of sand on the planet -- arid since the peninsula drifted into the subtropical high after splitting from Africa.",
+ "Greenland": "The world's largest island, a Precambrian shard of the Laurentian craton set free when the Labrador Sea and then the North Atlantic rifted around it in the Paleogene. Its interior basin, pressed below sea level under the weight of the ice, holds one of the two great ice sheets left on Earth.",
  "Kalahari Desert": "A huge semi-arid sand basin across southern Africa, its dunes and dry pans spread over the interior plateau through the Cenozoic.",
  "Australian Desert": "The arid heart of Australia, its long parallel dunefields and stony plains spreading as the continent drifted north into the subtropics and dried through the late Cenozoic.",
  "Patagonian Desert": "A cold, wind-scoured steppe in the rain shadow east of the Andes, dry ever since the mountains rose high enough in the Miocene to wring the moisture from the Pacific westerlies.",
