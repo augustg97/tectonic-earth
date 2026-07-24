@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260723-2135';
+const DATA_V='20260724-0225';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1111,10 +1111,18 @@ void main(){
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
-  vec3 SP=mix(texture2D(surfA,uv).rgb, texture2D(surfB,uv).rgb, mixf);
+  vec3 sdir=dirFromUv(uv);
+  /* Meander the drainage sample. D8 flow routing can only send water in eight
+     compass directions, so on low-relief ground the channels come out straight
+     and angular -- the "unnaturally straight rivers" a reader noticed. Warping
+     the sample point with fractal noise at two scales bends those segments into
+     natural meanders and frays the tributary tips, the same trick that
+     de-blocks the lake shorelines. It costs one extra texture read on land. */
+  vec2 rwarp=(vec2(fbm3(sdir*120.0)-0.5, fbm3(sdir*120.0+41.0)-0.5)*2.2
+            + vec2(fbm3(sdir*300.0+7.0)-0.5, fbm3(sdir*300.0+63.0)-0.5)*1.1)*uTexel;
+  vec3 SP=mix(texture2D(surfA,uv+rwarp).rgb, texture2D(surfB,uv+rwarp).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
 
-  vec3 sdir=dirFromUv(uv);
   vec3 col;
   if(z<0.0){
     col=oceanColour(z,sdir,lat);
@@ -2346,7 +2354,7 @@ function showFeature(l,lon,lat){
   const reg=regionalAt(l.n,state.age);
   if(reg)extra+=`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`;
   // Life of the age, for anything big enough to host a biota.
-  const BIG=new Set(['continent','ocean','sea','forest','grassland','tundra','island','region']);
+  const BIG=new Set(['continent','ocean','sea','forest','grassland','tundra','island','region','lake']);
   if(BIG.has(l.t))extra+=lifeSection(l);
   openInfo({name:l.n,
     tag:kind+' · '+fmtAge(Math.round(state.age)),

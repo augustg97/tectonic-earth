@@ -8239,6 +8239,51 @@
      ]
     ]
    }
+  ],
+  "Pebas Mega-Wetland": [
+   {
+    "a0": 8,
+    "a1": 21,
+    "shared": "The Pebas wetland's fauna is built around water: giant crocodilians, the largest turtles known, and an explosion of endemic snails and clams.",
+    "taxa": [
+     [
+      "Purussaurus",
+      "genus",
+      "fresh",
+      "A caiman up to twelve metres long, the largest crocodilian since the age of dinosaurs, with a bite that could take anything in the wetland."
+     ],
+     [
+      "Stupendemys",
+      "genus",
+      "fresh",
+      "The largest freshwater turtle ever, a side-neck with a shell over three metres across and horns on the front of it."
+     ],
+     [
+      "Mourasuchus",
+      "genus",
+      "fresh",
+      "A bizarre caiman with a long, flat, duck-like snout, probably a filter-feeder straining small prey from the water."
+     ],
+     [
+      "Gryposuchus",
+      "genus",
+      "fresh",
+      "A slender-snouted gharial up to ten metres long, a specialised fish-eater sharing the water with the giant caimans."
+     ],
+     [
+      "Pebasian molluscs",
+      "class",
+      "fresh",
+      "An endemic radiation of hundreds of snail and mussel species, found nowhere else, whose shells date the wetland bed by bed."
+     ],
+     [
+      "Anhinga",
+      "genus",
+      "air",
+      "The darter, a spear-fishing water bird, already present in the Miocene wetland and still hunting the Amazon today."
+     ]
+    ]
+   }
   ]
  },
  "sparse": {

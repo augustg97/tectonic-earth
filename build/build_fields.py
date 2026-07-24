@@ -32,6 +32,7 @@ from build_frames import period_for, sealevel_for, index_dems, read_dem
 import build_synthetic as BS
 import precambrian as PRE
 import epeiric as EP
+import seafloor as SF
 import motion as MO
 import paleo_tracks
 
@@ -64,6 +65,37 @@ def _save(img, path, q):
     return os.path.getsize(path)
 
 
+_SF_REC = None
+
+
+def _sf_reconstructor():
+    """One reconstructor for the whole run, or None if pyGPlates is absent."""
+    global _SF_REC
+    if _SF_REC is None:
+        try:
+            _SF_REC = paleo_tracks.Reconstructor() if paleo_tracks.available() else False
+        except Exception:
+            _SF_REC = False
+    return _SF_REC or None
+
+
+def _load_motion(age, tag):
+    """(vx, vy) for this age from the shipped _m field, or None if not built yet.
+
+    seafloor needs the divergence of the plate-motion field to find spreading
+    ridges. The _m texture is derived from the elevation keyframes by motion.py,
+    so on a re-render it already exists; on a cold first build it does not, and
+    seafloor falls back to seeding only the plateaus.
+    """
+    mf = os.path.join(OUT, f"{tag}_{abs(age):04d}_m.webp")
+    if not os.path.exists(mf):
+        return None
+    a = np.asarray(Image.open(mf).convert("RGB"), np.float32) / 255.0
+    vx = (a[..., 0] * 2 - 1) * 160.0
+    vy = (a[..., 1] * 2 - 1) * 160.0
+    return vx, vy
+
+
 def export(age, Z_hi, z_for_climate, tag):
     """Z_hi: elevation at ELEV res. z_for_climate: lat-ascending DEM for the wind solve."""
     cl = climate_at(age)
@@ -72,6 +104,11 @@ def export(age, Z_hi, z_for_climate, tag):
         (np.clip(Rf / RF_MAX, 0, 1) * 255).astype(np.uint8)).resize(
         (RAIN_W, RAIN_H), Image.LANCZOS)) / 255.0
 
+    # Evolving sea-floor structure and the oceanic plateaus: age-graded abyss
+    # from ridge distance, fracture zones, and Kerguelen / Ontong Java / the
+    # Seychelles seeded so they drown and re-emerge on cue. See seafloor.py.
+    mot = _load_motion(age, tag)
+    Z_hi = SF.apply(Z_hi, age, reconstructor=_sf_reconstructor(), motion=mot)
     e = _gray(enc_elev(smooth_bathymetry(Z_hi)))
     r = _gray(rain)
     ef = f"{tag}_{abs(age):04d}_e.webp"

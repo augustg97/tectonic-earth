@@ -727,7 +727,14 @@ def resolve_to_landmasses(tracks, windows, order):
                 # bad frame becomes permanent -- Laurussia latched onto a
                 # 43-cell islet and continuity then kept re-picking it for
                 # 50 Myr, 40 degrees from the continent it names.
-                score = d if prev is None else d + 0.55 * _nearest_cell(
+                # Continuity weight rises with age: the deep-time DEM
+                # (authored Precambrian composite, high Ediacaran sea level)
+                # makes landmasses appear, flood and fragment between keyframes,
+                # and without a strong pull toward where the label just was it
+                # hops island to island -- which is the Ediacaran "jump". In the
+                # Phanerozoic the terrain is real and distance can lead.
+                cw = 0.55 if age < 540 else 1.6
+                score = d if prev is None else d + cw * _nearest_cell(
                     cells, prev[0], prev[1])[2]
                 # and a continent does not belong on a speck
                 score += 10.0 * max(0.0, 1.0 - area / 500.0)
@@ -788,6 +795,59 @@ def resolve_to_landmasses(tracks, windows, order):
             if pt is not None:
                 resolved[n].append([age, round(pt[0], 1), round(pt[1], 1)])
     return resolved
+
+
+
+# Labels for the oceanic plateaus and microcontinents that seafloor.py seeds
+# into the elevation field. Both must use the SAME back-advected anchors, or
+# the name floats off the bank it is meant to sit on -- so the track is built
+# here from seafloor's own anchor list rather than from a static coordinate,
+# and the window covers the whole time the plateau is visible, emergent or
+# submerged (which is what "label the submerged form too" needs).
+PLATEAU_LABEL = {
+    "Kerguelen Microcontinent": ("Kerguelen", 120, 0),
+    "Mauritia": ("Mauritia", 85, 0),
+    "Jan Mayen Microcontinent": ("JanMayen", 55, 0),
+    "Seychelles Microcontinent": ("Seychelles", 90, 0),
+    "Zealandia": ("Zealandia", 85, 0),
+    "Argoland": ("Argoland", 165, 0),
+    "Broken Ridge": ("BrokenRidge", 100, 0),
+    "East Tasman Plateau": ("EastTasman", 80, 0),
+    "Ontong Java Plateau": ("OntongJava", 126, 0),
+    "Manihiki Plateau": ("Manihiki", 125, 0),
+    "Shatsky Rise": ("Shatsky", 147, 0),
+    "Agulhas Plateau": ("Agulhas", 100, 0),
+    "Mascarene Plateau": ("MascarenePlateau", 45, 0),
+    "Rio Grande Rise": ("RioGrandeRise", 85, 0),
+    "Walvis Ridge": ("WalvisRidge", 120, 0),
+}
+
+
+def _plateau_track(key, a_old, rec, step=5):
+    """Centroid of a plateau's back-advected anchors, per age -- the same
+    positions seafloor.py seeds, so the label lands on the seeded bank."""
+    import seafloor
+    spec = seafloor.PLATEAUS.get(key)
+    if not spec:
+        return []
+    out = []
+    for age in range(0, int(a_old) + step, step):
+        pts = []
+        for alon, alat, _r in spec["anchors"]:
+            plon, plat = alon, alat
+            if rec is not None and age > 0:
+                try:
+                    tr, _ = rec.track(float(alon), float(alat), min(540, max(age, 5)))
+                    if tr:
+                        b = min(tr, key=lambda r: abs(r[0] - age))
+                        plon, plat = b[1], b[2]
+                except Exception:
+                    pass
+            pts.append((plon, plat))
+        c = _centroid(pts)
+        if c:
+            out.append([age, round(c[0], 1), round(c[1], 1)])
+    return out
 
 
 def build_labels():
@@ -855,10 +915,22 @@ def build_labels():
                     rg.add(t)
             if rg:
                 l["rg"] = sorted(rg)
-        elif coord_is_present_day(l):
-            rg = region_tags(l["lon"], l["lat"])
-            if rg:
-                l["rg"] = rg
+        else:
+            # Region tag for the biota filter, from the label's own coordinate.
+            # Use region_tags DIRECTLY rather than gating on coord_is_present_day
+            # (which requires land TODAY) -- a submerged fragment like the East
+            # Tasman Plateau or Kerguelen has a real present-day position but is
+            # underwater, so the land gate skipped it and its card then showed
+            # Proconsul, an African ape, off Australia. The continent boxes
+            # return None over open ocean and for a paleo-frame coordinate that
+            # lands in no box, so this is safe to apply broadly; restrict to
+            # post-Pangaean windows, where a present-day coordinate is
+            # meaningful, so a deep-time craton authored in its own era's frame
+            # is not mis-tagged.
+            if max(l["a0"], l["a1"]) <= 320:
+                rg = region_tags(l["lon"], l["lat"])
+                if rg:
+                    l["rg"] = rg
         # Attach the per-label extras FIRST. Each tracking branch below ends in
         # `continue`, so anything after them is skipped for the labels that take
         # one -- which silently cost six seas their phase descriptions when the
@@ -887,6 +959,15 @@ def build_labels():
         # seaway). Broad ocean names keep snapLabel. Seas (epicontinental, ON
         # continental crust) DO ride the plate correctly and are the ones that
         # were mislaid — that is the fix.
+        plspec = PLATEAU_LABEL.get(l["n"])
+        if rec is not None and plspec is not None:
+            key, a1w, a0w = plspec
+            l["a1"], l["a0"] = a1w, a0w
+            tr = _plateau_track(key, max(a1w, a0w), rec)
+            if len(tr) > 1:
+                l["tr"] = tr
+                tracked += 1
+            continue
         wspec = water_specs.get(l["n"])
         if rec and wspec is not None:
             tr = composite_track(wspec, max(l["a0"], l["a1"]), rec)
@@ -993,7 +1074,9 @@ def build_labels():
         fixed = resolve_to_landmasses(raw_comp, comp_window, order)
         for name, tr in fixed.items():
             if len(tr) > 1:
-                comp_label[name]["tr"] = smooth_track(tr)
+                deep = (min(a for a, lo, la in tr) >= 500
+                        or max(a for a, lo, la in tr) >= 560)
+                comp_label[name]["tr"] = smooth_track(tr, win=11 if deep else 5)
                 tracked += 1
                 n_comp += 1
     if n_comp:
