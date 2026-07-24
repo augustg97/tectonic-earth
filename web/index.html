@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260724-1605';
+const DATA_V='20260724-2321';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -921,6 +921,7 @@ uniform sampler2D oceanA, oceanB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
+uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
 varying vec2 vUv;
@@ -993,11 +994,9 @@ float detail3(vec3 p, float rug){
   }
   return mix(sm-0.5, (rg-0.42)*1.35, rug);
 }
-// interpolate the two keyframes, then add procedural micro-relief so the
-// upsampled field doesn't read as soft
-float elevAt(vec2 uv, float rug){
-  float z=baseElev(uv);
-  vec3 d=dirFromUv(uv);
+// The procedural micro-relief added on top of the shipped field, split out so
+// the pole-filtered path below can add exactly the same detail to its own base.
+float elevDetail(float z, vec3 d, float rug){
   float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
   if(z<0.0){
     // The seafloor is not a flat sheet: give it its own gentle relief so
@@ -1010,6 +1009,11 @@ float elevAt(vec2 uv, float rug){
   // rugged ground also carries more relief, not just a different shape
   float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
   return z + det;
+}
+// interpolate the two keyframes, then add procedural micro-relief so the
+// upsampled field doesn't read as soft
+float elevAt(vec2 uv, float rug){
+  return elevDetail(baseElev(uv), dirFromUv(uv), rug);
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
    faint row-to-row streaks in the rainfall field — and those streaks were
@@ -1087,63 +1091,100 @@ void main(){
   // relief gradient, fine mottle, snow grain -- because at the pole all the
   // texture columns converge to a point and any of them, sampled at a fixed uv
   // step, reads across the pole and throws a radial starburst.
-  float polecap=1.0-smoothstep(70.0,86.0,abs(lat));
   float lonD=uv.x*360.0-180.0;
   float s2=sin(radians(lat)); s2*=s2;
   vec3 sdir=dirFromUv(uv);   // 3D position on the unit sphere (hoisted: the pole de-streak needs it)
 
-  // How broken is the shipped field around here? Measured once and reused, so
-  // the five elevAt taps below all agree on what kind of terrain this is.
-  /* Local ruggedness, on the same physical footing as the relief normal below.
-     A fixed uv step measures over a few metres of ground at high latitude and
-     reports near-zero roughness for real mountains -- the opposite failure to
-     the gradient's, from the same cause. Widen the longitude step so both
-     probes are the same distance apart wherever they are. */
-  /* Ruggedness on the SAME pole-stable footing as the relief normal below -- a
-     tangent frame on the sphere, not a cos(lat)-widened uv step. The old step
-     read clear across the pole, so rug picked up the field's azimuthal variation
-     and modulated the grain into radial spokes (the pole pinwheel the hillshade
-     was then flattened to hide). */
-  vec3 rEax=cross(vec3(0.0,1.0,0.0), sdir); float _rl=length(rEax);
-  rEax = _rl>1e-4 ? rEax/_rl : vec3(1.0,0.0,0.0);
-  vec3 rNax=cross(sdir, rEax);
-  float rda=1.6/1024.0*PI;
-  float rug=clamp(length(vec2(
-      baseElev(uvFromDir(normalize(sdir+rEax*rda)))-baseElev(uvFromDir(normalize(sdir-rEax*rda))),
-      baseElev(uvFromDir(normalize(sdir+rNax*rda)))-baseElev(uvFromDir(normalize(sdir-rNax*rda)))))/460.0,0.0,1.0);
-  float z=elevAt(uv,rug);
-  /* POLE COLOUR/DEPTH DE-STREAK. Near the pole longitude is so oversampled that
-     a few degrees of it is a few km of ground, so the base field's east-west
-     variation fans out of the pole as radial colour and depth bands (the water
-     pinwheel). Shift the BASE toward its mean around the latitude ring -- while
-     keeping this pixel's own isotropic detail -- so the cap reads like open
-     terrain, not a pinwheel. Runs only in the last ~10 degrees. */
-  float polemix=smoothstep(70.0,87.0,abs(lat));
-  float sy=sdir.y, cy=sqrt(max(0.0,1.0-sy*sy));
-  // The de-streak ring must not collapse to the pole point (cy->0), or the last
-  // pixels average nothing and keep their raw value -- the tan disc that sat
-  // right at the pole. Hold a minimum ring radius (~2.3 deg off the pole).
-  float cyR=max(cy,0.04);
-  float syR=(sy<0.0?-1.0:1.0)*sqrt(max(0.0,1.0-cyR*cyR));
-  if(polemix>0.01){
-    float ring=0.0;
-    for(int k=0;k<12;k++){    // 12 azimuths -> a clean mean even of dense strips
-      float az=(float(k)+0.5)/12.0*2.0*PI;
-      ring+=baseElev(uvFromDir(vec3(cyR*cos(az),syR,cyR*sin(az))));
+  /* ================== POLE-CORRECT FIELD SAMPLING ==================
+     Everything that made the poles warp follows from ONE fact: an
+     equirectangular field packs the same 2048 longitude columns into every
+     latitude row, so near a pole those columns are metres apart on the ground
+     while the rows stay ~20 km apart. That has TWO distinct consequences, and
+     they need different cures.
+
+     (1) ALIASING. Sampling a wildly oversampled signal per pixel reads
+     sub-texel noise, which fans out of the pole as radial spokes. Cure: a
+     low-pass matched to REAL DISTANCE -- average the field over a small circle
+     ON THE SPHERE (constant arc radius, so the footprint is a true disc on the
+     ground, about two field cells across). Away from the pole that is a
+     sub-texel blur and changes nothing. At the pole it spans the converging
+     columns and averages away exactly the aliasing -- while real geography
+     SURVIVES, because the disc is centred on this pixel: a coastline running
+     past the pole keeps ocean on one side and land on the other.
+
+     Note what NOT to do: average around the LATITUDE RING. That is radially
+     symmetric by construction, so it replaces the cap with a uniform disc, and
+     wherever the ring crosses land it paints the entire polar ocean as land.
+     Both failures showed up as a hard-edged circle centred on the pole.
+
+     (2) A ROTATING LIGHT. The hillshade lights terrain from a fixed direction
+     in the LOCAL east/north frame -- the cartographic convention -- but "east"
+     swings through a full turn around the pole, so the apparent sun azimuth
+     spins with it and the relief reads as a pinwheel that no amount of field
+     filtering can remove. Cure: blend the sun into a frame fixed in WORLD space
+     (t1/t2, built off the X axis) over the same band, so it stops spinning.
+
+     Elevation, gradient and ruggedness all come from the SAME six taps, so the
+     polar cap costs one ring rather than four separate probes. */
+  vec3 Eax=cross(vec3(0.0,1.0,0.0), sdir); float _el=length(Eax);
+  Eax = _el>1e-4 ? Eax/_el : vec3(1.0,0.0,0.0);   // local east
+  vec3 Nax=cross(sdir, Eax);                       // local north
+  /* Two polar weights, because the two cures have different natural ranges.
+     pwL (wide, ~70-84 deg) rotates the SUN into a world-fixed frame -- the light
+     starts visibly spinning well before the cap. pw (tight, ~80-88 deg) drives
+     the on-sphere sampling disc, which is now only a final polish: the bulk of
+     the aliasing is removed in the PIPELINE by build_fields.polar_lowpass, which
+     band-limits each row to the resolution its latitude can actually carry. Two
+     mild filters beat one heavy one -- over-blurring here is what stripped the
+     caps of detail before. */
+  float pwL=smoothstep(0.940,0.9950,abs(sdir.y));
+  float pw=smoothstep(0.985,0.9995,abs(sdir.y));
+  /* World-fixed tangent frame for the cap. Built from the X axis, NOT from east:
+     a frame that spins around the pole would make neighbouring pixels sample
+     different points and re-introduce the very jitter this removes. */
+  vec3 t1=vec3(1.0,0.0,0.0)-sdir*sdir.x; float _tl=length(t1);
+  t1 = _tl>1e-4 ? t1/_tl : vec3(0.0,0.0,1.0);
+  vec3 t2=cross(sdir,t1);
+  float rug, gE, gN, z;
+  if(pw>0.004){
+    float r=1.8/1024.0*PI;                  // blur radius AND gradient baseline
+    float sum=0.0; vec2 gv=vec2(0.0);
+    for(int k=0;k<6;k++){
+      float a=(float(k)+0.5)/6.0*2.0*PI;
+      vec2 dk=vec2(cos(a),sin(a));
+      float v=baseElev(uvFromDir(normalize(sdir+(t1*dk.x+t2*dk.y)*r)));
+      sum+=v; gv+=v*dk;
     }
-    z += (ring/12.0 - baseElev(uv))*polemix;
+    gv*=2.0/6.0;                            // ring moment -> gradient, in t1/t2
+    // 1.78 puts rug on the same slope scale as the non-polar probe below, so
+    // the detail character does not step at the branch.
+    rug=clamp(length(gv)*1.78/460.0,0.0,1.0);
+    z=elevDetail(mix(baseElev(uv), sum/6.0, pw), sdir, rug);
+    // rotate the gradient back into east/north so BOTH branches speak the same
+    // basis and nothing steps as pw crosses its threshold
+    vec3 g3=t1*gv.x+t2*gv.y;
+    gE=dot(g3,Eax); gN=dot(g3,Nax);
+  } else {
+    float rda=1.6/1024.0*PI;
+    rug=clamp(length(vec2(
+        baseElev(uvFromDir(normalize(sdir+Eax*rda)))-baseElev(uvFromDir(normalize(sdir-Eax*rda))),
+        baseElev(uvFromDir(normalize(sdir+Nax*rda)))-baseElev(uvFromDir(normalize(sdir-Nax*rda)))))/460.0,0.0,1.0);
+    z=elevAt(uv,rug);
+    float da=0.9/1024.0*PI;
+    gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
+    gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
   }
+  /* Sun direction, in the east/north basis the gradient now always uses. c is
+     t1 written in east/north coordinates, so blending toward (-0.55,0.55)
+     expressed through c rotates the sun out of the spinning local frame into
+     the world-fixed one as the pole is approached. Continuous everywhere, with
+     no antimeridian seam, because both frames vary continuously with longitude. */
+  vec2 c=vec2(dot(t1,Eax), dot(t1,Nax));
+  float _cl=length(c); c = _cl>1e-4 ? c/_cl : vec2(1.0,0.0);
+  vec2 Lh=mix(vec2(-0.55,0.55), -0.55*c + 0.55*vec2(-c.y,c.x), pwL);
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
   float Rf=rainAt(uv);
-  if(polemix>0.01){          // de-streak rainfall (drives vegetation colour) the same way
-    float rr=0.0;
-    for(int k=0;k<8;k++){
-      float az=(float(k)+0.5)/8.0*2.0*PI;
-      rr+=rainAt(uvFromDir(vec3(cyR*cos(az),syR,cyR*sin(az))));
-    }
-    Rf=mix(Rf, rr/8.0, polemix);
-  }
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
@@ -1357,8 +1398,11 @@ void main(){
     float fine=fbm3(sdir*23.0+7.0)-0.5;
     float fine2=fbm3(sdir*58.0+29.0)-0.5;
     float veget=clamp(h*1.3,0.18,1.0);
-    col*=1.0+(fine*0.14+fine2*0.07)*veget*polecap;
-    col.g+=fine*0.045*h*polecap;                 // patchy darker/lighter stands
+    // No polar fade on these: they are isotropic 3D noise sampled on the sphere,
+    // so they never had a pole problem -- fading them was pure loss of detail,
+    // and it is why the caps read blank next to the rest of the map.
+    col*=1.0+(fine*0.14+fine2*0.07)*veget;
+    col.g+=fine*0.045*h;                         // patchy darker/lighter stands
     float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
     col=mix(col, vec3(0.710,0.604,0.404), core*0.5);
     if(uVeg<0.999){
@@ -1387,21 +1431,32 @@ void main(){
        covers 0.6% of land against a real 0.5%, and perennial snow covers 2.4%.
        Three independent checks off one constant. See build/ice_audit.py. */
     float Tela=-5.0-7.0*arid;
-    float ela=clamp((T0-Tela)/0.0058, 300.0, 6200.0);
+    /* Era gate, applied as a FLOOR ON THE ELA rather than as a polar override.
+       The old code kept ice-free eras ice-free by swapping in a temperature-only
+       cover inside the polar cap -- which is precisely the hard-edged white disc
+       this round removed. But the gate itself was doing real work: the lapse
+       model puts a hothouse pole several degrees below freezing, so without it a
+       declared ice-free world grows a polar snowfield anyway.
+
+       Encode it physically instead. A polar CAP forms because it is cold at sea
+       level; a MOUNTAIN glacier forms because of altitude. So in an era that
+       carried no continental ice, hold the equilibrium line up off the lowlands
+       and let only genuine high ground glaciate. Smooth, global, latitude-blind
+       -- no ring, no disc, and Antarctic-style caps still form in an icehouse. */
+    float eraIce=smoothstep(-29.0,-14.0,uIceT);
+    float ela=clamp((T0-Tela)/0.0058, mix(1500.0,300.0,eraIce), 6200.0);
     // Ice flows below the ELA down valleys, so the margin is ragged, not a
     // clean contour; nudge it with noise and let it reach a little lower.
     float tongue=(fbm3(sdir*22.0+5.5)-0.5)*1.7;
-    float glac=clamp((zp-ela)/520.0+tongue*polecap+0.08,0.0,1.0);
-    /* Same pole problem as the snow: (zp-ela) keyed to the local, radially
-       smeared polar elevation painted the glacier as a white starburst. Inside
-       the polar cap replace it with a smooth, temperature-driven cover, so a
-       cold high pole gets an even ice cap instead of streaks. */
-    // Only where the ERA actually carries ice. In an ice-free hothouse (uIceT
-    // near the -30 sentinel) this is zero, so a warm-world pole like the
-    // Devonian gets no cap AND no streak, while a glacial era gets a smooth one.
-    float eraIce=smoothstep(-29.0,-14.0,uIceT);
-    float poleglac=smoothstep(-1.0,-7.0,T)*eraIce;
-    glac=mix(glac, poleglac, 1.0-polecap);
+    /* The glacier line is driven by the ELA everywhere, poles included. It used
+       to be REPLACED inside the polar cap by a smooth temperature-only cover,
+       because the smeared polar elevation painted (zp-ela) as a white starburst.
+       That substitution was itself a hard-edged white disc with a halo at the
+       blend ring -- exactly the artefact the user was seeing under polar ice.
+       The elevation is filtered properly now, so the ordinary ELA solve behaves
+       at the pole and the special case is gone: polar ice is real ice, on real
+       ground, shading like the rest of the map. */
+    float glac=clamp((zp-ela)/520.0+tongue+0.08,0.0,1.0);
     /* Perennial snow sits BELOW the glacier line. A glacier needs enough snow
        to survive the summer and then keep piling until it flows; snow only
        needs to survive the summer, which it manages a few hundred metres
@@ -1422,13 +1477,10 @@ void main(){
        that would hang snow on Andean peaks that are bare all year. */
     float snowline=ela-380.0;
     float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
-    float snow=clamp((zp-snowline)/400.0+tongue*0.6*polecap,0.0,1.0)*snowfall;
-    /* At the pole the elevation field's columns converge, so snow keyed to the
-       LOCAL elevation there paints the compressed radial terrain white in a
-       starburst. Within the polar cap, replace it with a smooth snow driven by
-       TEMPERATURE alone -- a cold pole gets an even cap, not a streak. */
-    float polesnow=snowfall*smoothstep(1.0,-4.0,T)*smoothstep(-29.0,-14.0,uIceT);
-    snow=mix(snow, polesnow, 1.0-polecap);
+    // Same story as the glacier above: the polar temperature-only substitution
+    // that used to sit here was a disc, so it is gone. Snow is the ELA band
+    // everywhere, and the filtered elevation keeps it clean at the pole.
+    float snow=clamp((zp-snowline)/400.0+tongue*0.6,0.0,1.0)*snowfall;
     snow=max(snow,glac);
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
@@ -1475,7 +1527,15 @@ void main(){
        Antarctica as bedrock with the ice stripped off and a third of that
        bedrock is below sea level -- judged as ocean it came out as teal
        lagoons scattered through the ice sheet. */
-    float shelf=smoothstep(-2400.0,-150.0,z);
+    /* "Shallow enough to ground an ice sheet on" is a real depth, and it is a
+       few hundred metres -- modern grounding lines sit between about 300 and
+       1000 m. Reaching to 2400 m swept in the crests of MID-OCEAN RIDGES, which
+       then took the (colder, harder) land-ice threshold and came out as
+       ice-free lanes tracing every ridge. Over the Arctic those lanes converge
+       on the pole and read as a starburst; the cause is the threshold, not the
+       projection. Held to a real grounding depth, ridges keep their pack ice
+       and Antarctica's below-sea-level bedrock still grounds as intended. */
+    float shelf=smoothstep(-1000.0,-120.0,z);
     float thr=mix(uSeaT, uIceT, shelf);
     float dS=thr-T;
     float nearS=exp(-(dS*dS)/(2.0*3.2*3.2));
@@ -1485,38 +1545,39 @@ void main(){
     col=mix(col, shelfCol, sa);
   }
 
-  /* POLE-STABLE relief normal. The old code stepped a fixed uv offset and
-     divided by cos(lat) to get a physical gradient -- arithmetically right,
-     visually disastrous: near a pole 1/cos(lat) blows up and multiplies the
-     compression noise in two adjacent texels into a radial starburst, so it had
-     to be faded to flat (which is why the poles lost all their relief detail).
-     Instead build a true tangent frame ON THE SPHERE (east/north about the +Y
-     pole axis) and read the field a fixed ARC apart in each direction. Nothing
-     is divided by cos(lat); the normal is well-defined at every latitude and
-     the terrain keeps its detail right up to the pole. The one residual pole
-     artefact is azimuthal -- pixels ringing the pole read very different
-     longitudes, so the EAST-WEST field gradient still wants to spoke -- so damp
-     JUST that component inside the cap, keeping the north-south relief and the
-     isotropic 3D grain that give the pole its texture. */
-  vec3 pax=vec3(0.0,1.0,0.0);
-  vec3 Eax=cross(pax, sdir); float _el=length(Eax);
-  Eax = _el>1e-4 ? Eax/_el : vec3(1.0,0.0,0.0);   // east tangent (degenerate only AT the pole)
-  vec3 Nax=cross(sdir, Eax);                        // north tangent
-  float da=0.9/1024.0*PI;                           // ~a texel-row of arc, matches the old off-pole step
-  float gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)
-          -elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
-  float gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)
-          -elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
-  /* The EAST-WEST gradient is what fans into radial spokes at the pole: near the
-     pole every pixel around the ring reads a different longitude, so the field's
-     (real but massively oversampled) azimuthal variation shows up as a pinwheel.
-     Fade that component out over a wide polar zone. The NORTH-SOUTH (radial)
-     gradient does NOT spoke -- it reads as smooth dome shading -- so keep it
-     almost to the pole. The isotropic 3D grain added below is never faded, so the
-     cap keeps a uniform texture and reads like any other ground. */
-  float eastfade=1.0-smoothstep(63.0,84.0,abs(lat));
-  float northfade=1.0-smoothstep(84.0,89.5,abs(lat));
-  vec3 nrm=normalize(vec3(-gE*eastfade, gN*northfade, 300.0));
+  /* SNOWBALL REFUGIA (Cryogenian only, gated by uSnowball).
+
+     At the Sturtian and Marinoan peaks the ice line reached the equator -- the
+     glacial deposits sit at equatorial paleolatitudes -- so the world above is
+     drawn frozen from pole to pole. But photosynthetic life demonstrably came
+     through both events, and the mechanisms the literature offers are narrow
+     and TROPICAL: leads of thin ice and open water kept open in the ablation
+     belt, and cryoconite meltwater ponds melted into the ice surface by dark
+     wind-blown dust, which on modern glaciers host cyanobacteria and algae.
+
+     So the refugia are drawn as what they were -- rare, thin and confined to
+     within about ten degrees of the equator -- rather than as a comfortable
+     open ocean. Everything poleward stays solid ice. */
+  if(uSnowball>0.01){
+    float trop=1.0-smoothstep(5.0,16.0,abs(lat));
+    float leadn=fbm3(sdir*6.0+13.0);
+    float lead=smoothstep(0.60,0.79,leadn)*trop*uSnowball;
+    // a lead over ocean is open water; over land it is wind-scoured bare rock
+    vec3 openc = z<0.0 ? mix(vec3(0.047,0.153,0.161), vec3(0.031,0.106,0.204), uSeaTint)
+                       : vec3(0.325,0.310,0.290);
+    col=mix(col, openc, clamp(lead,0.0,1.0)*0.85);
+    // cryoconite ponds: small dark meltwater pools ON the surviving ice
+    float pond=smoothstep(0.86,0.96, fbm3(sdir*30.0+7.0))*trop*uSnowball*(1.0-lead);
+    col=mix(col, vec3(0.075,0.290,0.345), clamp(pond,0.0,1.0)*0.80);
+  }
+
+  /* Relief normal. The gradient was already taken above, in a single pole-aware
+     pass -- filtered through the on-sphere disc inside the cap, plain
+     tangent-frame differences outside it, both in the east/north basis. No
+     component has to be faded out any more: the aliasing that used to force
+     that is gone at the source, so the poles keep their relief like anywhere
+     else, and the sun (Lh) rotates with the frame instead of spinning. */
+  vec3 nrm=normalize(vec3(-gE, gN, 300.0));
 
   if(z>=0.0){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -1628,22 +1689,26 @@ void main(){
       // Old crust is buried under sediment and smoother, but never glassy: the
       // deep abyss still carries fossil hills, so the floor keeps a base grain.
       float rough = mix(1.0, 0.34, smoothstep(0.06,0.72,crustAge));
-      float amp = 2.9 * rough * aniso * deepw * polecap;
+      // seafloor.py already fades the spreading vector out poleward of ~74 deg,
+      // so no second polar fade here -- it only flattened the polar sea floor.
+      float amp = 2.9 * rough * aniso * deepw;
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
       col *= 1.0 + sAcross*0.42*rough*aniso*deepw;
+      /* CRUSTAL AGE as tone. The ridge is already a genuine 2 km rise in the
+         depth field, but between 3 and 5 km down the depth ramp is compressed
+         and the whole spreading system read as one flat blue. Lightening the
+         youngest crust makes the age bands legible, so a reader can SEE where
+         the floor is being made and how it ages outward to the trenches --
+         which is the point of drawing plate tectonics under the ocean at all. */
+      col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.34*deepw;
     }
   }
-  /* Near the pole the depth-colour thresholds, applied to an azimuthally-smoothed
-     (radially symmetric) depth, would ring the ocean into a bullseye. Blend the
-     sea toward a single deep tone there so it reads as uniform open ocean rather
-     than concentric bands -- the honest choice at a point the projection cannot
-     resolve into real shelves anyway. */
-  if(z<0.0 && polemix>0.01){
-    vec3 deepPole=mix(vec3(0.05,0.15,0.16), vec3(0.03,0.11,0.20), uSeaTint);
-    col=mix(col, deepPole, polemix*0.85);
-  }
-  float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
+  /* (The polar ocean used to be flooded with a single deep tone here, to hide
+     the concentric bullseye that the latitude-ring average produced. With the
+     depth field filtered properly instead, the ordinary shelf/depth ramp is
+     correct at the pole too, so the sea keeps its real colour.) */
+  float hs=clamp(dot(nrm, normalize(vec3(Lh, 0.63))),0.0,1.0);
   // The base gradient is faded out into the cap and the pole is carried by the
   // isotropic grain, so the hillshade no longer has to be flattened to hide a
   // starburst -- leaving it intact is what keeps the pole's texture visible.
@@ -1782,6 +1847,7 @@ function initGL(){
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
+    uSnowball:{value:0},
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
   },vertexShader:VERT,fragmentShader:FRAG,
     extensions:{derivatives:true}});   // fwidth() for screen-space shoreline AA
@@ -3380,6 +3446,9 @@ function bindTextures(){
   mat.uniforms.uVeg.value=L('veg');
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
+  // Snowball intensity (render.snowball_at): 1 when the era's ice line reaches
+  // the equator. Gates the Cryogenian refugia — nothing else in the record does.
+  mat.uniforms.uSnowball.value=(A.snowball||0)+(((B.snowball||0)-(A.snowball||0))*t);
   mat.uniforms.uSchem.value=state.shade==='schem'?0.92:0;
   /* Sea colour slides from an ancient green ocean toward the modern blue. The
      research places the shift with the mid-Mesozoic rise of coccolithophores

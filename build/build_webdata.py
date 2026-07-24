@@ -943,6 +943,8 @@ def build_labels():
 
     composites = dict(getattr(features, "COMPOSITE_LABELS", {}))
     water_specs = dict(getattr(features, "COMPOSITE_WATER", {}))
+    # Basins the reconstruction closes: never snap these to leftover water.
+    NO_WATER_SNAP = {"Mediterranean (closing)", "Afro-European Belt"}
     composites.update(getattr(features, "COMPOSITE_BELTS", {}))
     n_comp = 0
     raw_comp, comp_window, comp_label = {}, {}, {}
@@ -1083,8 +1085,18 @@ def build_labels():
                     bx, by = base[near]
                 else:
                     bx, by = l["lon"], l["lat"]
-                w = nearest_water(key, bx, by, avoid=water_placed.get(key, ()),
-                                  prefer=prev_w)
+                # A basin the reconstruction is DESTROYING must not be dragged to
+                # whatever water is left over. "Mediterranean (closing)" is the
+                # case: Africa shuts it against Europe, so by the late future
+                # there is no Mediterranean water to snap to and the search
+                # walked the name out to the open Atlantic north of Europe --
+                # while its own card says it becomes a suture with mountains.
+                # For these, the crust position IS the answer; keep it there.
+                if l["n"] in NO_WATER_SNAP:
+                    w = None
+                else:
+                    w = nearest_water(key, bx, by, avoid=water_placed.get(key, ()),
+                                      prefer=prev_w)
                 if w is None:
                     out_tr.append([key, round(bx, 1), round(by, 1)])
                 else:

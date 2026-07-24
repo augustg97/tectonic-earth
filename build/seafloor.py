@@ -40,6 +40,119 @@ import numpy as np
 RIDGE_DEPTH = 2600.0        # m: crest of a mid-ocean ridge
 DEPTH_PER_SQRT_MYR = 350.0  # m per sqrt(Myr): how fast it deepens with age
 MAX_ABYSS = 6000.0
+# Half-spreading rate. Real ridges run 10-80 mm/yr; 30 mm/yr (= 30 km/Myr) is a
+# fair global mean and puts the oldest surviving crust near 180 Myr, which is
+# what the ocean basins actually show.
+SPREAD_KM_PER_MYR = 30.0
+MAX_CRUST_AGE = 190.0       # Myr: older than this and it has been subducted
+
+_PLATES_CACHE = None
+_GEOM_CACHE = {}
+
+
+def _load_plates():
+    """The resolved plate topologies, once. Boundaries are already classified
+    into ridge / trench / transform by build_plates_gplates.py, straight from the
+    Merdith model's own feature types -- so this is the reconstruction's opinion
+    of where crust was being made and destroyed, not an inference."""
+    global _PLATES_CACHE
+    if _PLATES_CACHE is None:
+        import json, os
+        for p in ("../web/plates_time.json", "web/plates_time.json"):
+            if os.path.exists(p):
+                with open(p) as f:
+                    _PLATES_CACHE = json.load(f)
+                break
+        else:
+            _PLATES_CACHE = False
+    return _PLATES_CACHE or None
+
+
+def _densify(polys, step_deg=0.35):
+    """Polylines -> 3D unit vectors, resampled fine enough that nearest-VERTEX
+    distance is a good stand-in for nearest-SEGMENT distance."""
+    pts, ids = [], []
+    for i, poly in enumerate(polys):
+        prev = None
+        for lon, lat in poly:
+            if prev is not None:
+                dlon = (lon - prev[0] + 180.0) % 360.0 - 180.0
+                d = math.hypot(dlon * math.cos(math.radians((lat + prev[1]) * 0.5)),
+                               lat - prev[1])
+                n = max(1, int(d / step_deg))
+                for k in range(1, n):
+                    t = k / n
+                    pts.append((prev[0] + dlon * t, prev[1] + (lat - prev[1]) * t))
+                    ids.append(i)
+            pts.append((lon, lat)); ids.append(i)
+            prev = (lon, lat)
+    if not pts:
+        return None, None
+    a = np.radians(np.asarray(pts, np.float64))
+    lo, la = a[:, 0], a[:, 1]
+    xyz = np.stack([np.cos(la) * np.cos(lo), np.sin(la), np.cos(la) * np.sin(lo)], 1)
+    return xyz, np.asarray(ids, np.int32)
+
+
+def _sphere_distance(xyz, ids, h, w):
+    """Great-circle distance (degrees) from every grid cell to the nearest of
+    `xyz`, plus which polyline that was. Done as a 3D nearest-neighbour query on
+    the unit sphere, so it is correct AT THE POLES -- a 2D distance transform on
+    a lat/lon raster is not, because a degree of longitude is not a degree of
+    ground."""
+    from scipy.spatial import cKDTree
+    lat = np.radians(90.0 - (np.arange(h) + 0.5) / h * 180.0)
+    lon = np.radians((np.arange(w) + 0.5) / w * 360.0 - 180.0)
+    clat = np.cos(lat)[:, None]
+    gx = (clat * np.cos(lon)[None, :]).ravel()
+    gy = np.repeat(np.sin(lat), w)
+    gz = (clat * np.sin(lon)[None, :]).ravel()
+    d, i = cKDTree(xyz).query(np.stack([gx, gy, gz], 1), k=1)
+    ang = np.degrees(2.0 * np.arcsin(np.clip(d * 0.5, 0.0, 1.0)))
+    return ang.reshape(h, w).astype(np.float32), ids[i].reshape(h, w)
+
+
+def _ridge_geometry(age, h=512, w=1024):
+    """Ridge-distance / segment-id / trench-distance fields for this age.
+
+    Computed at half resolution and upsampled: these are smooth, basin-scale
+    fields, so the detail costs nothing and the nearest-neighbour query stays
+    fast enough to run over every keyframe.
+    """
+    key = round(float(age))
+    if key in _GEOM_CACHE:
+        return _GEOM_CACHE[key]
+    d = _load_plates()
+    if not d:
+        _GEOM_CACHE[key] = None
+        return None
+    ages = sorted(int(k) for k in d.keys())
+    near = min(ages, key=lambda a: abs(a - key))
+    frame = d[str(near)]
+    ridge = [b["p"] for b in frame.get("b", []) if b.get("c") == "ridge" and len(b.get("p", [])) > 1]
+    trench = [b["p"] for b in frame.get("b", []) if b.get("c") == "trench" and len(b.get("p", [])) > 1]
+
+    rxyz, rids = _densify(ridge)
+    if rxyz is None or len(rxyz) < 8:
+        _GEOM_CACHE[key] = None
+        return None
+    rdist, rid = _sphere_distance(rxyz, rids, h, w)
+
+    tdist = None
+    txyz, tids = _densify(trench)
+    if txyz is not None and len(txyz) >= 8:
+        tdist, _ = _sphere_distance(txyz, tids, h, w)
+
+    out = {"ridge": (rdist, rid, len(rxyz) >= 200), "trench": tdist}
+    _GEOM_CACHE[key] = out
+    return out
+
+
+def _upsample(a, h, w, order=1):
+    from scipy.ndimage import zoom
+    if a.shape == (h, w):
+        return a
+    return zoom(a, (h / a.shape[0], w / a.shape[1]), order=order)
 
 
 def _blob(LON, LAT, plon, plat, radius_km):
@@ -221,30 +334,102 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
     polefade = np.clip((74.0 - np.abs(lat1d)) / 14.0, 0.0, 1.0)[:, None]
 
     if sea.any():
-        # regional depth: smooth the floor over SEA ONLY (normalised convolution),
-        # so a coastline step does not masquerade as a huge slope and ring every
-        # continent with fabric. ~9-cell blur keeps basin-scale tilt, drops bumps.
-        seaf = sea.astype(np.float32)
-        dep = np.where(sea, out, 0.0).astype(np.float32)
-        num = _nd.gaussian_filter(dep, 9.0)
-        den = _nd.gaussian_filter(seaf, 9.0)
-        reg = num / np.maximum(den, 1e-3)
-        gy, gx = np.gradient(reg)
-        coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
-        east = gx / coslat
-        north = -gy                                   # row index increases south
-        slope = np.hypot(east, north)                 # metres of depth per cell
-        conf = np.clip(slope / 11.0, 0.0, 1.0) * polefade
-        inv = 1.0 / (slope + 1e-6)
-        u = east * inv
-        v = north * inv
-        # roughness age straight from depth: crest depth -> 0 (rough), abyss -> 1
-        # (smooth). Half-space cooling makes deep == old == buried, so this needs
-        # no separate age model and tracks the real basins on every keyframe.
-        age01 = np.clip((-out - RIDGE_DEPTH) / (MAX_ABYSS - RIDGE_DEPTH), 0.0, 1.0)
-        ofield[..., 0] = np.where(sea, age01, 1.0)
-        ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
-        ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
+        geom = _ridge_geometry(age)
+        if geom is not None:
+            # ---- REAL PLATE TECTONICS -------------------------------------
+            # Crustal age from distance to the age's OWN resolved spreading
+            # ridges (Merdith topologies via pyGPlates), not a proxy. Everything
+            # below follows from it, so the floor genuinely opens at new rifts,
+            # ages outward, and founders into the trenches -- and it all moves
+            # because the ridge geometry is re-resolved at every keyframe.
+            _rd, _rid, ridge_ok = geom["ridge"]
+            dist_deg = _upsample(_rd, h, w, order=1)
+            seg_id = _upsample(_rid.astype(np.float32), h, w, order=0)
+            age_myr = np.clip(dist_deg * 111.19 / SPREAD_KM_PER_MYR, 0.0, MAX_CRUST_AGE)
+            model_depth = -(RIDGE_DEPTH + DEPTH_PER_SQRT_MYR * np.sqrt(age_myr))
+            model_depth = np.clip(model_depth, -MAX_ABYSS, -RIDGE_DEPTH)
+
+            # Blend over deep ocean only, leaving shelves and any real surveyed
+            # bathymetry (the present day) largely alone.
+            deep = np.clip((-out - 2200.0) / 2200.0, 0.0, 1.0) * sea * polefade
+            wgt = deep * (0.72 if ridge_ok else 0.35)
+            out = out * (1.0 - wgt) + model_depth * wgt
+
+            # SPREADING DIRECTION = the gradient of the ridge-distance field. It
+            # points straight away from the ridge that made this crust, which is
+            # the direction the plate travelled, so the shader's abyssal-hill
+            # fabric lies at right angles to it -- parallel to the ridge axis, as
+            # real abyssal hills do.
+            sm = _nd.gaussian_filter(dist_deg, 2.0)
+            gy, gx = np.gradient(sm)
+            coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
+            east = gx / coslat
+            north = -gy                                # row index increases south
+            mag = np.hypot(east, north) + 1e-9
+            u, v = east / mag, north / mag
+            conf = np.clip(mag / (0.35 * np.median(mag[sea]) + 1e-6), 0.0, 1.0) * polefade
+
+            relief = np.zeros_like(out)
+
+            # AXIAL VALLEY. A slow ridge carries a rift valley a few tens of km
+            # wide down its crest; the broad swell either side is already there,
+            # because it IS the age-depth curve above.
+            relief -= np.exp(-(dist_deg / 0.55) ** 2) * 900.0
+
+            # FRACTURE ZONES. Crust either side of a transform came off DIFFERENT
+            # ridge segments, so the identity of the nearest ridge segment changes
+            # across one -- and that discontinuity traces the fracture zone for
+            # free, running perpendicular to the ridge exactly as it should.
+            sid = _nd.gaussian_filter(seg_id.astype(np.float32), 1.0)
+            sgy, sgx = np.gradient(sid)
+            jump = np.hypot(sgx, sgy)
+            if jump[sea].any():
+                thr = np.percentile(jump[sea], 97.0)
+                fz = np.clip((jump - thr) / (thr + 1e-6), 0.0, 1.0)
+                relief -= _nd.gaussian_filter(fz, 1.2) * 700.0
+
+            # TRENCHES. Where the model says crust is being consumed, cut the
+            # deepest features on Earth -- narrow, arcuate, and only on the ocean
+            # side. ~100 km wide is 5 cells here, so this is genuinely resolvable.
+            tdist = geom["trench"]
+            if tdist is not None:
+                tdist = _upsample(tdist, h, w, order=1)
+                trough = np.exp(-(tdist / 0.75) ** 2)
+                deep_ok = np.clip((-out - 1500.0) / 2000.0, 0.0, 1.0)
+                relief -= trough * deep_ok * 3400.0
+
+            # SEAMOUNTS. Sparse volcanic cones, taller and denser on young crust.
+            rng = np.random.default_rng(11)
+            smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)
+            smt = np.clip((smt - 0.70) / 0.30, 0.0, 1.0) ** 2
+            relief += _nd.gaussian_filter(smt, 1.0) * 1100.0 * np.clip(
+                1.1 - age_myr / 90.0, 0.12, 1.0)
+
+            relief *= polefade
+            out = out + np.where(sea & (out < -900.0), relief, 0.0)
+            out = np.clip(out, -MAX_ABYSS, None)
+
+            # R is the SEDIMENT-BURIAL age: young crust carries sharp abyssal
+            # hills, old crust is smoothed under its own sediment blanket.
+            ofield[..., 0] = np.where(sea, np.clip(age_myr / MAX_CRUST_AGE, 0.0, 1.0), 1.0)
+            ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
+            ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
+        else:
+            # ---- fallback: no resolved topology for this age ----------------
+            # Regional depth gradient as a stand-in for the spreading direction.
+            seaf = sea.astype(np.float32)
+            dep = np.where(sea, out, 0.0).astype(np.float32)
+            reg = _nd.gaussian_filter(dep, 9.0) / np.maximum(_nd.gaussian_filter(seaf, 9.0), 1e-3)
+            gy, gx = np.gradient(reg)
+            coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
+            east, north = gx / coslat, -gy
+            slope = np.hypot(east, north)
+            conf = np.clip(slope / 11.0, 0.0, 1.0) * polefade
+            inv = 1.0 / (slope + 1e-6)
+            age01 = np.clip((-out - RIDGE_DEPTH) / (MAX_ABYSS - RIDGE_DEPTH), 0.0, 1.0)
+            ofield[..., 0] = np.where(sea, age01, 1.0)
+            ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * east * inv * conf, 0.0, 1.0), 0.5)
+            ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * north * inv * conf, 0.0, 1.0), 0.5)
 
     # plateaus and microcontinents ------------------------------------
     if PLATEAUS:

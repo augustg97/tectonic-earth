@@ -79,14 +79,25 @@ CLIMATE = [
     # non-glacial interval in between. Modelling 650-700 Ma as one long
     # icehouse -- as this table used to -- gets both the timing and the
     # structure wrong.
+    # These were still drawn as strong POLAR icehouses -- ice lines of 18-28
+    # degrees -- which understates what a snowball is. The Cryogenian glacial
+    # deposits sit at equatorial paleolatitudes (the Chuar Group constrains the
+    # eastern USA to ~10 deg S when glaciated), and the state, once entered, is
+    # global: ice-albedo runaway takes the line to the tropics and holds it
+    # there for the duration. So the line runs to the equator through the core
+    # of each event, deepest mid-Sturtian, easing only at onset and termination.
+    # The narrow tropical refugia the record requires -- leads of thin ice, open
+    # water, and cryoconite meltwater ponds on the ablating equatorial ice --
+    # are drawn in the shader, gated on `snowball` in the manifest.
     (628,  -0.30, 62,    62,   0.00, 0.46),  # thawed; cap carbonates worldwide
-    (637,  -4.20, 28,    28,   0.00, 0.45),  # Marinoan snowball (ends 635.5)
-    (648,  -4.60, 24,    24,   0.00, 0.45),  # Marinoan, deepest
-    (653,  -1.20, 48,    48,   0.00, 0.46),  # Marinoan onset (~650; poorly constrained)
+    (637,  -4.20, 12,    12,   0.00, 0.45),  # Marinoan snowball (ends 635.5)
+    (648,  -4.60,  4,     4,   0.00, 0.45),  # Marinoan, deepest
+    (653,  -1.20, 38,    38,   0.00, 0.46),  # Marinoan onset (~650; poorly constrained)
     (659,  -0.35, 60,    60,   0.00, 0.50),  # non-glacial interlude
-    (665,  -4.40, 25,    25,   0.00, 0.45),  # Sturtian (ends 661.7)
-    (690,  -6.00, 18,    18,   0.00, 0.45),  # Sturtian, deepest; ice at the equator
-    (712,  -5.20, 22,    22,   0.00, 0.45),  # Sturtian onset 717.4
+    (665,  -4.40, 10,    10,   0.00, 0.45),  # Sturtian (ends 661.7)
+    (690,  -6.00,  1,     1,   0.00, 0.45),  # Sturtian, deepest: ice AT the equator
+    (700,  -5.80,  2,     2,   0.00, 0.45),  # Sturtian core, still global
+    (712,  -5.20,  8,     8,   0.00, 0.45),  # Sturtian onset 717.4
     (721,  -0.50, 58,    58,   0.00, 0.50),  # Franklin LIP erupting; the freeze follows
     (735,   0.05, None,  None, 0.00, 0.53),
     # No glaciation at ~750 Ma: the "Kaigas" event is now rejected -- its type

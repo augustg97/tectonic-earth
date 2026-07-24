@@ -26,6 +26,11 @@ STEP = bf.STEP
 def save_eo(age, tag, Zhi):
     mot = bf._load_motion(age, tag)
     Z2, ofield = bf.SF.apply(Zhi, age, reconstructor=bf._sf_reconstructor(), motion=mot)
+    # Same polar band-limiting as build_fields.export -- this path must not
+    # diverge from it, or a reskin would quietly reintroduce the pole starburst.
+    Z2 = bf.polar_lowpass(Z2)
+    for _c in range(ofield.shape[2]):
+        ofield[..., _c] = bf.polar_lowpass(ofield[..., _c])
     e = bf._gray(bf.enc_elev(bf.smooth_bathymetry(Z2)))
     o = Image.fromarray((np.clip(ofield, 0, 1) * 255 + 0.5).astype(np.uint8)
                         ).resize((OCEAN_W, OCEAN_H), Image.BILINEAR)

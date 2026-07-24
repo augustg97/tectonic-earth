@@ -399,8 +399,33 @@ def glaciation(cl):
     # serves both poles and the equatorward line has to win -- otherwise an era
     # with ice at one pole only would lose it.
     line = min(lines)
-    ice_T = float(zonal_T(line, cl["temp"])) + MARGIN_OFFSET
+    sb = snowball_at(cl)
+    # MARGIN_OFFSET calibrates an ORDINARY ice sheet, whose margin sits several
+    # degrees colder than the nominal ice line. A snowball does not work that
+    # way: the ice-albedo runaway carries the sheet past its own equilibrium
+    # margin and freezes the ocean over completely. Keeping the offset left a
+    # bare tropical belt ~12 degrees wide that the equatorial glacial deposits
+    # rule out, so fade it out as the state goes global and add a little
+    # headroom. The narrow refugia that DID exist are drawn in the shader.
+    ice_T = float(zonal_T(line, cl["temp"])) + MARGIN_OFFSET * (1.0 - sb) + 2.0 * sb
     return ice_T, ice_T + 3.0
+
+
+def snowball_at(cl):
+    """How completely frozen this era is, 0..1, from the ice line alone.
+
+    A snowball is not just a strong icehouse: the ice-albedo runaway carries the
+    line into the tropics, and the interesting consequences -- narrow refugia of
+    thin ice and open water, cryoconite meltwater ponds on the ablating
+    equatorial ice -- only exist in that state. 1 when the line is at the
+    equator, 0 by 25 degrees, which keeps every ordinary icehouse (the Hirnantian
+    at 64, the Pleistocene at 72) firmly at zero.
+    """
+    lines = [x for x in (cl["iceN"], cl["iceS"]) if x is not None]
+    if not lines:
+        return 0.0
+    line = min(lines)
+    return float(max(0.0, min(1.0, (25.0 - line) / 20.0)))
 
 
 def render(z, age, out_h=512, out_w=1024, hillshade=True):

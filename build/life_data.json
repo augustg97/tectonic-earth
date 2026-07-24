@@ -5971,6 +5971,36 @@
      ]
     ],
     "shared": "The Nothofagus-marsupial forest links Eocene Antarctica to South America and Australia across Gondwana's last land bridges."
+   },
+   {
+    "a0": 0,
+    "a1": 15,
+    "taxa": [
+     [
+      "Aptenodytes forsteri",
+      "species",
+      "air",
+      "The emperor penguin, the only bird that breeds through the Antarctic winter."
+     ],
+     [
+      "Deschampsia antarctica",
+      "species",
+      "land",
+      "Antarctic hairgrass, one of just two flowering plants on the continent."
+     ],
+     [
+      "Belgica antarctica",
+      "species",
+      "land",
+      "A flightless midge, the largest wholly terrestrial animal on the continent."
+     ],
+     [
+      "Umbilicaria",
+      "genus",
+      "land",
+      "Rock-clinging lichens, the dominant life of ice-free nunataks."
+     ]
+    ]
    }
   ],
   "India": [
@@ -8309,6 +8339,810 @@
       "genus",
       "air",
       "The darter, a spear-fishing water bird, already present in the Miocene wetland and still hunting the Amazon today."
+     ]
+    ]
+   }
+  ],
+  "Amazon Rainforest": [
+   {
+    "a0": 0,
+    "a1": 10,
+    "taxa": [
+     [
+      "Ceiba pentandra",
+      "species",
+      "land",
+      "The kapok, an emergent tree standing above the canopy with buttress roots metres tall."
+     ],
+     [
+      "Panthera onca",
+      "species",
+      "land",
+      "The jaguar, the Americas' largest cat and the forest's apex predator."
+     ],
+     [
+      "Arapaima gigas",
+      "species",
+      "fresh",
+      "One of the world's largest freshwater fish, an air-breather in oxygen-poor floodplain water."
+     ],
+     [
+      "Inia geoffrensis",
+      "species",
+      "fresh",
+      "The Amazon river dolphin, pink-skinned and flexible enough to hunt in flooded forest."
+     ],
+     [
+      "Eciton burchellii",
+      "species",
+      "land",
+      "Army ants whose swarm raids drive the understorey's whole insect economy."
+     ],
+     [
+      "Bromeliaceae",
+      "family",
+      "land",
+      "Epiphytic bromeliads holding tank-pools in the canopy, each its own small ecosystem."
+     ]
+    ]
+   }
+  ],
+  "Guiana Shield": [
+   {
+    "a0": 0,
+    "a1": 25,
+    "taxa": [
+     [
+      "Rapateaceae",
+      "family",
+      "land",
+      "An ancient plant family largely confined to the shield, radiating on the tepui summits."
+     ],
+     [
+      "Oreophrynella",
+      "genus",
+      "land",
+      "Pebble toads endemic to individual tepui tops, which roll away from predators."
+     ],
+     [
+      "Heliamphora",
+      "genus",
+      "land",
+      "Sun-pitcher plants trapping insects on nutrient-starved sandstone summits."
+     ],
+     [
+      "Harpia harpyja",
+      "species",
+      "air",
+      "The harpy eagle, taking sloths and monkeys out of the canopy."
+     ]
+    ]
+   }
+  ],
+  "Brazilian Shield": [
+   {
+    "a0": 0,
+    "a1": 25,
+    "taxa": [
+     [
+      "Cerrado flora",
+      "class",
+      "land",
+      "Fire-adapted savanna woodland with thick corky bark and vast root systems."
+     ],
+     [
+      "Myrmecophaga tridactyla",
+      "species",
+      "land",
+      "The giant anteater, a specialist on the shield's termite mounds."
+     ],
+     [
+      "Chrysocyon brachyurus",
+      "species",
+      "land",
+      "The maned wolf, long-legged for seeing over cerrado grass."
+     ]
+    ]
+   }
+  ],
+  "Andes": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "taxa": [
+     [
+      "Vultur gryphus",
+      "species",
+      "air",
+      "The Andean condor, riding ridge updraughts on a three-metre wingspan."
+     ],
+     [
+      "Vicugna vicugna",
+      "species",
+      "land",
+      "The vicuna, grazing the altiplano on the finest wool of any mammal."
+     ],
+     [
+      "Polylepis",
+      "genus",
+      "land",
+      "Paper-bark trees forming the highest true forests on Earth, above 4,000 m."
+     ],
+     [
+      "Telmatobius",
+      "genus",
+      "fresh",
+      "Aquatic water frogs breathing through skin folds in cold high-altitude lakes."
+     ]
+    ]
+   }
+  ],
+  "Patagonian Batholith": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Nothofagus",
+      "genus",
+      "land",
+      "Southern beech, the signature Gondwanan tree of the temperate south."
+     ],
+     [
+      "Hippocamelus bisulcus",
+      "species",
+      "land",
+      "The huemul, a stocky Andean deer of the southern forests."
+     ]
+    ]
+   }
+  ],
+  "African Savanna": [
+   {
+    "a0": 0,
+    "a1": 8,
+    "taxa": [
+     [
+      "Loxodonta africana",
+      "species",
+      "land",
+      "The African bush elephant, whose feeding keeps the savanna from closing to woodland."
+     ],
+     [
+      "Connochaetes taurinus",
+      "species",
+      "land",
+      "The blue wildebeest, whose migration is the largest surviving land-mammal movement."
+     ],
+     [
+      "Panthera leo",
+      "species",
+      "land",
+      "The lion, the only truly social big cat."
+     ],
+     [
+      "Acacia",
+      "genus",
+      "land",
+      "Flat-topped thorn trees, browsed to their characteristic silhouette by giraffe."
+     ],
+     [
+      "Poaceae (C4)",
+      "family",
+      "land",
+      "C4 grasses, whose Miocene spread built this biome and reshaped grazing teeth."
+     ]
+    ]
+   }
+  ],
+  "Congo Basin": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Gorilla gorilla",
+      "species",
+      "land",
+      "The western gorilla, a folivore of dense secondary forest."
+     ],
+     [
+      "Okapia johnstoni",
+      "species",
+      "land",
+      "The okapi, the giraffe family's last forest-dwelling member, endemic here."
+     ],
+     [
+      "Raphia",
+      "genus",
+      "land",
+      "Swamp palms bearing the longest leaves of any plant, along the flooded interior."
+     ],
+     [
+      "Protopterus",
+      "genus",
+      "fresh",
+      "African lungfish, surviving the dry season encased in mud."
+     ]
+    ]
+   }
+  ],
+  "Sahara": [
+   {
+    "a0": 0,
+    "a1": 7,
+    "taxa": [
+     [
+      "Addax nasomaculatus",
+      "species",
+      "land",
+      "The addax, an antelope that can live without drinking free water."
+     ],
+     [
+      "Fennecus zerda",
+      "species",
+      "land",
+      "The fennec fox, radiating heat through outsized ears."
+     ],
+     [
+      "Tamarix",
+      "genus",
+      "land",
+      "Salt-excreting shrubs holding the fringes of oases and wadis."
+     ],
+     [
+      "Cyanobacterial crust",
+      "class",
+      "land",
+      "Biological soil crust binding sand between rains, the desert's living skin."
+     ]
+    ]
+   }
+  ],
+  "Namib": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "taxa": [
+     [
+      "Welwitschia mirabilis",
+      "species",
+      "land",
+      "A two-leaved gymnosperm that lives a thousand years on fog alone."
+     ],
+     [
+      "Onymacris unguicularis",
+      "species",
+      "land",
+      "The fog-basking beetle, standing head-down to drink condensation off its own back."
+     ],
+     [
+      "Oryx gazella",
+      "species",
+      "land",
+      "The gemsbok, tolerating body temperatures that would kill most mammals."
+     ]
+    ]
+   }
+  ],
+  "Ethiopian Highlands": [
+   {
+    "a0": 0,
+    "a1": 25,
+    "taxa": [
+     [
+      "Theropithecus gelada",
+      "species",
+      "land",
+      "The gelada, the last grass-eating primate, endemic to these escarpments."
+     ],
+     [
+      "Canis simensis",
+      "species",
+      "land",
+      "The Ethiopian wolf, Africa's rarest carnivore, hunting Afroalpine rodents."
+     ],
+     [
+      "Lobelia rhynchopetalum",
+      "species",
+      "land",
+      "Giant rosette lobelias of the Afroalpine moorland."
+     ]
+    ]
+   }
+  ],
+  "Okavango Rift": [
+   {
+    "a0": 0,
+    "a1": 3,
+    "taxa": [
+     [
+      "Hippopotamus amphibius",
+      "species",
+      "land",
+      "Hippos, whose channels through papyrus keep the inland delta's waterways open."
+     ],
+     [
+      "Cyperus papyrus",
+      "species",
+      "fresh",
+      "Papyrus sedge, the delta's dominant emergent plant."
+     ],
+     [
+      "Balaeniceps rex",
+      "species",
+      "air",
+      "The shoebill, ambushing lungfish in papyrus swamp."
+     ]
+    ]
+   }
+  ],
+  "Hoggar Massif": [
+   {
+    "a0": 0,
+    "a1": 10,
+    "taxa": [
+     [
+      "Olea laperrinei",
+      "species",
+      "land",
+      "The Laperrine's olive, a relict of wetter Sahara clinging to the massif's heights."
+     ],
+     [
+      "Acinonyx jubatus hecki",
+      "species",
+      "land",
+      "The critically endangered Saharan cheetah, ranging vast arid territories."
+     ]
+    ]
+   }
+  ],
+  "Himalaya": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Panthera uncia",
+      "species",
+      "land",
+      "The snow leopard, hunting blue sheep across cliff and scree."
+     ],
+     [
+      "Rhododendron",
+      "genus",
+      "land",
+      "Rhododendron forests banding the wet southern slopes by altitude."
+     ],
+     [
+      "Gyps himalayensis",
+      "species",
+      "air",
+      "The Himalayan griffon, soaring the highest of any vulture."
+     ],
+     [
+      "Pseudois nayaur",
+      "species",
+      "land",
+      "The bharal, the snow leopard's principal prey."
+     ]
+    ]
+   }
+  ],
+  "Tibetan Alpine Tundra": [
+   {
+    "a0": 0,
+    "a1": 10,
+    "taxa": [
+     [
+      "Bos mutus",
+      "species",
+      "land",
+      "The wild yak, dense-coated for the plateau's thin cold air."
+     ],
+     [
+      "Pantholops hodgsonii",
+      "species",
+      "land",
+      "The chiru, migrating hundreds of km across the plateau to calve."
+     ],
+     [
+      "Kobresia",
+      "genus",
+      "land",
+      "Sedge turf forming the plateau's vast alpine meadow."
+     ]
+    ]
+   }
+  ],
+  "Eurasian Steppe": [
+   {
+    "a0": 0,
+    "a1": 12,
+    "taxa": [
+     [
+      "Saiga tatarica",
+      "species",
+      "land",
+      "The saiga, its bulbous nose filtering dust and warming winter air."
+     ],
+     [
+      "Equus ferus",
+      "species",
+      "land",
+      "The wild horse, the steppe's defining grazer."
+     ],
+     [
+      "Stipa",
+      "genus",
+      "land",
+      "Feather grasses whose awns drill their own seed into the soil."
+     ],
+     [
+      "Marmota bobak",
+      "species",
+      "land",
+      "The bobak marmot, whose burrowing turns over the steppe soil."
+     ]
+    ]
+   }
+  ],
+  "Alps": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Capra ibex",
+      "species",
+      "land",
+      "The Alpine ibex, grazing near-vertical rock."
+     ],
+     [
+      "Larix decidua",
+      "species",
+      "land",
+      "The European larch, a deciduous conifer at the timberline."
+     ],
+     [
+      "Marmota marmota",
+      "species",
+      "land",
+      "The Alpine marmot, hibernating eight months of the year."
+     ]
+    ]
+   }
+  ],
+  "Ural Mountains": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Picea obovata",
+      "species",
+      "land",
+      "Siberian spruce, the taiga's dominant tree across the range."
+     ],
+     [
+      "Gulo gulo",
+      "species",
+      "land",
+      "The wolverine, ranging the boreal forest and tundra edge."
+     ]
+    ]
+   }
+  ],
+  "Taklamakan": [
+   {
+    "a0": 0,
+    "a1": 5,
+    "taxa": [
+     [
+      "Populus euphratica",
+      "species",
+      "land",
+      "The desert poplar, surviving on groundwater along dry river courses."
+     ],
+     [
+      "Camelus ferus",
+      "species",
+      "land",
+      "The wild Bactrian camel, drinking salt water no other large mammal tolerates."
+     ]
+    ]
+   }
+  ],
+  "Caledonides": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Calluna vulgaris",
+      "species",
+      "land",
+      "Heather moorland covering the worn roots of the old range."
+     ],
+     [
+      "Rangifer tarandus",
+      "species",
+      "land",
+      "Reindeer, grazing lichen on the Scandinavian uplands."
+     ]
+    ]
+   }
+  ],
+  "Verkhoyansk Belt": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Larix gmelinii",
+      "species",
+      "land",
+      "Dahurian larch, the only tree that forms forest on continuous permafrost."
+     ],
+     [
+      "Ovis nivicola",
+      "species",
+      "land",
+      "The snow sheep, isolated on the range's high plateaus."
+     ]
+    ]
+   }
+  ],
+  "Great Plains": [
+   {
+    "a0": 0,
+    "a1": 12,
+    "taxa": [
+     [
+      "Bison bison",
+      "species",
+      "land",
+      "The American bison, whose herds shaped the whole grassland before 1870."
+     ],
+     [
+      "Cynomys ludovicianus",
+      "species",
+      "land",
+      "Black-tailed prairie dogs, whose towns are the grassland's keystone."
+     ],
+     [
+      "Bouteloua gracilis",
+      "species",
+      "land",
+      "Blue grama, the shortgrass prairie's dominant sod-former."
+     ],
+     [
+      "Antilocapra americana",
+      "species",
+      "land",
+      "The pronghorn, still outrunning a predator that went extinct 12,000 years ago."
+     ]
+    ]
+   }
+  ],
+  "Rocky Mountains": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Ursus arctos horribilis",
+      "species",
+      "land",
+      "The grizzly, ranging from valley floor to alpine tundra."
+     ],
+     [
+      "Pinus contorta",
+      "species",
+      "land",
+      "Lodgepole pine, whose cones open only in fire."
+     ],
+     [
+      "Oreamnos americanus",
+      "species",
+      "land",
+      "The mountain goat, on cliffs no predator can follow."
+     ]
+    ]
+   }
+  ],
+  "Canadian Shield": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Picea mariana",
+      "species",
+      "land",
+      "Black spruce, dominating the shield's cold wet muskeg."
+     ],
+     [
+      "Alces alces",
+      "species",
+      "land",
+      "The moose, browsing willow along shield lakes and bogs."
+     ],
+     [
+      "Gavia immer",
+      "species",
+      "air",
+      "The common loon, nesting on the shield's countless glacial lakes."
+     ]
+    ]
+   }
+  ],
+  "Cordillera": [
+   {
+    "a0": 0,
+    "a1": 25,
+    "taxa": [
+     [
+      "Sequoia sempervirens",
+      "species",
+      "land",
+      "The coast redwood, the tallest tree on Earth, in the fog belt."
+     ],
+     [
+      "Canis lupus",
+      "species",
+      "land",
+      "The grey wolf, ranging the whole western mountain system."
+     ]
+    ]
+   }
+  ],
+  "Appalachians": [
+   {
+    "a0": 0,
+    "a1": 25,
+    "taxa": [
+     [
+      "Plethodontidae",
+      "family",
+      "land",
+      "Lungless salamanders -- these mountains hold the greatest diversity anywhere."
+     ],
+     [
+      "Quercus",
+      "genus",
+      "land",
+      "Oaks of the eastern deciduous forest, one of the richest temperate floras."
+     ],
+     [
+      "Ursus americanus",
+      "species",
+      "land",
+      "The American black bear, the range's largest surviving carnivore."
+     ]
+    ]
+   }
+  ],
+  "Nearctic Tundra": [
+   {
+    "a0": 0,
+    "a1": 3,
+    "taxa": [
+     [
+      "Rangifer tarandus",
+      "species",
+      "land",
+      "Caribou, migrating between taiga wintering ground and tundra calving ground."
+     ],
+     [
+      "Ovibos moschatus",
+      "species",
+      "land",
+      "The muskox, a survivor of the Pleistocene mammoth steppe."
+     ],
+     [
+      "Salix arctica",
+      "species",
+      "land",
+      "Arctic willow, a centuries-old tree growing flat against the ground."
+     ]
+    ]
+   }
+  ],
+  "Arctic Tundra": [
+   {
+    "a0": 0,
+    "a1": 3,
+    "taxa": [
+     [
+      "Vulpes lagopus",
+      "species",
+      "land",
+      "The Arctic fox, changing coat colour with the season."
+     ],
+     [
+      "Lemmus",
+      "genus",
+      "land",
+      "Lemmings, whose population cycles drive the whole tundra food web."
+     ],
+     [
+      "Cladonia rangiferina",
+      "species",
+      "land",
+      "Reindeer lichen, the tundra's dominant winter forage."
+     ]
+    ]
+   }
+  ],
+  "Beringian Steppe-Tundra": [
+   {
+    "a0": 0,
+    "a1": 2.6,
+    "taxa": [
+     [
+      "Mammuthus primigenius",
+      "species",
+      "land",
+      "The woolly mammoth, the mammoth steppe's dominant grazer until ~4,000 years ago."
+     ],
+     [
+      "Bison priscus",
+      "species",
+      "land",
+      "The steppe bison, ranging the land bridge between continents."
+     ],
+     [
+      "Panthera spelaea",
+      "species",
+      "land",
+      "The cave lion, hunting across Beringia's cold grassland."
+     ]
+    ]
+   }
+  ],
+  "Yilgarn Craton": [
+   {
+    "a0": 0,
+    "a1": 30,
+    "taxa": [
+     [
+      "Eucalyptus",
+      "genus",
+      "land",
+      "Eucalypts, fire-adapted and dominant across the ancient craton's soils."
+     ],
+     [
+      "Banksia",
+      "genus",
+      "land",
+      "Banksias of the kwongan heath, one of the world's richest floras on the poorest soil."
+     ],
+     [
+      "Notoryctes typhlops",
+      "species",
+      "land",
+      "The marsupial mole, blind and swimming through sand."
+     ]
+    ]
+   }
+  ],
+  "Transantarctic Mts": [
+   {
+    "a0": 0,
+    "a1": 20,
+    "taxa": [
+     [
+      "Cryptoendolithic community",
+      "class",
+      "land",
+      "Microbes living INSIDE sandstone grains, the driest-limit ecosystem on Earth."
+     ],
+     [
+      "Umbilicaria",
+      "genus",
+      "land",
+      "Lichens on wind-scoured nunatak rock."
      ]
     ]
    }

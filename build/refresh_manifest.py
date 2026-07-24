@@ -14,7 +14,7 @@ import numpy as np
 
 import ice_audit
 from climate import climate_at, system_at
-from render import glaciation
+from render import glaciation, snowball_at
 from build_frames import period_for, sealevel_for
 
 
@@ -56,6 +56,7 @@ def main():
         new = {"epoch": ep, "period": per, "sealevel": sealevel_for(age),
                "temp": round(cl["temp"], 3), "veg": round(cl["veg"], 3),
                "iceT": round(ice_T, 2), "seaT": round(sea_T, 2),
+               "snowball": round(snowball_at(cl), 3),
                "iceLand": round(li, 4), "iceSea": round(si, 4),
                "gmst": sysd["gmst"], "co2": sysd["co2"], "o2": sysd["o2"],
                "sol": sysd["sol"]}

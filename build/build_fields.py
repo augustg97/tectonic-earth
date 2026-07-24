@@ -60,6 +60,63 @@ ELEV_Q, RAIN_Q, OCEAN_Q = 92, 90, 90
 STEP = 5                         # Myr between keyframes, everywhere
 
 
+def polar_lowpass(z, strength=1.0):
+    """Band-limit the poleward rows of an equirectangular grid along longitude.
+
+    THE ROOT CAUSE OF POLAR WARPING. An equirectangular grid stores the same
+    number of longitude columns in every latitude row, so approaching a pole
+    those columns crowd into a vanishing circle: at 89.9 degrees the 2048
+    columns of a row span about 70 km of ground, a third of a kilometre each,
+    while the rows stay ~20 km apart. Nothing in the source data resolves that,
+    so the surplus is pure resampling noise -- and because it varies with
+    longitude, a globe renders it as a radial starburst fanning out of the pole.
+    Every downstream consumer inherits it: relief shading, ice, the depth ramp.
+
+    Averaging each row over 1/cos(lat) columns removes exactly that surplus and
+    nothing else. One column at the equator (a no-op), ~3 at 70 degrees, ~11 at
+    85, most of the row inside the last tenth of a degree -- which is right,
+    because there those columns really are all the same few kilometres of
+    ground. Real geography survives: a coastline at 85 degrees still spans
+    hundreds of columns.
+
+    Doing it HERE rather than in the shader means it is fixed once, for every
+    field and every consumer, at no per-pixel cost.
+    """
+    from scipy.ndimage import uniform_filter1d
+    h, w = z.shape
+    out = np.asarray(z, np.float32).copy()
+    lat = 90.0 - (np.arange(h) + 0.5) / h * 180.0
+    al = np.abs(lat)
+    coslat = np.maximum(np.cos(np.radians(lat)), 1e-6)
+    # The window widens from one cell to three across the last 15 degrees. One
+    # cell is the strict anti-alias criterion and is right through the
+    # mid-latitudes, but it leaves the innermost rows merely SMOOTHED when they
+    # need to CONVERGE: a pole is a single point, every meridian meets there, so
+    # any residual variation around the last ring is drawn as a starburst no
+    # matter how small it is. Ramping to three cells makes the final rows
+    # average essentially the whole ring, which is what the geometry demands,
+    # while 60-75 degrees is left almost untouched.
+    t = np.clip((al - 75.0) / 15.0, 0.0, 1.0)
+    k = strength * (1.0 + 2.0 * (t * t * (3.0 - 2.0 * t)))
+    for i in range(h):
+        win = int(round(k[i] / coslat[i]))
+        if win > 1:
+            # mode="wrap": longitude is periodic, so the average must be circular
+            out[i] = uniform_filter1d(out[i], size=min(win, w), mode="wrap")
+    # Final convergence. Inside the last two degrees the whole ring is one
+    # ~200 km patch of ground, and every meridian of it is drawn meeting at a
+    # single screen point -- so ANY variation left around that ring renders as a
+    # starburst, however small and however real. Fade each of those rows into
+    # its own mean, reaching full only exactly at the pole. This is a ring
+    # average, but a legitimate one: it is bounded to two degrees and its weight
+    # ramps smoothly to 1, unlike the earlier version that clamped a ring radius
+    # and stamped a hard-edged disc across the whole cap.
+    conv = np.clip((al - 88.0) / 2.0, 0.0, 1.0) ** 2
+    for i in np.nonzero(conv > 0.001)[0]:
+        out[i] = out[i] * (1.0 - conv[i]) + out[i].mean() * conv[i]
+    return out
+
+
 def _gray(a01):
     return Image.fromarray((np.clip(a01, 0, 1) * 255 + 0.5).astype(np.uint8)).convert("RGB")
 
@@ -113,6 +170,11 @@ def export(age, Z_hi, z_for_climate, tag):
     # Seychelles seeded so they drown and re-emerge on cue. See seafloor.py.
     mot = _load_motion(age, tag)
     Z_hi, ofield = SF.apply(Z_hi, age, reconstructor=_sf_reconstructor(), motion=mot)
+    # Kill the polar longitude surplus BEFORE encoding, in true metres, so every
+    # consumer of the elevation field is clean at the poles. See polar_lowpass.
+    Z_hi = polar_lowpass(Z_hi)
+    for _c in range(ofield.shape[2]):
+        ofield[..., _c] = polar_lowpass(ofield[..., _c])
     e = _gray(enc_elev(smooth_bathymetry(Z_hi)))
     r = _gray(rain)
     # ocean-structure field: R = crustal age, G/B = spreading direction. The
@@ -131,6 +193,7 @@ def export(age, Z_hi, z_for_climate, tag):
             "epoch": ep, "period": per, "sealevel": sealevel_for(age),
             "temp": round(cl["temp"], 3), "veg": round(cl["veg"], 3),
             "iceT": round(ice_T, 2), "seaT": round(sea_T, 2),
+            "snowball": round(R.snowball_at(cl), 3),
             "gmst": sysd["gmst"], "co2": sysd["co2"], "o2": sysd["o2"]}, n
 
 
