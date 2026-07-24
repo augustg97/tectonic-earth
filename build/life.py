@@ -415,10 +415,24 @@ def life():
     for e in _DATA["life"]:
         taxa = []
         for t in e["taxa"]:
-            name, rank, realm, note = (t if isinstance(t, (list, tuple))
-                                       else (t["name"], t["rank"], t["realm"], t["note"]))
-            taxa.append({"n": name, "r": rank, "realm": realm, "note": note,
-                         "ic": icon_for(name, realm)})
+            win = None
+            if isinstance(t, (list, tuple)):
+                if len(t) >= 5:
+                    name, rank, realm, note, win = t[0], t[1], t[2], t[3], t[4]
+                else:
+                    name, rank, realm, note = t
+            else:
+                name, rank, realm, note = (t["name"], t["rank"], t["realm"], t["note"])
+                win = t.get("win")
+            rec = {"n": name, "r": rank, "realm": realm, "note": note,
+                   "ic": icon_for(name, realm)}
+            # Optional per-taxon age window [appear, disappear], TIGHTER than the
+            # interval -- so Homo sapiens can sit inside the 2.58-Myr Quaternary
+            # but only show for its real last 0.3 Myr, and only where the record
+            # puts it. The app hides the taxon outside this.
+            if win:
+                rec["w"] = [max(win), min(win)]
+            taxa.append(rec)
         out.append({"interval": e["interval"], "a0": e["a0"], "a1": e["a1"],
                     "summary": e["summary"], "taxa": taxa,
                     "first": e.get("first_appearances", []),

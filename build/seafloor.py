@@ -84,10 +84,24 @@ PLATEAUS = {
         "anchors": [(-8.0, 70.5, 220), (-10.0, 68.0, 180)],
         "elev": [(55, 100), (40, -300), (30, -700), (25, -1100), (0, -1300)]},
     "Zealandia": {
-        "anchors": [(170.0, -42.0, 700), (166.0, -33.0, 520),
-                    (174.0, -47.0, 480), (159.0, -30.0, 420)],
-        "elev": [(85, 200), (75, 120), (55, -400), (35, -900), (23, -1000),
-                 (0, -1100)]},
+        # Widest anchors and a genuinely emergent PEAK at ~80 Ma, when Zealandia
+        # rifted from Gondwana as continental crust before it thinned and sank --
+        # its greatest land extent, which is what the user asked to see.
+        "anchors": [(170.0, -42.0, 750), (166.0, -33.0, 620),
+                    (174.0, -47.0, 520), (159.0, -30.0, 460),
+                    (163.0, -38.0, 520)],
+        "elev": [(90, -300), (83, 500), (80, 550), (72, 200), (60, -300),
+                 (45, -700), (23, -1000), (0, -1100)]},
+    "Sahul": {
+        # Australia + New Guinea + Tasmania on the exposed continental shelf.
+        # The joined-up continent existed at the glacial low-stands; the 5-Myr
+        # keyframes cannot resolve those, so the shelf is seeded to a shallow
+        # bank -- just below the surface -- so its FULL extent reads as a
+        # connected landmass edge through the Pleistocene even at an interglacial
+        # keyframe. Marked shallow, not emergent, to stay honest about today.
+        "anchors": [(141.0, -12.0, 380), (135.0, -10.0, 300),
+                    (146.0, -40.0, 280), (140.0, -30.0, 420)],
+        "elev": [(3, -120), (1, -60), (0.2, -30), (0, -60)]},
     "Argoland": {
         "anchors": [(112.0, -15.0, 340), (117.0, -18.0, 280)],
         "elev": [(165, 100), (155, 50), (130, -800), (100, -2500), (0, -4000)]},
@@ -222,18 +236,49 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
         deep = np.clip((-out - 3000.0) / 2500.0, 0.0, 1.0) * sea * polefade
         out = out * (1.0 - deep * 0.55) + model_depth * (deep * 0.55)
 
-        # ridge-parallel abyssal-hill fabric. The grain must run ALONG the ridge
-        # (perpendicular to the distance gradient), and it has to be smooth --
-        # the first version keyed the wave off a per-cell gradient direction,
-        # which is noisy and threw isolated spikes rather than long hills. Use
-        # the distance field itself as the phase, so the corrugations are
-        # parallel to the ridge by construction, then blur so they read as hills
-        # rather than a grating.
+        # REAL RELIEF, not a faint tone. The sea floor has as much structure as
+        # the land, and the previous fabric (70 m, tone only) was far too timid
+        # -- so this builds several hundred metres of it and lets the hillshade
+        # render it as terrain. Everything keys off the ridge-distance field so
+        # it is organised around the spreading centres, and travels with them.
         from scipy import ndimage as _nd
-        raw = np.sin(dist * 4.2) * np.sin(dist * 1.7 + 0.5)
-        fab = _nd.gaussian_filter(raw, sigma=(1.2, 1.2)) * 70.0
-        fab *= np.clip(1.0 - age_myr / 110.0, 0.12, 1.0) * polefade
-        out = out + np.where(sea & (out < -2600), fab, 0.0)
+        rng = np.random.default_rng(11)
+
+        # (a) abyssal hills: ridge-PARALLEL corrugations, the grain covering most
+        # of the sea floor. Phase is the distance field, so they run along the
+        # ridge by construction; three scales stacked, blurred to read as hills.
+        hills = (np.sin(dist * 5.0) * 0.55
+                 + np.sin(dist * 11.0 + 0.7) * 0.30
+                 + np.sin(dist * 23.0 + 1.9) * 0.15)
+        hills = _nd.gaussian_filter(hills, sigma=(0.9, 0.9))
+        # young crust has sharp hills; old crust is buried under sediment
+        hill_amp = 340.0 * np.clip(1.05 - age_myr / 120.0, 0.18, 1.0)
+        relief = hills * hill_amp
+
+        # (b) seamounts: isolated volcanic cones dotted across the abyss, tallest
+        # on young crust near the ridge. A sparse random field, raised to a high
+        # power so only the peaks survive, then each becomes a smooth cone.
+        smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.0)
+        smt = np.clip((smt - 0.62) / 0.38, 0.0, 1.0) ** 2
+        smt = _nd.gaussian_filter(smt, 1.1)
+        relief = relief + smt * 900.0 * np.clip(1.1 - age_myr / 90.0, 0.15, 1.0)
+
+        # (c) fracture zones: long troughs running ACROSS the grain (along the
+        # distance gradient), offsetting the fabric -- the transform-fault scars.
+        gy, gx = np.gradient(_nd.gaussian_filter(dist, 2.0))
+        across = np.arctan2(gy, gx)
+        fz = np.sin(across * 9.0 + dist * 0.6)
+        fzt = np.clip((np.abs(fz) - 0.86) / 0.14, 0.0, 1.0)
+        relief = relief - fzt * 500.0
+
+        # (d) the ridge itself: a shallow crest split by a narrow axial VALLEY,
+        # the way a slow ridge actually looks in section.
+        axial = np.exp(-(dist / 1.4) ** 2)
+        relief = relief + axial * 700.0 - np.exp(-(dist / 0.4) ** 2) * 900.0
+
+        relief *= polefade
+        out = out + np.where(sea & (out < -1800), relief, 0.0)
+        out = np.clip(out, -MAX_ABYSS, None)
 
     # 2) plateaus and microcontinents ------------------------------------
     if PLATEAUS:

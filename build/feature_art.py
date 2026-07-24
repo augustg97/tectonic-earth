@@ -599,6 +599,59 @@ art("desert_shadow",
     "latitude as rainforest across the Andes.")
 
 
+art("oceanic_plateau",
+    # A submarine LIP: thick volcanic crust standing kilometres above the abyss
+    # but still well below the sea. Sea across the top, a broad flat-topped rise
+    # on doubled ocean crust, the deep plain either side.
+    f'{_sea(0, 74)}'
+    f'<rect x="0" y="74" width="{W}" height="44" fill="{MANTLE}"/>'
+    f'<path d="M0 86h300v10H0z" fill="{CRUST_D}"/>'
+    f'<path d="M0 92h300v6H0z" fill="{CRUST_D}"/>'
+    # the plateau: a broad flat-topped pile of basalt
+    f'<path d="M52 86q10-30 44-32 40-2 60 2 44 8 92 4v26H52z" fill="{CRUST}"/>'
+    f'<path d="M52 86q10-30 44-32 40-2 60 2 44 8 92 4" stroke="{LINE}"'
+    f' stroke-width="1.6" fill="none" opacity=".6"/>'
+    # basalt flows stacked in the pile
+    f'<path d="M70 70h150M64 78h172" stroke="{CRUST_D}" stroke-width="1.4"'
+    f' opacity=".5"/>'
+    # still deep underwater: a depth marker down from the surface
+    f'<path d="M150 6v46M143 46l7 8 7-8" stroke="#8fc6dc" stroke-width="1.4"'
+    f' fill="none" opacity=".6"/>'
+    f'<path d="M20 20h60M20 20l6-4M20 20l6 4" stroke="{LINE}" stroke-width="1.3"'
+    f' fill="none" opacity=".5"/>',
+    "A submarine oceanic plateau -- a large igneous province erupted onto the "
+    "sea floor, kilometres of stacked basalt standing high above the abyss but "
+    "still well below the surface. Ontong Java is the biggest; it never became "
+    "land, and most plateaus like it never do.")
+
+art("microcontinent",
+    # A drowned continental fragment: continental crust, once an island, now a
+    # shallow bank a few hundred metres down, distinct from the ocean crust
+    # around it.
+    f'{_sea(0, 60)}'
+    f'<rect x="0" y="60" width="{W}" height="58" fill="{MANTLE}"/>'
+    f'<path d="M0 78h300v40H0z" fill="{CRUST_D}"/>'
+    # thin ocean crust either side, thick continental block in the middle
+    f'<path d="M0 82h96v8H0zM204 82h96v8h-96z" fill="{CRUST_D}"/>'
+    f'<path d="M96 60q12-8 54-8t54 8v30q0 8-54 8t-54-8z" fill="{LAND}"'
+    f' opacity=".55"/>'
+    f'<path d="M96 66q12-6 54-6t54 6v24q0 8-54 8t-54-8z" fill="{CRUST}"/>'
+    f'<path d="M96 66q12-6 54-6t54 6" stroke="{LAND}" stroke-width="3.5"'
+    f' fill="none"/>'
+    # just under the waves -- a shallow bank
+    f'<path d="M96 60q54 12 108 0" stroke="#8fc6dc" stroke-width="1.4"'
+    f' fill="none" opacity=".7"/>'
+    f'<path d="M150 8v40M143 42l7 8 7-8" stroke="#8fc6dc" stroke-width="1.4"'
+    f' fill="none" opacity=".55"/>'
+    f'<path d="M118 76h64M126 84h48" stroke="{CRUST_D}" stroke-width="1.4"'
+    f' opacity=".45"/>',
+    "A microcontinent: a fragment of continental crust, thicker and older than "
+    "the ocean floor around it, left behind when a continent rifted apart. Many "
+    "stood as islands when they broke away and have drowned since -- Kerguelen, "
+    "the Seychelles, Zealandia -- so what shows now is a shallow bank marooned "
+    "in deep ocean.")
+
+
 # ------------------------------------------- where the type art is wrong ---
 # A few families of feature are built by a mechanism the generic diagram gets
 # wrong, and there are enough of them to be worth their own drawing.
@@ -715,6 +768,16 @@ NAME_ART["Gilboa Forest"] = "forest_devonian"
 # An oceanic gateway, not water standing on a continent -- the epeiric-sea
 # caption would be flatly wrong about what this one was.
 NAME_ART["Central American Sea"] = "ocean_closing"
+
+for _n in ("Ontong Java Plateau", "Manihiki Plateau", "Shatsky Rise",
+           "Agulhas Plateau", "Broken Ridge", "Rio Grande Rise", "Walvis Ridge",
+           "Mascarene Plateau", "Naturaliste Plateau", "Hess Rise"):
+    NAME_ART[_n] = "oceanic_plateau"
+for _n in ("Kerguelen Microcontinent", "Mauritia", "Seychelles Microcontinent",
+           "Jan Mayen Microcontinent", "Zealandia", "Argoland",
+           "East Tasman Plateau", "Greater Adria", "Greater India"):
+    NAME_ART[_n] = "microcontinent"
+
 
 for _n in ("Central Asian Orogenic Belt", "Altai Belt", "Lachlan Orogen",
            "Qilian Belt", "Kunlun Belt", "Tien Shan", "Innuitian Belt",

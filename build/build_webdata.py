@@ -636,6 +636,24 @@ def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
     ok = z < -min_depth
     if not ok.any():
         ok = z < 0
+    # If the query itself is already valid water and clear of anything to avoid,
+    # keep it: a well-placed sea should not be nudged off its own centre toward
+    # whatever open ocean happens to sit within the search radius, which is how
+    # the Sea of Japan crept east onto the Pacific side of Japan. Only snap when
+    # the authored position is actually on land or too near another label.
+    qx = int((lon + 180.0) / 360.0 * nx) % nx
+    qy = int(np.clip((90.0 - lat) / 180.0 * ny, 0, ny - 1))
+    if ok[qy, qx]:
+        clash = False
+        for (alon, alat) in avoid:
+            dd = (math.sin(math.radians(lat)) * math.sin(math.radians(alat))
+                  + math.cos(math.radians(lat)) * math.cos(math.radians(alat))
+                  * math.cos(math.radians(lon - alon)))
+            if dd > math.cos(math.radians(avoid_deg)):
+                clash = True
+                break
+        if not clash:
+            return (float(lon), float(lat))
     for (alon, alat) in avoid:
         aa, bb = math.radians(alat), math.radians(alon)
         d2 = (np.cos(la) * np.cos(lo) * math.cos(aa) * math.cos(bb)
@@ -675,8 +693,19 @@ def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
     box = (csum[n - 1:, n - 1:] - csum[:-n + 1 or None, n - 1:]
            - csum[n - 1:, :-n + 1 or None] + csum[:-n + 1 or None, :-n + 1 or None])
     openness = box[:z.shape[0], :z.shape[1]] / float(n * n)
-    dot = dot + 0.45 * openness
-    d = np.where(ok, dot, -4.0)
+    # Proximity to the query is `dot` (the cosine to the base position); keep it
+    # DOMINANT and let openness be only a mild tie-break. At 0.45 openness could
+    # overpower a 15-degree proximity gap and drag a name out of a semi-enclosed
+    # basin into the open ocean beside it -- the Gulf of Mexico landed in the
+    # Atlantic off Florida, the Sea of Japan in the Pacific east of Japan.
+    # Also hold the name within ~14 degrees of where it was placed unless there
+    # is genuinely no nearer water, so an enclosed sea stays in its basin.
+    near_q = dot >= math.cos(math.radians(8.0))
+    score = dot + 0.10 * openness
+    if (ok & near_q).any():
+        d = np.where(ok & near_q, score, -4.0)
+    else:
+        d = np.where(ok, score, -4.0)
     k = int(np.argmax(d))
     y, x = divmod(k, nx)
     ang = math.degrees(math.acos(max(-1.0, min(1.0, float(np.clip(dot.flat[k], -1, 1))))))
@@ -705,6 +734,25 @@ def resolve_to_landmasses(tracks, windows, order):
         here = [n for n in order
                 if n in tracks and windows[n][0] <= age <= windows[n][1]]
         if not here:
+            continue
+        # DEEP TIME: use the plate track directly, do not re-snap to landmasses.
+        #
+        # The raw composite track is smooth -- it is the back-advected centroid
+        # of a continent's modern fragments, and it drifts a few degrees per
+        # keyframe. Snapping it to whatever DEM landmass is nearest is what makes
+        # it JUMP: before 540 Ma the terrain is the authored Precambrian
+        # composite and the Ediacaran sea is high, so cratons flood and split
+        # between frames, and the label hops island to island as its current
+        # landmass sinks. Past 540 the terrain is a real DEM and snapping earns
+        # its keep; before it, trust the plate model and let the name sit on its
+        # own crust even when that crust is briefly a shoal. This is the
+        # structural fix for the Ediacaran jump.
+        if age >= 545:
+            for n in here:
+                pt = next(((lo, la) for a, lo, la in tracks[n] if a == age), None)
+                if pt is not None:
+                    resolved[n].append([age, round(pt[0], 1), round(pt[1], 1)])
+                    last[n] = pt
             continue
         masses = landmasses(age)
         used = set()
@@ -926,8 +974,12 @@ def build_labels():
             # lands in no box, so this is safe to apply broadly; restrict to
             # post-Pangaean windows, where a present-day coordinate is
             # meaningful, so a deep-time craton authored in its own era's frame
-            # is not mis-tagged.
-            if max(l["a0"], l["a1"]) <= 320:
+            # is not mis-tagged. A feature that is LAND TODAY has a genuine
+            # present-day coordinate whatever its age (the Guiana Shield is
+            # 540 Myr old and still exactly where the box says) -- the 320 Ma
+            # cap alone was excluding those, which is how Proconsul reappeared
+            # under the Guiana Shield.
+            if coord_is_present_day(l) or max(l["a0"], l["a1"]) <= 320:
                 rg = region_tags(l["lon"], l["lat"])
                 if rg:
                     l["rg"] = rg

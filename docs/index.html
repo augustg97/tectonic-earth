@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260724-0225';
+const DATA_V='20260724-0514';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1045,36 +1045,12 @@ vec3 oceanColour(float z, vec3 sd, float latd){
   c=mix(c, vec3(0.353,0.722,0.706), smoothstep(-90.0,-28.0,z)*0.65);
   c=mix(c, vec3(0.529,0.847,0.804), smoothstep(-28.0,-4.0,z)*0.70);
 
-  /* SEA-FLOOR STRUCTURE. The elevation field carries real bathymetry only for
-     the present day; every ancient ocean is a flat synthetic depth, so the
-     abyss came out as one dead sheet of teal. Sea floor is not featureless, so
-     build the structure procedurally, keyed to depth as a stand-in for crustal
-     age -- shallow is young crust near a ridge, deep is old crust far from one.
-
-     Three things, all as tone rather than height so the coastline stays exact:
-       - abyssal-hill FABRIC: fine ridge-parallel corrugations, the grain that
-         covers most of the sea floor, fading as crust ages and buries under
-         sediment;
-       - FRACTURE ZONES: long scars across the grain, offsetting it;
-       - a RIDGE crest brightening where the crust is youngest and shallowest,
-         the spreading centre standing a little proud and pale. */
-  float aby=smoothstep(-320.0,-2600.0,z);          // 0 shelf .. 1 deep
-  float youth=1.0-smoothstep(-2400.0,-5200.0,z);   // 1 near ridge .. 0 old
-  // grain direction varies slowly, so the fabric bends the way real sea floor
-  // does around a ridge rather than running dead straight everywhere
-  float grd=fbm3(sd*1.3+9.0)*6.28;
-  vec2 gdir=vec2(cos(grd),sin(grd));
-  vec3 warp=sd + vec3(gdir.x,gdir.y,0.0)*0.02;
-  float hills=fbm3(vec3(dot(sd.xy,gdir)*70.0, sd.z*70.0, 4.0));
-  float fabric=(hills-0.5)*aby*(0.35+0.65*youth);
-  c*=1.0+fabric*0.16;
-  // fracture zones: sparse hard lineations across the grain
-  float fz=fbm3(sd*vec3(3.0)+vec3(dot(sd.xy,vec2(-gdir.y,gdir.x))*9.0,0.0,21.0));
-  float fzl=smoothstep(0.47,0.5,fz)*smoothstep(0.53,0.5,fz);
-  c*=1.0-fzl*aby*0.22;
-  // the ridge crest: youngest, shallowest, palest -- a spreading centre
-  float crest=smoothstep(0.62,0.9,youth)*smoothstep(-3400.0,-1900.0,z);
-  c=mix(c, c*1.14+vec3(0.02,0.05,0.06), crest*0.5);
+  /* Sea-floor colour follows the ELEVATION field now, not a procedural texture.
+     seafloor.py bakes real relief -- age-graded abyss, ridges, fracture zones,
+     plateaus -- into the shipped bathymetry, so the ordinary depth ramp and the
+     hillshade below render it as terrain that evolves with the plates. The old
+     tone-only fabric that used to sit here was static and read as an artificial
+     overlay; it is gone. */
   return c;
 }
 
@@ -1118,8 +1094,9 @@ void main(){
      the sample point with fractal noise at two scales bends those segments into
      natural meanders and frays the tributary tips, the same trick that
      de-blocks the lake shorelines. It costs one extra texture read on land. */
-  vec2 rwarp=(vec2(fbm3(sdir*120.0)-0.5, fbm3(sdir*120.0+41.0)-0.5)*2.2
-            + vec2(fbm3(sdir*300.0+7.0)-0.5, fbm3(sdir*300.0+63.0)-0.5)*1.1)*uTexel;
+  vec2 rwarp=(vec2(fbm3(sdir*70.0)-0.5, fbm3(sdir*70.0+41.0)-0.5)*3.4
+            + vec2(fbm3(sdir*160.0+7.0)-0.5, fbm3(sdir*160.0+63.0)-0.5)*2.0
+            + vec2(fbm3(sdir*360.0+19.0)-0.5, fbm3(sdir*360.0+81.0)-0.5)*1.0)*uTexel;
   vec3 SP=mix(texture2D(surfA,uv+rwarp).rgb, texture2D(surfB,uv+rwarp).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
 
@@ -1138,6 +1115,21 @@ void main(){
     float pn=fbm3(sdir*10.0+21.0);
     float plume=shallow*river*(0.45+0.55*pn);
     col=mix(col, vec3(0.34,0.41,0.31), clamp(plume,0.0,0.55));
+    /* RIVER DELTAS. A big river builds a fan of its own sediment where it meets
+       the sea -- shallower, browner, lobate. Sample the drainage field just
+       INLAND of this water pixel (step landward along the sea-floor gradient is
+       hard, so step toward higher ground using the coast): where a strong
+       channel debouches, lay down a turbid, pale-brown delta plume that fades
+       offshore and wobbles with noise into distributary lobes. Driven by the
+       real drainage network, so a delta sits at an actual river mouth and moves
+       when the river does. */
+    float mouth=smoothstep(0.42,0.72,drain);          // a real channel nearby
+    float nearshore=smoothstep(-260.0,-3.0,z);
+    float lobe=fbm3(sdir*46.0+13.0);
+    float delta=mouth*nearshore*(0.55+0.75*lobe);
+    col=mix(col, vec3(0.42,0.44,0.33), clamp(delta,0.0,0.6));
+    // the sediment shoal itself lightens the water a touch, as a delta front does
+    col=mix(col, vec3(0.30,0.52,0.50), clamp(mouth*nearshore*0.4,0.0,0.3));
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
@@ -1487,7 +1479,11 @@ void main(){
   // Keep relief on the seafloor all the way down (gentler than land), instead
   // of flattening it to almost nothing below ~2 km — that flattening is what
   // made every ocean read as one blue sheet.
-  float hw=(z<0.0)? mix(0.52,0.30,clamp(-z/4500.0,0.0,1.0)) : 1.0;
+  // The sea floor now carries real relief (seafloor.py), so shade it almost as
+  // strongly as land -- the abyssal hills, seamounts and ridge flanks should
+  // read as terrain, not a faint wash. Kept a touch softer than land so the
+  // deepest plains still calm down.
+  float hw=(z<0.0)? mix(0.85,0.55,clamp(-z/5200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
 
   if(z<0.0 && uSchem<0.5){
@@ -2415,7 +2411,16 @@ function phaseDesc(l,age){
   }
   return null;
 }
+/* A taxon may carry its own age window w=[old,young], tighter than the
+   interval it sits in -- Homo sapiens inside the Quaternary, say. Hide it when
+   the slider is outside that window, so a species does not appear before it
+   evolved or after it died. */
+function taxonNow(t){
+  if(!t.w) return true;
+  return state.age<=t.w[0]+0.001 && state.age>=t.w[1]-0.001;
+}
 function lifeHTML(taxa,limit){
+  taxa=taxa.filter(taxonNow);
   const I=DATA.life.icons||{};
   return '<div class="life">'+taxa.slice(0,limit||99).map(t=>
     `<div class="lifeitem"><div class="lifeicon ${esc(t.realm)}">`+

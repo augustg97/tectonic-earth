@@ -3432,12 +3432,16 @@
    "a1": 2.58,
    "summary": "Ice sheets advance and retreat on orbital cycles, repeatedly rearranging every terrestrial biome. The mammoth steppe -- a cold, dry, productive grassland with no modern analogue -- stretches from Iberia to Alaska, supporting mammoth, woolly rhinoceros, steppe bison and horse. Hominins spread out of Africa repeatedly; Homo sapiens appears by around 315,000 years ago and reaches every continent except Antarctica. Then, in a pattern that tracks human arrival more closely than it tracks climate, the large-bodied fauna disappears: Australia's around 46,000 years ago, the Americas' around 13,000, with Africa least affected because its animals evolved alongside hominins. The current extinction pulse continues, now driven by habitat loss and climate change.",
    "taxa": [
-    {
-     "name": "Homo sapiens",
-     "rank": "species",
-     "realm": "land",
-     "note": "The only species to have become a global biome in its own right, and the proximate cause of the extinction it is documenting."
-    },
+    [
+     "Homo sapiens",
+     "species",
+     "land",
+     "Our species. It arose in Africa around 300,000 years ago, spread across Eurasia after about 70,000, reached Australia by 65,000 and the Americas by 20,000 -- so before that it was nowhere, and the map should not show it.",
+     [
+      0.3,
+      0
+     ]
+    ],
     {
      "name": "Balaenoptera musculus",
      "rank": "species",
@@ -3468,12 +3472,16 @@
      "realm": "land",
      "note": "The giant sequoia, the largest tree on Earth by trunk volume, is a relict of a conifer flora that once ringed the northern hemisphere."
     },
-    {
-     "name": "Homo neanderthalensis",
-     "rank": "species",
-     "realm": "land",
-     "note": "Cold-adapted Eurasian hominins who buried their dead, made pigment and left DNA in most living non-African people."
-    },
+    [
+     "Homo neanderthalensis",
+     "species",
+     "land",
+     "The cold-adapted human of Ice Age Europe and western Asia, from about 400,000 to 40,000 years ago, overlapping and interbreeding with our species before vanishing.",
+     [
+      0.4,
+      0.039
+     ]
+    ],
     {
      "name": "Mammuthus primigenius",
      "rank": "species",
@@ -3509,7 +3517,27 @@
      "rank": "species",
      "realm": "land",
      "note": "The woolly rhinoceros, its appearance known from cave paintings as well as bones."
-    }
+    },
+    [
+     "Homo erectus",
+     "species",
+     "land",
+     "The first truly wide-ranging human, out of Africa by about 1.8 million years ago and across southern Asia -- the hominin present through most of the Pleistocene, long before our own species.",
+     [
+      2.0,
+      0.1
+     ]
+    ],
+    [
+     "Paranthropus boisei",
+     "genus",
+     "land",
+     "A heavily-built, small-brained hominin of eastern Africa with huge grinding molars, sharing the early Pleistocene with the first members of Homo.",
+     [
+      2.3,
+      1.2
+     ]
+    ]
    ],
    "first_appearances": [
     "Homo sapiens",
