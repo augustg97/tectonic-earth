@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260724-0514';
+const DATA_V='20260724-0602';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1065,6 +1065,12 @@ void main(){
     uv=vec2(ll.x/(2.0*PI)+0.5, 0.5+ll.y/PI);
   }
   float lat=90.0-uv.y*180.0;
+  // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
+  // out every per-pixel computation that depends on the longitude direction --
+  // relief gradient, fine mottle, snow grain -- because at the pole all the
+  // texture columns converge to a point and any of them, sampled at a fixed uv
+  // step, reads across the pole and throws a radial starburst.
+  float polecap=1.0-smoothstep(70.0,86.0,abs(lat));
   float lonD=uv.x*360.0-180.0;
   float s2=sin(radians(lat)); s2*=s2;
 
@@ -1076,7 +1082,7 @@ void main(){
      the gradient's, from the same cause. Widen the longitude step so both
      probes are the same distance apart wherever they are. */
   vec2 rs=uTexel*1.6;
-  float rugdu=rs.x/max(cos(radians(lat)),0.03);
+  float rugdu=rs.x/max(cos(radians(lat)),0.125);
   float rug=clamp(length(vec2(
       baseElev(uv+vec2(rugdu,0.0))-baseElev(uv-vec2(rugdu,0.0)),
       baseElev(uv+vec2(0.0,rs.y))-baseElev(uv-vec2(0.0,rs.y))))/460.0,0.0,1.0);
@@ -1285,8 +1291,8 @@ void main(){
     float fine=fbm3(sdir*23.0+7.0)-0.5;
     float fine2=fbm3(sdir*58.0+29.0)-0.5;
     float veget=clamp(h*1.3,0.18,1.0);
-    col*=1.0+(fine*0.14+fine2*0.07)*veget;
-    col.g+=fine*0.045*h;                 // patchy darker/lighter stands
+    col*=1.0+(fine*0.14+fine2*0.07)*veget*polecap;
+    col.g+=fine*0.045*h*polecap;                 // patchy darker/lighter stands
     float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
     col=mix(col, vec3(0.710,0.604,0.404), core*0.5);
     if(uVeg<0.999){
@@ -1319,7 +1325,17 @@ void main(){
     // Ice flows below the ELA down valleys, so the margin is ragged, not a
     // clean contour; nudge it with noise and let it reach a little lower.
     float tongue=(fbm3(sdir*22.0+5.5)-0.5)*1.7;
-    float glac=clamp((zp-ela)/520.0+tongue+0.08,0.0,1.0);
+    float glac=clamp((zp-ela)/520.0+tongue*polecap+0.08,0.0,1.0);
+    /* Same pole problem as the snow: (zp-ela) keyed to the local, radially
+       smeared polar elevation painted the glacier as a white starburst. Inside
+       the polar cap replace it with a smooth, temperature-driven cover, so a
+       cold high pole gets an even ice cap instead of streaks. */
+    // Only where the ERA actually carries ice. In an ice-free hothouse (uIceT
+    // near the -30 sentinel) this is zero, so a warm-world pole like the
+    // Devonian gets no cap AND no streak, while a glacial era gets a smooth one.
+    float eraIce=smoothstep(-29.0,-14.0,uIceT);
+    float poleglac=smoothstep(-1.0,-7.0,T)*eraIce;
+    glac=mix(glac, poleglac, 1.0-polecap);
     /* Perennial snow sits BELOW the glacier line. A glacier needs enough snow
        to survive the summer and then keep piling until it flows; snow only
        needs to survive the summer, which it manages a few hundred metres
@@ -1340,7 +1356,13 @@ void main(){
        that would hang snow on Andean peaks that are bare all year. */
     float snowline=ela-380.0;
     float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
-    float snow=clamp((zp-snowline)/400.0+tongue*0.6,0.0,1.0)*snowfall;
+    float snow=clamp((zp-snowline)/400.0+tongue*0.6*polecap,0.0,1.0)*snowfall;
+    /* At the pole the elevation field's columns converge, so snow keyed to the
+       LOCAL elevation there paints the compressed radial terrain white in a
+       starburst. Within the polar cap, replace it with a smooth snow driven by
+       TEMPERATURE alone -- a cold pole gets an even cap, not a streak. */
+    float polesnow=snowfall*smoothstep(1.0,-4.0,T)*smoothstep(-29.0,-14.0,uIceT);
+    snow=mix(snow, polesnow, 1.0-polecap);
     snow=max(snow,glac);
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
@@ -1414,11 +1436,19 @@ void main(){
      two probes the same PHYSICAL distance apart at every latitude, so the
      plain difference already IS the gradient and nothing needs amplifying. */
   vec2 st=uTexel*0.75;
-  float coslat=max(cos(radians(lat)),0.03);
-  float du=st.x/coslat;
+  /* Widen the longitude step by 1/cos(lat) so both probes stay the same
+     physical distance apart -- but CAP it. At the very pole cos(lat) -> 0, the
+     step -> the whole width of the map, and the east-west difference is then
+     taken between two random far-apart points, which threw a radial white
+     starburst out of the pole (worst on ice, where the broken normal lit up as
+     snow). Clamp the widening to 8x and, inside the last few degrees, fade the
+     east-west gradient out entirely and let the normal stand vertical -- there
+     is no meaningful east-west relief at a pole anyway. */
+  float coslat=max(cos(radians(lat)),0.125);
+  float du=min(st.x/coslat, st.x*6.0);   // never probe so far east-west it wraps the pole
   float ex1=elevAt(uv+vec2(du,0.0),rug), ex0=elevAt(uv-vec2(du,0.0),rug);
   float ey1=elevAt(uv+vec2(0.0,st.y),rug), ey0=elevAt(uv-vec2(0.0,st.y),rug);
-  vec3 nrm=normalize(vec3(-(ex1-ex0), -(ey1-ey0), 320.0));
+  vec3 nrm=normalize(vec3(-(ex1-ex0)*polecap, -(ey1-ey0)*polecap, 320.0));
 
   if(z>=0.0){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -1473,7 +1503,10 @@ void main(){
     nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.30+0.45*rug));
   }
   float hs=clamp(dot(nrm, normalize(vec3(-0.55,0.55,0.63))),0.0,1.0);
-  float shade=0.70+0.62*hs;
+  // Toward the pole, blend the hillshade to flat -- the normal is meaningless
+  // there and any relief it reports is the projection singularity, not terrain.
+  hs=mix(hs, 0.5, 1.0-polecap);
+  float shade=clamp(0.70+0.62*hs, 0.0, 1.18);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead
