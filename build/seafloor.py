@@ -46,6 +46,39 @@ MAX_ABYSS = 6000.0
 SPREAD_KM_PER_MYR = 30.0
 MAX_CRUST_AGE = 190.0       # Myr: older than this and it has been subducted
 
+# --- ACROSS-RIDGE COORDINATE: COMPANDING ----------------------------------
+# The across-ridge coordinate ships as ONE 8-bit channel, and the shader keys a
+# periodic fault set to it -- so the quantisation step of that channel is the
+# finest sea-floor fabric that can exist anywhere in the app. Stored linearly
+# over 75 degrees the step is 0.29 deg, which is COARSER than the 0.176 deg
+# texel: the field arrives as a staircase of flat terraces, and keying anything
+# periodic to it draws the terrace contours instead of the fabric.
+#
+# A 16-bit channel is the textbook fix and it is not affordable here. Measured
+# over the 251 keyframes: the extra byte is a sawtooth with a ~1.7-texel period,
+# i.e. incompressible, so the field can no longer be stored lossily -- 224 MB
+# for a long-period sawtooth encoding, 320 MB for a straight hi/lo split, and
+# even a LOSSLESS three-channel field with no extra precision at all is 124 MB,
+# against 23 MB today and 94 MB for every field in the app combined.
+#
+# Companding buys the precision for nothing. Store log(1 + d/D0) rather than d:
+# the step becomes proportional to (D0 + d), so it is 0.033 deg at the axis --
+# 8.7x finer than before, and five times finer than a texel -- widening to about
+# a degree in the far field. That gradient is not a compromise, it is the
+# physics: abyssal-hill fabric is cut at the axis and is progressively mantled
+# by pelagic sediment as the crust ages away from it, so there is less and less
+# fine structure out there to resolve. Precision is spent exactly where the sea
+# floor keeps its detail.
+CO_D0 = 2.5                 # deg: scale over which precision stays near-constant
+CO_MAX = 75.0               # deg: full-scale, wide enough to cross Panthalassa
+CO_K = math.log(1.0 + CO_MAX / CO_D0)
+
+
+def compand(dist_deg):
+    """Degrees from the ridge axis -> the 0..1 coordinate that ships in R."""
+    return np.log1p(np.clip(dist_deg, 0.0, CO_MAX) / CO_D0) / CO_K
+
+
 _PLATES_CACHE = None
 _GEOM_CACHE = {}
 
@@ -145,7 +178,94 @@ def _sphere_distance(xyz, ids, h, w):
     return ang.reshape(h, w).astype(np.float32), ids[i].reshape(h, w)
 
 
-def _ridge_network(polys, seg_deg=1.35, jog_deg=0.62, seed=17):
+def _hashf(i, salt):
+    """Deterministic 0..1 from an integer cell index.
+
+    Must not be `random`: the offsets have to depend only on WHERE along the
+    axis a cell falls, not on the order arcs happened to be joined in, or a
+    chain that gains a vertex at the next keyframe would re-roll its whole
+    network and the fracture zones would shimmer between frames.
+    """
+    x = (int(i) * 2654435761 + int(salt) * 40503) & 0xFFFFFFFF
+    x ^= x >> 15
+    x = (x * 2246822519) & 0xFFFFFFFF
+    x ^= x >> 13
+    x = (x * 3266489917) & 0xFFFFFFFF
+    x ^= x >> 16
+    return x / 4294967295.0
+
+
+# ORDERS OF RIDGE SEGMENTATION. A spreading centre is not segmented at one
+# scale, it is segmented at every scale, and that is precisely why a real chart
+# shows a ridge as a complex fractal range rather than the broad straight line
+# a single-scale model draws. Marine geology names the hierarchy:
+#
+#   first order   ridge-transform, 100s of km, offsets 10s-100s of km. These
+#                 are the discontinuities whose wakes are the fracture zones.
+#   second order  overlapping spreading centres, 30-100 km, smaller offsets.
+#                 The main fracture-zone family comes off these.
+#   third order   non-transform offsets and devals -- the axis bends rather
+#                 than steps, so no fracture zone trails from them.
+#   fourth order  axial crenulation at the scale of individual volcanoes.
+#
+# Amplitudes are held at a constant ~0.18 of segment length across all four,
+# which is what makes the result self-similar -- a genuine fractal axis over
+# 1.5 decades rather than a straight line with one wiggle imposed on it.
+_ORDERS = (
+    #  seg_deg  jog_deg  breaks (i.e. leaves a transform gap and a new segment id)
+    (7.00,     1.250,   True),
+    (2.00,     0.400,   True),
+    (0.65,     0.115,   False),
+    (0.22,     0.038,   False),
+)
+
+
+def _fractal_offset(s, salt):
+    """Sideways offset of the axis, in degrees, at arc length s along a chain.
+
+    Sums the four orders above. The two that break step (piecewise constant --
+    a transform IS a discontinuity); the two that do not bend smoothly, because
+    a third-order offset is a flexure of the axis, not a fault.
+    """
+    o = 0.0
+    for li, (seg, jog, brk) in enumerate(_ORDERS):
+        t = s / seg
+        c = int(math.floor(t))
+        a = (_hashf(c, salt + li * 977) - 0.5) * 2.0 * jog
+        if brk:
+            o += a
+        else:
+            f = t - c
+            f = f * f * (3.0 - 2.0 * f)
+            b = (_hashf(c + 1, salt + li * 977) - 0.5) * 2.0 * jog
+            o += a + (b - a) * f
+    return o
+
+
+def _cell(s, li):
+    return int(math.floor(s / _ORDERS[li][0]))
+
+
+def _walk(chain, step_deg):
+    """Resample a lon/lat chain at a fixed arc step, carrying arc length."""
+    pts = [(chain[0][0], chain[0][1], 0.0)]
+    s = 0.0
+    for q in chain[1:]:
+        p = pts[-1]
+        dlon = (q[0] - p[0] + 180.0) % 360.0 - 180.0
+        clat = max(math.cos(math.radians((q[1] + p[1]) * 0.5)), 0.05)
+        d = math.hypot(dlon * clat, q[1] - p[1])
+        if d < 1e-9:
+            continue
+        n = max(1, int(d / step_deg))
+        for k in range(1, n + 1):
+            f = k / float(n)
+            pts.append((p[0] + dlon * f, p[1] + (q[1] - p[1]) * f, s + d * f))
+        s += d
+    return pts
+
+
+def _ridge_network(polys, seed=17):
     """Turn the model's fragmentary ridge arcs into a CONNECTED, SEGMENTED
     spreading network -- the structural change that gives the sea floor crisp
     axial lines and real fracture zones.
@@ -162,11 +282,16 @@ def _ridge_network(polys, seg_deg=1.35, jog_deg=0.62, seed=17):
     So synthesise it, constrained by the real arcs rather than invented from
     nothing:
       1. join arcs whose endpoints nearly meet, so the system is continuous;
-      2. resample each chain into segments of about `seg_deg`;
-      3. jog alternate segments sideways, perpendicular to the local axis, to
-         build the transform staircase.
-    The jog is drawn from a stable hash of the segment index, so a given age
-    always produces the same network and it does not shimmer between frames.
+      2. walk each chain and displace it sideways by a FRACTAL offset summed
+         over four orders of segmentation (see _ORDERS);
+      3. cut the chain at the two orders that step, leaving the transform gap.
+
+    Offsetting at four self-similar scales rather than one is what turns the
+    axis from a broad straight line into a complex range: the first order rules
+    the basin-wide staircase, and each finer order roughens the one above it in
+    the same proportion, so the trace has structure at every scale you can zoom
+    to. The offsets come from a positional hash, so a given age always produces
+    the same network and it does not shimmer between frames.
 
     Returns polylines plus one id PER SEGMENT. That id is what finally makes
     fracture zones work: with hundreds of segments instead of thirteen, the
@@ -174,7 +299,6 @@ def _ridge_network(polys, seg_deg=1.35, jog_deg=0.62, seed=17):
     Voronoi walls and become exactly what they should be -- a dense family of
     flowline-parallel traces, one running out from every transform.
     """
-    import random as _r
     # --- 1. join arcs into chains ---------------------------------------
     arcs = [list(p) for p in polys if len(p) > 1]
     chains = []
@@ -201,34 +325,38 @@ def _ridge_network(polys, seg_deg=1.35, jog_deg=0.62, seed=17):
                     break
         chains.append(cur)
 
-    # --- 2 & 3. resample into segments and jog them into a staircase -----
-    rng = _r.Random(seed)
-    out, sid = [], 0
-    for chain in chains:
-        # walk the chain accumulating arc length, emitting a vertex every seg_deg
-        pts, acc, prev = [chain[0]], 0.0, chain[0]
-        for q in chain[1:]:
-            dlon = (q[0] - prev[0] + 180.0) % 360.0 - 180.0
-            step = math.hypot(dlon * math.cos(math.radians((q[1] + prev[1]) * 0.5)), q[1] - prev[1])
-            acc += step
-            if acc >= seg_deg:
-                pts.append(q); acc = 0.0
-            prev = q
-        if pts[-1] != chain[-1]:
-            pts.append(chain[-1])
-        if len(pts) < 2:
+    # --- 2 & 3. displace by the fractal offset, cut at the transforms ----
+    step = _ORDERS[-1][0]
+    out = []
+    for ci, chain in enumerate(chains):
+        pts = _walk(chain, step)
+        if len(pts) < 3:
             continue
-        for i in range(len(pts) - 1):
-            a, b = pts[i], pts[i + 1]
-            dlon = (b[0] - a[0] + 180.0) % 360.0 - 180.0
-            clat = max(math.cos(math.radians((a[1] + b[1]) * 0.5)), 0.05)
-            L = math.hypot(dlon * clat, b[1] - a[1]) + 1e-9
-            # unit normal to the segment, on the sphere's local tangent plane
-            nx, ny = -(b[1] - a[1]) / L, (dlon * clat) / L
-            j = (rng.random() - 0.5) * 2.0 * jog_deg
-            out.append([[a[0] + nx * j / clat, a[1] + ny * j],
-                        [b[0] + nx * j / clat, b[1] + ny * j]])
-            sid += 1
+        # The salt must depend on WHERE the chain is, not on its index in a list
+        # whose order changes as arcs appear and vanish -- otherwise the whole
+        # network re-rolls between keyframes. Quantised so it is stable under
+        # the small drift of a chain that persists.
+        salt = int((round(pts[0][0] / 8.0) * 131 + round(pts[0][1] / 8.0) * 17
+                    + seed) & 0x7FFFFFFF)
+        run = []
+        prev_c = (_cell(pts[0][2], 0), _cell(pts[0][2], 1))
+        for i, (lon, lat, s) in enumerate(pts):
+            j = pts[min(i + 1, len(pts) - 1)]
+            k = pts[max(i - 1, 0)]
+            dlon = (j[0] - k[0] + 180.0) % 360.0 - 180.0
+            clat = max(math.cos(math.radians(lat)), 0.05)
+            L = math.hypot(dlon * clat, j[1] - k[1]) + 1e-9
+            nx, ny = -(j[1] - k[1]) / L, (dlon * clat) / L   # unit normal, tangent plane
+            o = _fractal_offset(s, salt)
+            cur_c = (_cell(s, 0), _cell(s, 1))
+            if cur_c != prev_c:                              # a transform: cut here
+                if len(run) > 1:
+                    out.append(run)
+                run = []
+                prev_c = cur_c
+            run.append([lon + nx * o / clat, lat + ny * o])
+        if len(run) > 1:
+            out.append(run)
     return out
 
 
@@ -261,12 +389,26 @@ def _ridge_geometry(age, h=1024, w=2048):
         return None
     rdist, rid = _sphere_distance(rxyz, rids, h, w)
 
+    # DISTANCE TO THE SEGMENT ENDS as well as to the axis. A spreading segment
+    # is not uniform along its length: it is magmatically fat in the middle and
+    # starved at the ends, so the axial valley shoals toward the segment centre
+    # and drops into a NODAL BASIN a kilometre deeper at each end, against the
+    # transform. Those basins and the bulges between them are the most legible
+    # thing about a real ridge at chart scale, and with only an axis distance
+    # the ridge could only ever be a uniform ribbon.
+    ends = [p for run in ridge for p in (run[0], run[-1])]
+    edist = None
+    if len(ends) >= 4:
+        exyz, eids = _densify([[p, p] for p in ends], step_deg=9.0, smooth=False)
+        if exyz is not None and len(exyz) >= 4:
+            edist, _ = _sphere_distance(exyz, eids, h, w)
+
     tdist = None
     txyz, tids = _densify(trench)
     if txyz is not None and len(txyz) >= 8:
         tdist, _ = _sphere_distance(txyz, tids, h, w)
 
-    out = {"ridge": (rdist, rid, len(rxyz) >= 200), "trench": tdist}
+    out = {"ridge": (rdist, rid, len(rxyz) >= 200), "trench": tdist, "ends": edist}
     _GEOM_CACHE[key] = out
     return out
 
@@ -530,10 +672,23 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             relief = np.zeros_like(out)
             deg_per_cell = 180.0 / h
 
-            # AXIAL VALLEY. A slow ridge carries a rift valley a few tens of km
-            # wide down its crest; the broad swell either side is already there,
-            # because it IS the age-depth curve above.
-            relief -= np.exp(-(dist_deg / 0.55) ** 2) * 900.0
+            # AXIAL VALLEY, VARYING ALONG STRIKE. A slow ridge carries a rift
+            # valley a few tens of km wide down its crest; the broad swell
+            # either side is already there, because it IS the age-depth curve
+            # above. What was missing is that the valley is not a uniform
+            # ribbon. Melt is delivered to the middle of a segment and starved
+            # at its ends, so the crest shoals by several hundred metres toward
+            # the segment centre and drops into a NODAL BASIN about a kilometre
+            # deeper where it meets the transform. That alternation of bulge
+            # and basin, repeating every segment down the whole system, is what
+            # a real ridge looks like at chart scale -- and it is the direct
+            # cause of the along-axis relief the straight-line version lacked.
+            edist = geom.get("ends")
+            nodal = (np.exp(-(_upsample(edist, h, w, order=1) / 1.15) ** 2)
+                     if edist is not None else np.zeros_like(dist_deg))
+            relief -= np.exp(-(dist_deg / 0.55) ** 2) * (620.0 + 780.0 * nodal)
+            relief -= np.exp(-(dist_deg / 1.70) ** 2) * 300.0 * nodal
+            relief += np.exp(-(dist_deg / 2.60) ** 2) * 340.0 * (1.0 - nodal)
 
             # FRACTURE ZONES, back where they belong -- traced from the ridge
             # network's own transform offsets.
@@ -557,7 +712,20 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             dyb = sid_i[:-1, :] != sid_i[1:, :]
             edge[:-1, :] |= dyb
             edge[1:, :] |= dyb
-            fzd = _edt_wrap(~edge) * deg_per_cell
+            # SMOOTH THE DISTANCE FIELD BEFORE ITS LEVEL SETS ARE USED AS
+            # GEOMETRY. `edge` is a Voronoi boundary rasterised onto a lat/lon
+            # grid, so it is a staircase of single cells: the exact boundary is
+            # a smooth curve, and every right angle in it is an artefact of the
+            # lattice, not a feature. Taking exp(-(fzd/0.24)^2) of the raw
+            # transform therefore draws that staircase at full contrast, and
+            # with the network now supplying four times as many segments as
+            # before it covered the abyss in a right-angled circuit-board mesh.
+            # Half a groove-width of blur costs nothing real -- the trough is
+            # 0.24 deg wide and this is 0.26 -- and restores the smooth curve
+            # the partition boundary always was. Same lesson as the sediment
+            # field below: a distance transform is not a shape until it is
+            # band-limited.
+            fzd = _nd.gaussian_filter(_edt_wrap(~edge) * deg_per_cell, 1.5)
             # A trace is only a fracture zone where it runs along the flowline.
             # Cell boundaries between distant or oddly-oriented segments cut
             # across the grain and must be dropped, or they draw a lattice.
@@ -668,7 +836,15 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # so the whole basin lost its grain and its fracture zones and went
             # glassy. Normalising over 75 degrees keeps the coordinate varying
             # right across the widest ocean; depth still uses the clamped age.
-            ofield[..., 0] = np.where(sea, np.clip(dist_deg / 75.0, 0.0, 1.0), 1.0)
+            # ...and it ships COMPANDED, log(1 + d/D0), not linear -- see the
+            # note on CO_D0 at the top. The shader takes the exp back out, so
+            # the quantity it works in is unchanged; what changes is that the
+            # 256 available levels are now spent near the axis, where the
+            # fabric actually is, instead of being spread evenly across a basin
+            # whose far half is sediment-mantled and has nothing fine left to
+            # resolve. This is the whole reason the fault set can be keyed to a
+            # shipped 8-bit channel at all.
+            ofield[..., 0] = np.where(sea, compand(dist_deg), 1.0)
             ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
             ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
         else:
@@ -684,7 +860,8 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             conf = np.clip(slope / 11.0, 0.0, 1.0) * polefade
             inv = 1.0 / (slope + 1e-6)
             age01 = np.clip((-out - RIDGE_DEPTH) / (MAX_ABYSS - RIDGE_DEPTH), 0.0, 1.0)
-            ofield[..., 0] = np.where(sea, age01, 1.0)
+            # Companded like the main branch, so the shader has one decode.
+            ofield[..., 0] = np.where(sea, compand(age01 * CO_MAX), 1.0)
             ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * east * inv * conf, 0.0, 1.0), 0.5)
             ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * north * inv * conf, 0.0, 1.0), 0.5)
 

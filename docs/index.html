@@ -131,7 +131,17 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 #slider::-moz-range-thumb{width:4px;height:26px;border:none;background:#fff;border-radius:2px}
 #trackbg{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
 #trackgrad{position:absolute;inset:0}
-#ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px}
+#ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px;position:relative}
+/* Centred on the BAR, not in the flex flow: an auto-margin item would centre
+   itself in whatever space the controls left over, which is off-centre on the
+   page and moves as the speed readout changes width. */
+#contact{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-size:10.5px;line-height:1.4;color:var(--dim2);white-space:nowrap;text-align:center}
+#contact a{color:var(--dim2);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.16)}
+#contact a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+/* The controls close in on the centre before this gets cramped; drop it rather
+   than let it collide with the step buttons. */
+@media (max-width:1180px){#contact{display:none}}
 .pbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
 .pbtn:hover{border-color:var(--accent);color:var(--accent)}
 .pbtn svg{width:15px;height:15px;fill:currentColor}
@@ -533,9 +543,12 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <h2>Tectonic Earth</h2>
   <p>An interactive reconstruction of Earth's surface across 1.25 billion years — from the supercontinent <b>Rodinia</b> through <b>Pangaea</b> to the projected future supercontinent <b>Pangaea&nbsp;Proxima</b>. Land, mountains, shelves and inland seas come from published paleo-elevation data at 5-million-year steps.</p>
   <h3>How it animates</h3>
-  <p>The page doesn't ship pictures of each era — it ships <b>elevation and rainfall fields</b>, and builds the world in a shader as you scrub. Because it interpolates the height field, a coastline genuinely <b>migrates</b> between keyframes instead of one image dissolving into another, so motion stays smooth at any playback speed. Relief is shaded per pixel, so terrain keeps its bite at any zoom. The future is the present-day map carried by rigid plate rotations, which is why it holds the same detail as today and leaves no seam at the present.</p>
+  <p>The page doesn't ship pictures of each era — it ships <b>physical fields</b>, six of them per keyframe (elevation, rainfall, plate motion, lake depth, surface processes and ocean structure), and builds the world in a shader as you scrub. Because it interpolates the height field, a coastline genuinely <b>migrates</b> between keyframes instead of one image dissolving into another, so motion stays smooth at any playback speed. Relief is shaded per pixel, so terrain keeps its bite at any zoom. The future is the present-day map carried by rigid plate rotations, which is why it holds the same detail as today and leaves no seam at the present.</p>
   <h3>Layers through time</h3>
   <p>The present-day layers are surveyed data only for today. Going back, plate <b>motion is measured from the reconstruction itself</b> — consecutive keyframes are the same crust a few million years apart, so matching one against the next recovers how fast and which way each patch of surface travelled. Boundaries follow from that same field: crust pulling apart is a ridge, crust converging a trench. The two layers therefore always agree. Where there is no structure to match — bare abyssal plain — no motion is claimed rather than invented. <b>Volcanism</b> carries age windows, but a flood basalt is an eruption for a moment and a <b>landform</b> for far longer, so each province stays on the map for as long as it stood as high ground — the Deccan still holds up the Western Ghats, while CAMP, the largest of them all, was buried in its own rift basins almost as it erupted and is a landform essentially nowhere. Plumes are anchored in the mantle while plates slide over them, so those markers stay put and the crust moves past; provinces, which ride away on the plate, are carried back to the crust they erupted through.</p>
+  <h3>The ocean floor</h3>
+  <p>Two thirds of the surface is sea floor, so it is modelled rather than tinted. Each keyframe resolves that age's own spreading ridges and trenches from the plate model, and everything follows from distance to them. Depth comes from <b>half-space cooling</b> — new crust stands high at the axis and sinks as the square root of its age — which is why the ridges run as pale swells and the old basins lie 6 km down. The reconstruction only resolves a dozen or so ridge arcs in deep time, far too coarse to look like a spreading system, so the model <b>synthesises the network between them</b>: arcs are joined into continuous chains and then offset at four self-similar scales, from basin-wide ridge–transform steps down to axial crenulation, giving an axis that stays complex however far you zoom. Segments are fat in the middle and starved at the ends, so the crest shoals between <b>nodal basins</b> a kilometre deeper where it meets each transform. Every one of those offsets trails a <b>fracture zone</b> — the boundary between crust made by one segment and crust made by the next — which is where they come from here, rather than being drawn on.</p>
+  <p>Finer than the shipped grid, the floor is grown per pixel from the mechanism itself. Abyssal hills are not noise: they are <b>tilted fault blocks</b>, cut by normal faults at the axis and carried outward on the plate unchanged, which is why a real chart shows long parallel combing. Three self-similar fault sets reproduce that, spaced from about 24 km down to 3.6 km at the axis and widening with age as pelagic sediment mantles the short wavelengths first — so young crust is sharp, old crust subdued, and a turbidite plain against a continental margin is nearly featureless, as those plains actually are. Trenches carry an outer rise, continental slopes are cut by turbidity-current canyons, hotspot tracks smear into seamount chains along the plate's path, and oceanic plateaus rise and drown on their own curves.</p>
   <h3>Names and life</h3>
   <p>A feature that lasts 300 million years is not doing the same thing throughout, so the long-lived ones carry a description <b>per phase of their life</b>: the Appalachians read as a rising arc collision at 450 Ma, a Himalayan-scale range at 290, and a worn root today. Names are laid out rather than merely projected — each takes the nearest free slot to its feature, with a leader line when it has to move, and is dropped rather than drawn on top of another. Clicking a landmass also shows what its rocks preserve at that moment, and the life of the age is drawn alongside.</p>
   <h3>How the climate is derived</h3>
@@ -544,7 +557,8 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <ul>
     <li><b>Paleogeography &amp; elevation</b> — Scotese &amp; Wright (2018), <i>PALEOMAP PaleoDEMs</i> for the Phanerozoic (0–540 Ma), 6-arc-minute grids. CC-BY 4.0.</li>
     <li><b>Present plate motions</b> — NNR-MORVEL56 (Argus, Gordon &amp; DeMets, 2011): real Euler poles drive the motion-vector field.</li>
-    <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults.</li>
+    <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults. Through deep time the boundaries come instead from the Merdith et al. (2021) rotation model, resolved per keyframe with pyGPlates into continuously-closing topologies.</li>
+    <li><b>Sea floor</b> — depth from half-space cooling (Parsons &amp; Sclater); roughness follows the von Kármán description of abyssal-hill terrain — a band-limited fractal, about 5:1 elongated, hills tens to a few hundred metres high and a few kilometres apart. Ridge segmentation, nodal basins and fracture-zone spacing are set to the observed ranges. The ridge network below the model's resolution is synthesised, not surveyed: it is a plausible spreading system consistent with the resolved arcs, not a map of one.</li>
     <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Haq/Hallam sea-level curves, Late-Paleozoic and Neoproterozoic glaciations). Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
     <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
     <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
@@ -579,7 +593,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
         <hr class="rule">
 
         <section>
-          <p class="lead">Each moment in the timeline is stored as physical <b>fields</b> &mdash; elevation, rainfall, and plate motion &mdash; and the surface is assembled in a GPU shader at render time rather than played back as finished images. Interpolating the elevation field between keyframes lets coastlines migrate as sea level changes, relief is shaded per pixel, and the view holds detail from the whole globe down to a single valley.</p>
+          <p class="lead">Each moment in the timeline is stored as physical <b>fields</b> &mdash; elevation, rainfall, plate motion, lake depth, surface processes and ocean structure &mdash; and the surface is assembled in a GPU shader at render time rather than played back as finished images. Interpolating the elevation field between keyframes lets coastlines migrate as sea level changes, relief is shaded per pixel, and the view holds detail from the whole globe down to a single valley. Where a real feature is finer than any field the app could ship &mdash; abyssal hills a few kilometres across, gullies on a continental slope &mdash; it is grown per pixel from the process that makes it, so the detail appears as you zoom instead of running out.</p>
           <div class="stat-row">
             <div class="stat"><div class="n">1,250 Myr</div><div class="l">span, at 5-Myr steps</div></div>
             <div class="stat"><div class="n">Merdith 2021</div><div class="l">plate rotation model</div></div>
@@ -616,7 +630,8 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
           <div class="grid">
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-amber)"></span><h3>Real plate motion</h3></div><p>Ridges, trenches and transforms from the Merdith 2021 rotation model &mdash; moving continuously, keeping their names, ocean floor as active as the continents.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-green)"></span><h3>Climate &amp; biomes</h3></div><p>Winds carry moisture inland and dry the interiors; mountains cast rain shadows; vegetation follows rainfall against evaporation &mdash; so Pangaea grows a desert heart on its own.</p></div>
-            <div class="card"><div class="k"><span class="dot" style="background:#c9a86a"></span><h3>Photoreal terrain</h3></div><p>Per-pixel relief and hillshade, slope-bare rock on mountain flanks, ocean bathymetry, and glaciers from a snowline that answers to both cold and snowfall.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#c9a86a"></span><h3>Photoreal terrain</h3></div><p>Per-pixel relief and hillshade, slope-bare rock on mountain flanks, and glaciers from a snowline that answers to both cold and snowfall &mdash; including the Cryogenian, where the ice reaches the equator and life holds on in thin refugia.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#5f86a8"></span><h3>A modelled sea floor</h3></div><p>Ridges, transforms, fracture zones, trenches and abyssal-hill fabric, all derived from each age's own spreading system &mdash; depth from half-space cooling, texture from the fault mechanism that makes it.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-teal)"></span><h3>Rivers, marshes &amp; deltas</h3></div><p>Modeled drainage read from the lows of the reconstructed terrain and weighted by rainfall &mdash; channels in the valleys, marshes in wet flats, deltas at wet coasts.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>A cloud layer driven by each era's own rainfall (tropical convergence, storm tracks, clear desert belts), a day/night terminator, limb haze, and era-appropriate ocean colour.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#d2662f"></span><h3>Deep-time events</h3></div><p>73 confirmed impact structures and 37 large igneous provinces, each carried along its plate toward where that crust sat at the time (an estimate that recovers direction better than distance).</p></div>
@@ -641,12 +656,20 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
           </div>
         </section>
 
+        <section>
+          <div class="sec-head"><p class="eyebrow">Method</p><h2>The floor of the ocean</h2></div>
+          <p class="dim">Two thirds of the surface is sea floor, and for most of the timeline nobody has ever mapped it &mdash; the crust that recorded it has been subducted. What survives is the <i>mechanism</i>, and the mechanism is well understood, so that is what the model runs. Each keyframe resolves its own spreading ridges and trenches from the plate rotations, and the rest follows from distance to them: depth from half-space cooling, so new crust stands high at the axis and sinks as the square root of its age; fracture zones as the frozen wake of every transform offset; trenches with the outer rise the plate flexes into before it bends down.</p>
+          <p class="dim">The reconstruction resolves only a dozen or so ridge arcs in deep time, which is nowhere near enough to read as a spreading system, so the network between them is <b>synthesised</b> rather than interpolated &mdash; arcs joined into continuous chains, then offset at four self-similar scales from basin-wide ridge&ndash;transform steps down to axial crenulation. Finer still, below anything the shipped grid could hold, the floor is grown per pixel from the fault mechanism itself: abyssal hills are tilted fault blocks, cut at the axis and carried outward on the plate, which is why real fabric combs in long parallel lines rather than dappling. Sediment then buries the short wavelengths first, so young crust near a ridge is sharp and an old plain against a continental margin is nearly featureless.</p>
+          <p class="note">This is a plausible spreading system consistent with the resolved arcs, not a survey of one. The individual ridge segments and fracture zones are modelled, in the way the modelled rivers are: the pattern is real, the particular line is not.</p>
+        </section>
+
         <hr class="rule">
 
         <section>
           <div class="sec-head"><p class="eyebrow">Under the hood</p><h2>How it's built</h2></div>
           <div class="models">
-            <div class="model"><div class="lab">The engine</div><p>Ships elevation, rainfall and motion textures per 5-Myr keyframe; a GLSL shader interpolates them and recomputes temperature, relief, biomes, water and sky per pixel &mdash; nothing is a pre-baked picture.</p></div>
+            <div class="model"><div class="lab">The engine</div><p>Ships six physical fields per 5-Myr keyframe &mdash; elevation, rainfall, plate motion, lake depth, surface processes and ocean structure; a GLSL shader interpolates them and recomputes temperature, relief, biomes, water and sky per pixel &mdash; nothing is a pre-baked picture.</p></div>
+            <div class="model"><div class="lab">Ocean structure</div><p>Each age's ridges and trenches are resolved from the plate model, then a spreading network is synthesised between them at four self-similar scales. Depth follows half-space cooling; fracture zones fall out of the segmentation; abyssal hills are grown per pixel as tilted fault blocks and mantled by sediment with age.</p></div>
             <div class="model"><div class="lab">Plate motion</div><p>The Merdith et al. (2021) full-plate rotation model, resolved with pyGPlates into continuously-closing plate topologies and classified boundaries.</p></div>
             <div class="model"><div class="lab">Paleogeography</div><p>Scotese &amp; Wright PALEOMAP paleo-elevation models for 0&ndash;540 Ma; an authored craton composite deeper in the Precambrian; the present terrain rotated forward for the future.</p></div>
             <div class="model"><div class="lab">Climate</div><p>Temperature from latitude, elevation and an era anomaly; rainfall from wind-driven moisture transport, orographic rain shadow and Budyko humidity &mdash; calibrated to published GMST, CO<sub>2</sub> and O<sub>2</sub> curves.</p></div>
@@ -710,6 +733,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
         <svg viewBox="0 0 24 24"><path d="M8.6 5.6 15.1 12l-6.5 6.4L10 19.8 17.8 12 10 4.2z"/></svg>
       </button>
     </div>
+    <div id="contact">For questions, contact August Gweon (<a href="mailto:augustgweon@gmail.com">augustgweon@gmail.com</a>; <a href="mailto:august@anthropic.com">august@anthropic.com</a>)</div>
     <button class="txtbtn" id="ambientBtn">Ambient</button>
   </div>
 </div>
@@ -829,7 +853,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-1739';
+const DATA_V='20260725-2007';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -997,6 +1021,34 @@ vec4 abyssLod(float pxq){
   vec4 w=vec4(0.55,0.31,0.17,0.09);
   return w*(1.0-smoothstep(vec4(0.22),vec4(0.62),pxq*f));
 }
+/* Smear noise ALONG a direction -- a short line-integral convolution. Used to
+   make a field that varies down the ridge axis faster than across it, which is
+   how the fault fabric below gets broken into finite en-echelon hills instead
+   of ruled lines running forever.
+
+   Why a convolution and not a stretched domain, which would be far cheaper: on
+   a SPHERE the stretch cancels itself out. Compressing the noise coordinate
+   along a tangent direction t means subtracting t*dot(P*F,t), and dot(P,t) is
+   identically zero because a tangent is perpendicular to the radius. Worse, its
+   derivative is zero too -- moving along t tilts t inward at exactly the rate
+   that restores the term -- so the domain is not stretched at all, at any
+   amplitude. That curvature identity is the real reason an earlier attempt at
+   domain-stretched lineation came out as isotropic crumple. Elongation on a
+   sphere has to come either from a scalar field that genuinely varies across
+   the axis (which is what the shipped coordinate is) or from smearing. Both are
+   used here, each where it is the better tool.
+
+   Five taps buy about 2.5:1, which is all this needs: the anisotropy proper
+   comes from the companded coordinate, and this only has to bias the breakup
+   the right way. Every tap sits a fraction of a degree from the fragment, so a
+   wobble in the shipped direction field moves them by almost nothing. */
+float licN(vec3 p, vec3 t, float F, float S){
+  return ( vnoise3((p - t*(2.4*S))*F)*0.6
+         + vnoise3((p - t*(1.2*S))*F)*1.4
+         + vnoise3( p             *F)*1.8
+         + vnoise3((p + t*(1.2*S))*F)*1.4
+         + vnoise3((p + t*(2.4*S))*F)*0.6 ) * 0.169492;
+}
 
 float baseElev(vec2 uv){
   return mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
@@ -1028,7 +1080,20 @@ float elevDetail(float z, vec3 d, float rug){
     // Muted on the shelf, a little bolder out on the plain. Deliberately
     // small in amplitude so it never approaches sea level and flips to land.
     float shelf=smoothstep(-500.0,-40.0,z);       // ->1 on the shelf
-    return z + (n*150.0 + n2*95.0)*(1.0-shelf*0.7)*uDetail;
+    /* ...but NOT out on the abyssal plain, where the ocean-structure system
+       already supplies the relief and what it supplies is ANISOTROPIC:
+       ridge-parallel fault fabric carried outward on the plate. Isotropic
+       blobs added underneath that do not add detail, they cancel the grain.
+       The 24 km octave was the worst of it -- laying a mottle straight across
+       the combing, in the ELEVATION, where it drives the primary normal and so
+       beats a fabric that only perturbs the normal afterwards. That is why
+       round after round of fabric tuning kept coming back "a bit mottled": two
+       systems were texturing the same surface and the wrong one was winning.
+       Fade the fine octave out with depth and keep the long one, which reads as
+       basin-scale swell rather than as texture. */
+    float abyss=smoothstep(-1800.0,-3400.0,z);
+    return z + (n*150.0*(1.0-0.90*abyss) + n2*95.0*(1.0-0.35*abyss))
+               *(1.0-shelf*0.7)*uDetail;
   }
   // rugged ground also carries more relief, not just a different shape
   float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
@@ -1209,6 +1274,32 @@ void main(){
     float da=0.9/1024.0*PI;
     gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
     gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+    /* DEEP WATER: take the same gradient over a wider baseline too, and blend
+       to it with depth. The elevation field is 8-bit over a signed-square
+       range, so at abyssal depth ONE quantisation level is 105 m -- and this
+       gradient feeds a normal of (-gE, gN, 300), where 105 is a nineteen-degree
+       tilt. On a plain that is genuinely flat, the field hops between two
+       adjacent levels in an irregular texel-scale pattern and every hop threw
+       the surface normal nineteen degrees, which is a speckle no fabric can be
+       tuned out from underneath. Measured on the shipped field: half of all
+       adjacent abyssal cells differ by exactly zero and the 95th percentile is
+       two levels, i.e. the signal down there IS the staircase.
+
+       Widening the baseline to three texels averages the staircase away. It
+       costs nothing real, because the baked field holds nothing finer than
+       that in the abyss by design -- ridges, trenches, fracture zones and
+       plateaus are all half a degree and wider, and everything below that is
+       procedural and added after this point. Rescaled by da/db so a true slope
+       reads the same on either baseline and nothing steps as the blend
+       crosses. */
+    float qw=smoothstep(-2200.0,-3800.0,z);
+    if(qw>0.01){
+      float db=2.9/1024.0*PI, ds=da/db;
+      gE=mix(gE,(elevAt(uvFromDir(normalize(sdir+Eax*db)),rug)
+                -elevAt(uvFromDir(normalize(sdir-Eax*db)),rug))*ds, qw);
+      gN=mix(gN,(elevAt(uvFromDir(normalize(sdir+Nax*db)),rug)
+                -elevAt(uvFromDir(normalize(sdir-Nax*db)),rug))*ds, qw);
+    }
   }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
      t1 written in east/north coordinates, so blending toward (-0.55,0.55)
@@ -1686,22 +1777,26 @@ void main(){
        the coastline and the baked large structure (ridges, fracture zones,
        plateaus, seamounts) are untouched. */
     vec3 ocn = mix(texture2D(oceanA,uv).rgb, texture2D(oceanB,uv).rgb, mixf);
-    /* The across-ridge coordinate has to be SMOOTH, because the fault fabric
-       below is a periodic function of it and will faithfully draw whatever
-       structure it contains. Stored at 8 bits over 75 degrees, one quantisation
-       level is 0.29 deg while one texel is only 0.18 -- so the shipped field is
-       a staircase of flat terraces, and keying a fault set to it drew the
-       terrace CONTOURS as a right-angled circuit-board maze. Averaging a few
-       taps across the terraces turns the staircase back into the ramp it is
-       meant to be. (The real fix is a 16-bit coordinate; this buys the
-       precision needed here for four texture reads.) */
-    vec2 otx = vec2(1.0/2048.0, 1.0/1024.0)*1.35;
-    float crustAge = ( mix(texture2D(oceanA,uv).r, texture2D(oceanB,uv).r, mixf)*2.0
-      + mix(texture2D(oceanA,uv+vec2(otx.x,0.0)).r, texture2D(oceanB,uv+vec2(otx.x,0.0)).r, mixf)
-      + mix(texture2D(oceanA,uv-vec2(otx.x,0.0)).r, texture2D(oceanB,uv-vec2(otx.x,0.0)).r, mixf)
-      + mix(texture2D(oceanA,uv+vec2(0.0,otx.y)).r, texture2D(oceanB,uv+vec2(0.0,otx.y)).r, mixf)
-      + mix(texture2D(oceanA,uv-vec2(0.0,otx.y)).r, texture2D(oceanB,uv-vec2(0.0,otx.y)).r, mixf)
-      ) / 6.0;
+    /* THE ACROSS-RIDGE COORDINATE, COMPANDED. It has to be smooth, because the
+       fault fabric below is a periodic function of it and will faithfully draw
+       whatever structure it contains. Shipped LINEARLY over 75 degrees it was
+       not: one 8-bit level was 0.29 deg against a 0.176 deg texel, so the field
+       arrived as a staircase of flat terraces and the fault set drew the terrace
+       CONTOURS -- a right-angled circuit-board maze. Five taps of blur hid it at
+       the cost of the detail it was there to carry.
+
+       seafloor.py now ships log(1 + d/2.5) instead, so the levels are spent near
+       the axis: the step is 0.034 deg there, five times FINER than a texel, and
+       widens to a degree only out in the far field where pelagic sediment has
+       buried the fine fabric anyway. The staircase is gone at its source and one
+       tap is enough. R is the companded coordinate, uniformly quantised, and so
+       it -- not the decoded distance -- is what every periodic term below is
+       keyed to; that way the fault spacing widens with age exactly as the
+       resolvable fabric does. */
+    float CO_D0=2.5, CO_K=3.4340;
+    float crustCo = mix(texture2D(oceanA,uv).r, texture2D(oceanB,uv).r, mixf);
+    float distDeg = CO_D0*(exp(crustCo*CO_K)-1.0);    // true degrees from the axis
+    float crustAge = clamp(distDeg/75.0, 0.0, 1.0);   // as before: 0 at the axis, 1 far out
     vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
     float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
@@ -1759,22 +1854,44 @@ void main(){
          Because the field itself is elongated, its along-axis gradient is
          already ~1/6 of the across one and must NOT be scaled again. */
       float ACR=0.7639;
-      float ac=crustAge*300.0;
+      /* Keyed to the COMPANDED coordinate, not the decoded distance. The two
+         differ in exactly the way that matters: one 8-bit level advances the
+         companded coordinate by 1/255 everywhere, so the domain advances by a
+         fixed fraction of a noise period per level and can never terrace --
+         whereas keying to distance would advance it fifty times faster in the
+         far field than at the axis, and the far field is where the old maze
+         was worst. The rate below is set so a level moves the domain about a
+         quarter of a period, comfortably inside what interpolation smooths. */
+      float ac=crustCo*70.0;
       float fstep=0.12/1024.0*PI;                     // ~2.3 km, the hill scale
-      float acS=degrees(fstep)/75.0*300.0;            // ac advance over that step
+      float acS=degrees(fstep)/((CO_D0+distDeg)*CO_K)*70.0;   // ac advance over that step
       /* The stretch is carried along a FIXED world axis, not along across3.
-         Displacing the sample by across3*ac moves it up to 300 domain units
-         along a direction that itself wobbles with the shipped direction field,
-         so a fraction of a degree of wobble threw the sample a whole noise
-         period and scrambled the elongation into isotropic crumple. Only the
-         SCALAR ac has to encode "how far across the ridge" -- and it does,
-         being distance to the ridge. Anisotropy still comes out right: moving
-         across the ridge advances ac fast, moving along it does not. */
+         Displacing the sample by across3*ac moves it tens of domain units along
+         a direction that itself wobbles with the shipped direction field, so a
+         fraction of a degree of wobble threw the sample a whole noise period
+         and scrambled the elongation into isotropic crumple. Only the SCALAR ac
+         has to encode "how far across the ridge" -- and it does, being a
+         monotone function of distance to the ridge. Anisotropy still comes out
+         right: moving across the ridge advances ac fast, moving along it does
+         not. It does fall off with range, because the companded coordinate
+         does; the pelagic band-limit below is the answer to that. */
       vec3 SAX=vec3(0.0,0.0,1.0);
       vec3 q0=sdir*46.0 + SAX*ac;
       vec3 qa=(sdir+across3*fstep)*46.0 + SAX*(ac+acS);
       vec3 ql=(sdir+along3 *fstep)*46.0 + SAX*ac;
-      vec4 ow=abyssLod(length(fwidth(q0)));           // domain units per screen pixel
+      /* PELAGIC MANTLING, as a band-limit rather than as a fade. Far from the
+         axis the domain stretch necessarily weakens -- the coordinate advances
+         ever more slowly with distance -- so out there the fractal stops being
+         a ridge-parallel grain and becomes isotropic dapple laid over the whole
+         basin. Rather than fight that, model what actually happens: pelagic
+         ooze accumulates with age and buries the SHORT wavelengths first, so
+         old floor keeps its long swells and loses its fine texture. Killing the
+         fine octaves with distance is therefore both the right physics and the
+         cure for the dapple, and it leaves the true abyssal plain looking like
+         one -- broad, calm and nearly featureless, which is what a real plain
+         a thousand kilometres from a ridge looks like on a chart. */
+      float sedq = 1.0-0.72*smoothstep(6.0,34.0,distDeg);
+      vec4 ow=abyssLod(length(fwidth(q0)))*sedq;      // domain units per screen pixel
       float n0=abyssFbm(q0,ow), na=abyssFbm(qa,ow), nl=abyssFbm(ql,ow);
       float sAcross=(na-n0);
       float sAlong =(nl-n0);
@@ -1795,21 +1912,51 @@ void main(){
          The profile is skewed rather than sinusoidal because a fault block has
          a long back-slope and a short steep scarp, and it is built from two
          cosines so it stays band-limited and anti-aliases with everything else.
-         Two sets: a coarse one that carries the look at globe zoom and a finer
-         one that fades in as you approach it. */
+         Three self-similar sets: a coarse one that carries the look at globe
+         zoom and two finer ones that fade in as you approach it. */
       vec3 wq = sdir*22.0 - SAX*(crustAge*(22.0/ACR)*0.92);
       // Gentle: a fault set bends along its length, it does not meander. Above
       // about half a cycle the wander scrambles the parallelism it is meant
       // to soften and the fabric goes back to looking marbled.
       float wander = (vnoise3(wq)-0.5)*0.42 + (vnoise3(wq*2.7+9.0)-0.5)*0.18;
-      float pxa = max(fwidth(crustAge), 1e-6);
-      float phA = crustAge*88.0 + wander;
-      float phB = crustAge*310.0 + wander*2.6;
-      float wA = 1.0-smoothstep(0.20,0.55, pxa*88.0);
-      float wB = 1.0-smoothstep(0.20,0.55, pxa*310.0);
+      /* EN-ECHELON BREAKUP. Real abyssal hills are 10-20 km long, not ruled
+         lines: each fault dies out and is taken up by another offset a little
+         along strike. Jittering the phase with a field that varies mainly DOWN
+         the axis is what produces that -- each hill segment sits a fraction of
+         a wavelength off its neighbour, so the set stays parallel but stops
+         being a comb. Position-derived and therefore exact, which matters
+         because it is the one part of the fabric that must stay sharp after
+         the shipped coordinate has run out of levels. */
+      float jit = licN(sdir, along3, 318.0, 0.00118) - 0.5;
+      /* FRACTAL THROW. Fault populations follow a power law -- a few large
+         scarps and very many small ones -- so a set of uniform amplitude reads
+         as corduroy however well it is shaped. Modulating the throw along
+         strike with the same slow field that bends the set gives the range its
+         variety: a rugged panel here, a subdued one there, which is what makes
+         a real chart look like terrain rather than texture. */
+      float thrw = 0.45 + 0.95*vnoise3(wq*0.55+21.0);
+      /* THREE SELF-SIMILAR ORDERS, keyed to the companded coordinate so a
+         quantisation level advances each phase by a fixed fraction of a cycle
+         no matter how far out the fragment is. At the axis they come out at
+         about 24, 7.6 and 3.6 km -- observed abyssal-hill spacing is 2-5 km --
+         and they widen with distance exactly as the shipped precision and the
+         real, sediment-mantled fabric both do. The two finer sets also fade
+         out past the range where one level is still finer than a texel, since
+         beyond that the field genuinely cannot hold them. */
+      float pxa = max(fwidth(crustCo), 1e-6);
+      float nearw = 1.0-smoothstep(9.0,26.0,distDeg);
+      float phA = crustCo*40.0  + wander;
+      float phB = crustCo*126.0 + wander*2.6 + jit*0.55;
+      float phC = crustCo*268.0 + wander*5.1 + jit*1.30;
+      float wA = 1.0-smoothstep(0.20,0.55, pxa*40.0);
+      float wB = (1.0-smoothstep(0.20,0.55, pxa*126.0))*nearw;
+      float wC = (1.0-smoothstep(0.20,0.55, pxa*268.0))*nearw*nearw;
+      // Skewed, not sinusoidal: a fault block has a long back-slope and a short
+      // steep scarp. Built from two cosines so it stays band-limited.
       float faultSlope = wA*(cos(6.2831*phA)+0.45*cos(12.566*phA+1.1))
-                       + wB*0.55*(cos(6.2831*phB)+0.45*cos(12.566*phB+1.1));
-      gUV += sUV*(faultSlope*0.42);
+                       + wB*0.55*(cos(6.2831*phB)+0.45*cos(12.566*phB+1.1))
+                       + wC*0.30*(cos(6.2831*phC)+0.45*cos(12.566*phC+1.1));
+      gUV += sUV*(faultSlope*0.42*thrw);
 
       /* R now carries BOTH causes of burial -- pelagic ooze accumulating with
          age, and the turbidite wedge off a nearby continent -- so this one term
@@ -1844,7 +1991,16 @@ void main(){
          unnaturally perfect parallel lines, while leaving a little residual
          lets each corridor wander, as real fracture zones do. */
       float FZF=150.0;
-      float fzc=crustAge*(FZF/ACR)*0.86;
+      /* The cancellation has to be keyed to true DISTANCE, not to the companded
+         coordinate, because it only works if it advances at the same rate as
+         the domain does -- and true distance is the one quantity whose shipped
+         steps grow with range. So retire it beyond about 30 degrees, where a
+         level is several noise periods wide and holding on to it would put back
+         exactly the terracing this round removed. Nothing is lost: real
+         fracture zones out there are baked into the elevation field by
+         seafloor.py, and this term is the extra corrugation between them. */
+      float fzk=0.86*(1.0-smoothstep(8.0,30.0,distDeg));
+      float fzc=crustAge*(FZF/ACR)*fzk;
       vec3 g0=sdir*FZF - SAX*fzc;
       vec3 gl=(sdir+along3*(fstep*5.0))*FZF - SAX*fzc;
       float m0=vnoise3(g0)+0.5*vnoise3(g0*2.2+7.0);
@@ -1854,7 +2010,7 @@ void main(){
       // than the old isotropic finite differences.
       // The fault set above now carries the structure, so the fractal is
       // demoted to the fine texture riding on top of it.
-      float amp = 1.15 * rough * aniso * deepw;
+      float amp = 0.95 * rough * aniso * deepw * mix(0.50,1.0,sedq);
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
       col *= 1.0 + sAcross*0.55*rough*aniso*deepw;

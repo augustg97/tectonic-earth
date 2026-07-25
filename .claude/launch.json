@@ -4,7 +4,7 @@
     {
       "name": "web",
       "runtimeExecutable": "/usr/bin/python3",
-      "runtimeArgs": ["/Users/augustgweon/Desktop/Tectonic Plate Model/build/serve.py", "8899"],
+      "runtimeArgs": ["/Users/augustgweon/Tectonic Plate Model/build/serve.py", "8899"],
       "port": 8899
     }
   ]
