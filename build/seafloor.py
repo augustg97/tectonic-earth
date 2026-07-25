@@ -645,7 +645,30 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             _rd, _rid, ridge_ok = geom["ridge"]
             dist_deg = _upsample(_rd, h, w, order=1)
             seg_id = _upsample(_rid.astype(np.float32), h, w, order=0)
-            age_myr = np.clip(dist_deg * 111.19 / SPREAD_KM_PER_MYR, 0.0, MAX_CRUST_AGE)
+
+            # ---- CRUSTAL AGE, from history rather than from present distance --
+            # This is the substitution the whole sea floor now rests on. Age used
+            # to be inferred as distance-to-the-nearest-present-ridge times a
+            # spreading rate, which is wrong in three ways at once: the fabric it
+            # implies is oriented to the ridge as it IS rather than as it WAS,
+            # fracture zones cannot persist because nothing carries them, and the
+            # coordinate's gradient decays with range so the far field loses its
+            # fabric spacing along with its amplitude. Real age has none of those
+            # problems -- its gradient is 1/(spreading rate) and does not decay.
+            # See oceanage.py, crustage.py and realage.py.
+            try:
+                import oceanage
+                _a, _az, _fz, _sv = oceanage.cached(round(float(age)), 512, 1024)
+                age_myr = np.clip(_upsample(_a, h, w, order=1), 0.0, MAX_CRUST_AGE)
+                fz_field = np.clip(_upsample(_fz, h, w, order=1), 0.0, 1.0)
+                age_ok = True
+            except Exception as _e:
+                if verbose:
+                    print(f"    crustal age unavailable ({_e}); falling back to distance")
+                age_myr = np.clip(dist_deg * 111.19 / SPREAD_KM_PER_MYR, 0.0, MAX_CRUST_AGE)
+                fz_field = None
+                age_ok = False
+
             model_depth = -(RIDGE_DEPTH + DEPTH_PER_SQRT_MYR * np.sqrt(age_myr))
             model_depth = np.clip(model_depth, -MAX_ABYSS, -RIDGE_DEPTH)
 
@@ -655,12 +678,15 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             wgt = deep * (0.72 if ridge_ok else 0.35)
             out = out * (1.0 - wgt) + model_depth * wgt
 
-            # SPREADING DIRECTION = the gradient of the ridge-distance field. It
-            # points straight away from the ridge that made this crust, which is
-            # the direction the plate travelled, so the shader's abyssal-hill
-            # fabric lies at right angles to it -- parallel to the ridge axis, as
-            # real abyssal hills do.
-            sm = _nd.gaussian_filter(dist_deg, 2.0)
+            # SPREADING DIRECTION = the gradient of the CRUSTAL AGE field. Age
+            # increases along the flowline the crust travelled, so its gradient
+            # is that flowline and the fabric lies at right angles to it --
+            # parallel to the isochron, which is the ridge as it was when this
+            # crust formed. That last clause is the whole point of the change:
+            # taken from distance to the PRESENT ridge, the direction was right
+            # only near the axis and swung wrong everywhere else, which is why
+            # the fabric curved in arcs where a real chart combs dead straight.
+            sm = _nd.gaussian_filter(age_myr if age_ok else dist_deg, 2.0)
             gy, gx = np.gradient(sm)
             coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
             east = gx / coslat
@@ -742,8 +768,26 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # abyss. Fade the traces out past ~30 degrees of spreading.
             fz_ok = (keep * np.clip((-out - 2400.0) / 1500.0, 0.0, 1.0)
                      * (1.0 - np.clip((dist_deg - 16.0) / 14.0, 0.0, 1.0)))
-            relief -= np.exp(-(fzd / 0.24) ** 2) * 380.0 * fz_ok
-            relief += np.exp(-((fzd - 0.62) / 0.45) ** 2) * 110.0 * fz_ok
+            if age_ok and fz_field is not None:
+                # AGE-DERIVED FRACTURE ZONES, replacing the Voronoi partition.
+                # A fracture zone is two crusts of DIFFERENT AGE lying side by
+                # side, so it is an age offset measured along the isochron --
+                # which is exactly what oceanage.fz carries. The important
+                # difference from the partition version is not accuracy, it is
+                # PERSISTENCE: an age offset travels with the crust, so one
+                # transform's wake stays in the plate for as long as the plate
+                # lasts. That is why real fracture zones cross whole basins,
+                # and why the old construction could never produce one -- it
+                # was rebuilt from the present segmentation every keyframe and
+                # so could never be older than the frame it was drawn in.
+                fzw = (fz_field * np.clip((-out - 2400.0) / 1500.0, 0.0, 1.0)
+                       * polefade)
+                ring = np.clip(_nd.gaussian_filter(fzw, 2.6) - fzw * 0.80, 0.0, None)
+                relief -= fzw * 430.0
+                relief += ring * 260.0          # the flanking ridges either side
+            else:
+                relief -= np.exp(-(fzd / 0.24) ** 2) * 380.0 * fz_ok
+                relief += np.exp(-((fzd - 0.62) / 0.45) ** 2) * 110.0 * fz_ok
 
             # TRENCHES. Where the model says crust is being consumed, cut the
             # deepest features on Earth -- narrow, arcuate, and only on the ocean
@@ -844,7 +888,20 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # whose far half is sediment-mantled and has nothing fine left to
             # resolve. This is the whole reason the fault set can be keyed to a
             # shipped 8-bit channel at all.
-            ofield[..., 0] = np.where(sea, compand(dist_deg), 1.0)
+            # ...and what it compands is now AGE, not distance. Age is the
+            # coordinate the fabric actually lives in: its gradient is one over
+            # the spreading rate, which does not decay with range, so abyssal-
+            # hill spacing stays uniform from the axis to the trench the way it
+            # does in nature. Distance-to-the-present-ridge decayed, which is
+            # what marbled the far field and then left it blank once that was
+            # capped. Expressed in the same units as before -- degrees of
+            # spreading -- so the shader's decode is unchanged and only the
+            # meaning of the quantity improves.
+            if age_ok:
+                spread_deg = age_myr * SPREAD_KM_PER_MYR / 111.19
+            else:
+                spread_deg = dist_deg
+            ofield[..., 0] = np.where(sea, compand(spread_deg), 1.0)
             ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
             ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
         else:
