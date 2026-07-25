@@ -64,14 +64,50 @@ def _spread(diff, mask, sigma=14.0, rounds=3):
     return np.where(mask, diff, out)
 
 
+def _future(F, h, w):
+    """Age F Myr AHEAD, carried on the same rigid per-group rotations the future
+    terrain itself uses.
+
+    Not from pyGPlates. Asked for a negative time it does not refuse -- it
+    extrapolates Merdith et al. a hundred million years past the end of the
+    model and returns a complete, plausible-looking field in which every number
+    is invented, at 51 seconds a frame. The published model stops at the present
+    and so must we.
+
+    What the app already does for the future is warp TODAY's terrain by a rigid
+    rotation per plate group. Carrying today's age field on exactly those
+    rotations keeps the age registered to the elevation it describes, and then
+    the crust simply gets older by the elapsed time. Ground the groups do not
+    claim is new ocean opened behind the drifting plates -- new crust, so it is
+    young: oldest against the rifted margin where the gap first opened, youngest
+    down the middle where the ridge now is.
+    """
+    from scipy.ndimage import distance_transform_edt
+    import build_fields as bf
+    age0, _pid = realage.present(h, w)
+    a0 = np.where(np.isfinite(age0), age0, MAX_AGE).astype(float)
+    frac = float(np.clip(F / 250.0, 0.0, 1.0))
+    warped = bf.future_grid(frac, bf.rasterise_groups(), a0, h, w)
+    # future_grid fills unclaimed cells with its ocean-DEPTH backdrop, which is
+    # far outside any possible age -- so the fill identifies the new crust for
+    # free, with no second pass over the group masks.
+    new = warped < 0.0
+    age = np.where(new, 0.0, warped + F)
+    if new.any():
+        d = distance_transform_edt(new)
+        half = max(0.5 * float(d.max()), 1e-6)
+        age = np.where(new, F * np.clip(1.0 - d / half, 0.0, 1.0), age)
+    return np.clip(age, 0.0, MAX_AGE).astype(np.float32)
+
+
 def fuse(T, h=512, w=1024):
     """(age, azimuth_deg, fz, surveyed) for time T."""
     from scipy.ndimage import gaussian_filter
+    if T < 0:
+        age = _future(-float(T), h, w)
+        return _derive(age, h, w) + (np.zeros((h, w), bool),)
     model, arc, dst, pid = crustage.cached(T, h, w)
-    if T >= 0:
-        surv, ok = realage.cached(T, h, w)
-    else:
-        surv, ok = np.full((h, w), np.nan, np.float32), np.zeros((h, w), bool)
+    surv, ok = realage.cached(T, h, w)
 
     model = np.where(np.isfinite(model), model, MAX_AGE).astype(np.float64)
     both = ok & np.isfinite(surv)
@@ -81,6 +117,14 @@ def fuse(T, h=512, w=1024):
     else:
         age = model
     age = np.clip(age, 0.0, MAX_AGE).astype(np.float32)
+    return _derive(age, h, w) + (both,)
+
+
+def _derive(age, h, w):
+    """(age, azimuth_deg, fz) -- the two fields the sea floor reads off an age
+    grid, however that grid was made. Shared by the reconstructed past and the
+    projected future so both describe the fabric the same way."""
+    from scipy.ndimage import gaussian_filter
 
     # --- isochron direction, from the age gradient -----------------------
     # Smoothed first: the gradient of a nearest-neighbour field is dominated by
@@ -126,7 +170,7 @@ def fuse(T, h=512, w=1024):
     fz = np.clip(jump / (2.5 * across) - 0.35, 0.0, 1.0)
     fz = gaussian_filter(fz, 0.9, mode=("reflect", "wrap")).astype(np.float32)
 
-    return age, azi, fz, both
+    return age, azi, fz
 
 
 def cached(T, h=512, w=1024):
