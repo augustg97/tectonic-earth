@@ -145,6 +145,93 @@ def _sphere_distance(xyz, ids, h, w):
     return ang.reshape(h, w).astype(np.float32), ids[i].reshape(h, w)
 
 
+def _ridge_network(polys, seg_deg=1.35, jog_deg=0.62, seed=17):
+    """Turn the model's fragmentary ridge arcs into a CONNECTED, SEGMENTED
+    spreading network -- the structural change that gives the sea floor crisp
+    axial lines and real fracture zones.
+
+    The reconstruction resolves only a dozen or so ridge arcs in deep time, and
+    interpolating distance to that sparse set can only ever produce broad
+    smooth swells: no axis you can trace, and no transforms. A real spreading
+    system is one continuous network of SHORT segments -- 50-200 km each -- every
+    one offset from its neighbour by a transform fault, marching across the
+    basin in a staircase. That segmentation sits far below anything the plate
+    model carries, but it IS the structure that makes a ridge legible, and every
+    fracture zone in the ocean is the frozen wake of one of those offsets.
+
+    So synthesise it, constrained by the real arcs rather than invented from
+    nothing:
+      1. join arcs whose endpoints nearly meet, so the system is continuous;
+      2. resample each chain into segments of about `seg_deg`;
+      3. jog alternate segments sideways, perpendicular to the local axis, to
+         build the transform staircase.
+    The jog is drawn from a stable hash of the segment index, so a given age
+    always produces the same network and it does not shimmer between frames.
+
+    Returns polylines plus one id PER SEGMENT. That id is what finally makes
+    fracture zones work: with hundreds of segments instead of thirteen, the
+    boundaries of the nearest-segment partition stop being continent-length
+    Voronoi walls and become exactly what they should be -- a dense family of
+    flowline-parallel traces, one running out from every transform.
+    """
+    import random as _r
+    # --- 1. join arcs into chains ---------------------------------------
+    arcs = [list(p) for p in polys if len(p) > 1]
+    chains = []
+    while arcs:
+        cur = arcs.pop(0)
+        joined = True
+        while joined and arcs:
+            joined = False
+            for i, a in enumerate(arcs):
+                for endA, endB, rev in ((cur[-1], a[0], False), (cur[-1], a[-1], True),
+                                        (cur[0], a[-1], None), (cur[0], a[0], "revcur")):
+                    dlon = (endB[0] - endA[0] + 180.0) % 360.0 - 180.0
+                    dd = math.hypot(dlon * math.cos(math.radians(endA[1])), endB[1] - endA[1])
+                    if dd < 6.0:
+                        seg = a[::-1] if rev is True else a
+                        if rev is None:
+                            cur = a + cur
+                        elif rev == "revcur":
+                            cur = a[::-1] + cur
+                        else:
+                            cur = cur + seg
+                        arcs.pop(i); joined = True; break
+                if joined:
+                    break
+        chains.append(cur)
+
+    # --- 2 & 3. resample into segments and jog them into a staircase -----
+    rng = _r.Random(seed)
+    out, sid = [], 0
+    for chain in chains:
+        # walk the chain accumulating arc length, emitting a vertex every seg_deg
+        pts, acc, prev = [chain[0]], 0.0, chain[0]
+        for q in chain[1:]:
+            dlon = (q[0] - prev[0] + 180.0) % 360.0 - 180.0
+            step = math.hypot(dlon * math.cos(math.radians((q[1] + prev[1]) * 0.5)), q[1] - prev[1])
+            acc += step
+            if acc >= seg_deg:
+                pts.append(q); acc = 0.0
+            prev = q
+        if pts[-1] != chain[-1]:
+            pts.append(chain[-1])
+        if len(pts) < 2:
+            continue
+        for i in range(len(pts) - 1):
+            a, b = pts[i], pts[i + 1]
+            dlon = (b[0] - a[0] + 180.0) % 360.0 - 180.0
+            clat = max(math.cos(math.radians((a[1] + b[1]) * 0.5)), 0.05)
+            L = math.hypot(dlon * clat, b[1] - a[1]) + 1e-9
+            # unit normal to the segment, on the sphere's local tangent plane
+            nx, ny = -(b[1] - a[1]) / L, (dlon * clat) / L
+            j = (rng.random() - 0.5) * 2.0 * jog_deg
+            out.append([[a[0] + nx * j / clat, a[1] + ny * j],
+                        [b[0] + nx * j / clat, b[1] + ny * j]])
+            sid += 1
+    return out
+
+
 def _ridge_geometry(age, h=1024, w=2048):
     """Ridge-distance / segment-id / trench-distance fields for this age.
 
@@ -165,7 +252,10 @@ def _ridge_geometry(age, h=1024, w=2048):
     ridge = [b["p"] for b in frame.get("b", []) if b.get("c") == "ridge" and len(b.get("p", [])) > 1]
     trench = [b["p"] for b in frame.get("b", []) if b.get("c") == "trench" and len(b.get("p", [])) > 1]
 
-    rxyz, rids = _densify(ridge, smooth=False)   # keep the ridge-transform steps
+    # Synthesise the connected, transform-offset spreading network from the
+    # model's arcs, then measure distance to THAT. See _ridge_network.
+    ridge = _ridge_network(ridge)
+    rxyz, rids = _densify(ridge, step_deg=0.22, smooth=False)
     if rxyz is None or len(rxyz) < 8:
         _GEOM_CACHE[key] = None
         return None
@@ -445,22 +535,47 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # because it IS the age-depth curve above.
             relief -= np.exp(-(dist_deg / 0.55) ** 2) * 900.0
 
-            # NOTE ON FRACTURE ZONES -- deliberately NOT baked here any more.
+            # FRACTURE ZONES, back where they belong -- traced from the ridge
+            # network's own transform offsets.
             #
-            # They were derived from the boundaries of the nearest-ridge-segment
-            # partition, which is geometrically the right idea and completely
-            # unusable at this resolution: the reconstruction resolves only about
-            # a dozen ridge segments in deep time (13 at 300 Ma), so that
-            # partition is a Voronoi diagram whose largest cell covers a QUARTER
-            # OF THE PLANET. Its boundaries are therefore continent-length
-            # straight lines with angular kinks, and a per-segment depth offset
-            # turns each cell into a thick polygonal band -- precisely the
-            # ruled-with-a-straightedge look this was meant to avoid.
-            #
-            # Real fracture zones are spaced 50-300 km apart, so at any age there
-            # are hundreds of them: far below what the plate model resolves, and
-            # exactly the kind of fine fabric that belongs in the shader, grown
-            # per pixel along the flowline. See the FRACTURE ZONES block in FRAG.
+            # This was abandoned once because the partition was built on the
+            # dozen arcs the plate model resolves, whose largest Voronoi cell
+            # covered a quarter of the planet and whose boundaries were
+            # continent-length straight walls. That was a resolution problem,
+            # not a wrong idea: the boundary between crust that came off one
+            # ridge segment and crust that came off the next IS the fracture
+            # zone. With _ridge_network supplying a properly segmented spreading
+            # system, there are hundreds of cells rather than thirteen, and the
+            # same construction now yields what it always should have -- a dense
+            # family of flowline-parallel traces, one running out from every
+            # transform, curving with the plate as real ones do.
+            sid_i = seg_id.astype(np.int32)
+            edge = np.zeros(sid_i.shape, bool)
+            dxb = sid_i != np.roll(sid_i, 1, axis=1)      # wraps at the antimeridian
+            edge |= dxb
+            edge |= np.roll(dxb, -1, axis=1)
+            dyb = sid_i[:-1, :] != sid_i[1:, :]
+            edge[:-1, :] |= dyb
+            edge[1:, :] |= dyb
+            fzd = _edt_wrap(~edge) * deg_per_cell
+            # A trace is only a fracture zone where it runs along the flowline.
+            # Cell boundaries between distant or oddly-oriented segments cut
+            # across the grain and must be dropped, or they draw a lattice.
+            fgy, fgx = np.gradient(_nd.gaussian_filter(fzd, 1.0))
+            ge_, gn_ = fgx / coslat, -fgy
+            gm_ = np.hypot(ge_, gn_) + 1e-6
+            align = np.abs(ge_ / gm_ * u + gn_ / gm_ * v)   # 0 correct, 1 spurious
+            keep = np.clip(1.0 - align * 1.8, 0.0, 1.0)
+            # narrow trough with a flanking rise, and only out on real sea floor
+            # ...and only on crust these segments plausibly made. Far out in the
+            # basin the nearest segment is thousands of km away, the partition
+            # boundary there is a straight wall between two distant cells rather
+            # than a flowline, and drawing it puts a ruled line across empty
+            # abyss. Fade the traces out past ~30 degrees of spreading.
+            fz_ok = (keep * np.clip((-out - 2400.0) / 1500.0, 0.0, 1.0)
+                     * (1.0 - np.clip((dist_deg - 16.0) / 14.0, 0.0, 1.0)))
+            relief -= np.exp(-(fzd / 0.24) ** 2) * 380.0 * fz_ok
+            relief += np.exp(-((fzd - 0.62) / 0.45) ** 2) * 110.0 * fz_ok
 
             # TRENCHES. Where the model says crust is being consumed, cut the
             # deepest features on Earth -- narrow, arcuate, and only on the ocean

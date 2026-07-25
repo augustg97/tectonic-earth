@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-1111';
+const DATA_V='20260725-1739';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1686,7 +1686,22 @@ void main(){
        the coastline and the baked large structure (ridges, fracture zones,
        plateaus, seamounts) are untouched. */
     vec3 ocn = mix(texture2D(oceanA,uv).rgb, texture2D(oceanB,uv).rgb, mixf);
-    float crustAge = ocn.r;
+    /* The across-ridge coordinate has to be SMOOTH, because the fault fabric
+       below is a periodic function of it and will faithfully draw whatever
+       structure it contains. Stored at 8 bits over 75 degrees, one quantisation
+       level is 0.29 deg while one texel is only 0.18 -- so the shipped field is
+       a staircase of flat terraces, and keying a fault set to it drew the
+       terrace CONTOURS as a right-angled circuit-board maze. Averaging a few
+       taps across the terraces turns the staircase back into the ramp it is
+       meant to be. (The real fix is a 16-bit coordinate; this buys the
+       precision needed here for four texture reads.) */
+    vec2 otx = vec2(1.0/2048.0, 1.0/1024.0)*1.35;
+    float crustAge = ( mix(texture2D(oceanA,uv).r, texture2D(oceanB,uv).r, mixf)*2.0
+      + mix(texture2D(oceanA,uv+vec2(otx.x,0.0)).r, texture2D(oceanB,uv+vec2(otx.x,0.0)).r, mixf)
+      + mix(texture2D(oceanA,uv-vec2(otx.x,0.0)).r, texture2D(oceanB,uv-vec2(otx.x,0.0)).r, mixf)
+      + mix(texture2D(oceanA,uv+vec2(0.0,otx.y)).r, texture2D(oceanB,uv+vec2(0.0,otx.y)).r, mixf)
+      + mix(texture2D(oceanA,uv-vec2(0.0,otx.y)).r, texture2D(oceanB,uv-vec2(0.0,otx.y)).r, mixf)
+      ) / 6.0;
     vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
     float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
@@ -1767,6 +1782,35 @@ void main(){
       vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
       vec2 gUV = sUV*sAcross + rUV*sAlong;
 
+      /* FAULT-CONTROLLED FABRIC -- the mechanism, not an imitation of it.
+         Abyssal hills are not noise. They are TILTED FAULT BLOCKS: parallel
+         normal faults cut at the ridge axis, then carried outward on the plate
+         unchanged. That is why a real chart shows long continuous parallel
+         combing, and why a noise gradient -- however well tuned -- can only ever
+         give disconnected wavy blobs. So model the fault set directly: a
+         quasi-periodic profile in the ACROSS-RIDGE coordinate, which crustAge
+         already is, wandering slowly ALONG the axis so the whole set bends
+         together the way real fabric does instead of ruling straight lines.
+
+         The profile is skewed rather than sinusoidal because a fault block has
+         a long back-slope and a short steep scarp, and it is built from two
+         cosines so it stays band-limited and anti-aliases with everything else.
+         Two sets: a coarse one that carries the look at globe zoom and a finer
+         one that fades in as you approach it. */
+      vec3 wq = sdir*22.0 - SAX*(crustAge*(22.0/ACR)*0.92);
+      // Gentle: a fault set bends along its length, it does not meander. Above
+      // about half a cycle the wander scrambles the parallelism it is meant
+      // to soften and the fabric goes back to looking marbled.
+      float wander = (vnoise3(wq)-0.5)*0.42 + (vnoise3(wq*2.7+9.0)-0.5)*0.18;
+      float pxa = max(fwidth(crustAge), 1e-6);
+      float phA = crustAge*88.0 + wander;
+      float phB = crustAge*310.0 + wander*2.6;
+      float wA = 1.0-smoothstep(0.20,0.55, pxa*88.0);
+      float wB = 1.0-smoothstep(0.20,0.55, pxa*310.0);
+      float faultSlope = wA*(cos(6.2831*phA)+0.45*cos(12.566*phA+1.1))
+                       + wB*0.55*(cos(6.2831*phB)+0.45*cos(12.566*phB+1.1));
+      gUV += sUV*(faultSlope*0.42);
+
       /* R now carries BOTH causes of burial -- pelagic ooze accumulating with
          age, and the turbidite wedge off a nearby continent -- so this one term
          takes the fabric from sharp on young mid-ocean crust down to nearly
@@ -1808,7 +1852,9 @@ void main(){
       gUV += rUV*((ml-m0)*0.85);
       // Rescaled for the anisotropic domain above, whose slopes are far larger
       // than the old isotropic finite differences.
-      float amp = 3.0 * rough * aniso * deepw;
+      // The fault set above now carries the structure, so the fractal is
+      // demoted to the fine texture riding on top of it.
+      float amp = 1.15 * rough * aniso * deepw;
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
       col *= 1.0 + sAcross*0.55*rough*aniso*deepw;
