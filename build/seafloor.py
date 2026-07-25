@@ -91,11 +91,20 @@ def _chaikin(poly, rounds=2):
     return p
 
 
-def _densify(polys, step_deg=0.35):
+def _densify(polys, step_deg=0.35, smooth=True):
     """Polylines -> 3D unit vectors, resampled fine enough that nearest-VERTEX
-    distance is a good stand-in for nearest-SEGMENT distance."""
+    distance is a good stand-in for nearest-SEGMENT distance.
+
+    `smooth` rounds the corners, which is right for a TRENCH (a real arc curves
+    continuously and the model's own vertices should not show as kinks) and
+    WRONG for a RIDGE: a spreading centre is a staircase of straight segments
+    stepped by transform faults, and rounding that off is rounding off the very
+    feature -- the ridge-transform geometry -- that makes a spreading system
+    recognisable on a chart.
+    """
     pts, ids = [], []
-    polys = [_chaikin(p) for p in polys]
+    if smooth:
+        polys = [_chaikin(p) for p in polys]
     for i, poly in enumerate(polys):
         prev = None
         for lon, lat in poly:
@@ -156,7 +165,7 @@ def _ridge_geometry(age, h=1024, w=2048):
     ridge = [b["p"] for b in frame.get("b", []) if b.get("c") == "ridge" and len(b.get("p", [])) > 1]
     trench = [b["p"] for b in frame.get("b", []) if b.get("c") == "trench" and len(b.get("p", [])) > 1]
 
-    rxyz, rids = _densify(ridge)
+    rxyz, rids = _densify(ridge, smooth=False)   # keep the ridge-transform steps
     if rxyz is None or len(rxyz) < 8:
         _GEOM_CACHE[key] = None
         return None
@@ -511,7 +520,14 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # middle of the ocean. Cap the rise so the floor can come up to, but
             # not past, 600 m depth -- real seamounts that DO breach are islands
             # the reconstruction places deliberately, not a by-product of noise.
-            headroom = np.maximum(-out - 600.0, 0.0)
+            # Hold procedural relief well BELOW the depth at which the palette
+            # starts lightening toward shelf turquoise (-850 m). At -600 every
+            # seamount peak in mid-ocean lit up bright cyan, scattering
+            # turquoise flecks in broad bands across the open abyss. Real
+            # seamounts overwhelmingly stay deep -- the few that reach the
+            # surface are guyots and atolls, and those come from the plateau
+            # system deliberately, not from noise.
+            headroom = np.maximum(-out - 1300.0, 0.0)
             relief = np.minimum(relief, headroom)
             out = out + np.where(sea & (out < -900.0), relief, 0.0)
             out = np.clip(out, -MAX_ABYSS, None)

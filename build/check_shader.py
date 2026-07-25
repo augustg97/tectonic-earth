@@ -121,6 +121,18 @@ def main():
                         declared_at.setdefault(v, ln)
             i += 1
 
+        # 3a. A BACKTICK ANYWHERE IN THE SHADER SOURCE. The blocks are JS
+        # template literals, so one backtick -- most often a variable name
+        # quoted in a comment -- closes the literal early and the globe goes
+        # black. The truncation shows up downstream as "unclosed block comment"
+        # and a brace mismatch, which does not name the cause; say it plainly,
+        # because this is the single most-repeated mistake in this file.
+        for m in re.finditer("`", body):
+            ln = body[:m.start()].count("\n") + 1
+            ctx = body[max(0, m.start() - 46):m.start() + 14].replace("\n", " ")
+            bad.append(f"{name} line {ln}: BACKTICK in shader source -- it closes "
+                       f"the JS template literal. Near: ...{ctx}")
+
         # 3b. USE BEFORE DECLARATION. GLSL requires a variable to be declared
         # above its first use, and getting this wrong is another silent black
         # globe -- it cost a full rebuild cycle when a fracture-zone block was
