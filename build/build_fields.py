@@ -55,7 +55,7 @@ CLIM_H, CLIM_W = 768, 1536      # the wind solve runs here too, or there is
 # Ocean-structure field: crustal age + spreading direction. It is smooth (the
 # fine abyssal-hill fabric is synthesised in the shader from it, not stored), so
 # half the elevation resolution is ample and keeps the extra webp small.
-OCEAN_H, OCEAN_W = 512, 1024
+OCEAN_H, OCEAN_W = 1024, 2048
 ELEV_Q, RAIN_Q, OCEAN_Q = 92, 90, 90
 STEP = 5                         # Myr between keyframes, everywhere
 

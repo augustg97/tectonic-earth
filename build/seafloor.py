@@ -136,7 +136,7 @@ def _sphere_distance(xyz, ids, h, w):
     return ang.reshape(h, w).astype(np.float32), ids[i].reshape(h, w)
 
 
-def _ridge_geometry(age, h=512, w=1024):
+def _ridge_geometry(age, h=1024, w=2048):
     """Ridge-distance / segment-id / trench-distance fields for this age.
 
     Computed at half resolution and upsampled: these are smooth, basin-scale
@@ -493,9 +493,16 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # flattest places on Earth -- turbidites pouring off the margin bury
             # the hills completely -- while mid-ocean floor keeps its full relief.
             # Without this every basin is uniformly rough to the coastline.
-            dland = _edt_wrap(out < 0) * deg_per_cell
-            sed = np.exp(-(dland / 7.5) ** 2)            # 1 at the margin, ~0 by 15 deg
-            relief *= (1.0 - 0.80 * sed)                 # hills and scarps drown in it
+            # A distance transform returns stair-stepped level sets -- its
+            # contours follow the pixel lattice -- so using it raw stamped the
+            # sea floor with blocky right-angled zones where the fabric switched
+            # off, which read as wide unnatural gaps with straight edges. Blur it
+            # before use. Narrower than before (5 deg, not 7.5) and not quite to
+            # zero, because a turbidite apron is a few hundred km wide, not a
+            # thousand, and even it is not perfectly smooth.
+            dland = _nd.gaussian_filter(_edt_wrap(out < 0) * deg_per_cell, 6.0)
+            sed = np.exp(-(dland / 5.0) ** 2)
+            relief *= (1.0 - 0.72 * sed)                 # hills and scarps drown in it
 
             relief *= polefade
             # NEVER let sea-floor relief break the surface. Seamount chains on
@@ -518,7 +525,9 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # Sediment burial instead rides on the CONFIDENCE (the length of the
             # direction vector), which the shader already uses to fade the fabric
             # out: under a turbidite wedge there is no fabric to see.
-            conf = conf * (1.0 - 0.92 * sed)
+            # Never all the way to zero: a dead-flat patch with a hard edge is
+            # more obviously wrong than a faintly-textured one.
+            conf = conf * (1.0 - 0.78 * sed)
             # R is NORMALISED DISTANCE FROM THE RIDGE, not age. The two differ
             # where it matters: age saturates at 190 Myr (crust older than that
             # has been subducted) which happens only ~51 degrees out, and in a

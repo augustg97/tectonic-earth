@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-0748';
+const DATA_V='20260725-0956';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -973,6 +973,30 @@ float vnoise3(vec3 p){
   return mix(a,b,f.z);
 }
 float fbm3(vec3 p){ float s=0.0,a=0.5; for(int i=0;i<5;i++){ s+=a*vnoise3(p); p*=2.07; a*=0.5; } return s; }
+/* Band-limited fractal for the abyssal fabric. Marine geophysics describes sea
+   floor roughness with a von Karman model -- a power-law spectrum, i.e. a
+   fractal over a finite band -- so the surface needs octaves spanning the whole
+   visible range of scales. Three was too few and read as bland; five, falling
+   ~0.55 per octave, gives the fine detail that survives zooming in. Sampled in
+   an already-stretched domain, so the result is anisotropic. */
+float abyssFbm(vec3 q, vec4 w){
+  return vnoise3(q)
+       + w.x*vnoise3(q*2.13+11.0)
+       + w.y*vnoise3(q*4.47+31.0)
+       + w.z*vnoise3(q*9.31+61.0)
+       + w.w*vnoise3(q*19.7+97.0);
+}
+/* Per-octave level of detail. In the stretched domain the octaves span roughly
+   23 km down to 1.2 km, which brackets the 2-5 km of real abyssal hills -- but
+   an octave finer than a screen pixel cannot be drawn, it can only alias, and
+   zoomed out that turned the whole floor into crumpled foil. Weight each octave
+   down as it approaches the Nyquist limit for the current view, so the fine
+   fabric genuinely appears as you zoom in rather than boiling at every scale. */
+vec4 abyssLod(float pxq){
+  vec4 f=vec4(2.13,4.47,9.31,19.7);
+  vec4 w=vec4(0.55,0.31,0.17,0.09);
+  return w*(1.0-smoothstep(vec4(0.22),vec4(0.62),pxq*f));
+}
 
 float baseElev(vec2 uv){
   return mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
@@ -1654,7 +1678,16 @@ void main(){
     vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
     float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
-    if(aniso*deepw > 0.02){
+    /* CRUSTAL AGE as tone -- OUTSIDE the fabric branch below. The depth ramp is
+       compressed between 3 and 5 km, so without this the whole spreading system
+       reads as one flat blue; lightening the youngest crust makes the age bands
+       legible. It lives out here because it must not depend on the fabric gate:
+       anything inside that branch which does not scale with aniso switches on
+       and off at the threshold, which is what made features pop in and out. */
+    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.34*deepw;
+    // Gate only to skip work where there is provably nothing to draw. Every
+    // term inside now scales with aniso, so crossing it changes nothing visible.
+    if(aniso*deepw > 0.003){
       vec2 sN = spr/max(length(spr),1e-3);            // across-ridge unit (E,N)
       // local tangent frame on the sphere, to step the noise along real bearings.
       // dirFromUv puts the pole axis on +Y (y = sin lat), so east and north are
@@ -1685,18 +1718,39 @@ void main(){
          1 at 75 degrees out) -- see seafloor.py. One radian across the ridge
          therefore advances it by 57.2958/75 = 0.7639, which is the constant the
          two domain stretches below are built on. */
+      /* The marine-geophysics description of this surface is a VON KARMAN /
+         band-limited FRACTAL: mean squared elevation rising with scale, a
+         power-law spectrum, and about 5:1 anisotropy above a few hundred
+         metres, produced by normal faults whose throw and spacing follow
+         scaling laws. So the right model is many octaves across the whole
+         visible band, not a couple -- too few octaves is exactly why the floor
+         read as bland. Five here, amplitude falling ~0.55 per octave.
+
+         Anisotropy comes from the DOMAIN, not from scaling one gradient down:
+         a base rate of 46 per radian plus 300*ACR = 229 from the age stretch
+         gives 275 across against 46 along, i.e. 6:1 -- in the observed range.
+         Because the field itself is elongated, its along-axis gradient is
+         already ~1/6 of the across one and must NOT be scaled again. */
       float ACR=0.7639;
-      float ac=crustAge*440.0;
+      float ac=crustAge*300.0;
       float fstep=0.12/1024.0*PI;                     // ~2.3 km, the hill scale
-      float acS=degrees(fstep)/75.0*440.0;            // ac advance over that step
-      vec3 q0=sdir*46.0 + across3*ac;
-      vec3 qa=(sdir+across3*fstep)*46.0 + across3*(ac+acS);
-      vec3 ql=(sdir+along3 *fstep)*46.0 + across3*ac;
-      float n0=vnoise3(q0)+0.55*vnoise3(q0*2.4+11.0)+0.30*vnoise3(q0*5.6+31.0);
-      float na=vnoise3(qa)+0.55*vnoise3(qa*2.4+11.0)+0.30*vnoise3(qa*5.6+31.0);
-      float nl=vnoise3(ql)+0.55*vnoise3(ql*2.4+11.0)+0.30*vnoise3(ql*5.6+31.0);
+      float acS=degrees(fstep)/75.0*300.0;            // ac advance over that step
+      /* The stretch is carried along a FIXED world axis, not along across3.
+         Displacing the sample by across3*ac moves it up to 300 domain units
+         along a direction that itself wobbles with the shipped direction field,
+         so a fraction of a degree of wobble threw the sample a whole noise
+         period and scrambled the elongation into isotropic crumple. Only the
+         SCALAR ac has to encode "how far across the ridge" -- and it does,
+         being distance to the ridge. Anisotropy still comes out right: moving
+         across the ridge advances ac fast, moving along it does not. */
+      vec3 SAX=vec3(0.0,0.0,1.0);
+      vec3 q0=sdir*46.0 + SAX*ac;
+      vec3 qa=(sdir+across3*fstep)*46.0 + SAX*(ac+acS);
+      vec3 ql=(sdir+along3 *fstep)*46.0 + SAX*ac;
+      vec4 ow=abyssLod(length(fwidth(q0)));           // domain units per screen pixel
+      float n0=abyssFbm(q0,ow), na=abyssFbm(qa,ow), nl=abyssFbm(ql,ow);
       float sAcross=(na-n0);
-      float sAlong =(nl-n0)*0.35;
+      float sAlong =(nl-n0);
       vec2 sUV = vec2(sN.x, -sN.y);                     // across-ridge, in uv basis
       vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
       vec2 gUV = sUV*sAcross + rUV*sAlong;
@@ -1717,52 +1771,35 @@ void main(){
          fades to nothing under the sediment wedge. */
       float rough = mix(1.0, 0.45, smoothstep(0.05,0.70,crustAge));
 
-      /* FRACTURE ZONES, grown per pixel along the FLOWLINE.
-         Real ones are spaced 50-300 km, so a basin carries hundreds of them --
-         hundreds of times more than the dozen ridge segments the plate model
-         resolves in deep time. Deriving them from that model's geometry (as the
-         bake used to) could only ever produce a few continent-length straight
-         lines, so they are synthesised here instead.
+      /* FLOWLINE CORRUGATION -- the fracture-zone scale, with the anisotropy
+         REVERSED so these features run down the plate's path rather than along
+         the ridge. Together with the fabric above it gives the sea floor the
+         cross-grain a real chart shows.
 
-         The trick is a domain that is CONSTANT along a flowline. Moving one
-         radian across the ridge advances sdir*F by F, and advances crustAge by
-         1.1173 (age is 190 Myr over ~50 degrees); so subtracting
-         across3*crustAge*(F/1.1173) cancels the across-ridge variation exactly.
-         What is left varies only ALONG the ridge -- and its contours therefore
-         run precisely along the flowline, curving as the spreading direction
-         curves, which is what a fracture zone is: the frozen wake of a
-         transform. F sets the spacing (60 -> ~120 km). */
-      float FZF=60.0;
-      vec3 fq0=sdir*FZF - across3*(crustAge*(FZF/ACR));
-      vec3 fq1=(sdir+along3*(fstep*7.0))*FZF - across3*(crustAge*(FZF/ACR));
-      float fn0=vnoise3(fq0)+0.5*vnoise3(fq0*2.1+5.0);
-      float fn1=vnoise3(fq1)+0.5*vnoise3(fq1*2.1+5.0);
-      // a narrow scarp wherever that field crosses a level
-      float fzc0=1.0-smoothstep(0.0,0.055,abs(fn0-0.78));
-      float fzc1=1.0-smoothstep(0.0,0.055,abs(fn1-0.78));
-      float fzAmp=rough*aniso*deepw;
-      gUV += rUV*((fzc1-fzc0)*2.4*fzAmp);
-      col *= 1.0 - fzc0*0.085*deepw;                   // the trough reads darker
-      // Crust between two fracture zones came off one length of ridge and sits
-      // at its own level, so give each corridor a slight depth bias -- the reason
-      // a fracture zone reads as a step and not merely a groove.
-      float corr=floor(fn0*5.0);
-      col *= 1.0 + (fract(sin(corr*12.9898)*43758.5453)-0.5)*0.055*deepw;
-      // seafloor.py already fades the spreading vector out poleward of ~74 deg,
-      // so no second polar fade here -- it only flattened the polar sea floor.
-      // Rescaled for the anisotropic domain above, whose slopes are ~10x the
-      // old isotropic finite differences.
-      float amp = 0.60 * rough * aniso * deepw;
+         Note what this deliberately does NOT do: pick out CONTOURS of that
+         field. Contouring a value-noise field draws closed loops that follow
+         the noise lattice, so it produced a maze of angular squiggles all over
+         the ocean (and through the sea ice above it) -- and because its tone
+         term did not scale with aniso, it popped on and off at the fabric
+         gate. Taking the field's GRADIENT instead yields smooth elongated
+         swells and troughs, which is what the sea floor actually has.
+
+         Cancellation is deliberately partial (0.86): exact cancellation makes
+         unnaturally perfect parallel lines, while leaving a little residual
+         lets each corridor wander, as real fracture zones do. */
+      float FZF=150.0;
+      float fzc=crustAge*(FZF/ACR)*0.86;
+      vec3 g0=sdir*FZF - SAX*fzc;
+      vec3 gl=(sdir+along3*(fstep*5.0))*FZF - SAX*fzc;
+      float m0=vnoise3(g0)+0.5*vnoise3(g0*2.2+7.0);
+      float ml=vnoise3(gl)+0.5*vnoise3(gl*2.2+7.0);
+      gUV += rUV*((ml-m0)*0.85);
+      // Rescaled for the anisotropic domain above, whose slopes are far larger
+      // than the old isotropic finite differences.
+      float amp = 3.0 * rough * aniso * deepw;
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.055*rough*aniso*deepw;
-      /* CRUSTAL AGE as tone. The ridge is already a genuine 2 km rise in the
-         depth field, but between 3 and 5 km down the depth ramp is compressed
-         and the whole spreading system read as one flat blue. Lightening the
-         youngest crust makes the age bands legible, so a reader can SEE where
-         the floor is being made and how it ages outward to the trenches --
-         which is the point of drawing plate tectonics under the ocean at all. */
-      col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.34*deepw;
+      col *= 1.0 + sAcross*0.55*rough*aniso*deepw;
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
