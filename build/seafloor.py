@@ -70,7 +70,14 @@ MAX_CRUST_AGE = 190.0       # Myr: older than this and it has been subducted
 # fine structure out there to resolve. Precision is spent exactly where the sea
 # floor keeps its detail.
 CO_D0 = 2.5                 # deg: scale over which precision stays near-constant
-CO_MAX = 75.0               # deg: full-scale, wide enough to cross Panthalassa
+# Full scale. This used to be 75 deg, which is how far the far side of
+# Panthalassa sits from the nearest ridge the model resolves -- the right number
+# when the coordinate was DISTANCE. It is the wrong number now that it is AGE:
+# ocean crust does not survive past ~190 Myr, and 190 Myr at 30 km/Myr is 51.3
+# deg of spreading, so a tenth of the coordinate's range could never occur and
+# the precision spent on it was wasted. Must stay in step with CO_K in the
+# shader; changing it changes the meaning of every shipped _o field.
+CO_MAX = 52.0
 CO_K = math.log(1.0 + CO_MAX / CO_D0)
 
 
@@ -810,20 +817,35 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # direction the plate is travelling (which is the spreading
             # direction, u/v) taking a running maximum, so every seed is drawn
             # out into a track of progressively older, subsiding cones.
-            rng = np.random.default_rng(11)
-            smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)
-            smt = np.clip((smt - 0.74) / 0.26, 0.0, 1.0) ** 2
-            chain = smt.copy()
-            yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-            step_cells = 2.0
-            for k in range(1, 8):
-                sy = yy + v * (k * step_cells)          # +v is north; rows go south
-                sx = xx - (u / coslat) * (k * step_cells)
-                back = _nd.map_coordinates(smt, [np.clip(sy, 0, h - 1), sx % w],
-                                           order=1, mode="grid-wrap")
-                chain = np.maximum(chain, back * (1.0 - k / 9.0))
-            relief += _nd.gaussian_filter(chain, 0.9) * 780.0 * np.clip(
-                1.1 - age_myr / 110.0, 0.15, 1.0)
+            if age_ok:
+                # A POPULATION of individual mountains, not a smeared field.
+                # The old construction seeded noise and dragged it along the
+                # plate-motion direction taking a running maximum, which gives a
+                # streak: no summit, no flank, no shadow, and nothing you could
+                # point at and call a seamount. Real ones are discrete cones with
+                # a power-law height distribution, built at the ridge and at
+                # hotspots, subsiding with their plate and planed flat into
+                # guyots if they ever reached the surface. See seamounts.py --
+                # about six thousand of them above the 1.2 km this grid can
+                # resolve, which is the right order for the resolvable part of a
+                # population that runs to ~24,000 above a kilometre.
+                import seamounts as _sm
+                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell)
+            else:
+                rng = np.random.default_rng(11)
+                smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)
+                smt = np.clip((smt - 0.74) / 0.26, 0.0, 1.0) ** 2
+                chain = smt.copy()
+                yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+                step_cells = 2.0
+                for k in range(1, 8):
+                    sy = yy + v * (k * step_cells)      # +v is north; rows go south
+                    sx = xx - (u / coslat) * (k * step_cells)
+                    back = _nd.map_coordinates(smt, [np.clip(sy, 0, h - 1), sx % w],
+                                               order=1, mode="grid-wrap")
+                    chain = np.maximum(chain, back * (1.0 - k / 9.0))
+                relief += _nd.gaussian_filter(chain, 0.9) * 780.0 * np.clip(
+                    1.1 - age_myr / 110.0, 0.15, 1.0)
 
             # SEDIMENT BLANKET. Abyssal plains next to a continent are the
             # flattest places on Earth -- turbidites pouring off the margin bury
