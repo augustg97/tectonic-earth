@@ -837,8 +837,43 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # zero, because a turbidite apron is a few hundred km wide, not a
             # thousand, and even it is not perfectly smooth.
             dland = _nd.gaussian_filter(_edt_wrap(out < 0) * deg_per_cell, 6.0)
-            sed = np.exp(-(dland / 5.0) ** 2)
-            relief *= (1.0 - 0.72 * sed)                 # hills and scarps drown in it
+            # ...and it is now a THICKNESS, competing against the relief it has
+            # to bury, rather than a fade with distance from land. See
+            # sediment.py: pelagic ooze accumulates at a rate set by latitude
+            # times the crustal age, the turbidite wedge falls off from the
+            # margin, and where the total exceeds the height of an abyssal hill
+            # the floor is a plain. That threshold is why a real plain has a
+            # sharp edge you can trace, which a distance fade can never produce.
+            # It also needs a real age field to compute at all, which is a large
+            # part of why the age model was worth building.
+            if age_ok:
+                import sediment as _sd
+                # Distance to a SUBSTANTIAL landmass, not to any land at all.
+                # A terrigenous wedge is built by a continent's rivers; a mid-
+                # ocean island has no drainage basin behind it and builds
+                # nothing. Measured against every scrap of land, the model put a
+                # sediment apron around Hawaii and Iceland and buried 41% of the
+                # ocean floor -- twice the real figure, and with plains in the
+                # middle of the Pacific where the chart shows bare abyssal hills.
+                # Eroding the mask first drops anything under about 3 degrees
+                # across and leaves the continents.
+                _big = _nd.binary_erosion(out >= 0, iterations=8)
+                if not _big.any():
+                    _big = out >= 0
+                dbig = _nd.gaussian_filter(_edt_wrap(~_big) * deg_per_cell, 6.0)
+                sed_m = _sd.thickness(age_myr, dbig, lat1d)
+                sed = _sd.burial(sed_m)
+                # A plain is a FILL TERRACE, not bare basalt: the pile stands the
+                # floor up off the crust beneath it, which is why an abyssal
+                # plain is measurably shallower than the ridge flank it grades
+                # into. Added AFTER the burial multiply below, or the fill would
+                # be scaled down by the very burial it represents.
+                fill = np.minimum(sed_m, 3000.0) * _sd.FILL_FACTOR * sea
+            else:
+                sed = np.exp(-(dland / 5.0) ** 2)
+                fill = 0.0
+            relief *= (1.0 - 0.90 * sed)                 # hills and scarps drown in it
+            relief = relief + fill
 
             relief *= polefade
             # NEVER let sea-floor relief break the surface. Seamount chains on
