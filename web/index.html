@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-0253';
+const DATA_V='20260725-0748';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1681,9 +1681,14 @@ void main(){
          hill out into an axis-parallel ridge. The step is far finer than the
          shipped field, which is the point -- hills are 2-5 km and the field
          cell is 20 km, so this detail can only exist per-pixel. */
-      float ac=crustAge*300.0;
+      /* crustAge is really NORMALISED DISTANCE FROM THE RIDGE (0 at the axis,
+         1 at 75 degrees out) -- see seafloor.py. One radian across the ridge
+         therefore advances it by 57.2958/75 = 0.7639, which is the constant the
+         two domain stretches below are built on. */
+      float ACR=0.7639;
+      float ac=crustAge*440.0;
       float fstep=0.12/1024.0*PI;                     // ~2.3 km, the hill scale
-      float acS=degrees(fstep)/50.0*300.0;            // ac advance over that step
+      float acS=degrees(fstep)/75.0*440.0;            // ac advance over that step
       vec3 q0=sdir*46.0 + across3*ac;
       vec3 qa=(sdir+across3*fstep)*46.0 + across3*(ac+acS);
       vec3 ql=(sdir+along3 *fstep)*46.0 + across3*ac;
@@ -1695,12 +1700,54 @@ void main(){
       vec2 sUV = vec2(sN.x, -sN.y);                     // across-ridge, in uv basis
       vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
       vec2 gUV = sUV*sAcross + rUV*sAlong;
+
       /* R now carries BOTH causes of burial -- pelagic ooze accumulating with
          age, and the turbidite wedge off a nearby continent -- so this one term
          takes the fabric from sharp on young mid-ocean crust down to nearly
          featureless on an abyssal plain against a margin, which is what those
-         plains actually look like. Floor it low, not at a third. */
-      float rough = mix(1.0, 0.16, smoothstep(0.06,0.80,crustAge));
+         plains actually look like. Floor it low, not at a third.
+         (Declared HERE, above the fracture zones, because they need it too --
+         using it earlier than this is what left the globe black.) */
+      /* Old crust is smoother, but nowhere near featureless: pelagic ooze
+         accumulates only a few hundred metres over 100 Myr, which mantles
+         abyssal hills without burying them -- the old Pacific still shows its
+         whole fabric on a real chart. A floor of 0.16 wiped it out and left the
+         deep basins glassy. The genuinely flat places are the turbidite plains
+         against a margin, and those are handled by aniso, which seafloor.py
+         fades to nothing under the sediment wedge. */
+      float rough = mix(1.0, 0.45, smoothstep(0.05,0.70,crustAge));
+
+      /* FRACTURE ZONES, grown per pixel along the FLOWLINE.
+         Real ones are spaced 50-300 km, so a basin carries hundreds of them --
+         hundreds of times more than the dozen ridge segments the plate model
+         resolves in deep time. Deriving them from that model's geometry (as the
+         bake used to) could only ever produce a few continent-length straight
+         lines, so they are synthesised here instead.
+
+         The trick is a domain that is CONSTANT along a flowline. Moving one
+         radian across the ridge advances sdir*F by F, and advances crustAge by
+         1.1173 (age is 190 Myr over ~50 degrees); so subtracting
+         across3*crustAge*(F/1.1173) cancels the across-ridge variation exactly.
+         What is left varies only ALONG the ridge -- and its contours therefore
+         run precisely along the flowline, curving as the spreading direction
+         curves, which is what a fracture zone is: the frozen wake of a
+         transform. F sets the spacing (60 -> ~120 km). */
+      float FZF=60.0;
+      vec3 fq0=sdir*FZF - across3*(crustAge*(FZF/ACR));
+      vec3 fq1=(sdir+along3*(fstep*7.0))*FZF - across3*(crustAge*(FZF/ACR));
+      float fn0=vnoise3(fq0)+0.5*vnoise3(fq0*2.1+5.0);
+      float fn1=vnoise3(fq1)+0.5*vnoise3(fq1*2.1+5.0);
+      // a narrow scarp wherever that field crosses a level
+      float fzc0=1.0-smoothstep(0.0,0.055,abs(fn0-0.78));
+      float fzc1=1.0-smoothstep(0.0,0.055,abs(fn1-0.78));
+      float fzAmp=rough*aniso*deepw;
+      gUV += rUV*((fzc1-fzc0)*2.4*fzAmp);
+      col *= 1.0 - fzc0*0.085*deepw;                   // the trough reads darker
+      // Crust between two fracture zones came off one length of ridge and sits
+      // at its own level, so give each corridor a slight depth bias -- the reason
+      // a fracture zone reads as a step and not merely a groove.
+      float corr=floor(fn0*5.0);
+      col *= 1.0 + (fract(sin(corr*12.9898)*43758.5453)-0.5)*0.055*deepw;
       // seafloor.py already fades the spreading vector out poleward of ~74 deg,
       // so no second polar fade here -- it only flattened the polar sea floor.
       // Rescaled for the anisotropic domain above, whose slopes are ~10x the

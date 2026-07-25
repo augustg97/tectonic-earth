@@ -89,6 +89,7 @@ def main():
         # for-headers, whose counter lives in its own scope.
         depth = 0
         seen = [{}]
+        declared_at = {}
         i = 0
         while i < len(body):
             ch = body[i]
@@ -117,7 +118,37 @@ def main():
                                    f"same scope (first at line {seen[depth][v]})")
                     else:
                         seen[depth][v] = ln
+                        declared_at.setdefault(v, ln)
             i += 1
+
+        # 3b. USE BEFORE DECLARATION. GLSL requires a variable to be declared
+        # above its first use, and getting this wrong is another silent black
+        # globe -- it cost a full rebuild cycle when a fracture-zone block was
+        # inserted above the `rough` it depended on. Only flag names this shader
+        # actually declares somewhere (so uniforms, varyings, built-ins and
+        # function names are all ignored), and only when the first USE is on an
+        # earlier line than the declaration.
+        # Comments must be blanked first (keeping newlines so line numbers hold),
+        # or every mention of a variable in the prose above it reads as a use.
+        code = re.sub(r"/\*.*?\*/", lambda m: re.sub(r"[^\n]", " ", m.group(0)),
+                      body, flags=re.S)
+        code = re.sub(r"//[^\n]*", lambda m: " " * len(m.group(0)), code)
+        # Scoped to main(): a name declared inside one helper and used inside
+        # another is perfectly legal, so comparing across the whole block would
+        # be all false positives. main() is where the long straight-line code
+        # lives and where this mistake actually happens.
+        mstart = code.find("void main")
+        if mstart >= 0:
+            mline = code[:mstart].count("\n") + 1
+            for v, dln in declared_at.items():
+                if dln < mline:
+                    continue
+                for m2 in re.finditer(rf"\b{re.escape(v)}\b", code[mstart:]):
+                    uln = code[:mstart + m2.start()].count("\n") + 1
+                    if uln < dln:
+                        bad.append(f"{name} line {uln}: '{v}' used before it is "
+                                   f"declared (declaration is at line {dln})")
+                    break
         print(f"{name}: {len(body)} chars, {body.count('{')} blocks, ok"
               if not stray and not d else f"{name}: PROBLEMS")
 

@@ -68,10 +68,34 @@ def _load_plates():
     return _PLATES_CACHE or None
 
 
+def _chaikin(poly, rounds=2):
+    """Round off a polyline's corners (Chaikin). The resolved topologies are
+    stored as coarse polylines, so a trench drawn straight from them shows the
+    model's own vertices as angular kinks -- and a trench with corners in it is
+    the sort of ruled-with-a-straightedge feature that gives the whole sea floor
+    away. Real arcs curve continuously. Cheap, and purely cosmetic."""
+    if len(poly) < 3:
+        return poly
+    p = [list(q) for q in poly]
+    for _ in range(rounds):
+        out = [p[0]]
+        for a, b in zip(p[:-1], p[1:]):
+            dlon = (b[0] - a[0] + 180.0) % 360.0 - 180.0
+            if abs(dlon) > 60.0:          # antimeridian jump: leave it alone
+                out.append(b)
+                continue
+            out.append([a[0] + dlon * 0.25, a[1] * 0.75 + b[1] * 0.25])
+            out.append([a[0] + dlon * 0.75, a[1] * 0.25 + b[1] * 0.75])
+        out.append(p[-1])
+        p = out
+    return p
+
+
 def _densify(polys, step_deg=0.35):
     """Polylines -> 3D unit vectors, resampled fine enough that nearest-VERTEX
     distance is a good stand-in for nearest-SEGMENT distance."""
     pts, ids = [], []
+    polys = [_chaikin(p) for p in polys]
     for i, poly in enumerate(polys):
         prev = None
         for lon, lat in poly:
@@ -180,11 +204,22 @@ def _blob(LON, LAT, plon, plat, radius_km):
 
 
 def _curve(age, points):
+    """Elevation of a plateau at `age`, or None if it did not exist yet.
+
+    The oldest point on a curve is the feature's BIRTH -- Ontong Java erupted at
+    ~126 Ma, the Seychelles rifted at ~90, Rio Grande Rise at ~85. This used to
+    clamp past that point and return the oldest value for all older ages, which
+    quietly asserted that every one of them was a standing island throughout the
+    Palaeozoic and the Precambrian: seven emergent plateaus were being drawn in
+    the middle of Panthalassa at 300 Ma, as bright islands in open ocean. Return
+    None instead and let the caller skip them. (The YOUNG end still clamps --
+    a plateau that exists today goes on existing into the future.)
+    """
     pts = sorted(points, key=lambda p: p[0])
+    if age > pts[-1][0]:
+        return None                      # not yet formed at this age
     if age <= pts[0][0]:
         return pts[0][1]
-    if age >= pts[-1][0]:
-        return pts[-1][1]
     for i in range(len(pts) - 1):
         a0, v0 = pts[i]
         a1, v1 = pts[i + 1]
@@ -282,7 +317,12 @@ PLATEAUS = {
 
 def emergent_names(age):
     """Plateaus standing above sea level at this age, for optional labelling."""
-    return [n for n, sp in PLATEAUS.items() if _curve(age, sp["elev"]) > 0]
+    out = []
+    for n, sp in PLATEAUS.items():
+        e = _curve(age, sp["elev"])
+        if e is not None and e > 0:
+            out.append(n)
+    return out
 
 
 def _plateau_field(shape, age, reconstructor):
@@ -295,6 +335,8 @@ def _plateau_field(shape, age, reconstructor):
     mask = np.zeros(shape, np.float32)
     for name, spec in PLATEAUS.items():
         elev = _curve(age, spec["elev"])
+        if elev is None:
+            continue                     # this plateau does not exist yet
         m = np.zeros(shape, np.float32)
         for alon, alat, radius in spec["anchors"]:
             plon, plat = alon, alat
@@ -394,52 +436,22 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # because it IS the age-depth curve above.
             relief -= np.exp(-(dist_deg / 0.55) ** 2) * 900.0
 
-            # FRACTURE ZONES -- the single most conspicuous thing on a real
-            # bathymetric map: dead-straight scarps running the full width of a
-            # basin, perpendicular to the ridge. Crust either side of a transform
-            # came off DIFFERENT ridge segments, so the boundary of the
-            # nearest-segment partition traces them exactly.
+            # NOTE ON FRACTURE ZONES -- deliberately NOT baked here any more.
             #
-            # It has to be found as a BOUNDARY, though. Blurring the segment
-            # ID field and taking its gradient (what this did before) scales the
-            # signal by the arbitrary difference between two label NUMBERS, so a
-            # boundary between segments 1 and 2 came out forty times fainter than
-            # one between 1 and 41 -- which is why they were patchy dashes
-            # instead of continuous lineaments.
-            sid = seg_id.astype(np.int32)
-            edge = np.zeros(sid.shape, bool)
-            dx = sid != np.roll(sid, 1, axis=1)          # wraps at the antimeridian
-            edge |= dx
-            edge |= np.roll(dx, -1, axis=1)
-            dy = sid[:-1, :] != sid[1:, :]
-            edge[:-1, :] |= dy
-            edge[1:, :] |= dy
-            fzd = _edt_wrap(~edge) * deg_per_cell
-            # Keep only the traces that run the way a fracture zone actually
-            # runs. The nearest-segment partition is a Voronoi diagram, and its
-            # boundaries radiate in every direction -- between two distant or
-            # differently-oriented segments they cut diagonally across the basin
-            # and drew a spurious lattice. A real fracture zone is the wake of a
-            # transform, so it lies PARALLEL to the spreading direction, which
-            # means the gradient of this distance field (always perpendicular to
-            # the trace) should be perpendicular to (u,v). Suppress the rest.
-            fgy, fgx = np.gradient(_nd.gaussian_filter(fzd, 1.0))
-            ge, gn = fgx / coslat, -fgy
-            gm = np.hypot(ge, gn) + 1e-6
-            align = np.abs(ge / gm * u + gn / gm * v)     # 0 = correct, 1 = spurious
-            keep = np.clip(1.0 - align * 1.7, 0.0, 1.0)
-            # a narrow trough with a broad flanking rise, as a real FZ has
-            relief -= np.exp(-(fzd / 0.28) ** 2) * 430.0 * keep
-            relief += np.exp(-((fzd - 0.75) / 0.55) ** 2) * 120.0 * keep
-
-            # ...and a STEP across it. The two sides formed at ridge segments
-            # offset along the axis, so they are of different age and therefore
-            # sit at different depths -- the reason a fracture zone reads as a
-            # scarp and not merely a groove. One stable offset per segment gives
-            # each crustal block its own level.
-            nseg = int(sid.max()) + 1
-            seg_bias = np.random.default_rng(7).normal(0.0, 95.0, nseg).astype(np.float32)
-            relief += seg_bias[np.clip(sid, 0, nseg - 1)]
+            # They were derived from the boundaries of the nearest-ridge-segment
+            # partition, which is geometrically the right idea and completely
+            # unusable at this resolution: the reconstruction resolves only about
+            # a dozen ridge segments in deep time (13 at 300 Ma), so that
+            # partition is a Voronoi diagram whose largest cell covers a QUARTER
+            # OF THE PLANET. Its boundaries are therefore continent-length
+            # straight lines with angular kinks, and a per-segment depth offset
+            # turns each cell into a thick polygonal band -- precisely the
+            # ruled-with-a-straightedge look this was meant to avoid.
+            #
+            # Real fracture zones are spaced 50-300 km apart, so at any age there
+            # are hundreds of them: far below what the plate model resolves, and
+            # exactly the kind of fine fabric that belongs in the shader, grown
+            # per pixel along the flowline. See the FRACTURE ZONES block in FRAG.
 
             # TRENCHES. Where the model says crust is being consumed, cut the
             # deepest features on Earth -- narrow, arcuate, and only on the ocean
@@ -447,9 +459,9 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             tdist = geom["trench"]
             if tdist is not None:
                 tdist = _upsample(tdist, h, w, order=1)
-                trough = np.exp(-(tdist / 0.75) ** 2)
+                trough = np.exp(-(tdist / 0.55) ** 2)
                 deep_ok = np.clip((-out - 1500.0) / 2000.0, 0.0, 1.0)
-                relief -= trough * deep_ok * 3400.0
+                relief -= trough * deep_ok * 2300.0
                 # OUTER RISE: the subducting plate flexes upward a few hundred
                 # metres before it bends down, a low swell parallel to every
                 # trench. Cheap, and it is visible on every real map.
@@ -486,16 +498,37 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             relief *= (1.0 - 0.80 * sed)                 # hills and scarps drown in it
 
             relief *= polefade
+            # NEVER let sea-floor relief break the surface. Seamount chains on
+            # top of a ridge crest were raising 1,257 cells of open Panthalassa
+            # above sea level at 300 Ma and drawing them as bright islands in the
+            # middle of the ocean. Cap the rise so the floor can come up to, but
+            # not past, 600 m depth -- real seamounts that DO breach are islands
+            # the reconstruction places deliberately, not a by-product of noise.
+            headroom = np.maximum(-out - 600.0, 0.0)
+            relief = np.minimum(relief, headroom)
             out = out + np.where(sea & (out < -900.0), relief, 0.0)
             out = np.clip(out, -MAX_ABYSS, None)
 
-            # R is HOW SMOOTH this floor is, and burial has two causes: crust
-            # gets older and mantles itself in pelagic ooze, AND it sits near a
-            # margin under a turbidite wedge. Folding both in here means the
-            # shader's abyssal-hill fabric fades on old crust and dies entirely
-            # on the sediment plains, with no extra channel to ship.
-            smooth01 = np.clip(age_myr / MAX_CRUST_AGE * 0.85 + sed * 0.95, 0.0, 1.0)
-            ofield[..., 0] = np.where(sea, smooth01, 1.0)
+            # R stays a PURE across-ridge coordinate (crustal age), because the
+            # shader now uses it as exactly that -- to stretch the noise domain
+            # for the abyssal grain and to run the fracture zones along the
+            # flowline. Folding sediment into it, as an earlier version did,
+            # breaks that coordinate near every margin.
+            #
+            # Sediment burial instead rides on the CONFIDENCE (the length of the
+            # direction vector), which the shader already uses to fade the fabric
+            # out: under a turbidite wedge there is no fabric to see.
+            conf = conf * (1.0 - 0.92 * sed)
+            # R is NORMALISED DISTANCE FROM THE RIDGE, not age. The two differ
+            # where it matters: age saturates at 190 Myr (crust older than that
+            # has been subducted) which happens only ~51 degrees out, and in a
+            # basin the size of Panthalassa most of the floor is further from the
+            # few ridges this model resolves than that. A saturated R is a
+            # CONSTANT, and the shader uses R as its across-ridge coordinate --
+            # so the whole basin lost its grain and its fracture zones and went
+            # glassy. Normalising over 75 degrees keeps the coordinate varying
+            # right across the widest ocean; depth still uses the clamped age.
+            ofield[..., 0] = np.where(sea, np.clip(dist_deg / 75.0, 0.0, 1.0), 1.0)
             ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
             ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
         else:
