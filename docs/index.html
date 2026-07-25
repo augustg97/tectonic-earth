@@ -853,7 +853,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-2007';
+const DATA_V='20260725-2229';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1928,6 +1928,32 @@ void main(){
          because it is the one part of the fabric that must stay sharp after
          the shipped coordinate has run out of levels. */
       float jit = licN(sdir, along3, 318.0, 0.00118) - 0.5;
+      /* BOUND THE MODULATION INDEX. A phase-modulated band pattern stays a band
+         pattern only while the perturbation's gradient stays BELOW the
+         carrier's. Past that the iso-phase lines close on themselves and the
+         fabric stops being combing and becomes marbling -- concentric loops,
+         like contours on a topographic map.
+
+         That is not a tuning problem, it is arithmetic, and the far field was
+         well over the line: the carrier here is the companded coordinate, whose
+         gradient falls off as 1/(2.5+d) by construction, while the wander's does
+         not fall off at all. They cross at about 13 degrees from the axis, and
+         a basin the size of Panthalassa is almost entirely beyond that -- so
+         essentially the whole open ocean was marbled.
+
+         Capping the perturbation by the ratio is the correct local fix and it
+         is what is done here. But note what it exposes: a coordinate whose
+         gradient decays with range cannot carry uniform fabric to the far
+         field, and real sea floor DOES carry uniform fabric to the far field --
+         abyssal hills stay about 5 km apart from the axis to the trench,
+         because they are cut at a roughly constant spreading rate. Only their
+         AMPLITUDE decays, as sediment buries them. Distance-to-the-present-
+         ridge conflates the two; crustal age does not, and that is the real
+         reason the coordinate has to change. See the note in seafloor.py. */
+      float carrier = 40.0/((CO_D0+distDeg)*CO_K);    // cycles per degree in phA
+      float mcap = clamp(carrier/0.70, 0.0, 1.0);
+      wander *= mcap;
+      jit *= mcap;
       /* FRACTAL THROW. Fault populations follow a power law -- a few large
          scarps and very many small ones -- so a set of uniform amplitude reads
          as corduroy however well it is shaped. Modulating the throw along
