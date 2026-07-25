@@ -21,3 +21,7 @@ web/bluemarble.jpg
 * [0-9].webp
 * [0-9].json
 * [0-9].html
+
+# Intermediate age/isochron grids -- rebuildable, ~400 MB, never shipped
+build/cache/
+data/Muller2019_PresentDay_AgeGrid.nc
