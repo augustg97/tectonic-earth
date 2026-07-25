@@ -829,7 +829,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260724-2321';
+const DATA_V='20260725-0253';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1671,30 +1671,44 @@ void main(){
       // Three octaves of slope, measured mostly ACROSS the ridge (cheap forward
       // diffs). The finer octaves keep the fabric crisp as you zoom in -- the
       // hills are synthesised per pixel, so there is no resolution limit.
-      float F=140.0, hs0=0.7/F;
-      float c0=vnoise3(sdir*F);
-      float ca=vnoise3((sdir+across3*hs0)*F);
-      float cl=vnoise3((sdir+along3 *hs0)*F);
-      float F2=330.0, hs2=0.7/F2;
-      float d0=vnoise3(sdir*F2);
-      float da=vnoise3((sdir+across3*hs2)*F2);
-      float F3=760.0, hs3=0.7/F3;
-      float e0=vnoise3(sdir*F3);
-      float ea=vnoise3((sdir+across3*hs3)*F3);
-      float sAcross=(ca-c0) + (da-d0)*0.62 + (ea-e0)*0.34;
-      float sAlong =(cl-c0)*0.24;                      // small -> hills stay long
+      /* ANISOTROPIC SAMPLING DOMAIN -- what actually makes the grain lineate.
+         Taking directional derivatives of ISOTROPIC noise emphasises one
+         direction's slope but leaves the features themselves round, so the
+         floor came out as dapple rather than the fine combed corrugation a real
+         abyssal plain shows. Stretch the DOMAIN instead: crustAge is a monotone
+         across-ridge coordinate, so advancing the noise coordinate with it makes
+         the field vary fast ACROSS the axis and slowly ALONG it, drawing every
+         hill out into an axis-parallel ridge. The step is far finer than the
+         shipped field, which is the point -- hills are 2-5 km and the field
+         cell is 20 km, so this detail can only exist per-pixel. */
+      float ac=crustAge*300.0;
+      float fstep=0.12/1024.0*PI;                     // ~2.3 km, the hill scale
+      float acS=degrees(fstep)/50.0*300.0;            // ac advance over that step
+      vec3 q0=sdir*46.0 + across3*ac;
+      vec3 qa=(sdir+across3*fstep)*46.0 + across3*(ac+acS);
+      vec3 ql=(sdir+along3 *fstep)*46.0 + across3*ac;
+      float n0=vnoise3(q0)+0.55*vnoise3(q0*2.4+11.0)+0.30*vnoise3(q0*5.6+31.0);
+      float na=vnoise3(qa)+0.55*vnoise3(qa*2.4+11.0)+0.30*vnoise3(qa*5.6+31.0);
+      float nl=vnoise3(ql)+0.55*vnoise3(ql*2.4+11.0)+0.30*vnoise3(ql*5.6+31.0);
+      float sAcross=(na-n0);
+      float sAlong =(nl-n0)*0.35;
       vec2 sUV = vec2(sN.x, -sN.y);                     // across-ridge, in uv basis
       vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
       vec2 gUV = sUV*sAcross + rUV*sAlong;
-      // Old crust is buried under sediment and smoother, but never glassy: the
-      // deep abyss still carries fossil hills, so the floor keeps a base grain.
-      float rough = mix(1.0, 0.34, smoothstep(0.06,0.72,crustAge));
+      /* R now carries BOTH causes of burial -- pelagic ooze accumulating with
+         age, and the turbidite wedge off a nearby continent -- so this one term
+         takes the fabric from sharp on young mid-ocean crust down to nearly
+         featureless on an abyssal plain against a margin, which is what those
+         plains actually look like. Floor it low, not at a third. */
+      float rough = mix(1.0, 0.16, smoothstep(0.06,0.80,crustAge));
       // seafloor.py already fades the spreading vector out poleward of ~74 deg,
       // so no second polar fade here -- it only flattened the polar sea floor.
-      float amp = 2.9 * rough * aniso * deepw;
+      // Rescaled for the anisotropic domain above, whose slopes are ~10x the
+      // old isotropic finite differences.
+      float amp = 0.60 * rough * aniso * deepw;
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.42*rough*aniso*deepw;
+      col *= 1.0 + sAcross*0.055*rough*aniso*deepw;
       /* CRUSTAL AGE as tone. The ridge is already a genuine 2 km rise in the
          depth field, but between 3 and 5 km down the depth ramp is compressed
          and the whole spreading system read as one flat blue. Lightening the

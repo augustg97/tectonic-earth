@@ -155,6 +155,23 @@ def _upsample(a, h, w, order=1):
     return zoom(a, (h / a.shape[0], w / a.shape[1]), order=order)
 
 
+def _edt_wrap(mask):
+    """distance_transform_edt, but longitude is PERIODIC.
+
+    The plain transform treats column 0 and column w-1 as maximally far apart,
+    so any feature crossing the antimeridian gets cut in half and a false
+    distance ridge runs down the join. Pad a quarter-width off each end, do the
+    transform, crop back. (This pipeline has had to relearn that longitude wraps
+    more than once -- see the seam notes in the project memory.)
+    """
+    from scipy.ndimage import distance_transform_edt
+    w = mask.shape[1]
+    pad = w // 4
+    wide = np.concatenate([mask[:, -pad:], mask, mask[:, :pad]], axis=1)
+    d = distance_transform_edt(wide)
+    return d[:, pad:pad + w].astype(np.float32)
+
+
 def _blob(LON, LAT, plon, plat, radius_km):
     r = math.degrees(radius_km / 6371.0)
     dlon = ((LON - plon + 180.0) % 360.0) - 180.0
@@ -370,23 +387,59 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             conf = np.clip(mag / (0.35 * np.median(mag[sea]) + 1e-6), 0.0, 1.0) * polefade
 
             relief = np.zeros_like(out)
+            deg_per_cell = 180.0 / h
 
             # AXIAL VALLEY. A slow ridge carries a rift valley a few tens of km
             # wide down its crest; the broad swell either side is already there,
             # because it IS the age-depth curve above.
             relief -= np.exp(-(dist_deg / 0.55) ** 2) * 900.0
 
-            # FRACTURE ZONES. Crust either side of a transform came off DIFFERENT
-            # ridge segments, so the identity of the nearest ridge segment changes
-            # across one -- and that discontinuity traces the fracture zone for
-            # free, running perpendicular to the ridge exactly as it should.
-            sid = _nd.gaussian_filter(seg_id.astype(np.float32), 1.0)
-            sgy, sgx = np.gradient(sid)
-            jump = np.hypot(sgx, sgy)
-            if jump[sea].any():
-                thr = np.percentile(jump[sea], 97.0)
-                fz = np.clip((jump - thr) / (thr + 1e-6), 0.0, 1.0)
-                relief -= _nd.gaussian_filter(fz, 1.2) * 700.0
+            # FRACTURE ZONES -- the single most conspicuous thing on a real
+            # bathymetric map: dead-straight scarps running the full width of a
+            # basin, perpendicular to the ridge. Crust either side of a transform
+            # came off DIFFERENT ridge segments, so the boundary of the
+            # nearest-segment partition traces them exactly.
+            #
+            # It has to be found as a BOUNDARY, though. Blurring the segment
+            # ID field and taking its gradient (what this did before) scales the
+            # signal by the arbitrary difference between two label NUMBERS, so a
+            # boundary between segments 1 and 2 came out forty times fainter than
+            # one between 1 and 41 -- which is why they were patchy dashes
+            # instead of continuous lineaments.
+            sid = seg_id.astype(np.int32)
+            edge = np.zeros(sid.shape, bool)
+            dx = sid != np.roll(sid, 1, axis=1)          # wraps at the antimeridian
+            edge |= dx
+            edge |= np.roll(dx, -1, axis=1)
+            dy = sid[:-1, :] != sid[1:, :]
+            edge[:-1, :] |= dy
+            edge[1:, :] |= dy
+            fzd = _edt_wrap(~edge) * deg_per_cell
+            # Keep only the traces that run the way a fracture zone actually
+            # runs. The nearest-segment partition is a Voronoi diagram, and its
+            # boundaries radiate in every direction -- between two distant or
+            # differently-oriented segments they cut diagonally across the basin
+            # and drew a spurious lattice. A real fracture zone is the wake of a
+            # transform, so it lies PARALLEL to the spreading direction, which
+            # means the gradient of this distance field (always perpendicular to
+            # the trace) should be perpendicular to (u,v). Suppress the rest.
+            fgy, fgx = np.gradient(_nd.gaussian_filter(fzd, 1.0))
+            ge, gn = fgx / coslat, -fgy
+            gm = np.hypot(ge, gn) + 1e-6
+            align = np.abs(ge / gm * u + gn / gm * v)     # 0 = correct, 1 = spurious
+            keep = np.clip(1.0 - align * 1.7, 0.0, 1.0)
+            # a narrow trough with a broad flanking rise, as a real FZ has
+            relief -= np.exp(-(fzd / 0.28) ** 2) * 430.0 * keep
+            relief += np.exp(-((fzd - 0.75) / 0.55) ** 2) * 120.0 * keep
+
+            # ...and a STEP across it. The two sides formed at ridge segments
+            # offset along the axis, so they are of different age and therefore
+            # sit at different depths -- the reason a fracture zone reads as a
+            # scarp and not merely a groove. One stable offset per segment gives
+            # each crustal block its own level.
+            nseg = int(sid.max()) + 1
+            seg_bias = np.random.default_rng(7).normal(0.0, 95.0, nseg).astype(np.float32)
+            relief += seg_bias[np.clip(sid, 0, nseg - 1)]
 
             # TRENCHES. Where the model says crust is being consumed, cut the
             # deepest features on Earth -- narrow, arcuate, and only on the ocean
@@ -397,21 +450,52 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 trough = np.exp(-(tdist / 0.75) ** 2)
                 deep_ok = np.clip((-out - 1500.0) / 2000.0, 0.0, 1.0)
                 relief -= trough * deep_ok * 3400.0
+                # OUTER RISE: the subducting plate flexes upward a few hundred
+                # metres before it bends down, a low swell parallel to every
+                # trench. Cheap, and it is visible on every real map.
+                relief += np.exp(-((tdist - 2.2) / 1.1) ** 2) * deep_ok * 260.0
 
-            # SEAMOUNTS. Sparse volcanic cones, taller and denser on young crust.
+            # SEAMOUNTS, IN CHAINS. Volcanoes on ocean floor are built at fixed
+            # hotspots while the plate slides over them, so they come out as
+            # LINES -- Hawaii, Louisville, the Cook-Austral chain -- not as
+            # scattered dots. Seed sparse cones, then smear each along the
+            # direction the plate is travelling (which is the spreading
+            # direction, u/v) taking a running maximum, so every seed is drawn
+            # out into a track of progressively older, subsiding cones.
             rng = np.random.default_rng(11)
             smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)
-            smt = np.clip((smt - 0.70) / 0.30, 0.0, 1.0) ** 2
-            relief += _nd.gaussian_filter(smt, 1.0) * 1100.0 * np.clip(
-                1.1 - age_myr / 90.0, 0.12, 1.0)
+            smt = np.clip((smt - 0.74) / 0.26, 0.0, 1.0) ** 2
+            chain = smt.copy()
+            yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+            step_cells = 2.0
+            for k in range(1, 8):
+                sy = yy + v * (k * step_cells)          # +v is north; rows go south
+                sx = xx - (u / coslat) * (k * step_cells)
+                back = _nd.map_coordinates(smt, [np.clip(sy, 0, h - 1), sx % w],
+                                           order=1, mode="grid-wrap")
+                chain = np.maximum(chain, back * (1.0 - k / 9.0))
+            relief += _nd.gaussian_filter(chain, 0.9) * 780.0 * np.clip(
+                1.1 - age_myr / 110.0, 0.15, 1.0)
+
+            # SEDIMENT BLANKET. Abyssal plains next to a continent are the
+            # flattest places on Earth -- turbidites pouring off the margin bury
+            # the hills completely -- while mid-ocean floor keeps its full relief.
+            # Without this every basin is uniformly rough to the coastline.
+            dland = _edt_wrap(out < 0) * deg_per_cell
+            sed = np.exp(-(dland / 7.5) ** 2)            # 1 at the margin, ~0 by 15 deg
+            relief *= (1.0 - 0.80 * sed)                 # hills and scarps drown in it
 
             relief *= polefade
             out = out + np.where(sea & (out < -900.0), relief, 0.0)
             out = np.clip(out, -MAX_ABYSS, None)
 
-            # R is the SEDIMENT-BURIAL age: young crust carries sharp abyssal
-            # hills, old crust is smoothed under its own sediment blanket.
-            ofield[..., 0] = np.where(sea, np.clip(age_myr / MAX_CRUST_AGE, 0.0, 1.0), 1.0)
+            # R is HOW SMOOTH this floor is, and burial has two causes: crust
+            # gets older and mantles itself in pelagic ooze, AND it sits near a
+            # margin under a turbidite wedge. Folding both in here means the
+            # shader's abyssal-hill fabric fades on old crust and dies entirely
+            # on the sediment plains, with no extra channel to ship.
+            smooth01 = np.clip(age_myr / MAX_CRUST_AGE * 0.85 + sed * 0.95, 0.0, 1.0)
+            ofield[..., 0] = np.where(sea, smooth01, 1.0)
             ofield[..., 1] = np.where(sea, np.clip(0.5 + 0.5 * u * conf, 0.0, 1.0), 0.5)
             ofield[..., 2] = np.where(sea, np.clip(0.5 + 0.5 * v * conf, 0.0, 1.0), 0.5)
         else:
