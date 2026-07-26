@@ -96,7 +96,7 @@ Six textures per keyframe. All are WebP; all are decoded and interpolated betwee
 | `_m` | plate motion | 128×64 | R = east, G = north, B = confidence |
 | `_w` | lake depth | 2048×1024 | baked standing water, sqrt-encoded metres |
 | `_d` | surface process | 2048×1024 | drainage, substrate, fetch |
-| `_o` | ocean structure | 2048×1024 | R = companded across-ridge coordinate, G/B = spreading direction with confidence in its length |
+| `_o` | ocean structure | 2048×1024 | R = **crustal age**, log-companded over 0–52° of spreading (190 Myr, the oldest surviving ocean crust); G/B = spreading direction from the age gradient, with confidence in its length |
 
 Temperature is **not** shipped: it is a closed form of latitude, elevation and the era anomaly, so the shader recomputes it for free.
 
@@ -130,33 +130,44 @@ Precambrian coastlines are **generated, not copied**. An earlier version cut cra
 
 ### 5.3 The ocean floor
 
-The largest subsystem, and the one under most active development. Split between `build/seafloor.py` (baked structure) and the fragment shader (per-pixel fabric).
+The largest subsystem. It is built on **crustal age**, and the reason that matters is worth stating plainly, because the model it replaced was wrong in a way no amount of tuning could reach.
 
-**Baked, per keyframe:**
+The old model asked: *how far is this point from the nearest spreading ridge right now?* Nature asks nothing of the sort. Every parcel of ocean crust was created at a ridge at a particular moment and has been carried away ever since, and what it carries is a frozen record of the ridge **as it was**. Three things followed from getting that wrong, and all three were visible on screen:
 
-- **Age-graded depth** from half-space cooling, `depth = 2600 + 350·√(age_Myr)`, with a half-spreading rate of 30 km/Myr and crust older than 190 Myr treated as subducted.
-- **A synthesised spreading network.** The reconstruction resolves only a dozen or so ridge arcs in deep time — far too coarse to read as a spreading system, and interpolating distance to that sparse set can only ever give broad smooth swells with no axis you can trace. So `_ridge_network()` joins arcs whose endpoints nearly meet into continuous chains, then offsets each chain at **four self-similar orders**:
+- **Fabric orientation was wrong away from the axis.** Abyssal hills lie parallel to the *isochron*. Keyed to the present ridge they swept round it in arcs, where a real chart combs dead straight.
+- **Fracture zones could not persist.** The scars that cross a whole basin on a real chart are *material lines* — one transform's entire history, frozen into the plate. Ours were Voronoi boundaries of the *present* segmentation, rebuilt from nothing every keyframe, so they could never be older than the frame they were drawn in.
+- **The coordinate's gradient collapsed with range**, which marbled the far field into contour loops and then left it blank once that was capped. Real abyssal hills stay ~5 km apart from the axis to the trench; only their *amplitude* decays, as sediment buries them. Distance conflates spacing with amplitude. Age does not — its gradient is 1/(spreading rate) and does not decay.
 
-  | order | segment | offset | breaks? | what it is |
-  |---|---|---|---|---|
-  | 1st | 7.0° | ±1.25° | yes | ridge–transform; the fracture-zone makers |
-  | 2nd | 2.0° | ±0.40° | yes | overlapping spreading centres |
-  | 3rd | 0.65° | ±0.115° | no | non-transform offsets — the axis bends, not steps |
-  | 4th | 0.22° | ±0.038° | no | axial crenulation |
+**Two sources of age** (`crustage.py`, `realage.py`), fused in the gradient domain (`oceanage.py`):
 
-  Offset is held at ~0.18 of segment length at every order, which is what makes the axis genuinely self-similar over 1.5 decades. 13 arcs become 269 segments at 300 Ma, mean 1.6° ≈ 180 km — real fracture-zone spacing.
+| | |
+|---|---|
+| `crustage.py` | Isochron model. Crust at time T with age A sat on a ridge at T+A, so carrying that ridge forward to T on each flank's own plate *is* the isochron of age A. Matched per plate — a global nearest-isochron search puts a 180 Myr line beside a 20 Myr one and tears the field. |
+| `realage.py` | The surveyed grid (Müller et al. 2019) carried backwards. A cell whose age today is A0 existed at T iff A0 > T. |
 
-  Offsets come from a **positional hash**, not a RNG, so a chain that persists between keyframes does not re-roll its network and the fracture zones do not shimmer.
+Measured against the surveyed grid the isochron model correlates only **0.41** (median error 33 Myr) — Merdith is built to get *continents* right across a billion years, and its Cenozoic ocean detail is coarser than a model made for the purpose. So real data is used where real data exists, and the division is forced by the geology rather than chosen:
 
-- **Segment-scale axial structure.** Melt is delivered to the middle of a segment and starved at its ends, so the crest shoals toward the centre and drops into a **nodal basin** ~1 km deeper at each transform.
-- **Fracture zones** as the boundary of the nearest-segment partition — literally the boundary between crust made by one segment and crust made by the next.
-- **Trenches** with the outer rise the plate flexes into before it bends down; **seamount chains** smeared along plate motion; **sediment** blanketing near margins; **oceanic plateaus** (Kerguelen, Ontong Java, the Seychelles, Mauritia, Argoland …) back-advected on plate rotations with elevation curves that carry them from emergent island through drowned bank to deep plateau.
+| T | surveyed | | T | surveyed |
+|---|---|---|---|---|
+| 0 Ma | 55% of globe | | 100 Ma | 17% |
+| 40 Ma | 38% | | 150 Ma | 4% |
+| 80 Ma | 21% | | 180 Ma | 0.7% |
 
-**Per pixel, in the shader:**
+Past ~180 Ma essentially no ocean crust survives, so there is nothing left to reconstruct and the model carries it alone. The two are blended by spreading the *difference* rather than the values — preferring one where it exists would put a step of tens of Myr along the edge, and since depth goes as √age that step would draw itself on the sea floor as a wall.
 
-- **Abyssal hills as tilted fault blocks** — three self-similar fault sets keyed to the shipped across-ridge coordinate, spaced from ~24 km down to ~3.6 km at the axis, with power-law throw and en-echelon breakup. Abyssal hills are not noise: they are blocks cut by normal faults at the axis and carried outward unchanged, which is why real fabric combs in long parallel lines rather than dappling.
-- **Pelagic mantling** as a band-limit: sediment buries short wavelengths first, so young crust is sharp and an old plain against a margin is nearly featureless.
-- **Submarine canyons** on the continental slope, cut downslope — the opposite anisotropy to the abyssal fabric.
+**The future** is not extrapolated. Asked for a negative time pyGPlates does not refuse — it runs Merdith up to 250 Myr past the end of the model and returns a complete, plausible-looking field in which every number is invented. Instead the future carries today's age field on the same rigid per-group rotations the future *terrain* already uses, plus elapsed time; unclaimed ground is new ocean, young.
+
+**What falls out of age:**
+
+- **Depth** — half-space cooling on real age, so basins sit at the depths their crust has earned.
+- **Fabric orientation** — the isochron tangent, correct everywhere.
+- **Fracture zones** — an age offset measured *along* the isochron, over a finite baseline (the tangential component of a gradient is identically zero; the first version of this returned nothing at all for exactly that reason).
+- **Sediment** (`sediment.py`) — pelagic accumulation is rate(latitude) × age, which could not be computed at all before. Against the turbidite wedge off the margins, and against the 50–300 m of relief it has to bury. Where accumulation wins, the floor is a plain. Calibrated to published thickness grids: mean 451 m, plains 17%, hills the majority. Verified by the Bengal and Indus Fans appearing unprompted either side of India.
+- **Seamounts** (`seamounts.py`) — a population of discrete cones, power-law heights, born at ridges, subsiding with their plate, planed into guyots where they reached the surface. ~6,300 above the 1.2 km this grid can resolve.
+
+**Still baked from the ridge network**, and correctly so — these describe where the ridge is *now*: the axial valley, the along-strike segment structure (inflated centres, nodal basins at segment ends), trenches with their outer rise, and oceanic plateaus.
+
+**Per pixel, in the shader:** abyssal hills as three self-similar sets of **tilted fault blocks** keyed to the companded age coordinate, with power-law throw and en-echelon breakup; submarine canyons cut downslope on the continental slope.
 
 ### 5.4 Climate
 
@@ -248,7 +259,9 @@ Extra precision beyond 8 bits forces `_o` to lossless WebP, because every scheme
 
 All six field types together are 94 MB. **Do not re-attempt the 16-bit ship without new information.**
 
-The answer instead is **companding**: ship `log(1 + d/2.5)` rather than `d/75`. Free, and it moves the quantisation step from a flat 0.29° to 0.034° at the ridge axis — five times finer than a texel — widening to ~1° far out. That gradient is the physics, not a compromise: fabric is cut at the axis and buried by sediment with age.
+The answer instead is **companding**: ship `log(1 + d/2.5)` rather than a linear ramp. Free, and it moves the quantisation step to **0.030° at the ridge axis — 3.4 km, which is abyssal-hill spacing** — widening to ~1° far out. That gradient is the physics, not a compromise: fabric is cut at the axis and buried by sediment with age.
+
+Full scale is **52° of spreading**, not 75. That was the right number when the coordinate was distance (the far side of Panthalassa); it is wrong now it is age, because ocean crust does not survive past ~190 Myr and 190 Myr at 30 km/Myr is 51.3°. Two other constants were pinned to the old range — the `crustAge` normalisation and `ACR`, the radians-to-coordinate factor both domain stretches are built on — and would have silently rescaled the entire fabric.
 
 Corollary that governs the shader: **key every periodic term to the companded coordinate, never the decoded distance.** A quantisation level then advances the phase by a fixed fraction of a cycle everywhere. Only terms that must match a true spatial rate use decoded degrees, and those must be faded out past ~30° where a level spans several noise periods.
 
@@ -295,3 +308,18 @@ Clamping the sampling radius near the pole makes every pixel poleward of ~88° s
 - **27 tracked labels** still sit on the wrong medium for more than a third of their span. Root cause is a Merdith-vs-Scotese frame mismatch; the fix needs per-region rather than global-rigid frame correction.
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **Present-day biota** have their own regional cards for 49 of 148 labels; the rest fall back to broader assemblages.
+
+---
+
+## 10. Where the ocean model stands
+
+The sea floor was rebuilt onto crustal age in July 2026. What that fixed, and what it did not:
+
+**Fixed.** Fabric orientation everywhere (isochron tangent rather than present-ridge distance). Fracture zones that persist, because an age offset travels with the crust. Depth by basin, from real age. Abyssal plains with sharp edges, from a sediment thickness that competes against the relief it buries. A seamount population instead of smeared streaks. Far-field marbling, which was a modulation index above 1 — the perturbation's gradient exceeding the carrier's, crossing over at 13° from the axis.
+
+**Not fixed, and known.**
+
+- **Seamounts are not clustered along plume tracks.** They are seeded by crustal age, so they scatter where a real ocean shows chains — Hawaii, Louisville, the Cook–Australs. The `hotspot` input to `seamounts.field()` exists and is not wired up.
+- **Deep-time sea floor cannot be made accurate**, only structurally correct. That crust was subducted; there is no record. The isochron model correlates 0.41 with the surveyed grid where both exist, which is why the surveyed grid is preferred wherever it survives.
+- **The axial valley and nodal basins still key off the ridge network**, not age — deliberately, because they describe where the ridge is *now*.
+- **Aseismic ridges and marginal basins** (Ninetyeast, Walvis, the Philippine Sea) are absent or generic.
