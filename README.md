@@ -323,3 +323,16 @@ The sea floor was rebuilt onto crustal age in July 2026. What that fixed, and wh
 - **Deep-time sea floor cannot be made accurate**, only structurally correct. That crust was subducted; there is no record. The isochron model correlates 0.41 with the surveyed grid where both exist, which is why the surveyed grid is preferred wherever it survives.
 - **The axial valley and nodal basins still key off the ridge network**, not age — deliberately, because they describe where the ridge is *now*.
 - **Aseismic ridges and marginal basins** (Ninetyeast, Walvis, the Philippine Sea) are absent or generic.
+
+---
+
+## 11. Reference material
+
+`Deep Time Maps and Resources/` (not in git — large images) is the standard this work is measured against.
+
+- **`Google Earth Examples/`** — five screenshots that define "done" for the sea floor. The key finding from them: below the shelf break Google Earth's ocean carries almost **no colour variation**; the whole abyss is one blue-violet and every bit of visible detail is hillshade. An earlier round concluded the opposite ("we need more contrast") and was wrong.
+- **Esri Ocean Basemap** — https://www.arcgis.com/apps/mapviewer/index.html?webmap=67ab7f7c535c4687b6518e6d2343e8a2 · GEBCO-based, a second reference alongside Google Earth.
+- **Process diagrams** (`.webp`) — continental-margin anatomy, subduction, back-arc basins, slab pull, atoll formation, the supercontinent cycle, the oceanic crust age pattern. The margin diagram is why the canyons are dendritic.
+- **~76 deep-time paleogeographic maps** with Ma dates (Scotese / DeepTimeMaps). **Not yet audited against our reconstruction** — the user has asked for a full audit of these as separate work.
+
+`HANDOFF.md` carries the live state, the measured facts, and the work queue for continuing the sea-floor loop in a fresh session.
