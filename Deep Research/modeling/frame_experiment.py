@@ -113,11 +113,19 @@ def build_reconstructors():
     if paleo_tracks.available():
         rc = paleo_tracks.Reconstructor()
 
+        # Reconstructor.track returns ([[age, lon, lat], ...], plate_id) - the whole
+        # track, not a point. Take the last step, which is `age`.
+        def _last(rc, lon, lat, age, corr):
+            tr, _pid = rc.track(lon, lat, age, step=max(5, int(age)), correct_frame=corr)
+            if not tr:
+                return None
+            return (tr[-1][1], tr[-1][2])
+
         def merdith_raw(lon, lat, age, rc=rc):
-            return rc.track(lon, lat, age, correct_frame=False)
+            return _last(rc, lon, lat, age, False)
 
         def merdith_corr(lon, lat, age, rc=rc):
-            return rc.track(lon, lat, age, correct_frame=True)
+            return _last(rc, lon, lat, age, True)
 
         out.append(("merdith-raw", merdith_raw))
         out.append(("merdith-corrected", merdith_corr))
