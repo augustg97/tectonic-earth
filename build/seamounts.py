@@ -41,8 +41,8 @@ import numpy as np
 N_PLUMES = 34             # active plumes worldwide; the real count is 40-50
 CHAIN_STEP = 1.6          # deg between volcanoes along a track
 CHAIN_LEN = 26            # steps: a track a few thousand km long
-NEAR_RIDGE_DENS = 0.055   # per square degree on brand-new crust
-BACKGROUND_DENS = 0.004   # per square degree on old abyssal plain
+NEAR_RIDGE_DENS = 0.040   # per square degree on brand-new crust
+BACKGROUND_DENS = 0.0022   # per square degree on old abyssal plain
 
 H_MIN = 1150.0            # m: the smallest this grid can resolve
 H_MAX = 4300.0
@@ -110,7 +110,7 @@ def _stamp(out, ys, xs, h, w, dpc, plon, plat, hgt, elong, azi_deg, seed):
     out[r0:r1, :] = np.maximum(out[r0:r1, :], (prof * hgt).astype(np.float32))
 
 
-def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7):
+def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7, age_of=None):
     """Seamount relief in metres.
 
     `u`,`v` are the plate-motion direction (the age gradient), which is what
@@ -129,45 +129,49 @@ def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7):
             return None
         return (r, c) if sea[r, c] else None
 
-    # --- 1. hotspot chains -------------------------------------------------
-    n = 0
-    for p in range(N_PLUMES * 3):        # oversample; many seeds land on land
-        if n >= N_PLUMES:
-            break
-        plat = math.degrees(math.asin(_h(seed, p, 11) * 2.0 - 1.0))
-        plon = _h(seed, p, 13) * 360.0 - 180.0
-        at = ok(plat, plon)
-        if at is None:
-            continue
-        n += 1
-        # A plume's output varies enormously -- Hawaii is not Bowie Seamount.
-        vigour = 0.35 + 0.9 * _h(seed, p, 17)
-        la, lo = plat, plon
-        for k in range(CHAIN_LEN):
-            a2 = ok(la, lo)
-            if a2 is None:
-                break
-            r, c = a2
-            # Height falls along the track: the volcano stops being fed once it
-            # leaves the plume, then subsides with the cooling plate.
-            fade = math.exp(-k / 9.0)
+    # --- 1. hotspot chains, carried on the plate ---------------------------
+    # Positions come from crustage.plume_track, which reconstructs each volcano
+    # from the time it was born at the stationary plume to the present target
+    # time. The chain therefore MOVES: scrub the timeline and every cone tracks
+    # its plate while new ones appear at the plume. Walking outward along the
+    # motion field, as this used to, looks similar in a single frame and is
+    # quite wrong across time -- the volcanoes stayed pinned to the map while
+    # the plate slid underneath them.
+    tracks = []
+    if age_of is not None:
+        try:
+            import crustage
+            n = 0
+            for p in range(N_PLUMES * 4):
+                if n >= N_PLUMES:
+                    break
+                plat = math.degrees(math.asin(_h(seed, p, 11) * 2.0 - 1.0))
+                plon = _h(seed, p, 13) * 360.0 - 180.0
+                if ok(plat, plon) is None:
+                    continue
+                n += 1
+                tracks.append((p, 0.35 + 0.9 * _h(seed, p, 17),
+                               crustage.plume_track(plon, plat, age_of,
+                                                    max_age=CHAIN_LEN * 5, step=5)))
+        except Exception:
+            tracks = []
+    for p, vigour, tr in tracks:
+        for k, (lo, la, A) in enumerate(tr):
+            at = ok(la, lo)
+            if at is None:
+                continue
+            r, c = at
+            # The volcano stops being fed the moment it leaves the plume, then
+            # subsides with the cooling plate it rides.
+            fade = math.exp(-A / 42.0)
             hgt = H_MIN + (H_MAX - H_MIN) * vigour * fade * (0.55 + 0.5 * _h(seed, p, k, 23))
-            if hgt > H_MIN:
-                du = 0.0 if u is None else float(u[r, c])
-                dv = 0.0 if v is None else float(v[r, c])
-                azi = math.degrees(math.atan2(dv, du)) if (du or dv) else 0.0
-                # elongated along the chain, as rift zones tend to be
-                _stamp(out, ys, xs, h, w, dpc, lo, la, hgt,
-                       0.55 + 0.7 * _h(seed, p, k, 29), azi, seed * 1000 + p * 50 + k)
-            # step downstream: the plate carries the crust away from the plume
-            if u is None or v is None:
-                break
-            coslat = max(math.cos(math.radians(la)), 0.05)
-            lo += float(u[r, c]) * CHAIN_STEP / coslat
-            la += float(v[r, c]) * CHAIN_STEP
-            lo = (lo + 180.0) % 360.0 - 180.0
-            if abs(la) > 86.0:
-                break
+            if hgt <= H_MIN:
+                continue
+            du = 0.0 if u is None else float(u[r, c])
+            dv = 0.0 if v is None else float(v[r, c])
+            azi = math.degrees(math.atan2(dv, du)) if (du or dv) else 0.0
+            _stamp(out, ys, xs, h, w, dpc, lo, la, hgt,
+                   0.55 + 0.7 * _h(seed, p, k, 29), azi, seed * 1000 + p * 50 + k)
 
     # --- 2. near-ridge and background -------------------------------------
     cell = 1.0

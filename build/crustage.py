@@ -223,6 +223,72 @@ def plate_ids(T, h, w):
     return small[jj[:, None], ii[None, :]]
 
 
+_PART_CACHE = {}
+
+
+def partitioner(t):
+    """Plate partitioner at time t, cached -- plume tracks need one per birth
+    time and the same times recur across every target."""
+    key = int(round(t))
+    if key not in _PART_CACHE:
+        resolved, shared = [], []
+        pygplates.resolve_topologies(TOPO, rotmodel(), resolved, float(key), shared)
+        polys = [r for r in resolved if r.get_resolved_boundary() is not None]
+        _PART_CACHE[key] = pygplates.PlatePartitioner(polys, rotmodel()) if polys else None
+    return _PART_CACHE[key]
+
+
+def plume_track(plon, plat, T, max_age=110, step=5):
+    """Where a fixed plume's volcanoes have got to by time T.
+
+    THE POINT OF A HOTSPOT is that it does not move with the plate. The plume
+    sits in the mantle; the plate slides over it; the volcano built last is
+    carried away while a new one grows in its place. That is what makes a chain,
+    and it is what the previous version got backwards -- it drew a line outward
+    from the plume in the plate-motion direction, which looks similar in one
+    frame and is quite wrong across time: the volcanoes stayed put on the map
+    while the plate slid under them, so nothing was ever carried anywhere.
+
+    Done properly the chain is not a line drawn from the plume at all. It is the
+    set of volcanoes BORN AT the plume at times T+A for every A, each carried
+    forward to T on whatever plate happened to be over the plume when it formed.
+    Scrub the timeline and every cone now tracks its plate while fresh ones
+    appear at the stationary plume, which is the behaviour the Hawaiian-Emperor
+    chain is the textbook illustration of.
+
+    Returns [(lon, lat, age_Myr), ...], youngest first.
+    """
+    rot = rotmodel()
+    pt = pygplates.PointOnSphere(float(plat), float(plon))
+    out = []
+    for A in range(0, max_age + 1, step):
+        tb = int(round(T)) + A
+        if tb > 1000 or tb < 0:
+            break
+        pp = partitioner(tb)
+        if pp is None:
+            break
+        pl = pp.partition_point(pt)
+        if pl is None:
+            continue
+        pid = int(pl.get_feature().get_reconstruction_plate_id())
+        if A == 0:
+            out.append((float(plon), float(plat), 0.0))
+            continue
+        try:
+            fr = rot.get_rotation(float(T), pid, float(tb))
+        except Exception:
+            continue
+        if fr is None:
+            continue
+        v = xyz_of(np.array([plon]), np.array([plat])) @ _rotmat(fr).T
+        v = v[0] / (np.linalg.norm(v[0]) + 1e-12)
+        la = math.degrees(math.asin(max(-1.0, min(1.0, float(v[1])))))
+        lo = math.degrees(math.atan2(float(v[2]), float(v[0])))
+        out.append((lo, la, float(A)))
+    return out
+
+
 def build(T, h=512, w=1024):
     """(age_myr, azimuth_deg, arc_id, dist_deg) for time T. NaN where undatable."""
     from scipy.spatial import cKDTree

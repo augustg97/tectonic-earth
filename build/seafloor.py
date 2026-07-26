@@ -851,7 +851,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 # resolve, which is the right order for the resolvable part of a
                 # population that runs to ~24,000 above a kilometre.
                 import seamounts as _sm
-                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v)
+                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v, age_of=float(age))
             else:
                 rng = np.random.default_rng(11)
                 smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)

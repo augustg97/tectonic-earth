@@ -1154,15 +1154,24 @@ vec3 oceanColour(float z, vec3 sd, float latd){
   // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
   float shelf=smoothstep(-700.0,-40.0,z);
   float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
+  /* Toned right down against the reference. This mottle runs at a ~60 degree
+     scale, so it was painting broad green-blue patches across whole basins --
+     and broad tonal patches are the single most conspicuous difference between
+     our ocean and Google Earth's, which below the shelf break is very nearly
+     one colour. Productivity does vary, but not by enough to see from orbit,
+     and it must not compete with the relief. */
   float mott=fbm3(sd*6.0+3.1);
-  float bio=clamp(shelf*0.7+band*0.5,0.0,1.0)*(0.5+0.8*mott);
-  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.5,0.0,1.0));
+  float bio=clamp(shelf*0.7+band*0.5,0.0,1.0)*(0.62+0.45*mott);
+  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.26,0.0,1.0));
   /* Shelf grading. One turquoise step at the beach was doing all the work, so
      everything from the shelf break to the surf zone read as a single blue.
      Real shallow water is a sequence: the shelf break, the bank, the lagoon,
      the sand flat -- each shallower band lighter and greener than the last,
      because less water absorbs less red and more bottom shows through. */
-  c=mix(c, vec3(0.145,0.400,0.545), smoothstep(-1800.0,-320.0,z)*0.55);
+  // ...and this one reached from 1800 m up, i.e. across the whole slope, which
+  // is a lot of ocean to lighten. The reference keeps the slope close to the
+  // abyss in tone and separates it by SHADING.
+  c=mix(c, vec3(0.145,0.400,0.545), smoothstep(-1800.0,-320.0,z)*0.34);
   c=mix(c, vec3(0.216,0.573,0.639), smoothstep(-320.0,-90.0,z)*0.60);
   c=mix(c, vec3(0.353,0.722,0.706), smoothstep(-90.0,-28.0,z)*0.65);
   c=mix(c, vec3(0.529,0.847,0.804), smoothstep(-28.0,-4.0,z)*0.70);
@@ -1292,7 +1301,13 @@ void main(){
        procedural and added after this point. Rescaled by da/db so a true slope
        reads the same on either baseline and nothing steps as the blend
        crosses. */
-    float qw=smoothstep(-2200.0,-3800.0,z);
+    /* Capped at 0.6, not 1.0. The wide baseline removes the 105 m quantisation
+       staircase, but a fracture zone is only about 430 m deep and two texels
+       wide -- inside the very band this smooths -- so at full strength the fix
+       for one artefact was quietly erasing the feature that matters most for
+       making the sea floor legible. Keeping a share of the sharp gradient
+       leaves the staircase suppressed and the scars intact. */
+    float qw=smoothstep(-2200.0,-3800.0,z)*0.60;
     if(qw>0.01){
       float db=2.9/1024.0*PI, ds=da/db;
       gE=mix(gE,(elevAt(uvFromDir(normalize(sdir+Eax*db)),rug)
@@ -1812,7 +1827,13 @@ void main(){
        legible. It lives out here because it must not depend on the fabric gate:
        anything inside that branch which does not scale with aniso switches on
        and off at the threshold, which is what made features pop in and out. */
-    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.34*deepw;
+    /* Gentler than it was. The reference for this is Google Earth's ocean,
+       and below the shelf break that carries almost NO colour variation -- the
+       whole abyss is one blue-violet and every bit of the detail you see is
+       hillshade. We had it the other way round: broad tonal bands by crustal
+       age, and fine texture too faint to read against them. Tone down the
+       banding so it stops competing, and put the contrast into the relief. */
+    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.15*deepw;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
     if(aniso*deepw > 0.003){
@@ -2042,10 +2063,14 @@ void main(){
       // than the old isotropic finite differences.
       // The fault set above now carries the structure, so the fractal is
       // demoted to the fine texture riding on top of it.
-      float amp = 0.95 * rough * aniso * deepw * mix(0.50,1.0,sedq);
+      // Raised, because the tone it replaces has been taken out. On a real
+      // chart the abyssal-hill fabric is the dominant texture at every scale
+      // from basin to pixel, and ours was reading as a whisper under the
+      // colour banding.
+      float amp = 1.70 * rough * aniso * deepw * mix(0.50,1.0,sedq);
       nrm = normalize(nrm + vec3(gUV*amp, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.55*rough*aniso*deepw;
+      col *= 1.0 + sAcross*0.42*rough*aniso*deepw;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,
@@ -2064,6 +2089,14 @@ void main(){
     float tilt = clamp(length(vec2(gE,gN))/60.0, 0.0, 1.0);
     float cany = slopeBand*tilt;
     if(cany > 0.004){
+      /* TWO ORDERS, because a real slope is DENDRITIC. The reference diagram
+         for a continental margin shows the slope combed from the shelf break
+         to the rise by a dense comb of canyons that branch as they climb --
+         dozens of them along any stretch of margin, not the handful a single
+         octave gives. Turbidity currents capture one another exactly as rivers
+         do, so the pattern is a drainage network and needs the same treatment:
+         a coarse set that carries the main canyons and a finer set riding on
+         it for the tributaries. */
       float CF=260.0;
       vec3 CAX=vec3(0.0,0.0,1.0);            // fixed axis, same reason as SAX
       vec3 c0=sdir*CF - CAX*(z*(CF/78000.0));
@@ -2071,8 +2104,18 @@ void main(){
       float k0=vnoise3(c0)+0.5*vnoise3(c0*2.6+17.0);
       float k1=vnoise3(c1)+0.5*vnoise3(c1*2.6+17.0);
       float gully=(k1-k0);
-      nrm=normalize(nrm+vec3(gully*2.6*cany, 0.0, 0.0));
-      col *= 1.0 - abs(gully)*0.9*cany;      // shadowed incisions
+      float TF=CF*2.9;                       // tributaries
+      vec3 d0=sdir*TF - CAX*(z*(TF/78000.0));
+      vec3 d1=(sdir+Eax*(1.1/1024.0*PI))*TF - CAX*(z*(TF/78000.0));
+      float t0=vnoise3(d0)+0.5*vnoise3(d0*2.6+41.0);
+      float t1=vnoise3(d1)+0.5*vnoise3(d1*2.6+41.0);
+      // the fine set is throttled where the coarse one already has a canyon,
+      // which is what makes them read as tributaries joining a trunk rather
+      // than as a second independent comb laid over the first
+      float trib=(t1-t0)*0.55*(1.0-clamp(abs(gully)*2.2,0.0,1.0));
+      gully += trib;
+      nrm=normalize(nrm+vec3(gully*3.4*cany, 0.0, 0.0));
+      col *= 1.0 - abs(gully)*1.15*cany;     // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
