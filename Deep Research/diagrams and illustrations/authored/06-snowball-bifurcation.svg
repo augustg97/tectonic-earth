@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 468" width="1180" height="468">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="468"/>
+<text class="t title" x="28" y="34">The snowball bifurcation</text>
+<text class="t sub" x="28" y="53">Global mean temperature against CO2 at 700 Ma, from modeling/climate_ebm.py</text>
+<rect class="panel" x="120" y="108" width="680" height="300" rx="4"/>
+<line class="grid" x1="120" y1="392.2" x2="800" y2="392.2"/>
+<text class="t small" x="110" y="396.2" text-anchor="end">-40 C</text>
+<line class="grid" x1="120" y1="329.1" x2="800" y2="329.1"/>
+<text class="t small" x="110" y="333.1" text-anchor="end">-20 C</text>
+<line class="grid" x1="120" y1="265.9" x2="800" y2="265.9"/>
+<text class="t small" x="110" y="269.9" text-anchor="end">0 C</text>
+<line class="grid" x1="120" y1="202.7" x2="800" y2="202.7"/>
+<text class="t small" x="110" y="206.7" text-anchor="end">20 C</text>
+<line class="grid" x1="120" y1="139.6" x2="800" y2="139.6"/>
+<text class="t small" x="110" y="143.6" text-anchor="end">40 C</text>
+<line class="grid" x1="120.0" y1="108" x2="120.0" y2="408"/>
+<text class="t small" x="120.0" y="424.0" text-anchor="middle">30</text>
+<line class="grid" x1="202.9" y1="108" x2="202.9" y2="408"/>
+<text class="t small" x="202.9" y="424.0" text-anchor="middle">100</text>
+<line class="grid" x1="278.6" y1="108" x2="278.6" y2="408"/>
+<text class="t small" x="278.6" y="424.0" text-anchor="middle">300</text>
+<line class="grid" x1="361.6" y1="108" x2="361.6" y2="408"/>
+<text class="t small" x="361.6" y="424.0" text-anchor="middle">1000</text>
+<line class="grid" x1="437.3" y1="108" x2="437.3" y2="408"/>
+<text class="t small" x="437.3" y="424.0" text-anchor="middle">3000</text>
+<line class="grid" x1="520.2" y1="108" x2="520.2" y2="408"/>
+<text class="t small" x="520.2" y="424.0" text-anchor="middle">10000</text>
+<line class="grid" x1="595.9" y1="108" x2="595.9" y2="408"/>
+<text class="t small" x="595.9" y="424.0" text-anchor="middle">30000</text>
+<text class="t small" x="460.0" y="442.0" text-anchor="middle">atmospheric CO2, ppm (log)</text>
+<polyline points="120.0,416.4 152.4,412.7 184.8,408.9 217.1,286.1 249.5,271.7 281.9,261.1 314.3,251.2 346.7,243.0 379.0,235.3 411.4,228.1 443.8,220.6 476.2,216.9 508.6,213.1 541.0,209.3 573.3,205.5 605.7,201.7 638.1,198.0 670.5,194.2 702.9,190.4 735.2,186.6 767.6,182.8 800.0,179.0" fill="none" stroke="#c9a227" stroke-width="2.2"/>
+<circle cx="120.0" cy="416.4" r="3.4" fill="#7ebad6"/>
+<circle cx="152.4" cy="412.7" r="3.4" fill="#7ebad6"/>
+<circle cx="184.8" cy="408.9" r="3.4" fill="#7ebad6"/>
+<circle cx="217.1" cy="286.1" r="3.4" fill="#c9a227"/>
+<circle cx="249.5" cy="271.7" r="3.4" fill="#c9a227"/>
+<circle cx="281.9" cy="261.1" r="3.4" fill="#c9a227"/>
+<circle cx="314.3" cy="251.2" r="3.4" fill="#c9a227"/>
+<circle cx="346.7" cy="243.0" r="3.4" fill="#c9a227"/>
+<circle cx="379.0" cy="235.3" r="3.4" fill="#c9a227"/>
+<circle cx="411.4" cy="228.1" r="3.4" fill="#c9a227"/>
+<circle cx="443.8" cy="220.6" r="3.4" fill="#4a8050"/>
+<circle cx="476.2" cy="216.9" r="3.4" fill="#4a8050"/>
+<circle cx="508.6" cy="213.1" r="3.4" fill="#4a8050"/>
+<circle cx="541.0" cy="209.3" r="3.4" fill="#4a8050"/>
+<circle cx="573.3" cy="205.5" r="3.4" fill="#4a8050"/>
+<circle cx="605.7" cy="201.7" r="3.4" fill="#4a8050"/>
+<circle cx="638.1" cy="198.0" r="3.4" fill="#4a8050"/>
+<circle cx="670.5" cy="194.2" r="3.4" fill="#4a8050"/>
+<circle cx="702.9" cy="190.4" r="3.4" fill="#4a8050"/>
+<circle cx="735.2" cy="186.6" r="3.4" fill="#4a8050"/>
+<circle cx="767.6" cy="182.8" r="3.4" fill="#4a8050"/>
+<circle cx="800.0" cy="179.0" r="3.4" fill="#4a8050"/>
+<line x1="201.0" y1="108" x2="201.0" y2="408" stroke="#e07650" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text class="t small" x="208.0" y="126" fill="#e07650">deglaciation threshold</text>
+<rect class="panel" x="832" y="108" width="314" height="300" rx="6"/>
+<text class="t small" x="848" y="132">1-D diffusive energy balance model,</text>
+<text class="t small" x="848" y="147">solar luminosity at 700 Ma (Gough 1981):</text>
+<text class="t small" x="848" y="162">8% fainter than today.</text>
+<text class="t small" x="848" y="177"></text>
+<text class="t small" x="848" y="192">Blue  = hard snowball (ice fraction &gt; 0.95)</text>
+<text class="t small" x="848" y="207">Gold  = partial ice cover</text>
+<text class="t small" x="848" y="222">Green = ice free</text>
+<text class="t small" x="848" y="237"></text>
+<text class="t small" x="848" y="252">The point of the figure is the DISCONTINUITY.</text>
+<text class="t small" x="848" y="267">Once ice reaches the subtropics the albedo</text>
+<text class="t small" x="848" y="282">feedback runs away, and escaping needs a CO2</text>
+<text class="t small" x="848" y="297">level orders of magnitude above the one that</text>
+<text class="t small" x="848" y="312">let the planet freeze. That hysteresis is why</text>
+<text class="t small" x="848" y="327">the Cryogenian terminations required a spike</text>
+<text class="t small" x="848" y="342">of order 10^5 ppm and produced cap carbonates.</text>
+<text class="t small" x="848" y="357"></text>
+<text class="t small" x="848" y="372">Caveat, stated in the module: the logarithmic</text>
+<text class="t small" x="848" y="387">CO2 forcing law is not valid at 10^5 ppm, so</text>
+<text class="t small" x="848" y="402">the absolute threshold here is too high. The</text>
+<text class="t small" x="848" y="417">hysteresis is robust; the number is not.</text>
+</svg>

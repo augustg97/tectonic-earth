@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 622" width="1180" height="622">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="622"/>
+<text class="t title" x="28" y="34">Which continent was part of what, and when</text>
+<text class="t sub" x="28" y="53">From modeling/paleogeography.py - the table a label must satisfy before it is drawn</text>
+<line class="grid" x1="190.0" y1="84" x2="190.0" y2="554"/>
+<text class="t small" x="190.0" y="78" text-anchor="middle">1000 Ma</text>
+<line class="grid" x1="380.0" y1="84" x2="380.0" y2="554"/>
+<text class="t small" x="380.0" y="78" text-anchor="middle">800 Ma</text>
+<line class="grid" x1="570.0" y1="84" x2="570.0" y2="554"/>
+<text class="t small" x="570.0" y="78" text-anchor="middle">600 Ma</text>
+<line class="grid" x1="760.0" y1="84" x2="760.0" y2="554"/>
+<text class="t small" x="760.0" y="78" text-anchor="middle">400 Ma</text>
+<line class="grid" x1="950.0" y1="84" x2="950.0" y2="554"/>
+<text class="t small" x="950.0" y="78" text-anchor="middle">200 Ma</text>
+<line class="grid" x1="1140.0" y1="84" x2="1140.0" y2="554"/>
+<text class="t small" x="1140.0" y="78" text-anchor="middle">0 Ma</text>
+<text class="t lab" x="178" y="123" text-anchor="end">Laurentia</text>
+<rect x="190.0" y="111" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="111" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="111" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<rect x="736.2" y="111" width="237.5" height="16" rx="3" fill="#4f8fa0" opacity="0.85"/>
+<rect x="855.0" y="111" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="111" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="149" text-anchor="end">Baltica</text>
+<rect x="190.0" y="137" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="137" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="137" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<rect x="736.2" y="137" width="237.5" height="16" rx="3" fill="#4f8fa0" opacity="0.85"/>
+<rect x="855.0" y="137" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="137" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="175" text-anchor="end">Siberia</text>
+<rect x="190.0" y="163" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="163" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<rect x="855.0" y="163" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="163" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="201" text-anchor="end">Avalonia</text>
+<rect x="522.5" y="189" width="617.5" height="16" rx="3" fill="#212a34"/>
+<rect x="736.2" y="189" width="237.5" height="16" rx="3" fill="#4f8fa0" opacity="0.85"/>
+<rect x="855.0" y="189" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="189" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="227" text-anchor="end">Armorica</text>
+<rect x="627.0" y="215" width="513.0" height="16" rx="3" fill="#212a34"/>
+<rect x="855.0" y="215" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="215" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="253" text-anchor="end">Amazonia</text>
+<rect x="190.0" y="241" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="241" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="241" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="241" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="241" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="279" text-anchor="end">West African Craton</text>
+<rect x="190.0" y="267" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="267" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="267" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="267" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="267" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="305" text-anchor="end">Congo Craton</text>
+<rect x="190.0" y="293" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="293" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="293" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="293" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="293" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="331" text-anchor="end">Kalahari Craton</text>
+<rect x="190.0" y="319" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="319" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="319" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="319" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="319" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="357" text-anchor="end">India</text>
+<rect x="190.0" y="345" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="345" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="345" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="345" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="345" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="383" text-anchor="end">Australia</text>
+<rect x="190.0" y="371" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="371" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="371" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="371" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="371" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="409" text-anchor="end">East Antarctica</text>
+<rect x="190.0" y="397" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="397" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.85"/>
+<rect x="538.6" y="397" width="57.0" height="16" rx="3" fill="#5f6f8f" opacity="0.85"/>
+<rect x="617.5" y="397" width="351.5" height="16" rx="3" fill="#c9a227" opacity="0.85"/>
+<rect x="821.8" y="397" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="435" text-anchor="end">North China</text>
+<rect x="190.0" y="423" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="423" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<rect x="855.0" y="423" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<text class="t lab" x="178" y="461" text-anchor="end">South China</text>
+<rect x="190.0" y="449" width="950.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190.0" y="449" width="237.5" height="16" rx="3" fill="#7f6fa8" opacity="0.35" stroke-dasharray="3 2" stroke="#d8e2ec" stroke-width="0.8"/>
+<text class="t lab" x="178" y="487" text-anchor="end">Cimmeria</text>
+<rect x="855.0" y="475" width="285.0" height="16" rx="3" fill="#212a34"/>
+<text class="t lab" x="178" y="513" text-anchor="end">Kazakhstania</text>
+<rect x="665.0" y="501" width="475.0" height="16" rx="3" fill="#212a34"/>
+<rect x="855.0" y="501" width="228.0" height="16" rx="3" fill="#3f7f6a" opacity="0.85"/>
+<rect x="821.8" y="501" width="152.0" height="16" rx="3" fill="#c06a4a" opacity="0.85"/>
+<text class="t lab" x="178" y="539" text-anchor="end">Zealandia</text>
+<rect x="1045.0" y="527" width="95.0" height="16" rx="3" fill="#212a34"/>
+<rect x="190" y="568" width="14" height="12" rx="2" fill="#7f6fa8"/>
+<text class="t small" x="210" y="578">Rodinia</text>
+<rect x="278.2" y="568" width="14" height="12" rx="2" fill="#5f6f8f"/>
+<text class="t small" x="298.2" y="578">Pannotia</text>
+<rect x="373.0" y="568" width="14" height="12" rx="2" fill="#c9a227"/>
+<text class="t small" x="393.0" y="578">Gondwana</text>
+<rect x="467.8" y="568" width="14" height="12" rx="2" fill="#4f8fa0"/>
+<text class="t small" x="487.8" y="578">Laurussia</text>
+<rect x="569.2" y="568" width="14" height="12" rx="2" fill="#3f7f6a"/>
+<text class="t small" x="589.2" y="578">Laurasia</text>
+<rect x="664.0" y="568" width="14" height="12" rx="2" fill="#c06a4a"/>
+<text class="t small" x="684.0" y="578">Pangaea</text>
+<text class="t small" x="190" y="600" fill="#8fa3b8">Dark bar = the block exists but belongs to no named assembly - it is an independent continent or a drifting terrane. Dashed and faded = its membership is disputed in the literature. Pannotia itself is contested: several authors hold that the pieces were never all joined at once.</text>
+</svg>

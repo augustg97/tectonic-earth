@@ -1,0 +1,1814 @@
+{
+ "schema": 1,
+ "note": "Deep Research taxon database. Sizes are typical adult maxima in metres; ages in Ma.",
+ "taxa": [
+  {
+   "name": "Stromatolite",
+   "rank": "informal",
+   "clade": "cyanobacterial buildup",
+   "realm": "sea",
+   "first": 3500.0,
+   "last": 0.0,
+   "size_m": 3.0,
+   "habit": "laminated microbial buildup on warm shelves",
+   "diet": "photosynthesis",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "The dominant reef of the first three billion years. Declines sharply in the Cambrian as grazing and burrowing begin; survives today only in refugia like Hamelin Pool.",
+   "confidence": "good"
+  },
+  {
+   "name": "Bangiomorpha",
+   "rank": "genus",
+   "clade": "red alga",
+   "realm": "sea",
+   "first": 1050.0,
+   "last": 720.0,
+   "size_m": 0.002,
+   "habit": "filamentous, attached to shallow substrate",
+   "diet": "photosynthesis",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Among the oldest fossils showing sexual reproduction and complex multicellularity.",
+   "confidence": "good"
+  },
+  {
+   "name": "Acritarchs",
+   "rank": "informal",
+   "clade": "organic-walled microfossils",
+   "realm": "sea",
+   "first": 1800.0,
+   "last": 0.0,
+   "size_m": 0.0002,
+   "habit": "planktonic",
+   "diet": "photosynthesis / heterotrophy",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Mostly the cysts of algae; the workhorse biostratigraphic fossil of the Proterozoic and early Palaeozoic.",
+   "confidence": "good"
+  },
+  {
+   "name": "Cryoconite communities",
+   "rank": "assemblage",
+   "clade": "microbial",
+   "realm": "fresh",
+   "first": 720.0,
+   "last": 635.0,
+   "size_m": 0.0001,
+   "habit": "meltponds on the surface of snowball ice",
+   "diet": "photosynthesis",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "ice sheet",
+   "note": "The best candidate refugium for photosynthetic life through the Sturtian and Marinoan glaciations.",
+   "confidence": "moderate"
+  },
+  {
+   "name": "Charnia",
+   "rank": "genus",
+   "clade": "rangeomorph",
+   "realm": "sea",
+   "first": 575.0,
+   "last": 550.0,
+   "size_m": 1.0,
+   "habit": "sessile frond anchored by a holdfast, in the deep sea below the photic zone",
+   "diet": "osmotrophy or suspension feeding",
+   "provinces": [
+    "Avalon assemblage"
+   ],
+   "biome": "",
+   "note": "The first complex macrofossil recognised from rocks then thought to be Precambrian.",
+   "confidence": "good"
+  },
+  {
+   "name": "Fractofusus",
+   "rank": "genus",
+   "clade": "rangeomorph",
+   "realm": "sea",
+   "first": 575.0,
+   "last": 560.0,
+   "size_m": 0.4,
+   "habit": "reclining on the sea floor, deep water",
+   "diet": "osmotrophy",
+   "provinces": [
+    "Avalon assemblage"
+   ],
+   "biome": "",
+   "note": "Shows evidence of reproduction by stolons.",
+   "confidence": "good"
+  },
+  {
+   "name": "Dickinsonia",
+   "rank": "genus",
+   "clade": "dickinsoniomorph",
+   "realm": "sea",
+   "first": 560.0,
+   "last": 550.0,
+   "size_m": 1.4,
+   "habit": "flat on a microbial mat, possibly mobile",
+   "diet": "external digestion of the mat beneath it",
+   "provinces": [
+    "White Sea assemblage"
+   ],
+   "biome": "",
+   "note": "Cholesteroid biomarkers argue it was an animal. Up to 1.4 m and a few mm thick.",
+   "confidence": "good"
+  },
+  {
+   "name": "Kimberella",
+   "rank": "genus",
+   "clade": "kimberellomorph",
+   "realm": "sea",
+   "first": 555.0,
+   "last": 550.0,
+   "size_m": 0.05,
+   "habit": "mobile bottom-dweller",
+   "diet": "grazing with a radula-like apparatus",
+   "provinces": [
+    "White Sea assemblage"
+   ],
+   "biome": "",
+   "note": "The strongest Ediacaran candidate for a bilaterian, possibly mollusc-like; leaves scratch traces beside its body fossils.",
+   "confidence": "good"
+  },
+  {
+   "name": "Yorgia",
+   "rank": "genus",
+   "clade": "proarticulatan",
+   "realm": "sea",
+   "first": 558.0,
+   "last": 550.0,
+   "size_m": 0.25,
+   "habit": "mobile grazer on microbial mats",
+   "diet": "ciliary feeding",
+   "provinces": [
+    "White Sea assemblage"
+   ],
+   "biome": "",
+   "note": "Found with a trail of its own feeding impressions.",
+   "confidence": "good"
+  },
+  {
+   "name": "Tribrachidium",
+   "rank": "genus",
+   "clade": "trilobozoan",
+   "realm": "sea",
+   "first": 555.0,
+   "last": 550.0,
+   "size_m": 0.04,
+   "habit": "sessile, three-rayed symmetry",
+   "diet": "suspension feeding",
+   "provinces": [
+    "White Sea assemblage"
+   ],
+   "biome": "",
+   "note": "A body plan with no counterpart in any living phylum.",
+   "confidence": "good"
+  },
+  {
+   "name": "Ernietta",
+   "rank": "genus",
+   "clade": "erniettomorph",
+   "realm": "sea",
+   "first": 548.0,
+   "last": 539.0,
+   "size_m": 0.1,
+   "habit": "partly buried, sack-like, in shifting sand",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Nama assemblage"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Cloudina",
+   "rank": "genus",
+   "clade": "tubular biomineraliser",
+   "realm": "sea",
+   "first": 550.0,
+   "last": 539.0,
+   "size_m": 0.04,
+   "habit": "gregarious tube-dweller, reef-forming",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Nama assemblage"
+   ],
+   "biome": "",
+   "note": "One of the FIRST mineralised skeletons, and it carries the first evidence of predation: drill holes made by something that hunted it.",
+   "confidence": "good"
+  },
+  {
+   "name": "Namacalathus",
+   "rank": "genus",
+   "clade": "goblet-shaped biomineraliser",
+   "realm": "sea",
+   "first": 548.0,
+   "last": 539.0,
+   "size_m": 0.03,
+   "habit": "stalked, attached to microbial reefs",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Nama assemblage"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Anomalocaris",
+   "rank": "genus",
+   "clade": "radiodont",
+   "realm": "sea",
+   "first": 520.0,
+   "last": 500.0,
+   "size_m": 1.0,
+   "habit": "active nektonic swimmer with lateral flaps",
+   "diet": "predator",
+   "provinces": [
+    "Olenellid Province",
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "The largest Cambrian animal; compound eyes with tens of thousands of lenses.",
+   "confidence": "good"
+  },
+  {
+   "name": "Opabinia",
+   "rank": "genus",
+   "clade": "stem-arthropod",
+   "realm": "sea",
+   "first": 508.0,
+   "last": 505.0,
+   "size_m": 0.07,
+   "habit": "nektobenthic",
+   "diet": "predator, using a single frontal grasping proboscis",
+   "provinces": [
+    "Olenellid Province"
+   ],
+   "biome": "",
+   "note": "Five eyes. Burgess Shale.",
+   "confidence": "good"
+  },
+  {
+   "name": "Hallucigenia",
+   "rank": "genus",
+   "clade": "lobopodian",
+   "realm": "sea",
+   "first": 518.0,
+   "last": 505.0,
+   "size_m": 0.035,
+   "habit": "benthic walker",
+   "diet": "possibly scavenging on sponges",
+   "provinces": [
+    "Olenellid Province",
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "Reconstructed upside-down and back-to-front for decades.",
+   "confidence": "good"
+  },
+  {
+   "name": "Wiwaxia",
+   "rank": "genus",
+   "clade": "stem-mollusc / annelid",
+   "realm": "sea",
+   "first": 518.0,
+   "last": 505.0,
+   "size_m": 0.05,
+   "habit": "benthic, armoured with sclerites and spines",
+   "diet": "grazing",
+   "provinces": [
+    "Olenellid Province",
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Marrella",
+   "rank": "genus",
+   "clade": "marrellomorph arthropod",
+   "realm": "sea",
+   "first": 515.0,
+   "last": 505.0,
+   "size_m": 0.02,
+   "habit": "swimming and crawling near the bottom",
+   "diet": "deposit feeding",
+   "provinces": [
+    "Olenellid Province"
+   ],
+   "biome": "",
+   "note": "The most abundant animal in the Burgess Shale.",
+   "confidence": "good"
+  },
+  {
+   "name": "Olenellus",
+   "rank": "genus",
+   "clade": "olenellid trilobite",
+   "realm": "sea",
+   "first": 521.0,
+   "last": 509.0,
+   "size_m": 0.1,
+   "habit": "benthic",
+   "diet": "deposit feeding / predation",
+   "provinces": [
+    "Olenellid Province"
+   ],
+   "biome": "",
+   "note": "Index fossil of Laurentia, Baltica and Siberia.",
+   "confidence": "good"
+  },
+  {
+   "name": "Redlichia",
+   "rank": "genus",
+   "clade": "redlichiid trilobite",
+   "realm": "sea",
+   "first": 521.0,
+   "last": 509.0,
+   "size_m": 0.25,
+   "habit": "benthic",
+   "diet": "deposit feeding / predation",
+   "provinces": [
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "Index fossil of Gondwana and its margins.",
+   "confidence": "good"
+  },
+  {
+   "name": "Myllokunmingia",
+   "rank": "genus",
+   "clade": "stem-vertebrate",
+   "realm": "sea",
+   "first": 518.0,
+   "last": 515.0,
+   "size_m": 0.028,
+   "habit": "nektonic",
+   "diet": "filter feeding",
+   "provinces": [
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "Among the earliest known craniates, from Chengjiang.",
+   "confidence": "good"
+  },
+  {
+   "name": "Pikaia",
+   "rank": "genus",
+   "clade": "cephalochordate-grade chordate",
+   "realm": "sea",
+   "first": 508.0,
+   "last": 505.0,
+   "size_m": 0.04,
+   "habit": "swimming",
+   "diet": "filter feeding",
+   "provinces": [
+    "Olenellid Province"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Archaeocyaths",
+   "rank": "class",
+   "clade": "sponge-grade reef builder",
+   "realm": "sea",
+   "first": 525.0,
+   "last": 510.0,
+   "size_m": 0.15,
+   "habit": "sessile, cup-shaped, reef-forming on tropical shelves",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Olenellid Province",
+    "Redlichiid Province"
+   ],
+   "biome": "",
+   "note": "The FIRST animal reef builders. Extinct by the mid-Cambrian, leaving reef building to microbes again until the Ordovician.",
+   "confidence": "good"
+  },
+  {
+   "name": "Small shelly fauna",
+   "rank": "assemblage",
+   "clade": "mixed early biomineralisers",
+   "realm": "sea",
+   "first": 541.0,
+   "last": 521.0,
+   "size_m": 0.002,
+   "habit": "benthic, mostly millimetric",
+   "diet": "various",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Spines, plates, tubes and caps 1-2 mm long; the bridge between the Ediacaran and the Lagerstatten.",
+   "confidence": "good"
+  },
+  {
+   "name": "Cameroceras",
+   "rank": "genus",
+   "clade": "nautiloid cephalopod",
+   "realm": "sea",
+   "first": 470.0,
+   "last": 440.0,
+   "size_m": 6.0,
+   "habit": "nektonic, with a long straight conical shell",
+   "diet": "apex predator",
+   "provinces": [
+    "Laurentian (North American) Province",
+    "Baltic Province"
+   ],
+   "biome": "",
+   "note": "Among the largest animals of the early Palaeozoic; the classic figure of ~9 m is probably an overestimate.",
+   "confidence": "moderate"
+  },
+  {
+   "name": "Isotelus",
+   "rank": "genus",
+   "clade": "asaphid trilobite",
+   "realm": "sea",
+   "first": 460.0,
+   "last": 445.0,
+   "size_m": 0.7,
+   "habit": "benthic burrower",
+   "diet": "predation and deposit feeding",
+   "provinces": [
+    "Laurentian (North American) Province"
+   ],
+   "biome": "",
+   "note": "One of the largest trilobites.",
+   "confidence": "good"
+  },
+  {
+   "name": "Didymograptus",
+   "rank": "genus",
+   "clade": "graptolite",
+   "realm": "sea",
+   "first": 478.0,
+   "last": 458.0,
+   "size_m": 0.05,
+   "habit": "planktonic colony",
+   "diet": "suspension feeding",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Graptolites are the definitive Ordovician-Silurian biostratigraphic tool because they were planktonic and therefore near-global.",
+   "confidence": "good"
+  },
+  {
+   "name": "Halysites",
+   "rank": "genus",
+   "clade": "tabulate coral",
+   "realm": "sea",
+   "first": 460.0,
+   "last": 419.0,
+   "size_m": 0.3,
+   "habit": "colonial reef builder, chain-like",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Laurentian (North American) Province"
+   ],
+   "biome": "",
+   "note": "Part of the stromatoporoid-tabulate-rugose reef that replaces the Cambrian archaeocyath and microbial mound.",
+   "confidence": "good"
+  },
+  {
+   "name": "Receptaculites",
+   "rank": "genus",
+   "clade": "uncertain (alga or sponge)",
+   "realm": "sea",
+   "first": 470.0,
+   "last": 360.0,
+   "size_m": 0.3,
+   "habit": "sessile on carbonate shelves",
+   "diet": "unknown",
+   "provinces": [
+    "Laurentian (North American) Province"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Conodonts",
+   "rank": "class",
+   "clade": "early vertebrate",
+   "realm": "sea",
+   "first": 520.0,
+   "last": 201.0,
+   "size_m": 0.04,
+   "habit": "nektonic, eel-like",
+   "diet": "predation with phosphatic tooth elements",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Known for a century from their teeth alone; the animal was found only in 1983.",
+   "confidence": "good"
+  },
+  {
+   "name": "Cooksonia",
+   "rank": "genus",
+   "clade": "early vascular plant",
+   "realm": "land",
+   "first": 433.0,
+   "last": 393.0,
+   "size_m": 0.06,
+   "habit": "tiny dichotomising axes in damp lowlands",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Early vascular flora"
+   ],
+   "biome": "wetland",
+   "note": "Among the first vascular plants; a few centimetres tall, with terminal sporangia.",
+   "confidence": "good"
+  },
+  {
+   "name": "Baragwanathia",
+   "rank": "genus",
+   "clade": "lycopsid",
+   "realm": "land",
+   "first": 425.0,
+   "last": 393.0,
+   "size_m": 0.3,
+   "habit": "creeping and upright shoots with true microphylls",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Early vascular flora"
+   ],
+   "biome": "wetland",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Aglaophyton",
+   "rank": "genus",
+   "clade": "rhyniophyte-grade plant",
+   "realm": "land",
+   "first": 411.0,
+   "last": 407.0,
+   "size_m": 0.18,
+   "habit": "rootless, in a hot-spring wetland",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Early vascular flora"
+   ],
+   "biome": "wetland",
+   "note": "From the Rhynie chert, and the earliest clear evidence of arbuscular mycorrhizal symbiosis - land plants have always been partly fungal.",
+   "confidence": "good"
+  },
+  {
+   "name": "Prototaxites",
+   "rank": "genus",
+   "clade": "probable fungus",
+   "realm": "land",
+   "first": 420.0,
+   "last": 370.0,
+   "size_m": 8.0,
+   "habit": "free-standing column, the tallest organism of its day",
+   "diet": "saprotrophy / decay",
+   "provinces": [
+    "Archaeopteris forest flora"
+   ],
+   "biome": "",
+   "note": "No modern analogue. For 130 Myr the largest organism on land was probably a fungus.",
+   "confidence": "good"
+  },
+  {
+   "name": "Archaeopteris",
+   "rank": "genus",
+   "clade": "progymnosperm tree",
+   "realm": "land",
+   "first": 385.0,
+   "last": 359.0,
+   "size_m": 30.0,
+   "habit": "the first true forest tree: real wood, roots to ~1 m, a spreading crown",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Archaeopteris forest flora"
+   ],
+   "biome": "temperate forest",
+   "note": "Deep rooting and canopy shade begin the silicate-weathering and organic-burial drawdown of CO2 that ends in the Late Palaeozoic Ice Age.",
+   "confidence": "good"
+  },
+  {
+   "name": "Wattieza",
+   "rank": "genus",
+   "clade": "cladoxylopsid tree",
+   "realm": "land",
+   "first": 390.0,
+   "last": 380.0,
+   "size_m": 8.0,
+   "habit": "palm-like crown of frond-like branches",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Archaeopteris forest flora"
+   ],
+   "biome": "",
+   "note": "Earliest known tree-form, from Gilboa.",
+   "confidence": "good"
+  },
+  {
+   "name": "Elkinsia",
+   "rank": "genus",
+   "clade": "seed fern",
+   "realm": "land",
+   "first": 372.0,
+   "last": 359.0,
+   "size_m": 1.0,
+   "habit": "small woody plant",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Archaeopteris forest flora"
+   ],
+   "biome": "",
+   "note": "Among the earliest seed plants - the innovation that frees reproduction from standing water.",
+   "confidence": "good"
+  },
+  {
+   "name": "Dunkleosteus",
+   "rank": "genus",
+   "clade": "arthrodire placoderm",
+   "realm": "sea",
+   "first": 382.0,
+   "last": 358.0,
+   "size_m": 4.0,
+   "habit": "nektonic apex predator with bladed jaw plates instead of teeth",
+   "diet": "apex predator",
+   "provinces": [
+    "Eastern Americas Realm",
+    "Old World Realm"
+   ],
+   "biome": "",
+   "note": "One of the highest bite forces measured for any fish.",
+   "confidence": "good"
+  },
+  {
+   "name": "Tiktaalik",
+   "rank": "genus",
+   "clade": "elpistostegalian stem-tetrapod",
+   "realm": "fresh",
+   "first": 383.0,
+   "last": 375.0,
+   "size_m": 2.7,
+   "habit": "shallow-water predator with a mobile neck and weight-bearing fins",
+   "diet": "predator",
+   "provinces": [
+    "Eastern Americas Realm"
+   ],
+   "biome": "wetland",
+   "note": "Found by predicting the ROCK first: Devonian, shallow-marine to freshwater, then searching Ellesmere Island.",
+   "confidence": "good"
+  },
+  {
+   "name": "Ichthyostega",
+   "rank": "genus",
+   "clade": "early tetrapod",
+   "realm": "fresh",
+   "first": 374.0,
+   "last": 359.0,
+   "size_m": 1.5,
+   "habit": "amphibious, with limbs but a fish-like tail",
+   "diet": "predator",
+   "provinces": [
+    "Old World Realm"
+   ],
+   "biome": "wetland",
+   "note": "Seven toes.",
+   "confidence": "good"
+  },
+  {
+   "name": "Eurypterids",
+   "rank": "order",
+   "clade": "sea scorpion",
+   "realm": "sea",
+   "first": 467.0,
+   "last": 252.0,
+   "size_m": 2.5,
+   "habit": "nektobenthic, some in brackish and fresh water",
+   "diet": "predator",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Jaekelopterus at ~2.5 m is the largest arthropod that ever lived, rivalled only by Arthropleura.",
+   "confidence": "good"
+  },
+  {
+   "name": "Stringocephalus",
+   "rank": "genus",
+   "clade": "terebratulid brachiopod",
+   "realm": "sea",
+   "first": 390.0,
+   "last": 383.0,
+   "size_m": 0.1,
+   "habit": "benthic, attached",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Old World Realm"
+   ],
+   "biome": "",
+   "note": "A Middle Devonian index fossil of the Old World Realm.",
+   "confidence": "good"
+  },
+  {
+   "name": "Australocoelia",
+   "rank": "genus",
+   "clade": "brachiopod",
+   "realm": "sea",
+   "first": 419.0,
+   "last": 393.0,
+   "size_m": 0.02,
+   "habit": "benthic, cold-water shelf",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Malvinokaffric Realm"
+   ],
+   "biome": "",
+   "note": "Diagnostic of the cold high-latitude Gondwanan realm.",
+   "confidence": "good"
+  },
+  {
+   "name": "Lepidodendron",
+   "rank": "genus",
+   "clade": "arborescent lycopsid",
+   "realm": "land",
+   "first": 359.0,
+   "last": 299.0,
+   "size_m": 50.0,
+   "habit": "unbranched pole with a crown, DETERMINATE growth - grew, reproduced once, died",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "wetland",
+   "note": ">50 m tall and 2 m across at the base, with a shallow stigmarian rooting system. This is the coal.",
+   "confidence": "good"
+  },
+  {
+   "name": "Sigillaria",
+   "rank": "genus",
+   "clade": "arborescent lycopsid",
+   "realm": "land",
+   "first": 383.0,
+   "last": 254.0,
+   "size_m": 30.0,
+   "habit": "tall, usually unbranched, in coal swamps",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "wetland",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Calamites",
+   "rank": "genus",
+   "clade": "arborescent horsetail",
+   "realm": "land",
+   "first": 359.0,
+   "last": 299.0,
+   "size_m": 12.0,
+   "habit": "clonal thickets on levees and channel margins",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "wetland",
+   "note": ">10 m tall, with a unifacial vascular cambium - it made wood in a way no living plant does.",
+   "confidence": "good"
+  },
+  {
+   "name": "Medullosa",
+   "rank": "genus",
+   "clade": "medullosalean seed fern",
+   "realm": "land",
+   "first": 359.0,
+   "last": 299.0,
+   "size_m": 10.0,
+   "habit": "scrambling or self-supporting, with very large fronds",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "",
+   "note": "Produced the largest pollen grains known.",
+   "confidence": "good"
+  },
+  {
+   "name": "Psaronius",
+   "rank": "genus",
+   "clade": "marattialean tree fern",
+   "realm": "land",
+   "first": 323.0,
+   "last": 252.0,
+   "size_m": 10.0,
+   "habit": "tree fern with a mantle of adventitious roots",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province",
+    "Cathaysian Province"
+   ],
+   "biome": "",
+   "note": "Takes over the tropical wetlands after the ~305 Ma rainforest collapse.",
+   "confidence": "good"
+  },
+  {
+   "name": "Cordaites",
+   "rank": "genus",
+   "clade": "cordaitalean gymnosperm",
+   "realm": "land",
+   "first": 359.0,
+   "last": 252.0,
+   "size_m": 30.0,
+   "habit": "tree with strap-shaped leaves; coastal and upland",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Euramerican Province",
+    "Angaran Province"
+   ],
+   "biome": "temperate forest",
+   "note": "The dominant tree of the cool Angaran province, and a relative of conifers.",
+   "confidence": "good"
+  },
+  {
+   "name": "Arthropleura",
+   "rank": "genus",
+   "clade": "giant myriapod",
+   "realm": "land",
+   "first": 346.0,
+   "last": 290.0,
+   "size_m": 2.6,
+   "habit": "ground-dwelling",
+   "diet": "detritivore / herbivore",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "",
+   "note": "The largest known land arthropod. Traditionally tied to high O2 and the coal forest, but recent work finds it after the collapse and probably forest-independent.",
+   "confidence": "moderate"
+  },
+  {
+   "name": "Meganeura",
+   "rank": "genus",
+   "clade": "griffinfly",
+   "realm": "air",
+   "first": 315.0,
+   "last": 299.0,
+   "size_m": 0.7,
+   "habit": "aerial predator, ~70 cm wingspan",
+   "diet": "predator on other insects",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "",
+   "note": "Same caveat as Arthropleura on the oxygen story.",
+   "confidence": "good"
+  },
+  {
+   "name": "Hylonomus",
+   "rank": "genus",
+   "clade": "early reptile",
+   "realm": "land",
+   "first": 318.0,
+   "last": 315.0,
+   "size_m": 0.25,
+   "habit": "insectivore living in hollow lycopsid stumps",
+   "diet": "insectivore",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "",
+   "note": "Among the earliest amniotes - the group that could reproduce away from water and so inherited the drying world.",
+   "confidence": "good"
+  },
+  {
+   "name": "Eurydesma",
+   "rank": "genus",
+   "clade": "bivalve",
+   "realm": "sea",
+   "first": 299.0,
+   "last": 272.0,
+   "size_m": 0.12,
+   "habit": "cold-water shelf, often in glacial dropstone facies",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Gondwanan (Austral) Realm"
+   ],
+   "biome": "",
+   "note": "The diagnostic cold-water fauna of the Late Palaeozoic Ice Age in Gondwana.",
+   "confidence": "good"
+  },
+  {
+   "name": "Fusulinids",
+   "rank": "family",
+   "clade": "large benthic foraminifera",
+   "realm": "sea",
+   "first": 340.0,
+   "last": 252.0,
+   "size_m": 0.06,
+   "habit": "benthic on warm carbonate shelves",
+   "diet": "symbiont-bearing heterotrophy",
+   "provinces": [
+    "Tethyan Realm"
+   ],
+   "biome": "",
+   "note": "Grain-of-wheat shaped and up to 6 cm. Their PRESENCE marks the warm Tethyan realm and their ABSENCE marks the cool Gondwanan and Boreal ones.",
+   "confidence": "good"
+  },
+  {
+   "name": "Glossopteris",
+   "rank": "genus",
+   "clade": "glossopterid seed fern",
+   "realm": "land",
+   "first": 299.0,
+   "last": 252.0,
+   "size_m": 30.0,
+   "habit": "woody tree in very wet soils, like a modern bald cypress; conical, widely spaced crowns to exploit low-angle polar light",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "wetland",
+   "note": "Trunk to 80 cm, tongue-shaped leaves 2-30 cm with reticulate venation. Antarctic wood shows broad growth rings and an abrupt autumn shutdown taking as little as a month. Its distribution across five now-separated continents was Suess's evidence for Gondwana. Died out BEFORE 252.3 Ma, ~350 kyr ahead of the marine extinction.",
+   "confidence": "good"
+  },
+  {
+   "name": "Gangamopteris",
+   "rank": "genus",
+   "clade": "glossopterid seed fern",
+   "realm": "land",
+   "first": 299.0,
+   "last": 260.0,
+   "size_m": 15.0,
+   "habit": "as Glossopteris but with non-midribbed leaves",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "wetland",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Vertebraria",
+   "rank": "genus",
+   "clade": "glossopterid root",
+   "realm": "land",
+   "first": 299.0,
+   "last": 252.0,
+   "size_m": 0.0,
+   "habit": "septate, air-filled roots in waterlogged soil",
+   "diet": "-",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "wetland",
+   "note": "The root of Glossopteris, named separately before the connection was known; its internal air channels are a waterlogging adaptation.",
+   "confidence": "good"
+  },
+  {
+   "name": "Gigantopteris",
+   "rank": "genus",
+   "clade": "gigantopterid seed plant",
+   "realm": "land",
+   "first": 280.0,
+   "last": 252.0,
+   "size_m": 3.0,
+   "habit": "climbing or scrambling, with large net-veined leaves",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Cathaysian Province"
+   ],
+   "biome": "tropical rainforest",
+   "note": "The marker of the everwet Cathaysian province, whose rainforest survives the Euramerican collapse and persists to the end-Permian.",
+   "confidence": "good"
+  },
+  {
+   "name": "Rufloria",
+   "rank": "genus",
+   "clade": "cordaitalean leaf",
+   "realm": "land",
+   "first": 299.0,
+   "last": 252.0,
+   "size_m": 25.0,
+   "habit": "deciduous tree with strong growth rings",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Angaran Province"
+   ],
+   "biome": "boreal forest",
+   "note": "The characteristic Angaran leaf - cool temperate, seasonal, deciduous.",
+   "confidence": "good"
+  },
+  {
+   "name": "Dimetrodon",
+   "rank": "genus",
+   "clade": "sphenacodontid synapsid",
+   "realm": "land",
+   "first": 295.0,
+   "last": 272.0,
+   "size_m": 4.6,
+   "habit": "terrestrial apex predator with a tall neural-spine sail",
+   "diet": "carnivore",
+   "provinces": [
+    "Euramerican Province"
+   ],
+   "biome": "",
+   "note": "Not a dinosaur, and closer to us than to any reptile.",
+   "confidence": "good"
+  },
+  {
+   "name": "Inostrancevia",
+   "rank": "genus",
+   "clade": "gorgonopsian therapsid",
+   "realm": "land",
+   "first": 260.0,
+   "last": 252.0,
+   "size_m": 3.5,
+   "habit": "terrestrial apex predator with sabre canines",
+   "diet": "carnivore",
+   "provinces": [
+    "Angaran Province"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Lystrosaurus",
+   "rank": "genus",
+   "clade": "dicynodont therapsid",
+   "realm": "land",
+   "first": 255.0,
+   "last": 247.0,
+   "size_m": 1.0,
+   "habit": "burrowing herbivore",
+   "diet": "herbivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "The type case of post-extinction cosmopolitanism: after the end-Permian it was briefly a large fraction of all land vertebrates, on every continent.",
+   "confidence": "good"
+  },
+  {
+   "name": "Helicoprion",
+   "rank": "genus",
+   "clade": "eugeneodont chondrichthyan",
+   "realm": "sea",
+   "first": 290.0,
+   "last": 250.0,
+   "size_m": 4.0,
+   "habit": "nektonic, with a spiral tooth whorl in the lower jaw",
+   "diet": "predator on soft prey",
+   "provinces": [
+    "Tethyan Realm",
+    "Boreal Realm"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Dicroidium",
+   "rank": "genus",
+   "clade": "corystosperm seed fern",
+   "realm": "land",
+   "first": 252.0,
+   "last": 201.0,
+   "size_m": 10.0,
+   "habit": "forked-frond tree and shrub",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Dicroidium Flora"
+   ],
+   "biome": "temperate forest",
+   "note": "Replaces Glossopteris across Gondwana after the end-Permian.",
+   "confidence": "good"
+  },
+  {
+   "name": "Pleuromeia",
+   "rank": "genus",
+   "clade": "lycopsid",
+   "realm": "land",
+   "first": 252.0,
+   "last": 240.0,
+   "size_m": 2.0,
+   "habit": "unbranched, in disturbed coastal ground",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Dicroidium Flora",
+    "Northern Triassic conifer flora"
+   ],
+   "biome": "",
+   "note": "A disaster taxon: it carpets the early Triassic when the forests are gone.",
+   "confidence": "good"
+  },
+  {
+   "name": "Cynognathus",
+   "rank": "genus",
+   "clade": "cynodont therapsid",
+   "realm": "land",
+   "first": 247.0,
+   "last": 237.0,
+   "size_m": 1.2,
+   "habit": "terrestrial predator",
+   "diet": "carnivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Its Gondwana-wide distribution was classic evidence for continental drift.",
+   "confidence": "good"
+  },
+  {
+   "name": "Shonisaurus",
+   "rank": "genus",
+   "clade": "ichthyosaur",
+   "realm": "sea",
+   "first": 237.0,
+   "last": 210.0,
+   "size_m": 15.0,
+   "habit": "pelagic",
+   "diet": "predator on cephalopods and fish",
+   "provinces": [
+    "Tethyan Realm"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Eoraptor",
+   "rank": "genus",
+   "clade": "early dinosaur",
+   "realm": "land",
+   "first": 231.0,
+   "last": 228.0,
+   "size_m": 1.5,
+   "habit": "bipedal, cursorial",
+   "diet": "omnivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "From the Ischigualasto Formation, Argentina - near the base of the dinosaur radiation.",
+   "confidence": "good"
+  },
+  {
+   "name": "Coelophysis",
+   "rank": "genus",
+   "clade": "coelophysoid theropod",
+   "realm": "land",
+   "first": 215.0,
+   "last": 196.0,
+   "size_m": 3.0,
+   "habit": "gracile bipedal predator, gregarious",
+   "diet": "carnivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Placerias",
+   "rank": "genus",
+   "clade": "dicynodont",
+   "realm": "land",
+   "first": 221.0,
+   "last": 205.0,
+   "size_m": 3.5,
+   "habit": "heavy-bodied browser",
+   "diet": "herbivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Araucaria",
+   "rank": "genus",
+   "clade": "araucarian conifer",
+   "realm": "land",
+   "first": 200.0,
+   "last": 0.0,
+   "size_m": 60.0,
+   "habit": "emergent canopy tree",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Cosmopolitan Jurassic gymnosperm flora"
+   ],
+   "biome": "temperate rainforest",
+   "note": "Still living - monkey puzzle and Norfolk Island pine are the same genus that dominated Jurassic forests.",
+   "confidence": "good"
+  },
+  {
+   "name": "Williamsonia",
+   "rank": "genus",
+   "clade": "bennettitalean",
+   "realm": "land",
+   "first": 200.0,
+   "last": 90.0,
+   "size_m": 3.0,
+   "habit": "stout trunk with a crown of pinnate leaves and flower-like cones",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Cosmopolitan Jurassic gymnosperm flora"
+   ],
+   "biome": "",
+   "note": "Bennettitales look like cycads and are not; their bisexual cones long confused the search for the origin of flowers.",
+   "confidence": "good"
+  },
+  {
+   "name": "Ginkgo",
+   "rank": "genus",
+   "clade": "ginkgoalean",
+   "realm": "land",
+   "first": 200.0,
+   "last": 0.0,
+   "size_m": 35.0,
+   "habit": "deciduous tree",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Cosmopolitan Jurassic gymnosperm flora"
+   ],
+   "biome": "temperate forest",
+   "note": "One species survives; the genus was near-global in the Jurassic and Cretaceous.",
+   "confidence": "good"
+  },
+  {
+   "name": "Brachiosaurus",
+   "rank": "genus",
+   "clade": "sauropod dinosaur",
+   "realm": "land",
+   "first": 154.0,
+   "last": 150.0,
+   "size_m": 22.0,
+   "habit": "high browser with forelimbs longer than hindlimbs",
+   "diet": "herbivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "seasonal tropical forest",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Diplodocus",
+   "rank": "genus",
+   "clade": "diplodocid sauropod",
+   "realm": "land",
+   "first": 154.0,
+   "last": 150.0,
+   "size_m": 26.0,
+   "habit": "low-to-mid browser with a whip tail",
+   "diet": "herbivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Allosaurus",
+   "rank": "genus",
+   "clade": "allosauroid theropod",
+   "realm": "land",
+   "first": 155.0,
+   "last": 145.0,
+   "size_m": 9.0,
+   "habit": "terrestrial apex predator",
+   "diet": "carnivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Stegosaurus",
+   "rank": "genus",
+   "clade": "thyreophoran dinosaur",
+   "realm": "land",
+   "first": 155.0,
+   "last": 145.0,
+   "size_m": 9.0,
+   "habit": "low browser with dorsal plates and a spiked tail",
+   "diet": "herbivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Archaeopteryx",
+   "rank": "genus",
+   "clade": "avialan dinosaur",
+   "realm": "air",
+   "first": 150.0,
+   "last": 148.0,
+   "size_m": 0.5,
+   "habit": "arboreal or short-flight glider",
+   "diet": "carnivore / insectivore",
+   "provinces": [
+    "Solnhofen Lagoon"
+   ],
+   "biome": "",
+   "note": "From the Solnhofen lagoon, a hypersaline lagoonal Lagerstatte whose fauna is a mixture of marine, terrestrial and aerial - which is why it should not be realm-locked in a biota panel.",
+   "confidence": "good"
+  },
+  {
+   "name": "Liopleurodon",
+   "rank": "genus",
+   "clade": "pliosaurid plesiosaur",
+   "realm": "sea",
+   "first": 166.0,
+   "last": 155.0,
+   "size_m": 7.0,
+   "habit": "pelagic pursuit predator",
+   "diet": "apex predator",
+   "provinces": [
+    "Boreal Realm",
+    "Tethyan Realm"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Buchia",
+   "rank": "genus",
+   "clade": "bivalve",
+   "realm": "sea",
+   "first": 160.0,
+   "last": 130.0,
+   "size_m": 0.08,
+   "habit": "cool-water shelf, gregarious",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Boreal Realm"
+   ],
+   "biome": "",
+   "note": "A diagnostic Boreal-realm marker.",
+   "confidence": "good"
+  },
+  {
+   "name": "Archaefructus",
+   "rank": "genus",
+   "clade": "early angiosperm",
+   "realm": "fresh",
+   "first": 125.0,
+   "last": 122.0,
+   "size_m": 0.5,
+   "habit": "aquatic herb",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Early angiosperm flora"
+   ],
+   "biome": "wetland",
+   "note": "Among the oldest flowering plants with preserved reproductive structures, from the Yixian Formation.",
+   "confidence": "good"
+  },
+  {
+   "name": "Rudists",
+   "rank": "order",
+   "clade": "reef-building bivalve",
+   "realm": "sea",
+   "first": 155.0,
+   "last": 66.0,
+   "size_m": 1.0,
+   "habit": "sessile, conical, gregarious - a bivalve behaving like a coral",
+   "diet": "suspension feeding",
+   "provinces": [
+    "Tethyan Realm"
+   ],
+   "biome": "",
+   "note": "They displace corals as the main tropical reef builder for much of the Cretaceous, and die at the K-Pg.",
+   "confidence": "good"
+  },
+  {
+   "name": "Tyrannosaurus",
+   "rank": "genus",
+   "clade": "tyrannosaurid theropod",
+   "realm": "land",
+   "first": 68.0,
+   "last": 66.0,
+   "size_m": 12.0,
+   "habit": "terrestrial apex predator",
+   "diet": "carnivore",
+   "provinces": [
+    "Nearctic"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Triceratops",
+   "rank": "genus",
+   "clade": "ceratopsid dinosaur",
+   "realm": "land",
+   "first": 68.0,
+   "last": 66.0,
+   "size_m": 9.0,
+   "habit": "low browser with a frill and three horns",
+   "diet": "herbivore",
+   "provinces": [
+    "Nearctic"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Quetzalcoatlus",
+   "rank": "genus",
+   "clade": "azhdarchid pterosaur",
+   "realm": "air",
+   "first": 68.0,
+   "last": 66.0,
+   "size_m": 11.0,
+   "habit": "terrestrial stalker and soaring flier, ~11 m wingspan",
+   "diet": "carnivore",
+   "provinces": [
+    "Nearctic"
+   ],
+   "biome": "",
+   "note": "Among the largest flying animals that ever lived.",
+   "confidence": "good"
+  },
+  {
+   "name": "Mosasaurus",
+   "rank": "genus",
+   "clade": "mosasaur",
+   "realm": "sea",
+   "first": 82.0,
+   "last": 66.0,
+   "size_m": 13.0,
+   "habit": "pelagic and shelf predator",
+   "diet": "apex predator",
+   "provinces": [
+    "Boreal Realm",
+    "Tethyan Realm",
+    "Western Interior Seaway"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Hesperornis",
+   "rank": "genus",
+   "clade": "hesperornithean bird",
+   "realm": "sea",
+   "first": 83.0,
+   "last": 78.0,
+   "size_m": 1.8,
+   "habit": "flightless foot-propelled diver, toothed",
+   "diet": "piscivore",
+   "provinces": [
+    "Western Interior Seaway",
+    "Hudson Seaway"
+   ],
+   "biome": "",
+   "note": "A bird, so it is realm 'air' by clade and 'sea' by ecology - a case where a strict realm lock produces the wrong answer.",
+   "confidence": "good"
+  },
+  {
+   "name": "Ammonites",
+   "rank": "subclass",
+   "clade": "ammonoid cephalopod",
+   "realm": "sea",
+   "first": 409.0,
+   "last": 66.0,
+   "size_m": 0.6,
+   "habit": "nektonic, coiled external shell",
+   "diet": "predator / scavenger",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "The single most useful Mesozoic biostratigraphic group; gone at the K-Pg while nautiloids survived.",
+   "confidence": "good"
+  },
+  {
+   "name": "Coccolithophores",
+   "rank": "class",
+   "clade": "calcareous nannoplankton",
+   "realm": "sea",
+   "first": 220.0,
+   "last": 0.0,
+   "size_m": 2e-05,
+   "habit": "photic-zone plankton with calcite plates",
+   "diet": "photosynthesis",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "From ~201 Ma they rain carbonate onto the DEEP sea floor for the first time, moving the carbonate factory off the shelf and giving the modern ocean its clear blue colour.",
+   "confidence": "good"
+  },
+  {
+   "name": "Metasequoia",
+   "rank": "genus",
+   "clade": "deciduous conifer",
+   "realm": "land",
+   "first": 90.0,
+   "last": 0.0,
+   "size_m": 45.0,
+   "habit": "deciduous canopy tree, forming high-latitude forests",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Nearctic",
+    "Palearctic"
+   ],
+   "biome": "boreal forest",
+   "note": "Polar broadleaf-deciduous forest grew inside the Arctic Circle in the Eocene; Metasequoia is its signature. Described as a fossil in 1941 and found alive in 1944.",
+   "confidence": "good"
+  },
+  {
+   "name": "Nothofagus",
+   "rank": "genus",
+   "clade": "southern beech",
+   "realm": "land",
+   "first": 80.0,
+   "last": 0.0,
+   "size_m": 40.0,
+   "habit": "canopy tree of cool temperate rainforest",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Neotropical",
+    "Australasian",
+    "Antarctic"
+   ],
+   "biome": "temperate rainforest",
+   "note": "Its distribution across South America, New Zealand, Australia and (fossil) Antarctica is a Gondwanan vicariance pattern.",
+   "confidence": "good"
+  },
+  {
+   "name": "Titanoboa",
+   "rank": "genus",
+   "clade": "boid snake",
+   "realm": "land",
+   "first": 60.0,
+   "last": 58.0,
+   "size_m": 13.0,
+   "habit": "semi-aquatic ambush predator",
+   "diet": "carnivore",
+   "provinces": [
+    "Neotropical"
+   ],
+   "biome": "wetland",
+   "note": "Its size implies a mean annual temperature above ~30 C in Palaeocene Colombia.",
+   "confidence": "good"
+  },
+  {
+   "name": "Basilosaurus",
+   "rank": "genus",
+   "clade": "archaeocete whale",
+   "realm": "sea",
+   "first": 41.0,
+   "last": 34.0,
+   "size_m": 18.0,
+   "habit": "fully aquatic, serpentine, with vestigial hindlimbs",
+   "diet": "apex predator",
+   "provinces": [
+    "Tropical"
+   ],
+   "biome": "",
+   "note": "A whale still carrying the legs of its land ancestry.",
+   "confidence": "good"
+  },
+  {
+   "name": "Uintatherium",
+   "rank": "genus",
+   "clade": "dinoceratan",
+   "realm": "land",
+   "first": 45.0,
+   "last": 37.0,
+   "size_m": 4.0,
+   "habit": "heavy browser with six blunt horns",
+   "diet": "herbivore",
+   "provinces": [
+    "Nearctic",
+    "Palearctic"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Nummulites",
+   "rank": "genus",
+   "clade": "larger benthic foraminifera",
+   "realm": "sea",
+   "first": 56.0,
+   "last": 34.0,
+   "size_m": 0.1,
+   "habit": "benthic on warm carbonate shelves",
+   "diet": "symbiont-bearing heterotrophy",
+   "provinces": [
+    "Tropical"
+   ],
+   "biome": "",
+   "note": "Coin-sized single cells; the limestone of the Egyptian pyramids is largely made of them.",
+   "confidence": "good"
+  },
+  {
+   "name": "Andropogoneae",
+   "rank": "tribe",
+   "clade": "C4 grasses",
+   "realm": "land",
+   "first": 25.0,
+   "last": 0.0,
+   "size_m": 3.0,
+   "habit": "fire-adapted tussock and sward grasses",
+   "diet": "photosynthesis (C4)",
+   "provinces": [
+    "Afrotropical",
+    "Neotropical",
+    "Australasian"
+   ],
+   "biome": "savanna",
+   "note": "C4 grasslands expand in the late Miocene (~8 Ma) under low CO2 and seasonal aridity - the biome that makes the modern savanna fauna possible.",
+   "confidence": "good"
+  },
+  {
+   "name": "Otodus megalodon",
+   "rank": "species",
+   "clade": "otodontid shark",
+   "realm": "sea",
+   "first": 20.0,
+   "last": 3.6,
+   "size_m": 16.0,
+   "habit": "pelagic macropredator",
+   "diet": "apex predator on marine mammals",
+   "provinces": [
+    "Tropical",
+    "North temperate"
+   ],
+   "biome": "",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Proconsul",
+   "rank": "genus",
+   "clade": "early ape",
+   "realm": "land",
+   "first": 23.0,
+   "last": 17.0,
+   "size_m": 1.0,
+   "habit": "arboreal quadruped",
+   "diet": "frugivore",
+   "provinces": [
+    "Afrotropical"
+   ],
+   "biome": "seasonal tropical forest",
+   "note": "ENDEMIC TO AFRICA. Its appearance on an Australian-sector card was the bug that exposed the endemism filter not reaching submerged and island labels.",
+   "confidence": "good"
+  },
+  {
+   "name": "Megatherium",
+   "rank": "genus",
+   "clade": "ground sloth",
+   "realm": "land",
+   "first": 2.0,
+   "last": 0.011,
+   "size_m": 6.0,
+   "habit": "terrestrial browser, able to rear on its hindlimbs",
+   "diet": "herbivore",
+   "provinces": [
+    "Neotropical",
+    "Nearctic"
+   ],
+   "biome": "",
+   "note": "A South American native that invaded North America during the Great American Interchange, in one of at least eight ground-sloth lineages to do so.",
+   "confidence": "good"
+  },
+  {
+   "name": "Phorusrhacids",
+   "rank": "family",
+   "clade": "terror bird",
+   "realm": "land",
+   "first": 27.0,
+   "last": 1.8,
+   "size_m": 3.0,
+   "habit": "flightless cursorial predator",
+   "diet": "carnivore",
+   "provinces": [
+    "Neotropical"
+   ],
+   "biome": "temperate grassland",
+   "note": "Apex predators of isolated South America; possibly island-hopped north by ~5 Ma.",
+   "confidence": "good"
+  },
+  {
+   "name": "Toxodon",
+   "rank": "genus",
+   "clade": "notoungulate",
+   "realm": "land",
+   "first": 3.0,
+   "last": 0.012,
+   "size_m": 2.7,
+   "habit": "heavy grazer, rhinoceros-like in build but unrelated",
+   "diet": "herbivore",
+   "provinces": [
+    "Neotropical"
+   ],
+   "biome": "temperate grassland",
+   "note": "One of the endemic South American ungulate orders that the interchange extinguished.",
+   "confidence": "good"
+  },
+  {
+   "name": "Mammuthus primigenius",
+   "rank": "species",
+   "clade": "woolly mammoth",
+   "realm": "land",
+   "first": 0.4,
+   "last": 0.004,
+   "size_m": 3.4,
+   "habit": "cold-adapted grazer of the mammoth steppe",
+   "diet": "grazer",
+   "provinces": [
+    "Palearctic",
+    "Nearctic"
+   ],
+   "biome": "temperate grassland",
+   "note": "The mammoth steppe - cold, dry, productive grassland - is a biome with no modern equivalent, and it vanished with the ice.",
+   "confidence": "good"
+  },
+  {
+   "name": "Homo sapiens",
+   "rank": "species",
+   "clade": "hominin",
+   "realm": "land",
+   "first": 0.3,
+   "last": 0.0,
+   "size_m": 1.7,
+   "habit": "generalist, tool-using, globally dispersed",
+   "diet": "omnivore",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Cited as pivotal in the late Pleistocene megafaunal extinctions on every continent it reached.",
+   "confidence": "good"
+  },
+  {
+   "name": "Rhizophora",
+   "rank": "genus",
+   "clade": "mangrove",
+   "realm": "land",
+   "first": 60.0,
+   "last": 0.0,
+   "size_m": 30.0,
+   "habit": "intertidal tree on stilt roots, salt-excluding",
+   "diet": "photosynthesis",
+   "provinces": [
+    "Tropical"
+   ],
+   "biome": "wetland",
+   "note": "Mangrove is the one forest that shows up as coastline rather than as interior vegetation, and it is a Cenozoic feature.",
+   "confidence": "good"
+  },
+  {
+   "name": "Diatoms",
+   "rank": "class",
+   "clade": "siliceous phytoplankton",
+   "realm": "sea",
+   "first": 190.0,
+   "last": 0.0,
+   "size_m": 0.0002,
+   "habit": "photic-zone plankton with silica frustules",
+   "diet": "photosynthesis",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "",
+   "note": "Radiate strongly from the Cretaceous and dominate high-latitude and upwelling productivity in the Cenozoic; they draw silica down and are why sponges and radiolarians build thinner skeletons than they used to.",
+   "confidence": "good"
+  }
+ ]
+}

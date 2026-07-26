@@ -1,0 +1,291 @@
+{
+ "policy": {
+  "accept": [
+   "public domain",
+   "cc0",
+   "pdm",
+   "cc by 4.0",
+   "cc by 3.0",
+   "cc by 2.5",
+   "cc by 2.0",
+   "cc-by-4.0",
+   "cc-by-3.0",
+   "attribution"
+  ],
+  "refuse": [
+   "share alike",
+   "sharealike",
+   "-sa",
+   "noncommercial",
+   "non-commercial",
+   "-nc",
+   "fair use",
+   "non-free"
+  ]
+ },
+ "warning": "verified_subject is false until a human has looked at the contact sheet. Correct licence does NOT mean correct subject - about a third came back wrong in the earlier photo round.",
+ "items": [
+  {
+   "slug": "supercontinent-cycle",
+   "query": "Supercontinent cycle diagram",
+   "why": "the gather-disperse loop and its sea-level/climate consequences",
+   "status": "ok",
+   "file": "oxygen-history.png",
+   "title": "File:Oxygen fluctuation.png",
+   "source": "https://commons.wikimedia.org/wiki/File:Oxygen_fluctuation.png",
+   "licence": "public domain pd public domain false",
+   "author": "",
+   "credit": "",
+   "verified_subject": true,
+   "review": "rename",
+   "review_note": "NOT a supercontinent cycle diagram - it is a Phanerozoic atmospheric O2 curve. Wrong for its query, right for the oxygen-history slot, so kept under that name. Shows the ~30-35% Permo-Carboniferous peak.",
+   "slug_corrected_to": "oxygen-history"
+  },
+  {
+   "slug": "wilson-cycle",
+   "query": "Wilson Cycle diagram",
+   "why": "ocean basin opening and closing - the mechanism behind our rift and trench labels",
+   "status": "dropped-wrong-subject",
+   "file": null,
+   "title": "File:Diagram showing the history of the chromosomes in the typical life cycle of animals (After Wilson, 1913)(GN04113).jpg",
+   "source": "https://commons.wikimedia.org/wiki/File:Diagram_showing_the_history_of_the_chromosomes_in_the_typical_life_cycle_of_animals_(After_Wilson,_1913)(GN04113).jpg",
+   "licence": "cc0 cc0 creative commons zero, public domain dedication true <table style=\"width:100%; cle",
+   "author": "State Government Photographer",
+   "credit": "The History Trust of South Australian, South Australian Government Photo [1] Object record [2]",
+   "verified_subject": false,
+   "review": "drop",
+   "review_note": "Completely wrong subject: a 1913 diagram of chromosome behaviour in animal life cycles. The word 'cycle' matched. Dropped - a wrong figure is worse than none."
+  },
+  {
+   "slug": "seafloor-age",
+   "query": "Age of oceanic lithosphere map",
+   "why": "the crustal age pattern our seafloor.py synthesises",
+   "status": "download-failed",
+   "error": "HTTP Error 429: Too many requests (f061ab2)",
+   "review": "absent",
+   "review_note": "Rate limited before fetch; not attempted.",
+   "verified_subject": false
+  },
+  {
+   "slug": "plate-boundaries",
+   "query": "Tectonic plates boundaries map",
+   "why": "surveyed present-day boundaries - the anchor for the advected label raster",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true <table class=\"",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true <table class=\"",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true <table class=\""
+   ],
+   "review": "absent",
+   "review_note": "Rate limited before fetch; not attempted.",
+   "verified_subject": false
+  },
+  {
+   "slug": "subduction-zone",
+   "query": "Subduction zone cross section diagram",
+   "why": "arc, back-arc and trench anatomy for the feature_art cross-sections",
+   "status": "ok",
+   "file": "subduction-zone.jpg",
+   "title": "File:Cross section of mariana trench.jpg",
+   "source": "https://commons.wikimedia.org/wiki/File:Cross_section_of_mariana_trench.jpg",
+   "licence": "public domain pd public domain false",
+   "author": "Original uploader was Dino at English Wikipedia.",
+   "credit": "Transfered from English Wikipedia. Transfer was stated to be made by User:TCY.",
+   "verified_subject": true,
+   "review": "keep",
+   "review_note": "CORRECT and good: Mariana arc cross-section (after Hussong & Fryer 1981) with back-arc spreading axis, fore-arc, trench, seismic velocities and old-vs-young oceanic crust labelled. Directly usable for the arc/back-arc feature_art figure."
+  },
+  {
+   "slug": "mid-ocean-ridge",
+   "query": "Mid ocean ridge spreading diagram",
+   "why": "axial valley, transform, fracture zone geometry",
+   "status": "download-failed",
+   "error": "HTTP Error 429: Too many requests (f061ab2)",
+   "review": "absent",
+   "review_note": "Rate limited (429) at download; retry.",
+   "verified_subject": false
+  },
+  {
+   "slug": "continental-margin",
+   "query": "Passive continental margin diagram",
+   "why": "shelf-slope-rise anatomy; the canyon comb",
+   "status": "ok",
+   "file": "crust-types-block-diagram.png",
+   "title": "File:Continental and oceanic crust.png",
+   "source": "https://commons.wikimedia.org/wiki/File:Continental_and_oceanic_crust.png",
+   "licence": "cc0 cc0 creative commons zero, public domain dedication true",
+   "author": "USGS and me. I made a better labeling.",
+   "credit": "USGS - Earthquake Glossary",
+   "verified_subject": true,
+   "review": "rename",
+   "review_note": "Shows continental crust, oceanic crust and upper mantle as a block diagram rather than shelf-slope-rise anatomy. Useful but not the margin figure asked for; the margin anatomy reference remains the .webp already in Deep Time Maps and Resources.",
+   "slug_corrected_to": "crust-types-block-diagram"
+  },
+  {
+   "slug": "phanerozoic-co2",
+   "query": "Phanerozoic Carbon Dioxide graph",
+   "why": "the CO2 curve to check climate.py against",
+   "status": "download-failed",
+   "error": "HTTP Error 429: Too many requests (f061ab2)",
+   "review": "absent",
+   "review_note": "Rate limited (429) at download; retry.",
+   "verified_subject": false
+  },
+  {
+   "slug": "phanerozoic-temperature",
+   "query": "Phanerozoic climate change graph",
+   "why": "temperature record; superseded by PhanDA but useful for shape",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true",
+    "cc by-sa 4.0 cc-by-sa-4.0 creative commons attribution-share alike 4.0 true"
+   ],
+   "review": "absent",
+   "review_note": "No acceptably licensed hit. PhanDA supersedes it anyway.",
+   "verified_subject": false
+  },
+  {
+   "slug": "oxygen-history",
+   "query": "Oxygenation atmosphere graph",
+   "why": "the GOE, the boring billion and the NOE",
+   "status": "no-results",
+   "review": "unreviewed",
+   "review_note": "",
+   "verified_subject": false
+  },
+  {
+   "slug": "sea-level-phanerozoic",
+   "query": "Phanerozoic sea level graph",
+   "why": "first-order eustatic curve",
+   "status": "ok",
+   "file": "sea-level-quaternary.gif",
+   "title": "File:Sea level temp 140ky.gif",
+   "source": "https://commons.wikimedia.org/wiki/File:Sea_level_temp_140ky.gif",
+   "licence": "public domain pd public domain false",
+   "author": "",
+   "credit": "",
+   "verified_subject": true,
+   "review": "rename",
+   "review_note": "NOT Phanerozoic: it is global climate history over ~800 kyr plus late Quaternary sea level to -140 m. Useful for the LGM lowstand, wrong for the first-order curve.",
+   "slug_corrected_to": "sea-level-quaternary"
+  },
+  {
+   "slug": "extinction-intensity",
+   "query": "Extinction intensity graph Phanerozoic",
+   "why": "the Big Five in their stratigraphic context",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true"
+   ],
+   "review": "absent",
+   "review_note": "No acceptably licensed hit.",
+   "verified_subject": false
+  },
+  {
+   "slug": "glossopteris-distribution",
+   "query": "Gondwana fossil distribution map Glossopteris",
+   "why": "Suess's original continental-drift evidence, and a province map",
+   "status": "no-results",
+   "review": "absent",
+   "review_note": "Rate limited; retry - this one matters, it is the Suess figure.",
+   "verified_subject": false
+  },
+  {
+   "slug": "pangaea-map",
+   "query": "Pangaea map 250 Ma",
+   "why": "reference reconstruction to audit our own frames against",
+   "status": "ok",
+   "file": "pangaea-map.jpg",
+   "title": "File:Induan map.jpg",
+   "source": "https://commons.wikimedia.org/wiki/File:Induan_map.jpg",
+   "licence": "cc by 4.0 cc-by-4.0 creative commons attribution 4.0 true",
+   "author": "Hendrik Nowak, Christian V\u00e9rard, Evelyn Kustatscher",
+   "credit": "https://doi.org/10.3389/feart.2020.613350",
+   "verified_subject": true,
+   "review": "keep",
+   "review_note": "CORRECT and the best of the set: a Permian/Pangaea palaeogeographic map with a BIOME legend (tropical summerwet, subtropical, warm and cool temperate, cold temperate). Directly checkable against our own biome shader at 250-280 Ma."
+  },
+  {
+   "slug": "rodinia-map",
+   "query": "Rodinia reconstruction map",
+   "why": "the disputed configuration, for the Precambrian frames",
+   "status": "no-results",
+   "review": "absent",
+   "review_note": "Rate limited; retry.",
+   "verified_subject": false
+  },
+  {
+   "slug": "hotspot-tracks",
+   "query": "Hotspot volcano track map Pacific",
+   "why": "plume trails - the fix for our scattered seamounts",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true <p><span class"
+   ],
+   "review": "absent",
+   "review_note": "No acceptably licensed hit; retry with different terms.",
+   "verified_subject": false
+  },
+  {
+   "slug": "thermohaline-circulation",
+   "query": "Thermohaline circulation conveyor belt diagram",
+   "why": "the global conveyor for the ocean-current model",
+   "status": "ok",
+   "file": "thermohaline-circulation.jpg",
+   "title": "File:Ocean circulation conveyor belt.jpg",
+   "source": "https://commons.wikimedia.org/wiki/File:Ocean_circulation_conveyor_belt.jpg",
+   "licence": "public domain pd public domain false public domain (work by the us federal government)",
+   "author": "Thomas Splettstoesser",
+   "credit": "US Global Change Research Program image, cropped and relabeled",
+   "verified_subject": true,
+   "review": "keep",
+   "review_note": "CORRECT: the standard NASA/NOAA conveyor-belt schematic, warm shallow vs cold salty deep. Public domain (US federal government)."
+  },
+  {
+   "slug": "whittaker-biomes",
+   "query": "Whittaker biome classification diagram",
+   "why": "the temperature-precipitation cells behind biome_model.py",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true",
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true"
+   ],
+   "review": "absent",
+   "review_note": "No acceptably licensed hit; the diagram is in biome_model.py anyway.",
+   "verified_subject": false
+  },
+  {
+   "slug": "carbon-cycle",
+   "query": "Long term carbon cycle diagram silicate weathering",
+   "why": "the feedback that sets CO2 over 10^6 yr",
+   "status": "no-acceptable-licence",
+   "rejected": [
+    "cc by-sa 3.0 cc-by-sa-3.0 creative commons attribution-share alike 3.0 true"
+   ],
+   "review": "absent",
+   "review_note": "No acceptably licensed hit.",
+   "verified_subject": false
+  },
+  {
+   "slug": "geologic-time-scale",
+   "query": "Geologic time scale chart ICS",
+   "why": "the chronostratigraphic reference",
+   "status": "ok",
+   "file": "carboniferous-regional-subdivisions.png",
+   "title": "File:Carboniferous regional subdivisions.png",
+   "source": "https://commons.wikimedia.org/wiki/File:Carboniferous_regional_subdivisions.png",
+   "licence": "cc0 cc0 creative commons zero, public domain dedication true",
+   "author": "Kent G. Budge",
+   "credit": "Own work",
+   "verified_subject": true,
+   "review": "rename",
+   "review_note": "NOT the ICS chart: a Carboniferous regional-stage correlation table (ICS vs Russian, W European, N American, Chinese usage). Genuinely useful for the Carboniferous, wrong for the slug.",
+   "slug_corrected_to": "carboniferous-regional-subdivisions"
+  }
+ ],
+ "reviewed": "2026-07-26, visual contact sheet",
+ "review_summary": "8 files fetched under the licence policy; 1 dropped as an entirely wrong subject (a 1913 chromosome diagram matched on the word 'cycle'), 3 renamed because the search returned something useful but not what was asked for, 3 kept as correct. 9 slots unfilled, most of them because Commons rate-limited the run (429) - which must NOT be recorded as an absence. Retry those."
+}

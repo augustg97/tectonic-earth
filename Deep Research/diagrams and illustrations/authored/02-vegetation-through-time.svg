@@ -1,0 +1,307 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 560" width="1180" height="560">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="560"/>
+<text class="t title" x="28" y="34">What grew where, and when</text>
+<text class="t sub" x="28" y="53">Whittaker climate zones (rows) x vegetation eras (columns), from modeling/biome_model.py</text>
+<text class="t small" x="268.8" y="82" text-anchor="middle" fill="#c9a227">pre-vegetation</text>
+<text class="t small" x="268.8" y="95" text-anchor="middle">4600-470 Ma</text>
+<text class="t small" x="386.2" y="82" text-anchor="middle" fill="#c9a227">early vascular</text>
+<text class="t small" x="386.2" y="95" text-anchor="middle">470-385 Ma</text>
+<text class="t small" x="503.8" y="82" text-anchor="middle" fill="#c9a227">Devonian-Mississippian forest</text>
+<text class="t small" x="503.8" y="95" text-anchor="middle">385-323.4 Ma</text>
+<text class="t small" x="621.2" y="82" text-anchor="middle" fill="#c9a227">Pennsylvanian coal forest</text>
+<text class="t small" x="621.2" y="95" text-anchor="middle">323.4-303.7 Ma</text>
+<text class="t small" x="738.8" y="82" text-anchor="middle" fill="#c9a227">Permian</text>
+<text class="t small" x="738.8" y="95" text-anchor="middle">303.7-251.9 Ma</text>
+<text class="t small" x="856.2" y="82" text-anchor="middle" fill="#c9a227">Mesozoic gymnosperm</text>
+<text class="t small" x="856.2" y="95" text-anchor="middle">251.9-130 Ma</text>
+<text class="t small" x="973.8" y="82" text-anchor="middle" fill="#c9a227">angiosperm radiation</text>
+<text class="t small" x="973.8" y="95" text-anchor="middle">130-40 Ma</text>
+<text class="t small" x="1091.2" y="82" text-anchor="middle" fill="#c9a227">modern</text>
+<text class="t small" x="1091.2" y="95" text-anchor="middle">40-future Ma</text>
+<text class="t lab" x="198" y="132" text-anchor="end">tropical rainforest</text>
+<rect x="211.5" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.18"/>
+<text class="t small" x="268.8" y="132" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.19"/>
+<text class="t small" x="386.2" y="132" text-anchor="middle">low vascular thicket</text>
+<text class="t small" x="439.0" y="142" text-anchor="end" opacity="0.6">1m</text>
+<rect x="446.5" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.57"/>
+<text class="t small" x="503.8" y="132" text-anchor="middle">progymnosperm forest</text>
+<text class="t small" x="556.5" y="142" text-anchor="end" opacity="0.6">30m</text>
+<rect x="564.0" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.83"/>
+<text class="t small" x="621.2" y="132" text-anchor="middle">lycopsid coal swamp</text>
+<text class="t small" x="674.0" y="142" text-anchor="end" opacity="0.6">50m</text>
+<rect x="681.5" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.57"/>
+<text class="t small" x="738.8" y="126" text-anchor="middle">gigantopterid everwet</text>
+<text class="t small" x="738.8" y="138" text-anchor="middle">forest</text>
+<text class="t small" x="791.5" y="142" text-anchor="end" opacity="0.6">30m</text>
+<rect x="799.0" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.70"/>
+<text class="t small" x="856.2" y="126" text-anchor="middle">cycadophyte-conifer</text>
+<text class="t small" x="856.2" y="138" text-anchor="middle">rainforest</text>
+<text class="t small" x="909.0" y="142" text-anchor="end" opacity="0.6">40m</text>
+<rect x="916.5" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.77"/>
+<text class="t small" x="973.8" y="126" text-anchor="middle">paratropical</text>
+<text class="t small" x="973.8" y="138" text-anchor="middle">rainforest</text>
+<text class="t small" x="1026.5" y="142" text-anchor="end" opacity="0.6">45m</text>
+<rect x="1034.0" y="109.5" width="114.5" height="37" rx="3" fill="#1f6b2c" opacity="0.83"/>
+<text class="t small" x="1091.2" y="132" text-anchor="middle">tropical rainforest</text>
+<text class="t small" x="1144.0" y="142" text-anchor="end" opacity="0.6">50m</text>
+<text class="t lab" x="198" y="172" text-anchor="end">seasonal tropical forest</text>
+<rect x="211.5" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.18"/>
+<text class="t small" x="268.8" y="172" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.19"/>
+<text class="t small" x="386.2" y="172" text-anchor="middle">low vascular thicket</text>
+<text class="t small" x="439.0" y="182" text-anchor="end" opacity="0.6">0.8m</text>
+<rect x="446.5" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.51"/>
+<text class="t small" x="503.8" y="172" text-anchor="middle">progymnosperm forest</text>
+<text class="t small" x="556.5" y="182" text-anchor="end" opacity="0.6">25m</text>
+<rect x="564.0" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.38"/>
+<text class="t small" x="621.2" y="172" text-anchor="middle">tree-fern forest</text>
+<text class="t small" x="674.0" y="182" text-anchor="end" opacity="0.6">15m</text>
+<rect x="681.5" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.44"/>
+<text class="t small" x="738.8" y="166" text-anchor="middle">tree-fern and conifer</text>
+<text class="t small" x="738.8" y="178" text-anchor="middle">forest</text>
+<text class="t small" x="791.5" y="182" text-anchor="end" opacity="0.6">20m</text>
+<rect x="799.0" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.51"/>
+<text class="t small" x="856.2" y="166" text-anchor="middle">cheirolepid conifer</text>
+<text class="t small" x="856.2" y="178" text-anchor="middle">forest</text>
+<text class="t small" x="909.0" y="182" text-anchor="end" opacity="0.6">25m</text>
+<rect x="916.5" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.57"/>
+<text class="t small" x="973.8" y="166" text-anchor="middle">seasonal broadleaf</text>
+<text class="t small" x="973.8" y="178" text-anchor="middle">forest</text>
+<text class="t small" x="1026.5" y="182" text-anchor="end" opacity="0.6">30m</text>
+<rect x="1034.0" y="149.5" width="114.5" height="37" rx="3" fill="#4f8a3f" opacity="0.57"/>
+<text class="t small" x="1091.2" y="166" text-anchor="middle">seasonal tropical</text>
+<text class="t small" x="1091.2" y="178" text-anchor="middle">forest</text>
+<text class="t small" x="1144.0" y="182" text-anchor="end" opacity="0.6">30m</text>
+<text class="t lab" x="198" y="212" text-anchor="end">savanna</text>
+<rect x="211.5" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.18"/>
+<text class="t small" x="268.8" y="212" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.18"/>
+<text class="t small" x="386.2" y="206" text-anchor="middle">sparse vascular</text>
+<text class="t small" x="386.2" y="218" text-anchor="middle">patches</text>
+<text class="t small" x="439.0" y="222" text-anchor="end" opacity="0.6">0.3m</text>
+<rect x="446.5" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.31"/>
+<text class="t small" x="503.8" y="206" text-anchor="middle">open progymnosperm</text>
+<text class="t small" x="503.8" y="218" text-anchor="middle">woodland</text>
+<text class="t small" x="556.5" y="222" text-anchor="end" opacity="0.6">10m</text>
+<rect x="564.0" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.28"/>
+<text class="t small" x="621.2" y="206" text-anchor="middle">open tree-fern</text>
+<text class="t small" x="621.2" y="218" text-anchor="middle">woodland</text>
+<text class="t small" x="674.0" y="222" text-anchor="end" opacity="0.6">8m</text>
+<rect x="681.5" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.34"/>
+<text class="t small" x="738.8" y="206" text-anchor="middle">open conifer</text>
+<text class="t small" x="738.8" y="218" text-anchor="middle">woodland</text>
+<text class="t small" x="791.5" y="222" text-anchor="end" opacity="0.6">12m</text>
+<rect x="799.0" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.28"/>
+<text class="t small" x="856.2" y="206" text-anchor="middle">open bennettitalean</text>
+<text class="t small" x="856.2" y="218" text-anchor="middle">woodland</text>
+<text class="t small" x="909.0" y="222" text-anchor="end" opacity="0.6">8m</text>
+<rect x="916.5" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.34"/>
+<text class="t small" x="973.8" y="206" text-anchor="middle">open broadleaf</text>
+<text class="t small" x="973.8" y="218" text-anchor="middle">woodland</text>
+<text class="t small" x="1026.5" y="222" text-anchor="end" opacity="0.6">12m</text>
+<rect x="1034.0" y="189.5" width="114.5" height="37" rx="3" fill="#bfae5e" opacity="0.28"/>
+<text class="t small" x="1091.2" y="212" text-anchor="middle">tropical savanna</text>
+<text class="t small" x="1144.0" y="222" text-anchor="end" opacity="0.6">8m</text>
+<text class="t lab" x="198" y="252" text-anchor="end">subtropical desert</text>
+<rect x="211.5" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="268.8" y="252" text-anchor="middle">bare regolith</text>
+<rect x="329.0" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="386.2" y="252" text-anchor="middle">bare regolith</text>
+<rect x="446.5" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="503.8" y="252" text-anchor="middle">bare regolith</text>
+<rect x="564.0" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="621.2" y="252" text-anchor="middle">bare regolith</text>
+<rect x="681.5" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="738.8" y="252" text-anchor="middle">Pangaean sand sea</text>
+<rect x="799.0" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="856.2" y="252" text-anchor="middle">erg</text>
+<rect x="916.5" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.18"/>
+<text class="t small" x="973.8" y="252" text-anchor="middle">erg</text>
+<rect x="1034.0" y="229.5" width="114.5" height="37" rx="3" fill="#d6b98a" opacity="0.19"/>
+<text class="t small" x="1091.2" y="252" text-anchor="middle">subtropical desert</text>
+<text class="t small" x="1144.0" y="262" text-anchor="end" opacity="0.6">1m</text>
+<text class="t lab" x="198" y="292" text-anchor="end">temperate rainforest</text>
+<rect x="211.5" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.18"/>
+<text class="t small" x="268.8" y="292" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.19"/>
+<text class="t small" x="386.2" y="286" text-anchor="middle">streamside vascular</text>
+<text class="t small" x="386.2" y="298" text-anchor="middle">turf</text>
+<text class="t small" x="439.0" y="302" text-anchor="end" opacity="0.6">0.6m</text>
+<rect x="446.5" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.57"/>
+<text class="t small" x="503.8" y="292" text-anchor="middle">Archaeopteris forest</text>
+<text class="t small" x="556.5" y="302" text-anchor="end" opacity="0.6">30m</text>
+<rect x="564.0" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.57"/>
+<text class="t small" x="621.2" y="292" text-anchor="middle">cordaitalean forest</text>
+<text class="t small" x="674.0" y="302" text-anchor="end" opacity="0.6">30m</text>
+<rect x="681.5" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.57"/>
+<text class="t small" x="738.8" y="286" text-anchor="middle">Glossopteris swamp</text>
+<text class="t small" x="738.8" y="298" text-anchor="middle">forest</text>
+<text class="t small" x="791.5" y="302" text-anchor="end" opacity="0.6">30m</text>
+<rect x="799.0" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.77"/>
+<text class="t small" x="856.2" y="286" text-anchor="middle">temperate conifer</text>
+<text class="t small" x="856.2" y="298" text-anchor="middle">rainforest</text>
+<text class="t small" x="909.0" y="302" text-anchor="end" opacity="0.6">45m</text>
+<rect x="916.5" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.77"/>
+<text class="t small" x="973.8" y="286" text-anchor="middle">temperate broadleaf</text>
+<text class="t small" x="973.8" y="298" text-anchor="middle">rainforest</text>
+<text class="t small" x="1026.5" y="302" text-anchor="end" opacity="0.6">45m</text>
+<rect x="1034.0" y="269.5" width="114.5" height="37" rx="3" fill="#1f6b4a" opacity="0.90"/>
+<text class="t small" x="1091.2" y="292" text-anchor="middle">temperate rainforest</text>
+<text class="t small" x="1144.0" y="302" text-anchor="end" opacity="0.6">60m</text>
+<text class="t lab" x="198" y="332" text-anchor="end">temperate forest</text>
+<rect x="211.5" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.18"/>
+<text class="t small" x="268.8" y="332" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.19"/>
+<text class="t small" x="386.2" y="326" text-anchor="middle">streamside vascular</text>
+<text class="t small" x="386.2" y="338" text-anchor="middle">turf</text>
+<text class="t small" x="439.0" y="342" text-anchor="end" opacity="0.6">0.4m</text>
+<rect x="446.5" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.51"/>
+<text class="t small" x="503.8" y="332" text-anchor="middle">Archaeopteris forest</text>
+<text class="t small" x="556.5" y="342" text-anchor="end" opacity="0.6">25m</text>
+<rect x="564.0" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.51"/>
+<text class="t small" x="621.2" y="332" text-anchor="middle">cordaitalean forest</text>
+<text class="t small" x="674.0" y="342" text-anchor="end" opacity="0.6">25m</text>
+<rect x="681.5" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.51"/>
+<text class="t small" x="738.8" y="326" text-anchor="middle">Glossopteris / cordaitalean</text>
+<text class="t small" x="738.8" y="338" text-anchor="middle">forest</text>
+<text class="t small" x="791.5" y="342" text-anchor="end" opacity="0.6">25m</text>
+<rect x="799.0" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.57"/>
+<text class="t small" x="856.2" y="326" text-anchor="middle">conifer-cycadophyte</text>
+<text class="t small" x="856.2" y="338" text-anchor="middle">forest</text>
+<text class="t small" x="909.0" y="342" text-anchor="end" opacity="0.6">30m</text>
+<rect x="916.5" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.57"/>
+<text class="t small" x="973.8" y="326" text-anchor="middle">broadleaf-conifer</text>
+<text class="t small" x="973.8" y="338" text-anchor="middle">forest</text>
+<text class="t small" x="1026.5" y="342" text-anchor="end" opacity="0.6">30m</text>
+<rect x="1034.0" y="309.5" width="114.5" height="37" rx="3" fill="#3f7f4a" opacity="0.57"/>
+<text class="t small" x="1091.2" y="326" text-anchor="middle">temperate deciduous</text>
+<text class="t small" x="1091.2" y="338" text-anchor="middle">forest</text>
+<text class="t small" x="1144.0" y="342" text-anchor="end" opacity="0.6">30m</text>
+<text class="t lab" x="198" y="372" text-anchor="end">temperate grassland</text>
+<rect x="211.5" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.18"/>
+<text class="t small" x="268.8" y="372" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.18"/>
+<text class="t small" x="386.2" y="366" text-anchor="middle">sparse cryptogamic</text>
+<text class="t small" x="386.2" y="378" text-anchor="middle">ground</text>
+<text class="t small" x="439.0" y="382" text-anchor="end" opacity="0.6">0.05m</text>
+<rect x="446.5" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="503.8" y="366" text-anchor="middle">open herbaceous</text>
+<text class="t small" x="503.8" y="378" text-anchor="middle">ground</text>
+<text class="t small" x="556.5" y="382" text-anchor="end" opacity="0.6">0.5m</text>
+<rect x="564.0" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="621.2" y="372" text-anchor="middle">fern prairie</text>
+<text class="t small" x="674.0" y="382" text-anchor="end" opacity="0.6">1m</text>
+<rect x="681.5" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="738.8" y="366" text-anchor="middle">sphenopsid-fern</text>
+<text class="t small" x="738.8" y="378" text-anchor="middle">steppe</text>
+<text class="t small" x="791.5" y="382" text-anchor="end" opacity="0.6">1m</text>
+<rect x="799.0" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="856.2" y="372" text-anchor="middle">fern prairie</text>
+<text class="t small" x="909.0" y="382" text-anchor="end" opacity="0.6">1m</text>
+<rect x="916.5" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="973.8" y="366" text-anchor="middle">herbaceous open</text>
+<text class="t small" x="973.8" y="378" text-anchor="middle">ground</text>
+<text class="t small" x="1026.5" y="382" text-anchor="end" opacity="0.6">0.6m</text>
+<rect x="1034.0" y="349.5" width="114.5" height="37" rx="3" fill="#a9b56a" opacity="0.19"/>
+<text class="t small" x="1091.2" y="366" text-anchor="middle">temperate grassland /</text>
+<text class="t small" x="1091.2" y="378" text-anchor="middle">steppe</text>
+<text class="t small" x="1144.0" y="382" text-anchor="end" opacity="0.6">0.6m</text>
+<text class="t lab" x="198" y="412" text-anchor="end">boreal forest</text>
+<rect x="211.5" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.18"/>
+<text class="t small" x="268.8" y="412" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.19"/>
+<text class="t small" x="386.2" y="412" text-anchor="middle">low vascular thicket</text>
+<text class="t small" x="439.0" y="422" text-anchor="end" opacity="0.6">0.5m</text>
+<rect x="446.5" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.38"/>
+<text class="t small" x="503.8" y="406" text-anchor="middle">Archaeopteris</text>
+<text class="t small" x="503.8" y="418" text-anchor="middle">woodland</text>
+<text class="t small" x="556.5" y="422" text-anchor="end" opacity="0.6">15m</text>
+<rect x="564.0" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.44"/>
+<text class="t small" x="621.2" y="406" text-anchor="middle">cordaitalean</text>
+<text class="t small" x="621.2" y="418" text-anchor="middle">woodland</text>
+<text class="t small" x="674.0" y="422" text-anchor="end" opacity="0.6">20m</text>
+<rect x="681.5" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.51"/>
+<text class="t small" x="738.8" y="412" text-anchor="middle">cordaitalean taiga</text>
+<text class="t small" x="791.5" y="422" text-anchor="end" opacity="0.6">25m</text>
+<rect x="799.0" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.64"/>
+<text class="t small" x="856.2" y="406" text-anchor="middle">araucarian-podocarp</text>
+<text class="t small" x="856.2" y="418" text-anchor="middle">forest</text>
+<text class="t small" x="909.0" y="422" text-anchor="end" opacity="0.6">35m</text>
+<rect x="916.5" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.64"/>
+<text class="t small" x="973.8" y="406" text-anchor="middle">mixed conifer-broadleaf</text>
+<text class="t small" x="973.8" y="418" text-anchor="middle">forest</text>
+<text class="t small" x="1026.5" y="422" text-anchor="end" opacity="0.6">35m</text>
+<rect x="1034.0" y="389.5" width="114.5" height="37" rx="3" fill="#2f5d43" opacity="0.51"/>
+<text class="t small" x="1091.2" y="406" text-anchor="middle">boreal forest</text>
+<text class="t small" x="1091.2" y="418" text-anchor="middle">(taiga)</text>
+<text class="t small" x="1144.0" y="422" text-anchor="end" opacity="0.6">25m</text>
+<text class="t lab" x="198" y="452" text-anchor="end">tundra</text>
+<rect x="211.5" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.18"/>
+<text class="t small" x="268.8" y="452" text-anchor="middle">microbial crust</text>
+<rect x="329.0" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.18"/>
+<text class="t small" x="386.2" y="446" text-anchor="middle">bryophyte-grade ground</text>
+<text class="t small" x="386.2" y="458" text-anchor="middle">cover</text>
+<text class="t small" x="439.0" y="462" text-anchor="end" opacity="0.6">0.05m</text>
+<rect x="446.5" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.18"/>
+<text class="t small" x="503.8" y="452" text-anchor="middle">cryptogamic ground</text>
+<text class="t small" x="556.5" y="462" text-anchor="end" opacity="0.6">0.1m</text>
+<rect x="564.0" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.18"/>
+<text class="t small" x="621.2" y="446" text-anchor="middle">cold cryptogamic</text>
+<text class="t small" x="621.2" y="458" text-anchor="middle">ground</text>
+<text class="t small" x="674.0" y="462" text-anchor="end" opacity="0.6">0.1m</text>
+<rect x="681.5" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.25"/>
+<text class="t small" x="738.8" y="446" text-anchor="middle">Glossopteris</text>
+<text class="t small" x="738.8" y="458" text-anchor="middle">tundra-woodland</text>
+<text class="t small" x="791.5" y="462" text-anchor="end" opacity="0.6">5m</text>
+<rect x="799.0" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.34"/>
+<text class="t small" x="856.2" y="446" text-anchor="middle">polar deciduous conifer</text>
+<text class="t small" x="856.2" y="458" text-anchor="middle">woodland</text>
+<text class="t small" x="909.0" y="462" text-anchor="end" opacity="0.6">12m</text>
+<rect x="916.5" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.44"/>
+<text class="t small" x="973.8" y="446" text-anchor="middle">polar broadleaf-deciduous</text>
+<text class="t small" x="973.8" y="458" text-anchor="middle">forest</text>
+<text class="t small" x="1026.5" y="462" text-anchor="end" opacity="0.6">20m</text>
+<rect x="1034.0" y="429.5" width="114.5" height="37" rx="3" fill="#8f9c7c" opacity="0.18"/>
+<text class="t small" x="1091.2" y="452" text-anchor="middle">tundra</text>
+<text class="t small" x="1144.0" y="462" text-anchor="end" opacity="0.6">0.3m</text>
+<text class="t lab" x="198" y="492" text-anchor="end">wetland</text>
+<rect x="211.5" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.18"/>
+<text class="t small" x="268.8" y="492" text-anchor="middle">microbial mat flat</text>
+<rect x="329.0" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.18"/>
+<text class="t small" x="386.2" y="492" text-anchor="middle">rhyniophyte marsh</text>
+<text class="t small" x="439.0" y="502" text-anchor="end" opacity="0.6">0.3m</text>
+<rect x="446.5" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.28"/>
+<text class="t small" x="503.8" y="492" text-anchor="middle">Rhacophyton marsh</text>
+<text class="t small" x="556.5" y="502" text-anchor="end" opacity="0.6">8m</text>
+<rect x="564.0" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.77"/>
+<text class="t small" x="621.2" y="492" text-anchor="middle">lycopsid coal swamp</text>
+<text class="t small" x="674.0" y="502" text-anchor="end" opacity="0.6">45m</text>
+<rect x="681.5" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.51"/>
+<text class="t small" x="738.8" y="486" text-anchor="middle">Glossopteris peat</text>
+<text class="t small" x="738.8" y="498" text-anchor="middle">swamp</text>
+<text class="t small" x="791.5" y="502" text-anchor="end" opacity="0.6">25m</text>
+<rect x="799.0" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.21"/>
+<text class="t small" x="856.2" y="492" text-anchor="middle">horsetail-fern marsh</text>
+<text class="t small" x="909.0" y="502" text-anchor="end" opacity="0.6">2m</text>
+<rect x="916.5" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.51"/>
+<text class="t small" x="973.8" y="492" text-anchor="middle">Nymphaeales swamp</text>
+<text class="t small" x="1026.5" y="502" text-anchor="end" opacity="0.6">25m</text>
+<rect x="1034.0" y="469.5" width="114.5" height="37" rx="3" fill="#5d7f5a" opacity="0.31"/>
+<text class="t small" x="1091.2" y="492" text-anchor="middle">wetland</text>
+<text class="t small" x="1144.0" y="502" text-anchor="end" opacity="0.6">10m</text>
+<text class="t small" x="28" y="536">Fill opacity is canopy height, so the greening and heightening of the land is visible as a gradient from left to right. Note the two exceptions the app must honour: no grassland cell has grass before the Cenozoic, and no cell has a canopy before ~385 Ma.</text>
+</svg>
