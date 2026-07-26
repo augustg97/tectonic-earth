@@ -445,10 +445,31 @@ def _edt_wrap(mask):
 
 
 def _blob(LON, LAT, plon, plat, radius_km):
+    """A LOBATE blob, not a disc.
+
+    A perfect circle is the one outline no natural feature has, and an oceanic
+    plateau is about as far from one as a shape gets: it is a flood-basalt pile,
+    bounded by the rifted margins it split along, cut by fracture zones, and
+    built from overlapping flow fronts. Drawn as a disc, Ontong Java and
+    Kerguelen came out as machined coins sitting on the sea floor, which is the
+    single most obviously artificial thing a chart can show.
+
+    Three angular harmonics fix it for nothing. Their phases come from the
+    blob's own position, so a given plateau keeps the same outline at every
+    keyframe instead of writhing as you scrub.
+    """
     r = math.degrees(radius_km / 6371.0)
     dlon = ((LON - plon + 180.0) % 360.0) - 180.0
-    d = np.sqrt((dlon * np.cos(np.radians(LAT))) ** 2 + (LAT - plat) ** 2)
-    return np.clip(1.0 - (d / r) ** 2, 0.0, 1.0)
+    dx = dlon * np.cos(np.radians(LAT))
+    dy = LAT - plat
+    d = np.sqrt(dx * dx + dy * dy)
+    th = np.arctan2(dy, dx)
+    s = plon * 12.9898 + plat * 78.233
+    warp = (1.0
+            + 0.22 * np.cos(2.0 * th + math.sin(s) * math.pi)
+            + 0.14 * np.cos(3.0 * th + math.sin(s * 2.3) * math.pi)
+            + 0.08 * np.cos(5.0 * th + math.sin(s * 3.7) * math.pi))
+    return np.clip(1.0 - (d / np.maximum(r * warp, 1e-6)) ** 2, 0.0, 1.0)
 
 
 def _curve(age, points):
@@ -830,7 +851,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 # resolve, which is the right order for the resolvable part of a
                 # population that runs to ~24,000 above a kilometre.
                 import seamounts as _sm
-                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell)
+                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v)
             else:
                 rng = np.random.default_rng(11)
                 smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)

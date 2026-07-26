@@ -1,123 +1,195 @@
-"""A seamount POPULATION, rather than a few smeared chains.
+"""Seamounts, in the patterns they actually occur in.
 
-There are roughly 24,000 seamounts over a kilometre high on the present ocean
-floor -- about one every one and a half degrees of ocean -- and on a real chart
-they are a large part of what makes the abyss look busy rather than blank. We had
-generic streaks smeared along the plate-motion direction, which reads as a smudge
-because that is what it is: no individual mountain, no summit, no shadow.
+The first version of this seeded one uniform population across the whole ocean
+and stamped each as a radially symmetric cone. Both halves of that are wrong, and
+together they gave the abyss a warty stipple of several thousand identical
+mountains -- the opposite of a real chart, where the seamounts are the most
+ORGANISED thing on the sea floor.
 
-The population is not random. Three things about it are well established and all
-three are modelled here:
+Real ones come in three populations with quite different behaviour:
 
-  HEIGHT follows a power law -- very many small ones, very few large. So the
-  height is drawn from an inverse-power transform of a uniform variate rather
-  than from a Gaussian, which would give a typical seamount and almost no
-  outliers, exactly backwards.
+  HOTSPOT CHAINS. A plume sits still in the mantle and the plate slides over it,
+  so the volcanoes come out as a LINE, ageing away from the plume: an active
+  island at one end, then a string of extinct cones subsiding as the crust they
+  ride cools, then guyots planed flat by waves, then drowned banks. Hawaii-
+  Emperor, Louisville, the Cook-Australs, the Tuamotus, Walvis, Ninetyeast.
+  These are the large, conspicuous ones, and they are what makes a real chart
+  look organised rather than sprinkled.
 
-  BIRTH happens at the ridge, where most seamounts are built by the same
-  volcanism that makes the crust, and at hotspots, where a plume builds a chain
-  as the plate slides over it. So the density is highest on young crust and along
-  the tracks, not uniform.
+  NEAR-RIDGE SEAMOUNTS. Built at or beside the axis by the same volcanism that
+  makes the crust, so they crowd onto young sea floor and thin out with age.
+  Individually small.
 
-  SUBSIDENCE. A seamount rides its plate and sinks with it as the crust cools, so
-  an old seamount stands the same height above ITS OWN crust but sits far deeper.
-  Some grew fast enough to reach the surface and are then planed flat by waves
-  and drowned as guyots -- which is why flat-topped seamounts are common on old
-  crust and absent on young.
+  BACKGROUND. Genuinely sparse. Large tracts of old abyssal plain have nothing.
 
-Placement is a stable hash of position, so a given seamount is the same mountain
-at every keyframe rather than re-rolling and shimmering.
+And none of them is a circle. A seamount is fed along rift zones -- typically two
+or three arms radiating from the summit -- so the plan view is lobate and often
+strongly elongated, and the flanks carry collapse scars. A perfect circle is the
+one outline no volcano has.
+
+WHAT GETS BAKED. The grid cell is 20 km and a 1 km seamount is 14 km across, so
+the small population is sub-pixel and stamping it would alias rather than
+resolve; ridge-flank bumpiness is the shader's fault-block fabric, not this. What
+this field carries is the part the grid can hold: the chains, and the larger
+near-ridge cones.
 """
+import math
+
 import numpy as np
 
-DENSITY = 0.55            # seamounts per square degree of ocean, at the ridge
-# Lower cut. NOT the smallest real seamount -- the smallest this grid can carry.
-# A cell is 20 km, and a 1 km seamount is only 14 km across its base, so the
-# whole population below about 1.2 km is sub-pixel here and stamping it would
-# alias rather than resolve. Same division as the abyssal hills: the field
-# carries what the grid can hold and the shader synthesises the rest per pixel.
-# Above this cut the model produces of order ten thousand mountains, which is
-# the right order for the resolvable part of a population that runs to ~24,000
-# above a kilometre.
-H_MIN = 1200.0
-H_MAX = 4200.0            # m: the largest, which reach the surface
-POWER = 1.15              # power-law slope for the height distribution
-# Basal radius per metre of height. A seamount's flanks stand at roughly 1:14,
-# so a 1 km cone is about 14 km across the base -- 0.13 deg. Getting this wrong
-# by the factor of thirty it was wrong by gave a 4 km seamount a basal radius of
-# 1,950 km and covered 84% of the ocean in one merged shield.
-RADIUS_PER_M = 0.00013
+# --- populations -----------------------------------------------------------
+N_PLUMES = 34             # active plumes worldwide; the real count is 40-50
+CHAIN_STEP = 1.6          # deg between volcanoes along a track
+CHAIN_LEN = 26            # steps: a track a few thousand km long
+NEAR_RIDGE_DENS = 0.055   # per square degree on brand-new crust
+BACKGROUND_DENS = 0.004   # per square degree on old abyssal plain
+
+H_MIN = 1150.0            # m: the smallest this grid can resolve
+H_MAX = 4300.0
+POWER = 1.25              # power-law slope: many small, few large
+RADIUS_PER_M = 0.00013    # deg of basal radius per metre (~1:14 flanks)
 
 
-def _hash2(i, j, salt):
-    """Deterministic 0..1 from a pair of integers. Stable across keyframes, so a
-    seamount stays the same mountain instead of shimmering."""
-    x = (i * 73856093) ^ (j * 19349663) ^ (salt * 83492791)
-    x &= 0xFFFFFFFF
+def _h(*ints):
+    """Deterministic 0..1 from integers -- a seamount must be the same mountain
+    at every keyframe, not a fresh roll that shimmers as you scrub."""
+    x = 0x9E3779B9
+    for v in ints:
+        x = (x ^ (int(v) * 2654435761)) & 0xFFFFFFFF
+        x ^= x >> 15
+        x = (x * 2246822519) & 0xFFFFFFFF
     x ^= x >> 13
-    x = (x * 1274126177) & 0xFFFFFFFF
-    x ^= x >> 16
     return x / 4294967295.0
 
 
-def field(age_myr, sea, lat1d, deg_per_cell, hotspot=None, seed=7):
-    """Seamount relief in metres, on the model grid.
+def _stamp(out, ys, xs, h, w, dpc, plon, plat, hgt, elong, azi_deg, seed):
+    """One volcano: lobate, elongated along its rift zones, not a cone.
 
-    Seeded on a coarse lattice so the cost is set by the number of MOUNTAINS,
-    not by the number of cells -- each one is then stamped as a cone over the
-    handful of cells it actually covers.
+    Three angular harmonics do most of the work -- a two-armed rift gives the
+    strong elongation seen on most large seamounts, and the higher terms break
+    the outline up. The whole shape is stretched along `azi_deg`, which for a
+    chain volcano is the direction of the chain, because rift zones tend to
+    align with the stress field that the plate motion sets up.
+    """
+    rad = max(hgt * RADIUS_PER_M, dpc * 1.3)
+    reach = rad * (1.0 + elong) * 1.5
+    coslat = max(math.cos(math.radians(plat)), 0.05)
+    row = int((90.0 - plat) / 180.0 * h)
+    rr = int(np.ceil(reach / dpc)) + 1
+    r0, r1 = max(0, row - rr), min(h, row + rr + 1)
+    if r1 <= r0:
+        return
+    dy = (90.0 - (ys[r0:r1, :1] + 0.5) * dpc) - plat
+    dlon = (((xs[r0:r1, :] + 0.5) * dpc - 180.0) - plon + 180.0) % 360.0 - 180.0
+    dx = dlon * coslat
+    # rotate into the volcano's own frame so the elongation follows its rift
+    a = math.radians(azi_deg)
+    ca, sa = math.cos(a), math.sin(a)
+    ex = dx * ca + dy * sa
+    ey = -dx * sa + dy * ca
+    ex = ex / (1.0 + elong)                      # stretch along the rift
+    d = np.hypot(ex, ey)
+    th = np.arctan2(ey, ex)
+    p1 = _h(seed, 1) * 6.2831
+    p2 = _h(seed, 2) * 6.2831
+    p3 = _h(seed, 3) * 6.2831
+    warp = (1.0
+            + 0.26 * np.cos(2.0 * th + p1)
+            + 0.15 * np.cos(3.0 * th + p2)
+            + 0.09 * np.cos(5.0 * th + p3))
+    cone = np.clip(1.0 - d / np.maximum(rad * warp, 1e-6), 0.0, 1.0)
+    if not cone.any():
+        return
+    prof = cone ** 1.45
+    # A flank-collapse scar: one sector of the cone slumped away. Common on big
+    # ocean volcanoes and part of why none of them is symmetric.
+    if _h(seed, 4) > 0.55:
+        sc = math.radians(_h(seed, 5) * 360.0)
+        bite = np.cos(th - sc) > (0.55 + 0.3 * _h(seed, 6))
+        prof = np.where(bite, prof * 0.45, prof)
+    out[r0:r1, :] = np.maximum(out[r0:r1, :], (prof * hgt).astype(np.float32))
+
+
+def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7):
+    """Seamount relief in metres.
+
+    `u`,`v` are the plate-motion direction (the age gradient), which is what
+    lets a plume trail a CHAIN rather than a dot: walking that field from a
+    fixed plume traces the path the crust took over it.
     """
     h, w = age_myr.shape
     out = np.zeros((h, w), np.float32)
-    cell = 1.0                                   # deg between candidate sites
-    nlat = int(180 / cell)
-    nlon = int(360 / cell)
-
     ys, xs = np.mgrid[0:h, 0:w]
-    for j in range(nlat):
-        lat = 90.0 - (j + 0.5) * cell
-        coslat = max(np.cos(np.radians(lat)), 0.05)
-        # equal-area sampling: fewer candidate sites per degree of longitude
-        # near the poles, or the caps would sprout a dense fringe of volcanoes
+    dpc = deg_per_cell
+
+    def ok(la, lo):
+        r = int((90.0 - la) / 180.0 * h)
+        c = int((lo + 180.0) / 360.0 * w) % w
+        if r < 0 or r >= h:
+            return None
+        return (r, c) if sea[r, c] else None
+
+    # --- 1. hotspot chains -------------------------------------------------
+    n = 0
+    for p in range(N_PLUMES * 3):        # oversample; many seeds land on land
+        if n >= N_PLUMES:
+            break
+        plat = math.degrees(math.asin(_h(seed, p, 11) * 2.0 - 1.0))
+        plon = _h(seed, p, 13) * 360.0 - 180.0
+        at = ok(plat, plon)
+        if at is None:
+            continue
+        n += 1
+        # A plume's output varies enormously -- Hawaii is not Bowie Seamount.
+        vigour = 0.35 + 0.9 * _h(seed, p, 17)
+        la, lo = plat, plon
+        for k in range(CHAIN_LEN):
+            a2 = ok(la, lo)
+            if a2 is None:
+                break
+            r, c = a2
+            # Height falls along the track: the volcano stops being fed once it
+            # leaves the plume, then subsides with the cooling plate.
+            fade = math.exp(-k / 9.0)
+            hgt = H_MIN + (H_MAX - H_MIN) * vigour * fade * (0.55 + 0.5 * _h(seed, p, k, 23))
+            if hgt > H_MIN:
+                du = 0.0 if u is None else float(u[r, c])
+                dv = 0.0 if v is None else float(v[r, c])
+                azi = math.degrees(math.atan2(dv, du)) if (du or dv) else 0.0
+                # elongated along the chain, as rift zones tend to be
+                _stamp(out, ys, xs, h, w, dpc, lo, la, hgt,
+                       0.55 + 0.7 * _h(seed, p, k, 29), azi, seed * 1000 + p * 50 + k)
+            # step downstream: the plate carries the crust away from the plume
+            if u is None or v is None:
+                break
+            coslat = max(math.cos(math.radians(la)), 0.05)
+            lo += float(u[r, c]) * CHAIN_STEP / coslat
+            la += float(v[r, c]) * CHAIN_STEP
+            lo = (lo + 180.0) % 360.0 - 180.0
+            if abs(la) > 86.0:
+                break
+
+    # --- 2. near-ridge and background -------------------------------------
+    cell = 1.0
+    for j in range(int(180 / cell)):
+        la = 90.0 - (j + 0.5) * cell
+        coslat = max(math.cos(math.radians(la)), 0.05)
         step = max(1, int(round(1.0 / coslat)))
-        for i in range(0, nlon, step):
-            lon = -180.0 + (i + 0.5) * cell
-            r = _hash2(i, j, seed)
-            row = int((90.0 - lat) / 180.0 * h)
-            col = int((lon + 180.0) / 360.0 * w)
-            if row < 0 or row >= h or col < 0 or col >= w or not sea[row, col]:
+        for i in range(0, int(360 / cell), step):
+            lo = -180.0 + (i + 0.5) * cell
+            at = ok(la, lo)
+            if at is None:
                 continue
-            a = float(age_myr[row, col])
-            # Born at the ridge and on hotspots: density falls with crustal age
-            # because most seamounts are built at or near the axis.
-            dens = DENSITY * (0.35 + 0.85 * np.exp(-a / 28.0))
-            if hotspot is not None:
-                dens *= (1.0 + 5.0 * float(hotspot[row, col]))
-            if r > dens * cell * cell * coslat:
+            r, c = at
+            a = float(age_myr[r, c])
+            dens = BACKGROUND_DENS + NEAR_RIDGE_DENS * math.exp(-a / 14.0)
+            if _h(seed, i, j, 31) > dens * cell * cell * coslat:
                 continue
-            u = _hash2(i, j, seed + 101)
-            hgt = H_MIN * (1.0 - u) ** (-1.0 / POWER)
-            if hgt > H_MAX:
-                hgt = H_MAX
-            rad = max(hgt * RADIUS_PER_M, deg_per_cell * 1.2)
-            # jitter off the lattice, or the population lines up on a grid
-            plon = lon + (_hash2(i, j, seed + 211) - 0.5) * cell
-            plat = lat + (_hash2(i, j, seed + 307) - 0.5) * cell
-            rr = int(np.ceil(rad / deg_per_cell)) + 1
-            r0, r1 = max(0, row - rr), min(h, row + rr + 1)
-            if r1 <= r0:
-                continue
-            dy = (90.0 - (ys[r0:r1, :1] + 0.5) * deg_per_cell) - plat
-            dlon = (((xs[r0:r1, :] + 0.5) * deg_per_cell - 180.0) - plon + 180.0) % 360.0 - 180.0
-            d = np.hypot(dlon * coslat, dy)
-            cone = np.clip(1.0 - d / rad, 0.0, 1.0)
-            if not cone.any():
-                continue
-            # A cone with a rounded shoulder, not a spike. Tall ones on old crust
-            # reached the surface and were planed flat -- a guyot -- so their
-            # summit is a plateau rather than a peak.
-            prof = cone ** 1.35
-            if hgt > 2400.0 and a > 35.0:
-                prof = np.minimum(prof, 0.78) / 0.78 * 0.92
-            out[r0:r1, :] = np.maximum(out[r0:r1, :], (prof * hgt).astype(np.float32))
+            uq = _h(seed, i, j, 37)
+            hgt = min(H_MIN * (1.0 - uq) ** (-1.0 / POWER), H_MAX)
+            _stamp(out, ys, xs, h, w, dpc,
+                   lo + (_h(seed, i, j, 41) - 0.5) * cell,
+                   la + (_h(seed, i, j, 43) - 0.5) * cell,
+                   hgt, 0.15 + 0.55 * _h(seed, i, j, 47),
+                   _h(seed, i, j, 53) * 360.0, seed * 7919 + i * 181 + j)
     return out
