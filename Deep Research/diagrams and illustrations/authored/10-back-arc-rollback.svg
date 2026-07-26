@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 516" width="1180" height="516">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="516"/>
+<text class="t title" x="28" y="34">How a back-arc basin opens</text>
+<text class="t sub" x="28" y="53">Slab roll-back, after the Britannica sequence in Deep Time Maps and Resources</text>
+<rect x="44" y="122" width="340" height="210" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="45" y="123" width="338" height="40" fill="#16344a" opacity="0.7"/>
+<rect x="45" y="162" width="338" height="169" fill="#7a5a3c" opacity="0.35"/>
+<polyline points="164,162 227,201 290,240 344,274" stroke="#c96f4a" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.9"/>
+<rect x="46" y="153" width="118" height="9" fill="#c96f4a" opacity="0.9"/>
+<rect x="210" y="151" width="170" height="11" fill="#9a8a6a"/>
+<path d="M236 151 L256 122 L276 151 Z" fill="#8a6a4a"/>
+<text class="t small" x="256" y="116" text-anchor="middle" fill="#c0a080">arc</text>
+<text class="t small" x="164" y="178" text-anchor="middle" fill="#d89070">trench</text>
+<text class="t small" x="214.0" y="350" text-anchor="middle" fill="#c9a227">1. steep subduction</text>
+<text class="t small" x="214.0" y="364" text-anchor="middle">arc built on the overriding plate</text>
+<rect x="406" y="122" width="340" height="210" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="407" y="123" width="338" height="40" fill="#16344a" opacity="0.7"/>
+<rect x="407" y="162" width="338" height="169" fill="#7a5a3c" opacity="0.35"/>
+<polyline points="484,162 547,220 610,278 664,328" stroke="#c96f4a" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.9"/>
+<rect x="408" y="153" width="76" height="9" fill="#c96f4a" opacity="0.9"/>
+<rect x="530" y="151" width="212" height="11" fill="#9a8a6a"/>
+<path d="M556 151 L576 122 L596 151 Z" fill="#8a6a4a"/>
+<text class="t small" x="576" y="116" text-anchor="middle" fill="#c0a080">arc</text>
+<text class="t small" x="484" y="178" text-anchor="middle" fill="#d89070">trench</text>
+<path d="M514 192 l-26 0 m6 -5 l-6 5 l6 5" stroke="#e07650" fill="none" stroke-width="1.6"/>
+<text class="t small" x="576.0" y="350" text-anchor="middle" fill="#c9a227">2. slab rolls back</text>
+<text class="t small" x="576.0" y="364" text-anchor="middle">trench migrates oceanward; plate stretches</text>
+<rect x="768" y="122" width="340" height="210" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="769" y="123" width="338" height="40" fill="#16344a" opacity="0.7"/>
+<rect x="769" y="162" width="338" height="169" fill="#7a5a3c" opacity="0.35"/>
+<polyline points="804,162 867,239 930,316 984,382" stroke="#c96f4a" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.9"/>
+<rect x="770" y="153" width="34" height="9" fill="#c96f4a" opacity="0.9"/>
+<rect x="850" y="151" width="108" height="11" fill="#9a8a6a"/>
+<rect x="1024" y="151" width="80" height="11" fill="#9a8a6a"/>
+<rect x="958" y="157" width="66" height="5" fill="#c9a227"/>
+<text class="t small" x="991" y="148" text-anchor="middle" fill="#c9a227">new ridge</text>
+<path d="M876 151 L896 122 L916 151 Z" fill="#8a6a4a"/>
+<text class="t small" x="896" y="116" text-anchor="middle" fill="#c0a080">arc</text>
+<text class="t small" x="804" y="178" text-anchor="middle" fill="#d89070">trench</text>
+<path d="M834 192 l-26 0 m6 -5 l-6 5 l6 5" stroke="#e07650" fill="none" stroke-width="1.6"/>
+<text class="t small" x="938.0" y="350" text-anchor="middle" fill="#c9a227">3. back-arc basin</text>
+<text class="t small" x="938.0" y="364" text-anchor="middle">the overriding plate rifts and spreads</text>
+<text class="t small" x="44" y="394">Behind a subduction zone, the sea floor can pull APART. An old dense slab does not just sink - it also rolls</text>
+<text class="t small" x="44" y="408">backward, dragging the trench oceanward and stretching the plate behind it until that plate rifts and opens a new</text>
+<text class="t small" x="44" y="422">spreading centre: a small ocean basin forming INSIDE a convergent margin.</text>
+<text class="t small" x="44" y="436"></text>
+<text class="t small" x="44" y="450">Sea of Japan  ·  Mariana Trough  ·  Lau Basin  ·  Andaman Sea  ·  Tyrrhenian Sea  ·  Scotia Sea  ·  Bransfield Strait</text>
+<text class="t small" x="44" y="464"></text>
+<text class="t small" x="44" y="478">FOR THE MODEL: README §10 lists marginal basins as absent or generic. This is the mechanism that generates them,</text>
+<text class="t small" x="44" y="492">and it explains why the western Pacific is a scatter of small seas and island arcs rather than one clean margin.</text>
+</svg>

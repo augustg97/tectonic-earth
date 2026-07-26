@@ -69,26 +69,29 @@
 <text class="t lab" x="151" y="231" text-anchor="end" fill="#9fb2c6">glaciations</text>
 <rect x="385.4" y="217" width="43.4" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
 <rect x="438.0" y="217" width="11.3" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
-<rect x="491.9" y="217" width="3.0" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
+<rect x="492.7" y="217" width="3.0" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
+<rect x="518.3" y="217" width="5.5" height="20" rx="2.5" fill="#7ebad6" opacity="0.5"/>
 <rect x="597.7" y="217" width="3.0" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
-<rect x="654.8" y="217" width="10.2" height="20" rx="2.5" fill="#7ebad6" opacity="0.5"/>
-<rect x="664.2" y="217" width="81.9" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
-<rect x="838.1" y="217" width="9.4" height="20" rx="2.5" fill="#7ebad6" opacity="0.5"/>
+<rect x="660.3" y="217" width="7.8" height="20" rx="2.5" fill="#7ebad6" opacity="0.5"/>
+<rect x="679.8" y="217" width="64.0" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
+<rect x="828.0" y="217" width="19.5" height="20" rx="2.5" fill="#7ebad6" opacity="0.5"/>
 <rect x="918.5" y="217" width="26.5" height="20" rx="2.5" fill="#7ebad6" opacity="0.95"/>
 <text class="t small" x="407.2" y="200.0" text-anchor="middle">Sturtian</text>
 <line class="lead" x1="407.2" y1="203.0" x2="407.2" y2="217.0"/>
 <text class="t small" x="443.7" y="213.0" text-anchor="middle">Marinoan</text>
 <line class="lead" x1="443.7" y1="216.0" x2="443.7" y2="217.0"/>
-<text class="t small" x="493.4" y="200.0" text-anchor="middle">Gaskiers</text>
-<line class="lead" x1="493.4" y1="203.0" x2="493.4" y2="217.0"/>
+<text class="t small" x="494.2" y="200.0" text-anchor="middle">Gaskiers</text>
+<line class="lead" x1="494.2" y1="203.0" x2="494.2" y2="217.0"/>
+<text class="t small" x="521.1" y="213.0" text-anchor="middle">Baykonurian</text>
+<line class="lead" x1="521.1" y1="216.0" x2="521.1" y2="217.0"/>
 <text class="t small" x="599.2" y="200.0" text-anchor="middle">Hirnantian</text>
 <line class="lead" x1="599.2" y1="203.0" x2="599.2" y2="217.0"/>
-<text class="t small" x="659.9" y="213.0" text-anchor="middle">Late Devonian glaciation</text>
-<line class="lead" x1="659.9" y1="216.0" x2="659.9" y2="217.0"/>
-<text class="t small" x="705.1" y="200.0" text-anchor="middle">Late Palaeozoic Ice Age</text>
-<line class="lead" x1="705.1" y1="203.0" x2="705.1" y2="217.0"/>
-<text class="t small" x="842.8" y="213.0" text-anchor="middle">Early Cretaceous cool snap</text>
-<line class="lead" x1="842.8" y1="216.0" x2="842.8" y2="217.0"/>
+<text class="t small" x="664.2" y="213.0" text-anchor="middle">Late Devonian glaciation</text>
+<line class="lead" x1="664.2" y1="216.0" x2="664.2" y2="217.0"/>
+<text class="t small" x="711.8" y="200.0" text-anchor="middle">Late Palaeozoic Ice Age</text>
+<line class="lead" x1="711.8" y1="203.0" x2="711.8" y2="217.0"/>
+<text class="t small" x="837.8" y="213.0" text-anchor="middle">Early Cretaceous cool snap</text>
+<line class="lead" x1="837.8" y1="216.0" x2="837.8" y2="217.0"/>
 <text class="t small" x="931.7" y="200.0" text-anchor="middle">Late Cenozoic Ice Age</text>
 <line class="lead" x1="931.7" y1="203.0" x2="931.7" y2="217.0"/>
 <text class="t lab" x="151" y="302" text-anchor="end" fill="#9fb2c6">mass extinctions</text>

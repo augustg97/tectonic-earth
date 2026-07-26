@@ -573,6 +573,419 @@ def chart_snowball():
 
 # ---------------------------------------------------------------------------
 
+
+
+# ---------------------------------------------------------------------------
+# 7. Cenozoic climate events: warming above the line, drawdown below
+# ---------------------------------------------------------------------------
+
+def chart_cenozoic_events():
+    A0, A1 = 70.0, 0.0
+    x0, x1, mid = 150, W - 42, 300
+    body = []
+
+    def X(a):
+        return x1 - (a - A1) / (A0 - A1) * (x1 - x0)
+
+    body.append(f'<line class="axis" x1="{x0}" y1="{mid}" x2="{x1}" y2="{mid}"/>')
+    for a in (70, 60, 50, 40, 30, 20, 10, 0):
+        body.append(f'<line class="grid" x1="{X(a):.1f}" y1="108" x2="{X(a):.1f}" y2="{mid+150}"/>')
+        body.append(f'<text class="t small" x="{X(a):.1f}" y="{mid+166}" '
+                    f'text-anchor="middle">{a} Ma</text>')
+    for ep in dt.EPOCHS:
+        if ep.top >= A0 or ep.base <= 0 or ep.parent not in ("Paleogene", "Neogene", "Quaternary"):
+            continue
+        xa, xb = X(min(ep.base, A0)), X(max(ep.top, 0))
+        body.append(f'<rect x="{xa:.1f}" y="{mid+8}" width="{xb-xa:.1f}" height="17" '
+                    f'fill="none" stroke="#2a3644"/>')
+        if xb - xa > len(ep.name) * CHAR_W + 6:
+            body.append(f'<text class="t small" x="{(xa+xb)/2:.1f}" y="{mid+20}" '
+                        f'text-anchor="middle">{esc(ep.name)}</text>')
+
+    warm = [e for e in dt.HYPERTHERMALS if e.base <= A0 and e.top >= A1]
+    cool = [e for e in dt.DRAWDOWNS if e.base <= A0 and e.top >= A1]
+    body.append(f'<text class="t lab" x="{x0-14}" y="{mid-100}" text-anchor="end" '
+                f'fill="#d0864f">WARMING</text>')
+    body.append(f'<text class="t lab" x="{x0-14}" y="{mid+86}" text-anchor="end" '
+                f'fill="#6f9fbf">DRAWDOWN</text>')
+
+    lab = []
+    for i, e in enumerate(sorted(warm, key=lambda e: -e.base)):
+        xa, xb = X(min(e.base, A0)), X(max(e.top, 0))
+        w = max(xb - xa, 6)
+        h = 26 + (i % 3) * 26
+        body.append(f'<rect x="{xa:.1f}" y="{mid-h}" width="{w:.1f}" height="{h}" rx="2" '
+                    f'fill="#d0864f" opacity="0.85"/>')
+        lab.append((xa + w / 2, mid - h - 6, e.name, "#e0a070"))
+    for i, e in enumerate(sorted(cool, key=lambda e: -e.base)):
+        xa, xb = X(min(e.base, A0)), X(max(e.top, 0))
+        w = max(xb - xa, 6)
+        h = 34 + (i % 2) * 26
+        body.append(f'<rect x="{xa:.1f}" y="{mid+30}" width="{w:.1f}" height="{h}" rx="2" '
+                    f'fill="#6f9fbf" opacity="0.8"/>')
+        lab.append((xa + w / 2, mid + 30 + h + 13, e.name, "#8fb4d0"))
+    placed, dropped = _stagger([(x, t) for x, _, t, _ in lab], rows=3, pad=5)
+    row_of = {t: r for _, t, r in placed}
+    okset = {t for _, t, _ in placed}
+    for xc, yy, txt, col in lab:
+        if txt not in okset:
+            continue
+        off = row_of.get(txt, 0) * 13
+        yy2 = yy - off if yy < mid else yy + off
+        anc = "middle"
+        xt = xc
+        if xc > x1 - 70:
+            anc, xt = "end", x1
+        elif xc < x0 + 40:
+            anc, xt = "start", x0
+        body.append(f'<text class="t small" x="{xt:.1f}" y="{yy2:.1f}" '
+                    f'text-anchor="{anc}" fill="{col}">{esc(txt)}</text>')
+
+    for a, t in ((66, "K-Pg"), (34, "Antarctic ice"), (2.7, "N Hemisphere ice")):
+        body.append(f'<line x1="{X(a):.1f}" y1="118" x2="{X(a):.1f}" y2="{mid-2}" '
+                    f'stroke="#8a99aa" stroke-width="1" stroke-dasharray="3 3"/>')
+        anc = "end" if X(a) > x1 - 90 else "start"
+        xt = X(a) - 5 if anc == "end" else X(a) + 5
+        body.append(f'<text class="t small" x="{xt:.1f}" y="126" '
+                    f'text-anchor="{anc}">{esc(t)}</text>')
+
+    body.append(f'<text class="t small" x="{x0}" y="{mid+196}">'
+                'Bar height is arbitrary and only separates neighbours; bar WIDTH is the '
+                'real duration. Every one of these is shorter than a 5 Myr keyframe, which '
+                'is why they belong on cards rather than on the map.</text>')
+    return _svg(mid + 216, "\n".join(body),
+                "Cenozoic climate events: what warmed it, what cooled it",
+                "From modeling/deeptime.py HYPERTHERMALS and DRAWDOWNS")
+
+
+# ---------------------------------------------------------------------------
+# 8. Oxygen through time
+# ---------------------------------------------------------------------------
+
+def chart_oxygen():
+    # (age Ma, % of present atmospheric level) - a schematic of the consensus shape
+    pts = [(4000, 0.001), (2600, 0.001), (2450, 2), (2320, 60), (2250, 90), (2150, 40),
+           (2050, 5), (1800, 3), (1200, 3), (900, 5), (800, 10), (700, 20), (600, 40),
+           (541, 60), (430, 60), (400, 75), (360, 110), (300, 150), (280, 145),
+           (250, 75), (200, 60), (150, 80), (100, 95), (50, 100), (0, 100)]
+    x0, x1, y0, y1 = 150, W - 330, 120, 470
+    A0 = 4000.0
+
+    def X(a):
+        import math
+        return x0 + (1 - math.log10(max(a, 1) + 1) / math.log10(A0 + 1)) * (x1 - x0)
+
+    def Y(p):
+        import math
+        return y1 - (math.log10(max(p, 0.0005) / 0.0005) / math.log10(160 / 0.0005)) * (y1 - y0)
+
+    body = [f'<rect class="panel" x="{x0}" y="{y0}" width="{x1-x0}" height="{y1-y0}" rx="4"/>']
+    for p, lb in ((0.001, "0.001%"), (0.1, "0.1%"), (1, "1%"), (10, "10%"), (100, "100% PAL")):
+        body.append(f'<line class="grid" x1="{x0}" y1="{Y(p):.1f}" x2="{x1}" y2="{Y(p):.1f}"/>')
+        body.append(f'<text class="t small" x="{x0-8}" y="{Y(p)+4:.1f}" '
+                    f'text-anchor="end">{lb}</text>')
+    for a in (4000, 2500, 1000, 500, 100, 0):
+        body.append(f'<line class="grid" x1="{X(a):.1f}" y1="{y0}" x2="{X(a):.1f}" y2="{y1}"/>')
+        body.append(f'<text class="t small" x="{X(a):.1f}" y="{y1+16:.1f}" '
+                    f'text-anchor="middle">{a}</text>')
+    body.append(f'<text class="t small" x="{(x0+x1)/2:.1f}" y="{y1+34:.1f}" '
+                f'text-anchor="middle">Ma (log)</text>')
+    poly = " ".join(f"{X(a):.1f},{Y(p):.1f}" for a, p in pts)
+    body.append(f'<polyline points="{poly}" fill="none" stroke="#7fc4a0" stroke-width="2.4"/>')
+    for a, txt, col in ((2460, "Great Oxidation Event", "#c9a227"),
+                        (2300, "Lomagundi overshoot", "#e0a070"),
+                        (2100, "and crash", "#e07650"),
+                        (1500, "the 'boring billion'", "#8fa3b8"),
+                        (700, "Neoproterozoic Oxygenation", "#7ebad6"),
+                        (300, "Permo-Carboniferous peak ~30%", "#7fc4a0")):
+        body.append(f'<line x1="{X(a):.1f}" y1="{y0+6}" x2="{X(a):.1f}" y2="{y1-4}" '
+                    f'stroke="{col}" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>')
+    lb = [(2460, "Great Oxidation Event", 0, "start"),
+          (2200, "Lomagundi overshoot, then crash", 1, "start"),
+          (1500, "the 'boring billion'", 2, "start"),
+          (700, "Neoproterozoic Oxygenation", 3, "start"),
+          (300, "Permo-Carboniferous peak ~30%", 4, "end")]
+    for a, t, r, anc in lb:
+        yy = y1 - 16 - r * 15
+        body.append(f'<text class="t small" x="{X(a) + (-6 if anc=="end" else 6):.1f}" '
+                    f'y="{yy:.1f}" text-anchor="{anc}">{esc(t)}</text>')
+
+    bx = x1 + 26
+    body.append(f'<rect class="panel" x="{bx}" y="{y0}" width="{W-bx-34}" height="{y1-y0}" rx="6"/>')
+    txt = ["A schematic of the consensus SHAPE, not a data series -",
+           "the absolute values before the Phanerozoic carry",
+           "large uncertainty and the curve is drawn on a log",
+           "axis in both directions for that reason.",
+           "",
+           "What each step is FOR:",
+           "",
+           "GOE (2.46-2.06 Ga) oxidises methane, collapses the",
+           "  greenhouse, and freezes the planet (Huronian).",
+           "  Banded iron formations stop; red beds start; an",
+           "  ozone layer forms. >2,500 of Earth's ~4,500",
+           "  minerals date from it.",
+           "",
+           "Lomagundi-Jatuli (~2.3 Ga) overshoots near modern",
+           "  levels, then crashes at ~2.1 Ga. Not a ramp.",
+           "",
+           "The boring billion holds a few percent PAL with",
+           "  euxinic mid-depths. Eukaryotes exist and do not",
+           "  radiate.",
+           "",
+           "NOE (~850-540 Ma) is the permissive condition for",
+           "  large animals: an organism metres across with no",
+           "  circulation needs an oxygenated water column.",
+           "",
+           "The Permo-Carboniferous peak is the coal forests'",
+           "  buried carbon. ~30%, not 35%."]
+    yy = y0 + 20
+    for ln in txt:
+        body.append(f'<text class="t small" x="{bx+14}" y="{yy}">{esc(ln)}</text>')
+        yy += 13.4
+    return _svg(y1 + 56, "\n".join(body), "Oxygen through Earth history",
+                "Schematic; see research/05-atmosphere-ocean-chemistry for the evidence")
+
+
+# ---------------------------------------------------------------------------
+# 9. Atoll and guyot subsidence
+# ---------------------------------------------------------------------------
+
+def chart_atoll():
+    body = []
+    stages = [("1. volcanic island", "fringing reef hugs the shore", -46),
+              ("2. subsiding", "barrier reef + lagoon", -14),
+              ("3. atoll", "ring of reef, no island left", 12),
+              ("4. guyot", "reef drowned; flat wave-cut top", 74)]
+    bw, y0, h = 250, 128, 190
+    sea = y0 + 52
+    for i, (title, sub, drop) in enumerate(stages):
+        bx = 44 + i * (bw + 20)
+        body.append(f'<rect x="{bx}" y="{y0}" width="{bw}" height="{h}" rx="6" '
+                    f'fill="#101820" stroke="#2a3644"/>')
+        body.append(f'<rect x="{bx+1}" y="{sea}" width="{bw-2}" height="{y0+h-sea-1}" '
+                    f'fill="#16344a" opacity="0.85"/>')
+        body.append(f'<line x1="{bx+1}" y1="{sea}" x2="{bx+bw-1}" y2="{sea}" '
+                    f'stroke="#5fa8c8" stroke-width="1.4"/>')
+        # the volcano, sinking by `drop`
+        cx = bx + bw / 2
+        base_y = y0 + h - 6
+        peak_y = sea + drop
+        hw = 96
+        body.append(f'<path d="M{cx-hw} {base_y} L{cx} {peak_y} L{cx+hw} {base_y} Z" '
+                    f'fill="#4a3f39"/>')
+        if i == 3:   # wave-planed flat top
+            body.append(f'<path d="M{cx-46} {peak_y+12} L{cx+46} {peak_y+12} '
+                        f'L{cx+hw} {base_y} L{cx-hw} {base_y} Z" fill="#4a3f39"/>')
+            body.append(f'<line x1="{cx-46}" y1="{peak_y+12}" x2="{cx+46}" y2="{peak_y+12}" '
+                        f'stroke="#7d6f63" stroke-width="2"/>')
+        # water veil ON TOP of the rock, so anything below the line reads submerged
+        body.append(f'<rect x="{bx+1}" y="{sea}" width="{bw-2}" height="{y0+h-sea-1}" '
+                    f'fill="#16344a" opacity="0.55"/>')
+        body.append(f'<line x1="{bx+1}" y1="{sea}" x2="{bx+bw-1}" y2="{sea}" '
+                    f'stroke="#5fa8c8" stroke-width="1.4"/>')
+        # reef: a bright cap that always reaches the surface while it can
+        if i < 3:
+            rw = 26 + i * 30
+            body.append(f'<rect x="{cx-rw-14}" y="{sea-7}" width="14" height="13" rx="2" '
+                        f'fill="#d8c48a"/>')
+            body.append(f'<rect x="{cx+rw}" y="{sea-7}" width="14" height="13" rx="2" '
+                        f'fill="#d8c48a"/>')
+        if i == 1 or i == 2:
+            body.append(f'<text class="t small" x="{cx}" y="{sea+16}" text-anchor="middle" '
+                        f'fill="#7fbfd8">lagoon</text>')
+        if i == 3:
+            body.append(f'<text class="t small" x="{cx}" y="{peak_y+2}" text-anchor="middle" '
+                        f'fill="#9fb2c6">drowned</text>')
+        body.append(f'<text class="t small" x="{bx+bw/2}" y="{y0+h+18}" '
+                    f'text-anchor="middle" fill="#c9a227">{esc(title)}</text>')
+        body.append(f'<text class="t small" x="{bx+bw/2}" y="{y0+h+32}" '
+                    f'text-anchor="middle">{esc(sub)}</text>')
+        if i < 3:
+            ax = bx + bw + 3
+            body.append(f'<path d="M{ax} {y0+h/2} l13 0 m-5 -5 l5 5 l-5 5" '
+                        f'stroke="#5b6b7d" fill="none" stroke-width="1.4"/>')
+    foot = [
+        "The island does not sink because it is heavy. It sinks because the sea floor "
+        "it stands on is cooling: oceanic",
+        "lithosphere contracts and subsides as it ages, by roughly 350 m for every "
+        "square root of a million years.",
+        "So every volcanic island rides slowly downward, and whether it becomes an atoll "
+        "or a guyot is decided by",
+        "whether coral can grow upward fast enough - which depends on the water being "
+        "warm enough. Darwin worked",
+        "the whole sequence out in 1842 from the shapes alone, before anyone knew the "
+        "sea floor moved at all.",
+        "",
+        "FOR THE MODEL: this is the same physics as the seamount population in "
+        "seafloor.py. Seeding seamounts along",
+        "plume tracks and letting them subside with crustal age predicts flat-topped "
+        "guyots at depth on old chains and",
+        "sharp cones and islands on young ones - for free, from a mechanism rather "
+        "than from a texture.",
+    ]
+    yy = y0 + h + 62
+    for ln in foot:
+        body.append(f'<text class="t small" x="44" y="{yy}">{esc(ln)}</text>')
+        yy += 14
+    return _svg(yy + 10, "\n".join(body), "Atolls and guyots: an island's whole life",
+                "Darwin's subsidence sequence, and why our seamounts should have flat tops")
+
+
+# ---------------------------------------------------------------------------
+# 10. Back-arc basin by slab roll-back
+# ---------------------------------------------------------------------------
+
+def chart_backarc():
+    body = []
+    bw, bh, y0 = 340, 210, 122
+    for i, (title, note, rb) in enumerate([
+            ("1. steep subduction", "arc built on the overriding plate", 0),
+            ("2. slab rolls back", "trench migrates oceanward; plate stretches", 1),
+            ("3. back-arc basin", "the overriding plate rifts and spreads", 2)]):
+        bx = 44 + i * (bw + 22)
+        body.append(f'<rect x="{bx}" y="{y0}" width="{bw}" height="{bh}" rx="6" '
+                    f'fill="#101820" stroke="#2a3644"/>')
+        sea = y0 + 40
+        body.append(f'<rect x="{bx+1}" y="{y0+1}" width="{bw-2}" height="{sea-y0}" '
+                    f'fill="#16344a" opacity="0.7"/>')
+        body.append(f'<rect x="{bx+1}" y="{sea}" width="{bw-2}" height="{bh-(sea-y0)-1}" '
+                    f'fill="#7a5a3c" opacity="0.35"/>')
+        tr = bx + 120 - rb * 42                       # trench migrates oceanward (left)
+        # subducting slab, steepening as it rolls back
+        dip = 0.62 + rb * 0.30
+        pts = " ".join(f"{tr + t*180:.0f},{sea + t*180*dip:.0f}" for t in (0, .35, .7, 1))
+        body.append(f'<polyline points="{pts}" stroke="#c96f4a" stroke-width="13" '
+                    f'fill="none" stroke-linecap="round" opacity="0.9"/>')
+        body.append(f'<rect x="{bx+2}" y="{sea-9}" width="{tr-bx-2}" height="9" '
+                    f'fill="#c96f4a" opacity="0.9"/>')
+        # overriding plate, thinning and then rifting
+        ov0 = tr + 46
+        if rb < 2:
+            body.append(f'<rect x="{ov0}" y="{sea-11}" width="{bx+bw-ov0-4}" height="11" '
+                        f'fill="#9a8a6a"/>')
+        else:
+            gap = 66
+            mid = ov0 + (bx + bw - ov0) * 0.42
+            body.append(f'<rect x="{ov0}" y="{sea-11}" width="{mid-ov0:.0f}" height="11" '
+                        f'fill="#9a8a6a"/>')
+            body.append(f'<rect x="{mid+gap:.0f}" y="{sea-11}" '
+                        f'width="{bx+bw-(mid+gap)-4:.0f}" height="11" fill="#9a8a6a"/>')
+            body.append(f'<rect x="{mid:.0f}" y="{sea-5}" width="{gap}" height="5" '
+                        f'fill="#c9a227"/>')
+            body.append(f'<text class="t small" x="{mid+gap/2:.0f}" y="{sea-14}" '
+                        f'text-anchor="middle" fill="#c9a227">new ridge</text>')
+        # arc volcano
+        vx = tr + 92
+        body.append(f'<path d="M{vx-20} {sea-11} L{vx} {sea-40} L{vx+20} {sea-11} Z" '
+                    f'fill="#8a6a4a"/>')
+        body.append(f'<text class="t small" x="{vx}" y="{sea-46}" text-anchor="middle" '
+                    f'fill="#c0a080">arc</text>')
+        body.append(f'<text class="t small" x="{tr}" y="{sea+16}" text-anchor="middle" '
+                    f'fill="#d89070">trench</text>')
+        if rb:
+            body.append(f'<path d="M{tr+30} {sea+30} l-26 0 m6 -5 l-6 5 l6 5" '
+                        f'stroke="#e07650" fill="none" stroke-width="1.6"/>')
+        body.append(f'<text class="t small" x="{bx+bw/2}" y="{y0+bh+18}" '
+                    f'text-anchor="middle" fill="#c9a227">{esc(title)}</text>')
+        body.append(f'<text class="t small" x="{bx+bw/2}" y="{y0+bh+32}" '
+                    f'text-anchor="middle">{esc(note)}</text>')
+    foot = [
+        "Behind a subduction zone, the sea floor can pull APART. An old dense slab does "
+        "not just sink - it also rolls",
+        "backward, dragging the trench oceanward and stretching the plate behind it "
+        "until that plate rifts and opens a new",
+        "spreading centre: a small ocean basin forming INSIDE a convergent margin.",
+        "",
+        "Sea of Japan  ·  Mariana Trough  ·  Lau Basin  ·  Andaman Sea  ·  Tyrrhenian "
+        "Sea  ·  Scotia Sea  ·  Bransfield Strait",
+        "",
+        "FOR THE MODEL: README §10 lists marginal basins as absent or generic. This is "
+        "the mechanism that generates them,",
+        "and it explains why the western Pacific is a scatter of small seas and island "
+        "arcs rather than one clean margin.",
+    ]
+    yy = y0 + bh + 62
+    for ln in foot:
+        body.append(f'<text class="t small" x="44" y="{yy}">{esc(ln)}</text>')
+        yy += 14
+    return _svg(yy + 10, "\n".join(body), "How a back-arc basin opens",
+                "Slab roll-back, after the Britannica sequence in Deep Time Maps and Resources")
+
+
+# ---------------------------------------------------------------------------
+# 11. Glossopteris across Gondwana
+# ---------------------------------------------------------------------------
+
+def chart_glossopteris():
+    body = []
+    cx, cy, r = 330, 300, 165
+    body.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#16344a" stroke="#33414f"/>')
+    # Gondwana as five fragments arranged round a pole, in their Permian relationship
+    frags = [("South America", -62, 40, 46, 30, -18),
+             ("Africa", 4, -14, 52, 40, 8),
+             ("India", 74, -8, 30, 26, 0),
+             ("Australia", 92, 62, 42, 30, 14),
+             ("Antarctica", 8, 96, 60, 34, 0)]
+    for name, dx, dy, rx, ry, rot in frags:
+        px, py = cx + dx, cy + dy
+        body.append(f'<ellipse cx="{px}" cy="{py}" rx="{rx}" ry="{ry}" fill="#8a7a52" '
+                    f'transform="rotate({rot} {px} {py})" opacity="0.92"/>')
+        body.append(f'<text class="t small" x="{px}" y="{py+3}" text-anchor="middle" '
+                    f'fill="#15202b">{esc(name)}</text>')
+        # the leaf marker
+        body.append(f'<path d="M{px-6} {py+ry*0.55+11} q6 -12 12 0 q-6 8 -12 0 Z" '
+                    f'fill="#7fc46a"/>')
+    body.append(f'<circle cx="{cx+8}" cy="{cy+96}" r="4" fill="#e8f0f6"/>')
+    body.append(f'<text class="t small" x="{cx+8}" y="{cy+114}" text-anchor="middle" '
+                f'fill="#cfe0ec">South Pole</text>')
+    body.append(f'<text class="t small" x="{cx}" y="{cy-r-12}" text-anchor="middle">'
+                'Gondwana, Permian — the leaf marks each fragment where Glossopteris is found'
+                '</text>')
+
+    bx = 560
+    body.append(f'<rect class="panel" x="{bx}" y="120" width="{W-bx-34}" height="360" rx="6"/>')
+    txt = [
+        ("#c9a227", "THE ORGANISM"),
+        ("", "A seed fern, not a fern - Glossopteridales, and it took"),
+        ("", "a century after its discovery to work that out."),
+        ("", "Woody trees to ~30 m, trunk to 80 cm, softwood like"),
+        ("", "an araucarian. Tongue-shaped leaves 2-30 cm with a"),
+        ("", "distinctive NET of veins. Grew in waterlogged ground"),
+        ("", "like a modern bald cypress, and built Gondwanan coal."),
+        ("", ""),
+        ("#c9a227", "THE POLAR FOREST"),
+        ("", "Antarctic wood shows broad growth rings that stop"),
+        ("", "ABRUPTLY - the shutdown can take as little as a month."),
+        ("", "Inferred conical, widely spaced crowns to catch"),
+        ("", "low-angle light. Months of continuous sun, then months"),
+        ("", "of continuous dark. No modern biome works like this."),
+        ("", ""),
+        ("#c9a227", "THE ARGUMENT"),
+        ("", "The same leaves occur on five continents that are now"),
+        ("", "separated by oceans, and the seeds were far too large"),
+        ("", "to have floated. EDUARD SUESS used exactly this in"),
+        ("", "1885 to argue for one southern landmass - and named"),
+        ("", "it GONDWANA, the name this map still uses. Wegener"),
+        ("", "later took the same evidence into continental drift."),
+        ("", ""),
+        ("#c9a227", "THE END"),
+        ("", "Gone before 252.3 Ma - about 350,000 years BEFORE the"),
+        ("", "marine extinction. The land died first. Dicroidium"),
+        ("", "takes its place through the Triassic."),
+    ]
+    yy = 142
+    for col, ln in txt:
+        if ln:
+            f = f' fill="{col}" font-weight="600"' if col else ""
+            body.append(f'<text class="t small" x="{bx+16}" y="{yy}"{f}>{esc(ln)}</text>')
+        yy += 13.2
+    return _svg(510, "\n".join(body),
+                "Glossopteris: the leaf that named a supercontinent",
+                "Distribution schematic - fragment shapes are indicative, not a reconstruction")
+
+
+# -------------------------------------------------------------------------
+
 def main():
     figs = [
         ("01-deep-time-master-chart.svg", chart_deep_time),
@@ -581,6 +994,11 @@ def main():
         ("04-lip-to-extinction-cascade.svg", chart_lip_cascade),
         ("05-continental-affiliation.svg", chart_block_affiliation),
         ("06-snowball-bifurcation.svg", chart_snowball),
+        ("07-cenozoic-climate-events.svg", chart_cenozoic_events),
+        ("08-oxygen-through-time.svg", chart_oxygen),
+        ("09-atoll-guyot-subsidence.svg", chart_atoll),
+        ("10-back-arc-rollback.svg", chart_backarc),
+        ("11-glossopteris-gondwana.svg", chart_glossopteris),
     ]
     for name, fn in figs:
         svg = fn()

@@ -31,6 +31,7 @@ __all__ = [
     "eon_at", "era_at", "period_at", "epoch_at", "stage_at", "interval_at",
     "CLIMATE_STATES", "climate_state",
     "GLACIATIONS", "EXTINCTIONS", "ANOXIC_EVENTS", "LIPS", "HYPERTHERMALS",
+    "DRAWDOWNS",
     "events_at", "events_in",
 ]
 
@@ -316,7 +317,10 @@ PHANDA = {
 # ---------------------------------------------------------------------------
 
 GLACIATIONS = [
-    Event("Huronian", "glaciation", 2450, 2220, "global?",
+    Event("Pongola", "glaciation", 2985, 2837, "regional?",
+          "Mesoarchean. The oldest glaciation with a credible sedimentary record; extent "
+          "unknown and possibly local.", "moderate"),
+    Event("Huronian", "glaciation", 2400, 2100, "global?",
           "Follows the Great Oxidation Event; methane greenhouse destroyed.",
           "moderate", ("Great Oxidation Event",)),
     Event("Sturtian", "glaciation", 717.4, 661.7, "snowball",
@@ -325,18 +329,36 @@ GLACIATIONS = [
     Event("Marinoan", "glaciation", 650.0, 635.5, "snowball",
           "Second Cryogenian snowball; terminated at ~12% CO2 by volume; cap carbonates.",
           "good"),
-    Event("Gaskiers", "glaciation", 580.9, 579.6, "regional",
-          "<=340 kyr and regional. NOT a snowball.", "good"),
+    Event("Gaskiers", "glaciation", 579.88, 579.63, "regional",
+          "~250 kyr and regional. NOT a snowball. The tightest-dated glaciation in the "
+          "Precambrian record.", "good"),
+    Event("Baykonurian", "glaciation", 547.0, 540.0, "regional",
+          "TERMINAL EDIACARAN, and absent from most compilations. Diamictites in "
+          "Kazakhstan, Iran, Baltica and elsewhere. Sits immediately before the Cambrian "
+          "boundary, so it overlaps the Ediacaran biotic turnover.", "moderate"),
     Event("Hirnantian", "glaciation", 445.2, 443.1, "major",
           "South Pole over North Africa. Drove the End-Ordovician extinction.", "good"),
-    Event("Late Devonian glaciation", "glaciation", 372.0, 358.9, "moderate",
-          "Diamictites and striated pavements in Bolivia, Peru, Brazil. Two pulses.",
-          "moderate"),
-    Event("Late Palaeozoic Ice Age", "glaciation", 360.0, 255.0, "major",
-          "The longest Phanerozoic icehouse. Gondwanan ice sheets drive the coal-measure cyclothems.",
-          "good"),
-    Event("Early Cretaceous cool snap", "glaciation", 137.0, 125.0, "minor",
-          "Contested: whether there was any ice at all is genuinely open.", "contested"),
+    Event("Late Devonian glaciation", "glaciation", 365.0, 355.0, "moderate",
+          "A LATE FAMENNIAN pulse: diamictites and striated pavements across Bolivia, Peru "
+          "and Brazil. Narrowed from an earlier 372-358.9 here, which had wrongly swept in "
+          "the Frasnian-Famennian (Kellwasser) cooling - that is an anoxic/extinction "
+          "event, not the glaciation. Ice volume is much less constrained than for the "
+          "Hirnantian or the LPIA.", "moderate"),
+    Event("Late Palaeozoic Ice Age", "glaciation", 340.0, 258.0, "major",
+          "The longest Phanerozoic icehouse, ~80 Myr, and the only one whose ice volume "
+          "matched or exceeded the last glacial maximum. Gondwanan ice sheets drive the "
+          "coal-measure cyclothems on Milankovitch rhythms. NOTE THE CONVENTION: many "
+          "compilations give 360-255 Ma, which absorbs the late Famennian pulse. Kept "
+          "separate here (340 onset) so the two are not double-counted and the earliest "
+          "Carboniferous warm interval between them survives. Whether the LPIA was one "
+          "continuous ice age or discrete glacial episodes separated by ice-free intervals "
+          "is open; the evidence increasingly favours the second.", "good"),
+    Event("Early Cretaceous cool snap", "glaciation", 150.0, 125.0, "minor",
+          "Glendonites (which form only near freezing) and scattered dropstones in "
+          "Australia and the Arctic point to high-latitude ice, but no continental ice "
+          "sheet is accepted for the Cretaceous. EVERYTHING about it is contested, "
+          "including whether it happened; the 150 Ma onset is one reading of the "
+          "glendonite range and 137 Ma is another.", "contested"),
     Event("Late Cenozoic Ice Age", "glaciation", 34.0, 0.0, "major",
           "Antarctic glaciation from ~34 Ma at ~760 ppm CO2; N Hemisphere sheets from ~2.7 Ma.",
           "good"),
@@ -426,11 +448,37 @@ LIPS = [
     Event("Columbia River Basalt", "lip", 16.7, 15.9, "", "Yellowstone plume.", "good"),
 ]
 
+DRAWDOWNS = [
+    # Carbon-cycle events that COOL - the mirror image of the hyperthermals, and
+    # systematically under-represented because a slow cooling leaves a quieter record.
+    Event("Great Oxidation Event", "drawdown", 2460, 2060, "O2 0.001% -> ~10% PAL",
+          "Oxidising methane, the Archaean greenhouse gas, collapsed the greenhouse and "
+          "triggered the Huronian glaciation. Also: >2,500 of Earth's ~4,500 mineral "
+          "species owe their existence to it.", "good", ("Huronian",)),
+    Event("Devonian land-plant weathering", "drawdown", 400, 350, "CO2 ~2000 -> ~300 ppm",
+          "Deep-rooted vascular plants accelerate silicate weathering and bury organic "
+          "carbon on a continental scale. The slow cause of the Late Palaeozoic Ice Age.",
+          "good", ("Late Palaeozoic Ice Age",)),
+    Event("Azolla event", "drawdown", 49.3, 48.5, "CO2 3500 -> 650 ppm",
+          "~800 kyr of freshwater fern blooms on a near-isolated, strongly stratified "
+          "Arctic Ocean. Azolla fixes ~1 t nitrogen and removes ~6 t carbon per acre per "
+          "year and can double its biomass in 2-3 days; over a 4 million km2 basin that is "
+          "enough on its own to account for an ~80% CO2 drop. Arctic SST falls from ~13 C "
+          "toward modern values and bipolar ice becomes possible for the first time in "
+          ">500 Myr. Evidence: an >=8 m unit of alternating marine silica and mm-scale "
+          "Azolla laminae in the ACEX Arctic cores, with a gamma spike for correlation.",
+          "moderate"),
+    Event("Himalayan uplift weathering", "drawdown", 50, 0, "",
+          "Fresh silicate exposed by the India-Asia collision, plus declining degassing. "
+          "The long Cenozoic slide into the current icehouse.", "moderate"),
+]
+
 _CATALOGUES = {
     "glaciation": GLACIATIONS,
     "extinction": EXTINCTIONS,
     "anoxia": ANOXIC_EVENTS,
     "hyperthermal": HYPERTHERMALS,
+    "drawdown": DRAWDOWNS,
     "lip": LIPS,
 }
 

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 510" width="1180" height="510">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="510"/>
+<text class="t title" x="28" y="34">Glossopteris: the leaf that named a supercontinent</text>
+<text class="t sub" x="28" y="53">Distribution schematic - fragment shapes are indicative, not a reconstruction</text>
+<circle cx="330" cy="300" r="165" fill="#16344a" stroke="#33414f"/>
+<ellipse cx="268" cy="340" rx="46" ry="30" fill="#8a7a52" transform="rotate(-18 268 340)" opacity="0.92"/>
+<text class="t small" x="268" y="343" text-anchor="middle" fill="#15202b">South America</text>
+<path d="M262 367.5 q6 -12 12 0 q-6 8 -12 0 Z" fill="#7fc46a"/>
+<ellipse cx="334" cy="286" rx="52" ry="40" fill="#8a7a52" transform="rotate(8 334 286)" opacity="0.92"/>
+<text class="t small" x="334" y="289" text-anchor="middle" fill="#15202b">Africa</text>
+<path d="M328 319.0 q6 -12 12 0 q-6 8 -12 0 Z" fill="#7fc46a"/>
+<ellipse cx="404" cy="292" rx="30" ry="26" fill="#8a7a52" transform="rotate(0 404 292)" opacity="0.92"/>
+<text class="t small" x="404" y="295" text-anchor="middle" fill="#15202b">India</text>
+<path d="M398 317.3 q6 -12 12 0 q-6 8 -12 0 Z" fill="#7fc46a"/>
+<ellipse cx="422" cy="362" rx="42" ry="30" fill="#8a7a52" transform="rotate(14 422 362)" opacity="0.92"/>
+<text class="t small" x="422" y="365" text-anchor="middle" fill="#15202b">Australia</text>
+<path d="M416 389.5 q6 -12 12 0 q-6 8 -12 0 Z" fill="#7fc46a"/>
+<ellipse cx="338" cy="396" rx="60" ry="34" fill="#8a7a52" transform="rotate(0 338 396)" opacity="0.92"/>
+<text class="t small" x="338" y="399" text-anchor="middle" fill="#15202b">Antarctica</text>
+<path d="M332 425.7 q6 -12 12 0 q-6 8 -12 0 Z" fill="#7fc46a"/>
+<circle cx="338" cy="396" r="4" fill="#e8f0f6"/>
+<text class="t small" x="338" y="414" text-anchor="middle" fill="#cfe0ec">South Pole</text>
+<text class="t small" x="330" y="123" text-anchor="middle">Gondwana, Permian — the leaf marks each fragment where Glossopteris is found</text>
+<rect class="panel" x="560" y="120" width="586" height="360" rx="6"/>
+<text class="t small" x="576" y="142" fill="#c9a227" font-weight="600">THE ORGANISM</text>
+<text class="t small" x="576" y="155.2">A seed fern, not a fern - Glossopteridales, and it took</text>
+<text class="t small" x="576" y="168.39999999999998">a century after its discovery to work that out.</text>
+<text class="t small" x="576" y="181.59999999999997">Woody trees to ~30 m, trunk to 80 cm, softwood like</text>
+<text class="t small" x="576" y="194.79999999999995">an araucarian. Tongue-shaped leaves 2-30 cm with a</text>
+<text class="t small" x="576" y="207.99999999999994">distinctive NET of veins. Grew in waterlogged ground</text>
+<text class="t small" x="576" y="221.19999999999993">like a modern bald cypress, and built Gondwanan coal.</text>
+<text class="t small" x="576" y="247.5999999999999" fill="#c9a227" font-weight="600">THE POLAR FOREST</text>
+<text class="t small" x="576" y="260.7999999999999">Antarctic wood shows broad growth rings that stop</text>
+<text class="t small" x="576" y="273.9999999999999">ABRUPTLY - the shutdown can take as little as a month.</text>
+<text class="t small" x="576" y="287.1999999999999">Inferred conical, widely spaced crowns to catch</text>
+<text class="t small" x="576" y="300.39999999999986">low-angle light. Months of continuous sun, then months</text>
+<text class="t small" x="576" y="313.59999999999985">of continuous dark. No modern biome works like this.</text>
+<text class="t small" x="576" y="339.99999999999983" fill="#c9a227" font-weight="600">THE ARGUMENT</text>
+<text class="t small" x="576" y="353.1999999999998">The same leaves occur on five continents that are now</text>
+<text class="t small" x="576" y="366.3999999999998">separated by oceans, and the seeds were far too large</text>
+<text class="t small" x="576" y="379.5999999999998">to have floated. EDUARD SUESS used exactly this in</text>
+<text class="t small" x="576" y="392.7999999999998">1885 to argue for one southern landmass - and named</text>
+<text class="t small" x="576" y="405.9999999999998">it GONDWANA, the name this map still uses. Wegener</text>
+<text class="t small" x="576" y="419.19999999999976">later took the same evidence into continental drift.</text>
+<text class="t small" x="576" y="445.59999999999974" fill="#c9a227" font-weight="600">THE END</text>
+<text class="t small" x="576" y="458.7999999999997">Gone before 252.3 Ma - about 350,000 years BEFORE the</text>
+<text class="t small" x="576" y="471.9999999999997">marine extinction. The land died first. Dicroidium</text>
+<text class="t small" x="576" y="485.1999999999997">takes its place through the Triassic.</text>
+</svg>

@@ -40,46 +40,22 @@ BAD_TOKENS = ("share alike", "sharealike", "-sa", "noncommercial", "non-commerci
 
 # (slug, search query, why we want it)
 WANTED = [
-    ("supercontinent-cycle", "Supercontinent cycle diagram",
-     "the gather-disperse loop and its sea-level/climate consequences"),
-    ("wilson-cycle", "Wilson Cycle diagram",
-     "ocean basin opening and closing - the mechanism behind our rift and trench labels"),
-    ("seafloor-age", "Age of oceanic lithosphere map",
-     "the crustal age pattern our seafloor.py synthesises"),
-    ("plate-boundaries", "Tectonic plates boundaries map",
-     "surveyed present-day boundaries - the anchor for the advected label raster"),
-    ("subduction-zone", "Subduction zone cross section diagram",
-     "arc, back-arc and trench anatomy for the feature_art cross-sections"),
-    ("mid-ocean-ridge", "Mid ocean ridge spreading diagram",
-     "axial valley, transform, fracture zone geometry"),
-    ("continental-margin", "Passive continental margin diagram",
-     "shelf-slope-rise anatomy; the canyon comb"),
-    ("phanerozoic-co2", "Phanerozoic Carbon Dioxide graph",
-     "the CO2 curve to check climate.py against"),
-    ("phanerozoic-temperature", "Phanerozoic climate change graph",
-     "temperature record; superseded by PhanDA but useful for shape"),
-    ("oxygen-history", "Oxygenation atmosphere graph",
-     "the GOE, the boring billion and the NOE"),
-    ("sea-level-phanerozoic", "Phanerozoic sea level graph",
-     "first-order eustatic curve"),
-    ("extinction-intensity", "Extinction intensity graph Phanerozoic",
-     "the Big Five in their stratigraphic context"),
-    ("glossopteris-distribution", "Gondwana fossil distribution map Glossopteris",
-     "Suess's original continental-drift evidence, and a province map"),
-    ("pangaea-map", "Pangaea map 250 Ma",
-     "reference reconstruction to audit our own frames against"),
-    ("rodinia-map", "Rodinia reconstruction map",
+    ("glossopteris-distribution", "Snider-Pellegrini Wegener fossil map",
+     "the Suess/Wegener five-continent fossil distribution - THE Gondwana argument"),
+    ("rodinia-map", "Rodinia 750 million years reconstruction",
      "the disputed configuration, for the Precambrian frames"),
-    ("hotspot-tracks", "Hotspot volcano track map Pacific",
+    ("hotspot-tracks", "Hawaiian Emperor seamount chain map",
      "plume trails - the fix for our scattered seamounts"),
-    ("thermohaline-circulation", "Thermohaline circulation conveyor belt diagram",
-     "the global conveyor for the ocean-current model"),
-    ("whittaker-biomes", "Whittaker biome classification diagram",
-     "the temperature-precipitation cells behind biome_model.py"),
-    ("carbon-cycle", "Long term carbon cycle diagram silicate weathering",
-     "the feedback that sets CO2 over 10^6 yr"),
-    ("geologic-time-scale", "Geologic time scale chart ICS",
-     "the chronostratigraphic reference"),
+    ("crustal-age", "age of oceanic lithosphere map NOAA",
+     "the crustal age pattern seafloor.py synthesises"),
+    ("phanerozoic-co2", "Phanerozoic atmospheric carbon dioxide",
+     "the CO2 curve to check climate.py against"),
+    ("mid-ocean-ridge", "mid-ocean ridge cross section diagram",
+     "axial valley, transform, fracture zone geometry"),
+    ("supercontinent-cycle", "Wilson cycle diagram tectonics",
+     "the gather-disperse loop and its sea-level/climate consequences"),
+    ("pangaea-breakup", "Pangaea breakup stages continental drift map",
+     "the dispersal sequence our 200-0 Ma frames draw"),
 ]
 
 
@@ -179,11 +155,25 @@ def main():
             time.sleep(2.0)
             continue
         h = good[0]
+        # NOTE: iiurlwidth makes Commons return a RASTERISED thumbnail, so the
+        # source mime is the wrong thing to name the file by - an SVG source
+        # arrives as PNG bytes. Sniff the magic number instead.
         ext = {"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg",
                "image/gif": ".gif"}.get(h["mime"], ".png")
         path = os.path.join(OUT, slug + ext)
         try:
             size = download(h["url"], path)
+            with open(path, "rb") as fh:
+                magic = fh.read(8)
+            real = (".png" if magic.startswith(b"\x89PNG") else
+                    ".jpg" if magic.startswith(b"\xff\xd8") else
+                    ".gif" if magic.startswith(b"GIF8") else
+                    ".svg" if magic.lstrip().startswith((b"<svg", b"<?xm")) else ext)
+            if real != ext:
+                new = os.path.join(OUT, slug + real)
+                os.rename(path, new)
+                path, ext = new, real
+                print(f"    (mime said {h['mime']}, bytes say {real})")
         except Exception as exc:                      # noqa: BLE001
             print("    ! download failed:", exc)
             manifest.append(dict(slug=slug, query=query, why=why,
