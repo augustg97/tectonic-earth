@@ -853,7 +853,7 @@ function oldLakeTex(){
    build_site.py runs, so a deploy always changes the URL.
    Deliberately NOT applied to fields/ — those are 750 textures that rarely
    change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260725-2229';
+const DATA_V='20260726-0057';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -1793,10 +1793,16 @@ void main(){
        it -- not the decoded distance -- is what every periodic term below is
        keyed to; that way the fault spacing widens with age exactly as the
        resolvable fabric does. */
-    float CO_D0=2.5, CO_K=3.4340;
+    /* CO_K must match seafloor.CO_K exactly -- it is the constant that decodes
+       the shipped coordinate, and a mismatch silently rescales the whole sea
+       floor. It changed when the coordinate became AGE rather than distance:
+       ocean crust does not survive past ~190 Myr, which at 30 km/Myr is 51.3
+       degrees of spreading, so full scale dropped from 75 to 52 and the step at
+       the axis with it, to 0.030 deg -- 3.4 km, which is abyssal-hill spacing. */
+    float CO_D0=2.5, CO_K=3.0819;
     float crustCo = mix(texture2D(oceanA,uv).r, texture2D(oceanB,uv).r, mixf);
     float distDeg = CO_D0*(exp(crustCo*CO_K)-1.0);    // true degrees from the axis
-    float crustAge = clamp(distDeg/75.0, 0.0, 1.0);   // as before: 0 at the axis, 1 far out
+    float crustAge = clamp(distDeg/52.0, 0.0, 1.0);   // 0 at the axis, 1 on the oldest surviving crust
     vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
     float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
@@ -1838,7 +1844,7 @@ void main(){
          cell is 20 km, so this detail can only exist per-pixel. */
       /* crustAge is really NORMALISED DISTANCE FROM THE RIDGE (0 at the axis,
          1 at 75 degrees out) -- see seafloor.py. One radian across the ridge
-         therefore advances it by 57.2958/75 = 0.7639, which is the constant the
+         therefore advances it by 57.2958/52 = 1.1018, which is the constant the
          two domain stretches below are built on. */
       /* The marine-geophysics description of this surface is a VON KARMAN /
          band-limited FRACTAL: mean squared elevation rising with scale, a
@@ -1853,7 +1859,7 @@ void main(){
          gives 275 across against 46 along, i.e. 6:1 -- in the observed range.
          Because the field itself is elongated, its along-axis gradient is
          already ~1/6 of the across one and must NOT be scaled again. */
-      float ACR=0.7639;
+      float ACR=1.1018;
       /* Keyed to the COMPANDED coordinate, not the decoded distance. The two
          differ in exactly the way that matters: one 8-bit level advances the
          companded coordinate by 1/255 everywhere, so the domain advances by a
