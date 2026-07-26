@@ -30,7 +30,7 @@ from typing import Optional
 
 __all__ = [
     "Block", "BLOCKS", "ASSEMBLIES", "OROGENIES",
-    "exists", "affiliation", "anchors", "blocks_in", "history",
+    "exists", "affiliation", "anchors", "blocks_in", "history", "recognisable_until",
     "rift_events", "accretion_events",
 ]
 
@@ -200,6 +200,8 @@ BLOCKS = {b.name: b for b in _B}
 ASSEMBLIES = {
     "Rodinia": dict(
         base=1250, top=750, confidence="moderate",
+        breakup_onset=825, dispersed=550,
+        breakup_note="Breakup runs in four stages from ~825 Ma; the last Laurentia-Amazonia link goes at ~550.",
         note="Configuration actively disputed. Laurentia at the centre; the block off its "
              "present-western margin is the argument (SWEAT/AUSWUS/AUSMEX/Missing-Link).",
         members=["Laurentia", "Baltica", "Amazonia", "West African Craton", "Sao Francisco",
@@ -209,6 +211,8 @@ ASSEMBLIES = {
     ),
     "Pannotia": dict(
         base=633, top=573, confidence="contested",
+        breakup_onset=573, dispersed=530,
+        breakup_note="If it existed at all, it was coming apart as it formed.",
         note="May never have been a single coherent mass: Gondwana's assembly overlapped "
              "Laurentia's departure from Amazonia. Several authors reject it outright.",
         members=["Laurentia", "Baltica", "Amazonia", "West African Craton", "Congo Craton",
@@ -217,6 +221,8 @@ ASSEMBLIES = {
     ),
     "Gondwana": dict(
         base=550, top=180, confidence="good",
+        breakup_onset=180, dispersed=30,
+        breakup_note="Fragmentation runs 180 Ma (Weddell) to the Drake Passage at ~30 Ma; South America and Africa are still joined at ~120.",
         note="~100 million km2, one fifth of Earth's surface. Assembled by the Pan-African "
              "orogenies; joins Laurussia at ~335 Ma to complete Pangaea but remains a "
              "recognisable half of it until the Jurassic.",
@@ -229,6 +235,8 @@ ASSEMBLIES = {
     ),
     "Laurussia": dict(
         base=425, top=175, confidence="good",
+        breakup_onset=175, dispersed=60,
+        breakup_note="Survives inside Pangaea and outlives it; the North Atlantic finishes the job at ~60 Ma.",
         note="Also Euramerica or the Old Red Sandstone Continent. Laurentia + Baltica + "
              "Avalonia after the Caledonian orogeny.",
         members=["Laurentia", "Baltica", "Avalonia", "Timan-Pechora"],
@@ -236,6 +244,8 @@ ASSEMBLIES = {
     ),
     "Laurasia": dict(
         base=300, top=60, confidence="good",
+        breakup_onset=60, dispersed=30,
+        breakup_note="North Atlantic opening completes the separation.",
         note="Laurussia + Siberia + Kazakhstania after the Uralian orogeny; the northern "
              "half of Pangaea, and it outlives Pangaea's southern breakup.",
         members=["Laurentia", "Baltica", "Avalonia", "Siberia", "Kazakhstania",
@@ -244,6 +254,8 @@ ASSEMBLIES = {
     ),
     "Pangaea": dict(
         base=335, top=175, confidence="good",
+        breakup_onset=175, dispersed=100,
+        breakup_note="Rifting from ~175; the mass is not recognisable as one continent much past the mid-Cretaceous.",
         note="C-shaped around the Tethys embayment, with Panthalassa everywhere else. "
              "Central Pangaean Mountains peak ~295 Ma at Himalayan scale.",
         members=["Laurentia", "Baltica", "Avalonia", "Siberia", "Kazakhstania", "Armorica",
@@ -376,6 +388,19 @@ def anchors(block: str) -> tuple:
     """Present-day (lon, lat) anchor points for the block. These are what a
     rotation model should back-advect; they are chosen to be on land today."""
     return BLOCKS[block].anchors
+
+
+def recognisable_until(assembly: str) -> float:
+    """The age by which the mass is no longer recognisable as itself.
+
+    ASSEMBLIES["top"] is when BREAKUP BEGINS, which is not the same thing: Pangaea
+    starts rifting at ~175 Ma and is still a recognisable single continent for
+    another 75 Myr, and South America and Africa are still joined at ~120 Ma long
+    after "Gondwana breaks up at 180". A label naming the mass may legitimately
+    draw until this later date, so an audit that uses `top` reports false errors.
+    """
+    a = ASSEMBLIES[assembly]
+    return a.get("dispersed", a["top"])
 
 
 def blocks_in(assembly: str, age: Optional[float] = None) -> list:

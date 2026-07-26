@@ -198,5 +198,6 @@
   }
  ],
  "reviewed": "2026-07-26, two rounds, visual contact sheet each time",
- "review_summary": "Two fetch rounds, 12 files kept after review. Round 1: 8 fetched, 1 dropped as an entirely wrong subject (a 1913 chromosome diagram matched on the word 'cycle'), 3 renamed. Round 2: 4 fetched, 1 renamed (a continental-lithosphere section returned for a mid-ocean-ridge query), 1 flagged for being labelled in Hebrew, 1 flagged for being labelled in German. FOUR slots remain empty purely because Commons rate-limited the runs (429) - that is NOT evidence the figure does not exist."
+ "review_summary": "Two fetch rounds, 12 files kept after review. Round 1: 8 fetched, 1 dropped as an entirely wrong subject (a 1913 chromosome diagram matched on the word 'cycle'), 3 renamed. Round 2: 4 fetched, 1 renamed (a continental-lithosphere section returned for a mid-ocean-ridge query), 1 flagged for being labelled in Hebrew, 1 flagged for being labelled in German. FOUR slots remain empty purely because Commons rate-limited the runs (429) - that is NOT evidence the figure does not exist.",
+ "round3_note": "Round 3 retried the six rate-limited slots: four returned 429 again, one had no acceptable licence, and the 'English' Glossopteris query returned the same figure in DUTCH - dropped, no improvement on the German one. F10/F11 remain open. BUG FOUND AND FIXED: the fetcher OVERWROTE this manifest with only its own run, destroying two rounds of review verdicts. It now merges."
 }

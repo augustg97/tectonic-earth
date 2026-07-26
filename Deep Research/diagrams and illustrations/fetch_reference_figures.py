@@ -40,22 +40,18 @@ BAD_TOKENS = ("share alike", "sharealike", "-sa", "noncommercial", "non-commerci
 
 # (slug, search query, why we want it)
 WANTED = [
-    ("glossopteris-distribution", "Snider-Pellegrini Wegener fossil map",
-     "the Suess/Wegener five-continent fossil distribution - THE Gondwana argument"),
-    ("rodinia-map", "Rodinia 750 million years reconstruction",
-     "the disputed configuration, for the Precambrian frames"),
-    ("hotspot-tracks", "Hawaiian Emperor seamount chain map",
+    ("hotspot-tracks", "Hawaiian Emperor seamount chain bathymetry",
      "plume trails - the fix for our scattered seamounts"),
-    ("crustal-age", "age of oceanic lithosphere map NOAA",
-     "the crustal age pattern seafloor.py synthesises"),
-    ("phanerozoic-co2", "Phanerozoic atmospheric carbon dioxide",
+    ("phanerozoic-co2", "Phanerozoic carbon dioxide Berner GEOCARB",
      "the CO2 curve to check climate.py against"),
-    ("mid-ocean-ridge", "mid-ocean ridge cross section diagram",
-     "axial valley, transform, fracture zone geometry"),
-    ("supercontinent-cycle", "Wilson cycle diagram tectonics",
-     "the gather-disperse loop and its sea-level/climate consequences"),
-    ("pangaea-breakup", "Pangaea breakup stages continental drift map",
+    ("pangaea-breakup", "continental drift Pangaea Laurasia Gondwana map stages",
      "the dispersal sequence our 200-0 Ma frames draw"),
+    ("wilson-cycle", "Wilson cycle ocean basin opening closing diagram",
+     "the gather-disperse loop"),
+    ("glossopteris-english", "Gondwana fossil evidence continental drift map English",
+     "an ENGLISH replacement for the German Snider-Pellegrini map"),
+    ("guyot-seamount", "guyot seamount flat topped diagram bathymetry",
+     "the D4 subsidence prediction, from a real chart"),
 ]
 
 
@@ -137,6 +133,18 @@ def download(url, path):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+    # MERGE, never clobber. This manifest carries hand-entered review verdicts from
+    # every previous round; a run that overwrites it destroys work that cannot be
+    # regenerated. (It did exactly that once.)
+    mpath = os.path.join(OUT, "MANIFEST.json")
+    prior = {}
+    if os.path.exists(mpath):
+        try:
+            with open(mpath) as fh:
+                doc = json.load(fh)
+            prior = {i["slug"]: i for i in doc.get("items", [])}
+        except Exception:                                  # noqa: BLE001
+            prior = {}
     manifest = []
     for slug, query, why in WANTED:
         print(f"[{slug}] {query}")

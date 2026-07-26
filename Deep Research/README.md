@@ -47,12 +47,22 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 
 | module | what it is | current state |
 |---|---|---|
-| [`deeptime.py`](modeling/deeptime.py) | ICS v2024/12 chronology to stage level, plus catalogues of glaciations, extinctions, anoxic events, hyperthermals and LIPs, with confidence on every entry | 73 stages, 34 epochs, 22 periods, 54 events · selftest passes |
+| [`deeptime.py`](modeling/deeptime.py) | ICS v2024/12 chronology to stage level, plus catalogues of glaciations, extinctions, anoxic events, hyperthermals, carbon drawdowns and LIPs, with confidence on every entry | **101 stages**, 34 epochs, 22 periods, 54 events · selftest passes |
 | [`paleogeography.py`](modeling/paleogeography.py) | continental blocks: present-day anchors, existence windows, assembly membership, orogenies, terrane rift/accretion events | 56 blocks, 6 assemblies, 35 orogenies, 31 terrane events · selftest passes |
 | [`paleobiogeography.py`](modeling/paleobiogeography.py) | province model — `province(age, lat, realm, block)` and `provinciality(age)`; answers "no named province is established here" honestly | 7 marine + 6 terrestrial schemes · selftest passes |
 | [`climate_ebm.py`](modeling/climate_ebm.py) | 1-D diffusive energy-balance climate model with ice-albedo feedback and the snowball bifurcation | present-day 13.4 °C, ice line 71.8° · **known to understate hothouses, see its docstring** |
 | [`biome_model.py`](modeling/biome_model.py) | Whittaker climate zone **×** vegetation era → what actually grew there at that age | 14 zones × 8 eras · selftest passes |
 | [`taxa_db.py`](modeling/taxa_db.py) | taxa with **attributes**: size, habit, diet, realm, age range, provinces | 105 seed taxa; emits `taxa.json` · selftest passes |
+| [`hotspots.py`](modeling/hotspots.py) | 53 hotspots with coordinates, chains, LIP roots, flux and confidence; all 15 named aseismic ridges mapped to their plume; the guyot subsidence law | selftest passes |
+
+### Audits (read-only; they change nothing)
+
+| script | catches | current result |
+|---|---|---|
+| [`audit_cards.py`](modeling/audit_cards.py) | coverage, dates, unhedged contested claims, anachronisms, superseded claims, misattribution | 667 cards, **0 HIGH** |
+| [`audit_label_windows.py`](modeling/audit_label_windows.py) | a label drawn when the entity it names did not exist | 46 matched, **2 findings** |
+| [`climate_audit.py`](modeling/climate_audit.py) | `climate.py` against PhanDA and GEOCARBSULF | **6 findings** |
+| [`frame_experiment.py`](modeling/frame_experiment.py) | reconstruction frame quality, measured on a population | **the A1 result** |
 
 The models are deliberately dependency-light (stdlib only, except numpy for the EBM) so
 that `build/` can import any of them later without adding a dependency.
@@ -80,6 +90,16 @@ that `build/` can import any of them later without adding a dependency.
 | [`WP-01 · Where the continents were, and why our labels miss`](research%20reports/WP-01-where-the-continents-were.md) | the label error has **three** causes and only one is addressed; three ranked remediations, the cheapest of which is brand new |
 | [`WP-02 · The biosphere through deep time`](research%20reports/WP-02-the-biosphere-through-deep-time.md) | replace per-label curation with a province model, a vegetation model and an attribute-carrying taxon database; five concrete app changes |
 | [`WP-03 · The climate system across deep time`](research%20reports/WP-03-the-climate-system.md) | our climate table predates PhanDA; what to re-check, what to add, and what the app should stop claiming |
+| [`WP-04 · Closing the gaps: four measured results`](research%20reports/WP-04-closing-the-gaps.md) | **Scotese publishes his own rotations** and using them cuts placement error fourfold; the Cretaceous is 6 °C too cool; one hotspot catalogue closes four register items |
+
+## Staged for the build
+
+**[`STAGED-CHANGES.md`](research%20reports/STAGED-CHANGES.md)** is the handover surface:
+every gap item that would touch `build/` or `web/`, with the artifact that makes it a
+drop-in, ordered by measured value. Nothing in this folder has been applied to the app.
+
+Top of that list: **switch feature tracks to the PALEOMAP rotation model** — measured to
+cut abyssal-plain placement errors from 20% to 5%.
 
 ## The card audit
 

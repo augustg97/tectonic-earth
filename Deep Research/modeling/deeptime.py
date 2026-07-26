@@ -158,17 +158,17 @@ EPOCHS = [
     Interval("Late Devonian", 382.31, 358.86, "epoch", "Devonian"),
     Interval("Middle Devonian", 393.47, 382.31, "epoch", "Devonian"),
     Interval("Early Devonian", 419.62, 393.47, "epoch", "Devonian"),
-    Interval("Pridoli", 425.0, 419.62, "epoch", "Silurian"),
-    Interval("Ludlow", 427.4, 425.0, "epoch", "Silurian"),
+    Interval("Pridoli", 423.0, 419.62, "epoch", "Silurian"),
+    Interval("Ludlow", 427.4, 423.0, "epoch", "Silurian"),
     Interval("Wenlock", 432.9, 427.4, "epoch", "Silurian"),
     Interval("Llandovery", 443.1, 432.9, "epoch", "Silurian"),
     Interval("Late Ordovician", 458.2, 443.1, "epoch", "Ordovician"),
     Interval("Middle Ordovician", 471.3, 458.2, "epoch", "Ordovician"),
     Interval("Early Ordovician", 486.85, 471.3, "epoch", "Ordovician"),
     Interval("Furongian", 497.0, 486.85, "epoch", "Cambrian"),
-    Interval("Miaolingian", 521.0, 497.0, "epoch", "Cambrian"),
-    Interval("Cambrian Series 2", 529.0, 521.0, "epoch", "Cambrian"),
-    Interval("Terreneuvian", 538.8, 529.0, "epoch", "Cambrian"),
+    Interval("Miaolingian", 509.0, 497.0, "epoch", "Cambrian"),
+    Interval("Cambrian Series 2", 521.0, 509.0, "epoch", "Cambrian"),
+    Interval("Terreneuvian", 538.8, 521.0, "epoch", "Cambrian"),
 ]
 
 # Stages: complete for the Mesozoic and Cenozoic (where event dating is stage-level
@@ -247,6 +247,34 @@ STAGES = [
     Interval("Famennian", 371.1, 358.86, "stage", "Late Devonian"),
     Interval("Frasnian", 382.31, 371.1, "stage", "Late Devonian"),
     Interval("Hirnantian", 445.2, 443.1, "stage", "Late Ordovician"),
+    Interval("Givetian", 387.95, 382.31, "stage", "Middle Devonian"),
+    Interval("Eifelian", 393.47, 387.95, "stage", "Middle Devonian"),
+    Interval("Emsian", 407.6, 393.47, "stage", "Early Devonian"),
+    Interval("Pragian", 410.62, 407.6, "stage", "Early Devonian"),
+    Interval("Lochkovian", 419.62, 410.62, "stage", "Early Devonian"),
+    Interval("Ludfordian", 425.6, 423.0, "stage", "Ludlow"),
+    Interval("Gorstian", 427.4, 425.6, "stage", "Ludlow"),
+    Interval("Homerian", 430.5, 427.4, "stage", "Wenlock"),
+    Interval("Sheinwoodian", 432.9, 430.5, "stage", "Wenlock"),
+    Interval("Telychian", 438.5, 432.9, "stage", "Llandovery"),
+    Interval("Aeronian", 440.8, 438.5, "stage", "Llandovery"),
+    Interval("Rhuddanian", 443.1, 440.8, "stage", "Llandovery"),
+    Interval("Katian", 452.8, 445.2, "stage", "Late Ordovician"),
+    Interval("Sandbian", 458.2, 452.8, "stage", "Late Ordovician"),
+    Interval("Darriwilian", 469.4, 458.2, "stage", "Middle Ordovician"),
+    Interval("Dapingian", 471.3, 469.4, "stage", "Middle Ordovician"),
+    Interval("Floian", 477.7, 471.3, "stage", "Early Ordovician"),
+    Interval("Tremadocian", 486.85, 477.7, "stage", "Early Ordovician"),
+    Interval("Cambrian Age 10", 489.5, 486.85, "stage", "Furongian"),
+    Interval("Jiangshanian", 494.2, 489.5, "stage", "Furongian"),
+    Interval("Paibian", 497.0, 494.2, "stage", "Furongian"),
+    Interval("Guzhangian", 500.5, 497.0, "stage", "Miaolingian"),
+    Interval("Drumian", 504.5, 500.5, "stage", "Miaolingian"),
+    Interval("Wuliuan", 509.0, 504.5, "stage", "Miaolingian"),
+    Interval("Cambrian Age 4", 514.0, 509.0, "stage", "Cambrian Series 2"),
+    Interval("Cambrian Age 3", 521.0, 514.0, "stage", "Cambrian Series 2"),
+    Interval("Cambrian Age 2", 529.0, 521.0, "stage", "Terreneuvian"),
+    Interval("Fortunian", 538.8, 529.0, "stage", "Terreneuvian"),
 ]
 
 _ALL = {"eon": EONS, "era": ERAS, "period": PERIODS, "epoch": EPOCHS, "stage": STAGES}
@@ -529,6 +557,16 @@ def _selftest() -> None:
         if p is None:
             continue
         assert p.top <= e.top and e.base <= p.base, f"{e.name} escapes {e.parent}"
+    # epochs must TILE each period - a gap here is exactly the Cambrian error
+    # that this check caught when the Palaeozoic stages were added.
+    for per in [p for p in PERIODS if p.base <= 538.8]:
+        kids = sorted([e for e in EPOCHS if e.parent == per.name], key=lambda e: e.top)
+        if not kids:
+            continue
+        assert abs(kids[0].top - per.top) < 1e-6, f"{per.name}: youngest epoch gap"
+        assert abs(kids[-1].base - per.base) < 1e-6, f"{per.name}: oldest epoch gap"
+        for a, b in zip(kids, kids[1:]):
+            assert abs(a.base - b.top) < 1e-6, f"{per.name}: gap {a.name}|{b.name}"
     # no gaps or overlaps in the period column across the Phanerozoic
     phan = sorted([p for p in PERIODS if p.base <= 538.8], key=lambda p: p.top)
     for a, b in zip(phan, phan[1:]):
