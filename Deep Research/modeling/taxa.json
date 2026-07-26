@@ -1809,6 +1809,160 @@
    "biome": "",
    "note": "Radiate strongly from the Cretaceous and dominate high-latitude and upwelling productivity in the Cenozoic; they draw silica down and are why sponges and radiolarians build thinner skeletons than they used to.",
    "confidence": "good"
+  },
+  {
+   "name": "Haikouichthys",
+   "rank": "genus",
+   "clade": "Craniata",
+   "realm": "sea",
+   "first": 520.0,
+   "last": 515.0,
+   "size_m": 0.025,
+   "habit": "nektonic, with a skull and rudimentary vertebral elements",
+   "diet": "filter feeder",
+   "provinces": [
+    "Redlichiid Realm"
+   ],
+   "biome": "shelf",
+   "note": "From Chengjiang: among the oldest known vertebrates.",
+   "confidence": "good"
+  },
+  {
+   "name": "Aysheaia",
+   "rank": "genus",
+   "clade": "Lobopodia",
+   "realm": "sea",
+   "first": 508.0,
+   "last": 505.0,
+   "size_m": 0.06,
+   "habit": "benthic, walked on lobopods among sponges",
+   "diet": "fed on sponges",
+   "provinces": [
+    "Olenellid Realm"
+   ],
+   "biome": "reef",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Promissum",
+   "rank": "genus",
+   "clade": "Conodonta",
+   "realm": "sea",
+   "first": 445.0,
+   "last": 443.0,
+   "size_m": 0.4,
+   "habit": "nektonic, eel-like with phosphatic feeding elements",
+   "diet": "predator",
+   "provinces": [
+    "Malvinokaffric Realm"
+   ],
+   "biome": "shelf",
+   "note": "A giant conodont from the Soom Shale, deposited under the Hirnantian ice.",
+   "confidence": "good"
+  },
+  {
+   "name": "Sacabambaspis",
+   "rank": "genus",
+   "clade": "Agnatha",
+   "realm": "sea",
+   "first": 470.0,
+   "last": 450.0,
+   "size_m": 0.25,
+   "habit": "nektobenthic, armoured jawless fish",
+   "diet": "suspension or deposit feeder",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "shelf",
+   "note": "An early armoured jawless fish from Gondwana - the vertebrates arrive in shallow water on the southern continent, not the tropics.",
+   "confidence": "good"
+  },
+  {
+   "name": "Aegirocassis",
+   "rank": "genus",
+   "clade": "Radiodonta",
+   "realm": "sea",
+   "first": 480.0,
+   "last": 478.0,
+   "size_m": 2.0,
+   "habit": "nektonic, giant filter-feeding radiodont",
+   "diet": "filtered plankton with modified appendages",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "open ocean",
+   "note": "The Ordovician turns the Cambrian's apex predator lineage into a whale-shark analogue: the same appendages, remodelled into a plankton net.",
+   "confidence": "good"
+  },
+  {
+   "name": "Pterygotus",
+   "rank": "genus",
+   "clade": "Eurypterida",
+   "realm": "sea",
+   "first": 428.0,
+   "last": 372.0,
+   "size_m": 1.7,
+   "habit": "nektonic sea scorpion with crushing chelicerae",
+   "diet": "apex predator",
+   "provinces": [
+    "Old World Realm",
+    "Eastern Americas Realm"
+   ],
+   "biome": "shelf",
+   "note": "Eurypterids are the largest arthropods that ever lived and they dominate Silurian shelf predation before jawed fish take it over.",
+   "confidence": "good"
+  },
+  {
+   "name": "Birkenia",
+   "rank": "genus",
+   "clade": "Anaspida",
+   "realm": "sea",
+   "first": 428.0,
+   "last": 416.0,
+   "size_m": 0.1,
+   "habit": "nektonic jawless fish, laterally compressed",
+   "diet": "filter or deposit feeder",
+   "provinces": [
+    "Old World Realm"
+   ],
+   "biome": "shelf",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Favosites",
+   "rank": "genus",
+   "clade": "Tabulata",
+   "realm": "sea",
+   "first": 460.0,
+   "last": 359.0,
+   "size_m": 0.5,
+   "habit": "colonial, honeycomb corallites",
+   "diet": "suspension feeder",
+   "provinces": [
+    "cosmopolitan"
+   ],
+   "biome": "reef",
+   "note": "",
+   "confidence": "good"
+  },
+  {
+   "name": "Arandaspis",
+   "rank": "genus",
+   "clade": "Agnatha",
+   "realm": "sea",
+   "first": 480.0,
+   "last": 470.0,
+   "size_m": 0.15,
+   "habit": "benthic armoured jawless fish",
+   "diet": "deposit feeder",
+   "provinces": [
+    "Gondwanan Province"
+   ],
+   "biome": "shelf",
+   "note": "",
+   "confidence": "good"
   }
  ]
 }

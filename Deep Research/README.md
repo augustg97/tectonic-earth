@@ -54,6 +54,7 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 | [`biome_model.py`](modeling/biome_model.py) | Whittaker climate zone **×** vegetation era → what actually grew there at that age | 14 zones × 8 eras · selftest passes |
 | [`taxa_db.py`](modeling/taxa_db.py) | taxa with **attributes**: size, habit, diet, realm, age range, provinces | 105 seed taxa; emits `taxa.json` · selftest passes |
 | [`hotspots.py`](modeling/hotspots.py) | 53 hotspots with coordinates, chains, LIP roots, flux and confidence; all 15 named aseismic ridges mapped to their plume; the guyot subsidence law | selftest passes |
+| [`ocean_circulation.py`](modeling/ocean_circulation.py) | wind-driven surface circulation from a land/sea mask: Sverdrup gyres, western boundary currents, eastern-boundary upwelling, and the circumpolar-current test | present-day validated; **closing Drake switches the ACC off** |
 
 ### Audits (read-only; they change nothing)
 

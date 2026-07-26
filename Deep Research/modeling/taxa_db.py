@@ -496,13 +496,53 @@ _ROWS = [
      "Radiate strongly from the Cretaceous and dominate high-latitude and upwelling "
      "productivity in the Cenozoic; they draw silica down and are why sponges and "
      "radiolarians build thinner skeletons than they used to."),
+
+    # ---- B10: the mid-Cambrian to Silurian thin patch ---------------------
+    ("Haikouichthys", "genus", "Craniata", "sea", 520, 515, 0.025,
+     "nektonic, with a skull and rudimentary vertebral elements", "filter feeder",
+     ("Redlichiid Realm",), "shelf",
+     "From Chengjiang: among the oldest known vertebrates."),
+    ("Aysheaia", "genus", "Lobopodia", "sea", 508, 505, 0.06,
+     "benthic, walked on lobopods among sponges", "fed on sponges",
+     ("Olenellid Realm",), "reef"),
+    ("Promissum", "genus", "Conodonta", "sea", 445, 443, 0.4,
+     "nektonic, eel-like with phosphatic feeding elements", "predator",
+     ("Malvinokaffric Realm",), "shelf",
+     "A giant conodont from the Soom Shale, deposited under the Hirnantian ice."),
+    ("Sacabambaspis", "genus", "Agnatha", "sea", 470, 450, 0.25,
+     "nektobenthic, armoured jawless fish", "suspension or deposit feeder",
+     ("Gondwanan Province",), "shelf",
+     "An early armoured jawless fish from Gondwana - the vertebrates arrive in shallow "
+     "water on the southern continent, not the tropics."),
+    ("Aegirocassis", "genus", "Radiodonta", "sea", 480, 478, 2.0,
+     "nektonic, giant filter-feeding radiodont", "filtered plankton with modified appendages",
+     ("Gondwanan Province",), "open ocean",
+     "The Ordovician turns the Cambrian's apex predator lineage into a whale-shark "
+     "analogue: the same appendages, remodelled into a plankton net."),
+    ("Pterygotus", "genus", "Eurypterida", "sea", 428, 372, 1.7,
+     "nektonic sea scorpion with crushing chelicerae", "apex predator",
+     ("Old World Realm", "Eastern Americas Realm"), "shelf",
+     "Eurypterids are the largest arthropods that ever lived and they dominate Silurian "
+     "shelf predation before jawed fish take it over."),
+    ("Birkenia", "genus", "Anaspida", "sea", 428, 416, 0.1,
+     "nektonic jawless fish, laterally compressed", "filter or deposit feeder",
+     ("Old World Realm",), "shelf"),
+    ("Favosites", "genus", "Tabulata", "sea", 460, 359, 0.5,
+     "colonial, honeycomb corallites", "suspension feeder",
+     ("cosmopolitan",), "reef"),
+    ("Arandaspis", "genus", "Agnatha", "sea", 480, 470, 0.15,
+     "benthic armoured jawless fish", "deposit feeder",
+     ("Gondwanan Province",), "shelf"),
 ]
 
 
 TAXA = tuple(
     Taxon(name=r[0], rank=r[1], clade=r[2], realm=r[3], first=float(r[4]),
           last=float(r[5]), size_m=float(r[6]), habit=r[7], diet=r[8],
-          provinces=tuple(r[9]), biome=r[10], note=r[11],
+          provinces=tuple(r[9]), biome=r[10],
+          # note and confidence are optional - a row that stops at `biome` is
+          # legitimate, and requiring an empty string just invites typos.
+          note=(r[11] if len(r) > 11 else ""),
           confidence=(r[12] if len(r) > 12 else "good"))
     for r in _ROWS
 )
