@@ -39,7 +39,22 @@ import paleo_tracks
 OUT = "../web/fields"
 os.makedirs(OUT, exist_ok=True)
 
-ELEV_H, ELEV_W = 1024, 2048     # coastline resolution
+# 2048x4096, doubled in July 2026. The source PaleoDEMs are 6 arc-minute --
+# 0.1 degrees, 11.1 km at the equator -- and at 1024x2048 a texel was 19.5 km,
+# so HALF the resolution that exists was being thrown away before anything else
+# happened. Everything downstream inherited that: a continental slope drops
+# 3 km across two texels and arrives as a staircase of near-vertical facets, a
+# seamount is three texels across, and the shader has to reconstruct what the
+# grid could not carry. 2048 rows puts a texel at 9.8 km, which is the source
+# resolution and therefore the point at which more pixels stop buying anything.
+#
+# Cost, measured on the 0 Ma frame against a lossless encode: 439 kB at q=94
+# against 198 kB at 1024x2048/q=96, and the same steep-ground error (0.71 levels
+# mean, 3 at the 99th percentile). Across 251 keyframes that is about 51 MB
+# against 25, so the elevation roughly doubles and the whole payload goes from
+# 118 to ~144 MB. Quality drops 96 -> 94 because the finer grid needs less help:
+# there is less real content per texel for the encoder to ring around.
+ELEV_H, ELEV_W = 2048, 4096     # coastline resolution; matches the 6' source DEM
 # Rainfall drives biome colour, the glacier equilibrium line AND the weighting
 # on the drainage network, so it is the field that decides how varied a
 # continent looks -- and at 768x384 it was the coarsest input in the pipeline,
@@ -54,9 +69,32 @@ CLIM_H, CLIM_W = 768, 1536      # the wind solve runs here too, or there is
                                 # no new detail to export
 # Ocean-structure field: crustal age + spreading direction. It is smooth (the
 # fine abyssal-hill fabric is synthesised in the shader from it, not stored), so
-# half the elevation resolution is ample and keeps the extra webp small.
+# a quarter of the elevation resolution is ample and keeps the extra webp small.
+# Deliberately NOT raised with the elevation: this field's limit is precision,
+# not resolution -- see the companding note in seafloor.py -- and more pixels
+# would cost real bytes to store a field that is already smooth between them.
 OCEAN_H, OCEAN_W = 1024, 2048
-ELEV_Q, RAIN_Q, OCEAN_Q = 92, 90, 90
+# ELEV_Q is 94, and the reason is measurable rather than a matter of
+# taste. WebP's lossy path rings around sharp edges, and the elevation field is
+# encoded signed-sqrt so that one 8-bit level is 55 m at 1.5 km depth and 105 m
+# at 5.5 km. Measured against a lossless encode of the same field, q=92 puts a
+# mean error of 0.97 levels and a 99th percentile of FOUR on steep submarine
+# ground (against 0.06 on flat abyss) -- i.e. a couple of hundred metres of
+# invented relief, spatially organised as ringing, which the hillshade renders
+# as the granular black speckle that covered every ridge flank and shelf edge.
+# It is not visible on the abyssal plains because there is no edge there to ring
+# around, which is exactly why it took so long to attribute.
+#
+# It buys the one thing the shader cannot: the shader's dequantisation shrinkage
+# knows the size of a QUANTISATION step and can remove it exactly, but ringing is
+# several steps and indistinguishable from real relief once it is in the file.
+#
+# 94 rather than 96 because the grid doubled at the same time. Measured on the
+# 0 Ma frame, 2048x4096/q=94 lands at the same steep-ground error as
+# 1024x2048/q=96 -- 0.71 levels mean, 3 at the 99th percentile -- for 439 kB
+# against 198. Finer texels hold less real content each, so there is less for
+# the encoder to ring around and the quality can come back down.
+ELEV_Q, RAIN_Q, OCEAN_Q = 94, 90, 90
 STEP = 5                         # Myr between keyframes, everywhere
 
 

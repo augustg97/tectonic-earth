@@ -25,3 +25,7 @@ web/bluemarble.jpg
 # Intermediate age/isochron grids -- rebuildable, ~400 MB, never shipped
 build/cache/
 data/Muller2019_PresentDay_AgeGrid.nc
+
+# Reference material for the sea-floor work: ~80 large screenshots and
+# process diagrams, several hundred MB. README §11 describes what is in it.
+Deep Time Maps and Resources/

@@ -851,9 +851,19 @@ function oldLakeTex(){
    shows yesterday's content. That has now bitten labels.json, plates_time.json
    and life.json in turn. Stamped by build/stamp_data_version.py, which
    build_site.py runs, so a deploy always changes the URL.
-   Deliberately NOT applied to fields/ — those are 750 textures that rarely
-   change and busting them would re-download ~24 MB for a data-only edit. */
-const DATA_V='20260726-0223';
+   Deliberately NOT applied to fields/ — those are 1,500 textures that rarely
+   change and busting them on every data edit would re-download the lot.
+
+   FIELD_V exists for the times they DO change, and is bumped BY HAND rather
+   than stamped, precisely so an ordinary data edit does not trigger it. The
+   elevation field was rebuilt at 2048x4096 in July 2026: same filenames, new
+   contents, ~145 MB of them. Without a bust a returning viewer would keep the
+   old coarse textures and see a sea floor built to constants that no longer
+   match them — the same silent failure DATA_V exists to prevent, at fifty times
+   the size. Bump this whenever build_fields, reskin_seafloor or anything they
+   call changes what lands in web/fields. */
+const DATA_V='20260726-2251';
+const FIELD_V='20260726-hi';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -863,7 +873,7 @@ async function loadAll(){
   DATA.art=DATA.art||{art:{},byType:{}};
   DATA.photos=DATA.photos||{};
   const tl=DATA.timeline;
-  const src=n=>'fields/'+n;
+  const src=n=>'fields/'+n+'?v='+FIELD_V;
   let done=0; const total=tl.length*4;
   const one=(name,arr,i)=>new Promise(res=>{
     const img=new Image();
@@ -945,6 +955,7 @@ uniform sampler2D oceanA, oceanB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
+uniform vec4 uDbg;        // TEMPORARY: term-isolation switches for the sea-floor round
 uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
@@ -1003,12 +1014,17 @@ float fbm3(vec3 p){ float s=0.0,a=0.5; for(int i=0;i<5;i++){ s+=a*vnoise3(p); p*
    visible range of scales. Three was too few and read as bland; five, falling
    ~0.55 per octave, gives the fine detail that survives zooming in. Sampled in
    an already-stretched domain, so the result is anisotropic. */
-float abyssFbm(vec3 q, vec4 w){
+/* Three octaves, not five. The 9.3x and 19.7x terms are 15 km and 7 km in this
+   domain, and they now carry weights of 0.07 and 0.02 because licGrad owns that
+   band anisotropically -- so they were costing six noise evaluations per
+   fragment (this is called three times, for the centre and two probes) to
+   contribute a couple of per cent of an amplitude. Measured, dropping them
+   returns about 7 ms a frame at 1400x900, which pays for the coarse grain order
+   that replaced them. */
+float abyssFbm(vec3 q, vec2 w){
   return vnoise3(q)
        + w.x*vnoise3(q*2.13+11.0)
-       + w.y*vnoise3(q*4.47+31.0)
-       + w.z*vnoise3(q*9.31+61.0)
-       + w.w*vnoise3(q*19.7+97.0);
+       + w.y*vnoise3(q*4.47+31.0);
 }
 /* Per-octave level of detail. In the stretched domain the octaves span roughly
    23 km down to 1.2 km, which brackets the 2-5 km of real abyssal hills -- but
@@ -1016,10 +1032,16 @@ float abyssFbm(vec3 q, vec4 w){
    zoomed out that turned the whole floor into crumpled foil. Weight each octave
    down as it approaches the Nyquist limit for the current view, so the fine
    fabric genuinely appears as you zoom in rather than boiling at every scale. */
-vec4 abyssLod(float pxq){
-  vec4 f=vec4(2.13,4.47,9.31,19.7);
-  vec4 w=vec4(0.55,0.31,0.17,0.09);
-  return w*(1.0-smoothstep(vec4(0.22),vec4(0.62),pxq*f));
+/* Trimmed at the fine end. The base rate is 46 per radian -- a 136 km cell --
+   so the 9.3x and 19.7x octaves are 15 km and 7 km, and those two were most of
+   the sub-12 km energy the reference does not have (2-6% there against our
+   12-24%). licGrad owns that band now, anisotropically, which is the whole
+   difference between engraving and speckle: the same energy laid down as
+   isotropic fractal reads as grit. */
+vec2 abyssLod(float pxq){
+  vec2 f=vec2(2.13,4.47);
+  vec2 w=vec2(0.55,0.26);
+  return w*(1.0-smoothstep(vec2(0.16),vec2(0.42),pxq*f));   // same Nyquist rule as gw0..gw2
 }
 /* Smear noise ALONG a direction -- a short line-integral convolution. Used to
    make a field that varies down the ridge axis faster than across it, which is
@@ -1049,6 +1071,37 @@ float licN(vec3 p, vec3 t, float F, float S){
          + vnoise3((p + t*(1.2*S))*F)*1.4
          + vnoise3((p + t*(2.4*S))*F)*0.6 ) * 0.169492;
 }
+/* The corrugation itself: the ACROSS-axis difference of an ALONG-axis smear,
+   taken from one set of taps rather than by convolving twice and subtracting.
+
+   This is the far field's fabric, and it exists because the shipped coordinate
+   provably cannot carry one. Every periodic term keyed to the companded age
+   has a wavelength proportional to (D0 + d): 21 km at the axis, but 278 km at
+   30 degrees out and 450 km at 50 -- so the "abyssal hills" grew twenty times
+   coarser with age, while real ones stay a few kilometres apart from the axis
+   to the trench because they are cut at a roughly constant spreading rate.
+   Keying to true distance instead is not available either: one 8-bit level is
+   0.66 degrees out there, nearly four wavelengths, so it terraces.
+
+   A field built from POSITION has neither problem -- its scale is whatever we
+   choose, uniformly, everywhere. All the shipped field has to supply is the
+   DIRECTION, which is smooth, well-resolved and exactly what it is good at.
+   Smearing is the only way to elongate on a sphere (see licN above), so the
+   grain is a smear along the isochron and the relief is its gradient across.
+
+   Four taps at +-0.5S and +-1.5S. With S = 0.85/F the kernel spans about
+   +-1.3 noise cells, so the grain comes out near 3.5:1 -- measured off the
+   reference, whose hills run roughly three to five times longer than they are
+   wide. A longer smear reads as ruled corduroy however varied the amplitude:
+   it is the ASPECT that decides whether a lineated field looks like hills or
+   like cloth. Weights sum to 3.2; the 0.3125 restores unit scale. */
+float licGrad(vec3 p, vec3 t, vec3 a, float F, float S, float h){
+  vec3 pa=p+a*h, pb=p-a*h;
+  return ( (vnoise3((pa-t*(1.5*S))*F)-vnoise3((pb-t*(1.5*S))*F))*0.6
+         + (vnoise3((pa-t*(0.5*S))*F)-vnoise3((pb-t*(0.5*S))*F))*1.0
+         + (vnoise3((pa+t*(0.5*S))*F)-vnoise3((pb+t*(0.5*S))*F))*1.0
+         + (vnoise3((pa+t*(1.5*S))*F)-vnoise3((pb+t*(1.5*S))*F))*0.6 ) * 0.3125;
+}
 
 float baseElev(vec2 uv){
   return mix(decElev(texture2D(elevA,uv).r), decElev(texture2D(elevB,uv).r), mixf);
@@ -1073,7 +1126,18 @@ float detail3(vec3 p, float rug){
 // The procedural micro-relief added on top of the shipped field, split out so
 // the pole-filtered path below can add exactly the same detail to its own base.
 float elevDetail(float z, vec3 d, float rug){
-  float n=detail3(d*260.0,rug), n2=detail3(d*70.0+13.7,rug);
+  /* RIDGED NOISE IS A LAND MODEL. detail3 blends smooth fbm toward a ridged
+     variant by rug, which is driven by the local slope -- right for a mountain
+     belt, where erosion really does cut sharp crests and incised valleys, and
+     wrong underwater, where there are no rivers to do the cutting. On a ridge
+     flank or a shelf edge rug goes to 1 and the ridged octaves put creases into
+     the bathymetry; a crease is a gradient discontinuity, so it aliases into
+     the granular black speckle that covered every submarine slope at globe
+     zoom. Submarine slopes are smooth-swelled, and the reference shows them
+     that way. Keep a quarter of it so the character does not step at the
+     shoreline, and let the anisotropic fabric own the sea-floor texture. */
+  float rugw = z<0.0 ? rug*0.25 : rug;
+  float n=detail3(d*260.0,rugw), n2=detail3(d*70.0+13.7,rugw);
   if(z<0.0){
     // The seafloor is not a flat sheet: give it its own gentle relief so
     // shelves, ridge flanks and the abyssal plain read as different terrain.
@@ -1091,8 +1155,23 @@ float elevDetail(float z, vec3 d, float rug){
        systems were texturing the same surface and the wrong one was winning.
        Fade the fine octave out with depth and keep the long one, which reads as
        basin-scale swell rather than as texture. */
-    float abyss=smoothstep(-1800.0,-3400.0,z);
-    return z + (n*150.0*(1.0-0.90*abyss) + n2*95.0*(1.0-0.35*abyss))
+    /* ...and the fade was keyed to the WRONG VARIABLE. It ran on depth, coming
+       in over 1800-3400 m, so on ridge flanks, rises and upper slopes -- 15% of
+       the sea floor, and the most conspicuous 15% -- the 24 km octave stood at
+       nearly full strength. At +-72 m over a 24 km cell, differenced across the
+       35 km sampling baseline and rendered at the 59x vertical exaggeration
+       this normal implies, that is +-26 degree facets on a 4-pixel checker: the
+       granular black stipple that covered every rise at globe zoom, and which
+       survived removing the seamounts, raising the WebP quality and widening
+       the dequantisation window, because none of those was what made it.
+
+       The reason to fade was never depth. It is that below the shelf break the
+       ocean-structure system OWNS the 5-30 km band, anisotropically, and two
+       systems in one band is the same mistake at a different depth. So fade on
+       the shelf break itself. What remains is the 91 km octave, which is
+       basin-scale swell and does not compete with anything. */
+    float owned=smoothstep(-300.0,-1200.0,z);      // 1 below the shelf break
+    return z + (n*150.0*(1.0-0.94*owned) + n2*95.0*(1.0-0.35*owned))
                *(1.0-shelf*0.7)*uDetail;
   }
   // rugged ground also carries more relief, not just a different shape
@@ -1133,24 +1212,61 @@ float rainAt(vec2 uv){
    (The productivity noise is named "mott" because "patch" is a GLSL reserved
    word that silently kills the whole shader.) */
 vec3 oceanColour(float z, vec3 sd, float latd){
-  vec3 deep    = mix(vec3(0.043,0.140,0.150), vec3(0.027,0.098,0.192), uSeaTint);
-  vec3 midc    = mix(vec3(0.098,0.318,0.316), vec3(0.086,0.314,0.478), uSeaTint);
-  vec3 shallow = mix(vec3(0.300,0.612,0.545), vec3(0.220,0.565,0.720), uSeaTint);
-  /* THE DEPTH RAMP IS WHAT MAKES A BATHYMETRIC MAP LEGIBLE, and this one was
-     throwing that away. A pow(t,0.6) over 0-5000 m saturates by about 2500 m:
-     measured on the shipped field, HALF the ocean landed in the top 11% of the
-     ramp (median 0.89, p95 1.00), so a ridge crest 2 km above the basin floor
-     beside it came out the same tone and every basin read as one flat blue.
-     That, not the fabric, is why the globe lacked the province-by-province
-     variety a real chart has.
+  /* ONE HUE, BRIGHTNESS BY DEPTH. This used to interpolate between three
+     different colours -- a dark teal abyss, a mid blue, a turquoise shallow --
+     so the chromaticity swung with depth. Measured on the Google Earth frames,
+     the reference does not do that at all: binning its ocean by luminance, from
+     the 1st to the 75th percentile R/B holds at 0.37-0.41 and G/B at 0.46-0.52
+     while the brightness rises by 40%. It is one colour, shaded. Only above the
+     95th percentile -- genuinely shallow water, where the bottom starts showing
+     through -- does the hue move, and then it moves WARMER, not greener.
 
-     Spread it linearly across the range the sea floor actually occupies
-     instead. A ridge at 3 km now sits at 0.69 against 0.17 for a 5.5 km basin
-     -- a difference you can see, which is the entire point. */
-  float t=clamp((z + 6300.0)/4800.0, 0.0, 1.0);
-  t=pow(t,1.45);          // keep the true abyss dark while the ridges lift clear
-  vec3 c=mix(deep, midc, t);
-  c=mix(c, shallow, smoothstep(-850.0,-25.0,z));
+     That is also the physics. Below the photic zone nothing reflects off the
+     floor; all you see is the water column's own attenuation, whose spectrum
+     does not depend on how far past it the bottom is. A hue ramp with depth is
+     a cartographic convention, not an appearance, and adopting it is what made
+     ours read cyan (R/B 0.27, G/B 0.70) against the reference's blue-violet.
+
+     Chromaticity below is (0.372, 0.468, 1.0) -- the measured mean -- and the
+     ancient-sea variant keeps the same construction with the iron-and-algae
+     green mixed into the hue rather than into one end of a ramp. */
+  vec3 hue = mix(vec3(0.128,0.300,0.300), vec3(0.130,0.163,0.350), uSeaTint);
+  /* Brightness across the range the sea floor actually occupies. Gentle: the
+     reference's whole abyss, trench floor to ridge crest, spans about 1.4x in
+     luminance, and we were spending three times that. Widened once, though:
+     flattened to a 1.65x span the darkest ocean came out at L=43 against the
+     reference's 30, and losing the dark end costs as much legibility as the
+     old banding did. 1.97x lands the extremes right while keeping the middle,
+     where most of the sea floor is, nearly flat. Broad tonal variation is
+     the single biggest reason ours read as patchwork -- measured, our >250 km
+     spectral band carried 20-47% of the energy against the reference's 13-16%,
+     and this ramp was most of it. The contrast belongs in the relief. */
+  float t=clamp((z + 6300.0)/4600.0, 0.0, 1.0);
+  vec3 c=hue*(0.585+0.755*t);
+  /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
+     RETURN -- light that reaches the floor and comes back up. That is not a
+     linear ramp in depth, it is an exponential: the path is travelled twice and
+     attenuated both ways, so with a clear-ocean diffuse coefficient the return
+     is already down to a few per cent by 200 m and unmeasurable by 400.
+
+     Using smoothstep from 850 m instead put pale shelf colour on anything that
+     rose within half a kilometre of the surface -- which, in the open ocean,
+     means every seamount summit. Measured on the shipped 0 Ma field there are
+     228 separate open-ocean features above 500 m, and the render was drawing
+     each one as a bright dot: 892 bright blobs across one South Atlantic frame,
+     at (112,144,187), squarely the shelf colour. The reference has no such
+     thing anywhere. Its bright pixels are contiguous shelves, and its seamounts
+     -- Discovery, Meteor, the Walvis chain -- are the same blue as the abyss
+     around them, legible purely as shaded bumps.
+
+     Which is what the physics says: a basalt seamount summit under 200 m of
+     clear oligotrophic water returns almost nothing. Bright shallow water needs
+     a bright floor as well as a shallow one, and that means a carbonate bank or
+     a sand flat, tens of metres down -- not a volcanic peak. */
+  vec3 shallow = mix(vec3(0.300,0.612,0.545), vec3(0.260,0.400,0.600), uSeaTint);
+  float botRet = exp(z/70.0);                        // two-way attenuation
+  float shelfLift = smoothstep(-260.0,-60.0,z);      // the shelf break itself
+  c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
   // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
   float shelf=smoothstep(-700.0,-40.0,z);
   float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
@@ -1160,9 +1276,15 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      our ocean and Google Earth's, which below the shelf break is very nearly
      one colour. Productivity does vary, but not by enough to see from orbit,
      and it must not compete with the relief. */
+  /* ...and now confined to the shelf, because that is the only place it is
+     visible from orbit. The cold-latitude band reached the whole polar ABYSS,
+     so a 60-degree mottle was tinting entire deep basins green at about a tenth
+     -- broad, slow, and squarely in the >250 km band the reference keeps empty.
+     Open-ocean chlorophyll is a fraction of a milligram per cubic metre; it
+     changes the water's colour by far less than this was claiming. */
   float mott=fbm3(sd*6.0+3.1);
-  float bio=clamp(shelf*0.7+band*0.5,0.0,1.0)*(0.62+0.45*mott);
-  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.26,0.0,1.0));
+  float bio=shelf*clamp(0.55+0.65*band,0.0,1.0)*(0.62+0.45*mott);
+  c=mix(c, vec3(0.106,0.404,0.353), clamp(bio*0.24,0.0,1.0));
   /* Shelf grading. One turquoise step at the beach was doing all the work, so
      everything from the shelf break to the surf zone read as a single blue.
      Real shallow water is a sequence: the shelf break, the bank, the lagoon,
@@ -1171,10 +1293,23 @@ vec3 oceanColour(float z, vec3 sd, float latd){
   // ...and this one reached from 1800 m up, i.e. across the whole slope, which
   // is a lot of ocean to lighten. The reference keeps the slope close to the
   // abyss in tone and separates it by SHADING.
-  c=mix(c, vec3(0.145,0.400,0.545), smoothstep(-1800.0,-320.0,z)*0.34);
-  c=mix(c, vec3(0.216,0.573,0.639), smoothstep(-320.0,-90.0,z)*0.60);
-  c=mix(c, vec3(0.353,0.722,0.706), smoothstep(-90.0,-28.0,z)*0.65);
-  c=mix(c, vec3(0.529,0.847,0.804), smoothstep(-28.0,-4.0,z)*0.70);
+  /* Retargeted to what the reference's shallow water measures, which is not
+     turquoise. Its brightest 1% is (135,166,210) and even the brightest 0.1%
+     is (149,209,220) -- pale, and still blue-dominant at R/B 0.64-0.73. Ours
+     climbed to (135,216,205), G/B above 1, i.e. a saturated cyan that no part
+     of the reference contains; against a violet abyss that read as a different
+     ocean stuck onto the same coast. The sequence is kept -- shelf break, bank,
+     flat, surf, each lighter and warmer than the last -- but it now runs
+     through pale blues, and the whole shelf gains its brightness rather than
+     its saturation, which is what less water actually does. */
+  /* Each step now gated by bottom return as well as by depth, for the same
+     reason: these are floor colours, and you only see the floor where light
+     gets back off it. Without that gate the sequence fires on any peak that
+     happens to reach the right depth, wherever it is. */
+  c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,z)*0.26);
+  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,z)*0.60*sqrt(botRet));
+  c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
+  c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
 
   /* Sea-floor colour follows the ELEVATION field now, not a procedural texture.
      seafloor.py bakes real relief -- age-graded abyss, ridges, fracture zones,
@@ -1256,8 +1391,17 @@ void main(){
   t1 = _tl>1e-4 ? t1/_tl : vec3(0.0,0.0,1.0);
   vec3 t2=cross(sdir,t1);
   float rug, gE, gN, z;
+  /* How far this point stands above its own surroundings. Free: the four wide
+     taps the dequantisation already needs are exactly the ring to measure it
+     against. Used to keep ridge-parallel fabric off volcanoes -- see the note
+     where it is consumed. */
+  float prom=0.0;
+  /* The shallowest of those same four taps. A continental slope has a SHELF
+     above it; a seamount and a ridge flank do not. Free, and it is the only
+     honest way to tell them apart per pixel. */
+  float shelfHi=-12000.0;
   if(pw>0.004){
-    float r=1.8/1024.0*PI;                  // blur radius AND gradient baseline
+    float r=3.6/2048.0*PI;                  // blur radius AND gradient baseline (same angle at 2048 rows)
     float sum=0.0; vec2 gv=vec2(0.0);
     for(int k=0;k<6;k++){
       float a=(float(k)+0.5)/6.0*2.0*PI;
@@ -1275,12 +1419,27 @@ void main(){
     vec3 g3=t1*gv.x+t2*gv.y;
     gE=dot(g3,Eax); gN=dot(g3,Nax);
   } else {
-    float rda=1.6/1024.0*PI;
+    float rda=3.2/2048.0*PI;
     rug=clamp(length(vec2(
         baseElev(uvFromDir(normalize(sdir+Eax*rda)))-baseElev(uvFromDir(normalize(sdir-Eax*rda))),
         baseElev(uvFromDir(normalize(sdir+Nax*rda)))-baseElev(uvFromDir(normalize(sdir-Nax*rda)))))/460.0,0.0,1.0);
     z=elevAt(uv,rug);
-    float da=0.9/1024.0*PI;
+    /* AND THIS ONE KEEPS ITS ANGLE TOO, which is not the obvious choice and is
+       worth the note. The tempting move when the grid doubles is to halve the
+       gradient baseline and "use" the new resolution. Measured, that makes the
+       sea floor WORSE, and the reason is the shrinkage below: quantisation
+       error is bounded per SAMPLE, so it does not shrink when the baseline
+       does, while the true relief across the baseline does. Abyssal slopes run
+       2-5 m/km, so over 35 km a real difference is 75-180 m against an 89 m
+       quantum -- workable -- and over 23 km it is 50-120 m, which the shrinkage
+       then discards as indistinguishable from encoding noise. The rendered
+       abyss went flat, and the field was not at fault: it carries MORE at every
+       band than before (10-30 km: 61 m against 41; 30-80 km: 154 against 87).
+
+       So the finer grid pays out as better-resolved margins, seamounts and
+       fracture zones and as the absence of the aliasing staircase -- not as a
+       shorter probe. 2.4 texels of 2048 rows is the same 35 km it always was. */
+    float da=2.4/2048.0*PI;
     gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
     gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
@@ -1301,19 +1460,139 @@ void main(){
        procedural and added after this point. Rescaled by da/db so a true slope
        reads the same on either baseline and nothing steps as the blend
        crosses. */
-    /* Capped at 0.6, not 1.0. The wide baseline removes the 105 m quantisation
-       staircase, but a fracture zone is only about 430 m deep and two texels
-       wide -- inside the very band this smooths -- so at full strength the fix
-       for one artefact was quietly erasing the feature that matters most for
-       making the sea floor legible. Keeping a share of the sharp gradient
-       leaves the staircase suppressed and the scars intact. */
-    float qw=smoothstep(-2200.0,-3800.0,z)*0.60;
-    if(qw>0.01){
-      float db=2.9/1024.0*PI, ds=da/db;
-      gE=mix(gE,(elevAt(uvFromDir(normalize(sdir+Eax*db)),rug)
-                -elevAt(uvFromDir(normalize(sdir-Eax*db)),rug))*ds, qw);
-      gN=mix(gN,(elevAt(uvFromDir(normalize(sdir+Nax*db)),rug)
-                -elevAt(uvFromDir(normalize(sdir-Nax*db)),rug))*ds, qw);
+    /* Blending a fraction of the wide baseline in was the wrong shape of fix,
+       and measurement says so: it leaves 40% of every terrace wall standing,
+       and 40% of a nineteen-degree tilt is still eight degrees of hillshade on
+       ground that is genuinely flat. On the shipped field 75% of adjacent
+       abyssal cells are IDENTICAL and only 27 of the 256 levels are used below
+       3.5 km, so what the hillshade was drawing out there was not terrain at
+       all -- it was the CONTOURS of the terraces, closed loops following the
+       level sets of a smooth field. That is the maze, and it is why the abyss
+       read as marbled no matter what the procedural fabric did underneath it.
+
+       The right fix is available because the artefact is exactly characterised.
+       Quantisation error is bounded: each sample is within half a level of the
+       truth, so a DIFFERENCE of two samples is within one level, and one level
+       here is a known function of depth --
+
+           z = -d*d*Z_RANGE  =>  dz/dlevel = 2*|d|*Z_RANGE*(2/255)
+
+       -- about 89 m at 4 km depth and 109 m at 6 km. So any residual smaller
+       than that is fully explained by the encoding and carries no information,
+       while anything larger is real relief the encoder could not have invented.
+       Soft-threshold the residual at one level (the standard shrinkage rule,
+       and here the noise bound is exact rather than estimated) and the staircase
+       goes completely, with no cap needed.
+
+       This PROTECTS the features the old cap existed to save, rather than
+       trading against them: a fracture zone is ~430 m over two texels, so it
+       passes at 430-105 = 325 m, against 40% = 172 m before. Thresholding the
+       residual's MAGNITUDE rather than each component keeps it isotropic --
+       per-component shrinkage would bite along the axes and print a grid. */
+    /* The baseline is now EIGHT texels, not 2.9, and that is only affordable
+       because of the shrinkage below. Terraces average about four texels wide,
+       so a 2.9-texel window still straddles one or two edges and its gradient
+       swings by a third depending on which -- a weaker maze, but a maze, and it
+       was still plainly visible at globe zoom. A window several terrace widths
+       across reads the true regional slope instead.
+
+       Widening used to be the thing that could not be done, because it erases
+       fracture zones. Under a plain blend that is true. Under shrinkage it is
+       the opposite: what the residual has to clear is one quantisation level,
+       and widening the window makes the terrace's contribution to the WIDE
+       gradient smaller, so the residual at a terrace edge grows closer to
+       exactly one level and is removed more completely -- while a fracture zone,
+       a symmetric trough that the wide window sees as no slope at all, keeps
+       nearly its whole sharp gradient. The fix and the feature stopped being in
+       competition the moment the test became amplitude rather than scale. */
+    /* Engaged from 900 m, not 2200. The quantum is a function of depth and it
+       is already 55 m at 1.5 km and 70 m at 2.5 km -- on a ridge flank or an
+       upper slope that is still several times the real relief between two
+       texels, and those are precisely the places the granular speckle sat.
+       Waiting for the abyss meant the correction switched on only after the
+       artefact had stopped mattering. */
+    /* Applied to ALL submarine ground, shelves included. The shelf edges and
+       upper slopes were the worst of the stipple -- 303 m rms of texel-scale
+       content there against 108 on the abyss -- and they were outside the band
+       this ever touched. Fades in below 80 m, which leaves the surf zone and
+       the lagoons alone; everything deeper than that is being described by a
+       grid too coarse to describe it. */
+    float qw=smoothstep(-25.0,-500.0,z);
+    if(qw>0.01 && uDbg.w>0.5){
+      float db=16.0/2048.0*PI, ds=da/db;
+
+      /* baseElev, not elevAt: the wide taps are here to measure the REGIONAL
+         slope of the shipped field, and elevAt would run elevDetail's two
+         five-octave fractals at each of them -- forty extra noise evaluations
+         per fragment, measured at 11.5 ms a frame at 1400x900, for a
+         contribution that is procedural micro-relief and has no business in a
+         160 km baseline anyway. */
+      float e1=baseElev(uvFromDir(normalize(sdir+Nax*db)));
+      float e2=baseElev(uvFromDir(normalize(sdir-Nax*db)));
+      float wN=(e1-e2)*ds;
+      float e3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
+      float e4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
+      prom = z - (e1+e2+e3+e4)*0.25;
+      shelfHi = max(max(e1,e2),max(e3,e4));
+      float wE=(e3-e4)*ds;
+      /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
+         texels, so two of them can be up to about 1.4 levels apart on ground
+         that is genuinely flat. Under-shrinking leaves a visible residue and
+         costs more than the little extra relief this gives up. */
+      float QE=1.25*0.0156863*sqrt(Z_RANGE*abs(z));   // one 8-bit level, in metres
+      /* AND THEN HALVE WHAT IS LEFT OF IT, because of the exaggeration this
+         gradient is about to be rendered at. The normal is (-gE, gN, 300) with
+         gE in metres over a 1.8-texel baseline -- roughly 17.6 km at the equator
+         -- so the vertical scale is exaggerated about 59 times. On land that is
+         a deliberate and good choice: it is what gives a mountain belt its
+         relief at global zoom. Under water it is far too much. Measured on the
+         shipped field, sub-60 km content is 108 m rms on the abyssal plains and
+         281 m on ridge flanks, and at 59x those render as 36 and 62 degree
+         facets on ground whose true slopes are a fraction of a degree. That is
+         the granular black stipple over every rise and shelf edge, and it is
+         also why the abyss reads hard and crunchy where the reference reads
+         soft: the reference is not shading its ocean at sixty times.
+
+         The split is the fix rather than a global flattening. The WIDE gradient
+         -- eight texels, 160 km -- is coherent regional relief: basins, ridge
+         flanks, trench walls, everything the shipped field can legitimately
+         resolve, and it keeps full strength so those stay as legible as they
+         are now. Only the RESIDUAL, which is texel-scale and therefore
+         under-resolved by construction, is brought down; and the band it
+         vacates is the same one the anisotropic fabric fills, which is the
+         whole point. A fracture zone still comes through hard: 430 m over two
+         texels arrives as roughly 160 m of residual, a 47 degree feature. */
+      vec2 res=vec2(gE-wE, gN-wN);
+      float rl=length(res);
+      /* ...and trust the residual LESS the steeper the regional slope is. On a
+         continental slope the ground drops two or three kilometres across one
+         or two texels, so a 20 km grid cannot describe it as a slope at all --
+         it delivers a staircase, and every step of that staircase becomes a
+         near-vertical facet. That is the dark hatch that outlined every margin
+         and shelf break on the globe, and it is not quantisation and not
+         compression: it is a real slope sampled far too coarsely.
+
+         Where the WIDE gradient is already large, the regional slope is the
+         trustworthy description and the texel-scale departure from it is
+         sampling noise. Where the wide gradient is small -- open abyssal floor
+         -- a large residual means a genuine narrow feature, a fracture zone or a
+         trench edge, and those keep full strength. So scale by the wide
+         gradient rather than clamping globally, and the two cases separate
+         themselves. */
+      /* 0.55, up from 0.30. That blanket factor was set when the grid was half
+         this fine and most of the residual out here really was artefact -- an
+         aliased continental slope, a terrace wall. On a grid that matches the
+         source DEM the residual is far more often a real feature, and sweeping
+         the gain showed the cost plainly: at 0.30 the bare field renders at
+         rms 3.8 against 6.5 with the shrinkage off, and what goes missing is
+         the 80-250 km band, i.e. seamount groups and fracture-zone scarps --
+         precisely the structure the reference has and we lacked. The quantum
+         threshold is the part that is exactly justified; this factor never was,
+         and the steep-slope guard below is the targeted version of it. */
+      float keep=max(rl-QE,0.0)/max(rl,1e-4)*0.55
+               * mix(1.0, 0.22, smoothstep(200.0,900.0,length(vec2(wE,wN))));
+      gE=mix(gE, wE+res.x*keep, qw);
+      gN=mix(gN, wN+res.y*keep, qw);
     }
   }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
@@ -1350,7 +1629,33 @@ void main(){
 
   vec3 col;
   if(z<0.0){
-    col=oceanColour(z,sdir,lat);
+    /* COLOUR FOLLOWS THE REGIONAL DEPTH, not the texel's own. Bottom return is
+       exponential -- exp(z/70) changes seventeenfold between 100 and 300 m --
+       and the shipped field carries 206 to 303 m rms of texel-scale content in
+       exactly that band, because a 20 km cell cannot resolve a shelf. So
+       neighbouring pixels landed on wildly different parts of the ramp and the
+       shelves came out as a dark speckle inside pale blue: the crunchy hatch
+       that outlined every margin, the Mediterranean and the North Sea.
+
+       prom is this pixel against the mean of the four taps eight texels away,
+       and it is already computed for the dequantisation, so subtracting it
+       costs nothing and gives the colour a depth the grid can actually support.
+       Faded in below 40 m so the surf zone, lagoons and reef flats -- where the
+       shipped field IS the best description available and the ramp is meant to
+       be sharp -- keep their own value. Relief still comes from the hillshade,
+       which is where it belongs: this only stops the PALETTE from reporting
+       detail the data does not have. */
+    /* CLAMPED, because prom is not only noise. Subtracting the whole local
+       prominence made the palette treat a seamount as if it were as deep as the
+       plain around it -- so every rise came out DARKER than its surroundings, a
+       shaded smudge with no lit side, which is the opposite of what a rise
+       looks like. Only the first couple of hundred metres of prominence is the
+       unresolved texel-scale content this is meant to discount; past that it is
+       a real feature and the palette should say so. 250 m covers the 206-303 m
+       rms measured in the shelf band and leaves a 2 km cone essentially
+       untouched. */
+    float zcol = z - clamp(prom,-250.0,250.0)*clamp(smoothstep(-40.0,-260.0,z)*0.78, 0.0, 0.78);
+    col=oceanColour(zcol,sdir,lat);
     /* Sediment plumes: big rivers dump suspended silt where they meet the sea,
        staining the shallows a turbid green-brown for tens of km offshore. We
        carry no rivers, but a wet coast IS a big-river coast, so drive the plume
@@ -1652,6 +1957,10 @@ void main(){
   float dT=uIceT-T;
   float nearL=exp(-(dT*dT)/(2.0*3.2*3.2));
   float landIce=0.0;
+  /* How much FLOATING ice covers this pixel. Needed further down, where the
+     sea-floor relief is shaded: pack ice is a raft, and what you see from
+     above is its own surface, not the bathymetry five kilometres beneath it. */
+  float floatIce=0.0;
   if(z>=0.0){
     landIce=clamp((dT+lobe*nearL)/6.0,0.0,1.0);
     col=mix(col, vec3(0.906,0.941,0.965), landIce);
@@ -1685,6 +1994,9 @@ void main(){
     vec3 shelfCol=mix(vec3(0.812,0.878,0.910)*(0.94+0.10*packn),
                       vec3(0.898,0.929,0.953), shelf);
     col=mix(col, shelfCol, sa);
+    // ...and it FLOATS only where the water is too deep to ground on. Antarctica's
+    // below-sea-level bedrock is ice ON ground and keeps its relief.
+    floatIce=sa*(1.0-shelf);
   }
 
   /* SNOWBALL REFUGIA (Cryogenian only, gated by uSnowball).
@@ -1719,7 +2031,52 @@ void main(){
      component has to be faded out any more: the aliasing that used to force
      that is gone at the source, so the poles keep their relief like anywhere
      else, and the sun (Lh) rotates with the frame instead of spinning. */
-  vec3 nrm=normalize(vec3(-gE, gN, 300.0));
+  /* VERTICAL EXAGGERATION, and it is not the same number on land and at sea.
+     gE is metres over a 1.8-texel baseline -- about 17.6 km at the equator --
+     against a vertical scale of 300, so the relief is exaggerated some 59
+     times. On land that is the right call and always has been: it is what gives
+     a mountain belt its bite at global zoom, and the eye reads it as relief
+     rather than as distortion because mountains really are steep.
+
+     Under water it is far too much, and measurably so. Simulating this exact
+     gradient on the shipped field over the West Pacific: the median submarine
+     tilt comes out at 27.6 degrees and the 90th percentile at 53.5, on ground
+     whose true slopes are a fraction of a degree -- and 60% of it survives the
+     dequantisation shrinkage because it is not quantisation, it is genuine
+     structure that a 20 km grid can only deliver as one-texel steps. Every one
+     of those steps became a hard facet, and together they are the granular
+     black hatch that covered every rise, arc and shelf edge. It is why the
+     abyss read hard where the reference reads soft: the reference is not
+     shading its ocean at sixty times.
+
+     780 puts the sea floor at about 23x. Trenches and arcs stay as legible as
+     they were -- a four-kilometre trench wall is still a 78 degree face -- while
+     texel-scale noise drops from 27 degrees to 11. And because the abyssal-hill
+     fabric is added AFTER this as an explicit slope, it is untouched: the same
+     change that quiets the under-resolved band lets the one system that can
+     legitimately fill it come forward.
+
+     The shallow end is 520, not the land's 300, and that is the point of
+     having a separate number at all: the near-shore band is where the shipped
+     field is ROUGHEST -- an archipelago at 9.8 km is a scatter of one- and
+     two-texel islets and banks -- so taking the land exaggeration there applied
+     the strongest shading to the least resolved ground, and stippled every
+     shelf sea between Australia and Indonesia. Land is genuinely steep and
+     wants 300; shallow water is not land.
+
+     The ramp starts at 20 m, not 120, because the SHELVES needed it most and
+     were the last place still excluded. A 20 km cell cannot describe a drowned
+     river valley or a reef platform either; what arrives is the source DEM's
+     shelf detail aliased, and at 59x it drew the same granular hatch round every
+     coast that it drew on the rises. Only the surf zone keeps the land scale,
+     where the shipped field genuinely is the best description available. */
+  /* gE is a DIFFERENCE IN METRES across 2*da, not a slope, so the effective
+     exaggeration is (2*da in metres)/vex: these two constants are only
+     meaningful together with da, and they are unchanged because da is. See the
+     note there for why the gradient baseline keeps its ANGLE through the
+     resolution change instead of following the grid. */
+  float vex = z<0.0 ? mix(520.0, 780.0, smoothstep(-20.0,-400.0,z)) : 300.0;
+  vec3 nrm=normalize(vec3(-gE, gN, vex));
 
   if(z>=0.0){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -1745,7 +2102,7 @@ void main(){
     // from the normal above) so it does NOT read across the pole. The old fixed
     // uv step did, which turned every polar basin into a pinwheel of radial
     // rivers (the dark spokes over Gondwana's south-pole terrain).
-    float rvA=2.4/1024.0*PI;
+    float rvA=4.8/2048.0*PI;
     float zc=baseElev(uv);
     float ring=(baseElev(uvFromDir(normalize(sdir+Eax*rvA)))+baseElev(uvFromDir(normalize(sdir-Eax*rvA)))
                +baseElev(uvFromDir(normalize(sdir+Nax*rvA)))+baseElev(uvFromDir(normalize(sdir-Nax*rvA))))*0.25;
@@ -1833,7 +2190,11 @@ void main(){
        hillshade. We had it the other way round: broad tonal bands by crustal
        age, and fine texture too faint to read against them. Tone down the
        banding so it stops competing, and put the contrast into the relief. */
-    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.15*deepw;
+    /* Down again, to 0.06. The depth ramp above already lifts young crust,
+       because young crust IS shallower -- this term was adding a second,
+       independent age band on top of it, and two broad tonal fields over the
+       same basin is exactly the >250 km excess the spectrum showed. */
+    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.06*deepw;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
     if(aniso*deepw > 0.003){
@@ -1890,7 +2251,7 @@ void main(){
          was worst. The rate below is set so a level moves the domain about a
          quarter of a period, comfortably inside what interpolation smooths. */
       float ac=crustCo*70.0;
-      float fstep=0.12/1024.0*PI;                     // ~2.3 km, the hill scale
+      float fstep=0.24/2048.0*PI;                     // ~2.3 km, the hill scale
       float acS=degrees(fstep)/((CO_D0+distDeg)*CO_K)*70.0;   // ac advance over that step
       /* The stretch is carried along a FIXED world axis, not along across3.
          Displacing the sample by across3*ac moves it tens of domain units along
@@ -1917,14 +2278,19 @@ void main(){
          cure for the dapple, and it leaves the true abyssal plain looking like
          one -- broad, calm and nearly featureless, which is what a real plain
          a thousand kilometres from a ridge looks like on a chart. */
-      float sedq = 1.0-0.72*smoothstep(6.0,34.0,distDeg);
-      vec4 ow=abyssLod(length(fwidth(q0)))*sedq;      // domain units per screen pixel
+      float sedq = 1.0-0.50*smoothstep(6.0,34.0,distDeg);
+      vec2 ow=abyssLod(length(fwidth(q0)))*sedq;      // domain units per screen pixel
       float n0=abyssFbm(q0,ow), na=abyssFbm(qa,ow), nl=abyssFbm(ql,ow);
       float sAcross=(na-n0);
       float sAlong =(nl-n0);
       vec2 sUV = vec2(sN.x, -sN.y);                     // across-ridge, in uv basis
       vec2 rUV = vec2(sN.y,  sN.x);                     // along-ridge,  in uv basis
-      vec2 gUV = sUV*sAcross + rUV*sAlong;
+      /* Halved. This fractal is ISOTROPIC in character -- it is a stretched
+         domain, and the stretch decays with range -- so out in the far field it
+         contributes grit rather than grain, which is where our excess below
+         12 km was coming from. licGrad carries that band now, so the fractal is
+         demoted to a roughening of it. */
+      vec2 gUV = (sUV*sAcross + rUV*sAlong)*0.5*uDbg.x;
 
       /* FAULT-CONTROLLED FABRIC -- the mechanism, not an imitation of it.
          Abyssal hills are not noise. They are TILTED FAULT BLOCKS: parallel
@@ -1996,20 +2362,45 @@ void main(){
          real, sediment-mantled fabric both do. The two finer sets also fade
          out past the range where one level is still finer than a texel, since
          beyond that the field genuinely cannot hold them. */
+      /* TWO ORDERS, not three, and both kept ABOVE the band the reference
+         actually shows. Measured on the Google Earth frames at 1.6 km/px, the
+         engraving's energy sits at 12-30 km (31-41% of the spectrum) with only
+         2-6% below 12 km; ours had 12-24% below 12 km, which is what made it
+         read as hard speckle rather than as terrain. The 268-cycle set was 3.6
+         km at the axis -- entirely under the reference band, and past a few
+         degrees out it aliased and then had to be faded away again. It is gone;
+         the grain that band needs comes from licGrad below, at a wavelength
+         that does not drift with age. */
+      /* CONFINED TO FRESH CRUST, and the reason is the wavelength rather than
+         the precision. Keyed to the companded coordinate, phA's spacing is
+         40/((D0+d)*K) cycles per degree: 21 km at the axis, 90 km by ten
+         degrees out, 190 km by twenty. Abyssal hills are 2-8 km. So beyond a
+         few degrees this stopped being a fault set and became a system of
+         enormous wandering ridges -- and that, isolated by switching it off at
+         globe zoom, is exactly the squiggle maze that has been read as
+         "marbling" through several rounds. It is not a modulation-index problem
+         out there; the carrier itself is wrong by an order of magnitude.
+
+         Where it IS right is on young crust, within a few degrees of the axis,
+         which is also the only place the shipped coordinate resolves it and the
+         only place real scarps are unmantled and sharp. Keep it there and let
+         licGrad, whose spacing does not drift, carry the rest of the ocean. */
       float pxa = max(fwidth(crustCo), 1e-6);
-      float nearw = 1.0-smoothstep(9.0,26.0,distDeg);
+      float nearw = 1.0-smoothstep(2.5,8.0,distDeg);
       float phA = crustCo*40.0  + wander;
       float phB = crustCo*126.0 + wander*2.6 + jit*0.55;
-      float phC = crustCo*268.0 + wander*5.1 + jit*1.30;
       float wA = 1.0-smoothstep(0.20,0.55, pxa*40.0);
       float wB = (1.0-smoothstep(0.20,0.55, pxa*126.0))*nearw;
-      float wC = (1.0-smoothstep(0.20,0.55, pxa*268.0))*nearw*nearw;
       // Skewed, not sinusoidal: a fault block has a long back-slope and a short
       // steep scarp. Built from two cosines so it stays band-limited.
       float faultSlope = wA*(cos(6.2831*phA)+0.45*cos(12.566*phA+1.1))
-                       + wB*0.55*(cos(6.2831*phB)+0.45*cos(12.566*phB+1.1))
-                       + wC*0.30*(cos(6.2831*phC)+0.45*cos(12.566*phC+1.1));
-      gUV += sUV*(faultSlope*0.42*thrw);
+                       + wB*0.55*(cos(6.2831*phB)+0.45*cos(12.566*phB+1.1));
+      /* Only where the shipped coordinate genuinely resolves the set. Beyond
+         that these ARE the marbling: a carrier whose wavelength has grown to
+         hundreds of kilometres, phase-modulated by a wander that has not, which
+         is the arithmetic that closes iso-phase lines into loops. Retire them
+         with range instead of capping the modulation and keeping the loops. */
+      gUV += sUV*(faultSlope*0.30*thrw*nearw)*uDbg.y;
 
       /* R now carries BOTH causes of burial -- pelagic ooze accumulating with
          age, and the turbidite wedge off a nearby continent -- so this one term
@@ -2025,7 +2416,158 @@ void main(){
          deep basins glassy. The genuinely flat places are the turbidite plains
          against a margin, and those are handled by aniso, which seafloor.py
          fades to nothing under the sediment wedge. */
-      float rough = mix(1.0, 0.45, smoothstep(0.05,0.70,crustAge));
+      /* Floored at 0.68, not 0.45. Pelagic clay accumulates a few metres per
+         million years, so 100 Myr of it is a couple of hundred metres against
+         abyssal hills of 100-300 -- mantling, not burial, and the reference
+         shows full fabric on crust that old (its western South Atlantic tile is
+         ~120 Myr and combs as hard as the ridge flank). The genuinely smooth
+         places are turbidite plains against a margin, which is a SEDIMENT
+         SUPPLY effect rather than an age one, and that arrives separately
+         through aniso -- seafloor.py fades the direction field to nothing under
+         the wedge. Fading by age as well was counting the same burial twice and
+         wiping the fabric off half the open ocean. */
+      float rough = mix(1.0, 0.68, smoothstep(0.05,0.70,crustAge));
+
+      /* THE ABYSSAL GRAIN, at a wavelength that does not drift with age.
+         F=500 per radian is a 12.6 km cell and F=950 a 6.6 km one, which puts
+         both orders inside the 12-30 km band the reference carries and leaves
+         the sub-12 km band -- where ours had three to five times too much
+         energy -- almost empty. The smear is 1.5/F of a radian each way, so the
+         hills come out about 4:1 and 60-80 km long, which is what an abyssal
+         hill province looks like on a chart.
+
+         The probe h is half a wavelength: a centred difference at that spacing
+         is the corrugation's own slope rather than a sample of a finer field,
+         so this stays band-limited instead of aliasing when zoomed out. */
+      /* Bend the smear. Taken along a direction that is constant over the ~20 km
+         the shipped field resolves, the grain came out as ruled corduroy --
+         parallel ribs of even spacing running unbroken across a whole basin.
+         A real isochron is not straight: the ridge that cut it was segmented,
+         and the fabric bends with it. One noise, varying over ~210 km, rotates
+         the smear by up to about twelve degrees, which is enough to break the
+         ribs into finite, gently curving hills without loosening the
+         parallelism that makes them read as fault blocks at all. */
+      float bend=(vnoise3(sdir*30.0+3.7)-0.5)*0.42;
+      vec3 sm3=normalize(along3 + across3*bend);
+      /* THREE ORDERS, power-law, because the surface is a von Karman fractal
+         and not a single wavelength. Two orders gave a spectrum narrow enough
+         to read as ribbing -- evenly-spaced ribs of one size, which no chart
+         shows. Real abyssal-hill terrain has hills of every size over about a
+         decade, and it is the LARGE ones that give a basin its provinces and
+         its sense of being terrain rather than texture.
+
+         25 km, 12.6 km and 6.6 km, with amplitude going as roughly the square
+         root of wavelength -- the von Karman exponent for this surface -- so the
+         coarse order leads. Each order carries its own smear length in
+         proportion, which is what keeps the aspect ratio constant across them
+         instead of making the fine orders rounder than the coarse. */
+      /* Shorter hills, and the reference asked for it twice over. With the
+         finer elevation grid carrying the large scales, our local coherence had
+         climbed to 0.63-0.67 against the reference's 0.40-0.50 -- our grain is
+         now MORE lineated than the real sea floor -- while the spectrum showed
+         32-36% at 30-80 km against 25-39% and only 15-22% at 12-30 against
+         32-41%. Both readings say the same thing: the hills are too long.
+         S = 0.55/F puts the kernel inside +-0.8 of a noise cell, about 2.3:1,
+         which moves energy down into the band the reference carries most of and
+         brings the coherence back to what a real abyssal-hill province shows. */
+      /* 950 per radian: a 6.7 km cell, so the three orders come out at 13.4,
+         6.7 and 3.5 km. Set by measuring the reference's texture elements
+         against ours at the SAME pixel scale rather than by the radial band
+         split, which mixes an anisotropic feature's length into its width and
+         had been reading our grain as finer than it looked. Side by side at
+         1.6 km/px the reference's elements are 4-8 px and ours were 12-20:
+         two and a half times too coarse, which no amount of amplitude tuning
+         would have shown up as anything but "too strong". */
+      float HF=950.0, HS=0.40/950.0;
+      /* Probe at 0.35 of a cell rather than 0.5. A centred difference is a
+         low-pass as well as a derivative, and at half a cell it was rounding
+         the hills into soft blobs where the reference's read as crisp
+         engraving. */
+      float gr0=licGrad(sdir, sm3, across3, HF*0.5, HS/0.5, 0.35/(HF*0.5));
+      float gr1=licGrad(sdir, sm3, across3, HF,     HS,     0.35/HF);
+      float gr2=licGrad(sdir, sm3, across3, HF*1.9, HS/1.9, 0.35/(HF*1.9));
+      /* Anti-alias by the same rule as the fbm octaves: an order finer than the
+         screen pixel can only shimmer. fwidth on the sphere direction gives
+         radians per pixel directly. */
+      float radpx=length(fwidth(sdir));
+      /* Faded out by radpx*F = 0.45, not 0.75. A noise cell is 1/F radians, so
+         it needs radpx*F <= 0.5 just to span two pixels -- and an order drawn at
+         one pixel a cell does not add detail, it aliases. At the old threshold
+         the middle order survived to 1.3 px at globe zoom, and because the
+         fabric can tilt the normal past thirty degrees the hillshade then swung
+         between its floor and its ceiling on neighbouring pixels: measured, a
+         0.55 brightness ratio in two-pixel blobs, which is exactly the dark
+         speckle that stippled the deep basins from orbit. */
+      float gw0=1.0-smoothstep(0.18,0.45, radpx*HF*0.5);
+      float gw1=1.0-smoothstep(0.18,0.45, radpx*HF);
+      float gw2=1.0-smoothstep(0.18,0.45, radpx*HF*1.9);
+      /* Amplitude, NOT spacing, is what age takes away: pelagic ooze mantles
+         the hills, it does not stretch them. rough carries the age term and
+         sedq the turbidite wedge, so a young flank combs hard and an abyssal
+         plain against a margin goes quiet -- with the SAME wavelength on both,
+         which is the whole point of keying spacing to position. */
+      /* TWO THINGS SEPARATE FABRIC FROM CORDUROY, and both are physical.
+
+         First, a fault population is not uniform in throw. Rugged panels sit
+         beside subdued ones at province scale, and an even amplitude across a
+         whole basin is what makes ruled lineation read as cloth. thrw is
+         already that field -- slow, position-derived, about a 500 km cell -- but
+         mapped linearly it only spanned 1.9:1. Raised to a power it spans about
+         7:1, which is nearer a power-law throw distribution and gives the quiet
+         panels somewhere to be quiet.
+
+         Second, a fault block is ASYMMETRIC: a long gentle back-slope against a
+         short steep scarp, because that is what a rotated block bounded by a
+         normal fault looks like in section. Weighting the two signs of the
+         across-axis slope differently reproduces it for nothing, and it is what
+         turns a sine-like ripple into something with a recognisable summit and
+         a shadowed face -- the difference between the reference's discrete
+         hills and a uniform ribbing. (rough is applied once, in amp.) */
+      /* SPREADING RATE SETS THE ROUGHNESS, and we already ship the field that
+         measures it. This is the largest single control on abyssal-hill relief
+         in the real ocean: a slow ridge (the Atlantic, ~20 mm/yr) builds a deep
+         axial valley and throws fault scarps of several hundred metres, while a
+         fast one (the East Pacific Rise, 100+) has no valley at all and leaves
+         a floor so smooth that charts of it look almost blank. Half the reason
+         our fabric read as a uniform brushed texture is that it had no such
+         variable -- every basin was equally rough, whereas the reference's
+         quiet ground and rough ground are laid out by geology.
+
+         The measurement is free. distDeg = D0*(exp(co*K)-1), so
+         d(distDeg)/d(co) = K*(D0+distDeg); and fwidth(co)/radpx is d(co) per
+         radian of position, both already computed for the anti-aliasing. Their
+         product is how fast the crust ages away from the axis, in degrees of
+         age-distance per degree of ground -- which is 1 at the nominal 30 km/Myr,
+         above 1 where spreading is slower, below where it is faster. */
+      float coGrad = fwidth(crustCo)/max(radpx,1e-7)*0.0174533;   // d(co) per degree
+      float spreadRel = clamp(CO_K*(CO_D0+distDeg)*coGrad, 0.35, 2.6);
+      float rate = clamp(0.55+0.62*spreadRel, 0.45, 1.75);
+      /* Two scales of throw variation, not one. thrw runs at about 500 km and
+         sets which PROVINCE is rugged; within a province the individual hills
+         still have to differ, and a single slow field left them all the same
+         height -- which is most of what made the grain read as brushwork rather
+         than as terrain. An 85 km term does that, and it is the scale on which
+         a real fault population varies along strike. */
+      float panel = pow(clamp(thrw/1.40,0.0,1.0), 1.8)*rate
+                  * (0.45+1.10*vnoise3(wq*3.4+7.3));
+      /* AND THE SAME VARIABLE SETS THE SPACING, not just the amplitude. A slow
+         ridge builds large, widely-spaced blocks -- the Mid-Atlantic's fabric
+         is coarse and high-standing -- while a fast one leaves small, closely
+         set hills, which is why East Pacific Rise flanks look finer as well as
+         flatter. Tilting the balance between the three orders with spreadRel
+         gives the ocean provinces of different GRAIN SIZE, and that is most of
+         what still separated a synthesised fabric from a surveyed one: ours had
+         one hill size everywhere, varying only in how hard it was pressed.
+
+         Free, because spreadRel is already derived above from the age field's
+         own gradient -- the same measurement, used for the second thing it
+         actually controls. */
+      float sr = clamp((spreadRel-0.6)/1.6, 0.0, 1.0);      // 0 fast, 1 slow
+      float gsum = gr0*(0.42+0.72*sr)*gw0
+                 + gr1*gw1
+                 + gr2*(0.30-0.20*sr)*gw2;      // finer now, so weighted down
+      gsum = gsum<0.0 ? gsum*1.45 : gsum*0.70;
+      gUV += sUV*gsum*7.6*(0.18+0.95*panel)*uDbg.x;
 
       /* FLOWLINE CORRUGATION -- the fracture-zone scale, with the anisotropy
          REVERSED so these features run down the plate's path rather than along
@@ -2058,7 +2600,7 @@ void main(){
       vec3 gl=(sdir+along3*(fstep*5.0))*FZF - SAX*fzc;
       float m0=vnoise3(g0)+0.5*vnoise3(g0*2.2+7.0);
       float ml=vnoise3(gl)+0.5*vnoise3(gl*2.2+7.0);
-      gUV += rUV*((ml-m0)*0.85);
+      gUV += rUV*((ml-m0)*0.55)*uDbg.z;
       // Rescaled for the anisotropic domain above, whose slopes are far larger
       // than the old isotropic finite differences.
       // The fault set above now carries the structure, so the fractal is
@@ -2067,10 +2609,78 @@ void main(){
       // chart the abyssal-hill fabric is the dominant texture at every scale
       // from basin to pixel, and ours was reading as a whisper under the
       // colour banding.
-      float amp = 1.70 * rough * aniso * deepw * mix(0.50,1.0,sedq);
-      nrm = normalize(nrm + vec3(gUV*amp, 0.0));
+      /* NOT ON A VOLCANO FLANK. The shipped spreading direction is the regional
+         depth gradient, which is the isochron normal out on open floor -- but on
+         a seamount or a plateau edge the depth gradient points radially down the
+         feature's own flanks instead. The fabric therefore wrapped every cone in
+         radial spokes and a dark rosette, which is not a thing the sea floor
+         does and is conspicuous against the reference, where a seamount is a
+         plain shaded bump.
+
+         Steep ground is the tell: abyssal-hill fabric is a property of
+         flat-lying floor, laid down at an axis and carried outward, and by the
+         time the local slope is a few degrees the feature underneath is a
+         volcano, a scarp or a margin -- something with its own structure that
+         this fabric has no business combing. Fade out over that. */
+      /* NOT ON A VOLCANO, measured by PROMINENCE rather than by slope. Gating
+         on the local gradient caught the cone itself but not the two or three
+         texels around it, and that annulus is where the artefact lived: the
+         shipped direction field is the regional depth gradient, so around a
+         seamount it points radially outward and the smear that should run along
+         an isochron runs around a circle instead. The result was a set of
+         concentric ripples and a dark rosette on every cone -- a shape the sea
+         floor does not make, and one of the last things still separating our
+         seamounts from the reference's plain shaded bumps.
+
+         Prominence -- this point against the mean of the four taps eight texels
+         away -- covers the whole feature including its skirt, and it is free,
+         because those four taps are already being fetched for the
+         dequantisation above. It also says the right thing everywhere else: a
+         ridge flank has no prominence (it is a slope, not a rise), so the
+         fabric there is untouched, while a plateau or a guyot is excluded along
+         with its edge. */
+      float flatw = (1.0-smoothstep(90.0,320.0,length(vec2(gE,gN))))
+                  * (1.0-smoothstep(120.0,520.0,prom));
+      /* FOLLOW THE BAKED ROUGHNESS. rough and sedq are both smooth functions of
+         distance from the axis, so between them the fabric came out at nearly
+         one strength across a whole basin -- and a uniform amplitude everywhere
+         is the last thing separating this from the reference, whose fabric is
+         dense in some provinces, faint in others and genuinely absent on the
+         turbidite plains.
+
+         The baked field already knows which is which, because seafloor.py
+         damped its relief by the same sediment thickness: a plain it buried is
+         smooth, a bare ridge flank is not. rug is that measure and is already
+         computed for the land detail, so reading it here costs nothing and ties
+         the synthesised fabric to the same burial that shaped the field under
+         it -- one cause, two consequences, instead of two systems guessing. */
+      float bakedRough = smoothstep(0.015, 0.11, rug);
+      float amp = 1.55 * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
+                * mix(0.50, 1.30, bakedRough);
+      /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
+         unit normal, so a value of 1 is a forty-five degree face, and the tail
+         of the distribution ran well past that.
+
+         A hard min() was the first attempt and it was measurably wrong: sweeping
+         the fabric gain from 1.0 to 2.6 moved the rendered texture by under 2%
+         at every scale, because the magnitude was already over the cap almost
+         everywhere. What survives a saturated clamp is the grain's DIRECTION and
+         nothing of its amplitude, which is precisely the variation that makes a
+         fault population read as terrain rather than as embossing.
+
+         gm/sqrt(1+(gm/K)^2) has the same asymptote and no such flat: below K it
+         is linear to within a few per cent, at K it is 0.71K, and it approaches
+         K from below without ever clipping. Small slopes -- the great majority,
+         a real abyssal hill being 100-300 m over 2-5 km, i.e. 2-6 degrees --
+         pass through untouched, while the rare steep scarp is compressed instead
+         of flattened. Applied to the vector, so the knee cannot square the grain
+         off along the uv axes. */
+      vec2 gT=gUV*amp;
+      float gm=length(gT), K=0.62;
+      gT *= inversesqrt(1.0 + (gm*gm)/(K*K));
+      nrm = normalize(nrm + vec3(gT, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.42*rough*aniso*deepw;
+      col *= 1.0 + sAcross*0.30*rough*aniso*deepw;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,
@@ -2085,9 +2695,27 @@ void main(){
        Confined to the slope itself -- roughly 200 m to 3.5 km, and only where
        the floor is actually tilted -- so the shelf and the abyssal plain both
        stay smooth, as they should. */
+    /* ...and CONTINENTAL is the operative word, which this had no way to test.
+       The gate was "tilted ground between 200 m and 3.5 km", and a seamount
+       flank is exactly that: every cone whose summit reaches into the band got
+       combed by a canyon system. Worse, the canyon domain subtracts DEPTH as
+       its potential, so on a cone -- where iso-depth lines are circles -- it
+       drew the depth contours, and every seamount came out ringed like a
+       fingerprint. That is the concentric ripple, and it was never
+       quantisation: the rings are finer than a texel, which no 8-bit terrace
+       can be.
+
+       A submarine canyon is cut by turbidity currents carrying sediment off a
+       continental shelf. No shelf, no supply, no canyons -- a mid-ocean volcano
+       has volcanic flank structure instead (rift zones and collapse scars,
+       which seamounts.py already models). The test is therefore whether there
+       is a shelf above this slope, and the four wide taps answer it directly.
+       prom guards the rest: an isolated rise is not a margin however tilted. */
     float slopeBand = smoothstep(-200.0,-700.0,z) * (1.0-smoothstep(-3000.0,-4200.0,z));
     float tilt = clamp(length(vec2(gE,gN))/60.0, 0.0, 1.0);
-    float cany = slopeBand*tilt;
+    float cany = slopeBand*tilt
+               * smoothstep(-2600.0,-900.0,shelfHi)
+               * (1.0-smoothstep(200.0,800.0,prom));
     if(cany > 0.004){
       /* TWO ORDERS, because a real slope is DENDRITIC. The reference diagram
          for a continental margin shows the slope combed from the shelf break
@@ -2097,16 +2725,28 @@ void main(){
          do, so the pattern is a drainage network and needs the same treatment:
          a coarse set that carries the main canyons and a finer set riding on
          it for the tributaries. */
-      float CF=260.0;
+      /* THE PROBE HAS TO BE A DERIVATIVE. This stepped a fixed ANGLE, 2.2 texels,
+         which at CF=260 per radian is 0.88 of a noise cell and at the tributary
+         frequency 2.5 cells -- so k1 and k0 were decorrelated samples, not two
+         points on a slope, and their difference was full-amplitude noise rather
+         than a gully. Two consequences, both visible: the pattern was pixel
+         hash instead of a drainage network, and abs(gully)*1.15 exceeded 1, so
+         the shadow term drove the colour NEGATIVE. That is the hard black band
+         along every continental margin and shelf break -- not the elevation
+         staircase it was blamed on, and not the resolution.
+
+         Step a fixed fraction of a CELL instead, so each order is probed at its
+         own scale, and bound the shadow so it can darken but never black out. */
+      float CF=260.0, cstep=0.32;
       vec3 CAX=vec3(0.0,0.0,1.0);            // fixed axis, same reason as SAX
       vec3 c0=sdir*CF - CAX*(z*(CF/78000.0));
-      vec3 c1=(sdir+Eax*(1.1/1024.0*PI))*CF - CAX*(z*(CF/78000.0));
+      vec3 c1=(sdir+Eax*(cstep/CF))*CF - CAX*(z*(CF/78000.0));
       float k0=vnoise3(c0)+0.5*vnoise3(c0*2.6+17.0);
       float k1=vnoise3(c1)+0.5*vnoise3(c1*2.6+17.0);
       float gully=(k1-k0);
       float TF=CF*2.9;                       // tributaries
       vec3 d0=sdir*TF - CAX*(z*(TF/78000.0));
-      vec3 d1=(sdir+Eax*(1.1/1024.0*PI))*TF - CAX*(z*(TF/78000.0));
+      vec3 d1=(sdir+Eax*(cstep/TF))*TF - CAX*(z*(TF/78000.0));
       float t0=vnoise3(d0)+0.5*vnoise3(d0*2.6+41.0);
       float t1=vnoise3(d1)+0.5*vnoise3(d1*2.6+41.0);
       // the fine set is throttled where the coarse one already has a canyon,
@@ -2114,19 +2754,44 @@ void main(){
       // than as a second independent comb laid over the first
       float trib=(t1-t0)*0.55*(1.0-clamp(abs(gully)*2.2,0.0,1.0));
       gully += trib;
-      nrm=normalize(nrm+vec3(gully*3.4*cany, 0.0, 0.0));
-      col *= 1.0 - abs(gully)*1.15*cany;     // shadowed incisions
+      nrm=normalize(nrm+vec3(gully*9.0*cany, 0.0, 0.0));
+      col *= 1.0 - clamp(abs(gully)*3.0*cany, 0.0, 0.42);   // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
      the concentric bullseye that the latitude-ring average produced. With the
      depth field filtered properly instead, the ordinary shelf/depth ramp is
      correct at the pole too, so the sea keeps its real colour.) */
+  /* PACK ICE IS A RAFT. The sea-floor normal -- base relief and abyssal-hill
+     fabric alike -- was being used to shade whatever sits on the water above
+     it, so at the Cryogenian peaks the whole snowball was embossed with the
+     abyssal fabric of the ocean underneath: a dashed ripple across ground that
+     is, physically, a flat sheet of ice floating on five kilometres of water.
+     It is the same mistake as the sun glint (see the sea-surface block below)
+     and the same fix: the visible surface owns its own normal.
+
+     Flattened by how much floating ice there is, and only where the ice is
+     genuinely afloat -- grounded ice over shallow bedrock, which is most of
+     Antarctica, still takes the relief beneath it because there the relief IS
+     the surface. A little is left so the sheet does not go dead flat; pack
+     texture proper comes from the pack noise in the ice block. */
+  nrm = normalize(mix(nrm, vec3(0.0,0.0,1.0), floatIce*0.88));
   float hs=clamp(dot(nrm, normalize(vec3(Lh, 0.63))),0.0,1.0);
   // The base gradient is faded out into the cap and the pole is carried by the
   // isotropic grain, so the hillshade no longer has to be flattened to hide a
   // starburst -- leaving it intact is what keeps the pole's texture visible.
-  float shade=clamp(0.70+0.62*hs, 0.0, 1.18);
+  /* THE CEILING WAS CLIPPING THE HILLS' LIT FACES. On flat ground hs comes out
+     at 0.63, so shade sits at 1.09 -- 0.09 below the 1.18 ceiling and 0.39
+     above the floor. A hill tilted toward the sun therefore had almost no room
+     to brighten while one tilted away had plenty to darken, and the whole
+     abyssal fabric rendered as dark marks on a lighter ground rather than as
+     relief with a lit side and a shadowed side. That asymmetry, not the
+     amplitude, is why our hills read soft against the reference's crisp ones.
+
+     Only at sea. The ceiling is a blow-out guard and it is still needed on
+     land, where base colours run to 0.85 and 1.34 would clip them; the ocean's
+     are dark enough that the extra headroom costs nothing. */
+  float shade=clamp(0.70+0.62*hs, 0.0, z<0.0 ? 1.34 : 1.18);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead
@@ -2136,7 +2801,15 @@ void main(){
   // strongly as land -- the abyssal hills, seamounts and ridge flanks should
   // read as terrain, not a faint wash. Kept a touch softer than land so the
   // deepest plains still calm down.
-  float hw=(z<0.0)? mix(0.88,0.72,clamp(-z/5200.0,0.0,1.0)) : 1.0;
+  /* The sea floor now takes essentially the full hillshade. This used to fall
+     to 0.72 in the deepest water -- diluting the relief by nearly a third
+     exactly where there is most of it -- because the deep field was carrying
+     artefacts that shading would have amplified: the 105 m quantisation
+     staircase, and a specular highlight keyed to the sea-floor normal. Both are
+     dealt with at source now, so there is nothing left to hide, and the
+     reference is emphatic on this point: below the shelf break its ocean is one
+     colour and EVERY feature you can see is hillshade. */
+  float hw=(z<0.0)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
 
   if(z<0.0 && uSchem<0.5){
@@ -2155,7 +2828,18 @@ void main(){
     float s1=vnoise3(swell), s2=vnoise3(swell*1.9+5.0);
     vec3 rd=sdir*560.0+vec3(uTime*0.05);
     float r1=fbm3(rd), r2=fbm3(rd*2.6+11.0);
-    vec3 wn=normalize(nrm
+    /* THE SURFACE NORMAL IS NOT THE SEA-FLOOR NORMAL. This built wn from nrm,
+       which by this point carries the whole abyssal-hill fabric -- so every
+       ridge four kilometres down that happened to tilt toward the sun lit a
+       specular highlight on the water above it. That is the origin of the pale
+       blue-white speckle scattered across the open ocean: measured, 892 blobs
+       above L=115 in one South Atlantic frame at (115,135,190), which is
+       exactly base + spec*0.26 + glint*0.35. The reference has none, because a
+       sea surface is flat no matter what the bathymetry does under it.
+
+       Start from the flat surface (this basis has z up) and let only the waves
+       tilt it. The glitter is then a property of the water, as it should be. */
+    vec3 wn=normalize(vec3(0.0,0.0,1.0)
       + vec3((s1-s2)*0.30,(s2-s1)*0.30,0.0)
       + vec3((r1-r2)*0.50,(r2-r1)*0.50,0.0));
     float spec=pow(clamp(dot(wn,Ls),0.0,1.0),42.0);
@@ -2163,7 +2847,14 @@ void main(){
     float openw=1.0-smoothstep(-120.0,-8.0,z);
     col+=vec3(0.55,0.68,0.78)*spec*0.26*openw;
     col+=vec3(0.90,0.95,1.00)*glint*0.35*openw;
-    col*=0.975+0.05*r1+0.03*(s1-0.5);
+    /* And damp the surface's own brightness texture over the abyss. r1 runs at
+       a 11 km cell -- the same band as the sea-floor grain -- so at 5% it was
+       a second system writing into the band the fabric owns, and the deep ocean
+       is precisely where there is most sea floor to see and least reason to
+       look at the water. Full strength over the shelf, a quarter of it out
+       over the deep. */
+    float surfw=mix(0.12,1.0,smoothstep(-2600.0,-400.0,z));
+    col*=1.0+(-0.025+0.05*r1+0.03*(s1-0.5))*surfw;
     // Surf. Where the swell runs into water shallow enough to feel the bottom
     // it breaks, so the last few metres before land carry a bright, broken band.
     float surf=smoothstep(-26.0,-2.0,z)*smoothstep(0.45,0.85,r1*0.6+s1*0.4);
@@ -2262,7 +2953,10 @@ function initGL(){
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uSnowball:{value:0},
-    uTexel:{value:new THREE.Vector2(1/2048,1/1024)}   // matches ELEV_W/H
+    uDbg:{value:new THREE.Vector4(1,1,1,1)},
+    // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
+    // it is used to warp -- not the elevation, which is now twice that.
+    uTexel:{value:new THREE.Vector2(1/2048,1/1024)}
   },vertexShader:VERT,fragmentShader:FRAG,
     extensions:{derivatives:true}});   // fwidth() for screen-space shoreline AA
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);

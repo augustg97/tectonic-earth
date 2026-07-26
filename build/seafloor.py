@@ -36,6 +36,14 @@ import math
 
 import numpy as np
 
+# EVERY SPATIAL FILTER BELOW IS IN CELLS, and deg_per_cell = 180/h, so a radius
+# written here means one thing at 1024 rows and half as much ground at 2048.
+# When the elevation grid doubled in July 2026 all of them had to double with
+# it, because each is a claim about the WORLD -- a fracture zone is 0.26 deg
+# wide, a turbidite apron 5 deg, a continent more than 3 deg across -- and not a
+# claim about the raster. The exception is render.smooth_bathymetry, whose whole
+# job is to band-limit to what the grid can carry: that one is correctly a
+# function of the raster and gets FINER as the raster does.
 # --- age-depth (half-space cooling, Parsons & Sclater style) ---------------
 RIDGE_DEPTH = 2600.0        # m: crest of a mid-ocean ridge
 DEPTH_PER_SQRT_MYR = 350.0  # m per sqrt(Myr): how fast it deepens with age
@@ -714,7 +722,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # taken from distance to the PRESENT ridge, the direction was right
             # only near the axis and swung wrong everywhere else, which is why
             # the fabric curved in arcs where a real chart combs dead straight.
-            sm = _nd.gaussian_filter(age_myr if age_ok else dist_deg, 2.0)
+            sm = _nd.gaussian_filter(age_myr if age_ok else dist_deg, 4.0)
             gy, gx = np.gradient(sm)
             coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
             east = gx / coslat
@@ -779,11 +787,11 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # the partition boundary always was. Same lesson as the sediment
             # field below: a distance transform is not a shape until it is
             # band-limited.
-            fzd = _nd.gaussian_filter(_edt_wrap(~edge) * deg_per_cell, 1.5)
+            fzd = _nd.gaussian_filter(_edt_wrap(~edge) * deg_per_cell, 3.0)
             # A trace is only a fracture zone where it runs along the flowline.
             # Cell boundaries between distant or oddly-oriented segments cut
             # across the grain and must be dropped, or they draw a lattice.
-            fgy, fgx = np.gradient(_nd.gaussian_filter(fzd, 1.0))
+            fgy, fgx = np.gradient(_nd.gaussian_filter(fzd, 2.0))
             ge_, gn_ = fgx / coslat, -fgy
             gm_ = np.hypot(ge_, gn_) + 1e-6
             align = np.abs(ge_ / gm_ * u + gn_ / gm_ * v)   # 0 correct, 1 spurious
@@ -810,7 +818,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 # so could never be older than the frame it was drawn in.
                 fzw = (fz_field * np.clip((-out - 2400.0) / 1500.0, 0.0, 1.0)
                        * polefade)
-                ring = np.clip(_nd.gaussian_filter(fzw, 2.6) - fzw * 0.80, 0.0, None)
+                ring = np.clip(_nd.gaussian_filter(fzw, 5.2) - fzw * 0.80, 0.0, None)
                 relief -= fzw * 430.0
                 relief += ring * 260.0          # the flanking ridges either side
             else:
@@ -854,18 +862,18 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 relief += _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v, age_of=float(age))
             else:
                 rng = np.random.default_rng(11)
-                smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 2.2)
+                smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 4.4)
                 smt = np.clip((smt - 0.74) / 0.26, 0.0, 1.0) ** 2
                 chain = smt.copy()
                 yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-                step_cells = 2.0
+                step_cells = 4.0
                 for k in range(1, 8):
                     sy = yy + v * (k * step_cells)      # +v is north; rows go south
                     sx = xx - (u / coslat) * (k * step_cells)
                     back = _nd.map_coordinates(smt, [np.clip(sy, 0, h - 1), sx % w],
                                                order=1, mode="grid-wrap")
                     chain = np.maximum(chain, back * (1.0 - k / 9.0))
-                relief += _nd.gaussian_filter(chain, 0.9) * 780.0 * np.clip(
+                relief += _nd.gaussian_filter(chain, 1.8) * 780.0 * np.clip(
                     1.1 - age_myr / 110.0, 0.15, 1.0)
 
             # SEDIMENT BLANKET. Abyssal plains next to a continent are the
@@ -879,7 +887,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # before use. Narrower than before (5 deg, not 7.5) and not quite to
             # zero, because a turbidite apron is a few hundred km wide, not a
             # thousand, and even it is not perfectly smooth.
-            dland = _nd.gaussian_filter(_edt_wrap(out < 0) * deg_per_cell, 6.0)
+            dland = _nd.gaussian_filter(_edt_wrap(out < 0) * deg_per_cell, 12.0)
             # ...and it is now a THICKNESS, competing against the relief it has
             # to bury, rather than a fade with distance from land. See
             # sediment.py: pelagic ooze accumulates at a rate set by latitude
@@ -900,10 +908,10 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 # middle of the Pacific where the chart shows bare abyssal hills.
                 # Eroding the mask first drops anything under about 3 degrees
                 # across and leaves the continents.
-                _big = _nd.binary_erosion(out >= 0, iterations=8)
+                _big = _nd.binary_erosion(out >= 0, iterations=16)
                 if not _big.any():
                     _big = out >= 0
-                dbig = _nd.gaussian_filter(_edt_wrap(~_big) * deg_per_cell, 6.0)
+                dbig = _nd.gaussian_filter(_edt_wrap(~_big) * deg_per_cell, 12.0)
                 sed_m = _sd.thickness(age_myr, dbig, lat1d)
                 sed = _sd.burial(sed_m)
                 # A plain is a FILL TERRACE, not bare basalt: the pile stands the
@@ -987,7 +995,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # Regional depth gradient as a stand-in for the spreading direction.
             seaf = sea.astype(np.float32)
             dep = np.where(sea, out, 0.0).astype(np.float32)
-            reg = _nd.gaussian_filter(dep, 9.0) / np.maximum(_nd.gaussian_filter(seaf, 9.0), 1e-3)
+            reg = _nd.gaussian_filter(dep, 18.0) / np.maximum(_nd.gaussian_filter(seaf, 18.0), 1e-3)
             gy, gx = np.gradient(reg)
             coslat = np.clip(np.cos(np.radians(lat1d)), 0.08, 1.0)[:, None]
             east, north = gx / coslat, -gy

@@ -91,7 +91,7 @@ Six textures per keyframe. All are WebP; all are decoded and interpolated betwee
 
 | suffix | field | resolution | contents |
 |---|---|---|---|
-| `_e` | elevation | 2048×1024 | signed-sqrt encoded, so precision concentrates near sea level — the coastline is the one contour that must interpolate cleanly |
+| `_e` | elevation | 4096×2048 | signed-sqrt encoded, so precision concentrates near sea level — the coastline is the one contour that must interpolate cleanly. Matches the 6-arc-minute source DEM, so more pixels would only interpolate |
 | `_r` | rainfall | 1536×768 | smooth, so it costs little |
 | `_m` | plate motion | 128×64 | R = east, G = north, B = confidence |
 | `_w` | lake depth | 2048×1024 | baked standing water, sqrt-encoded metres |
@@ -246,6 +246,14 @@ Two lessons, both learned the expensive way:
 - **Never treat categorical IDs as a continuous field.** Blurring a segment-ID raster and taking its gradient scales the signal by the arbitrary difference in *label number*: a 1↔2 boundary comes out 40× fainter than a 1↔41 one.
 - **A distance transform is not a shape until it is band-limited.** Raw EDT level sets follow the pixel lattice, so they draw right angles. Smooth before using them as geometry.
 
+The same thing happens to the **elevation** field, and for longer it was blamed on the fabric. Measured on the shipped `_e`: only 27 of 256 levels are used below 3.5 km and **75% of adjacent abyssal cells are identical**, so the abyss is a staircase of terraces averaging four texels wide, and the hillshade draws their *contours* — closed loops following the level sets of a smooth field. That is the "marbling" several rounds of fabric tuning chased, and no fabric parameter could have reached it.
+
+**Dithering at encode does not work**: measured, WebP's lossy path destroys ±½-LSB noise of every kind (white, blue, TPDF) and re-terraces on decode, at identical file size.
+
+What does work is that the artefact is **exactly characterised**, so it can be undone at read time. Quantisation error is bounded by half a level per sample, hence one level per *difference*, and one level here is a known function of depth (`dz/dlevel = 2·|d|·Z_RANGE·2/255`, about 89 m at 4 km and 109 m at 6 km). Soft-threshold the residual between a narrow and a wide gradient at one level — the standard shrinkage rule, but with an exact noise bound rather than an estimated one — and the staircase goes completely.
+
+The corollary matters more than the fix: **shrinkage lets the smoothing window get wider, not narrower.** The old mitigation blended 40% of a 2.9-texel gradient and was capped there because widening it erased fracture zones. Under shrinkage the test is amplitude, not scale, so an 8-texel window is safe — and *better*, because a wider window makes a terrace's contribution to the regional slope smaller, so the residual at a terrace edge lands closer to exactly one level and is removed more completely, while a fracture zone (a symmetric trough the wide window reads as no slope at all) keeps nearly its whole sharp gradient.
+
 ### 7.3 The precision budget
 
 Extra precision beyond 8 bits forces `_o` to lossless WebP, because every scheme's extra channel is a sawtooth and lossy compression destroys it. Measured over 251 keyframes at 2048×1024:
@@ -269,15 +277,47 @@ Corollary that governs the shader: **key every periodic term to the companded co
 
 When detail looks *wrong* rather than *absent* — "mottled", "busy", "not quite combed" — check whether two systems are texturing the same surface. `elevDetail()` was laying isotropic 24 km blobs on the abyss **in the elevation**, where they drive the primary normal, so they beat the anisotropic fabric that only perturbs the normal afterwards. No parameter tuning could have fixed it.
 
-Give each system a band of scales and fade the others out of it.
+It has now happened three times, and the pattern in the *fix* is as instructive as the pattern in the fault:
 
-### 7.5 Anisotropy on a sphere
+| the two systems | the tell | why the first fade was wrong |
+|---|---|---|
+| `elevDetail`'s 24 km octave vs the abyssal fabric | mottling across the combing | faded on **depth** (1800–3400 m), so it stood at full strength on ridge flanks and upper slopes — 15% of the sea floor and the most conspicuous 15%. The reason to fade was never depth: it is that below the shelf break the ocean-structure system *owns* the 5–30 km band. Fade on the shelf break. |
+| the sea surface's sun glint vs the sea floor | pale blue-white speckle over open ocean (measured: 892 blobs above L=115 in one frame, at exactly base + spec + glint) | the specular normal was built from `nrm`, which by that point carries the whole abyssal-hill fabric — so a ridge four kilometres down lit a highlight on the water above it. **A sea surface is flat no matter what the bathymetry does under it.** |
+| the surface's own brightness ripple (11 km) vs the fabric | fine grit over the abyss | full strength everywhere; now a quarter of it over deep water, where there is most sea floor to see and least reason to look at the water |
+
+**Give each system a band, and fade the others out of it by the variable that says whose band it is** — not by whichever variable happens to correlate.
+
+### 7.5 A coordinate-keyed periodic term drifts in wavelength
+
+Keying the fault set to the companded age coordinate solves terracing and creates a worse problem, because the companding is by construction non-linear. `phA = crustCo·40` has a spacing of `40/((D0+d)·K)` cycles per degree — **21 km at the axis, 90 km at ten degrees out, 190 km at twenty**. Abyssal hills are 2–8 km. Past a few degrees this had stopped being a fault set and become a system of enormous wandering ridges, and *that* — isolated by switching it off at globe zoom — is the squiggle maze read as "marbling" for several rounds. It is not a modulation-index problem out there; the carrier itself is wrong by an order of magnitude.
+
+The shipped coordinate cannot carry a uniform fine fabric to the far field, and no cap fixes that: keyed to the companded coordinate the wavelength drifts, keyed to true distance one 8-bit level is 0.66° out there — nearly four wavelengths — and it terraces. So the far field's fabric has to come from **position**, whose scale is whatever we choose, uniformly, everywhere; all the shipped field supplies is the *direction*, which is smooth and well-resolved and exactly what it is good at. Periodic sets are kept only where the coordinate genuinely resolves them, within a few degrees of the axis, which is also the only place real scarps are unmantled and sharp.
+
+### 7.6 A resolution change is not one constant
+
+Doubling the elevation grid to 2048×4096 in July 2026 touched about fifteen constants across three files, and the failure mode is that most of them look fine when you skip them.
+
+**Filter radii are in cells, so they encode either a width in the WORLD or a limit of the RASTER, and only you know which.** Every filter in `seafloor.py` is the first kind — a fracture zone is 0.26°, a turbidite apron 5°, a continent more than 3° across — so all of them had to double. `render.smooth_bathymetry` is the second kind, band-limiting to what the grid can hold, so it correctly stays put and its footprint halves in angle (5 cells is 49 km at 9.8 km cells against 137 km at 19.5 — and the 90 km of bathymetry that buys back is the point of the exercise).
+
+**The gradient baseline should NOT follow the grid**, which is the counter-intuitive one. The tempting move is to halve `da` and "use" the new resolution; measured, it makes the sea floor worse. Quantisation error is bounded per *sample*, so it does not shrink when the baseline does, while the true relief across the baseline does: abyssal slopes run 2–5 m/km, so over 35 km a real difference is 75–180 m against an 89 m quantum, and over 23 km it is 50–120 m — which the shrinkage then discards as encoding noise. The rendered abyss went flat while the field itself carried *more* at every band (10–30 km: 61 m against 41; 30–80 km: 154 against 87).
+
+**And `gE` is metres, not a slope.** The effective vertical exaggeration is `(2·da in metres)/vex`, so `da` and `vex` are only meaningful together — as are every other constant compared against a gradient (the shrinkage's steep-slope guard, the fabric's flat-ground gate, the canyon's tilt gate). Change one, change all five.
+
+The models that write *into* the grid are a separate question and were deliberately left: `_ridge_geometry` at 1024×2048 and `oceanage` at 512×1024 are smooth fields that get upsampled, and raising `oceanage` costs 64 s a keyframe against 0.5 (it scales badly), which is 4½ hours for structure that is smooth between its samples anyway.
+
+### 7.7 Vertical exaggeration is not one number
+
+`nrm = normalize(vec3(-gE, gN, 300))` with `gE` in metres over a 1.8-texel baseline is a **59× vertical exaggeration**. On land that is right and always has been — it is what gives a mountain belt its bite at global zoom. Under water it is far too much, and measurably so: simulating that gradient on the shipped field gives a median submarine tilt of **27.6°** and a p90 of **53.5°** on ground whose true slopes are a fraction of a degree. Every under-resolved one-texel step becomes a hard facet, and together they are the granular black hatch that outlined every rise, arc and margin.
+
+Two things follow. First, the sea floor takes its own scale (780, about 23×) — trenches stay legible at 78° while texel-scale noise drops from 27° to 11°. Second, **60% of that content is not quantisation**: it survives shrinkage because a 20 km grid genuinely cannot describe a continental slope, and delivers it as a staircase. Where the *wide* gradient is already large, the regional slope is the trustworthy description and the texel-scale departure from it is sampling noise; where the wide gradient is small, a large residual is a real narrow feature. Scaling the residual by the wide gradient separates the two cases without a global flattening.
+
+### 7.8 Anisotropy on a sphere
 
 Elongating noise by compressing the domain along a tangent direction **does not work on a sphere, at any amplitude**. Compressing along `t` means subtracting `t·dot(P·F, t)`, and `dot(P, t)` is identically zero because a tangent is perpendicular to the radius — and its derivative is zero too, since moving along `t` tilts `t` inward at exactly the rate that restores the term. That curvature identity is why an early attempt at domain-stretched lineation came out as isotropic crumple.
 
 Elongation has to come from a scalar field that genuinely varies across the axis (the shipped coordinate), or from smearing along the axis. Both are used, each where it is the better tool.
 
-### 7.6 Never ring-average at the poles
+### 7.9 Never ring-average at the poles
 
 Clamping the sampling radius near the pole makes every pixel poleward of ~88° share one ring value — a uniform disc — and where that ring crosses land it paints polar *ocean* as land. Pole handling is instead: an on-sphere disc filter inside the cap, plain tangent-frame differences outside, both in the east/north basis, with the field band-limited per row in the pipeline (`polar_lowpass`).
 
@@ -317,12 +357,42 @@ The sea floor was rebuilt onto crustal age in July 2026. What that fixed, and wh
 
 **Fixed.** Fabric orientation everywhere (isochron tangent rather than present-ridge distance). Fracture zones that persist, because an age offset travels with the crust. Depth by basin, from real age. Abyssal plains with sharp edges, from a sediment thickness that competes against the relief it buries. A seamount population instead of smeared streaks. Far-field marbling, which was a modulation index above 1 — the perturbation's gradient exceeding the carrier's, crossing over at 13° from the axis.
 
+**Fixed in the July 2026 reference round** — the round measured against the Google Earth frames rather than tuned by eye. The measurements are in §7.2, §7.4, §7.5 and §7.6; the outcomes:
+
+| | before | after | reference |
+|---|---|---|---|
+| ocean RGB | 22 · 58 · 84 | **37 · 46 · 95** | 37 · 46 · 95 |
+| R/B · G/B | 0.27 · 0.70 | **0.39 · 0.48** | 0.39 · 0.48 |
+| saturation | 0.741 | **0.608** | 0.617 |
+| mean luminance | 54.8 | **59.2** | 59.4 |
+| energy below 12 km | 12–24% | **2.9–3.3%** | 2.4–5.7% |
+| energy 12–30 km | 13–27% | **16–27%** | 32–41% |
+| local grain coherence | 0.32–0.39 | **0.49–0.55** | 0.40–0.50 |
+| spurious bright blobs, one frame | 892 | **3** | — |
+| elevation grid | 1024×2048 | **2048×4096** | — |
+| `_e` across 251 keyframes | 18.4 MB | **57.4 MB** | — |
+| all fields | 94 MB | **145 MB** | — |
+
+Frame time is unchanged (67.7 ms against 66.6–67.3 for the previous shader, at 1400×900 and 1.6 km/px, measured on an idle machine — earlier readings taken while a reskin was running are not comparable). The abyssal fractal dropped from five octaves to three, which paid for the third grain order: its 15 km and 7 km terms had weights of 0.07 and 0.02 because `licGrad` owns that band now, and they cost six noise evaluations per fragment to contribute almost nothing.
+
+The colour change is the one worth restating, because it was a wrong *model* rather than a wrong value. The old ramp interpolated between three different hues with depth. Binning the reference's ocean by luminance shows it does nothing of the sort: from the 1st to the 75th percentile its R/B holds at 0.37–0.41 and G/B at 0.46–0.52 while brightness rises 40%. It is **one colour, shaded** — which is also the physics, since below the photic zone nothing reflects off the floor and all you see is the water column's own attenuation. A hue ramp with depth is a cartographic convention, not an appearance.
+
+The same argument fixed the shelf: bright shallow water needs a bright *floor* as well as a shallow one, and bottom return is exponential in depth, not a smoothstep from 850 m. Under the old ramp every seamount summit within half a kilometre of the surface was painted shelf-blue — 228 of them in the open ocean at 0 Ma.
+
+Being exponential, though, it then has to be fed a depth the grid can support: `exp(z/70)` changes seventeenfold between 100 and 300 m, and the shipped field carries 206–303 m rms of texel-scale content in exactly that band. So neighbouring shelf pixels landed on wildly different parts of the ramp, and the palette drew a dark speckle inside pale blue around every margin. The colour now follows the **regional** depth (this pixel against the four taps eight texels out, already fetched for the dequantisation) and fades back to the true value above 40 m, where the surf zone and the reef flats want the ramp sharp. Relief still comes from the hillshade — this only stops the palette reporting detail the data does not have.
+
+**A fifth instance, and the one that finally explained the seamounts.** The concentric rings on every cone were never quantisation — they are finer than a texel, which no 8-bit terrace can be. They were the **submarine-canyon system**, whose gate was "tilted ground between 200 m and 3.5 km" and therefore fired on every seamount flank; and because the canyon domain subtracts DEPTH as its potential, on a cone — where iso-depth lines are circles — it drew the depth contours. A canyon is cut by turbidity currents carrying sediment off a continental shelf, so the test is whether there *is* a shelf above the slope, and the four wide taps answer it directly. Its probe was also stepping a fixed angle rather than a fraction of a noise cell, so `k1` and `k0` were decorrelated samples and `abs(gully)*1.15` could exceed 1 — driving the colour negative and printing the hard black band along every margin.
+
+And a fourth instance of §7.4, found by checking the Cryogenian: **the sea-floor normal was shading pack ice**, so at the snowball peaks the whole world was embossed with the abyssal fabric of the ocean beneath it. Pack ice is a raft; the visible surface owns its own normal. Grounded ice over shallow bedrock — most of Antarctica — still takes the relief under it, because there the relief *is* the surface.
+
 **Not fixed, and known.**
 
 - **Seamounts are not clustered along plume tracks.** They are seeded by crustal age, so they scatter where a real ocean shows chains — Hawaii, Louisville, the Cook–Australs. The `hotspot` input to `seamounts.field()` exists and is not wired up.
 - **Deep-time sea floor cannot be made accurate**, only structurally correct. That crust was subducted; there is no record. The isochron model correlates 0.41 with the surveyed grid where both exist, which is why the surveyed grid is preferred wherever it survives.
 - **The axial valley and nodal basins still key off the ridge network**, not age — deliberately, because they describe where the ridge is *now*.
 - **Aseismic ridges and marginal basins** (Ninetyeast, Walvis, the Philippine Sea) are absent or generic.
+- **The fabric is a synthesised grain, not surveyed hills.** Its aspect, spectrum and coherence are now measured against the reference rather than guessed, and it varies with spreading rate, sediment burial and the baked field's own roughness — but a real chart's abyssal-hill provinces are bounded by fracture zones and change character across each one, and ours are continuous. `_o` carries no fracture-zone channel to key that on.
+- **Coastlines and shelf breaks stay jagged at texel scale.** At 9.8 km the grid matches the source PaleoDEMs exactly, so there is nothing further to extract: Google Earth's near-shore bathymetry is 15 arc-seconds, some twenty times finer. This is a data limit, not a shader one, and it is where the remaining visible difference lives.
 
 ---
 

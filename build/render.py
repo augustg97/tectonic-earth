@@ -294,12 +294,41 @@ def resample_dem(z, out_h, out_w):
 
 
 def smooth_bathymetry(Z):
-    """Flatten the abyssal plains. They hold no useful detail, their lossy
-    compression artifacts show up as blocking in the ocean depth ramp, and
-    smoothing them shrinks the shipped texture appreciably. Shelves and
-    coastlines are untouched."""
-    deep = np.clip((-Z - 600.0) / 1200.0, 0, 1)
-    return Z * (1 - deep) + _smooth(Z, 3) * deep
+    """Band-limit the sea floor to what a 20 km grid can actually carry.
+
+    This began as "flatten the abyssal plains", and for the plains it worked.
+    The band it did not reach is the one that mattered: ridges, rises, arcs and
+    plateaus, between about 1.5 and 3 km. Measured on the shipped field, 29% of
+    adjacent texels there differ by two or more encoding levels and the 95th
+    percentile is five -- some 350 m between neighbours, on ground whose true
+    slope over 20 km is a fraction of a degree. That is not relief, it is the
+    source DEM aliased onto a grid too coarse to hold it, and the renderer has
+    no way to tell the difference: every one of those steps becomes a hard
+    facet, and together they are the granular black hatch that traced every
+    mid-ocean ridge on the globe.
+
+    So the criterion is the shelf break rather than the abyss. Below it, the
+    fine structure of the sea floor is synthesised per pixel from the ocean-
+    structure field and does not need to be -- cannot usefully be -- carried
+    here. Above it, on the shelf and around the coast, the shipped field IS the
+    best description available and is left alone.
+
+    Two passes rather than one wide kernel: 5x5 across the whole sea floor below
+    the break, and a 3x3 weighted into the deep, where there is genuinely nothing
+    finer to keep. A single wider box would have the same reach but a boxier
+    impulse response, and the sea floor is one of the few places a filter
+    footprint would be visible.
+
+    These radii are in CELLS and are deliberately NOT scaled with the grid --
+    unlike every filter in seafloor.py, which encodes a width in degrees. This
+    one encodes the raster's own Nyquist limit, so when the grid doubled to
+    2048x4096 the footprint correctly halved in angle: 5 cells is 49 km at
+    9.8 km cells against 137 km at 19.5, and the extra 90 km of bathymetry it
+    now keeps is exactly what the finer grid was bought for."""
+    below = np.clip((-Z - 250.0) / 650.0, 0, 1)      # 0 on the shelf, 1 past the break
+    Zs = Z * (1 - below) + _smooth(Z, 2) * below
+    deep = np.clip((-Z - 2200.0) / 1400.0, 0, 1)
+    return Zs * (1 - deep) + _smooth(Zs, 1) * deep
 
 
 def compute_fields(z, age, out_h=512, out_w=1024):
