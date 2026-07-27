@@ -67,6 +67,11 @@ CHECKS = [
     Check("ice extent", os.path.join(HERE, "ice_audit.py"),
           r"^(\d+) of \d+ checked keyframes fall outside", "gt", 0,
           "drawn ice area against the literature range, per keyframe"),
+    Check("label plate vs text", os.path.join(HERE, "audit_label_plate.py"),
+          r"^(\d+) findings", "gt", 0,
+          "a label whose coordinate is a PALAEO position that happens to be land "
+          "today, so it is silently tracked on whichever continent now sits "
+          "there. Found eleven, including all four Sloss seas"),
     Check("frame gate · true regressions", os.path.join(MODELING, "regression_gate.py"),
           r"^  TRUE\s+(\d+)", "gt", 0,
           "features the frame switch made worse with no other explanation",

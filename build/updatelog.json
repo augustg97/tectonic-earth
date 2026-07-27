@@ -2,6 +2,69 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
  "releases": [
   {
+   "version": "1.8",
+   "date": "27 July 2026",
+   "title": "Rain that knows where the sea is",
+   "summary": "A second pass over the research programme. The weather now responds to the shallow seas the last release added, the deep ocean floor has depth again, and eleven places were found riding the wrong continent.",
+   "sections": [
+    {
+     "name": "Climate and weather",
+     "items": [
+      "Rainfall now knows about the shelf seas. The wind-and-moisture model was still running on a map without them, so flooding the Triassic changed the coastline without making the air over it any wetter. Land that stayed land is 17% wetter at 240 Ma, and the deep Pangaean interior 11%.",
+      "The climate readout names the state from the temperature it is showing you. It used to use a separate internal measure, so at 250 Ma the panel read “28.5 °C” and “Hothouse” side by side — while 28.5 °C is a warm greenhouse on the scale being quoted.",
+      "No grasslands before there were grasses. The world at 100 million years ago was being drawn with grassy plains and savanna stipple; grasses only matter ecologically from about 40 Ma, and tropical savanna from about 8 Ma."
+     ]
+    },
+    {
+     "name": "The ocean floor",
+     "items": [
+      "A third of the sea floor was perfectly flat. Everything older than about 97 million years was drawn at exactly the same depth — 6,000 m — across the whole old Pacific and the old North Atlantic. Real sea floor keeps deepening, more slowly, and now so does this one.",
+      "Old crust sits about 400 m shallower and, more to the point, 100-million-year-old and 180-million-year-old floor are no longer identical."
+     ]
+    },
+    {
+     "name": "Where things are",
+     "items": [
+      "Eleven places were riding the wrong continent, and a new check now catches the whole class. A coordinate written down as an ancient position, which happens to land on modern ground, was silently attached to whatever continent sits there today.",
+      "All four of the great floodings of North America — the Sauk, Tippecanoe, Kaskaskia and Absaroka seas — were authored in the Caribbean and carried to 67° south, while the continent they flooded sat on the equator.",
+      "Laurentia, the ancient core of North America, was itself riding South America. The Catskill Delta was in Brazil, the Variscan mountains of France in the Sahara, the Caledonides in Western Sahara, the German Muschelkalk Sea in Libya, and the Sveconorwegian belt of Norway in Algeria. Each is now anchored on the place it is named after."
+     ]
+    },
+    {
+     "name": "The future",
+     "items": [
+      "The continents assemble in the right places relative to one another. Australia had been welded to Africa's eastern edge; it is now a separate southern mass, and the average error in where each continent ends up fell from 38 degrees to 3.",
+      "Future collisions build mountains. Land above two kilometres was flat across the whole 250-million-year forecast — continents met and nothing rose. Now crust thickens where two masses meet, as it does at every collision in the past half of the model."
+     ]
+    },
+    {
+     "name": "New: Biotic interchanges",
+     "items": [
+      "A sixth browsable panel, for what happened when two long-separated faunas finally met. It exists for the same reason the Climate events panel does: a land bridge is a few tens of kilometres wide, so the globe can show two continents approaching and never show the moment they touch — which is the only moment that matters.",
+      "The Great American Interchange, when the Isthmus of Panama joined two continents and North American mammals largely replaced South America's; the Trans-Arctic Interchange, the mirror image, when the Bering Strait flooded and about 300 Pacific species moved into the Atlantic; the Grande Coupure, when a falling sea level drained the Turgai Strait and 60% of Europe's mammal genera were replaced; and the Lystrosaurus Flood, when one animal spread from Antarctica to Russia across an empty Pangaea.",
+      "Each card says what opened the route, who crossed, who won, and what is still argued over."
+     ]
+    },
+    {
+     "name": "Life",
+     "items": [
+      "Places that span sea and land show both again. A filter meant to stop oceans listing land animals was also being applied to the hand-catalogued lists, which hid organisms at 37 places. Solnhofen — a lagoon famous precisely for the pterosaurs and Archaeopteryx that fell into it — was showing neither, and continents in the Cambrian were being denied the trilobites that are the whole of their fossil record.",
+      "Ten more biogeographic provinces, and the Ordovician finally shows the ones it is famous for. The Ordovician has the most distinct regional faunas of any period in the early record, and it had been showing the fewest — because only labels that were themselves continents could reach the model. The Baltic and Mediterranean shelves appear, the Cambrian trilobite provinces appear, and so do the modern realms at the present day.",
+      "Cards say how big an animal was and what it ate. The illustrations have been ahead of the text for a while — a card could draw a creature accurately and never mention that it was two and a half metres long.",
+      "The Carboniferous rainforest collapse is marked as a Euramerican event everywhere it is mentioned. The Cathaysian rainforests of South China carried on to the end of the Permian.",
+      "The Devonian now gets less provincial as it goes on, which is what the record shows. Its three great marine realms were being held fixed across the whole period; the cold-water Malvinokaffric fauna of southern Gondwana actually disappears halfway through, and the Old World fauna spreads over most of what it and the Eastern Americas realm had held."
+     ]
+    },
+    {
+     "name": "Cards",
+     "items": [
+      "The five disputed supercontinents now say what is actually disputed about them, instead of sharing one general sentence. Whether Pannotia ever assembled at all is a different kind of doubt from which ocean closes in each of the four rival forecasts of the next supercontinent.",
+      "The About panel now names the sea-level curve the model follows, and says that the rival published family puts the Cretaceous high stand at about half of it. It previously credited a curve the app does not use."
+     ]
+    }
+   ]
+  },
+  {
    "version": "1.7",
    "date": "27 July 2026",
    "title": "The research release",

@@ -30,13 +30,104 @@ landed so the register describes the app rather than a wish list.
 | **G3** | falls out of the same relaxation | **r90 59.9° → 76.6°**, against PALEOMAP's own 76°. |
 | **F1 audit** | `audit_reconstruction.py:our_future_rotations()` rebuilt the rotation from `GROUP_TARGET` directly, so it never saw the packing — the exact failure its own docstring says it exists to avoid. It now reads `_packed_targets`. | second time in this programme an audit stopped tracking the pipeline it audits; see also `regression_gate.py`'s land-today guard. |
 
-**Still open and NOT applied:** **G4** (the future groups' neighbours — Australia is still
-welded east of Africa where Scotese puts it with Antarctica; the packing moved it toward
-the south but did not rearrange it, deliberately), **G5** (no orogeny is built in the
-future, now stated on the Pangaea Proxima card), **G7** (the 525 Ma land-area
-disagreement) and **G8** (the Palaeozoic shelf disagreement, recorded rather than fixed by
-design). **New limit recorded:** the seeded seas do not reach the climate solve — see
-README §9.
+### Round 3, 2026-07-27 — the rainfall coupling, G4, G5, and G7+G8 answered
+
+| item | what shipped | measured |
+|---|---|---|
+| **rainfall coupling** | `export()` ran the wind-and-moisture solve on the RAW paleo-DEM while everything else used the carved one, so every seeded sea changed the coastline without making the air over it wetter. The Phanerozoic path now passes the carved grid (`Zhi[::-1]` — `resample_dem` returns north-first, `compute_fields` wants ascending, and getting that backwards renders the world upside down). Future and Precambrian keep their own climate-resolution grids, which carry their own eustatic corrections. | at 240 Ma, land that is still land **0.104 → 0.122 (+17%)**, the deep Pangaean interior **+11%**, within four cells of the new coast **+13%**. Global mean falls only because 6% of the grid moved from land, where this model reports rainfall, to sea, where it reports almost none. New `rerender_rain.py` does it in 6 minutes without touching elevation or the manifest. |
+| **G4** | `GROUP_TARGET` re-aimed by search against the six published claims rather than by eye. | bearings from Africa at +250 Myr — **North America 331° → 293°** (published 298), **South America 252° → 203°** (201), **Eurasia 36° → 65°** (66). Mean error **38° → 3°**. Australia now sits **6,321 km from Africa on bearing 152° and 3,933 km from Antarctica**, a separate southern mass, where it was 2,969 km due east of Africa and welded into the main mass. Land goes *up* as a side effect, 126.1 → 128.5 Mkm². |
+| **G5** | **Collisional uplift along the sutures.** Now that the groups are packed to meet rather than interpenetrate there is a contact to work with: where two groups' land abuts, crust thickens, growing with the assembly. Two calibration findings recorded in the code — normalising the belt by its own maximum turns it into a plateau (26 Mkm² above 2 km, a world of mountains), and a gaussian is too broad-shouldered for an orogen, so the belt is raised to a power. | land above 2 km **8.8 → 13.8 Mkm²** across the series where it was flat at 8.7 → 8.6; above 1 km 29.9 → 36.3; mean land elevation 620 → 781 m. Sized against the Alpine–Himalayan belt, which is ~5 Mkm². |
+| **G7 + G8** | **Answered, and they are the same finding.** Our own Cambrian series is smooth — land 18.6% at 540 Ma → 16.6% at 525 → 17.2% at 500, moving in step with our eustatic curve — so our 525 Ma frame is not anomalous; Blakey's is, dropping 11 points in 25 Myr against his own neighbours. But the deeper result is that the disagreement is not about land at all: at 525 Ma **land + shelf agrees to 1.0 pp** (Blakey 31.7%, ours 32.7%) while **land alone differs by 10.1**. The two reconstructions agree about how much continental crust existed and disagree about how much of it was above water — which is exactly what G8 records for the rest of the Palaeozoic. One disagreement, not two. Recorded, not tuned. | 525 Ma land-only −10.1 pp, land+shelf **+1.0**; 470 Ma −2.1 / +5.2; 420 Ma −2.5 / +5.8 |
+
+### Round 4, 2026-07-27 — B2, B4, B6, B9, C2, C8, D5, and a bug class found by machine
+
+| item | what shipped | measured |
+|---|---|---|
+| **B2** | **The province model was never the problem; nothing was reaching it.** `provinces.py` resolved a label's `block` by NAME, so only the 56 labels that *are* cratons ever reached the block-keyed branches — every mountain belt, sea and basin handed the model a `None` and fell through to its two latitude bands. Matching on present-day position does not work either, because a label's coordinate is its *palaeo*-position. Block anchors are now reconstructed into the same frame the labels ride and matched at the age asked about. Reach set by measurement (1700 km) against 17 labels whose block is not in doubt; distance-weighting the whole block was tried and is worse. Oceans are never given a block — open water sits on no craton. | distinct provinces **49 → 59**. The Ordovician, the most provincial interval of the Palaeozoic, had been showing the *fewest*: 450–485 Ma **3 → 4–5**, with the Baltic and Mediterranean (peri-Gondwanan) shelves appearing. Not just the Ordovician — 500 Ma gains the **Olenellid, Redlichiid and Bigotinid** trilobite provinces, 400 Ma the **Eastern Americas Realm**, 0 Ma the four modern terrestrial realms. 12 → 17 at the present day. |
+| **the silent-tracking trap** | **A bug class, found by machine and closed with a validator.** `build_labels()` treats a coordinate that is land today as present-day and plate-tracks it; one on today's ocean is understood to be authored in its own era's frame and left alone. The blind spot: a *palaeo* coordinate that happens to fall on modern land is tracked anyway, on whatever continent now occupies that spot. Nothing complains — the label still draws and still moves, it is simply riding the wrong continent. New `audit_label_plate.py` cross-checks every tracked label's plate against the continents its own text names, with 14 genuinely trans-continental features listed as exemptions. | **11 labels found and corrected**, the same defect as the hand-found Newark Rift Valleys: **all four of Sloss's cratonic sequences** (Sauk, Tippecanoe, Kaskaskia, Absaroka — the floodings of *Laurentia*, all authored in the Caribbean, all riding South America and carried to 67°S while the continent they flooded sat on the equator), plus **Laurentia** itself (→ Guyana), **Catskill Delta** (→ Brazil), **Variscan Belt** (→ Sahara), **Caledonides** (→ Western Sahara), **Muschelkalk Sea** (→ Libya) and **Sveconorwegian Belt** (→ Algeria). Each re-anchored on the locality it is named for. Validator now at **0 findings** and registered in `audit_all.py` as a ratchet. |
+| **D5** | GDH1 (Stein & Stein 1992) replaces pure half-space cooling. `2600 + 350√t` reaches 6.9 km at 150 Myr, so it was clipped at `MAX_ABYSS`; a clip is not a flattening — it made the model term *constant* across all crust older than 97 Myr, which is **34.2% of the sea floor**, so a third of the ocean had no large-scale depth gradient in it at all. | **Scored against real bathymetry**, 582,736 surveyed deep-ocean cells at 0 Ma, area-weighted: mean absolute error **794 → 654 m**, bias **+715 → +549 m** (the old law was systematically too deep). Per age band it improves exactly where the old one saturated: +127 m at 50–80 Myr, **+369** at 80–100, **+406** at 100–130, +292 at 130–190. Two young bands come out nominally 17 and 23 m worse — below a fifth of the 105 m elevation quantum at abyssal depth, so not expressible in the shipped field. Cells pinned near the old 6000 m clip: **0.06%** of the deep floor. Seamount summits deliberately stay on √t (calibrated to the Hawaiian–Emperor chain; coupling them pushes Midway over the atoll/guyot line), and edifice heights already derive from the actual floor, so nothing floats. |
+| **B4** | size, habit and diet carried onto every taxon card from `taxa_db`, in one pass over the finished payload rather than three enrichment paths. Sizes print in the unit a reader would use — 2.5 m, 70 cm, 3 mm. | the 273 silhouettes were far ahead of the text: a card could draw an animal correctly and never say how big it was or what it ate. |
+| **B6** | vegetation gating was already correct via the CLIMATE table's `veg` column (0.00 at 500/700/1000 Ma, 0.05 in the Silurian, 0.95 by 300 Ma) — but **grassland was not gated at all**, so a 100 Ma world drew grass. New `uGrass` uniform pulls the dry axis off its grassy stops and mutes the savanna stipple before ~40 Ma, fully before ~70. | grasses matter ecologically only from ~40 Ma, C4 savanna from ~8 Ma. |
+| **C2** | the readout's climate state is named from **PhanDA's thresholds on the GMST the readout itself prints**, not from `temp`, the −1..+1 shader proxy, which is a different quantity with different breakpoints. | at 250 Ma the panel read "28.5 °C" and "Hothouse" side by side; 28.5 °C is a *warm greenhouse* in the scheme being invoked. 150 and 200 Ma likewise move to cool greenhouse. The two halves of the line now agree. |
+| **C8 · B9** | all five disputed supercontinents printed **one identical sentence** — the same defect the province cards had. Each now says what is actually argued over: whether Pannotia assembled at all, and which ocean each of the four rival futures closes. B9's Euramerican qualifier carried from the interval cards into the biome texts, which still said the rainforest collapse plainly. | Kenorland, Vaalbara and Ur are Archean and correctly absent from a 1000 Ma model. |
+
+**C9 — RESOLVED, no action.** The item asks that ocean anoxia be drawn as sea-floor
+sediment rather than as water colour, because anoxia is subsurface: the Black Sea is
+euxinic below ~100 m and looks entirely normal from a boat. Checked: **the app has never
+coloured water for anoxia.** OAEs appear only as cards, in the Climate events panel added
+for C5/F2 — which is the right place for them anyway, since every one of them is shorter
+than the 5 Myr between keyframes. There is nothing to correct.
+
+**C7 — RESOLVED.** The choice had already been made and argued in `build_frames.py`: the
+Haq family (Haq & Schutter 2008), with van der Meer's independent tectono-eustatic
+reconstruction agreeing closely, and an explicit rule never to mix in the Miller
+backstripping family, which puts the Cretaceous high stand at about *half* this. What was
+missing was telling the reader — the About panel said "Haq/Hallam sea-level curves",
+plural, naming a curve the app does not use. It now names the one it does, states that the
+rival family disagrees by a factor of two, and quotes the 2016 review's own verdict on the
+field.
+
+**B8 — DELIVERED.** A **sixth navigable panel, Biotic interchanges**, on the same
+`#ctxStack` pattern as the Climate events panel and for the same structural reason: the map
+cannot draw this. A land bridge is a few tens of kilometres of ground, and both Panama and
+the Bering Strait are far below what a 20 km grid resolves, so the globe can show two
+continents approaching and never show the moment they connect — which is the only moment
+that matters. Four cards, each with what opened the route, who crossed, who won, and what
+is still argued over: the **Great American Interchange** (and why it was so lopsided — the
+current reading is asymmetry of opportunity, not competitive superiority), the
+**Trans-Arctic Interchange** (the mirror image, at almost the same moment: Panama closed a
+seaway as Bering opened one, ~300 Pacific species into the Atlantic against a few dozen
+back), the **Grande Coupure** (where the land bridge and the cooling arrive together
+because the same sea-level fall did both), and the **Lystrosaurus Flood** (not an
+interchange but its opposite — provinciality collapsing on an emptied Pangaea). Figures
+assigned only where the diagram is honestly about the mechanism; the Trans-Arctic card gets
+none, because a seaway-closing diagram would argue the opposite of its own caption.
+
+**B5 — DELIVERED, and it was bigger than the item said.** The realm filter is derived from
+the label's *type* (`ocean`/`sea` → marine), which is only a proxy for the realm a locality
+actually spans, and it was being applied to **all three tiers** of the biota panel. It
+belongs on one: the global interval list, which is about the world rather than about this
+place, so putting its land animals in an ocean is a genuine error. A *curated* list is the
+opposite case — somebody catalogued what lived at this place at this age, and running that
+through a guess about the place discards the better answer for the worse one.
+
+Measured: the filter was silently hiding curated taxa on **37 label-spans**. Solnhofen is
+the case the register named — a marine lagoon whose entire significance is the pterosaurs
+and *Archaeopteryx* that fell into it, all dropped for being `air` on a `sea` card — and
+the Hudson Seaway lost *Hesperornis* the same way. But the bulk of it ran the other
+direction: **continent cards denied their marine fauna.** Cambrian Laurentia's curated list
+is four taxa and all four are marine, as the Cambrian must be, so a `continent` card kept
+none of them and fell through to the global list. Same for Baltica, Siberia, Avalonia,
+Gondwana, South China, the Kalahari and Congo cratons, and Rodinia. The curated tier is now
+shown as authored; the global tier is still filtered.
+
+**B11 — RESOLVED, and it found a real error.** The three Devonian realm names were checked
+against the primary source: **Boucot, Johnson & Talent (1969), *Early Devonian Brachiopod
+Zoogeography*, GSA Special Paper 119** — the paper that established these units and still
+the framework the field uses. The *names* check out. The *ages* did not. The source is
+explicit that this is an **Early** Devonian structure: by the Givetian the Malvinokaffric
+Realm is gone, the Eastern Americas Realm is much reduced, and the Old World Realm has
+spread over most of what the other two held. Our model held all three constant across the
+whole period, so it drew the Devonian getting *more* provincial when the record shows it
+becoming markedly less. Gated at the Givetian (387.7 Ma), with a cool-water southern shelf
+taking over from the Malvinokaffric so its disappearance reads as the cosmopolitanism it
+was rather than a hole in the model. Verified: Malvinokaffric present at 400–390 Ma, gone
+by 385.
+
+**D8 — RECORDED as a known limit.** `MAX_CRUST_AGE = 190` Myr is correct for the world's
+ocean floor — anything older has been subducted, which is why no Jurassic Pacific survives
+— but the deep eastern Mediterranean is the probable exception: the Ionian and Herodotus
+basins may be Palaeozoic Tethyan floor at **270–340 Ma**, trapped behind Tethys's closure
+rather than consumed with it. The app draws them at 190 Myr like everything else, so they
+come out a few hundred metres too shallow with the wrong fabric age. The dating is
+contested and the basins sit under kilometres of Messinian salt. Written into README §9
+rather than special-cased: one basin's disputed age does not earn a branch in the depth
+law.
+
+**Still open: nothing that changes the app.** The remaining register items are E1–E3, which
+are about the research folder itself — retrying rate-limited figure fetches, obtaining two
+paywalled sources, and filling four empty dossier directories. E2 and F10/F11 were already
+closed as negative results after repeated attempts.
 
 Priority: **P1** = closes a known visible defect · **P2** = adds real fidelity ·
 **P3** = correctness housekeeping · **P4** = worth knowing, no action yet.

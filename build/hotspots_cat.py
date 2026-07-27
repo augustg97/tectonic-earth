@@ -75,7 +75,24 @@ INITIAL_H = 4000.0          # m, edifice height when it leaves the plume
 
 
 def summit_depth(edifice_age):
-    """Depth of the summit below sea level in metres. NEGATIVE is an island."""
+    """Depth of the summit below sea level in metres. NEGATIVE is an island.
+
+    THIS DELIBERATELY STAYS ON sqrt(t) WHILE THE SEA FLOOR MOVED TO GDH1.
+    It looks like an inconsistency and is not, for two reasons.
+
+    Physically, a hotspot edifice is built on the plume's SWELL -- Hawaii's is
+    about a kilometre of dynamic uplift -- and subsides faster than plate cooling
+    alone as it rides off the swell. 350 m per sqrt(Myr) is calibrated to the
+    Hawaiian-Emperor chain we can see, and that calibration is what puts Midway
+    at atoll depth and the Emperors at guyot depth. Coupling this to GDH1 pushes
+    Midway to 515 m, over the atoll/guyot line: it would break the one part of
+    this model that is checked directly against real bathymetry.
+
+    Mechanically, there is no floating volcano either way. seamounts.field() sets
+    an edifice's HEIGHT from the floor actually under it (`-summit - floor[r,c]`),
+    not from an assumed axial depth, so a shallower GDH1 floor simply builds a
+    shorter cone to reach the same summit.
+    """
     a = max(0.0, float(edifice_age))
     return (RIDGE_DEPTH - INITIAL_H) + SUBSIDENCE * math.sqrt(a)
 

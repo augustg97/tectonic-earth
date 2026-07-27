@@ -1181,12 +1181,14 @@ def build_eras():
     out = {"intervals": eras.intervals(),
            "supercontinents": eras.supercontinents(),
            "glaciations": eras.glaciations(),
-           "climateEvents": eras.climate_events()}
+           "climateEvents": eras.climate_events(),
+           "interchanges": eras.interchanges()}
     json.dump(out, open(f"{WEB}/eras.json", "w"), separators=(",", ":"))
     print(f"eras: {len(out['intervals'])} intervals, "
           f"{len(out['supercontinents'])} supercontinents, "
           f"{len(out['glaciations'])} glaciations, "
-          f"{len(out['climateEvents'])} climate events")
+          f"{len(out['climateEvents'])} climate events, "
+          f"{len(out['interchanges'])} biotic interchanges")
 
 
 # ---------- biomes, life through time, regional fossil record ----------
@@ -1237,6 +1239,47 @@ def build_life():
     except Exception as e:                                 # noqa: BLE001
         print(f"  note: province layer unavailable ({e}); "
               f"cards fall back to the global list")
+
+    # B4: SIZE, HABIT AND DIET onto every taxon record, wherever it lives.
+    # The 273 silhouettes were far ahead of the text: a card could draw an animal
+    # correctly and still not say how big it was or what it ate, which are the
+    # first two things a reader wants. taxa_db carries all three, so this walks
+    # the finished payload once and fills in whatever it can match by name --
+    # curated lists, province markers and interval lists alike, rather than three
+    # separate enrichment paths that would drift apart.
+    try:
+        import provinces                                      # noqa: PLC0415
+        provinces._load()
+        TD = provinces._TD
+        hit = seen = 0
+
+        def _enrich(node):
+            nonlocal hit, seen
+            if isinstance(node, list):
+                for v in node:
+                    _enrich(v)
+            elif isinstance(node, dict):
+                if "n" in node and "r" in node and "realm" in node:
+                    seen += 1
+                    rec = TD.by_name(node["n"]) if TD else None
+                    if rec is not None:
+                        if rec.size_m and "sz" not in node:
+                            node["sz"] = round(float(rec.size_m), 4)
+                        if rec.habit and "hb" not in node:
+                            node["hb"] = rec.habit
+                        if rec.diet and "dt" not in node:
+                            node["dt"] = rec.diet
+                        if rec.size_m or rec.habit or rec.diet:
+                            hit += 1
+                for v in node.values():
+                    _enrich(v)
+
+        if TD:
+            _enrich(out)
+            print(f"  attributes: {hit} of {seen} taxon records now carry size, "
+                  f"habit or diet from taxa_db")
+    except Exception as e:                                     # noqa: BLE001
+        print(f"  note: taxon attributes unavailable ({e})")
 
     json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
     spans = sum(len(v) for v in out["regionTaxa"].values())

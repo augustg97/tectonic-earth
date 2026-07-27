@@ -769,6 +769,17 @@ NAME_ART["Gilboa Forest"] = "forest_devonian"
 # caption would be flatly wrong about what this one was.
 NAME_ART["Central American Sea"] = "ocean_closing"
 
+# The biotic-interchange cards. Only where the diagram is honestly ABOUT the
+# mechanism: the Great American interchange happens because the Central American
+# Seaway closes, the Grande Coupure because the Turgai Strait drains, and
+# Lystrosaurus spreads across a hemisphere because Pangaea has no barriers left.
+# The Trans-Arctic interchange is a seaway OPENING and gets no figure rather than
+# a nearly-right one -- a diagram that argues the opposite of its caption is
+# worse than a card with no diagram.
+NAME_ART["The Great American Biotic Interchange"] = "ocean_closing"
+NAME_ART["The Grande Coupure"] = "ocean_closing"
+NAME_ART["The Lystrosaurus Flood"] = "supercontinent"
+
 for _n in ("Ontong Java Plateau", "Manihiki Plateau", "Shatsky Rise",
            "Agulhas Plateau", "Broken Ridge", "Rio Grande Rise", "Walvis Ridge",
            "Mascarene Plateau", "Naturaliste Plateau", "Hess Rise"):

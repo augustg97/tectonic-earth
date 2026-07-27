@@ -138,23 +138,60 @@ def _devonian_carboniferous_flora(age, lat, block):
     return None
 
 
+# Base of the Givetian. Boucot, Johnson & Talent (1969) is explicit that the
+# three-realm structure is an EARLY Devonian one: by the Givetian the
+# Malvinokaffric Realm has gone, the Eastern Americas Realm is much reduced, and
+# the Old World Realm has expanded over most of what the other two held. The
+# Devonian trend is toward cosmopolitanism, and a model that keeps all three
+# realms to the Famennian draws the opposite of what the record shows.
+_GIVETIAN = 387.7
+
+
 def _devonian_marine(age, lat, block):
-    if block in ("Amazonia", "Sao Francisco", "Rio de la Plata", "Kalahari Craton",
-                 "Falkland / Malvinas", "Patagonia") and lat < -30:
+    """Devonian marine realms, after Boucot, Johnson & Talent (1969), *Early
+    Devonian Brachiopod Zoogeography*, GSA Special Paper 119 -- the paper that
+    established these three units and still the framework the field uses.
+
+    B11 asked for these names to be checked against a primary source rather than
+    general literature. They check out; the AGES did not. The realms were being
+    held constant across the whole period when the source describes them
+    collapsing into one another through it.
+    """
+    if (age > _GIVETIAN
+            and block in ("Amazonia", "Sao Francisco", "Rio de la Plata",
+                          "Kalahari Craton", "Falkland / Malvinas", "Patagonia")
+            and lat < -30):
         return Province("Malvinokaffric Realm", "marine", "both", "good",
                         "Cold-water, high southern latitude Gondwana. Low diversity, NO "
                         "reefs, distinctive brachiopod and trilobite assemblages. This is "
-                        "a MARINE realm - 'Malvinokaffric flora' is a misnomer.",
+                        "a MARINE realm - 'Malvinokaffric flora' is a misnomer. An EARLY "
+                        "Devonian realm: it is gone by the Givetian.",
                         ("Australocoelia", "Australospirifer", "Burmeisteria"))
     if block in ("Laurentia", "Avalonia") and abs(lat) < 35:
+        note = ("Appalachian basin and the epeiric seas of eastern Laurussia."
+                if age > _GIVETIAN else
+                "Appalachian basin and the epeiric seas of eastern Laurussia -- by now "
+                "much reduced, as Old World faunas spread into what it used to hold.")
         return Province("Eastern Americas Realm", "marine", "both", "moderate",
-                        "Appalachian basin and the epeiric seas of eastern Laurussia.",
-                        ("Tropidoleptus", "Mucrospirifer"))
+                        note, ("Tropidoleptus", "Mucrospirifer"))
     if abs(lat) < 35:
         return Province("Old World Realm", "marine", "both", "moderate",
                         "Europe, North Africa, Asia. Stromatoporoid-coral reefs at their "
-                        "Phanerozoic maximum until the Frasnian-Famennian collapse.",
+                        "Phanerozoic maximum until the Frasnian-Famennian collapse."
+                        + ("" if age > _GIVETIAN else " By the Late Devonian it has "
+                           "expanded over most of what the other two realms held."),
                         ("Stringocephalus", "Amphipora"))
+    # High latitude, and after the Malvinokaffric has gone. Saying nothing here
+    # would make the realm's disappearance look like a hole in the model rather
+    # than the cosmopolitanism it actually was.
+    if age <= _GIVETIAN and lat < -35:
+        return Province("Southern cool-water shelf (Late Devonian)", "marine",
+                        "latitude", "moderate",
+                        "Cool, high-latitude Gondwanan shelf after the Malvinokaffric "
+                        "Realm's endemics are gone. The Devonian ends far more "
+                        "cosmopolitan than it began: the same brachiopod and coral "
+                        "genera turn up from Europe to Australia to South America.",
+                        ("Cyrtospirifer",))
     return None
 
 

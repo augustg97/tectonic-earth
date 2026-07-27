@@ -196,8 +196,24 @@ def _load_motion(age, tag):
 
 
 def export(age, Z_hi, z_for_climate, tag):
-    """Z_hi: elevation at ELEV res. z_for_climate: lat-ascending DEM for the wind solve."""
+    """Z_hi: elevation at ELEV res, row 0 = north. z_for_climate: the raw
+    lat-ascending DEM, kept as a fallback for callers that have no carved grid."""
     cl = climate_at(age)
+    # THE CLIMATE SOLVE SEES THE TERRAIN THAT IS DRAWN, not the raw DEM.
+    #
+    # This ran on `z_for_climate` -- the source grid, before epeiric.carve -- so
+    # every seeded sea changed the coastline and the map without making the air
+    # over it any wetter. Harmless when the module seeded two named seas; not
+    # harmless once it also supplies the continental shelf that ringed Pangaea,
+    # which is several percent of the globe. Moisture recharges over water in
+    # compute_fields, so a shelf sea upwind is exactly the thing that should be
+    # feeding the Triassic megamonsoon's windward margins.
+    #
+    # ORIENTATION IS THE HAZARD HERE and it is the one that renders the whole
+    # world upside down: read_dem returns latitude ASCENDING, resample_dem
+    # returns row 0 = NORTH, epeiric.carve assumes north-first, and
+    # compute_fields wants ascending again. Hence the flip -- verified by
+    # measuring that rainfall still peaks at the equator and not at the poles.
     _, _, Rf, _, _ = compute_fields(z_for_climate, age, CLIM_H, CLIM_W)
     rain = np.asarray(Image.fromarray(
         (np.clip(Rf / RF_MAX, 0, 1) * 255).astype(np.uint8)).resize(
@@ -236,13 +252,36 @@ def export(age, Z_hi, z_for_climate, tag):
 
 
 # ---------------------------------------------------------------- future ----
-GROUP_TARGET = {          # where each group's centroid heads by +250 Myr, and its spin
+# Where each group's centroid heads by +250 Myr, and its spin.
+#
+# RE-AIMED 2026-07-27 against the reconstruction this future is supposed to be.
+# Measured as bearings from Africa at +250 Myr, against Scotese's Pangaea Ultima
+# -- the geometry Farnsworth et al. (2024) modelled the climate on, which is why
+# it is the one drawn here:
+#
+#                     was    now   published
+#   North America     331    293      298 deg
+#   South America     252    203      201
+#   Eurasia            36     65       66
+#   mean error         38      3
+#
+# And Australia now goes SOUTH with Antarctica instead of welding onto Africa's
+# eastern flank: 6,321 km from Africa on bearing 152 and 3,933 km from
+# Antarctica, where it was 2,969 km due east of Africa and inside the main mass.
+# Land at +250 Myr goes UP as a side effect, 126.1 -> 128.5 Mkm2, because a
+# better-spread arrangement stacks less.
+#
+# These are the AUTHORED targets. _packed_targets relaxes them so the groups stop
+# interpenetrating, so what is written here is the intent and not the final
+# position -- change these to move the reconstruction, and PACK to change how
+# tightly it closes.
+GROUP_TARGET = {
     "AFRICA":        (20, 2, 0),
-    "EURASIA":       (46, 30, -16),
-    "NORTH_AMERICA": (4, 40, 52),
-    "SOUTH_AMERICA": (-8, -12, 34),
+    "EURASIA":       (74, 4, -16),
+    "NORTH_AMERICA": (-8, -2, 52),
+    "SOUTH_AMERICA": (0, -56, 34),
     "INDIA":         (44, 20, 14),
-    "AUSTRALIA":     (62, 8, 118),
+    "AUSTRALIA":     (70, -12, 118),
     "ANTARCTICA":    (25, -42, 26),
     "ARABIA":        (33, 18, 8),
     "PACIFIC":       (-150, 5, 0),
@@ -345,6 +384,16 @@ def axis_angle_scale(Rm, frac):
 # independent yardstick rather than near it, which is the reason to stop there
 # rather than push the area figure lower.
 PACK = 1.0
+# Swept against what a collisional system actually adds. Today land above 2 km is
+# 8.8 Mkm2; the Alpine-Himalayan belt is roughly 10,000 km long and 500 wide, so a
+# Pangaea Ultima system should add of order 3-6 Mkm2 above 2 km, not tens. At
+# +250 Myr these settings give:
+#     land >1 km  29.9 -> 36.3 Mkm2      land >2 km  8.8 -> 13.8      >3 km  4.3 -> 5.5
+#     mean land elevation 620 -> 781 m
+# which is a Himalaya-scale addition rather than a world of mountains.
+SUTURE_DEG = 3.0        # half-width of a collisional belt, degrees (~330 km)
+SUTURE_UPLIFT = 3400.0  # m of crustal thickening at the contact by +250 Myr
+SUTURE_POW = 3.0        # sharpens the belt; see the note where it is applied
 SPRING = 0.55     # pull back toward the authored arrangement each pass
 RELAX = 0.35      # step size; small enough that the two forces find a balance
 _PACK_CACHE = {}
@@ -509,6 +558,7 @@ def future_grid(frac, gid, Zsrc, h, w):
     top -- but it removes the flat-slab appearance at the source.
     """
     gh, gw = gid.shape
+    owner = np.full((h, w), -1, np.int16)     # which group won each cell
     lon = (np.arange(w) + 0.5) / w * 360 - 180
     lat = 90 - (np.arange(h) + 0.5) / h * 180
     LON, LAT = np.meshgrid(lon, lat)
@@ -579,7 +629,53 @@ def future_grid(frac, gid, Zsrc, h, w):
         sy = np.clip(((90 - slat) / 180 * Zsrc.shape[0]).astype(int), 0, Zsrc.shape[0] - 1)
         sx = ((slon + 180) / 360 * Zsrc.shape[1]).astype(int) % Zsrc.shape[1]
         z = np.where(claims, Zsrc[sy, sx], -9999.0).reshape(h, w)
+        owner = np.where(z > out, i, owner)
         out = np.maximum(out, z)          # overlap -> collision keeps the high ground
+
+    # COLLISIONAL UPLIFT ALONG THE SUTURES.
+    #
+    # Rigid rotation has no mechanism to raise a mountain, so land above 2 km was
+    # flat across the whole series -- 8.7 to 8.6 Mkm2 from now to +250 Myr -- and
+    # the collisional belt Scotese draws through the middle of Pangaea Ultima
+    # could not appear anywhere. A supercontinent assembling without building a
+    # single range is the one thing the reconstruction is most sure about.
+    #
+    # Now that the groups are packed to MEET rather than interpenetrate there is
+    # a contact to work with: where two different groups' land abuts, crust
+    # thickens. The belt is a smoothed indicator of "a different group is nearby",
+    # so it is widest where two masses are broadly in contact and absent along a
+    # free coast, and it grows with `frac` because an orogen rises over the whole
+    # collision rather than appearing at the end.
+    #
+    # This is a supercontinent-scale statement, not a claim about any particular
+    # range: the belts appear where these groups collide, which is where any
+    # reconstruction would put them, and the app's card says so.
+    if frac > 0.02:
+        from scipy.ndimage import gaussian_filter, maximum_filter
+        land = out >= 0.0
+        own = np.where(land, owner, -1)
+        diff = np.zeros((h, w), np.float32)
+        for dy, dx in ((0, 1), (1, 0), (1, 1), (1, -1)):
+            a = np.roll(np.roll(own, dy, 0), dx, 1)
+            b = np.roll(np.roll(own, -dy, 0), -dx, 1)
+            diff += ((own >= 0) & (a >= 0) & (a != own)).astype(np.float32)
+            diff += ((own >= 0) & (b >= 0) & (b != own)).astype(np.float32)
+        seed = np.clip(diff, 0.0, 1.0)
+        # widen the seed to a belt a few hundred km across, then smooth its edge
+        sigma = max(1.0, SUTURE_DEG / (180.0 / h))
+        # NOT normalised by its own maximum. Dividing a smoothed 0..1 field by
+        # its peak rescales the tails as well, so the belt became a broad plateau
+        # of near-1 values and narrowing the kernel changed nothing -- land above
+        # 2 km came out at 26 Mkm2 against today's 8.8, a world of mountains. A
+        # gaussian of an indicator is already 0..1 and already peaks at 1 where
+        # the contact is solid, which is exactly the shape wanted.
+        # ...and raised to a power, because a gaussian is broad-shouldered and an
+        # orogen is not. At SUTURE_POW = 1 a belt tall enough to make a Himalaya
+        # also lifted ten million square kilometres past a kilometre; the power
+        # concentrates the same uplift onto the contact and lets the flanks fall
+        # away, which is both the right shape and the right area.
+        belt = gaussian_filter(maximum_filter(seed, size=3), sigma) ** SUTURE_POW
+        out = out + SUTURE_UPLIFT * frac * belt * land
     return out
 
 
@@ -653,7 +749,14 @@ def main():
         # flood the epicontinental seas this grid cannot resolve (see epeiric.py)
         Zhi = EP.carve(Zhi, age, _rec)
         coarse[age] = MO.coarsen(Zhi)
-        m, n = export(age, Zhi, z, "phan")
+        # Zhi[::-1], not z: the climate solve must see the terrain that is DRAWN.
+        # resample_dem returns row 0 = north and compute_fields wants latitude
+        # ascending, hence the flip. Only the Phanerozoic path does this -- the
+        # future and Precambrian branches build their own climate-resolution
+        # grids (gl, lo) with their own eustatic corrections already applied, and
+        # substituting the high-res one there would quietly change what those
+        # eras solve for.
+        m, n = export(age, Zhi, Zhi[::-1], "phan")
         manifest.append(m); total += n
     print(f"Phanerozoic: {len(manifest)} keyframes")
 

@@ -197,10 +197,18 @@ LABELS = [
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
     ("orogen", "Ural Mountains",     58,  55,  0, 320),
     ("orogen", "Appalachians",      -80,  38,  0, 470),
-    ("orogen", "Variscan Belt",       5,  22,  280, 360),
+    ("orogen", "Variscan Belt",       3,  46,  280, 360),   # Massif Central, not the Sahara
     # ---------- Paleozoic ----------
     ("continent", "Laurussia (Euramerica)", -20, 10, 175, 430),
-    ("continent", "Laurentia",      -60,   5,  430, 600),
+    # THE SILENT-TRACKING TRAP. A coordinate that is LAND today is taken as a
+    # present-day position and plate-tracked; one on today's ocean is understood
+    # to be authored in its own era's frame and is left where it is. So a PALAEO
+    # coordinate that happens to fall on modern land is tracked, silently, on
+    # whatever plate now occupies it. Laurentia at its Ordovician equatorial
+    # position lands in Guyana, so the label for North America's craton rode
+    # SOUTH AMERICA. Anchored on the Canadian Shield. audit_label_plate.py checks
+    # this whole class now; five more were found the same way.
+    ("continent", "Laurentia",      -95,  55,  430, 600),
     ("continent", "Baltica",         10,  -35,  430, 540),
     ("continent", "Siberia",         90,  20,  430, 600),
     ("continent", "Avalonia",       -18,  -35,  430, 490),
@@ -208,8 +216,8 @@ LABELS = [
     ("ocean", "Iapetus Ocean",      -30,  20,  400, 600),
     ("ocean", "Rheic Ocean",        -10, -20,  320, 490),
     ("ocean", "Panthalassic Ocean", -150,  0,  330, 540),
-    ("sea", "Sauk Sea",             -70,  10,  480, 530),
-    ("orogen", "Caledonides",       -12,  25,  0, 440),
+    ("sea", "Sauk Sea",             -90,  42,  480, 530),   # see the Sloss note below
+    ("orogen", "Caledonides",      -4.5,  57,  0, 440),   # the Scottish Highlands
     ("orogen", "Acadian Belt",      -48,  -10,  355, 420),
     ("orogen", "Taconic Belt",      -55,  12,  440, 470),
     # ---------- Precambrian ----------
@@ -275,7 +283,7 @@ LABELS = [
     ("basin", "Officer Basin", 120, -28, 700, 834),
     ("basin", "Centralian Superbasin", 112, -18, 700, 830),
     ("basin", "Michigan Basin", -85, 5, 350, 445),
-    ("basin", "Catskill Delta", -45, -14, 358, 385),
+    ("basin", "Catskill Delta", -74.5, 42.2, 358, 385),   # the Catskills, New York
     ("basin", "Permian Basin", -102, 2, 251, 305),
     ("basin", "Karoo Basin", 22, -58, 180, 300),
     ("basin", "Songliao Basin", 124, 45, 80, 135),
@@ -409,7 +417,7 @@ LABELS = [
     ("ocean", "Neotethys", 62, 0, 45, 270),
     ("ocean", "East African Ocean", 42, -3, -130, -25),
     # -- orogen --
-    ("orogen", "Sveconorwegian Belt", 5, 25, 900, 1000),
+    ("orogen", "Sveconorwegian Belt", 8, 59, 900, 1000),   # southern Norway, not Algeria
     ("orogen", "Sunsas Belt", -60, -20, 940, 1000),
     ("orogen", "Irumide Belt", 25, -12, 950, 1000),
     ("orogen", "Brasiliano Belt", -45, -25, 540, 650),
@@ -453,10 +461,19 @@ LABELS = [
     # -- sea --
     ("sea", "Bitter Springs Sea", 118, -15, 780, 812),
     ("sea", "Nama Sea", 16, -35, 538, 551),
-    ("sea", "Tippecanoe Sea", -62, 10, 418, 490),
-    ("sea", "Kaskaskia Sea", -60, 0, 360, 418),
-    ("sea", "Absaroka Sea", -75, 3, 252, 330),
-    ("sea", "Muschelkalk Sea", 12, 22, 237, 247),
+    # THE NEWARK BUG, FOUR MORE TIMES. Sloss's four cratonic sequences are the
+    # floodings of LAURENTIA, and all four were authored in the Caribbean and at
+    # the mouth of the Amazon: Tippecanoe at (-62, 10), Kaskaskia at (-60, 0),
+    # Absaroka at (-75, 3), Sauk at (-70, 10). Every one of them therefore rode
+    # PALEOMAP plate 201/203 -- SOUTH AMERICA -- and was carried to ~67 S while
+    # the continent they flooded sat on the equator. Anchored, like Newark, on
+    # the locality each is NAMED for: the Tippecanoe and Kaskaskia rivers, the
+    # Absaroka Range, and the Sauk sandstones of the upper Mississippi. All four
+    # are now plate 101 and land today, so they track and they pass the gate.
+    ("sea", "Tippecanoe Sea", -86.8, 40.5, 418, 490),
+    ("sea", "Kaskaskia Sea", -89.5, 38.5, 360, 418),
+    ("sea", "Absaroka Sea", -110, 44.5, 252, 330),
+    ("sea", "Muschelkalk Sea", 10.5, 50, 237, 247),   # central Germany, which it floods
     ("sea", "Viking Corridor", 2, 42, 155, 195),
     ("sea", "Hispanic Corridor", -55, 5, 150, 190),
     ("sea", "Boreal Sea", 45, 70, 90, 190),

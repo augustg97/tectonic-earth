@@ -149,7 +149,7 @@ Three eras, three sources (`build_fields.py`):
 
 Precambrian coastlines are **generated, not copied**. An earlier version cut cratons out of the modern DEM with lon/lat bounding boxes, which read as rectangles — jittering the edge of a rectangle still leaves a rectangle. Nothing about a 900 Ma coastline is known well enough to trace, so each craton's radius is modulated by three octaves of 3D noise in the craton's own rotating frame.
 
-`epeiric.py` floods the epicontinental seas the 20 km global grid cannot resolve, because otherwise a label describes a sea the map does not show. It carried two — the Trans-Saharan Seaway and the Cannonball Sea — and therefore reached 50–105 Ma and nothing else, which left the interval where the reconstruction is *worst* for shelf sea with no seeded water at all.
+`epeiric.py` floods the epicontinental seas the 20 km global grid cannot resolve, because otherwise a label describes a sea the map does not show. **The climate solve sees the carved terrain, not the raw DEM** — it did not until July 2026, so every seeded sea changed the coastline without making the air over it any wetter. Feeding it in raises rainfall on land that is still land by 17% at 240 Ma, the deep Pangaean interior by 11%, and the ground within a few cells of the new coast by 13%. Global mean rainfall *falls*, which is not a contradiction: 6% of the grid moved from land, where this model reports rainfall, to sea, where it reports almost none. It carried two — the Trans-Saharan Seaway and the Cannonball Sea — and therefore reached 50–105 Ma and nothing else, which left the interval where the reconstruction is *worst* for shelf sea with no seeded water at all.
 
 **Measured against Deep Time Maps (Blakey), an independent reconstruction, at 240 Ma we drew 1.8% shallow sea against his 8.0%, and 93% of everything he draws as shelf sea was dry land in ours.** That was also the whole of the +5 to +9 pp land *excess* at 150–240 Ma: never extra continent, always missing sea. Two mechanisms close it.
 
@@ -435,6 +435,20 @@ Both cost time in July 2026, on the same afternoon, and both look identical from
 
 All four fail the same way — the command returns, nothing errors, the files never change. On any long build, confirm the job is alive and producing output before leaving it, and prefer serial-and-verified to parallel-and-assumed.
 
+### 7.12 A rule with two branches has a blind spot where they meet
+
+`build_labels()` decides what to do with a coordinate by asking one question: **is it land today?** Land means a present-day position, so plate-track it. Water means the coordinate was authored in its own era's reconstruction frame — Gondwana at 30E 40S, Avalonia in the South Atlantic — so leave it where it is. Both branches are right, and §9 lists the four labels the water branch correctly declines to track.
+
+The blind spot is the case the question cannot see: **a palaeo coordinate that happens to fall on modern land.** It takes the present-day branch and is tracked, silently, on whatever continent now occupies that spot. Nothing errors. The label still draws, still moves, still looks entirely plausible — it is simply riding the wrong continent, and no amount of staring at the globe will show you which one.
+
+Found by machine, eleven of them, after the Newark Rift Valleys had been found by hand:
+
+- **All four of Sloss's cratonic sequences** — the Sauk, Tippecanoe, Kaskaskia and Absaroka seas, the great floodings of *Laurentia* — were authored in the Caribbean and at the mouth of the Amazon. All four rode South America and were carried to 67°S while the continent they flooded sat on the equator.
+- **Laurentia** itself, at its Ordovician equatorial position, lands in Guyana. The label for North America's craton rode South America.
+- **Catskill Delta** → Brazil · **Variscan Belt** → the Sahara · **Caledonides** → Western Sahara · **Muschelkalk Sea** → Libya · **Sveconorwegian Belt** → Algeria.
+
+The general lesson: when a rule branches on a property that is only a *proxy* for what you actually mean, enumerate the cases where the proxy and the meaning come apart, and write a check for them. Here the check is `build/audit_label_plate.py` — it cross-references every tracked label's plate id against the continents its own name and description commit it to, with fourteen genuinely trans-continental features (Laurasia, Beringia, Wallacea, the Central Pangaean Mountains) listed as exemptions with a reason each. It is registered in `audit_all.py`, so the class stays closed rather than being closed once.
+
 ## 8. Sources
 
 | role | source |
@@ -444,7 +458,7 @@ All four fail the same way — the command returns, nothing errors, the files ne
 | Paleo-DEMs | Scotese, C. R. & Wright, N. (2018), PALEOMAP PaleoDEMs · Zenodo 5460860 · CC-BY 4.0 |
 | Present plate motions | NNR-MORVEL56 (Argus, Gordon & DeMets, 2011) |
 | Present boundaries | Bird, P. (2003), PB2002 · *G³* 4(3) |
-| Sea-floor depth | Parsons & Sclater half-space cooling; von Kármán roughness model for abyssal hills |
+| Sea-floor depth | GDH1 plate model (Stein, C. A. & Stein, S., 1992, *Nature* 359, 123–129); von Kármán roughness model for abyssal hills |
 | Future climate | Farnsworth, A. et al. (2024), *Nature Geoscience* 17, 1109–1116 |
 | Solar model | Gough, D. O. (1981), *Solar Physics* 74, 21–34 |
 | Impacts | Impact Earth database (Osinski et al.) and Schmieder & Kring (2020) |
@@ -465,12 +479,14 @@ All four fail the same way — the command returns, nothing errors, the files ne
 - **A small block in a shredded region is below the grid, in any frame.** The Rhodope Massif is the worked example: nine anchors *inside the same massif*, all assigned the same plate, score anywhere from 0.15 to 0.92 on the medium test under **either** rotation model. The spread is the measurement — the answer depends on which texel you land in, not on the reconstruction — so its residual is recorded rather than tuned away.
 
 - **Four labels are authored at coordinates that are water today**, and so are never plate-tracked in any frame: **Gulf of California**, **Red Sea Rift** (both rifts that have already opened into sea), **West Antarctic Rift** (below sea level under ice) and **Kerguelen Microcontinent** (a drowned plateau). `coord_is_present_day()` routes them to `snapLabel`'s terrain search by design — a track follows crust, and a point in open water has no crust to follow. They are correct as authored; the build lists them under "labels left untracked" every run.
+- **The oldest ocean crust is capped at 190 Myr, and one basin is probably older than that.** `MAX_CRUST_AGE = 190` is right for the world's ocean floor: everything older has been subducted, which is why the Pacific has no Jurassic floor left. The exception is the deep **eastern Mediterranean** — the Ionian and Herodotus basins may be surviving **Palaeozoic Tethyan floor, 270–340 Ma**, trapped behind the closing of Tethys rather than consumed with it. If so it is by a wide margin the oldest ocean crust on Earth, and this model draws it at 190 Myr like everything else, so it comes out a few hundred metres too shallow and with the wrong fabric age. The dating is contested and the basins are buried under kilometres of Messinian salt, which is part of why. Recorded rather than special-cased: one basin's disputed age is not worth a branch in the depth law.
+
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **The biota panel now has three tiers, and the residue is 21 labels.** It used to have two: a curated list for 101 of 336 labels, and one *global interval list* for everything else — the same four organisms on two hundred cards, and 133 labels (every mountain belt, basin, rift, desert and plateau) got no panel at all. `provinces.py` puts a named biogeographic province on **315 of 336** labels at every age they are drawn, so the order is now exception-curated → province assemblage → labelled global list, with the heading saying which one the reader is looking at. The 21 that still fall through are future-only names (Pangaea Proxima, Amasia, Neo-Himalaya) and the Antarctic Ice Sheet.
 
 - **Ten curated localities are flagged `exception`** and the province model must never speak over them — Solnhofen, the Zechstein, Muschelkalk and Nama seas, the Messinian salt basin, the Paratethys, Lake Pannon, the Mid-Atlantic Ridge and East Pacific Rise vent faunas, and the Beringian steppe-tundra. Being atypical for their province is the entire point of each. `audit_curated_biota.py` checks the flag against a reading of the name, so a new curated entry has to declare itself.
 
-- **The seeded seas do not reach the climate solve.** `epeiric.carve` floods the shallow seas a 20 km grid loses, and `export()` runs the wind and moisture model on the *raw* DEM (`compute_fields(z_for_climate, …)`), not the carved one — so a flooded shelf changes the terrain and the coastline without making the air over it wetter. That decoupling is old, and the Pangaean shelf added in July 2026 makes it matter more, because it is a lot more water than the two named seas that preceded it. Fixing it means passing the carved grid into the climate solve and rebuilding rainfall for every keyframe, which is a ~3-hour run rather than the ~1-hour terrain reskin; it is not done. Consequence to be aware of: the Triassic megamonsoon's windward margins are drawn from a Pangaea with no shelf sea beside them.
+- **We and Blakey agree about how much continent there was, and disagree about how much of it was dry.** This is the honest shape of the two largest remaining disagreements with an independent reconstruction, and they turn out to be one disagreement. At 525 Ma our land is 10.1 points below his — the biggest single-age gap in the whole audit — but **land plus shelf agrees to 1.0 point** (31.7% against 32.7%). Same continents, different shoreline. From 360 Ma back the same thing shows as us drawing 3–11 points *more* shelf sea than he does. Our own Cambrian series is smooth and tracks our eustatic curve (18.6% land at 540 Ma → 16.6% at 525 → 17.2% at 500), while his drops eleven points in 25 Myr against his own neighbours — so where the two differ at 525 Ma, the anomaly is not on our side. Recorded rather than tuned: this is two published reconstructions disagreeing about flooding, not a defect.
 
 - **Present-day biota** have their own regional cards for 49 of 148 labels; the rest fall back to broader assemblages.
 

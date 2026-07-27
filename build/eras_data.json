@@ -371,7 +371,7 @@
    "rank": "epoch",
    "eon": "Phanerozoic",
    "era": "Paleozoic",
-   "summary": "Gondwana drove into Laurussia and Pangaea was assembled, throwing up the Central Pangaean Mountains — a Himalayan-scale range running from what is now Appalachia through Iberia into central Europe, preserved today as the Appalachian, Variscan and Ouachita belts. It happened during the peak of the Late Palaeozoic Ice Age, so sea level swung through more than a hundred metres on glacial cycles, repeatedly drowning and exposing the tropical coastal lowlands and stacking them into cyclothems: coal, shale, limestone, sandstone, repeat. Those coastal swamps were forests of lycopsids up to 40 metres tall — Lepidodendron, Sigillaria — with Calamites horsetails and tree ferns, and their burial is why this single period supplies so much of the world's coal. High atmospheric oxygen, around 30 percent, is the usual explanation for arthropods of a size never repeated: the millipede relative Arthropleura reached two and a half metres, and the dragonfly-like Meganeura had a 70 cm wingspan. That chain is a hypothesis rather than a settled result: both Arthropleura and Meganeura are now found in strata YOUNGER than the rainforest collapse, and both were probably forest-independent, so \u201chigh oxygen made them and the collapse killed them\u201d is a story the fossil record does not yet support end to end. The first amniotes — vertebrates laying eggs that did not need water — appear near 318 Ma, and around 305 Ma the Carboniferous Rainforest Collapse fragmented the swamp forests into refugia and pushed the surviving tetrapods toward drier ground. The classic reading is that each surviving rainforest island then evolved its own fauna; a 2018 re-analysis found the opposite, increased COSMOPOLITANISM, so treat the fragmentation as established and its biogeographic consequence as open. The collapse is also Euramerican: the Cathaysian rainforests of South China persist to the end-Permian.",
+   "summary": "Gondwana drove into Laurussia and Pangaea was assembled, throwing up the Central Pangaean Mountains — a Himalayan-scale range running from what is now Appalachia through Iberia into central Europe, preserved today as the Appalachian, Variscan and Ouachita belts. It happened during the peak of the Late Palaeozoic Ice Age, so sea level swung through more than a hundred metres on glacial cycles, repeatedly drowning and exposing the tropical coastal lowlands and stacking them into cyclothems: coal, shale, limestone, sandstone, repeat. Those coastal swamps were forests of lycopsids up to 40 metres tall — Lepidodendron, Sigillaria — with Calamites horsetails and tree ferns, and their burial is why this single period supplies so much of the world's coal. High atmospheric oxygen, around 30 percent, is the usual explanation for arthropods of a size never repeated: the millipede relative Arthropleura reached two and a half metres, and the dragonfly-like Meganeura had a 70 cm wingspan. That chain is a hypothesis rather than a settled result: both Arthropleura and Meganeura are now found in strata YOUNGER than the rainforest collapse, and both were probably forest-independent, so “high oxygen made them and the collapse killed them” is a story the fossil record does not yet support end to end. The first amniotes — vertebrates laying eggs that did not need water — appear near 318 Ma, and around 305 Ma the Carboniferous Rainforest Collapse fragmented the swamp forests into refugia and pushed the surviving tetrapods toward drier ground. The classic reading is that each surviving rainforest island then evolved its own fauna; a 2018 re-analysis found the opposite, increased COSMOPOLITANISM, so treat the fragmentation as established and its biogeographic consequence as open. The collapse is also Euramerican: the Cathaysian rainforests of South China persist to the end-Permian.",
    "key_events": [
     "323.4 Ma — Pennsylvanian begins; Gondwana-Laurussia collision under way",
     "~318 Ma — Hylonomus, among the first amniotes, in Nova Scotian tree stumps",
@@ -625,7 +625,8 @@
    "disputed": true,
    "summary": "Pannotia — also called Greater Gondwana or the Vendian supercontinent — is the proposed latest-Precambrian mass in which Gondwana's assembling cratons were joined by Laurentia, Baltica and Siberia clustered around them, forming a V-shaped landmass around 600 Ma. Its existence as a true supercontinent is genuinely disputed in the current literature, and the app treats it as provisional. The core objection is one of timing: Gondwana's own assembly was still finishing during the Kuunga orogeny between about 570 and 530 Ma, while Laurentia was already rifting away and the Iapetus Ocean was opening from roughly 615 to 550 Ma. If one end was still docking while the other end was already leaving, there may never have been a moment when the pieces were all simultaneously joined. Palaeomagnetic data are permissive rather than conclusive, and several reconstructions allow Laurentia to have been separated from Gondwana throughout. Critics — Meert and Evans among them — argue that no more than about half of continental crust was ever assembled at once, below the usual working threshold for a supercontinent. Its defenders, Scotese most prominently, keep it as a real but very short-lived mass.",
    "life": "The Ediacaran biota, the first large complex organisms on Earth, lived on Pannotia's shelves. The Avalon assemblage at 575 Ma is dominated by deep-water rangeomorph fronds such as Charnia and Fractofusus with no clear modern counterpart. By about 560 Ma the White Sea assemblage adds Dickinsonia, confirmed as an animal by cholesterol biomarkers preserved in its films, and Kimberella, a mollusc-grade grazer that left paired radular scratches in the microbial mats it fed on. By 550 Ma the Nama assemblage includes Cloudina and Namacalathus, the first animals to build mineralised skeletons — and some Cloudina tubes carry predatory boreholes, the earliest direct evidence of predation on skeletal animals.",
-   "fate": "Whatever coherence it had did not last. Iapetus and the Tornquist Sea widened, carrying Laurentia and Baltica away northward while Gondwana consolidated and drifted south; by the early Cambrian the fragments were unambiguously separate continents. The rifting is recorded by the Central Iapetus Magmatic Province between about 620 and 550 Ma. Gondwana, the piece that held, went on to survive for another 350 million years."
+   "fate": "Whatever coherence it had did not last. Iapetus and the Tornquist Sea widened, carrying Laurentia and Baltica away northward while Gondwana consolidated and drifted south; by the early Cambrian the fragments were unambiguously separate continents. The rifting is recorded by the Central Iapetus Magmatic Province between about 620 and 550 Ma. Gondwana, the piece that held, went on to survive for another 350 million years.",
+   "contested": "Whether it existed at all. Rodinia's fragments were still dispersing while Gondwana was assembling, so on many reconstructions the continents were never gathered at one moment -- and a supercontinent that never quite closed is not one. Where the name survives it often means 'Greater Gondwana' rather than a global assembly, and it rests on a short Ediacaran window some models do not reproduce at all."
   },
   {
    "name": "Gondwana",
@@ -705,7 +706,8 @@
    "disputed": true,
    "summary": "Christopher Scotese's scenario, also published as Pangaea Ultima, and the one this model follows. It requires the Atlantic to develop subduction along its own margins and close: the Americas reverse course and drive back east into Africa and Europe, Africa finishes shutting the Mediterranean, and Antarctica and Australia join from the south, producing a ring-shaped continent wrapped around a landlocked remnant of the Indian Ocean by about +250 Myr. The case for it is physical rather than arbitrary: oceanic lithosphere older than roughly 180 to 200 million years becomes dense enough to founder, the oldest Atlantic crust is nearing that age, and Atlantic-facing subduction already exists at the Caribbean, Scotia and Gibraltar arcs — Duarte and colleagues argue the Gibraltar arc is actively propagating westward into Atlantic lithosphere. The case against is that the Pacific is shrinking far faster and by simple extrapolation should close first, and that mantle convection models frequently prefer continents to reconverge over the old superocean (Novopangaea) or 90 degrees away from the last supercontinent's centre (Amasia).",
    "life": "Unknowable, and the model makes no claim about it. What can be modelled is habitability, and the result is bleak: Farnsworth and colleagues (2023) coupled a climate model to this exact configuration and found that the combination of a supercontinent, roughly 2.5 percent higher solar luminosity, and elevated CO2 from suppressed silicate weathering gives sustained interior temperatures of 40 to 50 C, with only 8 to 16 percent of the land surface remaining within the thermal tolerance of mammals.",
-   "fate": "Beyond the horizon of this model. On the pattern of every previous supercontinent, mantle heat trapped beneath it would eventually dome and rift it apart, on a timescale of perhaps 50 to 150 million years after assembly."
+   "fate": "Beyond the horizon of this model. On the pattern of every previous supercontinent, mantle heat trapped beneath it would eventually dome and rift it apart, on a timescale of perhaps 50 to 150 million years after assembly.",
+   "contested": "One of four published futures, and they disagree about which ocean closes. This one shuts the Atlantic and is Scotese's. It is the geography drawn here because Farnsworth et al. (2024) modelled a climate on it, so it is the only one whose temperatures can be checked against anything."
   },
   {
    "name": "Amasia",
@@ -725,7 +727,8 @@
    "disputed": true,
    "summary": "The scenario in which the Pacific closes rather than the Atlantic, and the continents converge over the Arctic. It comes in two flavours. Mitchell and colleagues (2012) proposed orthoversion: each supercontinent assembles roughly 90 degrees of longitude from the centre of the last one, along the ring of subduction that girdled it, which for Pangaea's successor means the Arctic. Separately, Yuan, Davies, Huang and others reached an Arctic-centred Amasia from numerical mantle convection models, in which the Pacific closes because its lithosphere is the oldest, its subduction ring already exists, and the upper mantle beneath an ageing ocean weakens over time, making it progressively easier to consume than the young, strong, subduction-free Atlantic. In favour: the Pacific genuinely is shrinking today and every piece of machinery required already exists. Against: it needs the Atlantic and Indian ridges to keep spreading indefinitely with nothing consuming their output, which is geometrically awkward on a finite sphere, and the true-polar-wander record underpinning orthoversion is contested.",
    "life": "Unknowable. Not modelled.",
-   "fate": "An Arctic-centred supercontinent sits at high latitude, which some climate modelling suggests would make it markedly colder and possibly glaciated at its core — a very different world from the equatorial Pangaea Proxima, and one reason the choice of scenario is not merely cosmetic."
+   "fate": "An Arctic-centred supercontinent sits at high latitude, which some climate modelling suggests would make it markedly colder and possibly glaciated at its core — a very different world from the equatorial Pangaea Proxima, and one reason the choice of scenario is not merely cosmetic.",
+   "contested": "One of four published futures. The continents gather over the ARCTIC rather than on the equator, following the idea that each supercontinent forms about 90 degrees away from the last. Atlantic and Pacific both partly survive."
   },
   {
    "name": "Aurica",
@@ -745,7 +748,8 @@
    "disputed": true,
    "summary": "Duarte and colleagues (2018) proposed the scenario in which both oceans close. New subduction invades the Atlantic — the Gibraltar arc again being the candidate seed — while the Pacific continues to be consumed at the Ring of Fire, so the continents converge from both sides; to conserve surface area a new ocean opens by rifting through Asia, roughly along the line where the Indian Ocean meets the continent. The product is an equator-centred supercontinent split by a young interior ocean, around +250 Myr. What favours it is that it takes both observed trends seriously at once rather than choosing between them, and it requires no ocean to keep spreading forever. What disfavours it is that it needs two independent, unproven events — successful Atlantic subduction invasion and the nucleation of a wholly new rift through continental Asia. Its climate is the interesting part: Way and colleagues (2021) modelled Aurica and Pangaea Ultima side by side and found Aurica several degrees cooler and substantially more habitable, because its equatorial position and interior seaway keep moisture moving across the land instead of leaving a baked continental core.",
    "life": "Unknowable. Not modelled.",
-   "fate": "Beyond this model's horizon. Aurica's new interior ocean would itself be a candidate to widen and take the supercontinent apart again."
+   "fate": "Beyond this model's horizon. Aurica's new interior ocean would itself be a candidate to widen and take the supercontinent apart again.",
+   "contested": "One of four published futures. Both the Atlantic and the Pacific close, and a new ocean opens along a rift through Asia. It needs two new subduction zones to appear where none exists today."
   },
   {
    "name": "Novopangaea",
@@ -765,7 +769,8 @@
    "disputed": true,
    "summary": "The conservative scenario, and arguably the default: change nothing, invent no new plate boundaries, and simply run today's motions forward. The Pacific keeps closing at the rate it is closing now, the Atlantic keeps opening at the rate it is opening now, the Americas ride west until they meet Asia, and Antarctica drifts north to join them from the south. It is the extroversion scenario in Hoffman's terms — the continents reconverge over the old superocean rather than over the ocean that separated them — and it was popularised by Ted Nield. Its great strength is that every subduction zone it uses exists today and no new physics is required, which makes it the scenario with the fewest free parameters. Its weakness is the mirror image: it requires the Atlantic to widen indefinitely and never develop subduction, even though its oldest crust is approaching the age at which other basins have foundered, and even though Atlantic-facing arcs already exist at Gibraltar, the Caribbean and Scotia.",
    "life": "Unknowable. Not modelled.",
-   "fate": "Beyond this model's horizon. Because Novopangaea assembles over the closed Pacific, the succeeding breakup would be expected to reopen a basin along a quite different line from the Atlantic."
+   "fate": "Beyond this model's horizon. Because Novopangaea assembles over the closed Pacific, the succeeding breakup would be expected to reopen a basin along a quite different line from the Atlantic.",
+   "contested": "One of four published futures. The opposite choice to Pangaea Proxima: the Atlantic keeps widening and the PACIFIC closes instead, which is what today's plate motions do if nothing changes. Simple extrapolation is its strength and its weakness -- 250 million years is long enough for subduction to start somewhere new, and that is exactly what nobody can predict."
   }
  ],
  "sources": [
@@ -1008,6 +1013,60 @@
    "end": "It was not a smooth ramp. Oxygen overshot to near modern levels around 2.3 Ga (the Lomagundi–Jatuli excursion) and crashed again at 2.1 Ga, after which it stayed low for more than a billion years.",
    "life": "Everything followed from it. Methane, the greenhouse gas holding the Archaean warm, was oxidised away and the planet froze into the Huronian glaciation. Banded iron formations, which need a deep ocean full of dissolved iron, largely stopped forming by 1.85 Ga; red beds appeared; an ozone layer formed, and the strange sulfur-isotope chemistry of an unshielded atmosphere disappeared from the record. Anaerobic life was mass-extinguished — the biosphere may have contracted by more than 80%. And more than 2,500 of Earth's roughly 4,500 mineral species owe their existence to it.",
    "contested": "The timing of the rise is better constrained than its shape, and whether there were earlier transient 'whiffs' of oxygen — several are claimed back to 3.0 Ga — is actively argued."
+  }
+ ],
+ "interchanges": [
+  {
+   "name": "The Great American Biotic Interchange",
+   "kind": "Continental collision",
+   "short": "Great American",
+   "a1": 10.0,
+   "a0": 0.0,
+   "jump_age": 5,
+   "peak": 2.7,
+   "summary": "South America spent roughly 60 million years as an island continent and evolved a mammal fauna found nowhere else: giant ground sloths, glyptodonts, litopterns and notoungulates, with the marsupial sparassodonts and the flightless terror birds as its predators. When the Isthmus of Panama closed, the two Americas exchanged faunas across it.",
+   "driver": "The rise of the Isthmus of Panama. Island-hopping had already begun by about 9 Ma, but the full land connection is conventionally placed near 2.8 Ma — and the date is genuinely contested, with some geological evidence arguing for a closure as early as 15 Ma.",
+   "result": "Traffic ran both ways but the outcome did not. North American groups — cats, bears, dogs, deer, camelids, horses, tapirs and rodents — dominate the modern South American fauna, while the northward migrants that persist are a short list: the opossum, the porcupine, the armadillo and the nine-banded armadillo's spread through Texas is still under way. Most of South America's endemic orders are gone.",
+   "contested": "Why the exchange was so lopsided. The old explanation was that northern mammals were simply competitively superior. The current reading leans on asymmetry of opportunity instead: North America had itself been receiving immigrants from Asia for tens of millions of years, so its fauna was drawn from a far larger species pool, and the tropical forest corridor suited northern generalists better than it suited southern specialists."
+  },
+  {
+   "name": "The Trans-Arctic Interchange",
+   "kind": "Seaway opening",
+   "short": "Trans-Arctic",
+   "a1": 5.5,
+   "a0": 3.5,
+   "jump_age": 5,
+   "peak": 4.8,
+   "summary": "The mirror image of Panama, and it happened at almost the same time: as the Isthmus rose and closed a seaway, the Bering Strait flooded and opened one. Pacific and Atlantic marine faunas, separated since the Cretaceous, met across the top of the world.",
+   "driver": "The flooding of the Bering Strait, near 5.5–4.8 Ma. It is shallow — about 50 m — so it opens and closes repeatedly with the glacial cycles that follow.",
+   "result": "Overwhelmingly one-way: roughly 300 Pacific molluscs, echinoderms and fish established themselves in the North Atlantic, against a few dozen going the other way. The blue mussel, the soft-shell clam and the Atlantic's periwinkles are Pacific in origin. The North Pacific was the larger and more diverse ocean and simply had more to export.",
+   "contested": "Whether the first opening was 5.5 or 4.8 Ma, and how much of the imbalance is the current regime — the flow through the strait runs north and west — rather than diversity alone."
+  },
+  {
+   "name": "The Grande Coupure",
+   "kind": "Climate-driven turnover",
+   "short": "Grande Coupure",
+   "a1": 34.0,
+   "a0": 33.5,
+   "jump_age": 35,
+   "peak": 33.9,
+   "summary": "“The great break”: the abrupt replacement of Europe's endemic Eocene mammals by Asian immigrants, at the Eocene–Oligocene boundary. Europe had been an archipelago, isolated by the Turgai Strait and the Tethys, with its own primates, artiodactyls and perissodactyls.",
+   "driver": "The Eocene–Oligocene transition, when Antarctica glaciated and global temperature fell sharply. Sea level dropped, the Turgai Strait between Europe and Asia drained, and a land route opened at the same moment the climate turned against a warm, closed-canopy fauna.",
+   "result": "About 60% of European mammal genera disappear and are replaced by rhinoceroses, true ruminants, rodents and carnivorans arriving from Asia. Europe's own primates vanish from the continent entirely and do not return until much later.",
+   "contested": "How much is competition from the immigrants and how much is the climate killing the incumbents first. The two are hard to separate because the land bridge and the cooling arrive together — which is itself the point: the same sea-level fall did both."
+  },
+  {
+   "name": "The Lystrosaurus Flood",
+   "kind": "Post-extinction spread",
+   "short": "Lystrosaurus",
+   "a1": 252.0,
+   "a0": 248.0,
+   "jump_age": 250,
+   "peak": 251.0,
+   "summary": "Not an interchange between separated faunas but its opposite: the collapse of provinciality altogether. After the end-Permian extinction, a single continent with almost nothing left alive on it was colonised by the few survivors, and the same animals turn up everywhere.",
+   "driver": "Pangaea was already assembled, so there were no barriers — and the extinction had emptied the niches. The dicynodont Lystrosaurus is the emblem: at some sites it makes up 90% of all tetrapod fossils.",
+   "result": "Lystrosaurus is found from Antarctica to Russia to South Africa to China. It is the single most compelling fossil argument for continental drift after Glossopteris, and it is a disaster signature: a fauna is uniform across a hemisphere because almost nothing survived to make it otherwise.",
+   "contested": "Whether Lystrosaurus's dominance reflects genuine ecological success or a preservation and sampling bias toward the environments that fossilise well in the earliest Triassic."
   }
  ]
 }

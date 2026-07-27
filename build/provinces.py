@@ -25,6 +25,7 @@ constant time with no biogeography ported into JavaScript.
 The catalogue is imported, not copied: `paleobiogeography` is stdlib-only for
 exactly this reason, and a second copy would drift from the one the audits check.
 """
+import math
 import os
 import sys
 
@@ -111,10 +112,37 @@ MARKER_NOTES = {
 }
 
 # The province model is banded and block-aware, and `block` is what turns
-# "tropical" into "Cathaysian Province". Only labels that ARE a named block can
-# supply one; everything else gets the latitude band, which is what the model is
-# built to fall back on.
+# "tropical" into "Cathaysian Province".
 MARINE_TYPES = {"ocean", "sea"}
+
+# --- WHICH BLOCK IS A LABEL STANDING ON? ----------------------------------
+# The best provinces in the model are keyed on the BLOCK, not on latitude. The
+# Ordovician alone names the Laurentian, Baltic, Siberian and Mediterranean
+# shelves -- four faunas that are the entire point of the interval, because the
+# Ordovician is the most provincial stretch of the Palaeozoic.
+#
+# `block` used to be resolved by NAME, so it fired only for the 56 labels that
+# ARE cratons. The other 280 -- every mountain belt, sea, basin and desert --
+# handed the model a None and fell through to its two latitude bands. The
+# measured effect: at 450-470 Ma the app offered 3 provinces, against 12 today,
+# so the most provincial interval in the record came out the least provincial on
+# screen. The model was never the problem; nothing was reaching it.
+#
+# Matching on present-day position does NOT work: a label's lon/lat is its
+# PALAEO-position (Avalonia is filed at 18W 35S, off Gondwana, not in
+# Newfoundland), while a block's anchors are present-day. So the anchors are
+# reconstructed into the same frame the labels are tracked in -- the same
+# rotations, from paleo_tracks -- and the match is made at the age being asked
+# about. Cratons drift apart; two points that share a plate today shared it then,
+# which is what makes this well posed at all.
+# How far an anchor speaks for its block. Anchors are sparse (1-8 a block), so
+# this is a reach, not a boundary. Chosen by measurement against 17 labels whose
+# block is not in doubt: 1200 km scores 11, 1400 scores 13, 1700 scores 14 and
+# nothing above it scores better. Weighting every anchor of a block by distance
+# instead of taking the nearest was tried and is WORSE (13) -- it hands the
+# Tornquist Sea to Avalonia -- so the simple rule stays.
+BLOCK_REACH_KM = 1700.0
+_BT_CACHE = None
 
 
 def _load():
@@ -159,8 +187,20 @@ def marker_taxon(name, realm):
         note = rec.note or (rec.habit or "").capitalize()
         if not note:
             return None
-        return {"n": name, "r": rec.rank, "realm": rec.realm or default_realm,
-                "note": note}
+        out = {"n": name, "r": rec.rank, "realm": rec.realm or default_realm,
+               "note": note}
+        # B4: size, habit and diet, where the database has them. The 273
+        # silhouettes were a long way ahead of the text -- a card could draw an
+        # animal accurately and not say how big it was or what it ate, which are
+        # the first two things anyone asks. Only emitted when present, so the
+        # card gains a line rather than a row of blanks.
+        if rec.size_m:
+            out["sz"] = round(float(rec.size_m), 4)
+        if rec.habit and rec.habit != note.lower():
+            out["hb"] = rec.habit
+        if rec.diet:
+            out["dt"] = rec.diet
+        return out
     hit = MARKER_NOTES.get(name)
     if hit is None:
         return None
@@ -194,6 +234,81 @@ def _lat_at(lab, age):
     return tr[-1][2]
 
 
+def _lon_at(lab, age):
+    """Palaeolongitude of a label at `age`, from the same track as _lat_at."""
+    tr = lab.get("tr")
+    if not tr:
+        return lab.get("lon")
+    if age <= tr[0][0]:
+        return tr[0][1]
+    if age >= tr[-1][0]:
+        return tr[-1][1]
+    for (a0, x0, _y0), (a1, x1, _y1) in zip(tr, tr[1:]):
+        if a0 <= age <= a1:
+            f = 0.0 if a1 == a0 else (age - a0) / (a1 - a0)
+            d = ((x1 - x0) + 180.0) % 360.0 - 180.0    # go the short way round
+            return x0 + d * f
+    return tr[-1][1]
+
+
+def _block_tracks(step=5, age_max=1000):
+    """{age: [(block, lon, lat), ...]} -- every block anchor, reconstructed.
+
+    Built once. ~340 anchors over 201 ages is a few seconds of pyGPlates, against
+    a whole interval's worth of provinces, so it is not worth being clever about.
+    Returns {} if pyGPlates is unavailable, and the caller then behaves exactly
+    as it did before -- name matching only.
+    """
+    global _BT_CACHE
+    if _BT_CACHE is not None:
+        return _BT_CACHE
+    _pb, pg = _load()
+    _BT_CACHE = {}
+    try:
+        import paleo_tracks                                  # noqa: PLC0415
+        if pg is None or not paleo_tracks.available():
+            return _BT_CACHE
+        rec = paleo_tracks.Reconstructor()
+    except Exception:                                        # noqa: BLE001
+        return _BT_CACHE
+    by_age = {}
+    for name, b in pg.BLOCKS.items():
+        for (x, y) in b.anchors:
+            try:
+                tr, _pid = rec.track(float(x), float(y), age_max, step)
+            except Exception:                                # noqa: BLE001
+                continue
+            for a, lo, la in tr:
+                by_age.setdefault(a, []).append((name, lo, la))
+    _BT_CACHE = by_age
+    return _BT_CACHE
+
+
+def _gc_km(lon1, lat1, lon2, lat2):
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dl = math.radians(lon2 - lon1)
+    c = math.sin(p1) * math.sin(p2) + math.cos(p1) * math.cos(p2) * math.cos(dl)
+    return 6371.0 * math.acos(max(-1.0, min(1.0, c)))
+
+
+def _block_at(lon, lat, age, tracks):
+    """The block whose reconstructed anchor is nearest, or None if none is close.
+
+    None is a real answer, not a failure. Open ocean sits on no craton, and the
+    caller does not even ask for one: Panthalassa's label was landing 860 km from
+    the reconstructed Antarctic Peninsula and being handed it.
+    """
+    pts = tracks.get(int(round(age / 5.0) * 5))
+    if not pts:
+        return None
+    best, bd = None, 1e18
+    for name, blon, blat in pts:
+        d = _gc_km(lon, lat, blon, blat)
+        if d < bd:
+            best, bd = name, d
+    return best if bd <= BLOCK_REACH_KM else None
+
+
 def build(labels, step=5):
     """({province_id: record}, {label_name: [[a_lo, a_hi, id], ...]}).
 
@@ -204,6 +319,7 @@ def build(labels, step=5):
     if pb is None:
         return {}, {}
     blocks = set(getattr(pg, "BLOCKS", ()) or ())
+    tracks = _block_tracks(step=step)
 
     ids, recs = {}, {}
     out = {}
@@ -216,7 +332,8 @@ def build(labels, step=5):
         lo = max(lo, 0)
         hi = min(hi, 1000)
         realm = "marine" if lab.get("t") in MARINE_TYPES else "terrestrial"
-        block = name if name in blocks else None
+        # A label that IS a craton keeps its own name -- exact beats nearest.
+        own = name if name in blocks else None
         runs = []
         a = lo
         while a <= hi + 1e-9:
@@ -224,6 +341,14 @@ def build(labels, step=5):
             if lat is None:
                 a += step
                 continue
+            block = own
+            # An OCEAN basin sits on no craton by definition, so it is never
+            # offered one; it takes the latitude band, which is the honest answer
+            # for open water. A `sea` is usually epicontinental here and does ask.
+            if block is None and tracks and lab.get("t") != "ocean":
+                lon = _lon_at(lab, a)
+                if lon is not None:
+                    block = _block_at(float(lon), float(lat), a, tracks)
             try:
                 p = pb.province(float(a), float(lat), realm, block)
             except Exception:                              # noqa: BLE001

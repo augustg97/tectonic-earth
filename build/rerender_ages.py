@@ -59,7 +59,7 @@ def main(ages):
             except NameError:
                 _REC = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
             Zhi = EP.carve(Zhi, age, _REC)
-            rec, _ = export(age, Zhi, z, "phan")
+            rec, _ = export(age, Zhi, Zhi[::-1], "phan")   # see build_fields.main
         else:
             if a_hi is None:                      # anchor, loaded once
                 z540 = dem_for_age(540)

@@ -324,12 +324,22 @@ def report(rows):
     cls = {}
     for r in reg:
         cls[r.cls] = cls.get(r.cls, 0) + 1
-    if cls:
-        lines.append("regressions by cause:")
-        for k in ("TRUE", "CANCELLATION", "DEM-LIMITED", "PRE-EXISTING"):
-            if cls.get(k):
-                lines.append(f"  {k:<14} {cls[k]:>3}")
-        lines.append("")
+    # The TRUE count is printed ALWAYS, even at zero, and the block is not
+    # conditional on there being any regressions at all.
+    #
+    # It used to appear only when non-zero, which made this gate unreadable by a
+    # machine at exactly the moment it started passing: `audit_all.py` matches
+    # `^  TRUE\s+(\d+)` and scored the check UNREADABLE, not "ok", once the count
+    # reached 0. That went unnoticed because `build_site.py` runs the audits with
+    # --quick, which skips this one for being slow -- so the publish gate never
+    # asked. Same family as README 7.10: a check that cannot report success is
+    # not a check. State the number unconditionally.
+    lines.append("regressions by cause:")
+    lines.append(f"  {'TRUE':<14} {cls.get('TRUE', 0):>3}")
+    for k in ("CANCELLATION", "DEM-LIMITED", "PRE-EXISTING"):
+        if cls.get(k):
+            lines.append(f"  {k:<14} {cls[k]:>3}")
+    lines.append("")
     true = sorted([r for r in reg if r.cls == "TRUE"], key=lambda r: r.old - r.new,
                   reverse=True)
     if true:

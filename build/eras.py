@@ -27,6 +27,7 @@ INTERVALS = _DATA["intervals"]
 SUPERCONTINENTS = _DATA["supercontinents"]
 GLACIATIONS = _DATA.get("glaciations", [])
 CLIMATE_EVENTS = _DATA.get("climate_events", [])
+INTERCHANGES = _DATA.get("interchanges", [])
 SOURCES = _DATA.get("sources", [])
 
 
@@ -48,6 +49,23 @@ def glaciations():
     -- the last one matters, because several of these are not settled.
     """
     return GLACIATIONS
+
+
+def interchanges():
+    """Biotic interchanges -- what happened when two separated faunas met.
+
+    The SIXTH navigable structure, and like the climate events it exists because
+    the map cannot show it. A land bridge is a few tens of kilometres of ground:
+    the Isthmus of Panama and the Bering Strait are both far below what a 20 km
+    grid can resolve, so the app can draw the continents approaching and never
+    draw the moment they connect -- which is the only moment that matters.
+
+    They are also the clearest demonstration in the record that geography IS
+    biology. Two of these are the same event: the Isthmus rose and closed a
+    seaway at almost exactly the moment the Bering Strait flooded and opened one,
+    and the consequences run in opposite directions on land and in the sea.
+    """
+    return INTERCHANGES
 
 
 def climate_events():

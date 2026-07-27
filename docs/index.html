@@ -267,6 +267,10 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 .lifetxt .ln2{font-size:11px;color:var(--ink);letter-spacing:.02em;line-height:1.3}
 .lifetxt .lr{font-size:8.5px;color:var(--dim2);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
 .lifetxt .lnote{font-size:10px;color:var(--dim);line-height:1.5;margin-top:3px}
+/* size · diet · habit. Dimmer than the note and set apart, because it is a
+   lookup a reader scans rather than a sentence they read. */
+.lifetxt .lattr{font-size:9.5px;color:var(--dim2);line-height:1.45;margin-top:3px;
+  padding-top:3px;border-top:1px solid var(--line)}
 
 /* ---- left rail: legend + browsable sidebars ---- */
 #leftrail{position:fixed;left:20px;top:96px;bottom:118px;width:200px;z-index:18;display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;transition:opacity .5s;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
@@ -522,6 +526,10 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <div class="ph"><span>Climate events</span><span class="chev">▾</span></div>
     <div class="pb" id="ceList"></div>
   </div>
+  <div class="panel" id="biPanel">
+    <div class="ph"><span>Biotic interchanges</span><span class="chev">▾</span></div>
+    <div class="pb" id="biList"></div>
+  </div>
 </div>
 
 <div id="controls">
@@ -609,7 +617,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <li><b>Present plate motions</b> — NNR-MORVEL56 (Argus, Gordon &amp; DeMets, 2011): real Euler poles drive the motion-vector field.</li>
     <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults. Through deep time the boundaries come instead from the Merdith et al. (2021) rotation model, resolved per keyframe with pyGPlates into continuously-closing topologies.</li>
     <li><b>Sea floor</b> — depth from half-space cooling (Parsons &amp; Sclater); roughness follows the von Kármán description of abyssal-hill terrain — a band-limited fractal, about 5:1 elongated, hills tens to a few hundred metres high and a few kilometres apart. Ridge segmentation, nodal basins and fracture-zone spacing are set to the observed ranges. The ridge network below the model's resolution is synthesised, not surveyed: it is a plausible spreading system consistent with the resolved arcs, not a map of one.</li>
-    <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Haq/Hallam sea-level curves, Late-Paleozoic and Neoproterozoic glaciations). Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
+    <li><b>Climate &amp; biosphere</b> — a literature-informed model (Scotese climate zones, Late-Paleozoic and Neoproterozoic glaciations). Sea level follows <b>one</b> curve on purpose &mdash; Haq &amp; Schutter (2008), which van der Meer's independent tectonic reconstruction closely agrees with. The rival backstripping family (Miller and co-workers) puts the Cretaceous high stand at roughly <i>half</i> this, and the two barely overlap; a 2016 review of the field is titled &ldquo;a chaos of Phanerozoic eustatic curves&rdquo;. Mixing them would give a curve matching neither, so the app stays inside one and says which. Greenhouse/icehouse anomalies are applied with polar amplification, so hothouse worlds gain ice-free poles while the tropics barely move.</li>
     <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
     <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
     <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith.</li>
@@ -912,7 +920,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-1803';
+const DATA_V='20260727-2132';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1093,6 +1101,15 @@ uniform sampler2D surfA, surfB;
                   (parallel to the ridge) -- rather than baked as fixed lines. */
 uniform sampler2D oceanA, oceanB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
+/* 0..1: do GRASSES exist and form a sward here yet. Vegetation as a whole is
+   already gated by uVeg, which the climate table drives correctly -- 0.00 before
+   500 Ma, 0.05 in the Silurian, so a Silurian continent is already rock and thin
+   crust rather than green. Grass is a separate and much later thing: present
+   from the Late Cretaceous but ecologically trivial, open grassland only from
+   about 40 Ma, and C4 savanna expanding from 8. Without this the Cretaceous
+   drew the same gold grass steppe and stippled savanna the Serengeti gets, tens
+   of millions of years before either existed. */
+uniform float uGrass;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 /* Term-isolation switches for the sea floor: x the noise fabric, y the
@@ -1893,9 +1910,16 @@ void main(){
        WET axis: taiga, temperate broadleaf, monsoon forest, equatorial rain
        forest. The wet end is deliberately darkest and least yellow -- closed
        canopy absorbs almost everything. */
+    /* The dry axis before grasses is not steppe. A seasonally dry interior in the
+       Mesozoic is fern and cycad scrub over open ground, and in the Palaeozoic
+       less than that -- browner, greyer and barer than a grassland, because what
+       makes a grassland green is the grass. Pull the two grassy stops toward the
+       stony/sandy ones by (1 - uGrass). */
+    vec3 dryCold = mix(vec3(0.541,0.545,0.463), vec3(0.501,0.478,0.420), 1.0-uGrass);
+    vec3 dryMid  = mix(vec3(0.702,0.667,0.482), vec3(0.680,0.616,0.470), 1.0-uGrass);
     vec3 dry = (w<0.5)
-      ? mix(vec3(0.541,0.545,0.463), vec3(0.702,0.667,0.482), clamp(w*2.0,0.0,1.0))
-      : mix(vec3(0.702,0.667,0.482), vec3(0.812,0.706,0.522), clamp((w-0.5)*2.0,0.0,1.0));
+      ? mix(dryCold, dryMid, clamp(w*2.0,0.0,1.0))
+      : mix(dryMid, vec3(0.812,0.706,0.522), clamp((w-0.5)*2.0,0.0,1.0));
     vec3 mid = (w<0.5)
       ? mix(vec3(0.353,0.412,0.310), vec3(0.545,0.588,0.353), clamp(w*2.0,0.0,1.0))
       : mix(vec3(0.545,0.588,0.353), vec3(0.706,0.635,0.361), clamp((w-0.5)*2.0,0.0,1.0));
@@ -1908,7 +1932,10 @@ void main(){
        in it, and from orbit that is a coarse two-tone stipple rather than a
        blend -- which is what makes the Sahel and the cerrado read as themselves
        and not as pale jungle. Only in the warm, seasonally-dry band. */
-    float savb=clamp((h-0.22)/0.30,0.0,1.0)*clamp(1.0-(h-0.42)/0.26,0.0,1.0)*clamp((w-0.55)/0.25,0.0,1.0);
+    /* ...and the savanna stipple is grass with trees standing in it, so it needs
+       grass. Before ~40 Ma the same climate band is closed or open woodland with
+       no sward under it, which reads as a blend rather than a two-tone stipple. */
+    float savb=clamp((h-0.22)/0.30,0.0,1.0)*clamp(1.0-(h-0.42)/0.26,0.0,1.0)*clamp((w-0.55)/0.25,0.0,1.0)*uGrass;
     float stip=vnoise3(sdir*46.0+17.0);
     col=mix(col, vec3(0.298,0.400,0.239), savb*smoothstep(0.52,0.78,stip)*0.55);
 
@@ -3201,7 +3228,7 @@ function initGL(){
     motA:{value:null},waterA:{value:null},waterB:{value:null},
     surfA:{value:null},surfB:{value:null},
     oceanA:{value:null},oceanB:{value:null},
-    mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uIceT:{value:-30},
+    mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uGrass:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
     uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uSnowball:{value:0},
@@ -4040,15 +4067,34 @@ function taxonNow(t){
   if(!t.w) return true;
   return state.age<=t.w[0]+0.001 && state.age>=t.w[1]-0.001;
 }
+/* How big something was, in the unit a reader would use for it: a 2.5 m
+   Arthropleura, a 70 cm Meganeura wingspan, a 3 mm ostracod. Fixed units make
+   one of those three unreadable whichever unit is chosen. */
+function sizeStr(m){
+  if(!(m>0))return '';
+  if(m>=1)return (m>=10?Math.round(m):Math.round(m*10)/10)+' m';
+  if(m>=0.01)return Math.round(m*100)+' cm';
+  return (Math.round(m*10000)/10)+' mm';
+}
 function lifeHTML(taxa,limit){
   taxa=taxa.filter(taxonNow);
   const I=DATA.life.icons||{};
-  return '<div class="life">'+taxa.slice(0,limit||99).map(t=>
-    `<div class="lifeitem"><div class="lifeicon ${esc(t.realm)}">`+
+  return '<div class="life">'+taxa.slice(0,limit||99).map(t=>{
+    /* B4. The drawing was always right and the text never said how big the
+       animal was or what it ate. Only the fields taxa_db actually has are
+       printed, so a taxon it does not cover keeps exactly its old card
+       instead of gaining a row of blanks. */
+    const bits=[];
+    const sz=sizeStr(t.sz); if(sz)bits.push(sz);
+    if(t.dt)bits.push(esc(t.dt));
+    if(t.hb)bits.push(esc(t.hb));
+    const attr=bits.length?`<div class="lattr">${bits.join(' · ')}</div>`:'';
+    return `<div class="lifeitem"><div class="lifeicon ${esc(t.realm)}">`+
     `<svg viewBox="0 0 64 40">${I[t.ic]||''}</svg></div>`+
     `<div class="lifetxt"><div class="ln2">${esc(t.n)}</div>`+
     `<div class="lr">${esc(t.r)} · ${esc(t.realm)}</div>`+
-    `<div class="lnote">${esc(t.note)}</div></div></div>`).join('')+'</div>';
+    `<div class="lnote">${esc(t.note)}</div>${attr}</div></div>`;
+  }).join('')+'</div>';
 }
 /* Which organisms to show for a clicked feature.
 
@@ -4115,7 +4161,25 @@ function lifeSection(l){
   const rt=regionTaxaAt(l.n,age), prov=provinceAt(l.n,age);
   const provOK = prov && (prov.r==='marine')===marine;
   if(rt&&rt.taxa&&rt.taxa.length){
-    const ftx=rt.taxa.filter(t=>wantR.includes(t.realm));
+    /* B5. A CURATED LIST IS NOT FILTERED BY REALM, because realm-locking is a
+       property of the LOCALITY and `wantR` is derived from the label's type,
+       which is only a proxy for it. Someone catalogued what lived at this place
+       at this age; running that through a guess about the place discards the
+       better answer in favour of the worse one.
+
+       Measured before this change: the filter was silently hiding curated taxa
+       on 37 label-spans. Solnhofen is the famous case — a marine lagoon whose
+       whole significance is the pterosaurs and Archaeopteryx that fell into it,
+       all dropped for being 'air' on a 'sea' card — and the Hudson Seaway lost
+       Hesperornis the same way. But the bulk of it was the opposite error:
+       CONTINENT cards denied their marine fauna. Cambrian Laurentia's curated
+       list is four taxa and all four are marine, as the Cambrian must be, so a
+       'continent' card kept none of them and fell through to the global list.
+
+       The global list below is STILL filtered, and that is where the filter was
+       always meant to live: that list is about the world, not about this place,
+       so putting its land animals in an ocean is a real error. */
+    const ftx=rt.taxa;
     if(ftx.length){
       let h;
       if(rt.exception){
@@ -4334,7 +4398,7 @@ function jumpTo(age){
   state.age=Math.max(-250,Math.min(1000,age));
   state.playing=false;syncPlay();syncSlider();
   bindTextures();buildBoundaries();buildHotspots();buildVectors();updateReadout();
-  markSidebarCurrent();markGlaciationList();markClimateEventList();
+  markSidebarCurrent();markGlaciationList();markClimateEventList();markInterchangeList();
 }
 function showInterval(i){
   const mid=(i.a0+i.a1)/2;
@@ -4357,7 +4421,12 @@ function showSupercontinent(s){
   let extra='';
   if(s.life)extra+=`<div class="ihead">Life it carried</div><p class="desc">${esc(s.life)}</p>`;
   if(s.fate)extra+=`<div class="ihead">What happened to it</div><p class="desc">${esc(s.fate)}</p>`;
-  if(s.disputed)extra+=`<div class="ihead">Contested</div><p class="desc">`+
+  /* Say WHAT is disputed, the way the glaciation cards do. All five of these
+     used to print one identical sentence, which told a reader nothing about the
+     difference between a supercontinent that may never have assembled and four
+     rival forecasts of the next one. */
+  if(s.contested)extra+=`<div class="ihead">Still argued over</div><p class="desc">${esc(s.contested)}</p>`;
+  else if(s.disputed)extra+=`<div class="ihead">Contested</div><p class="desc">`+
     `This one is not settled. It is shown because it is in the published literature, `+
     `not because the reconstruction is agreed.</p>`;
   openInfo({name:s.name,tag:(s.disputed?'Disputed · ':'')+'Supercontinent',
@@ -4601,7 +4670,15 @@ function updateReadout(){
                 : iceL>0.01 ? 'polar caps'
                 : (iceL>0.002||iceS>0.02) ? 'small polar ice'
                 : iceS>0.002 ? 'sea ice only' : 'ice-free';
-  const tw=m.temp>0.4?'Hothouse':m.temp>0.05?'Warm':m.temp>-0.25?'Cool':'Icehouse';
+  /* The climate STATE is named from the same number the readout prints, on
+     PhanDA's own thresholds (Judd et al. 2024): icehouse below 18 C, cool
+     greenhouse to 24, warm greenhouse to 30, hothouse above.
+
+     It used to be named from `temp`, the -1..+1 anomaly proxy the shader uses,
+     which is a different quantity with different breakpoints -- so at 250 Ma the
+     readout said "28.5 C" and "Hothouse" side by side, when 28.5 C is a warm
+     greenhouse in the scheme being invoked. Naming the state from the
+     temperature makes the two halves of the same line agree. */
   /* The vegetation label describes extent, but direction matters: in the past
      a partly-vegetated world is greening, in the projected future it is a
      biosphere in RETREAT as the supercontinent and brightening Sun push life
@@ -4611,6 +4688,8 @@ function updateReadout(){
     : (m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated');
   const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
   const gmst=L('gmst'), co2=L('co2'), o2=L('o2'), sol=L('sol');
+  const tw = gmst>30 ? 'Hothouse' : gmst>24 ? 'Warm greenhouse'
+           : gmst>18 ? 'Cool greenhouse' : 'Icehouse';
   /* Solar luminosity, from the standard solar model — the faint young Sun in
      the deep past (about 8% dimmer at 1000 Ma) brightening to a few percent
      above today in the far future. Only shown once it is large enough to
@@ -4833,6 +4912,50 @@ function buildClimateEventList(){
     el.onclick=()=>{ const e=climateEventsList()[+el.dataset.ce]; if(e) showClimateEvent(e); };
   });
 }
+/* BIOTIC INTERCHANGES — the sixth panel, and it exists for the same reason the
+   fifth does: the map cannot show this. A land bridge is a few tens of km of
+   ground, and Panama and the Bering Strait are both far under what a 20 km grid
+   resolves, so the globe can draw two continents approaching and never draw the
+   moment they touch — which is the only moment that matters. */
+function interchangeList(){
+  return ((DATA.eras&&DATA.eras.interchanges)||[]).slice().sort((a,b)=>a.a1-b.a1);
+}
+function buildInterchangeList(){
+  const box=$('#biList'); if(!box) return;
+  box.innerHTML=interchangeList().map((e,i)=>
+    `<div class="glrow ce" data-bi="${i}">`
+    +`<span class="gn">${esc(e.short||e.name)}<span class="gk">${esc(e.kind||'')}</span></span>`
+    +`<span class="gd">${esc(fmtSpan(e.a0,e.a1))}</span></div>`).join('');
+  box.querySelectorAll('[data-bi]').forEach(el=>{
+    el.onclick=()=>{ const e=interchangeList()[+el.dataset.bi]; if(e) showInterchange(e); };
+  });
+}
+function interchangeAt(age){
+  return interchangeList().find(e=>
+    age>=Math.min(e.a0,e.a1)-2.5 && age<=Math.max(e.a0,e.a1)+2.5)||null;
+}
+function markInterchangeList(){
+  const cur=interchangeAt(state.age), es=interchangeList();
+  document.querySelectorAll('#biList [data-bi]').forEach(el=>
+    el.classList.toggle('cur', !!cur && es[+el.dataset.bi]===cur));
+}
+function showInterchange(e){
+  const rows=[['Span',fmtSpan(e.a0,e.a1)],['Kind',e.kind||'Biotic interchange']];
+  if(e.peak!=null){
+    const A=ages(); let bi=0,bd=1e9;
+    A.forEach((v,i)=>{const d=Math.abs(v-e.peak);if(d<bd){bd=d;bi=i;}});
+    rows.push(['Connection formed',`${fmtAge(e.peak)} — narrower than this map can draw`]);
+  }
+  let extra='';
+  if(e.driver)extra+=`<div class="ihead">What opened the route</div><p class="desc">${esc(e.driver)}</p>`;
+  if(e.result)extra+=`<div class="ihead">Who crossed, and who won</div><p class="desc">${esc(e.result)}</p>`;
+  if(e.contested)extra+=`<div class="ihead">Still argued over</div><p class="desc">${esc(e.contested)}</p>`;
+  openInfo({name:e.name, tag:(e.kind||'Biotic interchange')+' · '+fmtSpan(e.a0,e.a1),
+            rows, desc:e.summary, extra, wide:true,
+            art:artFor('interchange',undefined,e.name)});
+  if(e.jump_age!=null)jumpTo(e.jump_age);
+  markInterchangeList();
+}
 function climateEventAt(age){
   /* Widened to +/- half a keyframe. An event 200 kyr long sits BETWEEN two
      keyframes far more often than on one, so an exact containment test would
@@ -5011,6 +5134,15 @@ function bindTextures(){
   const L=(k)=>A[k]+(B[k]-A[k])*t;
   mat.uniforms.uTemp.value=L('temp');
   mat.uniforms.uVeg.value=L('veg');
+  /* Grasses: present from the Late Cretaceous, ecologically minor until about
+     40 Ma, open grassland through the Oligocene and Miocene, C4 savanna from 8.
+     Ramped rather than switched, because that is how it happened. The future
+     keeps grass, so negative ages clamp to 1. */
+  {const a=Math.max(state.age,0);
+   mat.uniforms.uGrass.value = a<=8 ? 1.0
+     : a<=40 ? 1.0-0.45*(a-8)/32.0
+     : a<=70 ? 0.55*(1.0-(a-40)/30.0)
+     : 0.0;}
   mat.uniforms.uIceT.value=L('iceT');
   mat.uniforms.uSeaT.value=L('seaT');
   // Snowball intensity (render.snowball_at): 1 when the era's ice line reaches
@@ -5294,7 +5426,7 @@ function buildLegend(){
   initGL();
   await loadAll();
   ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
-  buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();markSidebarCurrent();
+  buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();buildInterchangeList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
      so when something does not appear on screen the only way to find out which

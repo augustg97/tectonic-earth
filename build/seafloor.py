@@ -44,10 +44,42 @@ import numpy as np
 # claim about the raster. The exception is render.smooth_bathymetry, whose whole
 # job is to band-limit to what the grid can carry: that one is correctly a
 # function of the raster and gets FINER as the raster does.
-# --- age-depth (half-space cooling, Parsons & Sclater style) ---------------
+# --- AGE-DEPTH: GDH1, NOT PURE HALF-SPACE COOLING -------------------------
+# Half-space cooling has the floor deepening as sqrt(age) for ever. It does not.
+# Past ~80 Myr the observed sea floor FLATTENS, because a plate loses heat from
+# below as well as from the top and settles towards a steady thickness.
+#
+# Pure sqrt reaches 6.9 km at 150 Myr -- deeper than almost anywhere real -- so
+# the old code clipped it at MAX_ABYSS. A clip is not a flattening. It made every
+# piece of crust older than 97 Myr EXACTLY 6000 m: measured on the present-day
+# age grid, 34.2% of the sea floor, a third of the ocean rendered as a plateau
+# with no depth gradient anywhere in it, across the whole old western Pacific and
+# the old North Atlantic. Abyssal hills then had to carry relief that the
+# large-scale field had flattened out.
+#
+# GDH1 (Stein & Stein 1992, Nature 359, 123) is the standard plate model and
+# gives the flattening directly, in two branches that meet at 20 Myr:
+#     t <  20 Myr   d = 2600 + 365*sqrt(t)
+#     t >= 20 Myr   d = 5651 - 2473*exp(-0.0278*t)
+# They agree to 0.4 m at the join. Old crust now settles onto a real asymptote of
+# 5651 m instead of a clip, so 150 Myr crust comes up 387 m and, more to the
+# point, 100 Myr and 180 Myr crust are no longer the same depth.
 RIDGE_DEPTH = 2600.0        # m: crest of a mid-ocean ridge
-DEPTH_PER_SQRT_MYR = 350.0  # m per sqrt(Myr): how fast it deepens with age
-MAX_ABYSS = 6000.0
+DEPTH_PER_SQRT_MYR = 350.0  # m per sqrt(Myr): the old law, kept for reference
+MAX_ABYSS = 6000.0          # a backstop now, not the shape of the old ocean
+GDH1_A = 365.0              # m per sqrt(Myr) on the young branch
+GDH1_D0 = 5651.0            # m: asymptotic plate depth
+GDH1_DD = 2473.0            # m: the amplitude that decays away
+GDH1_K = 0.0278             # per Myr
+GDH1_T = 20.0               # Myr: where the two branches meet
+
+
+def depth_from_age(age_myr):
+    """Depth below sea level in metres, POSITIVE DOWN, from crustal age. GDH1."""
+    t = np.maximum(np.asarray(age_myr, dtype=np.float64), 0.0)
+    young = RIDGE_DEPTH + GDH1_A * np.sqrt(t)
+    old = GDH1_D0 - GDH1_DD * np.exp(-GDH1_K * t)
+    return np.where(t < GDH1_T, young, old)
 # Half-spreading rate. Real ridges run 10-80 mm/yr; 30 mm/yr (= 30 km/Myr) is a
 # fair global mean and puts the oldest surviving crust near 180 Myr, which is
 # what the ocean basins actually show.
@@ -720,7 +752,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 fz_field = None
                 age_ok = False
 
-            model_depth = -(RIDGE_DEPTH + DEPTH_PER_SQRT_MYR * np.sqrt(age_myr))
+            model_depth = -depth_from_age(age_myr)
             model_depth = np.clip(model_depth, -MAX_ABYSS, -RIDGE_DEPTH)
 
             # Blend over deep ocean only, leaving shelves and any real surveyed

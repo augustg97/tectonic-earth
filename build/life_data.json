@@ -672,7 +672,7 @@
    "biomes": [
     {
      "name": "Lycopsid coal swamp",
-     "note": "Peak coal, and near its end: the Carboniferous Rainforest Collapse fragments this biome within a few million years."
+     "note": "Peak coal, and near its end: the Carboniferous Rainforest Collapse fragments this biome within a few million years -- in Euramerica. The Cathaysian rainforests of South China are unaffected and run to the end-Permian."
     },
     {
      "name": "Tropical everwet rainforest",
@@ -2243,7 +2243,7 @@
    "interval": "Pennsylvanian",
    "a0": 298.9,
    "a1": 323.2,
-   "summary": "The coal forests. Waterlogged equatorial mires filled with thirty-metre lycopsids, tree ferns, calamiteans and seed ferns bury organic carbon faster than any biome before or since, and nearly all the world's coal is made here. Oxygen climbs above thirty percent, which permits insects at sizes physically impossible today: Meganeura with a seventy-centimetre wingspan, and Arthropleura, a two-metre millipede. Amniotes appear -- Hylonomus in the hollow stumps at Joggins -- and with the amniotic egg, vertebrates finally cut the last tie to standing water. Toward the end of the interval the Carboniferous Rainforest Collapse fragments the swamp into refugia and drives tetrapod faunas into isolation.",
+   "summary": "The coal forests. Waterlogged equatorial mires filled with thirty-metre lycopsids, tree ferns, calamiteans and seed ferns bury organic carbon faster than any biome before or since, and nearly all the world's coal is made here. Oxygen climbs above thirty percent, which permits insects at sizes physically impossible today: Meganeura with a seventy-centimetre wingspan, and Arthropleura, a two-metre millipede. Amniotes appear -- Hylonomus in the hollow stumps at Joggins -- and with the amniotic egg, vertebrates finally cut the last tie to standing water. Toward the end of the interval the Carboniferous Rainforest Collapse fragments the swamp into refugia. It is a EURAMERICAN event: the Cathaysian rainforests of South China carry on to the end-Permian, so at any age after 305 Ma this biome is gone from one tropical belt and intact in the other.",
    "taxa": [
     {
      "name": "Lepidodendron",
