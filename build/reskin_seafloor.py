@@ -9,7 +9,11 @@ helpers, same inputs) and re-exports just those two textures. Far cheaper than
 re-running the climate solve for ~250 keyframes, and identical in result.
 
 Run from the build/ directory with the project venv:  ../venv/bin/python reskin_seafloor.py
-Set ONLY_AGE=<n> to reskin a single Phanerozoic keyframe for a quick check.
+Set ONLY_AGE=<n> to reskin a single Phanerozoic keyframe for a quick check, or
+ONLY_TAG=phan|fut|pre to redo one era's frames. The tag form exists because the
+three eras take different code paths through seafloor.py and a fix can apply to
+one of them alone -- the catalogued plume chains, for instance, are drawn in the
+Phanerozoic and deliberately not in the future.
 """
 import os, sys
 import numpy as np
@@ -50,10 +54,17 @@ def dem_for(age):
 
 rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
 only = os.environ.get("ONLY_AGE")
+only_tag = os.environ.get("ONLY_TAG")
+
+
+def want(tag):
+    return only_tag is None or only_tag == tag
 
 # ---- Phanerozoic (0..540) ----
 n = withmot = 0
 for age in range(0, 541, STEP):
+    if not want("phan"):
+        break
     if only is not None and age != int(only):
         continue
     z = dem_for(age)
@@ -72,6 +83,8 @@ gid = bf.rasterise_groups()
 Zsrc = bf.resample_dem(dem_for(0), 900, 1800)
 nf = 0
 for age in range(-STEP, -251, -STEP):
+    if not want("fut"):
+        break
     frac = abs(age) / 250.0
     gh = bf.future_grid(frac, gid, Zsrc, ELEV_H, ELEV_W)
     gh = gh - bf.sealevel_for(age)
@@ -83,6 +96,8 @@ print(f"future: {nf} keyframes reskinned")
 A_hi = bf.resample_dem(dem_for(540), ELEV_H, ELEV_W)
 npre = 0
 for age in range(540 + STEP, 1001, STEP):
+    if not want("pre"):
+        break
     hi = bf.PRE.precambrian_grid(age, tw=ELEV_W, th=ELEV_H, flood=140.0)
     wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
     hi = bf.handoff_blend(A_hi, hi, wq)

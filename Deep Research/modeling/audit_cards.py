@@ -71,6 +71,15 @@ def load_cards():
         cards[("glaciation", g["name"])] = " ".join(
             str(g.get(f, "")) for f in ("summary", "cause", "end", "life", "contested"))
         windows[("glaciation", g["name"])] = (g["a0"], g["a1"])
+    # The fifth navigable panel. Added when it shipped -- an audit that cannot see
+    # a card reports its subject as a coverage gap, which is worse than not
+    # checking at all because it reads as a finding.
+    for e in eras.get("climate_events", []):
+        cards[("climate-event", e["name"])] = " ".join(
+            str(e.get(f, "")) for f in ("summary", "cause", "end", "life", "contested",
+                                        "short"))
+        if not e.get("offmap"):
+            windows[("climate-event", e["name"])] = (e["a0"], e["a1"])
     for s in eras["supercontinents"]:
         cards[("supercontinent", s["name"])] = " ".join(
             str(s.get(f, "")) for f in ("summary", "life", "fate"))

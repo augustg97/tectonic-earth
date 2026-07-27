@@ -155,7 +155,25 @@ def run():
     out = []
     for name, spans in sorted(rt.items()):
         low = name.lower()
-        is_exception = any(k in low for k in EXCEPTION_MARKERS)
+        looks_exceptional = any(k in low for k in EXCEPTION_MARKERS)
+        # THE DATA IS NOW THE AUTHORITY, not this heuristic. Since the B1 wiring
+        # landed, life_data.json carries `exception: true` on the localities the
+        # province model must never overwrite, and build/life.py passes it through
+        # to the app. This audit's job flipped accordingly: it no longer GUESSES
+        # which entries are exceptional, it checks that what the data declares
+        # matches what a reading of the name would expect -- so a new curated
+        # entry has to declare itself, and a flag that quietly disappears is a
+        # finding rather than a silent behaviour change.
+        declared = any(sp.get("exception") for sp in spans)
+        if declared != looks_exceptional:
+            out.append(F("CONFLICT", name, "-",
+                         f"life_data.json {'declares' if declared else 'does NOT declare'} "
+                         f"exception:true, but the name reads "
+                         f"{'typical' if declared else 'exceptional'}",
+                         "either flag it in life_data.json or say here why it is "
+                         "province-typical; an undeclared exception gets overwritten "
+                         "by the province model"))
+        is_exception = declared
         for sp in spans:
             a0, a1 = sp.get("a0", 0), sp.get("a1", 0)
             mid = 0.5 * (a0 + a1)
@@ -204,11 +222,16 @@ def main():
     findings = run()
     order = {"CONFLICT": 0, "EXCEPTION": 1, "TYPICAL": 2}
     findings.sort(key=lambda f: (order[f.verdict], f.name))
-    counts = {}
+    # Every verdict is printed even at zero. A count that simply disappears when
+    # it is zero is indistinguishable from a count that failed to compute, and a
+    # broken check reading as a pass is the failure mode this project has already
+    # paid for once (README section 7.10). build/audit_all.py parses these.
+    counts = {"CONFLICT": 0, "EXCEPTION": 0, "TYPICAL": 0}
     for f in findings:
         counts[f.verdict] = counts.get(f.verdict, 0) + 1
     print(f"{len(findings)} curated region_taxa spans audited")
-    print("  " + " · ".join(f"{k} {v}" for k, v in sorted(counts.items())) + "\n")
+    print("  " + " · ".join(f"{k} {counts[k]}" for k in
+                            ("CONFLICT", "EXCEPTION", "TYPICAL")) + "\n")
     shown = {}
     for f in findings:
         shown[f.verdict] = shown.get(f.verdict, 0) + 1

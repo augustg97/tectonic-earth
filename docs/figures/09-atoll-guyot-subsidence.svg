@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 516" width="1180" height="516">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="516"/>
+<text class="t title" x="28" y="34">Atolls and guyots: an island's whole life</text>
+<text class="t sub" x="28" y="53">Darwin's subsidence sequence, and why our seamounts should have flat tops</text>
+<rect x="44" y="128" width="250" height="190" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="45" y="180" width="248" height="137" fill="#16344a" opacity="0.85"/>
+<line x1="45" y1="180" x2="293" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<path d="M73.0 312 L169.0 134 L265.0 312 Z" fill="#4a3f39"/>
+<rect x="45" y="180" width="248" height="137" fill="#16344a" opacity="0.55"/>
+<line x1="45" y1="180" x2="293" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<rect x="129.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<rect x="195.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<text class="t small" x="169.0" y="336" text-anchor="middle" fill="#c9a227">1. volcanic island</text>
+<text class="t small" x="169.0" y="350" text-anchor="middle">fringing reef hugs the shore</text>
+<path d="M297 223.0 l13 0 m-5 -5 l5 5 l-5 5" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="314" y="128" width="250" height="190" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="315" y="180" width="248" height="137" fill="#16344a" opacity="0.85"/>
+<line x1="315" y1="180" x2="563" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<path d="M343.0 312 L439.0 166 L535.0 312 Z" fill="#4a3f39"/>
+<rect x="315" y="180" width="248" height="137" fill="#16344a" opacity="0.55"/>
+<line x1="315" y1="180" x2="563" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<rect x="369.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<rect x="495.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<text class="t small" x="439.0" y="196" text-anchor="middle" fill="#7fbfd8">lagoon</text>
+<text class="t small" x="439.0" y="336" text-anchor="middle" fill="#c9a227">2. subsiding</text>
+<text class="t small" x="439.0" y="350" text-anchor="middle">barrier reef + lagoon</text>
+<path d="M567 223.0 l13 0 m-5 -5 l5 5 l-5 5" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="584" y="128" width="250" height="190" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="585" y="180" width="248" height="137" fill="#16344a" opacity="0.85"/>
+<line x1="585" y1="180" x2="833" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<path d="M613.0 312 L709.0 192 L805.0 312 Z" fill="#4a3f39"/>
+<rect x="585" y="180" width="248" height="137" fill="#16344a" opacity="0.55"/>
+<line x1="585" y1="180" x2="833" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<rect x="609.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<rect x="795.0" y="173" width="14" height="13" rx="2" fill="#d8c48a"/>
+<text class="t small" x="709.0" y="196" text-anchor="middle" fill="#7fbfd8">lagoon</text>
+<text class="t small" x="709.0" y="336" text-anchor="middle" fill="#c9a227">3. atoll</text>
+<text class="t small" x="709.0" y="350" text-anchor="middle">ring of reef, no island left</text>
+<path d="M837 223.0 l13 0 m-5 -5 l5 5 l-5 5" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="854" y="128" width="250" height="190" rx="6" fill="#101820" stroke="#2a3644"/>
+<rect x="855" y="180" width="248" height="137" fill="#16344a" opacity="0.85"/>
+<line x1="855" y1="180" x2="1103" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<path d="M883.0 312 L979.0 254 L1075.0 312 Z" fill="#4a3f39"/>
+<path d="M933.0 266 L1025.0 266 L1075.0 312 L883.0 312 Z" fill="#4a3f39"/>
+<line x1="933.0" y1="266" x2="1025.0" y2="266" stroke="#7d6f63" stroke-width="2"/>
+<rect x="855" y="180" width="248" height="137" fill="#16344a" opacity="0.55"/>
+<line x1="855" y1="180" x2="1103" y2="180" stroke="#5fa8c8" stroke-width="1.4"/>
+<text class="t small" x="979.0" y="256" text-anchor="middle" fill="#9fb2c6">drowned</text>
+<text class="t small" x="979.0" y="336" text-anchor="middle" fill="#c9a227">4. guyot</text>
+<text class="t small" x="979.0" y="350" text-anchor="middle">reef drowned; flat wave-cut top</text>
+<text class="t small" x="44" y="380">The island does not sink because it is heavy. It sinks because the sea floor it stands on is cooling: oceanic</text>
+<text class="t small" x="44" y="394">lithosphere contracts and subsides as it ages, by roughly 350 m for every square root of a million years.</text>
+<text class="t small" x="44" y="408">So every volcanic island rides slowly downward, and whether it becomes an atoll or a guyot is decided by</text>
+<text class="t small" x="44" y="422">whether coral can grow upward fast enough - which depends on the water being warm enough. Darwin worked</text>
+<text class="t small" x="44" y="436">the whole sequence out in 1842 from the shapes alone, before anyone knew the sea floor moved at all.</text>
+<text class="t small" x="44" y="450"></text>
+<text class="t small" x="44" y="464">FOR THE MODEL: this is the same physics as the seamount population in seafloor.py. Seeding seamounts along</text>
+<text class="t small" x="44" y="478">plume tracks and letting them subside with crustal age predicts flat-topped guyots at depth on old chains and</text>
+<text class="t small" x="44" y="492">sharp cones and islands on young ones - for free, from a mechanism rather than from a texture.</text>
+</svg>

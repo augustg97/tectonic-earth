@@ -747,6 +747,7 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             conf = np.clip(mag / (0.35 * np.median(mag[sea]) + 1e-6), 0.0, 1.0) * polefade
 
             relief = np.zeros_like(out)
+            chain_relief = None      # catalogued plume edifices, exempt from the cap
             deg_per_cell = 180.0 / h
 
             # AXIAL VALLEY, VARYING ALONG STRIKE. A slow ridge carries a rift
@@ -874,7 +875,10 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 # resolve, which is the right order for the resolvable part of a
                 # population that runs to ~24,000 above a kilometre.
                 import seamounts as _sm
-                relief += _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v, age_of=float(age))
+                _bg, _chain = _sm.field(age_myr, sea, lat1d, deg_per_cell, u, v,
+                                        age_of=float(age), floor=out)
+                relief += _bg
+                chain_relief = _chain
             else:
                 rng = np.random.default_rng(11)
                 smt = _nd.gaussian_filter(rng.random(out.shape).astype(np.float32), 4.4)
@@ -957,6 +961,19 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # system deliberately, not from noise.
             headroom = np.maximum(-out - 1300.0, 0.0)
             relief = np.minimum(relief, headroom)
+            # ...EXCEPT the catalogued plume chains, and this is the one place
+            # the cap must not apply. Hawaii, Iceland, the Galapagos, Reunion,
+            # the Azores, Cape Verde, Samoa, the Societies and the Marquesas are
+            # volcanic ISLANDS, and a rule written to stop procedural noise
+            # breaching was also holding every real one 1.3 km under water. The
+            # split is not "how tall" but "do we know its name": a named
+            # volcano's summit depth comes from its own age
+            # (hotspots_cat.summit_depth), so the young end of a chain surfaces,
+            # the middle is an atoll and the old end is a drowned guyot -- which
+            # is the entire D4 prediction and it costs one comparison.
+            if chain_relief is not None:
+                relief = np.maximum(relief,
+                                    chain_relief * (1.0 - 0.90 * sed) * polefade)
             out = out + np.where(sea & (out < -900.0), relief, 0.0)
             out = np.clip(out, -MAX_ABYSS, None)
 

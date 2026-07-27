@@ -110,6 +110,19 @@ Two independent routes, used where each is sound.
 
 **Deep time** (`build_plates_gplates.py`, `plates_time.py`) — the **Merdith et al. (2021)** full-plate rotation model, resolved with pyGPlates into continuously-closing plate topologies per 5-Myr age, with boundaries classified as ridge / trench / transform. Stored in `web/plates_time.json` as `{"c": "ridge"|"trench"|"transform", "p": [[lon,lat],…]}`.
 
+**Two rotation models are in use, and that is deliberate.** Boundaries need resolved topologies, which only Merdith provides. *Feature tracks* — labels, craters, LIPs, the epeiric seas and the hotspot chains — instead ride **Scotese's PALEOMAP rotations** (`paleo_tracks.py`), because that is the frame the PaleoDEM terrain is drawn in, and tracking in anyone else's places a name on one Earth and draws it on another. Until July 2026 the tracks were Merdith's and the gap was patched with a rigid global longitude shift per age (`frame_offset.py`, now deleted — with one frame there is nothing left to correct and applying it would inject the error it used to remove).
+
+Four independent measurements of that switch:
+
+| | before | after |
+|---|---|---|
+| land-today points landing on abyssal plain (53 points × 10 ages) | 20% | **5%** |
+| labels disagreeing with the terrain under them, ≥⅓ of their span | 62 | **41** |
+| labels moving more than 15° in one 5 Myr step — impossible for crust | 12 | **6** |
+| per-feature medium score, mean over the 124 features the build tracks | 0.819 | **0.971** |
+
+The last is the one that matters, because an average can hide a tail. `Deep Research/modeling/regression_gate.py` scores **every** tracked feature on **its own** age window under both frames and reports the individual outcome: 54 improved, 67 unchanged, 3 down by ≤0.08, **none** a true regression. That harness is the general instrument, not a one-off — §7.10.
+
 Boundaries are derived by **segmenting the surface into plates first and taking the edges afterwards**. An earlier version thresholded a strain field and thinned it, which can only ever give fragments — a threshold crossing is a patch, and thinning a patch gives a broken crest. Real boundaries are not features in their own right; they are the edges between plates, so they are continuous and closed by construction.
 
 **Measured motion** (`motion.py`) — two elevation keyframes are the same crust some millions of years apart, so block-matching one against the next recovers how far each patch of surface travelled. Matching uses a ±15 Myr half-baseline — a 30 Myr window — because over a single 5 Myr step a plate moves well under one grid cell, which integer block-matching cannot resolve at all.
@@ -190,7 +203,9 @@ Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the ge
 
 ### 5.6 Events, features and life
 
-- `paleo_tracks.py` — impacts and large igneous provinces are catalogued where we find them *today*, and the crust has travelled. These are reconstructed along **real plate rotations**. The previous approach advected them on the block-matched motion grid, which freezes over featureless ocean and has a poleward bias past 250 Ma, so an ocean crater sat still while its plate moved out from under it.
+- `paleo_tracks.py` — impacts, large igneous provinces, labels, the epeiric seas and the plume chains are catalogued where we find them *today*, and the crust has travelled. These are reconstructed along **real plate rotations** — Scotese's PALEOMAP, the frame the terrain itself is drawn in (§5.1). The previous approach advected them on the block-matched motion grid, which freezes over featureless ocean and has a poleward bias past 250 Ma, so an ocean crater sat still while its plate moved out from under it.
+- `provinces.py` — the biogeographic province each label sat in, at every age it is drawn, emitted as runs. What stopped 235 of 336 cards showing one global list; see §9.
+- `hotspots_cat.py` — the 53-plume catalogue and the subsidence law that turns it into islands, atolls and guyots; see §10. Both this and `provinces.py` are two-line bridges to `Deep Research/modeling/`, which is stdlib-only on purpose so `build/` can import it rather than keep a second copy that drifts.
 - `features.py` — volcanic provinces and era labels with age windows. A flood basalt is an eruption for a moment and a **landform** for far longer, so each province stays on the map as long as it stood as high ground. The Deccan still holds up the Western Ghats; CAMP, the largest of them all, was buried in its own rift basins almost as it erupted and is a landform essentially nowhere.
 - `life.py`, `add_*_life.py`, `add_present_biota.py` — biomes and the regional fossil record, with terms chosen to suit the period: no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith.
 - `audit_labels_full.py` — systematic label audit across terrain, debut age and drift, because a label must track the *same feature* as it evolves rather than merely sit at fixed coordinates.
@@ -223,6 +238,24 @@ python check_shader.py && python build_site.py
 ```
 
 then commit and push to `main`. GitHub Pages serves `main:/docs`.
+
+`build_site.py` now **runs the validators first and refuses to publish if one moved backwards**. They are read-only and take a few seconds:
+
+```bash
+python audit_all.py           # all of them
+python audit_all.py --quick   # skip the pyGPlates ones (~2 min)
+```
+
+| check | baseline | what it catches |
+|---|---|---|
+| `audit_cards` HIGH / MED | 0 / 0 | factual errors, unhedged contested claims, date drift, coverage gaps, anachronistic vocabulary |
+| `audit_label_windows` | 2 | a label drawn when the entity it names did not exist |
+| `audit_curated_biota` | 10 exceptions, 0 conflicts | a curated locality the province model would overwrite, or one whose flag disagrees with what it is |
+| `climate_audit` | 1 (an INFO check that PASSES) | the GMST/CO₂/O₂ table against PhanDA and Krause |
+| `ice_audit` | 0 of 23 outside range | drawn ice area against the literature, per keyframe |
+| `regression_gate` | 0 true regressions | a feature the frame switch made worse |
+
+The baselines are not all zero and should not be — two label windows are genuine open disagreements about when Gondwana and Kazakhstania become identifiable. The rule is that **none of them may move backwards**; when one legitimately improves, tighten the baseline in the same commit, so the ratchet turns one way only. `SKIP_AUDIT=1` overrides, deliberately awkwardly.
 
 Common targeted rebuilds:
 
@@ -337,11 +370,34 @@ Clamping the sampling radius near the pole makes every pixel poleward of ~88° s
 
 ---
 
+### 7.10 A guard inside a bare `except` is not a guard
+
+`regression_gate.py` mirrors the build's own rule for which labels get plate-tracked, including "the coordinate must be land today". It was written as:
+
+```python
+try:
+    z = present(lon, lat)
+    if z is None or z < 0:
+        return False
+except Exception:
+    pass
+```
+
+`build_webdata._present_elevation()` takes **no arguments** — it returns the raster, and the lookup is a separate function. So every call raised `TypeError` straight into `except: pass`, the guard passed everything, and the gate scored 35 labels the build never tracks. That is what produced the headline "7 true regressions": five of the seven — Gulf of California, Red Sea Rift, Newark Rift Valleys, West Antarctic Rift, Kerguelen — are authored at coordinates that are *water today*, so the build leaves them to `snapLabel` under **both** frames. A frame switch cannot regress a feature it never touches.
+
+With the guard actually working: 124 features scored, 54 improved, 67 unchanged, **3 down by ≤0.08, none true**.
+
+Two rules out of it, and the second is the general one:
+
+- **A `try/except` around a guard inverts it.** The failure mode of a check that throws is *silence*, and silence reads as "passed". If the guard cannot run, that is a reason to stop, not to continue — the gate now raises rather than reporting numbers it cannot stand behind.
+- **When an audit disagrees with the app, check the audit first.** Seven times out of seven in this project the error has been in the measuring instrument. Two of the seven were found by the audits' own selftests; this one needed the app's answer and the audit's answer to be put side by side.
+
 ## 8. Sources
 
 | role | source |
 |---|---|
-| Plate model | Merdith, A. S. et al. (2021), *Earth-Science Reviews* 214, 103477 · Zenodo 4485738 · CC-BY 4.0 |
+| Plate topologies | Merdith, A. S. et al. (2021), *Earth-Science Reviews* 214, 103477 · Zenodo 4485738 · CC-BY 4.0 |
+| Feature-track rotations | Scotese, C. R. (2016), PALEOMAP Global Plate Model `m15g60_v2d3` · in `Scotese_PaleoAtlas_v3` · CC-BY 4.0 — the PaleoDEMs' own frame |
 | Paleo-DEMs | Scotese, C. R. & Wright, N. (2018), PALEOMAP PaleoDEMs · Zenodo 5460860 · CC-BY 4.0 |
 | Present plate motions | NNR-MORVEL56 (Argus, Gordon & DeMets, 2011) |
 | Present boundaries | Bird, P. (2003), PB2002 · *G³* 4(3) |
@@ -358,9 +414,19 @@ Clamping the sampling radius near the pole makes every pixel poleward of ~88° s
 ## 9. Known limits
 
 - **Deep time and deep future are interpretive.** Pre-540 Ma and future frames are authored reconstructions — real cratons rotated into supercontinent fits. Treat this as a visualisation of the published record, not a precise map.
+
+- **Palaeozoic longitude is a choice, not a measurement, and a residual against another reconstruction is EXPECTED.** Palaeomagnetism fixes palaeolatitude and orientation and says nothing about longitude, so before ~175 Ma — where the oldest sea floor and its magnetic stripes run out — every published model picks its own. Measured against Deep Time Maps (Blakey), an independent reconstruction: 5° mean |Δlon| over 0–100 Ma, 12° over 100–260 Ma, and **73° over 260–525 Ma, reaching 146° at 500 Ma**. Scotese's own model moved by up to **60°** between its ~2000 and 2016 editions. Latitude agrees throughout — land-versus-latitude correlation 0.87–0.97 across 400–525 Ma — which is the signature of a one-dimensional uncertainty. Chasing the residual to zero is the wrong goal; part of it can also be a true-polar-wander correction present in one model and absent in another.
 - **The synthesised spreading network is plausible, not surveyed.** The pattern is real; the particular line is not. Same standing as the modelled rivers.
-- **27 tracked labels** still sit on the wrong medium for more than a third of their span. Root cause is a Merdith-vs-Scotese frame mismatch; the fix needs per-region rather than global-rigid frame correction.
+- **41 tracked labels** still sit on the wrong medium for more than a third of their span, down from 62 before the frame switch. The old root cause — a Merdith-vs-Scotese frame mismatch patched with a rigid global longitude shift — is gone; tracks now use Scotese's own rotations, so the mismatch is zero by construction. What remains is a different and smaller set of causes: about a third of them are submarine **plateaus** (Ontong Java, Manihiki, Agulhas, Broken Ridge, Mascarene, Kerguelen) where "wrong medium" means the audit expected land and the feature is genuinely a drowned plateau, and most of the rest are terranes below what a 20 km grid resolves.
+
+- **A small block in a shredded region is below the grid, in any frame.** The Rhodope Massif is the worked example: nine anchors *inside the same massif*, all assigned the same plate, score anywhere from 0.15 to 0.92 on the medium test under **either** rotation model. The spread is the measurement — the answer depends on which texel you land in, not on the reconstruction — so its residual is recorded rather than tuned away.
+
+- **Four labels are authored at coordinates that are water today**, and so are never plate-tracked in any frame: **Gulf of California**, **Red Sea Rift** (both rifts that have already opened into sea), **West Antarctic Rift** (below sea level under ice) and **Kerguelen Microcontinent** (a drowned plateau). `coord_is_present_day()` routes them to `snapLabel`'s terrain search by design — a track follows crust, and a point in open water has no crust to follow. They are correct as authored; the build lists them under "labels left untracked" every run.
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
+- **The biota panel now has three tiers, and the residue is 21 labels.** It used to have two: a curated list for 101 of 336 labels, and one *global interval list* for everything else — the same four organisms on two hundred cards, and 133 labels (every mountain belt, basin, rift, desert and plateau) got no panel at all. `provinces.py` puts a named biogeographic province on **315 of 336** labels at every age they are drawn, so the order is now exception-curated → province assemblage → labelled global list, with the heading saying which one the reader is looking at. The 21 that still fall through are future-only names (Pangaea Proxima, Amasia, Neo-Himalaya) and the Antarctic Ice Sheet.
+
+- **Ten curated localities are flagged `exception`** and the province model must never speak over them — Solnhofen, the Zechstein, Muschelkalk and Nama seas, the Messinian salt basin, the Paratethys, Lake Pannon, the Mid-Atlantic Ridge and East Pacific Rise vent faunas, and the Beringian steppe-tundra. Being atypical for their province is the entire point of each. `audit_curated_biota.py` checks the flag against a reading of the name, so a new curated entry has to declare itself.
+
 - **Present-day biota** have their own regional cards for 49 of 148 labels; the rest fall back to broader assemblages.
 
 ---
@@ -408,12 +474,40 @@ Two corrections were needed, both found by painting the detector's own output ov
 
 **But the limit was the age grid, not the channel.** Rendering the fracture-zone field over the equatorial Atlantic at 512×1024 against 768×1536 settles it: the coarse grid shows the ridge trace and essentially nothing else, the fine one shows the Romanche–Chain–Vema family as the long continuous parallel scars a chart has. A fracture zone is a step a few tens of km wide, and a 39 km cell smooths it away before anything downstream can see it. `seafloor.py` now asks `oceanage` for 768×1536 — 4.8 s a keyframe once the one-time pyGPlates load is paid — which sharpens the baked troughs as well as the shader's test for where the fabric should break.
 
+**Fixed in July 2026: the plumes were in the wrong places, and it was not a texture problem.**
+
+`seamounts.field()` placed its 34 plumes by **hashing a seed** — `_h(seed, p, 11)` for the latitude. The mechanism was right (a chain is the locus of volcanoes born at a stationary plume and carried off on the plate) and every location was invented, so the single most *organised* feature of a real ocean was the one thing the map put in the wrong place. Hawaii, Louisville, Ninetyeast, Walvis, the Emperor seamounts: all absent, and a scatter of imaginary chains instead.
+
+The fix is a catalogue, not a noise function. `hotspots_cat.py` bridges the 53-plume table in `Deep Research/modeling/hotspots.py` into the seeder, and one line of physics does the rest:
+
+```
+summit_depth = (ridge_depth − edifice_height) + 0.350·√(edifice age in Myr)
+```
+
+An edifice's summit sits at an **absolute** depth set by its own age, so its height above the floor is whatever the difference happens to be — which is why a young Hawaiian volcano on 90 Myr crust comes out 7 km tall and an Emperor guyot on the same crust comes out with its top 2 km down. Islands drown at ~16 Myr. Measured on the shipped field at 0 Ma:
+
+| | drawn | what it should be |
+|---|---|---|
+| Midway (~28 Ma edifice) | **−77 m** | an atoll — it is one |
+| Meiji (~85 Ma, Emperor) | **−2,111 m** | a deep guyot |
+| Ninetyeast Ridge | **−1,255 to −2,587 m** | a submarine ridge, crest 1.5–2.5 km |
+| Carnegie / Nazca / Cocos ridges | −458 / −768 / −36 m | shallow aseismic ridges |
+| Iceland · Réunion · Azores · Cape Verde · Samoa · Society · Marquesas · St Helena | **emergent** | volcanic islands |
+| two open-abyss controls | unchanged | unchanged |
+
+Measured over 300 open-abyss points on the rendered globe afterwards: R/B **0.42**, G/B **0.52**, saturation **0.574**. The colour ramp was not touched and has not moved. **The spectral-band and grain-coherence rows of the table above were NOT re-measured** — their reference framing is a set of Google Earth screenshots at a fixed zoom and sun angle, which is not reproducible from a scripted render, so quoting a number against them would be false precision. The direct evidence that the abyss is untouched is that the chains occupy 2% of ocean cells and the open-abyss controls read identically before and after.
+
+Three things follow from the catalogue rather than needing new machinery. **Guyots and atolls** are the same line at different ages. **Ten named aseismic ridges** are entered from their surveyed present-day trace and carried back on their own plate — necessary because several were written on a plate the plume no longer touches (India has taken the Ninetyeast Ridge 5,000 km from Kerguelen, and every plate within 8° of the plume now shares Antarctica's rotation). And the **anti-breach cap** — which existed to stop procedural noise painting turquoise flecks across the abyss — now splits on *do we know its name*: a named volcano's summit comes from its own age, everything procedural stays 1.3 km down. New land is **0.012% of the globe**, and it is Hawaii, the Azores, Bouvet, the Marquesas, Juan Fernández and the Cook–Australs.
+
+**Where the catalogue stops, the model carries on and says so.** The oldest dated trail is ~135 Ma; Earth plainly had plumes at 300 Ma and we do not know where, so the hashed population survives as the top-up beyond the catalogue's reach.
+
 **Not fixed, and known.**
 
-- **Seamounts are not clustered along plume tracks.** They are seeded by crustal age, so they scatter where a real ocean shows chains — Hawaii, Louisville, the Cook–Australs. The `hotspot` input to `seamounts.field()` exists and is not wired up.
 - **Deep-time sea floor cannot be made accurate**, only structurally correct. That crust was subducted; there is no record. The isochron model correlates 0.41 with the surveyed grid where both exist, which is why the surveyed grid is preferred wherever it survives.
 - **The axial valley and nodal basins still key off the ridge network**, not age — deliberately, because they describe where the ridge is *now*.
-- **Aseismic ridges and marginal basins** (Ninetyeast, Walvis, the Philippine Sea) are absent or generic.
+- **Marginal basins are still generic.** The aseismic ridges are now catalogued, but the Philippine Sea and the western Pacific's scatter of back-arc basins are not modelled by slab roll-back; the mechanism is on the Sea of Japan card and not in the geometry.
+- **A plume's mirror trail is over-drawn at the short end.** Where a plume sits on a spreading axis it feeds both flanks — Tristan writes Walvis on the African plate and the Rio Grande Rise on the South American — and the catalogue does not record which flank each age span belongs to, so the union is applied to both. The Rio Grande Rise therefore runs a little younger than it should.
+- **The Emperor limb is short.** PALEOMAP's Pacific rotation carries the chain to (158°E, 37°N) at 80 Ma where the real Meiji seamount is at (165°E, 53°N). That is the published model's own answer, and the ridge itself is drawn from its surveyed trace rather than from the rotation for exactly this reason.
 - **The fabric is a synthesised grain, not surveyed hills.** Its aspect, spectrum and coherence are measured against the reference rather than guessed, and it varies with spreading rate, sediment burial, the baked field's own roughness and — since the fracture-zone work below — with the province it sits in. What it still is not is a survey.
 - **Coastlines and shelf breaks stay jagged at texel scale.** At 9.8 km the grid matches the source PaleoDEMs exactly, so there is nothing further to extract: Google Earth's near-shore bathymetry is 15 arc-seconds, some twenty times finer. This is a data limit, not a shader one, and it is where the remaining visible difference lives.
 

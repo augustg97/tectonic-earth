@@ -9,9 +9,24 @@ has no size ceiling at all — which is what makes room for future detail.
 Output is plain static files: drop the folder on GitHub Pages, Netlify,
 Cloudflare Pages, or any web server. No build step, no dependencies.
 """
-import os, shutil, json
+import os, shutil, json, subprocess, sys
 
 import stamp_data_version
+
+# THE VALIDATORS RUN BEFORE THE DEPLOY, not after it. Every one of them is
+# read-only and the whole set takes a few seconds; the alternative is finding out
+# from the live site that a card lost its hedge or a label window slipped, which
+# is how two of these findings were discovered in the first place. Set
+# SKIP_AUDIT=1 to publish anyway -- deliberately awkward, and it says so.
+if os.environ.get("SKIP_AUDIT") != "1":
+    print("validators:")
+    _r = subprocess.run([sys.executable,
+                         os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "audit_all.py"), "--quick"])
+    if _r.returncode != 0:
+        raise SystemExit("build_site: a validator moved backwards (above). Fix it, "
+                         "or move the baseline in audit_all.py in the same commit "
+                         "and say why. SKIP_AUDIT=1 overrides.")
 
 WEB = "../web"
 SITE = "../docs"   # GitHub Pages serves main:/docs natively
@@ -50,6 +65,20 @@ for name in DATA_FILES:
 # Photographs for the feature cards. A directory rather than a file list --
 # photos.py adds to it whenever a new feature gets one, and a hard-coded list
 # would silently stop shipping the new ones.
+# Model-generated figures for the cards. These come out of
+# "Deep Research/diagrams and illustrations/make_diagrams.py", which draws them
+# FROM the same tables the app ships -- the oxygen curve is climate.py's own O2
+# column, the atoll/guyot panel is the subsidence law seamounts.py applies -- so
+# they cannot drift away from what the model does. Same directory-not-a-list
+# reasoning as the photos below.
+fsrc = os.path.join(WEB, "figures")
+if os.path.isdir(fsrc):
+    fdst = os.path.join(SITE, "figures")
+    if os.path.isdir(fdst):
+        shutil.rmtree(fdst)
+    shutil.copytree(fsrc, fdst)
+    print(f"figures: {len(os.listdir(fdst))} model-generated diagrams")
+
 psrc = os.path.join(WEB, "photos")
 if os.path.isdir(psrc):
     pdst = os.path.join(SITE, "photos")

@@ -48,6 +48,11 @@ PALEOMAP_DIR = os.path.join(ROOT, "data", "paleomap_gpm",
 PALEOMAP_ROT = os.path.join(PALEOMAP_DIR, "PALEOMAP_PlateModel.rot")
 PALEOMAP_POLY = os.path.join(PALEOMAP_DIR, "PALEOMAP_PlatePolygons.gpml")
 
+MERDITH_DIR = os.path.join(ROOT, "data", "merdith2021", "SM2_X")
+MERDITH_ROT = os.path.join(MERDITH_DIR, "1000_0_rotfile_Merdith_et_al.rot")
+MERDITH_POLY = os.path.join(MERDITH_DIR, "shapes_static_polygons_Merdith_et_al.gpml")
+FRAME_OFFSET = os.path.join(HERE, "frame_offset_merdith.json")
+
 AGES = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 # A coarse global sample of present-day continental interiors and margins. These
 # are all land today, spread over every craton, so the score is a population
@@ -117,26 +122,66 @@ def sample(grid, lon, lat):
 
 
 def build_reconstructors():
-    """(name, callable(lon, lat, age) -> (lon, lat) or None) for each frame."""
-    import paleo_tracks
+    """(name, callable(lon, lat, age) -> (lon, lat) or None) for each frame.
+
+    All three frames are pinned here BY NAME rather than read out of
+    build/paleo_tracks.py. This experiment's whole content is a three-way
+    comparison, and once the build adopted PALEOMAP (which is what the experiment
+    recommended) importing the build's reconstructor would have silently made all
+    three columns the same model and reported a dead heat. Same reason
+    regression_gate.py pins both of its frames. See frame_offset_merdith.json for
+    the retired rigid correction, kept here because build/frame_offset.json is
+    deleted with the switch.
+    """
+    import json
     out = []
 
-    if paleo_tracks.available():
-        rc = paleo_tracks.Reconstructor()
+    if os.path.exists(MERDITH_ROT) and os.path.exists(MERDITH_POLY):
+        import pygplates
+        m_rot = pygplates.RotationModel(MERDITH_ROT)
+        m_part = pygplates.PlatePartitioner(
+            pygplates.FeatureCollection(MERDITH_POLY), m_rot, reconstruction_time=0)
 
-        # Reconstructor.track returns ([[age, lon, lat], ...], plate_id) - the whole
-        # track, not a point. Take the last step, which is `age`.
-        def _last(rc, lon, lat, age, corr):
-            tr, _pid = rc.track(lon, lat, age, step=max(5, int(age)), correct_frame=corr)
-            if not tr:
+        try:
+            with open(FRAME_OFFSET) as fh:
+                tab = {int(k): float(v) for k, v in json.load(fh).items()}
+        except Exception:                                  # noqa: BLE001
+            tab = {}
+        keys = sorted(tab)
+
+        def shift(age):
+            if not keys:
+                return 0.0
+            a = abs(float(age))
+            if a <= keys[0]:
+                return tab[keys[0]]
+            if a >= keys[-1]:
+                return tab[keys[-1]]
+            for i in range(len(keys) - 1):
+                k0, k1 = keys[i], keys[i + 1]
+                if k0 <= a <= k1:
+                    f = 0.0 if k1 == k0 else (a - k0) / (k1 - k0)
+                    return tab[k0] + (tab[k1] - tab[k0]) * f
+            return 0.0
+
+        def _merd(lon, lat, age, corr):
+            pt = pygplates.PointOnSphere(float(lat), float(lon))
+            f = m_part.partition_point(pt)
+            pid = f.get_feature().get_reconstruction_plate_id() if f else 0
+            try:
+                p = m_rot.get_rotation(float(age), pid) * pt
+            except Exception:                              # noqa: BLE001
                 return None
-            return (tr[-1][1], tr[-1][2])
+            la, lo = p.to_lat_lon()
+            if corr:
+                lo = ((lo + shift(age) + 180.0) % 360.0) - 180.0
+            return (lo, la)
 
-        def merdith_raw(lon, lat, age, rc=rc):
-            return _last(rc, lon, lat, age, False)
+        def merdith_raw(lon, lat, age):
+            return _merd(lon, lat, age, False)
 
-        def merdith_corr(lon, lat, age, rc=rc):
-            return _last(rc, lon, lat, age, True)
+        def merdith_corr(lon, lat, age):
+            return _merd(lon, lat, age, True)
 
         out.append(("merdith-raw", merdith_raw))
         out.append(("merdith-corrected", merdith_corr))

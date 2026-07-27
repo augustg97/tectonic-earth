@@ -1347,7 +1347,7 @@
     },
     {
      "name": "Expanding subtropical desert",
-     "note": "The first widening of the dry belts as the continents begin to gather \u2014 a hint of what is coming."
+     "note": "The first widening of the dry belts as the continents begin to gather — a hint of what is coming."
     },
     {
      "name": "Temperate & boreal forest",
@@ -1380,7 +1380,7 @@
     },
     {
      "name": "Alpine highland",
-     "note": "A fresh Alpine-scale range along the Africa\u2013Europe suture where the Mediterranean has closed."
+     "note": "A fresh Alpine-scale range along the Africa–Europe suture where the Mediterranean has closed."
     },
     {
      "name": "Temperate forest refugia",
@@ -1401,7 +1401,7 @@
    "biomes": [
     {
      "name": "Hot supercontinental desert",
-     "note": "A vast, expanding hot desert forms in the interior as the landmasses close ranks \u2014 the largest since Pangaea."
+     "note": "A vast, expanding hot desert forms in the interior as the landmasses close ranks — the largest since Pangaea."
     },
     {
      "name": "Coastal & upland vegetation refugia",
@@ -1430,7 +1430,7 @@
    "biomes": [
     {
      "name": "Hyperarid supercontinental desert",
-     "note": "The defining feature of the world: the largest hot desert in Earth's history, with monthly heat above 50 C \u2014 beyond mammalian tolerance."
+     "note": "The defining feature of the world: the largest hot desert in Earth's history, with monthly heat above 50 C — beyond mammalian tolerance."
     },
     {
      "name": "Bare rock & salt-pan interior",
@@ -1438,7 +1438,7 @@
     },
     {
      "name": "Coastal, polar & montane refugia",
-     "note": "A thin green rim \u2014 the last vegetation, clinging to cool coasts, the poleward margins and mountain highlands where water and shade remain."
+     "note": "A thin green rim — the last vegetation, clinging to cool coasts, the poleward margins and mountain highlands where water and shade remain."
     },
     {
      "name": "Warm oxygen-poor superocean",
@@ -1446,7 +1446,7 @@
     },
     {
      "name": "Expanded oceanic anoxic zone",
-     "note": "Sluggish circulation in the warm ocean lets oxygen-minimum zones spread, laying down black shale \u2014 but the surface stays productive."
+     "note": "Sluggish circulation in the warm ocean lets oxygen-minimum zones spread, laying down black shale — but the surface stays productive."
     },
     {
      "name": "Microbial mats & marginal reefs",
@@ -3078,7 +3078,7 @@
    "interval": "Paleocene",
    "a0": 56,
    "a1": 66,
-   "summary": "An empty world refilling. Ferns blanket the devastated landscape immediately after the impact, then forests return, and within a few million years mammals have gone from shrew-sized to bear-sized. The radiation is fast but strange: most Paleocene mammals belong to groups with no living descendants -- multituberculates, condylarths, taeniodonts. Birds also radiate, and in South America the flightless phorusrhacids start down the road to becoming apex predators. Cerrej\u00f3n in Colombia preserves a tropical rainforest with Titanoboa, a thirteen-metre snake whose size implies mean annual temperatures well above anything today. The ocean's plankton slowly rebuilds.",
+   "summary": "An empty world refilling. Ferns blanket the devastated landscape immediately after the impact, then forests return, and within a few million years mammals have gone from shrew-sized to bear-sized. The radiation is fast but strange: most Paleocene mammals belong to groups with no living descendants -- multituberculates, condylarths, taeniodonts. Birds also radiate, and in South America the flightless phorusrhacids start down the road to becoming apex predators. Cerrejón in Colombia preserves a tropical rainforest with Titanoboa, a thirteen-metre snake whose size implies mean annual temperatures well above anything today. The ocean's plankton slowly rebuilds.",
    "taxa": [
     {
      "name": "Titanoboa cerrejonensis",
@@ -3351,7 +3351,7 @@
    "interval": "Pliocene",
    "a0": 2.58,
    "a1": 5.333,
-   "summary": "The world assembles into something recognisable. The Isthmus of Panama closes, rerouting ocean currents and launching the Great American Biotic Interchange -- North American carnivorans pour south, and ground sloths, glyptodonts and armadillos move north. Northern Hemisphere glaciation begins around 2.7 million years ago and the boreal forest and tundra biomes come into existence. In Africa, Australopithecus walks upright across savanna at Laetoli, leaving footprints in volcanic ash that show a modern striding gait. The first stone tools appear near the end of the interval, and with them the genus Homo.",
+   "summary": "The world assembles into something recognisable. The Isthmus of Panama completes a land bridge -- shoaling had been under way since perhaps 10 Ma and the closure date is actively debated -- rerouting ocean currents and launching the Great American Biotic Interchange, which is itself well dated and accelerates sharply at about 2.7 Ma -- North American carnivorans pour south, and ground sloths, glyptodonts and armadillos move north. Northern Hemisphere glaciation begins around 2.7 million years ago and the boreal forest and tundra biomes come into existence. In Africa, Australopithecus walks upright across savanna at Laetoli, leaving footprints in volcanic ash that show a modern striding gait. The first stone tools appear near the end of the interval, and with them the genus Homo.",
    "taxa": [
     {
      "name": "Australopithecus afarensis",
@@ -7325,7 +7325,8 @@
       "Lacy bryozoans forming small reefs on the Zechstein carbonate shelf."
      ]
     ],
-    "shared": "The Zechstein repeatedly dried to halite and potash; its fauna is a low-diversity, stress-tolerant one that came and went with each flooding."
+    "shared": "The Zechstein repeatedly dried to halite and potash; its fauna is a low-diversity, stress-tolerant one that came and went with each flooding.",
+    "exception": true
    }
   ],
   "Turgai Strait": [
@@ -7399,7 +7400,8 @@
       "Dwarfed, stress-tolerant foraminifera track the sea's swings between marine and near-freshwater."
      ]
     ],
-    "shared": "The Paratethys is the shrunken relic of Tethys; isolation made its fauna strange and endemic, ancestral to the Caspian and Black Sea life of today."
+    "shared": "The Paratethys is the shrunken relic of Tethys; isolation made its fauna strange and endemic, ancestral to the Caspian and Black Sea life of today.",
+    "exception": true
    }
   ],
   "Mozambique Ocean": [
@@ -7537,7 +7539,7 @@
       "Archaeopteryx",
       "genus",
       "air",
-      "The first bird \u2014 feathered, clawed and toothed \u2014 its wings printed in the lagoon's fine limestone."
+      "The first bird — feathered, clawed and toothed — its wings printed in the lagoon's fine limestone."
      ],
      [
       "Rhamphorhynchus",
@@ -7563,7 +7565,8 @@
       "sea",
       "Ammonites of the open Tethys, sunk into a stagnant, oxygen-starved basin that let nothing decay."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Muschelkalk Sea": [
@@ -7575,7 +7578,7 @@
       "Ceratites",
       "genus",
       "sea",
-      "The ammonoid that zones the whole Muschelkalk \u2014 its ribbed shells fill the limestone."
+      "The ammonoid that zones the whole Muschelkalk — its ribbed shells fill the limestone."
      ],
      [
       "Encrinus",
@@ -7593,9 +7596,10 @@
       "Placodontia",
       "order",
       "sea",
-      "Placodonts \u2014 armoured reptiles with flat crushing teeth for shellfish on the sea floor."
+      "Placodonts — armoured reptiles with flat crushing teeth for shellfish on the sea floor."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Mowry Sea": [
@@ -7607,7 +7611,7 @@
       "Actinopterygii",
       "class",
       "sea",
-      "The Mowry Shale is paved with fish scales \u2014 a bloom-and-death sea of small ray-finned fish."
+      "The Mowry Shale is paved with fish scales — a bloom-and-death sea of small ray-finned fish."
      ],
      [
       "Radiolaria",
@@ -7697,7 +7701,7 @@
       "Baculites",
       "genus",
       "sea",
-      "The Bearpaw Shale is a Baculites clock \u2014 each zone a different straight-shelled ammonite species."
+      "The Bearpaw Shale is a Baculites clock — each zone a different straight-shelled ammonite species."
      ],
      [
       "Placenticeras",
@@ -7735,7 +7739,7 @@
       "Ammonoidea",
       "subclass",
       "sea",
-      "A rich, ornate Tethyan ammonite fauna \u2014 the warm-water standard the boreal seas are compared against."
+      "A rich, ornate Tethyan ammonite fauna — the warm-water standard the boreal seas are compared against."
      ],
      [
       "Scleractinia",
@@ -7785,7 +7789,7 @@
       "Cloudina",
       "genus",
       "sea",
-      "Stacked-cone tube-builder, one of the first animals to make a mineralised skeleton \u2014 some bored by predators."
+      "Stacked-cone tube-builder, one of the first animals to make a mineralised skeleton — some bored by predators."
      ],
      [
       "Namacalathus",
@@ -7803,9 +7807,10 @@
       "Rangeomorpha",
       "class",
       "sea",
-      "Fractal, fern-like fronds \u2014 the last of the soft Ediacaran biota before the Cambrian."
+      "Fractal, fern-like fronds — the last of the soft Ediacaran biota before the Cambrian."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Sundance Sea": [
@@ -7817,7 +7822,7 @@
       "Gryphaea",
       "genus",
       "sea",
-      "'Devil's toenails' \u2014 thick curved oysters strewn across the Jurassic seabed of western North America."
+      "'Devil's toenails' — thick curved oysters strewn across the Jurassic seabed of western North America."
      ],
      [
       "Belemnitida",
@@ -7893,7 +7898,7 @@
       "Placodermi",
       "class",
       "sea",
-      "Armoured fish \u2014 including giant Dunkleosteus-kin \u2014 the apex predators of the Devonian sea."
+      "Armoured fish — including giant Dunkleosteus-kin — the apex predators of the Devonian sea."
      ],
      [
       "Rugosa",
@@ -7919,7 +7924,7 @@
       "Crinoidea",
       "class",
       "sea",
-      "The 'age of crinoids' \u2014 Carboniferous seafloors were forests of stalked echinoderms."
+      "The 'age of crinoids' — Carboniferous seafloors were forests of stalked echinoderms."
      ],
      [
       "Productida",
@@ -7931,7 +7936,7 @@
       "Chondrichthyes",
       "class",
       "sea",
-      "Bizarre Carboniferous sharks and chimaeras \u2014 Helicoprion's tooth-whorl among them."
+      "Bizarre Carboniferous sharks and chimaeras — Helicoprion's tooth-whorl among them."
      ]
     ]
    }
@@ -7989,9 +7994,10 @@
       "Dreissena",
       "genus",
       "sea",
-      "'Lago Mare' phase \u2014 brackish Paratethyan mussels flooding a Mediterranean nearly emptied and freshened before the Atlantic broke back in."
+      "'Lago Mare' phase — brackish Paratethyan mussels flooding a Mediterranean nearly emptied and freshened before the Atlantic broke back in."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Lake Pannon": [
@@ -8017,7 +8023,8 @@
       "land",
       "Three-toed horses on the surrounding grassy shores, washed into the lake beds."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "West Siberian Sea": [
@@ -8061,7 +8068,7 @@
       "Selachii",
       "superorder",
       "sea",
-      "A dazzling shark and ray fauna \u2014 the phosphate beds of Morocco are built from their teeth."
+      "A dazzling shark and ray fauna — the phosphate beds of Morocco are built from their teeth."
      ],
      [
       "Archaeoceti",
@@ -8081,7 +8088,7 @@
       "Scleractinia",
       "order",
       "sea",
-      "Coral reefs of the Coral Triangle \u2014 the most biodiverse marine region on Earth today."
+      "Coral reefs of the Coral Triangle — the most biodiverse marine region on Earth today."
      ],
      [
       "Foraminifera",
@@ -8113,7 +8120,7 @@
       "Bryozoa",
       "phylum",
       "sea",
-      "Cool-water bryozoan and shell gravels rather than tropical coral \u2014 the temperate carbonate style."
+      "Cool-water bryozoan and shell gravels rather than tropical coral — the temperate carbonate style."
      ],
      [
       "Nautilus",
@@ -8189,7 +8196,7 @@
       "Bathymodiolus",
       "genus",
       "sea",
-      "Vent mussels living on sulphur-eating bacteria in their gills \u2014 no sunlight, no photosynthesis."
+      "Vent mussels living on sulphur-eating bacteria in their gills — no sunlight, no photosynthesis."
      ],
      [
       "Archaea",
@@ -8197,7 +8204,8 @@
       "sea",
       "Heat- and sulphur-loving microbes at the base of a food web run entirely on chemistry, not light."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "East Pacific Rise": [
@@ -8209,7 +8217,7 @@
       "Riftia",
       "genus",
       "sea",
-      "Giant tube worms up to 2 m long, mouthless and gutless, fed by symbiotic bacteria \u2014 icons of the 1977 vent discovery."
+      "Giant tube worms up to 2 m long, mouthless and gutless, fed by symbiotic bacteria — icons of the 1977 vent discovery."
      ],
      [
       "Calyptogena",
@@ -8223,7 +8231,8 @@
       "sea",
       "The 'Pompeii worm', living on chimney walls in some of the hottest water any animal endures."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Cannonball Sea": [
@@ -8287,7 +8296,7 @@
       "Ammonoidea",
       "subclass",
       "sea",
-      "The corridor itself is defined by ammonites \u2014 their sudden trans-Pangaean spread marks the seaway opening."
+      "The corridor itself is defined by ammonites — their sudden trans-Pangaean spread marks the seaway opening."
      ],
      [
       "Bivalvia",
@@ -9098,7 +9107,8 @@
       "land",
       "The cave lion, hunting across Beringia's cold grassland."
      ]
-    ]
+    ],
+    "exception": true
    }
   ],
   "Yilgarn Craton": [

@@ -1,9 +1,32 @@
 # Model gaps register
 
 Every open item this research programme has produced, tied to the specific Tectonic Earth
-subsystem it would change. **This is the handover surface between research and the build.**
-Nothing here has been applied to the model — that is deliberate; this folder does not
-change the app.
+subsystem it would change. **This was the handover surface between research and the build.**
+
+## APPLIED, 2026-07-26 — the handover was executed
+
+The standing rule that this folder does not change the app held for eight rounds. It has
+now been **collected in one implementation pass**, and this section records what actually
+landed so the register describes the app rather than a wish list.
+
+| item | what shipped | measured |
+|---|---|---|
+| **A1 · A3 · A4** | `paleo_tracks.py` repointed at `PALEOMAP_PlateModel.rot`; `frame_offset.py`, `frame_offset.json` and `frame_offset.json.raw` **deleted**; every prose reference corrected. Merdith kept for topologies. | abyssal-plain placement **20% → 5%**; labels disagreeing with their terrain ≥⅓ of span **62 → 41**; labels jumping >15° in one step **12 → 6**; per-feature mean **0.819 → 0.971** |
+| **the 7 TRUE regressions** | **five were never regressions**: `regression_gate.py`'s land-today guard called `_present_elevation(lon, lat)` on a zero-argument function, so a `TypeError` went into a bare `except: pass` and the guard passed everything. Fixed. Newark Rift Valleys' coordinate was in the **Caribbean** (−68, 12) — corrected to the Newark Basin. Cimmerian Belt re-anchored from a PALEOMAP polygon boundary onto Central Iran. Rhodope re-anchored onto the massif and its residual **recorded as a known limit**. | **TRUE regressions 7 → 0**, on a harness that now scores 124 features instead of 158 phantom ones |
+| **C1 · C3 · C4 · F9** | Cretaceous 30.0 → **33.0 °C**, Palaeocene–Eocene raised, Devonian shape corrected, O₂ peak 36% → **30%**, Guadalupian card fixed | `climate_audit.py` **6 findings → 1**, and that one is the faint-young-Sun check *passing*. 90 Ma now reads **hothouse** — the app had never reached that state. `ice_audit.py` unchanged at 23/23 |
+| **D1 · D2 · D3 · D4** | `hotspots_cat.py` bridges the 53-plume catalogue into `seamounts.field()`, which had been placing its 34 plumes by **hashing a seed**. Ten named aseismic ridges get surveyed traces; `summit_depth()` sets every catalogued summit's absolute depth from its own age. | Midway **−77 m** (atoll), Meiji **−2111 m** (guyot), Ninetyeast −1255 to −2587 m, Iceland/Réunion/Azores/Cape Verde/Samoa/Society/Marquesas/St Helena **emergent**. Open-abyss controls unmoved. New land **0.012%** of the globe, all of it real island groups |
+| **B1 + B1 coverage** | `provinces.py` emits a province per label per age as runs; `exception: true` on the ten distinctive localities; `lifeSection` reordered to exception → province → **labelled global**; the biota panel widened to orogens, basins, rifts, deserts and plateaus | **235 of 336 labels** showed one global list; now **315 are placed in a named province**. The Urals, the Verkhoyansk Belt and the Sahara had **no biota panel at all** and now name their province and its taxa |
+| **F2 · C5 · F3 · F5 · F6 · F7 · F8 · D6 · D7 · B9 · C8** | a fifth navigable panel, **Climate events**, on the `#ctxStack` pattern with 7 cards covering all 11 gaps; the Baykonurian glaciation; four hedges; Suess on Glossopteris; Permian Basin, back-arc and atoll/guyot cards; LIP→consequence links; the not-fixed-hotspots caveat; six model-generated figures shipped | `audit_cards.py` **0 HIGH / 11 MED / 6 LOW → 0 / 0 / 0** |
+| **A6 · A7 · G6** | a *What longitude is, and is not* section on the About page with the measured numbers, and README §9 | 5°/12°/73° mean \|Δlon\| by era, 146° at 500 Ma, 60° between Scotese's own editions |
+| **E5 (adopted)** | `build/audit_all.py` runs every validator against a recorded baseline and **`build_site.py` refuses to publish if one moved backwards** | 8 checks, all at baseline |
+| **E6** | already fixed in `frame_experiment.py`; both it and `regression_gate.py` now **pin every frame by name** rather than reading the build, so neither becomes a no-op the moment the switch lands | WP-04's three-way result reproduces to 1 pp |
+
+**Still open and NOT applied**, deliberately, because they were outside this pass's scope
+and each is a terrain rebuild in its own right: **G1** (flood the Triassic–Jurassic epeiric
+seas), **G2/G3/G4/G5** (the future series destroying 37% of continental area, assembling
+too early and too tightly, with the wrong neighbours and no orogeny), **G7** (the 525 Ma
+land-area disagreement) and **G8** (the Palaeozoic shelf disagreement, which is recorded
+rather than fixed by design).
 
 Priority: **P1** = closes a known visible defect · **P2** = adds real fidelity ·
 **P3** = correctness housekeeping · **P4** = worth knowing, no action yet.

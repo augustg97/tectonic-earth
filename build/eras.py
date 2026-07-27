@@ -26,6 +26,7 @@ with open(_PATH) as _f:
 INTERVALS = _DATA["intervals"]
 SUPERCONTINENTS = _DATA["supercontinents"]
 GLACIATIONS = _DATA.get("glaciations", [])
+CLIMATE_EVENTS = _DATA.get("climate_events", [])
 SOURCES = _DATA.get("sources", [])
 
 
@@ -47,6 +48,26 @@ def glaciations():
     -- the last one matters, because several of these are not settled.
     """
     return GLACIATIONS
+
+
+def climate_events():
+    """Named climate events -- hyperthermals, ocean anoxic events, carbon drawdowns.
+
+    The FIFTH navigable structure, and it exists for a reason the other four do
+    not have: every one of these is SHORTER THAN A KEYFRAME. The PETM lasts
+    200,000 years and the keyframes are 5 Myr apart, so no amount of field
+    resolution will ever draw it -- the app can only carry it as a card. The
+    card audit found eleven such gaps (PETM, Azolla, OAE 1a/1b/2/3, EECO, MECO,
+    MMCO, the GOE and the Hirnantian anoxia) and they are covered by the seven
+    entries here, the smaller ones as companions on the card of their relative.
+
+    The Great Oxidation Event carries `offmap`: at 2.46-2.06 Ga it is a billion
+    years older than this map's oldest frame, so it is listed and described and
+    never drawn or jumped to. Saying "this happened and it is off the edge of
+    this map" is more honest than omitting the largest change in the history of
+    Earth's surface.
+    """
+    return CLIMATE_EVENTS
 
 
 def interval_at(age):

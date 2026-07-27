@@ -470,8 +470,17 @@ def region_taxa():
                 taxa.append({"n": name, "r": rank, "realm": realm,
                              "note": note, "ic": icon_for(name, realm)})
             if taxa:
+                # `exception` says this locality is atypical FOR ITS PROVINCE and
+                # the province model must never speak over it -- Solnhofen, the
+                # Zechstein, the Nama Sea, the Messinian salt basin, Lake Pannon,
+                # the two ridge-vent faunas. Everything else is province-typical,
+                # so the model owns the claim about WHICH province and the
+                # curated list supplies the detail inside it.
+                # modeling/audit_curated_biota.py classifies all 198 spans and is
+                # the check that a new curated entry declares itself.
                 rows.append({"a0": s["a0"], "a1": s["a1"], "taxa": taxa,
-                             **({"shared": s["shared"]} if s.get("shared") else {})})
+                             **({"shared": s["shared"]} if s.get("shared") else {}),
+                             **({"exception": True} if s.get("exception") else {})})
         if rows:
             out[region] = rows
     return out

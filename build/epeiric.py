@@ -12,10 +12,10 @@ rather than pretend it was not there. Everything here is a named sea with real
 stratigraphic control, not a general licence to invent water.
 
 Footprints are given in PRESENT-DAY coordinates -- the modern outcrop of the
-basin's marine deposits -- and back-advected along the same Merdith rotations
-(with the PaleoDEM frame correction) that carry the labels, so the sea lands on
-the crust it actually flooded. Depth follows an authored curve so each sea
-waxes and wanes instead of switching on and off.
+basin's marine deposits -- and back-advected along the same PALEOMAP rotations
+that carry the labels, which are the frame the terrain itself is drawn in, so
+the sea lands on the crust it actually flooded. Depth follows an authored curve
+so each sea waxes and wanes instead of switching on and off.
 
 Only low ground floods: anything already above FLOOD_CEILING is left alone, so
 seeding a seaway cannot drown a mountain range.

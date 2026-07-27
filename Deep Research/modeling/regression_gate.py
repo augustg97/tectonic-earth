@@ -56,6 +56,20 @@ PALEOMAP_DIR = os.path.join(ROOT, "data", "paleomap_gpm",
 PALEOMAP_ROT = os.path.join(PALEOMAP_DIR, "PALEOMAP_PlateModel.rot")
 PALEOMAP_POLY = os.path.join(PALEOMAP_DIR, "PALEOMAP_PlatePolygons.gpml")
 
+# BOTH frames are pinned here by name rather than taken from whatever
+# build/paleo_tracks.py currently points at. Before the switch landed the "old"
+# column could be read out of the build; the moment the build adopts PALEOMAP
+# that would make both columns the same model and the gate would report a
+# perfect, meaningless zero. A gate that stops measuring the thing it was built
+# to measure at exactly the moment the change lands is worse than no gate.
+MERDITH_DIR = os.path.join(ROOT, "data", "merdith2021", "SM2_X")
+MERDITH_ROT = os.path.join(MERDITH_DIR, "1000_0_rotfile_Merdith_et_al.rot")
+MERDITH_POLY = os.path.join(MERDITH_DIR, "shapes_static_polygons_Merdith_et_al.gpml")
+# The rigid per-age longitude shift the old pipeline applied on top of Merdith.
+# Kept as data in this folder because build/frame_offset.json is deleted with the
+# switch, and reproducing the old frame needs it.
+FRAME_OFFSET = os.path.join(HERE, "frame_offset_merdith.json")
+
 # What medium each label type belongs on. This is the accuracy definition: a
 # feature is correctly placed if it sits on the medium its own name implies.
 WANT_LAND = {"continent", "craton", "orogen", "terrane", "region", "desert",
@@ -93,39 +107,65 @@ class Row:
         self.cls, self.note = "", ""
 
 
+def _frame(rot_path, poly_path, shift=None):
+    """fn(lon, lat, age) -> (lon, lat) | None, for one rotation model."""
+    import pygplates
+    rot = pygplates.RotationModel(rot_path)
+    part = pygplates.PlatePartitioner(
+        pygplates.FeatureCollection(poly_path), rot, reconstruction_time=0)
+
+    def _at(lon, lat, age):
+        pt = pygplates.PointOnSphere(lat, lon)
+        f = part.partition_point(pt)
+        if f is None:
+            return None
+        try:
+            p = rot.get_rotation(float(age),
+                                 f.get_feature().get_reconstruction_plate_id()) * pt
+        except Exception:                                  # noqa: BLE001
+            return None
+        la, lo = p.to_lat_lon()
+        if shift is not None:
+            lo = ((lo + shift(age) + 180.0) % 360.0) - 180.0
+        return (lo, la)
+
+    return _at
+
+
+def _offset_fn():
+    """The old rigid Merdith->PaleoDEM longitude shift, interpolated in age."""
+    import json
+    try:
+        with open(FRAME_OFFSET) as fh:
+            tab = {int(k): float(v) for k, v in json.load(fh).items()}
+    except Exception:                                      # noqa: BLE001
+        return None
+    keys = sorted(tab)
+
+    def shift(age):
+        a = abs(float(age))
+        if a <= keys[0]:
+            return tab[keys[0]]
+        if a >= keys[-1]:
+            return tab[keys[-1]]
+        for i in range(len(keys) - 1):
+            k0, k1 = keys[i], keys[i + 1]
+            if k0 <= a <= k1:
+                f = 0.0 if k1 == k0 else (a - k0) / (k1 - k0)
+                return tab[k0] + (tab[k1] - tab[k0]) * f
+        return 0.0
+
+    return shift
+
+
 def build_frames():
     """(name, fn(lon, lat, age) -> (lon, lat) | None) for old and new."""
-    import paleo_tracks
     out = []
-    if paleo_tracks.available():
-        rc = paleo_tracks.Reconstructor()
-
-        def _last(lon, lat, age, corr):
-            tr, _ = rc.track(lon, lat, age, step=max(5, int(age)), correct_frame=corr)
-            return (tr[-1][1], tr[-1][2]) if tr else None
-
+    if os.path.exists(MERDITH_ROT):
         out.append(("old (Merdith + frame_offset)",
-                    lambda lo, la, a: _last(lo, la, a, True)))
+                    _frame(MERDITH_ROT, MERDITH_POLY, _offset_fn())))
     if os.path.exists(PALEOMAP_ROT):
-        import pygplates
-        rot = pygplates.RotationModel(PALEOMAP_ROT)
-        part = pygplates.PlatePartitioner(
-            pygplates.FeatureCollection(PALEOMAP_POLY), rot, reconstruction_time=0)
-
-        def _pm(lon, lat, age):
-            pt = pygplates.PointOnSphere(lat, lon)
-            f = part.partition_point(pt)
-            if f is None:
-                return None
-            try:
-                p = rot.get_rotation(float(age),
-                                     f.get_feature().get_reconstruction_plate_id()) * pt
-            except Exception:                              # noqa: BLE001
-                return None
-            la, lo = p.to_lat_lon()
-            return (lo, la)
-
-        out.append(("new (PALEOMAP)", _pm))
+        out.append(("new (PALEOMAP)", _frame(PALEOMAP_ROT, PALEOMAP_POLY)))
     return out
 
 
@@ -191,25 +231,42 @@ def run(limit=None):
     # Ocean labels take the COMPOSITE_WATER / nearest_water path instead, because
     # a basin is water, not crust: tracking a point in it follows the wrong plate
     # and Tethys would ride India south.
-    present = None
+    # The land-today gate has to be the BUILD'S OWN, called correctly. It was
+    # written here as `present(lon, lat)` while build_webdata._present_elevation()
+    # takes no arguments and returns the raster; every call raised TypeError into
+    # a bare `except: pass`, so the guard passed everything and the gate scored 5
+    # labels the build never plate-tracks. That is what put Gulf of California,
+    # Red Sea Rift, Newark Rift Valleys, West Antarctic Rift and Kerguelen in the
+    # TRUE column: all five are authored at coordinates that are WATER today, so
+    # coord_is_present_day() is False and build_labels leaves them to snapLabel
+    # in both frames. A frame switch cannot regress a feature it never touches.
+    # (Seventh time an audit's disagreement with the app has been the audit's
+    # error. They remain real DATA problems -- see untracked_bad_coord -- just
+    # not frame regressions.)
+    # build_webdata.WEB is "../web", relative to build/, so the raster only loads
+    # from that directory. Ask from there rather than reimplementing the lookup.
+    present = elev = None
+    cwd = os.getcwd()
     try:
         import build_webdata as BW
-        present = getattr(BW, "_present_elevation", None)
+        os.chdir(BUILD)
+        present, elev = BW._present_elevation(), BW._elev_lookup
     except Exception:                                      # noqa: BLE001
         pass
+    finally:
+        os.chdir(cwd)
+    if present is None:
+        raise SystemExit("present-day DEM did not load; the land-today gate would "
+                         "silently pass every label. Refusing to report numbers.")
 
     def build_tracks_this(typ, lon, lat, base, top):
         if typ == "ocean":
             return False
         if top >= 540 or (base - top) < 5:
             return False
-        if present is not None:
-            try:
-                z = present(lon, lat)
-                if z is None or z < 0:
-                    return False          # not land today -> build leaves it untracked
-            except Exception:                              # noqa: BLE001
-                pass
+        if present is not None and elev is not None:
+            if elev(present, lon, lat) <= 0:
+                return False          # not land today -> build leaves it untracked
         return True
 
     rows = []

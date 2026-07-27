@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 493" width="1180" height="493">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="493"/>
+<text class="t title" x="28" y="34">How a volcanic province kills an ocean</text>
+<text class="t sub" x="28" y="53">The mechanism runs in a fixed order, and each step has its own timescale and its own sedimentary fingerprint</text>
+<rect x="40" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#b0603f" stroke-width="1.6"/>
+<rect x="40" y="110" width="168" height="5" rx="2.5" fill="#b0603f"/>
+<text class="t small" x="124.0" y="136" text-anchor="middle" fill="#b0603f" font-weight="600">LARGE IGNEOUS PROVINCE</text>
+<text class="t small" x="124.0" y="158" text-anchor="middle">&gt;1e5 km3, and &gt;75% of that</text>
+<text class="t small" x="124.0" y="173" text-anchor="middle">in pulses of 1-5 Myr.</text>
+<text class="t small" x="124.0" y="188" text-anchor="middle">It is the RATE, not the volume</text>
+<path d="M210 174.0 l11 0 m-4 -4 l4 4 l-4 4" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="220" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#8fa3b8" stroke-width="1.6"/>
+<rect x="220" y="110" width="168" height="5" rx="2.5" fill="#8fa3b8"/>
+<text class="t small" x="304.0" y="136" text-anchor="middle" fill="#8fa3b8" font-weight="600">SO2 -&gt; sulfate aerosol</text>
+<text class="t small" x="304.0" y="158" text-anchor="middle">cooling, months to years</text>
+<text class="t small" x="304.0" y="173" text-anchor="middle">sharp and short</text>
+<path d="M390 174.0 l11 0 m-4 -4 l4 4 l-4 4" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="400" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#d0864f" stroke-width="1.6"/>
+<rect x="400" y="110" width="168" height="5" rx="2.5" fill="#d0864f"/>
+<text class="t small" x="484.0" y="136" text-anchor="middle" fill="#d0864f" font-weight="600">CO2 -&gt; greenhouse</text>
+<text class="t small" x="484.0" y="158" text-anchor="middle">warming, 1e3 - 1e6 yr</text>
+<text class="t small" x="484.0" y="173" text-anchor="middle">the long tail that matters</text>
+<path d="M570 174.0 l11 0 m-4 -4 l4 4 l-4 4" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="580" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#6f8fa8" stroke-width="1.6"/>
+<rect x="580" y="110" width="168" height="5" rx="2.5" fill="#6f8fa8"/>
+<text class="t small" x="664.0" y="136" text-anchor="middle" fill="#6f8fa8" font-weight="600">warming -&gt; stratification</text>
+<text class="t small" x="664.0" y="158" text-anchor="middle">+ weathering-driven nutrient flux</text>
+<text class="t small" x="664.0" y="173" text-anchor="middle">-&gt; productivity</text>
+<path d="M750 174.0 l11 0 m-4 -4 l4 4 l-4 4" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="760" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#4f6f5a" stroke-width="1.6"/>
+<rect x="760" y="110" width="168" height="5" rx="2.5" fill="#4f6f5a"/>
+<text class="t small" x="844.0" y="136" text-anchor="middle" fill="#4f6f5a" font-weight="600">OCEANIC ANOXIC EVENT</text>
+<text class="t small" x="844.0" y="158" text-anchor="middle">black laminated shale, no bioturbation</text>
+<text class="t small" x="844.0" y="173" text-anchor="middle">carbon isotope excursion</text>
+<text class="t small" x="844.0" y="188" text-anchor="middle">only above ~25 C GMST</text>
+<path d="M930 174.0 l11 0 m-4 -4 l4 4 l-4 4" stroke="#5b6b7d" fill="none" stroke-width="1.4"/>
+<rect x="940" y="110" width="168" height="128" rx="7" fill="#161d25" stroke="#e07650" stroke-width="1.6"/>
+<rect x="940" y="110" width="168" height="5" rx="2.5" fill="#e07650"/>
+<text class="t small" x="1024.0" y="136" text-anchor="middle" fill="#e07650" font-weight="600">EXTINCTION</text>
+<text class="t small" x="1024.0" y="158" text-anchor="middle">habitat loss + H2S toxicity</text>
+<text class="t small" x="1024.0" y="173" text-anchor="middle">+ ozone destruction at extremes</text>
+<text class="t lab" x="40" y="272" fill="#9fb2c6">The instances, from modeling/deeptime.py</text>
+<text class="t small" x="40" y="294" fill="#8fa3b8">province</text>
+<text class="t small" x="260" y="294" fill="#8fa3b8">Ma</text>
+<text class="t small" x="420" y="294" fill="#8fa3b8">extinction / turnover</text>
+<text class="t small" x="700" y="294" fill="#8fa3b8">anoxic or thermal event</text>
+<text class="t small" x="40" y="314">Siberian Traps</text>
+<text class="t small" x="260" y="314">252-250</text>
+<text class="t small" x="420" y="314">End-Permian</text>
+<text class="t small" x="700" y="314">P-Tr deoxygenation</text>
+<text class="t small" x="40" y="333">CAMP</text>
+<text class="t small" x="260" y="333">202-197</text>
+<text class="t small" x="420" y="333">End-Triassic</text>
+<text class="t small" x="700" y="333">-</text>
+<text class="t small" x="40" y="352">Karoo-Ferrar</text>
+<text class="t small" x="260" y="352">184-178</text>
+<text class="t small" x="420" y="352">Toarcian turnover</text>
+<text class="t small" x="700" y="352">T-OAE</text>
+<text class="t small" x="40" y="371">Ontong Java</text>
+<text class="t small" x="260" y="371">124-120</text>
+<text class="t small" x="420" y="371">-</text>
+<text class="t small" x="700" y="371">OAE 1a (Selli)</text>
+<text class="t small" x="40" y="390">Caribbean LIP</text>
+<text class="t small" x="260" y="390">95-88</text>
+<text class="t small" x="420" y="390">Cenomanian-Turonian</text>
+<text class="t small" x="700" y="390">OAE 2 (Bonarelli)</text>
+<text class="t small" x="40" y="409">Deccan Traps</text>
+<text class="t small" x="260" y="409">68.5-65.5</text>
+<text class="t small" x="420" y="409">End-Cretaceous</text>
+<text class="t small" x="700" y="409">-</text>
+<text class="t small" x="40" y="428">N Atlantic IP</text>
+<text class="t small" x="260" y="428">62-55</text>
+<text class="t small" x="420" y="428">benthic foram turnover</text>
+<text class="t small" x="700" y="428">PETM</text>
+<text class="t small" x="40" y="471" fill="#8fa3b8">Deccan begins ~1 Myr BEFORE Chicxulub, so the impact cannot have triggered it - a case where the sequence is the argument.</text>
+</svg>

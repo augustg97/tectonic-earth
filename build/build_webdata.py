@@ -202,7 +202,7 @@ def paleo_position(lon, lat, age, mot, step=5.0):
 def build_hotspots():
     out = features.hotspots()
     vis = features.visible_until()
-    # A real rotation model (Merdith 2021 via pyGPlates) carries each feature
+    # A real rotation model (Scotese PALEOMAP via pyGPlates) carries each feature
     # along its plate's finite rotation, giving a continuous track that is
     # correct on ocean floor as well as continent -- so a crater rides the plate
     # instead of freezing. Fall back to the old block-matched advection only if
@@ -302,7 +302,7 @@ def build_hotspots():
                      "single centre.")
         e["d1"] = d
     json.dump(out, open(f"{WEB}/hotspots.json", "w"), separators=(",", ":"))
-    src = "Merdith 2021 rotation tracks" if rec else "block-matched advection"
+    src = "PALEOMAP rotation tracks" if rec else "block-matched advection"
     print(f"volcanism + impacts: {len(out)} features "
           f"({len(imp)} craters, {tracked} given plate-motion tracks; {src})")
 
@@ -424,7 +424,7 @@ def region_tags(lon, lat):
 def composite_track(spec, a_old, rec, step=5):
     """Per-age position of a paleocontinent, from where its fragments were.
 
-    Modern anchors ride the Merdith rotations (frame-corrected to the PaleoDEM).
+    Modern anchors ride the PALEOMAP rotations, the PaleoDEM's own frame.
     Past 540 Ma the map is the authored Precambrian composite instead of a real
     DEM, so the position comes from that composite's own craton placement, and
     the two are blended across exactly the 540-600 handoff the terrain uses --
@@ -717,10 +717,13 @@ def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
 def resolve_to_landmasses(tracks, windows, order):
     """Put each paleocontinent ON a landmass, and never two on the same one.
 
-    The rotation model and the PaleoDEM do not agree plate by plate -- the global
-    frame correction is rigid, the real disagreement is regional -- so a centroid
-    derived from modern fragments can land in open ocean. Siberia did, at every
-    Cambrian age. Snapping to the nearest real landmass fixes that; enforcing one
+    Even in one frame a centroid derived from modern fragments can land in open
+    ocean: a paleocontinent is a set of pieces that have since dispersed, and the
+    mean of their reconstructed positions is not guaranteed to be on any of them.
+    Siberia landed in water at every Cambrian age. (Before the PALEOMAP switch a
+    second cause compounded it -- tracks and terrain came from two models whose
+    disagreement was regional while the correction applied was rigid. That one is
+    gone.) Snapping to the nearest real landmass fixes it; enforcing one
     landmass per name is what stops two continents sharing a label, which is the
     confusing failure the search version produced.
 
@@ -902,13 +905,13 @@ def build_labels():
     out = features.labels()
     desc = features.descriptions()
     ph = features.phases()
-    # Carry each label along its plate's REAL rotation (Merdith 2021), the same
-    # track craters and LIPs use, so a name follows its feature across the whole
-    # timeline instead of being yanked to the nearest matching terrain by
+    # Carry each label along its plate's REAL rotation (Scotese PALEOMAP), the
+    # same track craters and LIPs use, so a name follows its feature across the
+    # whole timeline instead of being yanked to the nearest matching terrain by
     # snapLabel -- which put the Western Interior Seaway and Gulf of Mexico out
-    # in the Pacific at 98 Ma. Cap at 540 Ma: the deep-Precambrian frame is
-    # authored, not Merdith-derived, and Scotese/Merdith only agree within the
-    # Phanerozoic. Labels authored entirely in the Precambrian era-frame
+    # in the Pacific at 98 Ma. Cap at 540 Ma: the deep-Precambrian frame is the
+    # authored composite (precambrian.py), not a reconstructed DEM, so there is
+    # no terrain for a rotation to agree with. Labels authored in that era-frame
     # (>=540 Ma, e.g. Timanian Belt) are left to snapLabel with their paleo coord.
     rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
     tracked = 0
@@ -1162,11 +1165,13 @@ def build_labels():
 def build_eras():
     out = {"intervals": eras.intervals(),
            "supercontinents": eras.supercontinents(),
-           "glaciations": eras.glaciations()}
+           "glaciations": eras.glaciations(),
+           "climateEvents": eras.climate_events()}
     json.dump(out, open(f"{WEB}/eras.json", "w"), separators=(",", ":"))
     print(f"eras: {len(out['intervals'])} intervals, "
           f"{len(out['supercontinents'])} supercontinents, "
-          f"{len(out['glaciations'])} glaciations")
+          f"{len(out['glaciations'])} glaciations, "
+          f"{len(out['climateEvents'])} climate events")
 
 
 # ---------- biomes, life through time, regional fossil record ----------
@@ -1187,6 +1192,37 @@ def build_life():
            "regionTaxa": life.region_taxa(), "sparse": life.sparse(),
            "labelRegion": {k: sorted(v) for k, v in life.LABEL_REGION.items()},
            "credits": life.credits()}
+
+    # THE PROVINCE LAYER. 235 of 336 labels have no curated biota, and all 235
+    # of them used to show one global interval list -- the same four organisms on
+    # two hundred cards. The province model names the biogeographic province each
+    # label actually sat in, at every age it is drawn, so the panel can answer
+    # "what lived HERE" from a model instead of falling back to the world.
+    # Emitted as runs, because a province lasts a period and the timeline steps
+    # every 5 Myr. build_labels() runs first, so the tracks are already on disk.
+    try:
+        import provinces
+        labs = json.load(open(f"{WEB}/labels.json"))
+        precs, pruns = provinces.build(labs)
+        out["provinces"] = precs
+        out["labelProvince"] = pruns
+        n_ex = sum(1 for v in out["regionTaxa"].values()
+                   for s in v if s.get("exception"))
+        covered = len(pruns)
+        print(f"  provinces: {len(precs)} distinct, placing {covered} of "
+              f"{len(labs)} labels; {n_ex} curated localities flagged as "
+              f"exceptions the model must not overwrite")
+        no_p = [l["n"] for l in labs
+                if l["n"] not in pruns and max(l["a0"], l["a1"]) > 0]
+        if no_p:
+            print(f"  {len(no_p)} labels still fall through to the GLOBAL list "
+                  f"(shown under a global heading): "
+                  f"{', '.join(sorted(no_p)[:6])}"
+                  + (" ..." if len(no_p) > 6 else ""))
+    except Exception as e:                                 # noqa: BLE001
+        print(f"  note: province layer unavailable ({e}); "
+              f"cards fall back to the global list")
+
     json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
     spans = sum(len(v) for v in out["regionTaxa"].values())
     print(f"life: {len(out['biomes'])} biome samples, {len(out['life'])} intervals, "

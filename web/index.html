@@ -79,6 +79,7 @@ canvas{display:block}
 .ctx-interval{--ck:rgba(201,168,106,.5);--ca:#c9a86a;--cg:rgba(201,168,106,.15)}
 .ctx-super{--ck:rgba(122,168,116,.5);--ca:#8ec48a;--cg:rgba(122,168,116,.15)}
 .ctx-glacial{--ck:rgba(126,186,214,.5);--ca:#8fc9e4;--cg:rgba(126,186,214,.15)}
+.ctx-climate{--ck:rgba(226,150,110,.5);--ca:#f0a878;--cg:rgba(226,150,110,.15)}
 body.ambient #ctxStack{opacity:0;pointer-events:none}
 #extinctBox{position:fixed;right:20px;top:582px;width:210px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(224,118,74,.55);border-radius:12px;z-index:21;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);transition:opacity .4s}
 #extinctBox.hidden{opacity:0;pointer-events:none}
@@ -302,6 +303,14 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 .glrow .gn{font-size:11px;color:var(--ink);letter-spacing:.02em}
 .glrow.cur .gn{color:#a8d8ee}
 .glrow.snow .gn{color:#cfe4f2}
+.glrow.ce.cur{background:rgba(226,150,110,.16);box-shadow:inset 2px 0 0 #e2966e}
+.glrow.ce.cur .gn{color:#f0b892}
+.glrow.offmap{opacity:.62}
+.glrow.offmap .gd{font-style:italic}
+.modelfig{margin:10px 0 0;padding:0}
+.modelfig img{width:100%;height:auto;display:block;border-radius:4px;background:#11161c}
+.modelfig figcaption{font-size:10.5px;line-height:1.45;color:var(--dim);padding:6px 2px 0}
+.modelfig .cred{display:block;font-size:9.5px;opacity:.72;padding-top:2px}
 .glrow .gd{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 .glrow .gk{font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:#7d8b9c;display:block;margin-top:1px}
 
@@ -484,6 +493,10 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
     <div class="ph"><span>Glaciations</span><span class="chev">▾</span></div>
     <div class="pb" id="glList"></div>
   </div>
+  <div class="panel" id="cePanel">
+    <div class="ph"><span>Climate events</span><span class="chev">▾</span></div>
+    <div class="pb" id="ceList"></div>
+  </div>
 </div>
 
 <div id="controls">
@@ -553,9 +566,14 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <p>A feature that lasts 300 million years is not doing the same thing throughout, so the long-lived ones carry a description <b>per phase of their life</b>: the Appalachians read as a rising arc collision at 450 Ma, a Himalayan-scale range at 290, and a worn root today. Names are laid out rather than merely projected — each takes the nearest free slot to its feature, with a leader line when it has to move, and is dropped rather than drawn on top of another. Clicking a landmass also shows what its rocks preserve at that moment, and the life of the age is drawn alongside.</p>
   <h3>How the climate is derived</h3>
   <p>Biomes aren't painted on by latitude. Each frame runs a small climate model: prevailing winds (tropical easterlies, mid-latitude westerlies) carry moisture inland from the sea, drying as they go, so <b>continental interiors go arid on their own</b> — which is why Pangaea grows a desert heart while its coasts and Tethys shores stay monsoon-green. Air forced over mountains rains out and leaves a <b>rain shadow</b> behind them (the Atacama and Patagonia fall out of the model, not out of a lookup table). Vegetation is then set by rainfall against evaporative demand, so cold, dry Siberia is taiga while a subtropical plain on the same rainfall is desert.</p>
+  <h3>What longitude is, and is not</h3>
+  <p>The honest limit on everything above, stated with the measurement behind it. Palaeomagnetism gives a rock's <b>palaeolatitude</b> and its orientation, and says <b>nothing whatever about its longitude</b> — a reconstruction can slide every continent east or west together and fit exactly the same data. So before roughly 175 Ma, when the oldest surviving sea floor runs out and there are no more magnetic stripes to line up against, longitude is <i>chosen</i> by other arguments rather than measured.</p>
+  <p>How much does that matter? Measured against Ron Blakey's Deep Time Maps, an independent reconstruction by a different author on a different plate model: through the Mesozoic and Cenozoic the two are the same world to within about <b>5–12° of longitude</b>. From the Devonian back they are not — at 500 Ma they place the continents up to <b>146°</b> apart, and Scotese's own model moved by up to <b>60°</b> between its ~2000 and 2016 editions. Meanwhile the latitudes agree throughout, including at exactly those ages: land-versus-latitude profiles match with a correlation of 0.87–0.97 across 400–525 Ma.</p>
+  <p><b>The uncertainty is one-dimensional, not general.</b> How far north or south a continent was is measured; where it sat around the globe, in the Palaeozoic, is a reasoned choice. This map follows Scotese &amp; Wright throughout — terrain, feature tracks and epicontinental seas all in that one frame, so the parts cannot disagree with each other — and a small residual against any other published reconstruction is expected rather than a defect.</p>
   <h3>Data sources</h3>
   <ul>
     <li><b>Paleogeography &amp; elevation</b> — Scotese &amp; Wright (2018), <i>PALEOMAP PaleoDEMs</i> for the Phanerozoic (0–540 Ma), 6-arc-minute grids. CC-BY 4.0.</li>
+    <li><b>Feature tracks</b> — Scotese (2016), <i>PALEOMAP Global Plate Model</i> (m15g60_v2d3). Labels, craters, volcanic provinces and the seeded epicontinental seas are carried on these rotations, which are the PaleoDEMs' own reference frame, so names are placed on the same Earth they are drawn on. CC-BY 4.0.</li>
     <li><b>Present plate motions</b> — NNR-MORVEL56 (Argus, Gordon &amp; DeMets, 2011): real Euler poles drive the motion-vector field.</li>
     <li><b>Plate boundaries</b> — Bird (2003), <i>PB2002</i> — classified as ridges, trenches and transform faults. Through deep time the boundaries come instead from the Merdith et al. (2021) rotation model, resolved per keyframe with pyGPlates into continuously-closing topologies.</li>
     <li><b>Sea floor</b> — depth from half-space cooling (Parsons &amp; Sclater); roughness follows the von Kármán description of abyssal-hill terrain — a band-limited fractal, about 5:1 elongated, hills tens to a few hundred metres high and a few kilometres apart. Ridge segmentation, nodal basins and fracture-zone spacing are set to the observed ranges. The ridge network below the model's resolution is synthesised, not surveyed: it is a plausible spreading system consistent with the resolved arcs, not a map of one.</li>
@@ -862,7 +880,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-0301';
+const DATA_V='20260727-0744';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -3863,8 +3881,21 @@ function showFeature(l,lon,lat){
   // What the rocks of this landmass, at this age, actually preserve.
   const reg=regionalAt(l.n,state.age);
   if(reg)extra+=`<div class="ihead">Fossil record here</div><p class="desc">${esc(reg)}</p>`;
-  // Life of the age, for anything big enough to host a biota.
-  const BIG=new Set(['continent','ocean','sea','forest','grassland','tundra','island','region','lake']);
+  /* Life of the age, for anything big enough to host a biota.
+
+     WIDENED with the province layer. The list used to stop at the biome-ish and
+     basin-ish types, so 133 labels -- 40% of them, every mountain belt, basin,
+     rift, desert and plateau -- showed no biota at all. That was the right call
+     while the only thing on offer was one global interval list: better silence
+     than the world's fauna printed under "Ural Mountains". It is the wrong call
+     now that the model can name the province 126 of those 133 sat in.
+
+     Still excluded: `ice`, `volcano` and `impact`. An ice sheet is not a habitat
+     and a crater is a point, and for those the honest answer is the one the card
+     already gives. */
+  const BIG=new Set(['continent','ocean','sea','forest','grassland','tundra','island',
+                     'region','lake','orogen','basin','rift','desert','plateau',
+                     'craton','terrane']);
   if(BIG.has(l.t))extra+=lifeSection(l);
   openInfo({name:l.n,
     tag:kind+' · '+fmtAge(Math.round(state.age)),
@@ -3962,6 +3993,22 @@ function regionTaxaAt(name,age){
   const R=(DATA.life.regionTaxa||{})[name]; if(!R)return null;
   return R.find(r=>age>=Math.min(r.a0,r.a1)&&age<=Math.max(r.a0,r.a1))||null;
 }
+/* Which biogeographic province this label sat in at this age.
+
+   Built offline by build/provinces.py from Deep Research/modeling/paleobiogeography,
+   and shipped as RUNS -- [a_lo, a_hi, id] -- because a province lasts a period
+   while the timeline steps every 5 Myr. Returns the province record or null.
+
+   This is what stopped 235 of 336 cards showing one global list. The model
+   decides which province a place is in; a curated list, where there is one,
+   supplies the organisms inside it; and the ten localities whose whole point is
+   being ATYPICAL for their province are flagged so the model never speaks over
+   them. See lifeSection below for the order. */
+function provinceAt(name,age){
+  const R=(DATA.life.labelProvince||{})[name]; if(!R)return null;
+  for(const [a0,a1,id] of R){ if(age>=a0-2.5&&age<=a1+2.5) return (DATA.life.provinces||{})[id]||null; }
+  return null;
+}
 function sparseAt(name,age){
   const S=(DATA.life.sparse||{})[name]; if(!S)return null;
   const h=S.find(r=>age>=Math.min(r.a0,r.a1)&&age<=Math.max(r.a0,r.a1));
@@ -3976,16 +4023,52 @@ function lifeSection(l){
      reader flagged. ("air" rides with the land, since birds/pterosaurs are read
      as over-land here, not marine.) */
   const wantR = marine?['sea']:(l.t==='lake'?['fresh','land','air']:['land','air','fresh']);
-  const rt=regionTaxaAt(l.n,age);
+  /* THREE TIERS, AND THE HEADING ALWAYS SAYS WHICH ONE YOU ARE READING.
+
+       1. an EXCEPTION locality  - curated, and flagged because the place is
+          atypical for its province. Solnhofen, the Zechstein and Nama seas,
+          the Muschelkalk, the Messinian salt basin, the Paratethys, Lake
+          Pannon, the two ridge-vent faunas, the Beringian steppe-tundra. The
+          model must never speak over these; being unusual is the whole point.
+       2. the PROVINCE assemblage - named by the model, with the curated taxa
+          inside it where we have them and its own marker taxa where we do not.
+          This is the tier that did not exist: 235 of 336 labels had nothing
+          between a curated list and the whole world.
+       3. the GLOBAL interval list - last, and explicitly labelled global, so it
+          can never read as a claim that these taxa lived at this spot. */
+  const rt=regionTaxaAt(l.n,age), prov=provinceAt(l.n,age);
+  const provOK = prov && (prov.r==='marine')===marine;
   if(rt&&rt.taxa&&rt.taxa.length){
     const ftx=rt.taxa.filter(t=>wantR.includes(t.realm));
     if(ftx.length){
-      let h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(ftx,6);
+      let h;
+      if(rt.exception){
+        h=`<div class="ihead">Life here at ${when}</div>`+lifeHTML(ftx,6)+
+          `<p class="desc">A locality that does not fit its region: `+
+          (provOK?`the surrounding ${esc(prov.n)} looked nothing like this. `:``)+
+          `It is catalogued in its own right rather than taken from the province around it.</p>`;
+      }else{
+        h=(provOK?`<div class="ihead">${esc(prov.n)} · ${when}</div>`
+                 :`<div class="ihead">Life here at ${when}</div>`)+lifeHTML(ftx,6);
+      }
       if(rt.shared)h+=`<p class="desc">${esc(rt.shared)}</p>`;
+      if(provOK&&!rt.exception&&prov.note)h+=`<p class="desc">${esc(prov.note)}</p>`;
       return h;
     }
     // the curated list held nothing of this feature's realm -> fall through to
-    // the realm-correct global list rather than showing the wrong realm.
+    // the province, and only then to the realm-correct global list.
+  }
+  /* TIER 2. No curated list, but the model can name the province -- so say what
+     province this was and give its diagnostic taxa, instead of handing the
+     reader the world's biota and hoping the heading carries the caveat. */
+  if(provOK&&prov.mk&&prov.mk.length){
+    return `<div class="ihead">${esc(prov.n)} · ${when}</div>`+
+      `<p class="desc">${esc(prov.note)}</p>`+
+      listHTML(marine?'Characteristic of this marine province'
+                     :'Characteristic of this province', prov.mk)+
+      (prov.c==='moderate'
+        ? `<p class="desc">The province is modelled from palaeolatitude and the `+
+          `block this sat on; treat the boundary as a gradient, not a line.</p>`:'');
   }
   const why=sparseAt(l.n,age);
   if(why)return `<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;
@@ -4018,15 +4101,20 @@ function lifeSection(l){
        the real biota, so present it plainly as what lives here today rather than
        with the "nothing catalogued" caveat that made present-day cards read as
        empty. The region filter above already narrows it to this landmass. */
+    /* TIER 3, and the heading has to carry the whole caveat by itself.
+       "In the sea at 250 Ma" on a card titled Verkhoyansk Belt reads as a claim
+       about the Verkhoyansk Belt however global the intent, so the word GLOBAL
+       goes in the heading rather than only in the small print underneath. */
     const recent = age<=2.6;
     const head = recent
       ? (marine?`In the sea here today`:`Living here today`)
-      : reg ? (marine?`Elsewhere in the sea at ${when}`:`Elsewhere on Earth at ${when}`)
-            : (marine?`In the sea at ${when}`:`On land at ${when}`);
+      : (marine?`Worldwide in the sea at ${when}`:`Worldwide on land at ${when}`);
     const caveat = recent ? '' :
-      `<p class="desc">Nothing is catalogued for this landmass at this age yet, `+
-      `so these are the interval's characteristic groups worldwide — not a claim `+
-      `that they lived here.</p>`;
+      `<p class="desc">This is the GLOBAL list for the interval — `+
+      (provOK?`the province model places this in the ${esc(prov.n)} but has no `+
+              `diagnostic taxa for it, and nothing`
+             :`neither the province model nor the catalogue can place this, and nothing`)+
+      ` is catalogued for this spot. Not a claim that these lived here.</p>`;
     return `<div class="ihead">${head}</div>`+lifeHTML(pick,5)+caveat;
   }
   if(marine){
@@ -4082,6 +4170,59 @@ function photoHTML(name){
     +`<span class="cred">${by} · ${esc(p.licence)} · ${link}</span>`
     +`</figcaption></figure>`;
 }
+/* MODEL-GENERATED FIGURES.
+
+   Distinct from the schematics in feature_art.py, and the difference is the
+   point. A schematic is a drawing of what a KIND of thing looks like; these are
+   drawn by "Deep Research/diagrams and illustrations/make_diagrams.py" FROM the
+   app's own tables -- the oxygen panel plots climate.py's O2 column, the
+   atoll/guyot panel plots the same subsidence law seamounts.py stamps into the
+   sea floor -- so they cannot drift away from what the model actually does. If
+   the table changes and the figure is not regenerated, the figure is wrong and
+   regenerating it is one command.
+
+   Keyed on card name. A card can carry both: the schematic says what this kind
+   of thing IS, the figure says what our numbers SAY about it. */
+const FIGURES={
+  'Emperor Seamounts':['09-atoll-guyot-subsidence.svg',
+    'Darwin’s subsidence sequence, drawn from the same half-space law the sea floor uses: island, atoll, guyot.'],
+  'Sea of Japan':['10-back-arc-rollback.svg',
+    'Slab roll-back opening a back-arc basin behind a subduction zone.'],
+  'Glossopteris Flora':['11-glossopteris-gondwana.svg',
+    'The five-continent Glossopteris distribution — the evidence Suess used in 1885 to name Gondwana.'],
+  'Ontong Java Plateau':['04-lip-to-extinction-cascade.svg',
+    'How a large igneous province becomes an ocean anoxic event.'],
+  'Caribbean LIP':['04-lip-to-extinction-cascade.svg',
+    'How a large igneous province becomes an ocean anoxic event.'],
+  'Siberian Traps':['04-lip-to-extinction-cascade.svg',
+    'How a large igneous province becomes a mass extinction.'],
+  'Oceanic Anoxic Event 1a':['04-lip-to-extinction-cascade.svg',
+    'Ontong Java to OAE 1a: the cascade, step by step.'],
+  'Oceanic Anoxic Event 2':['04-lip-to-extinction-cascade.svg',
+    'The Caribbean plateau to OAE 2: the cascade, step by step.'],
+  'Palaeocene–Eocene Thermal Maximum':['07-cenozoic-climate-events.svg',
+    'Cenozoic climate events on one axis: warmings above the line, drawdowns below.'],
+  'Azolla Event':['07-cenozoic-climate-events.svg',
+    'Cenozoic climate events on one axis: warmings above the line, drawdowns below.'],
+  'Early Eocene Climatic Optimum':['07-cenozoic-climate-events.svg',
+    'Cenozoic climate events on one axis: warmings above the line, drawdowns below.'],
+  'Great Oxidation Event':['08-oxygen-through-time.svg',
+    'Oxygen through time, with the Lomagundi overshoot and the crash that followed.'],
+  'Guadalupian':['08-oxygen-through-time.svg',
+    'Oxygen through time. The Permo-Carboniferous peak is near 30%, not 35%.'],
+  'Pennsylvanian':['08-oxygen-through-time.svg',
+    'Oxygen through time, from this app’s own climate table.']
+};
+function modelFigHTML(name){
+  const f=FIGURES[name]; if(!f)return '';
+  /* NOT loading="lazy". These are 5-6 KB and the element is only created when
+     a card opens, so deferring buys nothing -- and a lazy image inside a panel
+     that has just been written to the DOM does not always get an intersection
+     callback, which showed up here as a figure that never appeared. */
+  return `<figure class="modelfig"><img src="figures/${f[0]}" alt="${esc(f[1])}">`
+    +`<figcaption>${esc(f[1])}<span class="cred">Generated from this model’s own tables, `
+    +`so it cannot disagree with the map.</span></figcaption></figure>`;
+}
 function figHTML(a){
   if(!a||!a.svg)return '';
   /* "slice" so that anywhere the figure is given a fixed height (the extinction
@@ -4097,7 +4238,7 @@ function openInfo(o){
   $('#infoTag').textContent=o.tag||'';
   $('#infoRows').innerHTML=(o.rows||[]).map(r=>`<div class="row">${r[0]}<b>${r[1]}</b></div>`).join('');
   const fig=$('#infoArt');
-  fig.innerHTML=figHTML(o.art)+photoHTML(o.name);
+  fig.innerHTML=figHTML(o.art)+photoHTML(o.name)+modelFigHTML(o.name);
   fig.hidden=!fig.innerHTML;
   $('#infoDesc').textContent=o.desc||'';
   $('#infoExtra').innerHTML=o.extra||'';
@@ -4109,7 +4250,7 @@ function jumpTo(age){
   state.age=Math.max(-250,Math.min(1000,age));
   state.playing=false;syncPlay();syncSlider();
   bindTextures();buildBoundaries();buildHotspots();buildVectors();updateReadout();
-  markSidebarCurrent();markGlaciationList();
+  markSidebarCurrent();markGlaciationList();markClimateEventList();
 }
 function showInterval(i){
   const mid=(i.a0+i.a1)/2;
@@ -4582,6 +4723,70 @@ function markGlaciationList(){
   document.querySelectorAll('#glList [data-gl]').forEach(el=>
     el.classList.toggle('cur', !!cur && gs[+el.dataset.gl]===cur));
 }
+/* Climate events: the FIFTH navigable structure, and the one whose contents can
+   never be drawn. A hyperthermal or an ocean anoxic event lasts between 200,000
+   years and about a million; the keyframes are 5 Myr apart, so no field the app
+   could ship would resolve one. The card is the only place they can live, and
+   without it the app was silent about the PETM — the single best-documented
+   rapid warming in the record — while drawing the world it happened in.
+
+   The Great Oxidation Event carries `offmap`: at 2.46–2.06 Ga it is a billion
+   years before this map's oldest frame. It is listed, described, and never
+   jumped to; saying "off the edge of this map" beats omitting the largest
+   change in the history of Earth's surface. */
+function climateEventsList(){
+  return ((DATA.eras&&DATA.eras.climateEvents)||[]).slice()
+    .sort((a,b)=>a.a1-b.a1);
+}
+function buildClimateEventList(){
+  const box=$('#ceList'); if(!box) return;
+  const es=climateEventsList();
+  box.innerHTML=es.map((e,i)=>
+    `<div class="glrow ce${e.offmap?' offmap':''}" data-ce="${i}">`
+    +`<span class="gn">${esc(e.short||e.name)}<span class="gk">${esc(e.kind||'')}</span></span>`
+    +`<span class="gd">${esc(e.offmap?'before this map':fmtSpan(e.a0,e.a1))}</span></div>`).join('');
+  box.querySelectorAll('[data-ce]').forEach(el=>{
+    el.onclick=()=>{ const e=climateEventsList()[+el.dataset.ce]; if(e) showClimateEvent(e); };
+  });
+}
+function climateEventAt(age){
+  /* Widened to +/- half a keyframe. An event 200 kyr long sits BETWEEN two
+     keyframes far more often than on one, so an exact containment test would
+     make the card essentially unreachable by scrubbing — which is the same
+     resolution problem that put these on cards in the first place. */
+  return climateEventsList().find(e=>!e.offmap &&
+    age>=Math.min(e.a0,e.a1)-2.5 && age<=Math.max(e.a0,e.a1)+2.5)||null;
+}
+function markClimateEventList(){
+  const cur=climateEventAt(state.age), es=climateEventsList();
+  document.querySelectorAll('#ceList [data-ce]').forEach(el=>
+    el.classList.toggle('cur', !!cur && es[+el.dataset.ce]===cur));
+}
+function showClimateEvent(e){
+  const rows=[['Span', e.offmap?'2.46–2.06 Ga — before this map begins'
+                               :fmtSpan(e.a0,e.a1)],
+              ['Kind', e.kind||'Climate event']];
+  if(!e.offmap){
+    const A=ages(); let bi=0,bd=1e9;
+    A.forEach((v,i)=>{const d=Math.abs(v-(e.peak!=null?e.peak:e.a0));if(d<bd){bd=d;bi=i;}});
+    const m=DATA.timeline[bi];
+    if(m){
+      rows.push(['Nearest keyframe',`${fmtAge(A[bi])} — ${m.gmst.toFixed(1)}°C · ${m.co2} ppm CO₂`]);
+      rows.push(['Shorter than',`the 5 Myr between keyframes — this cannot be drawn`]);
+    }
+  }
+  let extra='';
+  if(e.cause)extra+=`<div class="ihead">What caused it</div><p class="desc">${esc(e.cause)}</p>`;
+  if(e.end)extra+=`<div class="ihead">How it ended</div><p class="desc">${esc(e.end)}</p>`;
+  if(e.life)extra+=`<div class="ihead">What it did to life</div><p class="desc">${esc(e.life)}</p>`;
+  if(e.contested)extra+=`<div class="ihead">Still argued over</div><p class="desc">${esc(e.contested)}</p>`;
+  openInfo({name:e.name, tag:(e.kind||'Climate event')
+              +' · '+(e.offmap?'2.46–2.06 Ga':fmtSpan(e.a0,e.a1)),
+            rows, desc:e.summary, extra, wide:true,
+            art:artFor('climate-event',undefined,e.name)});
+  if(!e.offmap&&e.jump_age!=null)jumpTo(e.jump_age);
+  markClimateEventList();
+}
 function showGlaciation(g){
   const rows=[['Span',fmtSpan(g.a0,g.a1)],['Kind',g.kind||'Glaciation']];
   /* The measured ice, not the claim: iceLand/iceSea come from the manifest and
@@ -4634,6 +4839,13 @@ function ctxItems(){
   const g=glaciationAt(age);
   if(g)out.push({k:'glacial',cls:'ctx-glacial',eyebrow:g.kind||'Glaciation',
     title:g.name, sub:fmtSpan(g.a0,g.a1), body:g.summary, open:()=>showGlaciation(g)});
+  /* A climate event is shorter than the gap between keyframes, so the card is
+     the ONLY way it can appear. Marked as such in the sub-line rather than
+     letting a reader assume the globe behind it is showing the event. */
+  const ce=climateEventAt(age);
+  if(ce)out.push({k:'climate',cls:'ctx-climate',eyebrow:ce.kind||'Climate event',
+    title:ce.short||ce.name, sub:fmtSpan(ce.a0,ce.a1)+' · shorter than a keyframe',
+    body:ce.summary, open:()=>showClimateEvent(ce)});
   return out;
 }
 function updateContextCards(){
@@ -4963,7 +5175,7 @@ function buildLegend(){
   initGL();
   await loadAll();
   ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
-  buildEraList();buildScList();buildExtinctionList();buildGlaciationList();markSidebarCurrent();
+  buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
      so when something does not appear on screen the only way to find out which

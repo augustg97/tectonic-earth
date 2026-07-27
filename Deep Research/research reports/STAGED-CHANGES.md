@@ -4,8 +4,27 @@
 gap item that would touch `build/` or `web/`, with the artifact that makes it a drop-in.
 Ordered by measured value, not by register number.
 
-Nothing here has been applied. Each row says exactly what to change and what evidence
-backs it.
+> ## APPLIED — this handover was executed on 2026-07-26
+>
+> **Tier 1 items 1–4, all of Tier 1b, all of Tier 2 and all of Tier 3 have shipped.**
+> [MODEL-GAPS.md](../MODEL-GAPS.md) carries the outcome table with the measurements.
+> Three things worth knowing before reading the rest of this file:
+>
+> 1. **Five of the "7 true regressions" were never regressions.** `regression_gate.py`'s
+>    land-today guard called a zero-argument function with two arguments, and the
+>    `TypeError` went into a bare `except: pass` — so the guard passed every label and the
+>    gate scored 35 the build never plate-tracks. With it fixed the switch scores 124
+>    features: 54 improved, 67 unchanged, 3 down by ≤0.08, **0 true regressions**. Seventh
+>    time an audit's disagreement with the app has been the audit's error.
+> 2. **Two authored coordinates were plain data errors** the switch exposed: Newark Rift
+>    Valleys sat at (−68, 12) — the Caribbean Sea, 3,300 km from the Newark Basin — and the
+>    Cimmerian Belt sat on a PALEOMAP polygon boundary that assigned it to a Gondwanan plate
+>    which never docked. Both corrected.
+> 3. **Tier 1 items 5 and 6 (G1, G2) were NOT applied.** Flooding the Triassic–Jurassic and
+>    fixing `future_grid`'s `np.maximum` are each a terrain rebuild in their own right and
+>    were out of scope for this pass. They remain the two largest staged items.
+>
+> Everything below is left as written, as the record of what was handed over.
 
 ---
 

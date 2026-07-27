@@ -248,7 +248,12 @@ LABELS = [
     ("orogen", "Verkhoyansk Belt",   130,  67,  0, 162),
     ("orogen", "Cadomian Belt",       -2,  48,  538, 650),
     ("orogen", "Timanian Belt",       -8, -14,  548, 620),
-    ("orogen", "Cimmerian Belt",      55,  35,  190, 250),
+    # (55, 35) sits on the PALEOMAP polygon boundary at the southern edge of the
+    # Alborz and partitions to plate 505 -- a Gondwanan plate that is still at
+    # 34S at 250 Ma and only reaches 12S by 190 Ma, so the belt never docked.
+    # Central Iran proper is plate 512, which does the actual Cimmerian journey:
+    # the equator at 250 Ma, 19N at 230, 34N at 210, docked by 190.
+    ("orogen", "Cimmerian Belt",      53,  33,  190, 250),
     ("orogen", "Innuitian Belt",     -85,  78,  340, 385),
     ("continent", "Amazonia",        -55, -10,  545, 900),
     ("continent", "Congo Craton",     20,  -3,  545, 950),
@@ -432,7 +437,13 @@ LABELS = [
     ("rift", "Midcontinent Rift", -35, 18, 985, 1000),
     ("rift", "Adelaide Rift Complex", 125, -30, 660, 830),
     ("rift", "Oslo Rift", 10, 14, 288, 300),
-    ("rift", "Newark Rift Valleys", -68, 12, 190, 232),
+    # The authored coordinate was (-68, 12) -- the Caribbean Sea off Venezuela,
+    # 3,300 km from the Newark Basin and 1,064 m under water, so it failed the
+    # land-today gate and was never plate-tracked at all. It rode PALEOMAP plate
+    # 224 (northern South America) instead of 101 (North America), which is why
+    # the two models put it 18 degrees of LATITUDE apart at 210 Ma on a pair of
+    # models that agree about latitude. Anchored on the Newark Basin itself.
+    ("rift", "Newark Rift Valleys", -74.5, 40.5, 190, 232),
     ("rift", "Benue Trough", 9, -5, 80, 130),
     ("rift", "Rhine Graben", 8, 49, 0, 35),
     ("rift", "East African Rift", 36, 2, 0, 30),
@@ -565,7 +576,13 @@ LABELS = [
     ("orogen", "Bohemian Massif", 14, 49, 0, 340),
     ("orogen", "Iberian Massif", -6, 40, 0, 340),
     ("orogen", "Massif Central", 3, 45, 0, 340),
-    ("orogen", "Rhodope Massif", 25, 41, 0, 120),
+    # Anchored on the massif's core rather than the +21 m coastal texel at
+    # (25, 41): a massif's anchor should be on the massif. The residual is a
+    # RECORDED KNOWN LIMIT, not a frame effect -- nine anchors inside the same
+    # massif, all on the same plate id, score anywhere from 0.15 to 0.92 in
+    # EITHER frame, which is a block smaller than the 20 km grid in the most
+    # tectonically shredded region on Earth. See README section 9.
+    ("orogen", "Rhodope Massif", 24.7, 41.6, 0, 120),
     ("orogen", "Ellesmerian Belt", -85, 79, 0, 360),
     ("region", "Fennoscandian Shield", 25, 64, 0, 540),
     ("continent", "Anatolide-Tauride Block", 32, 38, 0, 250),
@@ -704,9 +721,9 @@ def lake_shape(name):
 #
 # So define each one the way a geologist would locate it: by where the crust of
 # its MODERN FRAGMENTS actually sat at that age. build_webdata.build_labels
-# back-advects every anchor below along the Merdith rotation model (with the
-# PaleoDEM frame correction applied) and takes the spherical centroid, giving a
-# smooth per-age track instead of a search.
+# back-advects every anchor below along the Scotese PALEOMAP rotation model --
+# the frame the PaleoDEM terrain is itself drawn in -- and takes the spherical
+# centroid, giving a smooth per-age track instead of a search.
 #
 #   modern  - present-day points on the craton, which must be LAND today so the
 #             rotation model can assign them a plate. Pick craton interior, not
@@ -939,7 +956,22 @@ DESCRIPTIONS = {
  "Zechstein Sea": "A hypersaline sea in Pangaea's arid interior that repeatedly evaporated, leaving thick salt beds beneath the North Sea.",
  # continents / terranes
  "Pangaea": "The last true supercontinent: nearly all land fused into one mass reaching pole to pole. Its interior lay so far from any ocean that it became one of the most arid landscapes in Earth's history.",
- "Pangaea Proxima": "A projected future supercontinent, assembled as the Atlantic closes and the continents crowd back together around Africa.",
+ # WHOSE future this is, which the card did not say. It matters: four are
+ # published and they disagree about which ocean closes.
+ "Pangaea Proxima": "A projected future supercontinent, assembled as the Atlantic closes "
+  "and the continents crowd back together around Africa.\n\n"
+  "This is one of four published futures, not a forecast. It follows C. R. Scotese's "
+  "Pangaea Ultima reconstruction, in which the Atlantic closes again -- introversion -- "
+  "and it is the one drawn here because Farnsworth et al. (2024) modelled the climate on "
+  "exactly this geometry, so the map and the temperature readout agree with each other. "
+  "The alternatives are Novopangaea (the Pacific closes instead), Aurica (both close) and "
+  "Amasia (everything gathers over the Arctic). Beyond about 50 million years, plate "
+  "motions cannot be projected, only reasoned about.\n\n"
+  "One honest limit on the drawing: this series rotates today's topography and has no "
+  "mechanism to raise a mountain range, so the collisional belt Scotese draws between "
+  "Africa and Eurasia cannot appear here. Land above 2 km is flat across the whole "
+  "future series -- 8.7 to 8.6 million km2 -- where a real assembly would be building "
+  "a Himalaya.",
  "Rodinia": "A Precambrian supercontinent of the Neoproterozoic world, assembled around a Laurentian core roughly a billion years ago. Its breakup may have helped trigger the Cryogenian glaciations.",
  "Pannotia": "A short-lived latest-Precambrian supercontinent, already coming apart as the Cambrian explosion began.",
  "Gondwana": "The southern supercontinent — South America, Africa, India, Australia and Antarctica as one landmass — which drifted across the South Pole and carried ice sheets with it.",
@@ -1122,9 +1154,19 @@ DESCRIPTIONS = {
  "Gilboa Forest": "The oldest forest known: stands of tree-fern-like Wattieza up to eight metres tall, "
   "their stumps preserved in growth position in New York State. Roots like these began "
   "breaking rock into soil and pulling CO2 out of the air.",
- "Glossopteris Flora": "The tongue-leaved seed fern that carpeted high-latitude Gondwana. Finding the same "
-  "leaves in South America, Africa, India, Australia and Antarctica was one of Wegener's "
-  "original arguments for continental drift.",
+ # The credit was Wegener's alone, which is true and incomplete. EDUARD SUESS used
+ # exactly this evidence in 1885 to argue for a single southern landmass and gave
+ # it the name this map puts on every Palaeozoic frame.
+ "Glossopteris Flora": "The tongue-leaved seed fern that carpeted high-latitude Gondwana "
+  "-- a real tree, up to about 30 m, with leaves 2-30 cm long carrying a distinctive net "
+  "of veins. It grew in waterlogged ground like a modern bald cypress and built the "
+  "southern coal. In Antarctic wood its growth rings are broad and then stop abruptly, in "
+  "as little as a month: these were polar forests, running flat out through a summer of "
+  "continuous light and shutting down for a winter of continuous dark.\n\n"
+  "The same leaves turn up in South America, Africa, India, Australia and Antarctica, and "
+  "the seeds were far too big to cross an ocean. Eduard Suess used exactly this in 1885 to "
+  "argue for a single southern landmass, and gave it the name this map still uses: "
+  "Gondwana. Wegener took the same evidence further, into continental drift.",
  "Gobi Erg": "The dune fields and playas of the Late Cretaceous Gobi, where sudden sand collapses "
   "buried animals alive -- including the fighting Velociraptor and Protoceratops, locked "
   "together mid-fight.",
@@ -1198,7 +1240,26 @@ DESCRIPTIONS = {
  "Pacific-Antarctic Ridge": "The southern boundary of the Pacific plate, a fast-spreading ridge feeding new floor into the largest ocean.",
  "Carlsberg Ridge": "The spreading centre of the northwest Indian Ocean, separating the African and Indian plates and running up toward the Gulf of Aden.",
  "Ninetyeast Ridge": "The longest straight line on Earth, a 5,000-kilometre volcanic ridge marking the track of the Kerguelen plume as the Indian plate raced north over it.",
- "Emperor Seamounts": "The older, drowned half of the Hawaiian chain, bent sharply away from it -- the kink records either a change in the Pacific plate's motion or a wandering of the plume around 47 million years ago.",
+ "Emperor Seamounts": "The older, drowned half of the Hawaiian chain, bent sharply away "
+  "from it -- the kink at about 47 million years ago is now more often interpreted as the PLUME "
+  "wandering south than as the Pacific plate changing direction.\n\n"
+  "This chain is also the clearest illustration anywhere of Darwin's subsidence sequence, "
+  "which he worked out in 1842 from the shapes of reefs alone, before anyone knew the sea "
+  "floor moved. Every volcanic island is temporary: it stands on ocean floor that cools, "
+  "contracts and sinks as it ages, so the island rides slowly downward. Where the water is "
+  "warm enough, coral grows upward as fast as the island sinks -- a FRINGING REEF hugging "
+  "the shore becomes a BARRIER REEF with a lagoon behind it, and finally an ATOLL, a ring "
+  "of reef around open water where a mountain used to be. Where the water is too cold or "
+  "the subsidence too fast, the island simply drowns and its wave-planed top survives as a "
+  "flat-topped seamount: a GUYOT.\n\n"
+  "Read the chain from Hawaii north-west and you read the sequence in order. The Big "
+  "Island is still being built; Midway at about 28 million years is an atoll; the Emperor "
+  "seamounts are guyots a kilometre or two down; and Meiji at the far end, roughly 85 "
+  "million years old and two kilometres deep, is about to be subducted into the Kuril "
+  "trench. The app draws it from that arithmetic rather than from a texture -- an "
+  "edifice's summit subsides by 350 metres per square root of a million years, the same "
+  "half-space cooling law the sea floor itself uses, so islands drown at about 16 million "
+  "years and everything older is flat-topped.",
  "Reykjanes Ridge": "The stretch of the Mid-Atlantic Ridge south of Iceland, riding so high on the Iceland plume that it nearly breaks the surface.",
  "Gakkel Ridge": "The slowest spreading ridge in the world, opening the Arctic Ocean basin beneath the sea ice at barely a centimetre a year.",
  "Nazca Ridge": "A submarine volcanic ridge sliding into the trench beneath Peru, whose buoyancy flattens the subducting slab and broadens the Andes above it.",
@@ -1264,9 +1325,19 @@ DESCRIPTIONS = {
   "deepest scar in an otherwise fused landmass, and the only water for thousands of "
   "kilometres.",
  "Pebas Mega-Wetland": "Before the Amazon ran east, western Amazonia was the Pebas system: around a million square kilometres of shallow lake, swamp and slow river, fed by the rising Andes and draining north to the Caribbean, with tides reaching far inland and the sea flooding in from time to time. It lasted through the Miocene, roughly 21 to 8 million years ago, until Andean uplift finally tipped the continent the other way and set the modern east-flowing Amazon.\n\nIt was the richest freshwater ecosystem South America has known. Its endemic snails and mussels radiated into hundreds of species found nowhere else, and its water held giants: Purussaurus, a caiman twelve metres long, the shovel-jawed Mourasuchus, slender fish-eating gharials, and Stupendemys, the largest freshwater turtle that ever lived, its shell more than three metres across.",
- "Permian Basin": "A deep tropical basin in western Pangaea, ringed by the Capitan reef -- one of the "
-  "best-preserved fossil reefs on Earth. As it evaporated it laid down kilometres of salt "
-  "and became the richest oil province in North America.",
+ "Permian Basin": "A tropical sea that slowly strangled. Through the Permian a deep basin "
+  "on Pangaea's western margin was progressively cut off from the open ocean by its own "
+  "reefs -- the Capitan reef complex, built not by corals but by sponges, algae and "
+  "bryozoans, and now exhumed as the Guadalupe Mountains, one of the best-exposed fossil "
+  "reefs on Earth.\n\n"
+  "The fill reads as a sequence: WOLFCAMP deep-water shales, then LEONARD as the shelf "
+  "builds out, then the GUADALUPIAN reef at its greatest height, and finally -- once the "
+  "connection to the ocean had narrowed enough -- the OCHOAN, when evaporation won. The "
+  "Castile Formation is hundreds of metres of gypsum and halite laid down in varve-like "
+  "annual couplets that can be counted one by one.\n\n"
+  "A restricted basin under a subtropical high is the standard recipe for salt, and "
+  "Pangaea's margins made several: the Zechstein Sea of northern Europe is the same story "
+  "at the same time, on the other side of the supercontinent.",
  "Perunica": "A small terrane carrying the classic Barrandian fossil sequence of Bohemia, drifting "
   "in the Rheic Ocean off Gondwana's northern margin.",
  "Proxima Interior Desert": "The dead heart of the next supercontinent. So far from any coast that no weather "
@@ -1534,7 +1605,15 @@ DESCRIPTIONS = {
  "Kolyma-Omolon Terrane": "A composite terrane that closed the Anyui Ocean against Siberia in the Cretaceous, welding on what is now far northeastern Russia.",
  "Piedmont-Ligurian Ocean": "The narrow Alpine branch of Tethys, opened as Africa and Europe drifted apart in the Jurassic and consumed again as they closed -- its sea floor is now in the Alps as ophiolite.",
  "Okhotsk Sea": "A back-arc basin behind the Kuril arc, opened as the Pacific plate rolled back beneath Asia.",
- "Sea of Japan": "Opened in the Miocene when the Japanese arc rifted away from Asia and rotated -- the whole archipelago swung out like a door.",
+ "Sea of Japan": "Opened in the Miocene when the Japanese arc rifted away from Asia and "
+  "rotated -- the whole archipelago swung out like a door.\n\n"
+  "It is a BACK-ARC BASIN, and the mechanism is worth having because it explains a whole "
+  "province of the modern Earth. Behind a subduction zone the ocean floor can pull APART: "
+  "as an old, dense slab sinks it also rolls backward, dragging the trench oceanward and "
+  "stretching the plate behind it until that plate rifts and a new spreading centre opens "
+  "-- a small ocean basin forming INSIDE a convergent margin. The Mariana Trough, the Lau "
+  "Basin, the Andaman Sea and the Tyrrhenian are all this. It is why the western Pacific "
+  "is a scatter of small seas and island arcs rather than one clean margin.",
  "Tethyan Himalaya": "The stack of shallow-marine rock that lay on India's northern shelf, scraped off and piled up when India hit Asia -- the summit of Everest is made of it.",
  "Morrison Floodplain": "A broad seasonal floodplain east of the rising Cordillera, and the richest dinosaur-bearing formation in North America.",
  "Yakutat Terrane": "A fragment of thickened ocean floor riding north on the Pacific plate and jamming into southern Alaska -- which is why the St Elias Mountains are the highest coastal range on Earth.",
@@ -1657,23 +1736,23 @@ EVENT_NOTES = {
     "Siberian Traps": "The largest continental flood basalt known: perhaps four million cubic kilometres of lava across Siberia in under a million years, and — as it burned through coal and evaporite — enough carbon and sulphur to acidify the oceans and drive the end-Permian extinction, the worst in Earth's history.",
     "Deccan Traps": "Vast basalt flows across western India, erupting as the subcontinent drove north over the Reunion plume. Their peak brackets the Chicxulub impact, and the two together ended the Cretaceous.",
     "Central Atlantic (CAMP)": "Magmatism spread across four continents as Pangaea began to split, opening the crack that became the Atlantic. It coincides with the end-Triassic extinction.",
-    "Ontong Java Plateau": "The largest oceanic plateau on Earth, erupted onto the floor of the Pacific in a few million years. It helped push the mid-Cretaceous into an extreme greenhouse and starved the oceans of oxygen.",
+    "Ontong Java Plateau": "The largest oceanic plateau on Earth: 1.86 million square kilometres of sea floor, erupted in a few million years. It is the leading trigger for OCEANIC ANOXIC EVENT 1a (Selli, ~120.5-119.3 Ma) -- the carbon-isotope record swings hard at exactly its eruption, and calcareous nannoplankton went through a sharp crisis. See the climate-events panel.",
     "Ethiopian Traps": "Flood basalts over the Afar plume that domed up East Africa and began tearing it open — the rifting still going on today.",
     "North Atlantic Igneous": "Eruptions as Greenland and Europe parted. Carbon released here is a leading suspect for the Paleocene-Eocene Thermal Maximum, the sharpest warming of the Cenozoic.",
-    "Karoo-Ferrar": "Basalts stretched from southern Africa to Antarctica as Gondwana started to break apart, and coincide with the Early Jurassic ocean anoxic event.",
+    "Karoo-Ferrar": "Basalts stretched from southern Africa to Antarctica as Gondwana started to break apart. They coincide with the TOARCIAN ocean anoxic event (~183 Ma) and are its leading trigger -- the same LIP-to-anoxia cascade as Ontong Java to OAE 1a and the Caribbean plateau to OAE 2.",
     "Parana-Etendeka": "One province split in two: its halves now sit in Brazil and Namibia, torn apart by the opening South Atlantic.",
     "Emeishan Traps": "Flood basalts in South China, associated with the end-Guadalupian extinction some eight million years before the far larger end-Permian crisis.",
     "Columbia River Basalts": "The youngest continental flood basalt province, laid down across the Pacific Northwest as the Yellowstone plume arrived beneath the continent.",
-    "Caribbean LIP": "A thick oceanic plateau that proved too buoyant to subduct; it jammed between the Americas and became the floor of the Caribbean.",
+    "Caribbean LIP": "Built by the Galapagos plume on the floor of the Pacific and then rammed into the gap between the Americas, where it survives as the thick, buoyant crust under the Caribbean Sea -- one of the few oceanic plateaus that escaped subduction by being too light to sink. Its eruption is the leading trigger for OCEANIC ANOXIC EVENT 2 (Bonarelli, ~94.3-93.5 Ma), when the deep ocean ran out of oxygen at the hottest moment of the last 200 million years. See the climate-events panel.",
     "Madagascar Traps": "Eruptions as Madagascar separated from India, leaving the island isolated — and its life to evolve alone.",
     "Kalkarindji": "Australia's Cambrian flood basalts, linked to an early-Cambrian extinction pulse not long after animals first diversified.",
     "Franklin LIP": "Enormous eruptions across what is now Arctic Canada at the threshold of the Sturtian glaciation. Weathering of fresh basalt in the tropics is thought to have drawn down enough CO2 to help freeze the planet.",
     "Central Iapetus": "Rift volcanism as Rodinia's fragments finally separated and the Iapetus Ocean opened between them.",
     "Rajmahal Traps": "The Kerguelen plume's first arrival under eastern India, before the plate carried the continent onward.",
     # --- plumes ---
-    "Hawaii": "A plume fixed in the mantle while the Pacific plate slides over it, printing a chain of volcanoes that gets older to the north-west — the clearest ruler we have for plate motion.",
+    "Hawaii": "A plume in the mantle while the Pacific plate slides over it, printing a chain of volcanoes that gets older to the north-west — the clearest ruler we have for plate motion.\n\nWith one caveat that this map has to state, because it draws the chain: hotspots are NOT fixed. Inter-hotspot motion is demonstrable before about 90 Ma, and the 47 Ma bend between the Hawaiian Ridge and the Emperor Seamounts is now widely interpreted as the PLUME moving south rather than as the Pacific plate changing direction. Any track drawn before ~90 Ma is a model output, not a measurement.",
     "Iceland": "The only place a mid-ocean ridge rises above sea level, held up by a plume beneath the spreading Atlantic.",
-    "Yellowstone": "The North American plate riding south-west over a plume, leaving a track of calderas across the Snake River Plain.",
+    "Yellowstone": "The North American plate riding south-west over a plume, leaving a track of calderas across the Snake River Plain. It is the ONLY hotspot on Earth consistently imaged from the deep mantle to the surface, which is the calibration for how confident any other plume card here should sound.",
     "Afar": "Three rifts meet over a plume here; two are opening the Red Sea and Gulf of Aden, the third is splitting Africa itself.",
     "Reunion": "The plume that erupted the Deccan Traps, still burning under the Indian Ocean 66 million years later.",
     # --- impact structures ---

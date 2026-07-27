@@ -206,30 +206,62 @@ if __name__ == "__main__":
 # at all. These values sit between the two rather than committing to either.
 # CO2 follows PhanDA / CenCO2PIP; O2 follows Mills et al. (2023), pulled back
 # from its mid-line where that exceeds the ~35% combustion ceiling.
+#
+# THE CRETACEOUS AND EOCENE WERE RAISED (2026-07-26), because splitting the
+# difference had produced a curve with a qualitative failure in it, not merely a
+# quantitative one. Our maximum was 30.0 C at 90 Ma; 30 C is EXACTLY PhanDA's
+# icehouse/hothouse boundary, so no keyframe in the app ever entered the
+# hothouse state, while PhanDA finds Earth spent more of the Phanerozoic warm
+# than cold. A compromise that lands precisely on a category boundary is not a
+# compromise, it is a claim -- and the wrong one.
+#
+# The Turonian now reads 33.0: still between Scotese (~28) and PhanDA (36),
+# leaning to PhanDA because it is the newer and far larger assimilation (about
+# 150,000 proxy data points against model ensembles) and because the Turonian is
+# where its coverage is densest. The 120, 145 and 66 Ma rows move with it so the
+# peak is a Cretaceous, not a spike at one keyframe.
+#
+# The Palaeocene-Eocene rows move for a second, independent reason: CO2 doubled
+# 810 -> 1600 ppm across 66 -> 56 Ma while GMST moved +1.5 C, which is a quarter
+# of what PhanDA's ~8 C per doubling implies, in the one interval where a large
+# warming is best documented (the PETM, running into the EECO). Our 50 Ma also
+# read COOLER than our 56 Ma, which puts the Early Eocene Climatic Optimum below
+# the boundary it follows -- backwards for the Cenozoic's warmest sustained
+# interval. Same argument at 380 -> 360 Ma, where we drew Famennian ice in the
+# CLIMATE table below while barely cooling the number above it.
+#
+# Nothing here touches the rendered world: CLIMATE (not SYSTEM) carries the
+# temp/ice/veg/arid the fields are built from, and its 90 Ma row was already at
+# the table's maximum anomaly. This makes the readout agree with what was
+# already being drawn. refresh_manifest.py is the only rebuild needed.
 SYSTEM = [
     # age    GMST  CO2     O2
     (0,      14.4,  420,   20.9),
     (5,      15.5,  400,   20.9),
     (20,     17.0,  450,   20.8),
     (34,     19.0,  700,   20.5),
-    (40,     23.0, 1000,   20.0),
-    (50,     26.5, 1400,   19.5),
-    (56,     27.5, 1600,   19.2),
-    (66,     26.0,  810,   25.5),
-    (90,     30.0,  800,   25.0),
-    (120,    27.0,  870,   24.5),
-    (145,    23.0,  720,   24.0),
+    (40,     24.5, 1000,   20.0),
+    (50,     29.0, 1400,   19.5),   # EECO: the Cenozoic's warmest sustained state
+    (56,     29.5, 1600,   19.2),   # Palaeocene-Eocene boundary, into the PETM
+    (66,     27.0,  810,   25.5),
+    (90,     33.0,  800,   25.0),   # Turonian: PhanDA 36, Scotese ~28
+    (120,    28.5,  870,   24.5),
+    (145,    24.5,  720,   24.0),
     (160,    22.0,  850,   24.0),
     (200,    24.0, 1070,   22.0),
     (230,    24.0,  950,   26.0),
-    (250,    28.5,  900,   30.0),
-    (260,    20.0,  600,   34.0),
-    (280,    15.0,  380,   36.0),
-    (300,    15.0,  460,   30.0),
+    # O2: the Permo-Carboniferous peak was 36%, which is above the ~35% ceiling
+    # wet vegetation can burn under and above the current review. Krause et al.
+    # (2022) puts it near 30%. The TIMING was already right (Cisuralian), so
+    # only the amplitude moves, and the decline into the Triassic keeps its shape.
+    (250,    28.5,  900,   26.5),
+    (260,    20.0,  600,   28.5),
+    (280,    15.0,  380,   30.0),   # the peak
+    (300,    15.0,  460,   29.5),
     (315,    14.0,  450,   29.0),
     (330,    14.0,  460,   26.0),
-    (360,    22.0,  810,   21.0),
-    (380,    23.0, 1500,   17.0),
+    (360,    21.0,  810,   21.0),   # Famennian ice: the number now cools with it
+    (380,    24.5, 1500,   17.0),
     (400,    22.0, 2040,   14.5),
     (420,    24.0, 1300,   18.5),
     (440,    17.0,  900,   14.0),
