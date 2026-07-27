@@ -198,6 +198,16 @@ def main():
 
     mpath = os.path.join(OUT, "MANIFEST.json")
     with open(mpath, "w") as fh:
+        # MERGE, never clobber. This manifest carries hand-entered review verdicts
+        # that cannot be regenerated. A failed retry must not erase a good earlier
+        # result. (This was "fixed" once without verifying the fix took, and the
+        # next run destroyed the manifest again - hence the assertion below.)
+        merged = dict(prior)
+        for _it in manifest:
+            if _it.get("status") == "ok" or _it["slug"] not in merged:
+                merged[_it["slug"]] = _it
+        assert len(merged) >= len(prior), "merge lost entries"
+        manifest = sorted(merged.values(), key=lambda i: i["slug"])
         json.dump({"policy": {"accept": list(OK_LICENCES), "refuse": list(BAD_TOKENS)},
                    "warning": "verified_subject is false until a human has looked at "
                               "the contact sheet. Correct licence does NOT mean correct "
