@@ -72,6 +72,49 @@ Islands drown at ~16 Myr, which is the right order for the Hawaiian chain. That 
 delivers islands at the young end, atolls in the middle, **guyots** at the old end, and the
 named aseismic ridges — four register items, no new noise function.
 
+### 5. Flood the Triassic–Jurassic epicontinental seas · **G1**
+
+**Evidence:** `modeling/audit_reconstruction.py`, [WP-05 §4](WP-05-reconstruction-audit.md).
+At **240 Ma we draw 1.8% of the surface as shallow sea against Blakey's 8.0%, and 93% of
+everything he draws as shelf sea is dry land in our field** — 83% at 200 Ma, 77% at 180 Ma.
+The measurement is taken only where both models put continental crust, after a rigid
+longitude fit, so it is about flooding and not about placement. The present-day control
+passes (Δ −0.1 pp, only 19% of his shelf dry in ours), so the method is sound.
+
+**Change:** `build/epeiric.py` already floods the seas a 20 km grid cannot resolve — the
+Trans-Saharan Seaway, the Cannonball Sea — and its coverage stops short of the Triassic and
+Jurassic. Extend it there: the Germanic Basin / Muschelkalk sea, the Sverdrup and West
+Siberian basins, the Tethyan shelf carbonate platforms, the Sundance and Curtis seaways in
+western North America.
+
+**Bonus:** this is also the whole of the **+5 to +9 pp land excess** at 150–240 Ma reported
+in WP-05 §2. It was never extra continent; it was missing sea. One fix closes both.
+
+### 6. Stop the future series destroying continental area · **G2**
+
+**Evidence:** [WP-05 §6.1](WP-05-reconstruction-audit.md). **148.1 → 92.6 Mkm² over 250 Myr,
+a 37% loss.** PALEOMAP's rigid rotations over the same interval lose 5.5%, all of it
+rasterisation. Continental crust is conserved on this timescale, so the trend is an artefact.
+
+**Cause**, one line in `build_fields.future_grid`:
+
+```python
+out = np.maximum(out, z)          # overlap -> collision keeps the high ground
+```
+
+Where two group rotations land on the same ground, one survives and the other's area is
+annihilated. The signature confirms it exactly: land above 2 km is flat (8.7 → 8.6 Mkm²)
+while land below 1 km falls **45%** (118 → 65 Mkm²), and the mean elevation of what survives
+rises 667 → 879 m. `maximum` is a "high ground wins" rule, so it eats plains and spares
+mountains — and coastal plain, shelf and continental interior are exactly the ground the
+biota, biome and rainfall layers are drawn on.
+
+**Change**, in rough order of effort: pull `GROUP_TARGET` apart so groups meet rather than
+interpenetrate (cheapest, and it also fixes G3's over-compact assembly); or allocate
+contested ground to a single group before sampling; or add an explicit area-conservation
+check to the build so this cannot regress silently. Whatever is chosen, `audit_reconstruction.py
+--future` re-measures it in one command.
+
 ---
 
 ## Tier 2 — card content, all text written

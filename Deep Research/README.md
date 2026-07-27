@@ -65,7 +65,8 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 | [`audit_label_windows.py`](modeling/audit_label_windows.py) | a label drawn when the entity it names did not exist | 46 matched, **2 findings** |
 | [`audit_curated_biota.py`](modeling/audit_curated_biota.py) | curated biota vs the province model — the B1 exception/typical split | 197 spans, **9 exceptions, 188 placed, 0 unplaced** |
 | [`climate_audit.py`](modeling/climate_audit.py) | `climate.py` against PhanDA and GEOCARBSULF | **6 findings** |
-| [`frame_experiment.py`](modeling/frame_experiment.py) | reconstruction frame quality, measured on a population | **the A1 result** |
+| [`frame_experiment.py`](modeling/frame_experiment.py) | reconstruction frame quality, measured on a population | **the A1 result** · note: its `_decode()` uses the wrong `Z_RANGE`, see E6 |
+| [`audit_reconstruction.py`](modeling/audit_reconstruction.py) | the shipped palaeogeography against Deep Time Maps and Scotese PALEOMAP — land, shelf, ice, position — plus the future series against PALEOMAP's own future rotations | **the A5 / F1 result**, 31 ages · selftest passes |
 
 The models are deliberately dependency-light (stdlib only, except numpy for the EBM) so
 that `build/` can import any of them later without adding a dependency.
@@ -94,13 +95,14 @@ that `build/` can import any of them later without adding a dependency.
 | [`WP-02 · The biosphere through deep time`](research%20reports/WP-02-the-biosphere-through-deep-time.md) | replace per-label curation with a province model, a vegetation model and an attribute-carrying taxon database; five concrete app changes |
 | [`WP-03 · The climate system across deep time`](research%20reports/WP-03-the-climate-system.md) | our climate table predates PhanDA; what to re-check, what to add, and what the app should stop claiming |
 | [`WP-04 · Closing the gaps: four measured results`](research%20reports/WP-04-closing-the-gaps.md) | **Scotese publishes his own rotations** and using them cuts placement error fourfold; the Cretaceous is 6 °C too cool; one hotspot catalogue closes four register items |
+| [`WP-05 · The reconstruction, audited against two published series`](research%20reports/WP-05-reconstruction-audit.md) | our terrain is in the PALEOMAP frame **to within 2° at ten ages**, so the Palaeozoic disagreement with Blakey is between the two references and not ours; but **93% of Blakey's Triassic shelf sea is dry land in ours**, and the future series **destroys 37% of Earth's continental area** |
 
 ## Handoff prompts
 
 | file | for |
 |---|---|
 | [`HANDOFF-IMPLEMENTATION.md`](HANDOFF-IMPLEMENTATION.md) | **the session that finally changes the app.** Tiered by measured value, with the traps that have each cost real time. |
-| [`HANDOFF-A5-F1-reference-map-audit.md`](HANDOFF-A5-F1-reference-map-audit.md) | auditing our reconstruction against the DeepTimeMaps and Scotese series — runs in parallel, touches nothing else. |
+| [`HANDOFF-A5-F1-reference-map-audit.md`](HANDOFF-A5-F1-reference-map-audit.md) | **consumed in round 8** → [WP-05](research%20reports/WP-05-reconstruction-audit.md). Kept for provenance. One correction: it says to decode the field "exactly as `frame_experiment.py:_decode()` does", and that decode uses `Z_RANGE = 11000.0` where `build/` uses **8000.0**. |
 
 ## Staged for the build
 
@@ -176,10 +178,20 @@ and drafted replacement copy for every finding; added 5 figures (11 total) and 4
 collected ones (11 total, all reviewed); added the Baykonurian glaciation, the Azolla
 event and a carbon-drawdown catalogue to `deeptime.py`.
 
-All selftests pass; all 46 internal links resolve. See [`MODEL-GAPS.md`](MODEL-GAPS.md)
-for the **50 open items**, 12 at P1.
+*Round 8* — **A5 and F1 measured**, in [WP-05](research%20reports/WP-05-reconstruction-audit.md).
+The shipped palaeogeography compared with Deep Time Maps and Scotese PALEOMAP on 31 ages,
+and the future series compared with PALEOMAP's own future rotations. Three results worth the
+round: our terrain sits in the PALEOMAP frame **to within 2° at all ten tested ages**, so the
+big Palaeozoic disagreement with Blakey is between the two published references and not ours;
+**93% of Blakey's 240 Ma shelf sea is dry land in our field**, which is `epeiric.py` not
+reaching the Triassic; and the future series **loses 37% of Earth's continental area** to one
+`np.maximum` in `future_grid`. Also: fourteen consecutive Mesozoic keyframes agree with an
+independent source that there was no ice, and our Palaeozoic ice sits inside the literature
+range where the reference sits below it.
 
-Next round, in priority order: check for a published PALEOMAP rotation file (A1); the
-DeepTimeMaps and Scotese-future audits against our own frames (A5, F1); the climate-events
-panel, whose 11 cards are already drafted (F2); the hotspot catalogue and the seamount
-wiring (D1–D2); the PhanDA diff (C1).
+All selftests pass. See [`MODEL-GAPS.md`](MODEL-GAPS.md) for the **59 open items**, 14 at P1.
+
+Next round, in priority order: adopt the PALEOMAP rotations, which are measured and ready
+(A1); flood the Triassic–Jurassic epeiric seas (G1); stop the future series destroying land
+(G2); the climate-events panel, whose 11 cards are already drafted (F2); the hotspot
+catalogue and the seamount wiring (D1–D2); the PhanDA diff (C1).
