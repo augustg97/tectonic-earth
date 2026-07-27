@@ -87,14 +87,25 @@ def load_field(age):
     if best is None:
         return None, None
     img = np.asarray(Image.open(os.path.join(fields, best)).convert("L")).astype(np.float32)
-    return fieldpack.decode(img / 255.0) if hasattr(fieldpack, "decode") else _decode(img), best
+    # The function is dec_elev, not decode. The hasattr guard here was always
+    # False, so this quietly used the local _decode fallback - which is how a
+    # wrong Z_RANGE survived in it. Call the real one.
+    return fieldpack.dec_elev(img / 255.0), best
 
 
 def _decode(img):
-    """signed-sqrt decode, matching build/fieldpack.py"""
+    """signed-sqrt decode, matching build/fieldpack.py.
+
+    Z_RANGE IS 8000.0. This said 11000.0 until WP-05 caught it, and the A5/F1
+    handoff prompt propagated the error by telling that session to decode "exactly
+    as _decode() does". Consequence for the WP-04 result: none to the headline -
+    the land/abyss ranking is scored with ONE threshold across all three frames, so
+    a monotonic rescale of every value cannot reorder them - but the "shelf" band
+    boundary was really -364 m, not -500 m. Prefer fieldpack.decode() outright.
+    """
     import numpy as np
     t = img / 255.0 * 2.0 - 1.0
-    return np.sign(t) * (t * t) * 11000.0
+    return np.sign(t) * (t * t) * 8000.0
 
 
 def sample(grid, lon, lat):

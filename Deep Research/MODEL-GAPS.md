@@ -10,6 +10,15 @@ Priority: **P1** = closes a known visible defect · **P2** = adds real fidelity 
 Status: **RESOLVED** = answered, with the answer recorded · **MEASURED** = quantified and
 ready to apply · **RETIRED** = no longer needed · items with no status are open.
 
+## The no-regression gate (2026-07-26)
+
+`modeling/regression_gate.py` + [NO-REGRESSION-PROTOCOL.md](research%20reports/NO-REGRESSION-PROTOCOL.md)
+answer "will this reduce the accuracy of any individual frame?" for the frame switch:
+**58 improved, 79 unchanged, 21 regressed of 158 tracked features; mean 0.746 → 0.833; only
+7 true regressions, four of which look like data errors the switch exposed.** §5 of the
+protocol lists the pre-existing quantitative gate every other staged change must not move
+backwards.
+
 ## Round 3 resolutions (2026-07-26) — see [WP-04](research%20reports/WP-04-closing-the-gaps.md)
 
 | item | status | result |

@@ -18,7 +18,13 @@ to apply it.
    item, with the artifact that makes it a drop-in, ordered by measured value.
 3. `Deep Research/research reports/WP-04-closing-the-gaps.md` — the four measured results
    that justify the top of that list.
-4. `Deep Research/MODEL-GAPS.md` — the full register with status per item.
+4. `Deep Research/research reports/NO-REGRESSION-PROTOCOL.md` — **how to prove each
+   change helps every frame and not merely the average.** The gate, the seven diagnosed
+   cases, and the per-change quality gate for everything else.
+5. `Deep Research/research reports/WP-05-reconstruction-audit.md` — our reconstruction
+   measured against two published series, on 31 ages. It is the independent witness, and
+   it also corrected a decode constant in this folder's own tooling.
+6. `Deep Research/MODEL-GAPS.md` — the full register with status per item.
 
 ## The order, and why
 
@@ -39,12 +45,37 @@ throughout — the frame correction becomes meaningless *and harmful* once both 
 the pipeline share a frame. **Keep Merdith for boundaries**: `build_plates_gplates.py`
 needs resolved topologies, which PALEOMAP's polygon set does not provide.
 
-**The warning that matters most in this whole document:** every tracked label, crater, LIP
-and plateau moves. The change is an improvement *in aggregate* and **will look like a
-regression on any individual feature that happened to be well placed by the old error.**
-Judge it on the population — rerun `Deep Research/modeling/frame_experiment.py`,
-`build/audit_labels.py` and `build/audit_label_motion.py` and compare the numbers. Do not
-let one favourite feature drive the decision. Then re-derive or delete `frame_offset.json`.
+**Do not judge this on the average — there is a per-feature gate for it.** Read
+`Deep Research/research reports/NO-REGRESSION-PROTOCOL.md` before you start, and run
+
+```bash
+cd "Deep Research/modeling" && ../../venv/bin/python regression_gate.py
+```
+
+It scores **every feature the build actually plate-tracks**, on its own age window, under
+both frames, and reports the individual outcome. As measured: **58 improved, 79 unchanged,
+21 regressed, mean 0.746 → 0.833**, and of the 21 only **7** are true regressions — the
+rest are pre-existing errors the switch merely *revealed* (bad in both frames), features
+the 20 km DEM cannot resolve either way, or positions the old rigid correction happened to
+flatter.
+
+Those 7 are already diagnosed one by one in the protocol. Four look like data errors, not
+frame errors: Gulf of California and Red Sea Rift are `rift` labels authored **in water**
+(Gulf of California gives the *identical* position under both frames, so it cannot be a
+frame effect at all); Newark Rift Valleys differs by 18° of *latitude*, which the two
+models are supposed to agree on, so it is a plate-assignment problem; and Kerguelen's new
+"land" reading is arguably correct for an emergent plateau.
+
+**Work that list, do not skip it.** Each of the 7 must end in a corrected coordinate, a
+documented exemption, or a recorded known-limit. Then re-run the gate and ship when it is
+empty or written down. Afterwards re-derive or delete `frame_offset.json`, and rerun
+`build/audit_labels.py` and `build/audit_label_motion.py` as a cross-check.
+
+**And keep the discipline for everything else.** §5 of the protocol lists the pre-existing
+quantitative gate for each remaining change — `ice_audit.py` for the Cretaceous warming
+(including the Mesozoic ice-free interval that WP-05 confirmed from two independent
+sources), the README §10 sea-floor measurements for the seamount work, the nine
+exceptions for B1. None of them may move backwards.
 
 ### 2. Climate table corrections
 
