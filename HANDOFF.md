@@ -60,6 +60,22 @@ The user asked for the three remaining items to be closed: the synthetic grain, 
 
 Asked to close the last item — structural variety — the answer was not the fourth `_o` channel it looked like. A fracture zone IS an age offset, so the signal is already in the shipped R channel: step along the isochron, difference the age. Eight texture reads, no bytes. See README §10 for the two corrections that were needed and, more importantly, for the finding that the **age grid** was the real limit: at 512×1024 there are no scars to detect at all.
 
+## Loading is lazy now — do not re-add an eager load
+
+`loadAll()` fetches the JSON, the always-resident `wold` lake field, and the two
+keyframes the opening age sits between. Everything else arrives behind the
+globe. The eager version cost **148.8 MB / 1,506 files / 17.9 s** before
+anything appeared; it is now **~1 MB / 12 files / 0.37 s**, and the render is
+bit-identical (same SHA-1 with `uTime` pinned).
+
+If you add a seventh field, add it to `FIELD_KINDS` and it is handled — fetch,
+prefetch, splash counter and all. Do not add a `Promise.all` over the timeline.
+
+`bindTextures()` calls `ensureFrames`/`pumpPrefetch` every frame, which is why
+no code path that changes `state.age` needs to remember to. `loadField` is a
+no-op once a file has settled or is in flight, so the steady-state cost is a
+dozen Map lookups.
+
 ## Do not change the pipeline without re-running the reskin
 
 `build_fields.ELEV_H/W/Q`, `render.smooth_bathymetry` and every filter in `seafloor.py` are baked into the shipped `_e`. The shader is not — it can be iterated freely against whatever fields are on disk, which is what makes the loop tractable: start the reskin, then tune the shader while it runs.

@@ -201,6 +201,20 @@ Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the ge
 
 ---
 
+## 5.8 Loading
+
+Fields are fetched **when they are wanted**, not up front. The loader used to await all 1,506 of them — six fields at each of 251 keyframes — before the globe appeared: measured, **148.8 MB and 17.9 s on localhost with a warm cache**, which is fetch and decode alone, before a byte crosses a network. What the opening frame needs is the keyframes it interpolates between: 12 files, about a megabyte. Time to a usable Earth went **17.9 s → 0.37 s**, and the render is bit-identical (same SHA-1 on a pinned-`uTime` capture).
+
+Three things already in the architecture made that a loader change rather than a rewrite, and they are worth preserving:
+
+- `bindTextures()` is written `if(ea) … if(eb||ea)`, so a keyframe that has not arrived keeps the previously bound texture instead of binding null.
+- `getTex()` creates GPU textures lazily behind an LRU cap, so residency was never tied to how many images were in memory.
+- every CPU-side reader of the elevation raster goes through `elevField()`, which returns null for a frame it does not have — and every caller already handled that, because a `_w` or `_o` file has always been allowed to be missing.
+
+The background fill re-centres on every completion: it asks each time for the nearest keyframe to wherever the viewer is **now**, so scrubbing re-aims the queue instead of waiting out a plan made before they moved. Four concurrent — enough to saturate a connection, few enough that a frame someone is waiting for is not stuck behind speculative ones. A cold jump to an unfetched age costs about 0.8 s locally, during which the previous age stays on screen.
+
+`FIELD_V` (bumped by hand, unlike `DATA_V`) busts the texture cache when the fields change but keep their names — as they did when the elevation grid doubled.
+
 ## 6. Build and deploy
 
 ```bash

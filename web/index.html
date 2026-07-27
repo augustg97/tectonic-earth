@@ -862,8 +862,8 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-0158';
-const FIELD_V='20260726-fz';
+const DATA_V='20260727-0301';
+const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -872,30 +872,120 @@ async function loadAll(){
   DATA.life=DATA.life||{biomes:[],life:[],regional:{}};
   DATA.art=DATA.art||{art:{},byType:{}};
   DATA.photos=DATA.photos||{};
-  const tl=DATA.timeline;
-  const src=n=>'fields/'+n+'?v='+FIELD_V;
-  let done=0; const total=tl.length*4;
-  const one=(name,arr,i)=>new Promise(res=>{
+  // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
+  // Seven kilobytes, and the lake swap can be asked for at any age, so it is the
+  // one field that is always resident.
+  await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
+    im.onerror=()=>res();im.src=fieldSrc('phan_0000_wold.webp');});
+  // ...and the two keyframes the opening age actually sits between. Everything
+  // else arrives in the background; see the note on loadFrame below.
+  await ensureFrames(state.age, true);
+}
+
+/* ================= fields, fetched when they are needed =================
+
+   This used to await all 1,506 of them -- every one of the six fields at every
+   one of the 251 keyframes -- before the globe appeared. Measured: 148.8 MB and
+   17.9 seconds on localhost with a warm cache, which is fetch and decode alone,
+   before a single byte crosses a network. What the opening frame actually needs
+   is the two keyframes it interpolates between: twelve files, about a megabyte.
+   The other 274-fold was being paid up front for footage the viewer might never
+   scrub to.
+
+   Nothing about the data changes. The same files are fetched, in full, at the
+   same fidelity -- just when they are wanted. Three things already in the
+   architecture make that safe, and it is worth naming them because they are why
+   this is a loader change and not a rewrite:
+
+     * bindTextures() is written `if(ea) ... if(eb||ea)`, so a keyframe that has
+       not arrived keeps the previously bound texture rather than binding null.
+     * getTex() creates GPU textures lazily behind an LRU cap, so residency was
+       never tied to how many images were in memory.
+     * every CPU-side reader of the elevation raster goes through elevField(),
+       which returns null for a frame it does not have, and every caller of that
+       already handles null -- because a _w or _o file has always been allowed to
+       be missing.
+
+   So the only genuinely new requirement is that the frames around the CURRENT
+   age be there, which is what ensureFrames and the prefetch pump below do. */
+const FIELD_KINDS=[['e',()=>ELI],['r',()=>RNI],['m',()=>MOI],
+                   ['w',()=>WLI],['d',()=>SFI],['o',()=>OCI]];
+const fieldSrc=n=>'fields/'+n+'?v='+FIELD_V;
+const _fieldTried=new Set();     // kind+i once a fetch has SETTLED, success or not
+const _fieldPending=new Map();   // kind+i -> in-flight promise, so nothing is asked for twice
+
+function fieldFile(i,kind){
+  const fr=DATA.timeline[i];
+  if(kind==='e')return fr.e;
+  if(kind==='r')return fr.r;
+  if(kind==='m')return fr.m;
+  // The lake, surface-process and ocean-structure fields are baked alongside the
+  // elevation field and named by the same convention, so derive rather than
+  // threading three more names through the timeline JSON.
+  return fr.e.replace('_e.webp','_'+kind+'.webp');
+}
+
+/* The opening frame needs twelve files, so the splash counts those and nothing
+   else. It used to count all 1,506 -- which is why it sat at low percentages for
+   most of a minute and then jumped. */
+let _bootWant=0,_bootGot=0;
+function loadField(i,kind,boot){
+  const key=kind+i;
+  if(_fieldTried.has(key))return Promise.resolve();
+  const p0=_fieldPending.get(key); if(p0)return p0;
+  const arr=FIELD_KINDS.find(k=>k[0]===kind)[1]();
+  if(boot)_bootWant++;
+  const p=new Promise(res=>{
     const img=new Image();
-    const fin=()=>{done++;$('#loadPct').textContent=Math.round(done/total*100)+'%';res();};
+    // Mark tried on BOTH paths. A 404 is legitimate here -- a keyframe may have
+    // no lake field -- and retrying it forever would make the prefetch pump spin.
+    const fin=()=>{
+      _fieldPending.delete(key);_fieldTried.add(key);
+      if(boot){_bootGot++;const el=$('#loadPct');
+        if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}
+      res();};
     img.onload=()=>{arr[i]=img;fin();};
     img.onerror=fin;
-    img.src=src(name);
+    img.src=fieldSrc(fieldFile(i,kind));
   });
-  // The lake-depth field is baked alongside the elevation field and named by the
-  // same convention, so derive it here rather than threading it through the
-  // timeline JSON. If a _w file is missing the loader just leaves that slot empty
-  // and the shader shows no lake there — the build degrades gracefully.
-  await Promise.all(tl.flatMap((fr,i)=>[one(fr.e,ELI,i),one(fr.r,RNI,i),one(fr.m,MOI,i),
-                                        one(fr.e.replace('_e.webp','_w.webp'),WLI,i),
-                                        // surface-process field: drainage, substrate, fetch
-                                        one(fr.e.replace('_e.webp','_d.webp'),SFI,i),
-                                        // ocean-structure field: crustal age + spreading direction
-                                        one(fr.e.replace('_e.webp','_o.webp'),OCI,i)]));
-  // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
-  await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
-    im.onerror=()=>res();im.src=src('phan_0000_wold.webp');});
+  _fieldPending.set(key,p);
+  return p;
 }
+const loadFrame=(i,boot)=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot)));
+const frameSettled=i=>FIELD_KINDS.every(([k])=>_fieldTried.has(k+i));
+
+/* The frames an age sits between. `block` is true only at boot: everywhere else
+   this is fire-and-forget, because bindTextures already has something to draw. */
+function ensureFrames(age,block){
+  const f=frameAt(age);
+  const p=Promise.all([loadFrame(f.i,block),loadFrame(f.j,block)]);
+  return block?p:undefined;
+}
+
+/* PREFETCH, re-centred on every completion. Rather than a fixed queue, ask each
+   time for the nearest keyframe to wherever the viewer is NOW -- so scrubbing
+   across the timeline re-aims the fill instead of waiting out a plan made
+   before they moved. Four at a time: enough to saturate a connection, few
+   enough that a frame the viewer is actually waiting for is not stuck behind a
+   queue of speculative ones. */
+const PREFETCH_CONCURRENCY=4;
+let _prefetchBusy=0, _prefetchOn=false;
+function nextWantedFrame(){
+  const n=DATA.timeline.length, c=frameAt(state.age).i;
+  for(let d=0;d<n;d++){
+    for(const i of (d?[c-d,c+d]:[c])) if(i>=0&&i<n&&!frameSettled(i))return i;
+  }
+  return -1;
+}
+function pumpPrefetch(){
+  if(!_prefetchOn)return;
+  while(_prefetchBusy<PREFETCH_CONCURRENCY){
+    const i=nextWantedFrame(); if(i<0)return;
+    _prefetchBusy++;
+    loadFrame(i).then(()=>{_prefetchBusy--;pumpPrefetch();});
+  }
+}
+function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
 
 /* map timeline (sorted asc by age) to helpers */
 function ages(){return DATA.timeline.map(f=>f.age);}
@@ -4590,6 +4680,11 @@ function markExtinctList(cur){
 /* ================= render loop ================= */
 function bindTextures(){
   const f=curFrame();
+  /* Ask for whatever this age needs, every frame. loadField is a no-op once a
+     file has settled or is already in flight, so the steady-state cost is a
+     dozen Map lookups -- and putting it here rather than on each of the many
+     paths that can change state.age means none of them can be forgotten. */
+  if(!frameSettled(f.i)||!frameSettled(f.j)){ensureFrames(state.age);pumpPrefetch();}
   const ea=getTex('e',f.i), eb=getTex('e',f.j);
   const ra=getTex('r',f.i), rb=getTex('r',f.j);
   // Outside the Holocene window, the present frame contributes its long-lived
@@ -4887,7 +4982,14 @@ function buildLegend(){
   syncSlider();updateReadout();syncPlay();syncDir();
   setInterval(updateReadout,120);
   $('#load').classList.add('done');
+  // When the globe first became usable, measured inside the page. The number
+  // that matters for this app is not DOMContentLoaded but this: how long until
+  // there is an Earth to look at.
+  window.__readyAt=performance.now();
   requestAnimationFrame(loop);
+  // The globe is on screen and interactive by here; the rest of the timeline
+  // fills in behind it, nearest-to-the-viewer first.
+  startPrefetch();
 })();
 </script>
 </body>

@@ -257,7 +257,13 @@ def build_one(base, verbose=False):
     drain[sea] = 0.0
     rgb = np.stack([drain, hard, fet], -1)
     img = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8), "RGB")
-    img.save(os.path.join(FIELDS, base + "_d.webp"), "WEBP", quality=92, method=4)
+    # method=6, matching every other field. `method` is encoder SEARCH EFFORT at
+    # a fixed quality target, not a quality setting, so the extra work buys a
+    # smaller file at the same distortion budget rather than a different picture.
+    # Worth ~2% here, which is a couple of megabytes across the 251 keyframes --
+    # too small to justify a rebuild on its own, and free when one is happening
+    # anyway.
+    img.save(os.path.join(FIELDS, base + "_d.webp"), "WEBP", quality=92, method=6)
     if verbose:
         land = ~sea
         print(f"  {base}: river cells (drain>0.55) "

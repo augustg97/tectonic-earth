@@ -4,8 +4,13 @@ venv/
 build/__pycache__/
 build/*.png
 
-# Generated intermediates. docs/ holds the deployable copy of the fields.
+# Generated intermediates. docs/ holds the deployable copy of the fields, and
+# that is the one GitHub Pages serves -- tracking both meant every field rebuild
+# wrote ~300 MB of new blobs into history instead of ~150. The textures here are
+# reproducible from build_fields.py / reskin_seafloor.py; the manifest is not
+# (five build scripts read it), so it is kept deliberately.
 web/fields/
+!web/fields/manifest.json
 web/frames/
 web/artifact.html
 web/bluemarble.jpg
