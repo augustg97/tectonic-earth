@@ -116,12 +116,53 @@ after any `features.LABELS` edit. Both fail loudly and cost nothing.
 
 ---
 
+## Tier 1b — B1, now decided
+
+**The decision (2026-07-26): model decides, curated is a flagged exception.**
+`paleobiogeography.province()` runs everywhere. A curated list shows only where it is
+genuinely distinctive; elsewhere the curated list is *checked against* the model rather
+than silently overriding it. Where the model has no province, the card shows the global
+interval list **under a heading that says it is global** — never implying those taxa lived
+at that spot.
+
+**Why this matters:** 106 of 336 labels have a curated entry, so **230 fall straight
+through to one global list for the whole interval**. A Verkhoyansk Belt card at 250 Ma
+currently shows "the world's Late Permian biota", not what lived there.
+
+`modeling/audit_curated_biota.py` is the prerequisite that decision creates — it splits
+all 198 curated spans into exception / typical / conflict:
+
+| verdict | count | what happens to it |
+|---|---|---|
+| **EXCEPTION** | **9** | keep and flag; the model must never overwrite it |
+| **province-typical** | **67** | the model can own these; curated prose moves to province level |
+| **model cannot place** | **121** | falls to the labelled global list — *or the province model gets extended* |
+| CONFLICT | 0 | none found |
+
+The nine exceptions are exactly the localities whose whole point is being atypical:
+**Solnhofen Lagoon, Zechstein Sea, Muschelkalk Sea, Nama Sea, Messinian Salt Basin,
+Paratethys, Lake Pannon, Mid-Atlantic Ridge, East Pacific Rise, Beringian Steppe-Tundra.**
+
+**The headline finding is the 121.** The bottleneck for B1 is *not* the curated data — it
+is the **province model's own coverage**, which is thin in deep time and for basins. That
+reverses the assumed order of work: extend `paleobiogeography.py` first, then wire it in.
+Concretely, the model places 18 spans in the Tethyan Realm, 9 Boreal, 6 Austral, 5
+Gondwanan, and nothing at all for most Palaeozoic seas.
+
+**Implementation shape**, once coverage improves:
+
+1. Add an `exception: true` flag to the nine entries in `life_data.json`.
+2. `regionTaxaAt` returns `(taxa, is_exception)`.
+3. `lifeSection` order becomes: exception-curated → province assemblage → labelled global
+   list, with the heading naming which one the reader is looking at.
+4. Keep `audit_curated_biota.py` in CI so a new curated entry has to declare itself.
+
 ## Tier 4 — modelling work still to do here first
 
 | item | why it is not staged |
 |---|---|
 | **C6** ocean circulation | the gyre-template model is designed (research 05/01 §3) but not built |
-| **B1** province model behind the biota panel | `paleobiogeography.py` exists; wiring it needs a decision on how curated overrides interact with the model |
+| **B1** province-model coverage | DECIDED and audited (see Tier 1b). The remaining work is **extending the province model**, which now places only 67 of 198 curated spans — coverage, not design, is the bottleneck |
 | **B10** grow `taxa_db.py` | 105 taxa; thinnest at mid-Cambrian–Silurian |
 | **B7** Lagerstätten as point features | list drafted; coordinates not yet assembled |
 | **A5 / F1** reference-map audits | the DeepTimeMaps and Scotese-future comparisons are set up but not run at scale |
