@@ -392,6 +392,13 @@ Two rules out of it, and the second is the general one:
 - **A `try/except` around a guard inverts it.** The failure mode of a check that throws is *silence*, and silence reads as "passed". If the guard cannot run, that is a reason to stop, not to continue — the gate now raises rather than reporting numbers it cannot stand behind.
 - **When an audit disagrees with the app, check the audit first.** Seven times out of seven in this project the error has been in the measuring instrument. Two of the seven were found by the audits' own selftests; this one needed the app's answer and the audit's answer to be put side by side.
 
+### 7.11 Two ways a long build silently does not run
+
+Both cost time in July 2026, on the same afternoon, and both look identical from outside: the command returns, nothing is obviously wrong, and the files never change.
+
+- **A process backgrounded with `&` dies when its shell call ends** — `nohup` does not save it. A 50-keyframe rebuild launched this way printed its first line and was gone; the same command in a properly detached background task ran for two hours. The tell is a log that stops after one line.
+- **Waiting on a pattern matches the waiter.** `pgrep -f build_fields.py` matching itself is the known form, and bracketing the first character (`[b]uild_fields.py`) fixes exactly that one case and no other: a *second* waiter watching the same string still matches the first. `until ! ps -eo command | grep -q "[r]eskin_seafloor.py"` can therefore never exit, because its own command line contains the pattern. **Wait on a PID** — `until ! kill -0 "$PID"` — which cannot match anything but the process itself.
+
 ## 8. Sources
 
 | role | source |
