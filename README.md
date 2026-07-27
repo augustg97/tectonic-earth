@@ -129,6 +129,16 @@ Boundaries are derived by **segmenting the surface into plates first and taking 
 
 Where there is no structure to match — bare abyssal plain — **no motion is claimed** rather than invented. This matters downstream: an early attempt to find ridges by thresholding this field's divergence marked scattered noise as ridges, precisely because the field is silent by design over the open ocean.
 
+### 5.1b The future series
+
+The present DEM carried by rigid per-group rotations toward `GROUP_TARGET`. Two things about it are worth stating because both were wrong until July 2026.
+
+**The targets are packed, not authored-raw.** `future_grid` resolved two groups landing on the same ground with `out = np.maximum(out, z)` — high ground wins — so the lower of the two was deleted, and what got deleted was coastal plain, shelf and continental interior. Measured: land **148 → 93 Mkm²** across 250 Myr, a 37% loss, against 5.5% for a rotation that conserves area by construction; ground below 1 km fell 45% while land above 2 km stayed flat. Instrumenting the claim masks pinned it: at +250 Myr **53.3 Mkm² of land sat on top of other land** against a total deficit of 58.0, so 92% of the loss was groups interpenetrating and nothing else.
+
+No collision rule fixes that — whichever cell you keep, the other has nowhere to go. `_packed_targets` instead treats each group as a disc of its own land radius and relaxes the *authored* targets until they only touch, mass-weighted (so a small block docks against a large one rather than shoving it aside) and sprung back toward the authored arrangement (so what changes is the packing, not the reconstruction). Raw land now runs **150.5 → 133.1 Mkm², −11.6%** against a 5.5% rasterisation floor, land above 1 km is flat at 29.9 → 29.4, and mean land elevation rises 56 m instead of 212.
+
+The same relaxation fixes the separate finding that the assembly ended too tight: **r90 60° → 76.6°**, against PALEOMAP's own 76°.
+
 ### 5.2 Paleogeography
 
 Three eras, three sources (`build_fields.py`):
@@ -139,7 +149,29 @@ Three eras, three sources (`build_fields.py`):
 
 Precambrian coastlines are **generated, not copied**. An earlier version cut cratons out of the modern DEM with lon/lat bounding boxes, which read as rectangles — jittering the edge of a rectangle still leaves a rectangle. Nothing about a 900 Ma coastline is known well enough to trace, so each craton's radius is modulated by three octaves of 3D noise in the craton's own rotating frame.
 
-`epeiric.py` floods the epicontinental seas the 20 km global grid cannot resolve (the Trans-Saharan Seaway, the Cannonball Sea), because otherwise a label describes a sea the map does not show.
+`epeiric.py` floods the epicontinental seas the 20 km global grid cannot resolve, because otherwise a label describes a sea the map does not show. It carried two — the Trans-Saharan Seaway and the Cannonball Sea — and therefore reached 50–105 Ma and nothing else, which left the interval where the reconstruction is *worst* for shelf sea with no seeded water at all.
+
+**Measured against Deep Time Maps (Blakey), an independent reconstruction, at 240 Ma we drew 1.8% shallow sea against his 8.0%, and 93% of everything he draws as shelf sea was dry land in ours.** That was also the whole of the +5 to +9 pp land *excess* at 150–240 Ma: never extra continent, always missing sea. Two mechanisms close it.
+
+- **Eight named Triassic–Jurassic basins**, each with stratigraphic control and its own transgression curve: the Germanic (Muschelkalk), Zechstein, Sverdrup, West Siberian, Sundance, Russian Platform, Neuquén and the Alpine Tethyan platforms. An Arabian carbonate platform and an Australian northwest shelf were entered here first and taken out again the same day — they are *margins*, not flooded interiors, so they duplicated the shelf mechanism below and over-flooded 220 Ma by 3.3 points. **What belongs in this table is water standing on continental interior.**
+- **A Pangaean shelf**, which is the other two-thirds. A shelf break sits 130–200 m down and tens to a couple of hundred km offshore, so a 20 km grid samples it in one or two cells and the coastline lands on the slope.
+
+**The shelf's target comes from our own data, not from Blakey.** Measured on the raw PaleoDEMs the shelf fraction jumps 8.6% → 4.5% → 3.0% → 6.3% → 1.6% → 8.2% → 13.8% across 170, 180, 200, 220, 240, 250 and 260 Ma, while eustatic sea level slides smoothly from 83 m to 0. Shelf area does not do that: a seven-point swing between two adjacent frames is how the source grids were authored. So each frame is judged against the **median of its own ±70 Myr neighbourhood**, and the mechanism supplies only the shortfall. Blakey is then used to *score* that target, never to set it — mean absolute error 0.68 pp over 150–250 Ma.
+
+Two things the solver had to learn, both from measurement:
+
+- **The weight sets which ground floods, not how deep.** Blending toward a shelf depth in proportion to a weight shaves two metres off everything near the coast at weight 0.02, so any land already within two metres of sea level becomes "shelf" — the response was a staircase, stepping 6.3% → 11.2% in one increment. The weight is now an elevation ceiling, and area grows smoothly with it.
+- **Flood only if it helps.** On some frames the smallest expressible flood still overshoots: the 220 Ma grid carries ~5% of the globe as coastal land within *fourteen metres* of sea level. Where flooding would land further from the target than leaving it alone, the frame keeps what it has — which is right anyway, because land that close to sea level is the grid being vague about a coastline, not a shelf waiting to be revealed.
+
+| shelf sea vs Blakey | before | after |
+|---|---|---|
+| 150 Ma | −2.6 pp | **−0.7** |
+| 180 Ma | −3.6 | **−0.7** |
+| 200 Ma | −5.0 | **−0.9** |
+| 240 Ma | −6.4 | **−0.4** |
+| **mean over 150–250 Ma** | **2.80 pp** | **0.70 pp** |
+
+No age was made worse, and the 0 Ma control is untouched at 9.0%. The Palaeozoic runs the *other* way — we draw 3–11 pp more shelf than Blakey from 260 Ma back — and is deliberately left alone: that is an open disagreement between two published reconstructions, not a defect to tune out.
 
 ### 5.3 The ocean floor
 
@@ -433,6 +465,8 @@ Both cost time in July 2026, on the same afternoon, and both look identical from
 - **The biota panel now has three tiers, and the residue is 21 labels.** It used to have two: a curated list for 101 of 336 labels, and one *global interval list* for everything else — the same four organisms on two hundred cards, and 133 labels (every mountain belt, basin, rift, desert and plateau) got no panel at all. `provinces.py` puts a named biogeographic province on **315 of 336** labels at every age they are drawn, so the order is now exception-curated → province assemblage → labelled global list, with the heading saying which one the reader is looking at. The 21 that still fall through are future-only names (Pangaea Proxima, Amasia, Neo-Himalaya) and the Antarctic Ice Sheet.
 
 - **Ten curated localities are flagged `exception`** and the province model must never speak over them — Solnhofen, the Zechstein, Muschelkalk and Nama seas, the Messinian salt basin, the Paratethys, Lake Pannon, the Mid-Atlantic Ridge and East Pacific Rise vent faunas, and the Beringian steppe-tundra. Being atypical for their province is the entire point of each. `audit_curated_biota.py` checks the flag against a reading of the name, so a new curated entry has to declare itself.
+
+- **The seeded seas do not reach the climate solve.** `epeiric.carve` floods the shallow seas a 20 km grid loses, and `export()` runs the wind and moisture model on the *raw* DEM (`compute_fields(z_for_climate, …)`), not the carved one — so a flooded shelf changes the terrain and the coastline without making the air over it wetter. That decoupling is old, and the Pangaean shelf added in July 2026 makes it matter more, because it is a lot more water than the two named seas that preceded it. Fixing it means passing the carved grid into the climate solve and rebuilding rainfall for every keyframe, which is a ~3-hour run rather than the ~1-hour terrain reskin; it is not done. Consequence to be aware of: the Triassic megamonsoon's windward margins are drawn from a Pangaea with no shelf sea beside them.
 
 - **Present-day biota** have their own regional cards for 49 of 148 labels; the rest fall back to broader assemblages.
 

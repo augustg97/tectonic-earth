@@ -21,12 +21,22 @@ landed so the register describes the app rather than a wish list.
 | **E5 (adopted)** | `build/audit_all.py` runs every validator against a recorded baseline and **`build_site.py` refuses to publish if one moved backwards** | 8 checks, all at baseline |
 | **E6** | already fixed in `frame_experiment.py`; both it and `regression_gate.py` now **pin every frame by name** rather than reading the build, so neither becomes a no-op the moment the switch lands | WP-04's three-way result reproduces to 1 pp |
 
-**Still open and NOT applied**, deliberately, because they were outside this pass's scope
-and each is a terrain rebuild in its own right: **G1** (flood the Triassic–Jurassic epeiric
-seas), **G2/G3/G4/G5** (the future series destroying 37% of continental area, assembling
-too early and too tightly, with the wrong neighbours and no orogeny), **G7** (the 525 Ma
-land-area disagreement) and **G8** (the Palaeozoic shelf disagreement, which is recorded
-rather than fixed by design).
+### Round 2 of the same pass, 2026-07-27 — G1, G2 and G3
+
+| item | what shipped | measured |
+|---|---|---|
+| **G1** | `epeiric.py` extended from two named seas to ten, reaching the Triassic–Jurassic at last (Germanic/Muschelkalk, Zechstein, Sverdrup, West Siberian, Sundance, Russian Platform, Neuquén, Alpine Tethyan) — plus a **Pangaean margin shelf**, because the named basins are only a third of the deficit. The shelf's target is derived from **our own source grids**: each frame against the median of its ±70 Myr neighbourhood, because the raw PaleoDEMs swing 8.6→4.5→3.0→6.3→1.6→8.2→13.8% across seven adjacent frames while sea level slides smoothly, which is authoring and not geology. Blakey scores the target and never sets it. | mean absolute shelf error over 150–250 Ma **2.80 → 0.70 pp**; the target itself scores 0.68 pp against Blakey. **No age made worse**, 0 Ma control untouched. Two solver findings recorded in README §5.2: the weight must set which ground floods rather than how deep (the naive form stepped 6.3→11.2% in one increment), and a frame whose smallest expressible flood overshoots is left alone. |
+| **G2** | `_packed_targets` in `build_fields.py`. No collision rule can fix stacked land — whichever cell you keep, the other has nowhere to go — so the *targets* are relaxed until the groups only touch: mass-weighted, and sprung back to the authored arrangement so the packing changes and the reconstruction does not. | raw land at +250 Myr **97.1 → 133.1 Mkm²**, a **35.5% → 11.6%** loss against a 5.5% rasterisation floor. The signature is gone too: land >1 km flat at 29.9 → 29.4, and mean land elevation rises **56 m instead of 212**. |
+| **G3** | falls out of the same relaxation | **r90 59.9° → 76.6°**, against PALEOMAP's own 76°. |
+| **F1 audit** | `audit_reconstruction.py:our_future_rotations()` rebuilt the rotation from `GROUP_TARGET` directly, so it never saw the packing — the exact failure its own docstring says it exists to avoid. It now reads `_packed_targets`. | second time in this programme an audit stopped tracking the pipeline it audits; see also `regression_gate.py`'s land-today guard. |
+
+**Still open and NOT applied:** **G4** (the future groups' neighbours — Australia is still
+welded east of Africa where Scotese puts it with Antarctica; the packing moved it toward
+the south but did not rearrange it, deliberately), **G5** (no orogeny is built in the
+future, now stated on the Pangaea Proxima card), **G7** (the 525 Ma land-area
+disagreement) and **G8** (the Palaeozoic shelf disagreement, recorded rather than fixed by
+design). **New limit recorded:** the seeded seas do not reach the climate solve — see
+README §9.
 
 Priority: **P1** = closes a known visible defect · **P2** = adds real fidelity ·
 **P3** = correctness housekeeping · **P4** = worth knowing, no action yet.

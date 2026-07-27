@@ -1,12 +1,12 @@
 # Frame-switch regression gate
 
 ```
-124 tracked features scored on their own age windows
-  improved    54
+123 tracked features scored on their own age windows
+  improved    53
   unchanged   68
   regressed    2
 
-mean score  old 0.818  ->  new 0.971
+mean score  old 0.818  ->  new 0.970
 
 regressions by cause:
   CANCELLATION     2
@@ -107,14 +107,13 @@ is a reason to FIX THE FEATURE, not to keep the compensating error.
 | Caledonides | orogen | 0.87 | 1.00 | improved |  |
 | Bohemian Massif | orogen | 0.86 | 1.00 | improved |  |
 | Anatolide-Tauride Block | continent | 0.31 | 0.46 | improved |  |
-| Ellesmerian Belt | orogen | 0.84 | 1.00 | improved |  |
 | Himalaya | orogen | 0.83 | 1.00 | improved |  |
+| Massif Central | orogen | 0.83 | 1.00 | improved |  |
 | Guiana Shield | region | 0.82 | 1.00 | improved |  |
 | Altai Belt | orogen | 0.80 | 1.00 | improved |  |
 | Newark Rift Valleys | rift | 0.80 | 1.00 | improved |  |
 | Alborz Belt | orogen | 0.80 | 1.00 | improved |  |
 | Pontide Arc | orogen | 0.80 | 1.00 | improved |  |
-| Massif Central | orogen | 0.80 | 1.00 | improved |  |
 | Oaxaquia | island | 0.60 | 0.80 | improved |  |
 | Lhasa Terrane | island | 0.77 | 1.00 | improved |  |
 | Annamia | continent | 0.76 | 1.00 | improved |  |

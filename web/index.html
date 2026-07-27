@@ -880,7 +880,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-0750';
+const DATA_V='20260727-1706';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1650,8 +1650,40 @@ void main(){
       float wN=(e1-e2)*ds;
       float e3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
       float e4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
-      prom = z - (e1+e2+e3+e4)*0.25;
-      shelfHi = max(max(e1,e2),max(e3,e4));
+      /* THE FOUR TAPS ARE A CROSS, AND A CROSS IMPRINTS ITS OWN SHAPE.
+
+         max and mean over four samples are not robust to one outlier, and
+         beside an isolated rise there is always exactly one: the pixel 16 texels
+         north of a seamount has its SOUTH tap on the summit. Consequences, all
+         visible on screen as four symmetrical textured dots at the cardinal
+         offsets around every seamount and chain:
+
+           shelfHi = max(...)  read the summit as a shelf, so the canyon system
+                               concluded there was a shelf above this slope and
+                               combed dendritic canyons into the abyssal plain;
+           prom = z - mean(...) went strongly NEGATIVE, which un-gated the
+                               abyssal fabric (flatw) and brightened the palette.
+
+         The fix is to say what a shelf and a surrounding actually are.
+
+         A SHELF IS BROAD -- tens to hundreds of kilometres -- so on a real
+         margin at least two of the four taps land on it. An isolated seamount is
+         narrower than the tap spacing, so exactly one does. Taking the SECOND
+         highest therefore keeps every continental slope and rejects every
+         seamount, with no extra texture fetch. The cost is a canyon suppressed
+         where a shelf survives in only one direction from the slope, which is a
+         sliver of shelf and not a sediment supply anyway.
+
+         A SURROUNDING IS THE TYPICAL LEVEL AROUND YOU, so take the median rather
+         than the mean: mean(2nd highest, 2nd lowest) discards one high outlier
+         (a neighbouring seamount) and one low one (a neighbouring trench) at the
+         cost of four min/max ops. */
+      float m12=max(e1,e2), n12=min(e1,e2);
+      float m34=max(e3,e4), n34=min(e3,e4);
+      float hi2=max(min(m12,m34), max(n12,n34));   // 2nd highest of the four
+      float lo2=min(max(n12,n34), min(m12,m34));   // 2nd lowest
+      prom = z - (hi2+lo2)*0.5;
+      shelfHi = hi2;
       float wE=(e3-e4)*ds;
       /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
          texels, so two of them can be up to about 1.4 levels apart on ground
@@ -2889,8 +2921,20 @@ void main(){
        prom guards the rest: an isolated rise is not a margin however tilted. */
     float slopeBand = smoothstep(-200.0,-700.0,z) * (1.0-smoothstep(-3000.0,-4200.0,z));
     float tilt = clamp(length(vec2(gE,gN))/60.0, 0.0, 1.0);
+    /* -1800/-700, tightened from -2600/-900 once shelfHi became robust (see the
+       wide-tap block). The old range was set against max-of-four, which needed
+       slack because one tap on anything shallow had to be tolerated. Measured on
+       the shipped field with the second-highest tap, the two populations
+       separate cleanly and the old range straddled them:
+
+         eight real continental slopes   shelfHi -10 to -1064 m
+         eight submarine ridge flanks    shelfHi -1684 m and deeper
+
+       And -2600 m was never a shelf in the first place: the shelf break sits at
+       130-200 m worldwide, so a "shelf above this slope" two and a half
+       kilometres down was always a ridge crest or a seamount. */
     float cany = slopeBand*tilt
-               * smoothstep(-2600.0,-900.0,shelfHi)
+               * smoothstep(-1800.0,-700.0,shelfHi)
                * (1.0-smoothstep(200.0,800.0,prom));
     if(cany > 0.004){
       /* TWO ORDERS, because a real slope is DENDRITIC. The reference diagram
@@ -4062,13 +4106,21 @@ function lifeSection(l){
      province this was and give its diagnostic taxa, instead of handing the
      reader the world's biota and hoping the heading carries the caveat. */
   if(provOK&&prov.mk&&prov.mk.length){
-    return `<div class="ihead">${esc(prov.n)} · ${when}</div>`+
-      `<p class="desc">${esc(prov.note)}</p>`+
-      listHTML(marine?'Characteristic of this marine province'
-                     :'Characteristic of this province', prov.mk)+
-      (prov.c==='moderate'
-        ? `<p class="desc">The province is modelled from palaeolatitude and the `+
-          `block this sat on; treat the boundary as a gradient, not a line.</p>`:'');
+    /* Through lifeHTML, exactly like the curated lists: icon, name, rank, realm
+       and a sentence. This tier used to render a bullet list of bare names,
+       which looked like a lesser kind of card sitting beside the real ones --
+       and was: "Lepidodendron" tells a reader nothing they did not already know
+       from not knowing it. build/provinces.py resolves every marker the model
+       can emit to a full record (taxa_db first, then its own table) and its
+       selftest fails if any marker cannot be described. */
+    const ftx=prov.mk.filter(t=>wantR.includes(t.realm));
+    if(ftx.length){
+      return `<div class="ihead">${esc(prov.n)} · ${when}</div>`+
+        `<p class="desc">${esc(prov.note)}</p>`+lifeHTML(ftx,6)+
+        (prov.c==='moderate'
+          ? `<p class="desc">The province is modelled from palaeolatitude and the `+
+            `block this sat on; treat its boundary as a gradient, not a line.</p>`:'');
+    }
   }
   const why=sparseAt(l.n,age);
   if(why)return `<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;

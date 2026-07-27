@@ -1009,6 +1009,17 @@ def our_future_rotations():
         os.chdir(BUILD)
         import build_fields as BF
         gid = BF.rasterise_groups()
+        # THE PACKED TARGETS, not the authored ones. future_grid relaxes
+        # GROUP_TARGET so the groups stop interpenetrating (they were deleting
+        # 35% of Earth's land), and reading the raw table here would have left
+        # this audit describing a future the app no longer builds -- which is the
+        # exact failure the docstring above says it exists to avoid. Same lesson
+        # as regression_gate.py: an audit that reconstructs the pipeline instead
+        # of calling it silently stops tracking it.
+        idx = BF.index_dems()
+        Zsrc = BF.resample_dem(BF.read_dem(idx[min(idx, key=lambda k: abs(k))]),
+                               900, 1800)
+        targets = BF._packed_targets(gid, Zsrc)
     finally:
         os.chdir(cwd)
     gh, gw = gid.shape
@@ -1022,7 +1033,7 @@ def our_future_rotations():
             continue
         v = _unit(GLON[m], GLAT[m]).mean(axis=1)
         v /= np.linalg.norm(v)
-        tl, tb, spin = BF.GROUP_TARGET[g]
+        tl, tb, spin = targets[g]
         t = _unit(tl, tb)
         out[g] = (_rodrigues(t, spin) @ _rot_from_to(v, t), v)
     return out

@@ -19,7 +19,7 @@ A third texture per keyframe carries derived plate motion (see motion.py),
 which drives both the motion-vector arrows and the plate boundaries at every
 age rather than only near the present.
 """
-import os, re, json, glob, io
+import os, re, json, glob, io, math
 import numpy as np
 import netCDF4
 from PIL import Image
@@ -325,6 +325,177 @@ def axis_angle_scale(Rm, frac):
     return BS.rodrigues(ax, np.degrees(ang) * frac)
 
 
+# How close the packed targets may come, as a fraction of "the two land discs
+# just touch". 1.0 is the physically clean statement AND the measured optimum,
+# and the two agree for a reason: the radius is the 90th percentile of each
+# group's land, so a tenth of every landmass still lies outside its disc and
+# still collides at the margins. That residual collision is not a defect -- it is
+# what a suture is, and a supercontinent that assembled without one would be
+# wrong. Swept, raw land at +250 Myr against +0 (a rigid rotation conserves it
+# exactly; rasterising costs about 5.5%):
+#
+#     PACK   land +250   loss    r90     emptiest hemisphere
+#     0.00       97.1   35.5%   59.9 deg      0.10%      <- authored, the defect
+#     0.75      114.7   23.8%   67.5 deg      0.11%
+#     0.95      130.3   13.4%   74.6 deg      0.46%
+#     1.00      133.1   11.6%   76.6 deg      0.55%      <- here
+#     1.05      135.6   10.0%   78.4 deg      0.76%
+#
+# PALEOMAP's own rigid rotations give r90 76 deg, so 1.00 lands on the
+# independent yardstick rather than near it, which is the reason to stop there
+# rather than push the area figure lower.
+PACK = 1.0
+SPRING = 0.55     # pull back toward the authored arrangement each pass
+RELAX = 0.35      # step size; small enough that the two forces find a balance
+_PACK_CACHE = {}
+
+
+def _packed_targets(gid, Zsrc=None):
+    """GROUP_TARGET, pushed apart until the groups no longer interpenetrate.
+
+    THE DEFECT THIS FIXES. future_grid resolves two groups landing on the same
+    ground with `out = np.maximum(out, z)`, so the lower of the two is deleted --
+    and because the rule is "high ground wins", what it deletes is coastal plain,
+    shelf and continental interior. Measured over the shipped series: land falls
+    148.1 -> 92.6 Mkm2 across 250 Myr, a 37% loss, against 5.5% for a rigid
+    rotation that conserves area by construction; ground below 1 km falls 45%
+    while land above 2 km is flat; and mean land elevation RISES 667 -> 879 m.
+    Instrumenting the claim masks pins it exactly: at +250 Myr, 53.3 Mkm2 of land
+    is stacked on top of other land against a total deficit of 58.0, so 92% of
+    the loss is groups interpenetrating and nothing else.
+
+    THE FIX IS NOT A BETTER COLLISION RULE. Any rule that picks one of two
+    stacked cells throws the other away; the land has nowhere to go because the
+    destination is already full. The targets themselves are too close together
+    for the size of the things being sent there -- everything collides with
+    EURASIA, which is the largest group and is aimed into the middle of the pile.
+
+    So treat each group as a disc of its own equal-area radius and relax the
+    AUTHORED targets until they only touch. The arrangement is preserved --
+    Africa still central, the Pacific still opposite, each group still heading
+    where it was authored to head -- and only the packing changes. That also
+    addresses the separate finding that the assembly ends too compact (r90 60
+    degrees against PALEOMAP's 76) and closes about 100 Myr early, because both
+    are the same over-tight targets seen from a different angle.
+    """
+    key = id(gid)
+    if key in _PACK_CACHE:
+        return _PACK_CACHE[key]
+    gh, gw = gid.shape
+    glon = (np.arange(gw) + 0.5) / gw * 360 - 180
+    glat = 90 - (np.arange(gh) + 0.5) / gh * 180
+    GLON, GLAT = np.meshgrid(glon, glat)
+    cosw = np.cos(np.radians(GLAT))
+    tot = cosw.sum()
+
+    # LAND, not territory. A PB2002 plate group is mostly ocean -- the Pacific
+    # group alone is a third of the globe -- and sizing the berths by territory
+    # asked ten discs to tile the whole sphere, which is not a supercontinent but
+    # a dispersal. What must not interpenetrate is the LAND each group carries,
+    # because ocean stacked on ocean costs nothing and land stacked on land is
+    # the entire defect.
+    land = None
+    if Zsrc is not None:
+        zy = (np.arange(gh) * Zsrc.shape[0] // gh).clip(0, Zsrc.shape[0] - 1)
+        zx = (np.arange(gw) * Zsrc.shape[1] // gw).clip(0, Zsrc.shape[1] - 1)
+        land = Zsrc[np.ix_(zy, zx)] >= 0
+
+    names, tgt, rad, mass = [], [], [], []
+    for i, g in enumerate(GROUPS):
+        m = gid == i
+        if not m.any():
+            continue
+        tl, tb, _spin = GROUP_TARGET[g]
+        names.append(g)
+        tgt.append(BS.unit(tl, tb))
+        lm = m & land if land is not None else m
+        # The radius that holds this group's land about its own centroid. A
+        # percentile rather than the maximum, so one stray island does not book
+        # a berth for the whole group; and a real radius rather than an
+        # equal-area disc, because what has to clear a neighbour is how far the
+        # mass REACHES, not how much of it there is.
+        if lm.any():
+            c = BS.unit(GLON[m], GLAT[m]).mean(axis=1)
+            c /= np.linalg.norm(c)
+            v = BS.unit(GLON[lm], GLAT[lm])
+            ang = np.arccos(np.clip(c @ v, -1.0, 1.0))
+            wts = cosw[lm]
+            order = np.argsort(ang)
+            cw = np.cumsum(wts[order]) / max(wts.sum(), 1e-9)
+            rad.append(float(ang[order][np.searchsorted(cw, 0.90)]))
+            mass.append(float(wts.sum()))
+        else:
+            rad.append(0.0)          # an all-ocean group needs no berth
+            mass.append(0.0)
+    T = np.array(tgt, float)
+    T0 = T.copy()                    # the authored arrangement, to spring back to
+    mass = np.array(mass, float)
+    mass = mass / max(mass.max(), 1e-9)
+
+    # CONSTRAINED relaxation, and both constraints are needed.
+    #
+    # Mass-weighted, so a pair separates by moving the SMALL one. Pushing each
+    # of a pair equally sent Eurasia -- which is the heaviest group and collides
+    # with every other -- 67 degrees across the globe into the north Pacific,
+    # because it accumulated a push from each neighbour and escaped. Continents
+    # do not work that way: a small block docks against a large one.
+    #
+    # And sprung back to the authored arrangement, so the equilibrium is "as
+    # close to what was authored as the geometry permits" rather than whatever
+    # configuration the pushes happen to reach. The authored targets encode a
+    # published reconstruction -- Scotese's Pangaea Ultima, which the app's
+    # climate is calibrated on -- and the defect being fixed is that the groups
+    # interpenetrate, not that the arrangement is wrong.
+    for _ in range(400):
+        step = np.zeros_like(T)
+        for a in range(len(T)):
+            for b in range(a + 1, len(T)):
+                if rad[a] <= 0.0 or rad[b] <= 0.0:
+                    continue
+                d = math.acos(max(-1.0, min(1.0, float(np.dot(T[a], T[b])))))
+                need = (rad[a] + rad[b]) * PACK
+                if d >= need or d < 1e-6:
+                    continue
+                axis = np.cross(T[a], T[b])
+                nrm = np.linalg.norm(axis)
+                if nrm < 1e-9:
+                    continue
+                axis /= nrm
+                over = need - d
+                wa = mass[b] / max(mass[a] + mass[b], 1e-9)   # light one moves
+                wb = mass[a] / max(mass[a] + mass[b], 1e-9)
+                step[a] += -axis * over * wa
+                step[b] += axis * over * wb
+        # restoring spring toward the authored target
+        for a in range(len(T)):
+            ax = np.cross(T[a], T0[a])
+            nrm = np.linalg.norm(ax)
+            if nrm > 1e-9:
+                dev = math.acos(max(-1.0, min(1.0, float(np.dot(T[a], T0[a])))))
+                step[a] += (ax / nrm) * dev * SPRING
+        moved = 0.0
+        for a in range(len(T)):
+            amp = np.linalg.norm(step[a])
+            if amp < 1e-9:
+                continue
+            axis = step[a] / amp
+            ang = min(amp, 0.05) * RELAX
+            T[a] = BS.rodrigues(axis, math.degrees(ang)) @ T[a]
+            T[a] /= np.linalg.norm(T[a])
+            moved = max(moved, ang)
+        if moved < 1e-5:
+            break
+
+    out = {}
+    for k, g in enumerate(names):
+        v = T[k]
+        lat = math.degrees(math.asin(max(-1.0, min(1.0, float(v[2])))))
+        lon = math.degrees(math.atan2(float(v[1]), float(v[0])))
+        out[g] = (lon, lat, GROUP_TARGET[g][2])
+    _PACK_CACHE[key] = out
+    return out
+
+
 def future_grid(frac, gid, Zsrc, h, w):
     """Inverse-warp the present DEM by per-group rotation. frac 0 -> identity.
 
@@ -382,10 +553,11 @@ def future_grid(frac, gid, Zsrc, h, w):
         v /= np.linalg.norm(v)
         cent[g] = v
 
+    packed = _packed_targets(gid, Zsrc)
     for i, g in enumerate(GROUPS):
         if g not in cent:
             continue
-        tl, tb, spin = GROUP_TARGET[g]
+        tl, tb, spin = packed[g]
         s = cent[g]; t = BS.unit(tl, tb)
         Rfull = BS.rodrigues(t, spin) @ BS.rot_from_to(s, t)
         Rm = axis_angle_scale(Rfull, frac)
