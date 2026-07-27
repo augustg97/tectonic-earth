@@ -49,11 +49,12 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 |---|---|---|
 | [`deeptime.py`](modeling/deeptime.py) | ICS v2024/12 chronology to stage level, plus catalogues of glaciations, extinctions, anoxic events, hyperthermals, carbon drawdowns and LIPs, with confidence on every entry | **101 stages**, 34 epochs, 22 periods, 54 events · selftest passes |
 | [`paleogeography.py`](modeling/paleogeography.py) | continental blocks: present-day anchors, existence windows, assembly membership, orogenies, terrane rift/accretion events | 56 blocks, 6 assemblies, 35 orogenies, 31 terrane events · selftest passes |
-| [`paleobiogeography.py`](modeling/paleobiogeography.py) | province model — `province(age, lat, realm, block)` and `provinciality(age)`; answers "no named province is established here" honestly | 7 marine + 6 terrestrial schemes · selftest passes |
+| [`paleobiogeography.py`](modeling/paleobiogeography.py) | province model — `province(age, lat, realm, block)` and `provinciality(age)` | **49 distinct provinces over 0–1000 Ma**; 9 marine + 5 terrestrial schemes; no cell unnamed · selftest passes |
 | [`climate_ebm.py`](modeling/climate_ebm.py) | 1-D diffusive energy-balance climate model with ice-albedo feedback and the snowball bifurcation | present-day 13.4 °C, ice line 71.8° · **known to understate hothouses, see its docstring** |
 | [`biome_model.py`](modeling/biome_model.py) | Whittaker climate zone **×** vegetation era → what actually grew there at that age | 14 zones × 8 eras · selftest passes |
 | [`taxa_db.py`](modeling/taxa_db.py) | taxa with **attributes**: size, habit, diet, realm, age range, provinces | 105 seed taxa; emits `taxa.json` · selftest passes |
 | [`hotspots.py`](modeling/hotspots.py) | 53 hotspots with coordinates, chains, LIP roots, flux and confidence; all 15 named aseismic ridges mapped to their plume; the guyot subsidence law | selftest passes |
+| [`lagerstatten.py`](modeling/lagerstatten.py) | 30 Lagerstätten as point features: present-day coordinates, block for the plate track, window, setting, significance | selftest passes |
 | [`ocean_circulation.py`](modeling/ocean_circulation.py) | wind-driven surface circulation from a land/sea mask: Sverdrup gyres, western boundary currents, eastern-boundary upwelling, and the circumpolar-current test | present-day validated; **closing Drake switches the ACC off** |
 
 ### Audits (read-only; they change nothing)
@@ -62,6 +63,7 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 |---|---|---|
 | [`audit_cards.py`](modeling/audit_cards.py) | coverage, dates, unhedged contested claims, anachronisms, superseded claims, misattribution | 667 cards, **0 HIGH** |
 | [`audit_label_windows.py`](modeling/audit_label_windows.py) | a label drawn when the entity it names did not exist | 46 matched, **2 findings** |
+| [`audit_curated_biota.py`](modeling/audit_curated_biota.py) | curated biota vs the province model — the B1 exception/typical split | 197 spans, **9 exceptions, 188 placed, 0 unplaced** |
 | [`climate_audit.py`](modeling/climate_audit.py) | `climate.py` against PhanDA and GEOCARBSULF | **6 findings** |
 | [`frame_experiment.py`](modeling/frame_experiment.py) | reconstruction frame quality, measured on a population | **the A1 result** |
 
