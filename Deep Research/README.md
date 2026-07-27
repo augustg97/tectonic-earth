@@ -95,6 +95,13 @@ that `build/` can import any of them later without adding a dependency.
 | [`WP-03 · The climate system across deep time`](research%20reports/WP-03-the-climate-system.md) | our climate table predates PhanDA; what to re-check, what to add, and what the app should stop claiming |
 | [`WP-04 · Closing the gaps: four measured results`](research%20reports/WP-04-closing-the-gaps.md) | **Scotese publishes his own rotations** and using them cuts placement error fourfold; the Cretaceous is 6 °C too cool; one hotspot catalogue closes four register items |
 
+## Handoff prompts
+
+| file | for |
+|---|---|
+| [`HANDOFF-IMPLEMENTATION.md`](HANDOFF-IMPLEMENTATION.md) | **the session that finally changes the app.** Tiered by measured value, with the traps that have each cost real time. |
+| [`HANDOFF-A5-F1-reference-map-audit.md`](HANDOFF-A5-F1-reference-map-audit.md) | auditing our reconstruction against the DeepTimeMaps and Scotese series — runs in parallel, touches nothing else. |
+
 ## Staged for the build
 
 **[`STAGED-CHANGES.md`](research%20reports/STAGED-CHANGES.md)** is the handover surface:

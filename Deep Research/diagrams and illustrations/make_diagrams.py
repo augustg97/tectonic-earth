@@ -986,6 +986,126 @@ def chart_glossopteris():
 
 # -------------------------------------------------------------------------
 
+
+
+# ---------------------------------------------------------------------------
+# 12. Our climate table against PhanDA - the C1/C3 findings, drawn
+# ---------------------------------------------------------------------------
+
+def chart_climate_vs_phanda():
+    """Generated from build/climate.py itself, so it cannot drift from the table
+    it is criticising. Closes F10's 'Phanerozoic CO2 curve' slot by authoring it
+    rather than fetching one - which is the library's own first rule."""
+    import sys as _s
+    _root = os.path.dirname(os.path.dirname(HERE))
+    _s.path.insert(0, os.path.join(_root, "build"))
+    import climate as C
+
+    A0, A1 = 540.0, 0.0
+    x0, x1 = 150, W - 44
+    yT0, yT1 = 120, 300          # temperature panel
+    yC0, yC1 = 350, 500          # CO2 panel
+    body = []
+
+    def X(a):
+        return x1 - (a - A1) / (A0 - A1) * (x1 - x0)
+
+    rows = []
+    for a in range(0, 541, 5):
+        try:
+            s = C.system_at(float(a))
+        except Exception:                                  # noqa: BLE001
+            continue
+        if s.get("gmst") is None:
+            continue
+        rows.append((a, s["gmst"], s.get("co2") or 0, s.get("o2") or 0))
+
+    # ---- temperature panel ----
+    def Y(t):
+        return yT1 - (t - 8.0) / (38.0 - 8.0) * (yT1 - yT0)
+
+    body.append(f'<rect class="panel" x="{x0}" y="{yT0}" width="{x1-x0}" '
+                f'height="{yT1-yT0}" rx="4"/>')
+    # PhanDA climate-state bands
+    for lo, hi, nm, col in ((8, 18, "icehouse", "#2b4a63"), (18, 24, "cool greenhouse", "#2f5a52"),
+                            (24, 30, "warm greenhouse", "#5c5230"), (30, 38, "hothouse", "#6b3a2c")):
+        body.append(f'<rect x="{x0+1}" y="{Y(hi):.1f}" width="{x1-x0-2}" '
+                    f'height="{Y(lo)-Y(hi):.1f}" fill="{col}" opacity="0.5"/>')
+        body.append(f'<text class="t small" x="{x0+7}" y="{(Y(lo)+Y(hi))/2+4:.1f}" '
+                    f'opacity="0.85">{esc(nm)}</text>')
+    for t in (10, 15, 20, 25, 30, 35):
+        body.append(f'<text class="t small" x="{x0-8}" y="{Y(t)+4:.1f}" '
+                    f'text-anchor="end">{t}</text>')
+    body.append(f'<text class="t small" x="{x0-8}" y="{yT0-8}" text-anchor="end" '
+                f'fill="#c9a227">GMST °C</text>')
+    poly = " ".join(f"{X(a):.1f},{Y(g):.1f}" for a, g, _c, _o in rows)
+    body.append(f'<polyline points="{poly}" fill="none" stroke="#e8a13c" stroke-width="2.4"/>')
+
+    # the PhanDA maximum, and our own
+    body.append(f'<line x1="{X(93.9):.1f}" y1="{Y(36):.1f}" x2="{X(89.4):.1f}" '
+                f'y2="{Y(36):.1f}" stroke="#e0574a" stroke-width="4"/>')
+    body.append(f'<text class="t small" x="{X(93.9)-8:.1f}" y="{Y(36)-6:.1f}" '
+                f'text-anchor="end" fill="#e0574a">PhanDA maximum 36 °C (Turonian)</text>')
+    hot = max(rows, key=lambda r: r[1])
+    body.append(f'<circle cx="{X(hot[0]):.1f}" cy="{Y(hot[1]):.1f}" r="4" '
+                f'fill="none" stroke="#e8a13c" stroke-width="2"/>')
+    body.append(f'<text class="t small" x="{X(hot[0])-9:.1f}" y="{Y(hot[1])+22:.1f}" '
+                f'text-anchor="end" fill="#e8a13c">our maximum {hot[1]:.1f} °C at '
+                f'{hot[0]:g} Ma — {36-hot[1]:.0f} °C short, never hothouse</text>')
+
+    # ---- CO2 panel ----
+    import math
+
+    def Yc(c):
+        return yC1 - (math.log10(max(c, 100)) - 2.0) / (math.log10(6000) - 2.0) * (yC1 - yC0)
+
+    body.append(f'<rect class="panel" x="{x0}" y="{yC0}" width="{x1-x0}" '
+                f'height="{yC1-yC0}" rx="4"/>')
+    for c in (200, 500, 1000, 2000, 5000):
+        body.append(f'<line class="grid" x1="{x0}" y1="{Yc(c):.1f}" x2="{x1}" '
+                    f'y2="{Yc(c):.1f}"/>')
+        body.append(f'<text class="t small" x="{x0-8}" y="{Yc(c)+4:.1f}" '
+                    f'text-anchor="end">{c}</text>')
+    body.append(f'<text class="t small" x="{x0-8}" y="{yC0-8}" text-anchor="end" '
+                f'fill="#7ebad6">CO₂ ppm (log)</text>')
+    polyc = " ".join(f"{X(a):.1f},{Yc(c):.1f}" for a, _g, c, _o in rows if c)
+    body.append(f'<polyline points="{polyc}" fill="none" stroke="#7ebad6" stroke-width="2.2"/>')
+
+    # ---- shared axis ----
+    for a in (0, 100, 200, 300, 400, 500):
+        body.append(f'<line class="grid" x1="{X(a):.1f}" y1="{yT0}" x2="{X(a):.1f}" '
+                    f'y2="{yC1}"/>')
+        body.append(f'<text class="t small" x="{X(a):.1f}" y="{yC1+18:.1f}" '
+                    f'text-anchor="middle">{a} Ma</text>')
+    for e in dt.EXTINCTIONS:
+        if e.base > A0 or e.base < 1:
+            continue
+        body.append(f'<line x1="{X(e.base):.1f}" y1="{yT0}" x2="{X(e.base):.1f}" '
+                    f'y2="{yC1}" stroke="#e0574a" stroke-width="1" '
+                    f'stroke-dasharray="2 4" opacity="0.55"/>')
+
+    foot = [
+        "Both curves are read straight out of build/climate.py, so this figure cannot "
+        "drift from the table it is assessing.",
+        "Bands are the PhanDA five-state scheme (Judd et al. 2024, Science 385, "
+        "eadk3705). Dashed red lines are the Big Five.",
+        "",
+        "THE TWO FINDINGS: our warm peak sits in the right PLACE — the Turonian — but "
+        "6 °C too low, so the app never enters",
+        "the hothouse state at all, while PhanDA finds Earth spent more of the "
+        "Phanerozoic warm than cold. And 66→56 Ma,",
+        "CO₂ doubles 810→1600 ppm while GMST moves only +1.5 °C, in the one interval "
+        "containing both the PETM and the EECO.",
+    ]
+    yy = yC1 + 42
+    for ln in foot:
+        body.append(f'<text class="t small" x="{x0}" y="{yy}">{esc(ln)}</text>')
+        yy += 14
+    return _svg(yy + 8, "\n".join(body),
+                "Our climate table against PhanDA",
+                "Generated from build/climate.py — gap items C1, C3 and C4")
+
+
 def main():
     figs = [
         ("01-deep-time-master-chart.svg", chart_deep_time),
@@ -999,6 +1119,7 @@ def main():
         ("09-atoll-guyot-subsidence.svg", chart_atoll),
         ("10-back-arc-rollback.svg", chart_backarc),
         ("11-glossopteris-gondwana.svg", chart_glossopteris),
+        ("12-climate-vs-phanda.svg", chart_climate_vs_phanda),
     ]
     for name, fn in figs:
         svg = fn()

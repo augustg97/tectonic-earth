@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 634" width="1180" height="634">
+<style>
+  .bg{fill:#11161c}
+  .panel{fill:#161d25;stroke:#2a3644;stroke-width:1}
+  .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;fill:#d8e2ec}
+  .title{font-size:19px;font-weight:600;letter-spacing:.2px}
+  .sub{font-size:11.5px;fill:#8fa3b8}
+  .lab{font-size:11px}
+  .small{font-size:9.5px;fill:#9fb2c6}
+  .tick{stroke:#3a4756;stroke-width:1}
+  .axis{stroke:#5b6b7d;stroke-width:1.2}
+  .grid{stroke:#232d39;stroke-width:1}
+  .lead{stroke:#4d5f73;stroke-width:1;stroke-dasharray:2 2}
+</style>
+<rect class="bg" x="0" y="0" width="1180" height="634"/>
+<text class="t title" x="28" y="34">Our climate table against PhanDA</text>
+<text class="t sub" x="28" y="53">Generated from build/climate.py — gap items C1, C3 and C4</text>
+<rect class="panel" x="150" y="120" width="986" height="180" rx="4"/>
+<rect x="151" y="240.0" width="984" height="60.0" fill="#2b4a63" opacity="0.5"/>
+<text class="t small" x="157" y="274.0" opacity="0.85">icehouse</text>
+<rect x="151" y="204.0" width="984" height="36.0" fill="#2f5a52" opacity="0.5"/>
+<text class="t small" x="157" y="226.0" opacity="0.85">cool greenhouse</text>
+<rect x="151" y="168.0" width="984" height="36.0" fill="#5c5230" opacity="0.5"/>
+<text class="t small" x="157" y="190.0" opacity="0.85">warm greenhouse</text>
+<rect x="151" y="120.0" width="984" height="48.0" fill="#6b3a2c" opacity="0.5"/>
+<text class="t small" x="157" y="148.0" opacity="0.85">hothouse</text>
+<text class="t small" x="142" y="292.0" text-anchor="end">10</text>
+<text class="t small" x="142" y="262.0" text-anchor="end">15</text>
+<text class="t small" x="142" y="232.0" text-anchor="end">20</text>
+<text class="t small" x="142" y="202.0" text-anchor="end">25</text>
+<text class="t small" x="142" y="172.0" text-anchor="end">30</text>
+<text class="t small" x="142" y="142.0" text-anchor="end">35</text>
+<text class="t small" x="142" y="112" text-anchor="end" fill="#c9a227">GMST °C</text>
+<polyline points="1136.0,261.6 1126.9,255.0 1117.7,252.0 1108.6,249.0 1099.5,246.0 1090.4,241.8 1081.2,237.6 1072.1,229.8 1063.0,210.0 1053.8,199.2 1044.7,189.0 1035.6,184.2 1026.4,186.6 1017.3,191.4 1008.2,187.8 999.1,183.0 989.9,178.2 980.8,172.8 971.7,168.0 962.5,171.0 953.4,174.0 944.3,177.0 935.1,180.0 926.0,183.0 916.9,186.0 907.8,190.8 898.6,195.6 889.5,200.4 880.4,205.2 871.2,210.0 862.1,211.8 853.0,214.2 843.9,216.0 834.7,214.8 825.6,213.0 816.5,211.2 807.3,210.0 798.2,208.8 789.1,207.0 779.9,205.2 770.8,204.0 761.7,204.0 752.6,204.0 743.4,204.0 734.3,204.0 725.2,204.0 716.0,204.0 706.9,197.4 697.8,190.8 688.6,183.6 679.5,177.0 670.4,202.8 661.3,228.0 652.1,235.2 643.0,243.0 633.9,250.8 624.7,258.0 615.6,258.0 606.5,258.0 597.4,258.0 588.2,258.0 579.1,259.8 570.0,262.2 560.8,264.0 551.7,264.0 542.6,264.0 533.4,264.0 524.3,256.2 515.2,247.8 506.1,240.0 496.9,232.2 487.8,223.8 478.7,216.0 469.5,214.8 460.4,213.0 451.3,211.2 442.1,210.0 433.0,211.2 423.9,213.0 414.8,214.8 405.6,216.0 396.5,213.0 387.4,210.0 378.2,207.0 369.1,204.0 360.0,214.8 350.9,225.0 341.7,235.2 332.6,246.0 323.5,258.0 314.3,240.0 305.2,222.0 296.1,204.0 286.9,203.4 277.8,202.8 268.7,202.8 259.6,202.2 250.4,201.6 241.3,201.0 232.2,203.4 223.0,205.2 213.9,202.8 204.8,200.4 195.6,197.4 186.5,195.0 177.4,199.2 168.3,204.0 159.1,208.8 150.0,213.0" fill="none" stroke="#e8a13c" stroke-width="2.4"/>
+<line x1="964.5" y1="132.0" x2="972.8" y2="132.0" stroke="#e0574a" stroke-width="4"/>
+<text class="t small" x="956.5" y="126.0" text-anchor="end" fill="#e0574a">PhanDA maximum 36 °C (Turonian)</text>
+<circle cx="971.7" cy="168.0" r="4" fill="none" stroke="#e8a13c" stroke-width="2"/>
+<text class="t small" x="962.7" y="190.0" text-anchor="end" fill="#e8a13c">our maximum 30.0 °C at 90 Ma — 6 °C short, never hothouse</text>
+<rect class="panel" x="150" y="350" width="986" height="150" rx="4"/>
+<line class="grid" x1="150" y1="474.6" x2="1136" y2="474.6"/>
+<text class="t small" x="142" y="478.6" text-anchor="end">200</text>
+<line class="grid" x1="150" y1="441.0" x2="1136" y2="441.0"/>
+<text class="t small" x="142" y="445.0" text-anchor="end">500</text>
+<line class="grid" x1="150" y1="415.6" x2="1136" y2="415.6"/>
+<text class="t small" x="142" y="419.6" text-anchor="end">1000</text>
+<line class="grid" x1="150" y1="390.2" x2="1136" y2="390.2"/>
+<text class="t small" x="142" y="394.2" text-anchor="end">2000</text>
+<line class="grid" x1="150" y1="356.7" x2="1136" y2="356.7"/>
+<text class="t small" x="142" y="360.7" text-anchor="end">5000</text>
+<text class="t small" x="142" y="342" text-anchor="end" fill="#7ebad6">CO₂ ppm (log)</text>
+<polyline points="1136.0,447.4 1126.9,449.2 1117.7,447.7 1108.6,446.3 1099.5,444.9 1090.4,438.3 1081.2,432.6 1072.1,426.2 1063.0,415.6 1053.8,409.0 1044.7,403.3 1035.6,399.2 1026.4,406.5 1017.3,420.0 1008.2,423.5 999.1,423.5 989.9,423.6 980.8,423.7 971.7,423.8 962.5,423.3 953.4,422.8 944.3,422.2 935.1,421.7 926.0,421.3 916.9,420.7 907.8,422.0 898.6,423.4 889.5,424.7 880.4,426.2 871.2,427.7 862.1,425.6 853.0,423.5 843.9,421.6 834.7,420.4 825.6,419.3 816.5,418.2 807.3,417.1 798.2,416.1 789.1,415.1 779.9,414.1 770.8,413.2 761.7,413.9 752.6,414.6 743.4,415.3 734.3,416.0 725.2,416.8 716.0,417.5 706.9,418.0 697.8,418.5 688.6,419.0 679.5,419.5 670.4,426.2 661.3,434.4 652.1,437.9 643.0,441.8 633.9,446.1 624.7,451.1 615.6,449.2 606.5,447.4 597.4,445.7 588.2,444.1 579.1,444.3 570.0,444.7 560.8,444.9 551.7,444.7 542.6,444.3 533.4,444.1 524.3,439.7 515.2,435.8 506.1,432.3 496.9,429.1 487.8,426.1 478.7,423.4 469.5,416.3 460.4,410.4 451.3,405.3 442.1,400.8 433.0,397.6 423.9,394.7 414.8,392.0 405.6,389.5 396.5,393.0 387.4,396.9 378.2,401.2 369.1,406.0 360.0,409.0 350.9,412.2 341.7,415.6 332.6,419.5 323.5,428.7 314.3,405.6 305.2,391.5 296.1,381.3 286.9,375.9 277.8,371.2 268.7,367.0 259.6,363.2 250.4,359.8 241.3,356.7 232.2,354.2 223.0,351.9 213.9,349.8 204.8,347.9 195.6,346.1 186.5,344.4 177.4,346.8 168.3,349.4 159.1,352.2 150.0,355.2" fill="none" stroke="#7ebad6" stroke-width="2.2"/>
+<line class="grid" x1="1136.0" y1="120" x2="1136.0" y2="500"/>
+<text class="t small" x="1136.0" y="518.0" text-anchor="middle">0 Ma</text>
+<line class="grid" x1="953.4" y1="120" x2="953.4" y2="500"/>
+<text class="t small" x="953.4" y="518.0" text-anchor="middle">100 Ma</text>
+<line class="grid" x1="770.8" y1="120" x2="770.8" y2="500"/>
+<text class="t small" x="770.8" y="518.0" text-anchor="middle">200 Ma</text>
+<line class="grid" x1="588.2" y1="120" x2="588.2" y2="500"/>
+<text class="t small" x="588.2" y="518.0" text-anchor="middle">300 Ma</text>
+<line class="grid" x1="405.6" y1="120" x2="405.6" y2="500"/>
+<text class="t small" x="405.6" y="518.0" text-anchor="middle">400 Ma</text>
+<line class="grid" x1="223.0" y1="120" x2="223.0" y2="500"/>
+<text class="t small" x="223.0" y="518.0" text-anchor="middle">500 Ma</text>
+<line x1="323.1" y1="120" x2="323.1" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="438.5" y1="120" x2="438.5" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="676.0" y1="120" x2="676.0" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="767.9" y1="120" x2="767.9" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="1015.4" y1="120" x2="1015.4" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="657.6" y1="120" x2="657.6" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<line x1="575.4" y1="120" x2="575.4" y2="500" stroke="#e0574a" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+<text class="t small" x="150" y="542">Both curves are read straight out of build/climate.py, so this figure cannot drift from the table it is assessing.</text>
+<text class="t small" x="150" y="556">Bands are the PhanDA five-state scheme (Judd et al. 2024, Science 385, eadk3705). Dashed red lines are the Big Five.</text>
+<text class="t small" x="150" y="570"></text>
+<text class="t small" x="150" y="584">THE TWO FINDINGS: our warm peak sits in the right PLACE — the Turonian — but 6 °C too low, so the app never enters</text>
+<text class="t small" x="150" y="598">the hothouse state at all, while PhanDA finds Earth spent more of the Phanerozoic warm than cold. And 66→56 Ma,</text>
+<text class="t small" x="150" y="612">CO₂ doubles 810→1600 ppm while GMST moves only +1.5 °C, in the one interval containing both the PETM and the EECO.</text>
+</svg>
