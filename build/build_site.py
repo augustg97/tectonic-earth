@@ -47,7 +47,7 @@ shutil.copytree(os.path.join(WEB, "fields"), dst,
 
 DATA_FILES = ("index.html", "three.min.js", "timeline.json", "boundaries.json",
               "plates_time.json", "plates.json", "hotspots.json", "labels.json",
-              "eras.json", "life.json", "art.json", "photos.json",
+              "eras.json", "life.json", "art.json", "photos.json", "updatelog.json",
               # screenshots for the in-app About one-pager overlay
               "about-globe.jpg", "about-map.jpg", "about-pangaea.jpg", "about-hydro.jpg")
 for name in DATA_FILES:

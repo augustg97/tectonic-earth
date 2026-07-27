@@ -430,6 +430,10 @@ Both cost time in July 2026, on the same afternoon, and both look identical from
 
 - **A process backgrounded with `&` dies when its shell call ends** — `nohup` does not save it. A 50-keyframe rebuild launched this way printed its first line and was gone; the same command in a properly detached background task ran for two hours. The tell is a log that stops after one line.
 - **Waiting on a pattern matches the waiter.** `pgrep -f build_fields.py` matching itself is the known form, and bracketing the first character (`[b]uild_fields.py`) fixes exactly that one case and no other: a *second* waiter watching the same string still matches the first. `until ! ps -eo command | grep -q "[r]eskin_seafloor.py"` can therefore never exit, because its own command line contains the pattern. **Wait on a PID** — `until ! kill -0 "$PID"` — which cannot match anything but the process itself.
+- **A chained waiter must run the next job in its own foreground.** A waiter that ends `… & echo $!` loses the child the moment the waiter's shell exits, so the second job never starts and nothing says so.
+- **Two full-resolution rebuilds in parallel is slower than one after the other.** They write disjoint files and use disjoint `oceanage` cache entries, so nothing collides and it looks free. It is not: one pass holds ~1 GB and the future builder ~2.2, which pinned swap at 3.5 GB of 4 and took throughput from 20 s a keyframe to 60. **Check `sysctl vm.swapusage` and RSS, not just file collisions.**
+
+All four fail the same way — the command returns, nothing errors, the files never change. On any long build, confirm the job is alive and producing output before leaving it, and prefer serial-and-verified to parallel-and-assumed.
 
 ## 8. Sources
 

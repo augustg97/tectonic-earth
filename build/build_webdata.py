@@ -1162,6 +1162,21 @@ def build_labels():
 
 
 # ---------- browsable intervals + supercontinents ----------
+def build_updatelog():
+    """User-facing release notes, straight through from build/updatelog.json.
+
+    Data rather than markup so adding a release is one edit to one file, and the
+    app never changes shape to carry a new entry.
+    """
+    src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "updatelog.json")
+    with open(src, encoding="utf-8") as fh:
+        d = json.load(fh)
+    d.pop("_note", None)
+    json.dump(d, open(f"{WEB}/updatelog.json", "w"), separators=(",", ":"))
+    n = sum(len(sec["items"]) for r in d["releases"] for sec in r["sections"])
+    print(f"update log: {len(d['releases'])} releases, {n} entries")
+
+
 def build_eras():
     out = {"intervals": eras.intervals(),
            "supercontinents": eras.supercontinents(),
@@ -1246,4 +1261,5 @@ if __name__ == "__main__":
     build_hotspots()
     build_labels()
     build_eras()
+    build_updatelog()
     build_life()

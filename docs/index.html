@@ -24,6 +24,27 @@ canvas{display:block}
 #title{pointer-events:auto}
 #title h1{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
 #aboutBtn{cursor:pointer;color:var(--dim2);font-size:12px;margin-left:4px;transition:color .15s}
+#updatelog{position:fixed;left:20px;top:70px;width:360px;max-width:calc(100vw - 40px);
+  background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:14px;padding:20px;z-index:41;opacity:0;
+  transform:translateY(6px);pointer-events:none;transition:.25s;
+  max-height:calc(100vh - 160px);overflow-y:auto}
+#updatelog.show{opacity:1;transform:none;pointer-events:auto}
+#updatelog .ax{position:absolute;top:14px;right:16px;cursor:pointer;color:var(--dim2);font-size:18px;line-height:1}
+#updatelog h2{font-size:15px;letter-spacing:.06em;margin-bottom:6px}
+#updatelog .ulsub{font-size:10.5px;color:var(--dim2);margin-bottom:4px}
+.ulrel{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.ulrel:first-child{border-top:none;margin-top:6px}
+.ulhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ulver{font-size:9.5px;letter-spacing:.14em;color:var(--accent);border:1px solid var(--accent);
+  border-radius:4px;padding:1px 5px;opacity:.85}
+.uldate{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2)}
+.ultitle{font-size:12.5px;color:var(--ink);font-weight:600;width:100%;margin-top:3px}
+.ulsum{font-size:11px;line-height:1.6;color:var(--dim);margin:6px 0 2px}
+.ulsec{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin:11px 0 5px}
+.ulitem{font-size:11px;line-height:1.55;color:var(--dim);padding-left:12px;position:relative;margin-bottom:6px}
+.ulitem::before{content:"";position:absolute;left:0;top:6px;width:4px;height:4px;border-radius:50%;
+  background:var(--accent);opacity:.7}
 #aboutBtn:hover{color:var(--accent)}
 #about{position:fixed;left:20px;top:70px;width:340px;max-width:calc(100vw - 40px);background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:14px;padding:20px;z-index:40;opacity:0;transform:translateY(6px);pointer-events:none;transition:.25s;max-height:calc(100vh - 160px);overflow-y:auto}
 #about.show{opacity:1;transform:none;pointer-events:auto}
@@ -349,6 +370,10 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   border:1px solid var(--line);border-radius:6px;padding:3px 7px;margin-left:9px;
   vertical-align:middle;transition:color .15s,border-color .15s}
 #aboutPageBtn:hover{color:var(--accent);border-color:var(--accent)}
+#logBtn{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;border:1px solid var(--line);border-radius:5px;padding:2px 7px;
+  margin-left:6px;transition:color .15s,border-color .15s;white-space:nowrap}
+#logBtn:hover{color:var(--accent);border-color:var(--accent)}
 
 #aboutPage{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
   padding:3vh 3vw;background:rgba(4,6,10,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
@@ -464,7 +489,7 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 
 <div id="topbar">
   <div id="title">
-    <h1>Tectonic&nbsp;Earth <span id="aboutBtn" title="About &amp; data sources">ⓘ</span> <span id="aboutPageBtn" title="About this project — features, models &amp; sources">About</span></h1>
+    <h1>Tectonic&nbsp;Earth <span id="aboutBtn" title="About &amp; data sources">ⓘ</span> <span id="aboutPageBtn" title="About this project — features, models &amp; sources">About</span> <span id="logBtn" title="What has changed, and when">Update&nbsp;Log</span></h1>
     <div class="sub">Deep-time plate reconstruction · 1000 Ma → +250 Myr</div>
   </div>
   <div id="readout">
@@ -549,6 +574,13 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   <div id="infoArt" hidden></div>
   <p class="desc" id="infoDesc"></p>
   <div id="infoExtra"></div>
+</div>
+
+<div id="updatelog">
+  <div class="ax" id="ulClose">×</div>
+  <h2>Update Log</h2>
+  <p class="ulsub">What has changed in this model, newest first.</p>
+  <div id="ulBody"></div>
 </div>
 
 <div id="about">
@@ -880,7 +912,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-1706';
+const DATA_V='20260727-1803';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -5094,7 +5126,42 @@ document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
   const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);});
 $('#ambientBtn').onclick=()=>enterAmbient(true);
 $('#exitAmbient').onclick=()=>enterAmbient(false);
-$('#aboutBtn').onclick=()=>$('#about').classList.toggle('show');
+$('#aboutBtn').onclick=()=>{$('#updatelog').classList.remove('show');
+  $('#about').classList.toggle('show');};
+/* The update log. Content is DATA (build/updatelog.json), not markup, so adding a
+   release is one edit to one file and never a change to the app. Built once, on
+   first open -- it is a few dozen entries and nobody needs it before they ask. */
+let ulBuilt=false;
+async function buildUpdateLog(){
+  const box=$('#ulBody'); if(!box) return;
+  /* Fetched on FIRST OPEN, not at startup. The loader's whole design is that a
+     file is fetched when it is wanted (see loadAll), and nobody needs release
+     notes before they ask for them -- so this costs nothing until it is used. */
+  if(!DATA.updatelog){
+    box.innerHTML='<p class="ulsum">Loading…</p>';
+    try{ DATA.updatelog=await fetch('updatelog.json?v='+DATA_V).then(r=>r.json()); }
+    catch(e){ box.innerHTML='<p class="ulsum">Could not load the update log.</p>'; return; }
+  }
+  const rel=(DATA.updatelog&&DATA.updatelog.releases)||[];
+  if(!rel.length){ box.innerHTML='<p class="ulsum">No entries yet.</p>'; return; }
+  box.innerHTML=rel.map(r=>
+    `<div class="ulrel"><div class="ulhead">`
+    +`<span class="ulver">v${esc(r.version)}</span>`
+    +`<span class="uldate">${esc(r.date)}</span>`
+    +`<span class="ultitle">${esc(r.title)}</span></div>`
+    +(r.summary?`<p class="ulsum">${esc(r.summary)}</p>`:'')
+    +(r.sections||[]).map(sec=>
+       (sec.name?`<div class="ulsec">${esc(sec.name)}</div>`:'')
+       +(sec.items||[]).map(t=>`<div class="ulitem">${esc(t)}</div>`).join('')
+     ).join('')
+    +`</div>`).join('');
+}
+$('#logBtn').onclick=()=>{
+  if(!ulBuilt){ulBuilt=true;buildUpdateLog();}
+  $('#about').classList.remove('show');
+  $('#updatelog').classList.toggle('show');
+};
+$('#ulClose').onclick=()=>$('#updatelog').classList.remove('show');
 $('#aboutClose').onclick=()=>$('#about').classList.remove('show');
 
 /* Full one-pager About overlay. Images are lazy: their src is swapped in from
