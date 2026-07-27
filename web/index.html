@@ -862,8 +862,8 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260726-2251';
-const FIELD_V='20260726-hi';
+const DATA_V='20260727-0158';
+const FIELD_V='20260726-fz';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -955,7 +955,17 @@ uniform sampler2D oceanA, oceanB;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 uniform float uMapProj, uBounds;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
-uniform vec4 uDbg;        // TEMPORARY: term-isolation switches for the sea-floor round
+/* Term-isolation switches for the sea floor: x the noise fabric, y the
+   near-axis fault sets, z the fracture-zone corrugation, w the dequantisation
+   shrinkage. Set them from the console (APP.gl.mat.uniforms.uDbg.value.set)
+   and re-render to attribute a defect to one term.
+
+   Kept, not scaffolding. Every real cause found in this work -- the terrace
+   maze, the sun glint keyed to the sea-floor normal, the canyon system ringing
+   the seamounts -- was identified by switching one of these off and looking,
+   and none of them was where inspection said it would be. Four multiplies by
+   1.0 is a fair price for the next one. */
+uniform vec4 uDbg;
 uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
@@ -2210,6 +2220,52 @@ void main(){
       vec3 n3 = cross(sdir, e3);                        // toward the pole (north-ish)
       vec3 across3 = normalize(sN.x*e3 + sN.y*n3);     // along spreading = across ridge
       vec3 along3  = normalize(-sN.y*e3 + sN.x*n3);    // along the ridge
+
+      /* FRACTURE ZONES, READ OFF THE SHIPPED AGE FIELD RATHER THAN SHIPPED.
+         The obvious way to get these into the shader is a fourth channel on
+         _o, and it is the wrong way: the signal is already in the R channel we
+         send, because a fracture zone IS an age offset. Two pieces of crust of
+         quite different age sit side by side along a line, so stepping ALONG
+         the isochron and differencing the age spikes on a scar and is near zero
+         everywhere else. That is exactly what oceanage._derive computes in the
+         pipeline; doing it here costs four texture reads and no bytes at all.
+
+         It has to be a finite step, not a derivative. The tangential component
+         of a gradient is identically zero, so projecting the age gradient onto
+         the isochron direction returns nothing -- a step is only visible across
+         a baseline wide enough to straddle it. 0.9 degrees, the same as the
+         pipeline uses.
+
+         Scaled against how fast age changes ACROSS the isochron over the SAME
+         baseline, and measured rather than assumed. The analytic rate --
+         2L/(K*(D0+d)) for the companded coordinate -- looks equivalent and is
+         not: it presumes the nominal 30 km/Myr everywhere, so anywhere the real
+         spreading was slower the ordinary across-isochron change exceeds it and
+         the ratio reports a scar. Checked against the equatorial Atlantic, that
+         version lit up every continental margin and almost none of the actual
+         fracture zones. Four more texture reads buy the real denominator, and
+         then the ratio means what it says: on ordinary crust the two changes
+         are comparable, on a scar the along-isochron one is far larger. */
+      float FZL = 0.9/180.0*PI;
+      vec2 uvA = uvFromDir(normalize(sdir+along3*FZL));
+      vec2 uvB = uvFromDir(normalize(sdir-along3*FZL));
+      vec2 uvC = uvFromDir(normalize(sdir+across3*FZL));
+      vec2 uvD = uvFromDir(normalize(sdir-across3*FZL));
+      float cA = mix(texture2D(oceanA,uvA).r, texture2D(oceanB,uvA).r, mixf);
+      float cB = mix(texture2D(oceanA,uvB).r, texture2D(oceanB,uvB).r, mixf);
+      float cC = mix(texture2D(oceanA,uvC).r, texture2D(oceanB,uvC).r, mixf);
+      float cD = mix(texture2D(oceanA,uvD).r, texture2D(oceanB,uvD).r, mixf);
+      /* Two guards, both for the same singularity. The denominator is a
+         SYMMETRIC difference across the isochron, and at the spreading axis age
+         is a minimum -- the two samples come back nearly equal, the ratio blows
+         up, and the detector paints the ridge crest as one continuous scar
+         thousands of km long. Floor it at a third of the nominal rate so it
+         cannot vanish, and fade the whole thing in past a couple of degrees
+         from the axis, where a fracture zone stops being an active transform
+         between two ridge segments and becomes the frozen trace this is for. */
+      float fzFloor = 0.33*1.8/(CO_K*(CO_D0+distDeg));
+      float fzone = clamp(abs(cA-cB)/(2.5*max(abs(cC-cD),fzFloor)) - 0.35, 0.0, 1.0)
+                  * smoothstep(1.5,5.0,distDeg) * aniso * deepw;
       // two octaves, slope taken mostly ACROSS the ridge (cheap forward diffs)
       // Three octaves of slope, measured mostly ACROSS the ridge (cheap forward
       // diffs). The finer octaves keep the fabric crisp as you zoom in -- the
@@ -2655,8 +2711,20 @@ void main(){
          the synthesised fabric to the same burial that shaped the field under
          it -- one cause, two consequences, instead of two systems guessing. */
       float bakedRough = smoothstep(0.015, 0.11, rug);
+      /* AND THE FABRIC BREAKS AT A FRACTURE ZONE. This is what gave a real
+         chart its provinces and ours had none of: abyssal hills are cut at one
+         segment of a ridge axis, and the crust on the other side of a transform
+         was cut at a different one at a different time, so the combing stops
+         dead at the scar and resumes out of step. Ours ran continuously across
+         every one of them, which is most of why the ocean read as a single
+         uniform field rather than as a set of terrains.
+
+         A quiet lineament is the whole of it -- the trough itself is already
+         baked into the elevation by seafloor.py, and drawing it twice would
+         just make a dark line. What the fabric has to do is stop. */
       float amp = 1.55 * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
-                * mix(0.50, 1.30, bakedRough);
+                * mix(0.50, 1.30, bakedRough)
+                * (1.0 - 0.80*fzone);
       /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
          unit normal, so a value of 1 is a forty-five degree face, and the tail
          of the distribution ran well past that.

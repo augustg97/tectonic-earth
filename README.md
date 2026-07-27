@@ -385,13 +385,22 @@ Being exponential, though, it then has to be fed a depth the grid can support: `
 
 And a fourth instance of §7.4, found by checking the Cryogenian: **the sea-floor normal was shading pack ice**, so at the snowball peaks the whole world was embossed with the abyssal fabric of the ocean beneath it. Pack ice is a raft; the visible surface owns its own normal. Grounded ice over shallow bedrock — most of Antarctica — still takes the relief under it, because there the relief *is* the surface.
 
+**Fracture zones, and the channel that was not needed.** A real chart's abyssal-hill provinces are bounded by fracture zones and change character across each one; ours ran continuously across every scar, which was most of why the ocean read as one uniform field rather than a set of terrains. The obvious fix is a fourth channel on `_o`, and it is the wrong one: **the signal is already in the R channel**, because a fracture zone *is* an age offset. Stepping along the isochron and differencing the age spikes on a scar and is near zero elsewhere — the same computation `oceanage._derive` does in the pipeline, for eight texture reads and no extra bytes.
+
+Two corrections were needed, both found by painting the detector's own output over a region with textbook scars:
+
+- Scaling against the *assumed* spreading rate lit up every continental margin and almost no scars, because the analytic rate presumes 30 km/Myr everywhere and anywhere spreading was slower the ordinary gradient exceeds it. Measure the real denominator.
+- It then traced the ridge axis, because the denominator is a symmetric difference across the isochron and at the axis age is a minimum — the samples come back equal and the ratio diverges. Floor it, and fade the detector in past a couple of degrees, where a fracture zone stops being an active transform and becomes the frozen trace this is for.
+
+**But the limit was the age grid, not the channel.** Rendering the fracture-zone field over the equatorial Atlantic at 512×1024 against 768×1536 settles it: the coarse grid shows the ridge trace and essentially nothing else, the fine one shows the Romanche–Chain–Vema family as the long continuous parallel scars a chart has. A fracture zone is a step a few tens of km wide, and a 39 km cell smooths it away before anything downstream can see it. `seafloor.py` now asks `oceanage` for 768×1536 — 4.8 s a keyframe once the one-time pyGPlates load is paid — which sharpens the baked troughs as well as the shader's test for where the fabric should break.
+
 **Not fixed, and known.**
 
 - **Seamounts are not clustered along plume tracks.** They are seeded by crustal age, so they scatter where a real ocean shows chains — Hawaii, Louisville, the Cook–Australs. The `hotspot` input to `seamounts.field()` exists and is not wired up.
 - **Deep-time sea floor cannot be made accurate**, only structurally correct. That crust was subducted; there is no record. The isochron model correlates 0.41 with the surveyed grid where both exist, which is why the surveyed grid is preferred wherever it survives.
 - **The axial valley and nodal basins still key off the ridge network**, not age — deliberately, because they describe where the ridge is *now*.
 - **Aseismic ridges and marginal basins** (Ninetyeast, Walvis, the Philippine Sea) are absent or generic.
-- **The fabric is a synthesised grain, not surveyed hills.** Its aspect, spectrum and coherence are now measured against the reference rather than guessed, and it varies with spreading rate, sediment burial and the baked field's own roughness — but a real chart's abyssal-hill provinces are bounded by fracture zones and change character across each one, and ours are continuous. `_o` carries no fracture-zone channel to key that on.
+- **The fabric is a synthesised grain, not surveyed hills.** Its aspect, spectrum and coherence are measured against the reference rather than guessed, and it varies with spreading rate, sediment burial, the baked field's own roughness and — since the fracture-zone work below — with the province it sits in. What it still is not is a survey.
 - **Coastlines and shelf breaks stay jagged at texel scale.** At 9.8 km the grid matches the source PaleoDEMs exactly, so there is nothing further to extract: Google Earth's near-shore bathymetry is 15 arc-seconds, some twenty times finer. This is a data limit, not a shader one, and it is where the remaining visible difference lives.
 
 ---

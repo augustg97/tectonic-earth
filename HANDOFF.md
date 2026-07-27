@@ -56,6 +56,10 @@ The user asked for the three remaining items to be closed: the synthetic grain, 
 - Two full reskins were run, the second at the new resolution. `web/fields` is **145 MB** against 94 before, of which `_e` is **57.4 MB** against 18.4. Verified across 0 / 300 / 700 Ma and +150 Myr, globe and map, with no console errors; frame time 57 ms close and 72 ms globe against ~67 for the committed shader.
 - **Not deployed**, deliberately, per the loop's own rule.
 
+## The fracture-zone round
+
+Asked to close the last item — structural variety — the answer was not the fourth `_o` channel it looked like. A fracture zone IS an age offset, so the signal is already in the shipped R channel: step along the isochron, difference the age. Eight texture reads, no bytes. See README §10 for the two corrections that were needed and, more importantly, for the finding that the **age grid** was the real limit: at 512×1024 there are no scars to detect at all.
+
 ## Do not change the pipeline without re-running the reskin
 
 `build_fields.ELEV_H/W/Q`, `render.smooth_bathymetry` and every filter in `seafloor.py` are baked into the shipped `_e`. The shader is not — it can be iterated freely against whatever fields are on disk, which is what makes the loop tractable: start the reskin, then tune the shader while it runs.
@@ -87,8 +91,8 @@ The headline: **almost none of the gap was in the abyssal-hill fabric**, which i
 
 Ranked by how much of the remaining visible gap each closes:
 
-1. **12–30 km energy is still short** — 20–28% against the reference's 32–41%. This is the band the fabric owns, so it is a fabric question, not a data one.
-2. **The fabric does not break at fracture zones.** A real chart's abyssal-hill provinces are bounded by them and change character across each; ours is continuous. `_o` carries no fracture-zone channel to key on — R is age, G/B direction. Adding one means finding a spare channel or a fourth field.
+1. **12–30 km energy is still short** — 16–28% against the reference's 32–41%. This is the band the fabric owns, so it is a fabric question, not a data one. Note the radial band metric mixes an anisotropic feature's length into its width; comparing element SIZE side by side at matched scale was the measurement that actually moved this.
+2. **The age grid could go further.** 768×1536 is what made fracture zones appear at all; 1024×2048 was measured at 64 s a keyframe against 4.8 and was not attempted. If the provinces still read as too similar, that is the next lever — it sharpens the scars, the baked troughs and the spreading-rate field together.
 3. **Coastlines and shelf breaks stay jagged at texel scale.** Verified as a source-data limit rather than a shader one: globally the abyss now measures a median slope of 0.00° and p95 of 1.08°, entirely physical, and the remaining stipple sits on genuinely steep margins where the PaleoDEM itself is coarse. Google Earth's near-shore bathymetry is 15 arc-seconds — twenty times finer than anything available here.
 4. **Deep time renders much flatter and greener than the present.** At 300 Ma the fabric is nearly absent (old crust everywhere, no surveyed age, low `aniso`) and `uSeaTint` pulls the hue well toward the ancient green sea. Both are deliberate, and neither has a reference to check against — but it does mean the calibration only holds at the modern end.
 5. Then: remove `uDbg`, `check_shader.py && build_site.py` → commit → push → verify live `DATA_V`.

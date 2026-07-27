@@ -694,7 +694,22 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
             # See oceanage.py, crustage.py and realage.py.
             try:
                 import oceanage
-                _a, _az, _fz, _sv = oceanage.cached(round(float(age)), 512, 1024)
+                # 768x1536, raised from 512x1024 in July 2026. This is the grid
+                # the FRACTURE ZONES live or die on, and at 39 km cells they
+                # died: rendering the fz field over the equatorial Atlantic at
+                # both resolutions, the coarse one shows the ridge trace and
+                # essentially nothing else, while the fine one shows the
+                # Romanche-Chain-Vema family as the long continuous parallel
+                # scars a real chart has. A fracture zone is a STEP in age a few
+                # tens of km wide, so a cell that wide smooths it away before
+                # anything downstream can see it -- and everything downstream
+                # does depend on it: the baked troughs here, and the shader's
+                # test for where the abyssal-hill fabric should break.
+                #
+                # Cheap, once the cold pyGPlates load is paid: 4.8 s a keyframe
+                # against 54 s for the first call, so about 16 minutes across
+                # the 201 ages, cached thereafter.
+                _a, _az, _fz, _sv = oceanage.cached(round(float(age)), 768, 1536)
                 age_myr = np.clip(_upsample(_a, h, w, order=1), 0.0, MAX_CRUST_AGE)
                 fz_field = np.clip(_upsample(_fz, h, w, order=1), 0.0, 1.0)
                 age_ok = True
