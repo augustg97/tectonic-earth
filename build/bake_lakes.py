@@ -213,7 +213,7 @@ def lake_depth(Z, Rf, T, age=0.0):
 
 
 def load_rain(epath):
-    rpath = epath.replace("_e.webp", "_r.webp")
+    rpath = epath.replace("_e.avif", "_r.webp")
     if not os.path.exists(rpath):
         return None
     r = Image.open(rpath).convert("L").resize((ELEV_W, ELEV_H), Image.BILINEAR)
@@ -222,7 +222,7 @@ def load_rain(epath):
 
 def bake_one(epath, stats=False):
     base = os.path.splitext(os.path.basename(epath))[0].replace("_e", "")
-    wpath = epath.replace("_e.webp", "_w.webp")
+    wpath = epath.replace("_e.avif", "_w.webp")
     e = np.asarray(Image.open(epath).convert("RGB"))[..., 0].astype(np.float32) / 255.0
     Z = dec_elev(e)
     Rf = load_rain(epath)
@@ -248,10 +248,10 @@ def main():
     args = sys.argv[1:]
     if args:
         for a in args:
-            p = a if a.endswith("_e.webp") else os.path.join(FIELDS, a + "_e.webp")
+            p = a if a.endswith("_e.avif") else os.path.join(FIELDS, a + "_e.avif")
             bake_one(p, stats=True)
         return
-    files = sorted(glob.glob(os.path.join(FIELDS, "*_e.webp")))
+    files = sorted(glob.glob(os.path.join(FIELDS, "*_e.avif")))
     print(f"baking {len(files)} lake fields...")
     for i, p in enumerate(files):
         bake_one(p)

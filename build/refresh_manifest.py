@@ -12,6 +12,7 @@ import json, os
 
 import numpy as np
 
+import build_fields as bf
 import ice_audit
 from climate import climate_at, system_at
 from render import glaciation, snowball_at
@@ -48,6 +49,16 @@ def main():
     changed = 0
     for rec in man:
         age = rec["age"]
+        # The FILENAMES are re-derived too, not just the metadata. Elevation
+        # moved from WebP to AVIF and this file rewrites every record; if it
+        # carried the old name forward the app would fetch a texture that is no
+        # longer there and the globe would come up blank, with nothing in the
+        # build saying why. build_fields owns the naming; ask it.
+        tag = "fut" if age < 0 else ("pre" if age > 540 else "phan")
+        ef = bf.elev_name(tag, age)
+        rec["e"] = ef
+        rec["r"] = bf.sibling(ef, "r")
+        rec["m"] = bf.sibling(ef, "m")
         cl = climate_at(age)
         ice_T, sea_T = glaciation(cl)
         ep, per = period_for(age)

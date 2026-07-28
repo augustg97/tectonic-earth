@@ -94,7 +94,7 @@ OCEAN_H, OCEAN_W = 1024, 2048
 # 1024x2048/q=96 -- 0.71 levels mean, 3 at the 99th percentile -- for 439 kB
 # against 198. Finer texels hold less real content each, so there is less for
 # the encoder to ring around and the quality can come back down.
-ELEV_Q, RAIN_Q, OCEAN_Q = 94, 90, 90
+ELEV_Q, RAIN_Q, OCEAN_Q = 90, 90, 90   # ELEV_Q is now an AVIF quality
 STEP = 5                         # Myr between keyframes, everywhere
 
 
@@ -160,8 +160,61 @@ def _gray(a01):
 
 
 def _save(img, path, q):
-    img.save(path, "WEBP", quality=q, method=6)
+    """Encode by EXTENSION, so the format lives in the filename and nowhere else."""
+    if path.endswith(".avif"):
+        img.convert("RGB").save(path, "AVIF", quality=q, speed=6)
+    else:
+        img.save(path, "WEBP", quality=q, method=6)
     return os.path.getsize(path)
+
+
+# --- ELEVATION SHIPS AS AVIF, AND THE REASON IS MEASURED -------------------
+# WebP's lossy path transforms in 4x4 blocks, and it quantises each block's DC
+# level independently. On the deep sea floor -- smooth, low-contrast, and using
+# only ~27 of the 256 encoded levels below 3.5 km -- neighbouring blocks land on
+# DIFFERENT levels, so the decoded field carries a 4-pixel grid of one-level
+# steps that was never in the data. The shader then DIFFERENTIATES elevation to
+# light it, and one level at abyssal depth is a 19-degree normal tilt (section
+# 2.4), so each block edge is drawn as a facet. That is the staircase.
+#
+# Measured on the float array before it is ever saved, as excess gradient energy
+# at exactly the 4-pixel period:
+#
+#     clean array                   0.0-0.4x
+#     WebP q94 (what we shipped)   29.5x (Precambrian)  37.8x (present day)
+#     AVIF q90                      2.3x               15.8x
+#     WebP lossless                 0.4x                0.0x
+#
+# AVIF wins on every axis that matters here: AV1's larger transforms and much
+# better prediction of smooth gradients cut the artefact 2.4-13x, the files come
+# out SMALLER (0.56-1.0x), the mean error is lower (18 m against 27), and it
+# decodes at the same speed -- measured in the browser at 3.3 ms against WebP's
+# 3.6 on a 4096x2048 frame, so the fetch-on-demand scrubbing is unaffected.
+# Lossless WebP would take the artefact to zero but costs 3.7x the bytes
+# (+149 MB), which would undo the loading work for a field that is already
+# band-limited by smooth_bathymetry.
+#
+# Only the ELEVATION moves. It is the field the shader differentiates, so it is
+# the one whose block edges become geometry; rainfall and ocean structure are
+# read as values and stay WebP.
+ELEV_EXT = ".avif"
+
+
+def elev_name(tag, age):
+    return f"{tag}_{abs(age):04d}_e{ELEV_EXT}"
+
+
+def sibling(ef, kind):
+    """The _r/_m/_o/_w/_d file that belongs with an elevation file.
+
+    Everything used to be `ef.replace("_e.webp", ...)`, which silently returns
+    the string UNCHANGED once elevation stops being a .webp -- so the app would
+    have asked for the elevation file six times over and nothing would have said
+    so. Split on the suffix instead, and assert.
+    """
+    base, _sep, _ext = ef.rpartition("_e")[0], "_e", ""
+    assert base, f"not an elevation filename: {ef}"
+    return f"{base}_{kind}.webp"
 
 
 _SF_REC = None
@@ -235,7 +288,7 @@ def export(age, Z_hi, z_for_climate, tag):
     # shader grows the abyssal-hill fabric from it, so it need only be smooth.
     o = Image.fromarray((np.clip(ofield, 0, 1) * 255 + 0.5).astype(np.uint8)
                         ).resize((OCEAN_W, OCEAN_H), Image.BILINEAR)
-    ef = f"{tag}_{abs(age):04d}_e.webp"
+    ef = elev_name(tag, age)
     rf = f"{tag}_{abs(age):04d}_r.webp"
     of = f"{tag}_{abs(age):04d}_o.webp"
     n = (_save(e, os.path.join(OUT, ef), ELEV_Q) + _save(r, os.path.join(OUT, rf), RAIN_Q)
@@ -243,7 +296,7 @@ def export(age, Z_hi, z_for_climate, tag):
     ice_T, sea_T = glaciation(cl)
     ep, per = period_for(age)
     sysd = system_at(age)
-    return {"age": age, "e": ef, "r": rf, "m": ef.replace("_e.webp", "_m.webp"),
+    return {"age": age, "e": ef, "r": rf, "m": sibling(ef, "m"),
             "epoch": ep, "period": per, "sealevel": sealevel_for(age),
             "temp": round(cl["temp"], 3), "veg": round(cl["veg"], 3),
             "iceT": round(ice_T, 2), "seaT": round(sea_T, 2),
@@ -680,7 +733,7 @@ def future_grid(frac, gid, Zsrc, h, w):
 
 
 
-def handoff_blend(A, B, wq):
+def handoff_blend(A, B, wq, wl=None):
     """Cross-fade the real 540 Ma DEM into the authored Precambrian composite.
 
     Blending elevations in METRES destroys land. Ocean floor is about -4000 m
@@ -699,10 +752,30 @@ def handoff_blend(A, B, wq):
     reconstructions -- it cannot be anything else -- but land area now moves
     smoothly from one world to the other.
     """
-    if wq <= 0:
+    """WHERE the continents are and HOW MUCH land there is now ride separate
+    ramps, and they have to, because they were fighting.
+
+    `wq` mixes the two GEOMETRIES and is deliberately short (20 Myr). The 540 Ma
+    DEM is a snapshot of one instant; held at two-thirds weight 20 Myr away it
+    was putting -3640 m of ocean under Siberia's label, which by then had moved
+    with its plate -- so a continent appeared to swim across the sea and its name
+    swam with it. Measured under the label: the generated world says +489 m at
+    every age in the window and the static map says -3640, and the blend is what
+    drowned it.
+
+    `wl` sets the LAND-FRACTION target and is long (110 Myr), because that is the
+    quantity a short ramp wrecks: at 20 Myr land jumped 18.5% -> 28.6% and back
+    to 24.1%, which is the same "continents flood then a continent arises"
+    artefact this function was written to kill, running in reverse. On the long
+    ramp it rises smoothly and never turns round.
+
+    Defaults to wl = wq, so any caller that does not care gets the old
+    behaviour.
+    """
+    if wl is None:
+        wl = wq
+    if wq <= 0 and wl <= 0:
         return A
-    if wq >= 1:
-        return B
 
     def enc(z):
         return 0.5 + 0.5 * np.sign(z) * np.sqrt(np.clip(np.abs(z) / 8000.0, 0, 1))
@@ -718,8 +791,11 @@ def handoff_blend(A, B, wq):
     def landfrac(z):
         return float(((z > 0) * wlat).sum() / denom)
 
-    out = dec(enc(A) * (1 - wq) + enc(B) * wq)
-    target = landfrac(A) * (1 - wq) + landfrac(B) * wq
+    # At wq >= 1 the geometry is purely B, but the shim below STILL runs: that
+    # is the whole point of splitting the ramps, and returning B early here is
+    # what used to make the land-fraction curve step.
+    out = B if wq >= 1 else dec(enc(A) * (1 - wq) + enc(B) * wq)
+    target = landfrac(A) * (1 - wl) + landfrac(B) * wl
     lo, hi = -3000.0, 3000.0
     for _ in range(40):                      # bisect the sea-level shim
         mid = (lo + hi) / 2
@@ -793,8 +869,9 @@ def main():
         hi = PRE.precambrian_grid(age, tw=ELEV_W, th=ELEV_H, flood=140.0)
         lo = PRE.precambrian_grid(age, tw=CLIM_W, th=CLIM_H, flood=140.0)
         # ramp from the real 540 Ma reconstruction into the authored one
-        wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
-        hi = handoff_blend(A_hi, hi, wq)
+        wq = float(np.clip((age - 540.0) / 20.0, 0, 1))    # geometry: short
+        wl = float(np.clip((age - 540.0) / 110.0, 0, 1))   # land fraction: long
+        hi = handoff_blend(A_hi, hi, wq, wl)
         lo = handoff_blend(A_lo, lo, wq)
         coarse[age] = MO.coarsen(hi)
         m, n = export(age, hi, lo[::-1], "pre")

@@ -449,6 +449,36 @@ Found by machine, eleven of them, after the Newark Rift Valleys had been found b
 
 The general lesson: when a rule branches on a property that is only a *proxy* for what you actually mean, enumerate the cases where the proxy and the meaning come apart, and write a check for them. Here the check is `build/audit_label_plate.py` — it cross-references every tracked label's plate id against the continents its own name and description commit it to, with fourteen genuinely trans-continental features (Laurasia, Beringia, Wallacea, the Central Pangaean Mountains) listed as exemptions with a reason each. It is registered in `audit_all.py`, so the class stays closed rather than being closed once.
 
+### 7.13 The artefact was in the codec, not the model
+
+A stair-step pattern crossed the sea floor at zoom, worst on smooth abyssal plain and along shelf edges. Four rounds of sea-floor work had already gone into procedural fabric, the depth law and the dequantisation window, so the reflex was to look there again. It was none of them.
+
+**WebP's lossy path transforms in 4x4 blocks and quantises each block's DC level on its own.** The abyss is smooth, low-contrast, and uses only ~27 of the 256 encoded levels below 3.5 km, so neighbouring blocks land on DIFFERENT levels and the decoded field carries a four-pixel grid of one-level steps that was never in the data. The shader then DIFFERENTIATES elevation to light it, and one level at abyssal depth is a 19-degree normal tilt (section 2.4) -- so every block edge is drawn as a facet.
+
+Measured as excess gradient energy at exactly the four-pixel period, on the float array before it is ever saved:
+
+| | Precambrian | present day |
+|---|---|---|
+| the array itself | 0.4x | 0.0x |
+| WebP q94, what we shipped | **29.5x** | **37.8x** |
+| AVIF q90 | 2.3x | 15.8x |
+| WebP lossless | 0.4x | 0.0x |
+
+Elevation ships as **AVIF** now. AV1's larger transforms and better prediction of smooth gradients cut the artefact 2.4-13x, the files come out *smaller* (0.95x overall), mean error drops, and it decodes at the same speed -- 3.3 ms against WebP's 3.6 on a 4096x2048 frame, measured in the browser, so fetch-on-demand scrubbing is unaffected. Lossless WebP takes it to zero but costs 3.7x the bytes. On the shipped set the block-edge excess step fell from **9.3 m to 3.0 m**, under the ~89 m quantisation level the shader already shrinks away.
+
+Three hypotheses were tested and disproved first -- crustal-age quantisation, the new GDH1 depth law, and dithering before quantisation -- and two A/B runs were invalid because they re-encoded an ALREADY-DAMAGED file, which faithfully reproduces the artefact and looks like a null result. When A/B-ing a codec, always start from the array, never from the shipped file.
+
+### 7.14 One control for two quantities means neither can be right
+
+`handoff_blend` cross-fades the real 540 Ma DEM into the generated Precambrian world, and a single `wq` drove both what the ground looks like and how much of it is land. Those want opposite ramps:
+
+- The 540 Ma DEM is a snapshot of one instant. Held at two-thirds weight 20 Myr away, it put **-3640 m of ocean** under Siberia's label, which by then had moved with its plate -- so a continent appeared to swim across the sea and its name swam with it. That wants a SHORT ramp.
+- Land fraction wants a LONG one. Shortening the single ramp to 20 Myr sent land 18.5% -> 28.6% -> back to 24.1%, which is the same "continents flood then a continent arises" artefact this function was written to kill, running backwards.
+
+Split them: geometry on 20 Myr, land fraction on 110 Myr, with the re-levelling shim now running at `wq >= 1` too (returning `B` early is what made the land curve step). Both come right at once -- land rises 18.5 -> 24.4% monotonically and both labels sit on land at every age.
+
+Two related traps came out of the same hunt. **A label's track is not linear in time**: Siberia barely moves 540->560 and then sweeps 60 degrees by 600, so pinning the ends of the handoff window left the interpolation 23 degrees ahead of it in the middle -- more than the craton's own radius. Pinning the ends of a window says nothing about its middle. And a verification that RE-DERIVES geometry can repeat the very error it is checking for: the first "on land at every age" result was produced by a broadcasting bug and was wrong. Sample the shipped texture instead.
+
 ## 8. Sources
 
 | role | source |
@@ -480,6 +510,8 @@ The general lesson: when a rule branches on a property that is only a *proxy* fo
 
 - **Four labels are authored at coordinates that are water today**, and so are never plate-tracked in any frame: **Gulf of California**, **Red Sea Rift** (both rifts that have already opened into sea), **West Antarctic Rift** (below sea level under ice) and **Kerguelen Microcontinent** (a drowned plateau). `coord_is_present_day()` routes them to `snapLabel`'s terrain search by design — a track follows crust, and a point in open water has no crust to follow. They are correct as authored; the build lists them under "labels left untracked" every run.
 - **The oldest ocean crust is capped at 190 Myr, and one basin is probably older than that.** `MAX_CRUST_AGE = 190` is right for the world's ocean floor: everything older has been subducted, which is why the Pacific has no Jurassic floor left. The exception is the deep **eastern Mediterranean** — the Ionian and Herodotus basins may be surviving **Palaeozoic Tethyan floor, 270–340 Ma**, trapped behind the closing of Tethys rather than consumed with it. If so it is by a wide margin the oldest ocean crust on Earth, and this model draws it at 190 Myr like everything else, so it comes out a few hundred metres too shallow and with the wrong fabric age. The dating is contested and the basins are buried under kilometres of Messinian salt, which is part of why. Recorded rather than special-cased: one basin's disputed age is not worth a branch in the depth law.
+
+- **The late Ediacaran draws too little land ice, and that is the price of one reference frame.** `ice_audit` wants 2-10% of land under ice at 570 Ma, for the cool interval after the Gaskiers glaciation; the model draws **0.3%**. It is not the ice model. Pinning the generated Precambrian world to PALEOMAP at the handoff -- so that Siberia and Laurentia stop drifting away from their own names (section 7.14) -- also adopts PALEOMAP's Ediacaran latitudes, and they are tropical: at 570 Ma **60% of all land lies within 30 degrees of the equator and only 7% above 60**, against 46%/16% at 545 and 42%/16% at 650. There is barely any high-latitude land to freeze. The literature figure assumes continents further poleward than this frame puts them. Warming the ice threshold until the number matched would be a compensating error hiding a geography disagreement, so it is recorded instead, and `audit_all` allows exactly this one finding.
 
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **The biota panel now has three tiers, and the residue is 21 labels.** It used to have two: a curated list for 101 of 336 labels, and one *global interval list* for everything else — the same four organisms on two hundred cards, and 133 labels (every mountain belt, basin, rift, desert and plateau) got no panel at all. `provinces.py` puts a named biogeographic province on **315 of 336** labels at every age they are drawn, so the order is now exception-curated → province assemblage → labelled global list, with the heading saying which one the reader is looking at. The 21 that still fall through are future-only names (Pangaea Proxima, Amasia, Neo-Himalaya) and the Antarctic Ice Sheet.

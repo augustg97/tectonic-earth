@@ -182,12 +182,79 @@ PRE_KEYS = {
         "EAntarctica": (52, -72, 25), "NChina": (72, -22, 160), "SChina": (80, -31, 150),
         "Kazakh": (-80, 44, 120), "Arabia": (-6, -26, 8),
     },
+    # 540 Ma, AND ITS POSITIONS COME FROM PALEOMAP, NOT FROM THIS FILE.
+    #
+    # This key used to be at 560 Ma, and there was nothing below it -- so
+    # `pre_placement` clipped and the generated terrain FROZE at its 560
+    # arrangement while the labels, which ride PALEOMAP rotations, kept moving
+    # toward their Phanerozoic positions. Between 570 and 541 Ma the two
+    # descriptions of the same world drifted apart until Siberia's label sat
+    # **105 degrees** from the Siberia the terrain was drawing, and Laurentia's
+    # 51. `handoff_blend` then cross-faded two grids that disagreed by a
+    # hemisphere, so a continent appeared to swim across the ocean as you
+    # scrubbed, and its name swam with it.
+    #
+    # Two theories, and the rule is to pick one. This picks the PaleoDEM's: at
+    # the young end the generated world is pinned to where PALEOMAP puts each
+    # craton at 540 Ma -- the mean of that block's own reconstructed anchors --
+    # so the generated grid and the real 540 map agree at the handoff and there
+    # is nothing left to cross-fade. Siberia and Laurentia stay with the
+    # landmasses they become. Older keys are untouched: the 540-650 leg now
+    # carries the Rodinia-breakup and Gondwana-assembly reorganisation, which is
+    # the event that actually happened in that window.
+    #
+    # Spins are kept from the old 560 key: they orient each craton's generated
+    # SHAPE and say nothing about where it is.
+    # Laurentia, Baltica and Siberia are placed at THEIR OWN LABEL'S position
+    # here and at 600 Ma, not at the block centroid. They are the only three
+    # cratons the app tracks a label for across this window, and the centroid
+    # left Siberia's label 22-33 degrees out while its craton is only 19 across
+    # -- so the name sat in open ocean on a world that had drawn its landmass
+    # elsewhere. Pinning the generated craton to the track the label rides makes
+    # the two agree by construction. The other eleven keep the interpolation
+    # they already had, so nothing else moves.
+    # Laurentia, Baltica and Siberia are placed at THEIR OWN LABEL'S position
+    # at 540, 560, 580 and 600 Ma -- the whole handoff window, sampled every
+    # 20 Myr rather than only at its ends.
+    #
+    # Two keys were not enough, and the reason is worth writing down: a label's
+    # track is NOT linear in time. Siberia barely moves between 540 and 560 and
+    # then sweeps 60 degrees of longitude by 600, so a straight interpolation
+    # between the two endpoints ran 23 degrees ahead of it in the middle -- more
+    # than the craton's own radius, which put the name in open water at exactly
+    # the ages this was meant to fix. Pinning the ends of a window says nothing
+    # about its middle.
+    #
+    # These are the only three cratons the app tracks a label for across this
+    # window; the other eleven keep the values the previous interpolation gave
+    # them, so nothing else moves. Spins orient the generated SHAPE and are kept.
+    540: {
+        "Laurentia": (-76, -30, 170), "Baltica": (-19, -53, 120), "Siberia": (-11, -16, 150),
+        "Amazonia": (-174, -72, 10), "WestAfrica": (138, -67, 20), "Congo": (172, -41, 5),
+        "Kalahari": (-161, -33, 0), "India": (174, -12, 190), "Australia": (-174, 17, 160),
+        "EAntarctica": (-176, -8, 20), "NChina": (144, 7, 160), "SChina": (160, 32, 150),
+        "Kazakh": (45, -23, 120), "Arabia": (149, -21, 0),
+    },
     560: {
-        "Laurentia": (-70, 25, 170), "Baltica": (-110, 15, 120), "Siberia": (-120, 45, 150),
-        "Amazonia": (-30, -25, 10), "WestAfrica": (-12, -20, 20), "Congo": (5, -35, 5),
-        "Kalahari": (10, -55, 0), "India": (40, -40, 190), "Australia": (70, -55, 160),
-        "EAntarctica": (50, -78, 20), "NChina": (60, -30, 160), "SChina": (68, -38, 150),
-        "Kazakh": (-95, 35, 120), "Arabia": (25, -18, 0),
+        "Laurentia": (-75, -27, 170), "Baltica": (-32, -40, 120), "Siberia": (-22, -12, 150),
+        "Amazonia": (-151, -63, 11), "WestAfrica": (108, -60, 21), "Congo": (139, -40, 6),
+        "Kalahari": (-131, -37, 0), "India": (150, -17, 191), "Australia": (-195, 5, 161),
+        "EAntarctica": (-200, -20, 21), "NChina": (131, 2, 160), "SChina": (145, 21, 150),
+        "Kazakh": (22, -11, 120), "Arabia": (121, -22, 1),
+    },
+    580: {
+        "Laurentia": (-72, -14, 170), "Baltica": (-46, -27, 120), "Siberia": (-43, 4, 150),
+        "Amazonia": (-127, -55, 12), "WestAfrica": (77, -53, 22), "Congo": (107, -40, 6),
+        "Kalahari": (-102, -42, 0), "India": (126, -21, 192), "Australia": (-215, -6, 162),
+        "EAntarctica": (-224, -31, 22), "NChina": (118, -4, 160), "SChina": (131, 9, 150),
+        "Kazakh": (0, 2, 120), "Arabia": (92, -23, 3),
+    },
+    600: {
+        "Laurentia": (-70, -4, 170), "Baltica": (-59, -14, 120), "Siberia": (-58, 14, 150),
+        "Amazonia": (-104, -46, 13), "WestAfrica": (47, -46, 23), "Congo": (74, -39, 7),
+        "Kalahari": (-72, -46, 0), "India": (102, -26, 193), "Australia": (-236, -18, 163),
+        "EAntarctica": (-248, -43, 23), "NChina": (105, -9, 160), "SChina": (116, -2, 150),
+        "Kazakh": (-23, 14, 120), "Arabia": (64, -24, 4),
     },
 }
 

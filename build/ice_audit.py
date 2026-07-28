@@ -88,7 +88,7 @@ def _resize(a, H, W):
 
 
 def fields(base, H=512, W=1024):
-    e = _field(base + "_e.webp")
+    e = _field(base + "_e.avif")
     if e is None:
         return None, None
     s = 2.0 * _resize(e, H, W) - 1.0

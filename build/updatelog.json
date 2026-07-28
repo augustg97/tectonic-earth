@@ -2,6 +2,30 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
  "releases": [
   {
+   "version": "1.9",
+   "date": "28 July 2026",
+   "title": "Smoother water, steadier continents",
+   "summary": "Two things you could see: a stair-step pattern across the sea floor, and two continents that swam away from their own names just before the Cambrian. Both are gone.",
+   "sections": [
+    {
+     "name": "The ocean floor",
+     "items": [
+      "The staircase is gone. Zoomed in, the sea floor was crossed by faint square steps — most visible on smooth abyssal plains and along the edges of ridges and shelves. They were never in the model: they came from the image format the elevation was stored in, which compresses in four-pixel blocks and left a one-step ledge at every block edge. The lighting then treated each ledge as a real slope.",
+      "Elevation is now stored in a newer format that handles smooth ground far better. The leftover step is a third of what it was, and small enough that the app's existing correction removes it — while the files are slightly smaller and load just as fast.",
+      "Coastlines and shelf edges are smoother for the same reason."
+     ]
+    },
+    {
+     "name": "Where things are",
+     "items": [
+      "Siberia and Laurentia stay on their own land through the run-up to the Cambrian. Between 570 and 541 million years ago the two names drifted out over open ocean, because the deep-time map and the plate model that carries the labels disagreed about where those continents were — by as much as a hemisphere at the join.",
+      "The deep-time map now follows the same plate model the labels do, sampled every twenty million years across the handover so it tracks their real path rather than cutting the corner. Both continents sit on solid ground at every frame.",
+      "Land area still changes smoothly through the handover, which was the trap: fixing the positions with a single control made continents flood and re-emerge. Position and land area are now handled separately."
+     ]
+    }
+   ]
+  },
+  {
    "version": "1.8",
    "date": "27 July 2026",
    "title": "Rain that knows where the sea is",

@@ -38,7 +38,7 @@ def save_eo(age, tag, Zhi):
     e = bf._gray(bf.enc_elev(bf.smooth_bathymetry(Z2)))
     o = Image.fromarray((np.clip(ofield, 0, 1) * 255 + 0.5).astype(np.uint8)
                         ).resize((OCEAN_W, OCEAN_H), Image.BILINEAR)
-    bf._save(e, os.path.join(OUT, f"{tag}_{abs(age):04d}_e.webp"), bf.ELEV_Q)
+    bf._save(e, os.path.join(OUT, bf.elev_name(tag, age)), bf.ELEV_Q)
     bf._save(o, os.path.join(OUT, f"{tag}_{abs(age):04d}_o.webp"), bf.OCEAN_Q)
     return mot is not None
 
@@ -99,8 +99,9 @@ for age in range(540 + STEP, 1001, STEP):
     if not want("pre"):
         break
     hi = bf.PRE.precambrian_grid(age, tw=ELEV_W, th=ELEV_H, flood=140.0)
-    wq = float(np.clip((age - 540.0) / 60.0, 0, 1))
-    hi = bf.handoff_blend(A_hi, hi, wq)
+    wq = float(np.clip((age - 540.0) / 20.0, 0, 1))
+    wl = float(np.clip((age - 540.0) / 110.0, 0, 1))
+    hi = bf.handoff_blend(A_hi, hi, wq, wl)
     save_eo(age, "pre", hi)
     npre += 1
 print(f"precambrian: {npre} keyframes reskinned")

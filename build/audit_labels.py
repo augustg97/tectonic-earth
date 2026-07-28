@@ -42,9 +42,9 @@ def field(age):
     # three naming schemes: future, Phanerozoic, and the authored Precambrian
     # above 540 Ma. Omitting "pre_" makes every deep-time probe silently report
     # "no data", which reads exactly like "the label is not on land".
-    name = (f"fut_{abs(key):04d}_e.webp" if key < 0 else
-            f"pre_{key:04d}_e.webp" if key > 540 else
-            f"phan_{key:04d}_e.webp")
+    name = (f"fut_{abs(key):04d}_e.avif" if key < 0 else
+            f"pre_{key:04d}_e.avif" if key > 540 else
+            f"phan_{key:04d}_e.avif")
     p = os.path.join(FIELDS, name)
     if not os.path.exists(p):
         _cache[key] = None

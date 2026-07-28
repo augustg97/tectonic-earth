@@ -920,7 +920,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260727-2132';
+const DATA_V='20260728-0341';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -980,7 +980,12 @@ function fieldFile(i,kind){
   // The lake, surface-process and ocean-structure fields are baked alongside the
   // elevation field and named by the same convention, so derive rather than
   // threading three more names through the timeline JSON.
-  return fr.e.replace('_e.webp','_'+kind+'.webp');
+  /* Elevation ships as AVIF and the other five as WebP, so the sibling name
+     cannot be a blind replace of '_e.webp' -- that returns the string
+     UNCHANGED the moment elevation is not a .webp, and the app would ask for
+     the elevation six times over with nothing to say so. Split on '_e'. */
+  const cut=fr.e.lastIndexOf('_e');
+  return fr.e.slice(0,cut)+'_'+kind+'.webp';
 }
 
 /* The opening frame needs twelve files, so the splash counts those and nothing

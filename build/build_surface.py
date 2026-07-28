@@ -58,7 +58,7 @@ def _read(path, size=None):
 
 
 def elevation(base):
-    p = os.path.join(FIELDS, base + "_e.webp")
+    p = os.path.join(FIELDS, base + "_e.avif")
     if not os.path.exists(p):
         return None
     s = 2.0 * _read(p, (W, H)) - 1.0
@@ -277,8 +277,8 @@ def main():
     if len(sys.argv) > 1 and not sys.argv[1].startswith("-"):
         build_one(sys.argv[1], verbose=True)
         return
-    bases = sorted({os.path.basename(p)[:-len("_e.webp")]
-                    for p in glob.glob(os.path.join(FIELDS, "*_e.webp"))})
+    bases = sorted({os.path.basename(p)[:-len("_e.avif")]
+                    for p in glob.glob(os.path.join(FIELDS, "*_e.avif"))})
     print(f"deriving surface fields for {len(bases)} keyframes...")
     for i, b in enumerate(bases):
         build_one(b, verbose=(i % 40 == 0))

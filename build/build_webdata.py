@@ -314,7 +314,7 @@ def _present_elevation():
     """The shipped present-day elevation raster, for sanity-checking coords."""
     if "p" in _DEM_CACHE:
         return _DEM_CACHE["p"]
-    path = os.path.join(WEB, "fields", "phan_0000_e.webp")
+    path = os.path.join(WEB, "fields", "phan_0000_e.avif")
     try:
         from PIL import Image
         im = Image.open(path).convert("L")
@@ -511,8 +511,8 @@ def landmasses(age, nx=720, ny=360, min_area=40.0):
             _LANDMASS_CACHE["_warned"] = True
         _LANDMASS_CACHE[key] = []
         return []
-    name = (f"pre_{key:04d}_e.webp" if key > 540 else
-            (f"fut_{abs(key):04d}_e.webp" if key < 0 else f"phan_{key:04d}_e.webp"))
+    name = (f"pre_{key:04d}_e.avif" if key > 540 else
+            (f"fut_{abs(key):04d}_e.avif" if key < 0 else f"phan_{key:04d}_e.avif"))
     path = os.path.join(WEB, "fields", name)
     if not os.path.exists(path):
         _LANDMASS_CACHE[key] = []
@@ -596,8 +596,8 @@ def elev_grid(age, nx=720, ny=360):
         return _GRID_CACHE[key]
     import numpy as np
     from PIL import Image
-    name = (f"pre_{key:04d}_e.webp" if key > 540 else
-            (f"fut_{abs(key):04d}_e.webp" if key < 0 else f"phan_{key:04d}_e.webp"))
+    name = (f"pre_{key:04d}_e.avif" if key > 540 else
+            (f"fut_{abs(key):04d}_e.avif" if key < 0 else f"phan_{key:04d}_e.avif"))
     path = os.path.join(WEB, "fields", name)
     if not os.path.exists(path):
         _GRID_CACHE[key] = None
