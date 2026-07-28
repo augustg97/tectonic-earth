@@ -179,7 +179,20 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 input[type=range].mini{-webkit-appearance:none;appearance:none;height:3px;background:#2b3240;border-radius:2px;outline:none}
 input[type=range].mini::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
 input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
-#ambientBtn{margin-left:auto}
+#spinwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+#spinwrap[hidden]{display:none}
+#spin{width:72px}
+#spinVal,#tiltVal,#headVal{min-width:34px;font-variant-numeric:tabular-nums}
+/* margin-left:auto moves from #ambientBtn to the camera cluster, so the cluster
+   is what gets pushed right and Ambient stays pinned to its right-hand edge --
+   which is the arrangement the request asks for. */
+#camwrap{margin-left:auto;display:flex;align-items:center}
+#camGlobe,#camMap{display:flex;align-items:center;gap:10px}
+#camGlobe[hidden],#camMap[hidden]{display:none}
+.camrow{display:flex;align-items:center;gap:7px;color:var(--dim);font-size:11px;letter-spacing:.04em;cursor:pointer}
+#tiltR,#headR{width:74px}
+#mapLonLbl{color:var(--dim);font-size:11px;min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
+#resetNorth{padding:6px 9px;font-size:9.5px}
 .txtbtn{background:none;border:1px solid var(--line);color:var(--dim);font-family:var(--font);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:8px;cursor:pointer;transition:.15s}
 .txtbtn:hover{border-color:var(--accent);color:var(--ink)}
 .txtbtn.on{border-color:var(--accent);color:var(--accent)}
@@ -360,12 +373,52 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 @media (max-width:1180px){
   #info{right:20px;top:auto;bottom:158px;max-height:calc(100vh - 400px)}
 }
+/* ===== MOBILE =====================================================
+   The rails were built for a desktop viewport and simply kept their size on a
+   phone: #readout had no mobile rule at all, so the whole conditions block --
+   age, era, temperature, CO2, biomes -- rendered at full width straight over
+   the globe, and #ctxStack stacked cards on top of that. The globe, which is
+   the entire point, got whatever was left.
+
+   So: nothing overlays the globe by default. Both rails become drawers behind
+   their own button, and the readout keeps only what a glance needs -- the age
+   and the period -- with the rest inside the right drawer. */
 @media (max-width:720px){
-  #controls{top:auto;bottom:150px;width:160px}
-  #leftrail{display:none}
-  #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:44vh}
+  .mtab{display:flex}
+  #controls{position:fixed;top:auto;bottom:150px;width:160px}
+  /* was display:none, which made the legend and timeline unreachable rather
+     than tidy. It is a drawer now. */
+  #leftrail{display:flex;left:0;top:0;bottom:0;width:min(78vw,240px);
+    background:rgba(10,13,18,.94);backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);padding:56px 12px 16px;z-index:36;
+    transform:translateX(-102%);transition:transform .28s ease}
+  body.m-left #leftrail{transform:none}
+  #controls,#ctxStack,#extinctBox{transform:translateX(102%);
+    transition:transform .28s ease}
+  body.m-right #controls,body.m-right #ctxStack,body.m-right #extinctBox{
+    transform:none}
+  #readout{padding:6px 8px 8px 12px;background:none}
+  #readout #env,#readout #eraName{display:none}
+  body.m-right #readout{background:rgba(10,13,18,.94);border-radius:10px}
+  body.m-right #readout #env,body.m-right #readout #eraName{display:block}
+  #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:40vh}
   #age{font-size:24px}
+  #title h1{font-size:15px} #title .sub{display:none}
+  /* the bottom bar is the one thing that must stay usable, so it wraps rather
+     than pushing the camera cluster off the edge */
+  #ctlrow{flex-wrap:wrap;gap:9px}
+  #camwrap{margin-left:0;order:9;width:100%}
+  #camGlobe{width:100%;justify-content:space-between}
+  #tiltR,#headR{width:64px}
+  #contact{display:none}
 }
+.mtab{display:none;position:fixed;top:12px;z-index:38;width:38px;height:38px;
+  align-items:center;justify-content:center;border-radius:10px;
+  background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--ink);
+  font-family:var(--font);font-size:15px;cursor:pointer}
+#mLeft{left:12px} #mRight{right:12px}
+body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
+body.ambient .mtab{display:none}
 
 /* ===== About one-pager overlay =====================================
    Fully namespaced under #aboutPage with its own palette variables, so
@@ -490,6 +543,11 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 <canvas id="map2d"></canvas>
 <svg id="leaders"></svg>
 <div id="labels"></div>
+
+<!-- MOBILE DRAWER BUTTONS. Hidden above 720px; below it they are the only way
+     to reach the rails, which are otherwise off-screen. -->
+<button id="mLeft" class="mtab" aria-label="Timeline and legend">☰</button>
+<button id="mRight" class="mtab" aria-label="Conditions and details">i</button>
 
 <div id="topbar">
   <div id="title">
@@ -782,6 +840,11 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
       <svg id="dirIcon" viewBox="0 0 24 24"><path d="M4 12h13l-5-5 1.4-1.4L21.8 12l-8.4 6.4L12 17l5-5H4z"/></svg>
     </button>
     <div id="speedwrap"><span>Speed</span><input type="range" id="speed" class="mini" min="1" max="60" value="18"><span id="speedVal">18 Myr/s</span></div>
+    <!-- Spin speed sits beside time speed because they are the same KIND of
+         control -- how fast something moves -- and separating them would make
+         the user hunt for the second one. It only appears when auto-rotate is
+         on, since a speed control for a thing that is not moving is furniture. -->
+    <div id="spinwrap" hidden><span>Spin</span><input type="range" id="spin" class="mini" min="0" max="100" value="25"><span id="spinVal">1.0&times;</span></div>
     <div id="steprow">
       <button class="pbtn small" id="stepBack" title="Back 1 Myr (←)" aria-label="Back one million years">
         <svg viewBox="0 0 24 24"><path d="M15.4 5.6 8.9 12l6.5 6.4L14 19.8 6.2 12 14 4.2z"/></svg>
@@ -792,6 +855,31 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
       </button>
     </div>
     <div id="contact">For questions, contact August Gweon (<a href="mailto:augustgweon@gmail.com">augustgweon@gmail.com</a>; <a href="mailto:august@anthropic.com">august@anthropic.com</a>)</div>
+    <!-- Camera controls, immediately left of Ambient. Globe view gets Google
+         Earth's three: tilt, heading, and a way back to north. Map view gets
+         longitude arrows in the same slot instead, because tilt and heading are
+         meaningless on a flat projection and leaving them there enabled but
+         inert is worse than swapping them out. -->
+    <div id="camwrap">
+      <div id="camGlobe">
+        <label class="camrow"><span>Tilt</span>
+          <input type="range" id="tiltR" class="mini" min="0" max="90" value="0">
+          <span id="tiltVal">0&deg;</span></label>
+        <label class="camrow"><span>Heading</span>
+          <input type="range" id="headR" class="mini" min="0" max="360" value="0">
+          <span id="headVal">0&deg;</span></label>
+        <button class="txtbtn" id="resetNorth">Reset to north</button>
+      </div>
+      <div id="camMap" hidden>
+        <button class="pbtn small" id="mapW" title="Pan west" aria-label="Pan west">
+          <svg viewBox="0 0 24 24"><path d="M15.4 5.6 8.9 12l6.5 6.4L14 19.8 6.2 12 14 4.2z"/></svg>
+        </button>
+        <span id="mapLonLbl">0&deg;</span>
+        <button class="pbtn small" id="mapE" title="Pan east" aria-label="Pan east">
+          <svg viewBox="0 0 24 24"><path d="M8.6 5.6 15.1 12l-6.5 6.4L10 19.8 17.8 12 10 4.2z"/></svg>
+        </button>
+      </div>
+    </div>
     <button class="txtbtn" id="ambientBtn">Ambient</button>
   </div>
 </div>
@@ -831,7 +919,13 @@ const $=s=>document.querySelector(s);
 const state={
   age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:18,
   layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false},
-  ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null
+  ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null,
+  // rot/tilt are the LONGITUDE and LATITUDE of the point the camera looks at.
+  // gtilt and head are the Google Earth pair layered on top: how far the camera
+  // leans off that point's vertical, and which way it faces once it has. Both
+  // zero reproduces the old straight-down-the-normal view exactly, which is what
+  // keeps this from being a regression on every framing verified so far.
+  gtilt:0, head:0, spin:1, mapLon:0
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
 let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[], OCI=[];   // elevation / rainfall / motion / lake-depth / surface-process / ocean-structure fields
@@ -920,7 +1014,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-0428';
+const DATA_V='20260728-1109';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1077,7 +1171,40 @@ function ll2v(lon,lat,r){
   return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
 }
 
-const VERT=`varying vec2 vUv; varying vec3 vVN; void main(){ vUv=uv; vVN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `;
+/* The globe used to be a perfectly smooth ball whose relief existed only in the
+   fragment shader's shading. That reads correctly looking straight down and
+   falls apart the moment you tilt: a shaded sphere seen edge-on is still a
+   sphere, with a smooth silhouette and no mountains standing against the sky.
+   Tilt is only worth having if the terrain has real height, so the terrain now
+   has real height -- the elevation field displaces the vertices themselves.
+
+   texture2D, NOT texture2DLod. The reasoning for the LOD variant is sound in
+   GLSL ES 1.00 -- a vertex shader has no implicit derivatives -- but three.js
+   compiles ShaderMaterial to GLSL ES 3.00 under WebGL2, where the compatibility
+   layer #defines texture2D to texture() and provides no texture2DLod at all.
+   The result was "no matching overloaded function", a vertex shader that never
+   compiled, and a globe that drew as a featureless blue ball because the whole
+   program was dead. texture() in the vertex stage samples the base level, which
+   is what was wanted. The decode duplicates decElev from the fragment shader
+   (one line, signed-sqrt, Z_RANGE 8000) rather than sharing it, because the two
+   stages are compiled from separate strings.
+
+   Gated on uMapProj because this same material draws the flat map, where
+   "displace along the normal" would push the plane bodily at the camera. */
+const VERT=`
+varying vec2 vUv; varying vec3 vVN;
+uniform sampler2D elevA, elevB;
+uniform float mixf, uDisp, uMapProj;
+void main(){
+  vUv=uv; vVN=normalize(normalMatrix*normal);
+  vec3 p=position;
+  if(uDisp>0.0 && uMapProj<0.5){
+    float e=mix(texture2D(elevA,uv).r, texture2D(elevB,uv).r, mixf);
+    float d=e*2.0-1.0;
+    p+=normal*(sign(d)*d*d*8000.0)*uDisp;
+  }
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);
+} `;
 
 /* ---------------------------------------------------------------------------
    Terrain shader.
@@ -1115,7 +1242,7 @@ uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
    drew the same gold grass steppe and stippled savanna the Serengeti gets, tens
    of millions of years before either existed. */
 uniform float uGrass;
-uniform float uMapProj, uBounds;
+uniform float uMapProj, uBounds, uMapLon;
 uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not a Color)
 /* Term-isolation switches for the sea floor: x the noise fabric, y the
    near-axis fault sets, z the fracture-zone corrugation, w the dequantisation
@@ -1505,7 +1632,12 @@ void main(){
     // The sphere samples with uv.y = 1 at the north pole (flipY puts image row
     // 0 there), so the flat map has to match that convention or it renders
     // upside down relative to the globe.
-    uv=vec2(ll.x/(2.0*PI)+0.5, 0.5+ll.y/PI);
+    // Central-meridian shift. Rotating the SAMPLE rather than the geometry
+    // means the ellipse stays put and the world slides through it, which is
+    // what "look at a different face" means on a whole-globe projection --
+    // and it keeps the map's silhouette stable as you pan.
+    float mlon=mod(ll.x+uMapLon+PI, 2.0*PI)-PI;
+    uv=vec2(mlon/(2.0*PI)+0.5, 0.5+ll.y/PI);
   }
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
@@ -3268,7 +3400,7 @@ function initGL(){
     oceanA:{value:null},oceanB:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uGrass:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
-    uMapProj:{value:0},uBounds:{value:0},uSeaTint:{value:1},uTime:{value:0},
+    uMapProj:{value:0},uBounds:{value:0},uMapLon:{value:0},uDisp:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uSnowball:{value:0},
     uDbg:{value:new THREE.Vector4(1,1,1,1)},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
@@ -3276,7 +3408,12 @@ function initGL(){
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}
   },vertexShader:VERT,fragmentShader:FRAG,
     extensions:{derivatives:true}});   // fwidth() for screen-space shoreline AA
-  globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat);
+  // 1024x512 is 525k vertices -- 0.35 deg, ~39 km a quad -- which is what it
+  // takes for a displaced range to read as a range rather than as a bulge.
+  // Phones keep the old mesh: they cannot afford half a million vertices and
+  // are not the device anyone tilts to admire the Himalaya on.
+  const SEG=matchMedia('(max-width:720px)').matches?[256,128]:[1024,512];
+  globe=new THREE.Mesh(new THREE.SphereGeometry(1,SEG[0],SEG[1]),mat);
   scene.add(globe);
   // the flat map is the same shader on a plane, so both views agree exactly
   mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
@@ -3290,9 +3427,27 @@ function initGL(){
   mat.uniforms.oceanA.value=_oceanGray; mat.uniforms.oceanB.value=_oceanGray;
   // atmosphere
   const ageo=new THREE.SphereGeometry(1.03,64,32);
-  const amat=new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,uniforms:{},
+  /* uAtm and uRim exist because this shell was written for ONE viewing
+     situation -- the whole globe, centred, seen from far away -- where the
+     opaque Earth covers the middle and only a rim of shell is left showing.
+     Tilt breaks that assumption completely: the camera drops to just above the
+     shell and looks along it, so the line of sight runs a long tangential path
+     through the atmosphere and the edge-on term (0.72-dot -> 0.43 alpha) paints
+     the entire screen pale blue. uAtm dims the whole shell as the camera closes
+     in and uRim sharpens it onto the limb, which is exactly what a real horizon
+     looks like from low orbit -- a thin bright band, not a fog. */
+  const amat=new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,
+    uniforms:{uAtm:{value:1},uRim:{value:2.2}},
     vertexShader:`varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
-    fragmentShader:`varying vec3 vN;void main(){float i=pow(0.72-dot(vN,vec3(0,0,1.0)),2.2);gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9;}`});
+    fragmentShader:`uniform float uAtm,uRim;varying vec3 vN;void main(){
+      /* CLAMP THE BASE TO 0..1 BEFORE THE POWER. On the back faces this
+         shell is drawn with, dot() goes negative, so 0.72-dot reaches 1.72 --
+         and raising a number GREATER THAN ONE to a higher power amplifies it
+         instead of attenuating it. Tightening the rim by lifting uRim to 6.5
+         therefore produced 1.72^6.5 = 35, a fully saturated white disc over
+         the entire planet. It read as a terrain bug and was this one line. */
+      float i=pow(clamp(0.72-dot(vN,vec3(0,0,1.0)),0.0,1.0),uRim);
+      gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9*uAtm;}`});
   atmo=new THREE.Mesh(ageo,amat); scene.add(atmo);
 
   /* Cloud layer -- the single biggest "seen from space" cue. It is a thin shell
@@ -5226,7 +5381,12 @@ function loop(now){
     if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
     syncSlider();
   }
-  if((state.layers.rotate&&!dragging)||state.ambient){state.rot+=dt*(state.ambient?0.12:0.05);}
+  // state.spin scales the manual auto-rotate only. Ambient keeps its own fixed
+  // pace on purpose: it is a display mode with a composed rhythm, and having it
+  // inherit whatever the slider was left on would make the same mode look
+  // different every time it is entered.
+  if((state.layers.rotate&&!dragging)||state.ambient){
+    state.rot+=dt*(state.ambient?0.12:0.05*state.spin);}
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
   updateContextCards(); // and the interval / supercontinent / glaciation cards
   // Drives only the sea-surface sheen; nothing about world state depends on it,
@@ -5264,8 +5424,86 @@ function loop(now){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
     // back the camera off on narrow/tall viewports so the globe always fits
     const d=state.zoom*Math.max(1,1.15/cam.aspect);
-    cam.position.set(0,Math.sin(state.tilt)*d,Math.cos(state.tilt)*d);
-    cam.lookAt(0,0,0);
+    /* ORBIT ABOUT A POINT ON THE SURFACE, not about the centre of the Earth.
+       The old line put the camera on the YZ plane looking at the origin, which
+       can express "where on the globe am I above" and nothing else -- there is
+       no way to lean over and look at the horizon, which is what tilt means.
+
+       The globe has already been rotated by state.rot, so the point under the
+       camera sits on the +Z meridian at latitude state.tilt. Build the local
+       frame there and orbit within it:
+
+         up    = the surface normal at C
+         north = the tangent pointing at the pole
+         east  = north x up
+         horiz = the compass direction we are looking TOWARD (heading)
+
+       The camera leans off `up` by gtilt toward the OPPOSITE of horiz -- you
+       stand south of a thing to look north at it -- and screenUp is built
+       analytically as the perpendicular of the view direction in that same
+       plane. That last part matters: the obvious `cam.up = up` degenerates at
+       gtilt 0, where up is parallel to the view direction and lookAt has no
+       basis to work from. Deriving screenUp instead means tilt 0 is an ordinary
+       point on the range rather than a special case that has to be clamped. */
+    /* TERRAIN EXAGGERATION, and why it is not a constant.
+
+       Earth's relief is 0.14% of its radius: Everest against 6,371 km is a
+       rounding error, and at 1x on a globe that fills the screen it is under a
+       pixel. Every 3D globe therefore exaggerates. But exaggeration that is
+       always on would deform the one framing this whole model has been verified
+       at -- the untilted, zoomed-out globe -- so it ramps from ZERO there and
+       only arrives when the user has both come close and leaned over, which is
+       the only time relief is visible anyway.
+
+       ZOOM_NEAR/FAR: state.zoom is camera distance, so SMALLER is closer. */
+    const ZF=3.05, ZN=1.05;
+    const near=Math.min(1,Math.max(0,(ZF-state.zoom)/(ZF-ZN)));
+    const lean=Math.min(1,state.gtilt/45);
+    const exag=15.0*near*(0.40+0.60*lean);
+    mat.uniforms.uDisp.value=exag/6371000.0;
+    /* The shells have to clear the mountains. Clouds sat at 1.014 and the
+       atmosphere at 1.03; a 15x Everest reaches 1.019, so peaks would have
+       erupted through the cloud deck and into the haze. Rather than hard-code
+       new radii -- which would thicken the atmosphere on the untilted globe
+       where none of this applies -- both shells ride on top of whatever the
+       current exaggeration actually needs. */
+    const lift=1.0+8000.0*exag/6371000.0;
+    clouds.scale.setScalar(lift); atmo.scale.setScalar(lift);
+    // Dim and tighten the halo as the camera drops toward the surface, or the
+    // tangential path through it washes the whole frame out. See the note on
+    // the material itself.
+    atmo.material.uniforms.uAtm.value=1.0-0.80*near;
+    atmo.material.uniforms.uRim.value=2.2+5.0*near;
+    /* Clouds RETIRE as the camera drops, rather than merely thinning. A cloud
+       shell is a flat texture on a sphere: looked down on from far away it
+       reads as weather, but looked along from low orbit the eye travels through
+       its whole tangential thickness and it becomes an opaque white wall lying
+       across the terrain -- which is precisely what tilt is for looking at.
+       Real clouds would part and show ground between them; this one cannot, so
+       the honest move is to take it away once the geometry stops supporting the
+       illusion. Gone by the time the camera is 60% of the way in. */
+    if(clouds.material.uniforms.uCloud){
+      const cf=Math.max(0.0,1.0-near/0.6);
+      clouds.material.uniforms.uCloud.value=cf;
+      clouds.visible=clouds.visible&&cf>0.01;
+    }
+    const t=state.gtilt*Math.PI/180, hd=state.head*Math.PI/180;
+    const cp=Math.cos(state.tilt), sp=Math.sin(state.tilt);
+    const C  =new THREE.Vector3(0,sp,cp);              // surface point, r=1
+    const up =C.clone();
+    const north=new THREE.Vector3(0,cp,-sp);
+    const east=new THREE.Vector3().crossVectors(north,up);
+    const horiz=north.clone().multiplyScalar(Math.cos(hd))
+                     .addScaledVector(east,Math.sin(hd));
+    // d is measured from the Earth's centre at tilt 0, so the orbit radius is
+    // d-1; without that subtraction every view would jump backwards by one
+    // Earth radius the moment this code replaced the old two-liner.
+    const orb=Math.max(0.05,d-1.0);
+    cam.position.copy(C)
+       .addScaledVector(up,   orb*Math.cos(t))
+       .addScaledVector(horiz,-orb*Math.sin(t));
+    cam.up.copy(up).multiplyScalar(Math.sin(t)).addScaledVector(horiz,Math.cos(t));
+    cam.lookAt(C);
     globe.rotation.x=0;atmo.rotation.copy(globe.rotation);
     renderer.render(scene,cam);
   }else{
@@ -5299,9 +5537,55 @@ $('#stepBack').onclick=()=>stepAge(1);
 $('#stepFwd').onclick=()=>stepAge(-1);
 syncDir();
 $('#speed').addEventListener('input',e=>{state.speed=+e.target.value;$('#speedVal').textContent=state.speed+' Myr/s';});
+
+/* ---- spin speed, camera tilt/heading, and map longitude ---- */
+// The slider is 0..100 but the RATE is exponential, because a linear speed
+// control spends most of its travel in a range that all looks the same. This
+// maps to 0.1x .. 10x with 1x at the quarter mark, so slow-and-stately and
+// spinning-like-a-top are both reachable without hunting.
+function spinRate(v){ return v<=0?0:Math.pow(10,(v-25)/37.5); }
+$('#spin').addEventListener('input',e=>{
+  state.spin=spinRate(+e.target.value);
+  $('#spinVal').textContent=state.spin<0.005?'off'
+    :(state.spin<1?state.spin.toFixed(2):state.spin.toFixed(1))+'×';});
+function camSync(){
+  $('#tiltVal').textContent=Math.round(state.gtilt)+'°';
+  $('#headVal').textContent=Math.round(state.head)+'°';
+  $('#tiltR').value=state.gtilt; $('#headR').value=state.head;
+  // Heading is only meaningful once you have leaned over -- looking straight
+  // down, every heading shows the same disc rotated. Say so rather than let it
+  // read as broken.
+  $('#headR').disabled=state.gtilt<1;
+  $('#headR').style.opacity=state.gtilt<1?0.4:1;
+}
+$('#tiltR').addEventListener('input',e=>{state.gtilt=+e.target.value;camSync();});
+$('#headR').addEventListener('input',e=>{state.head=+e.target.value;camSync();});
+$('#resetNorth').addEventListener('click',()=>{
+  // Google Earth resets BOTH -- it is "put the camera back the way it was",
+  // not "set one number to zero" -- and it animates, because snapping gives no
+  // sense of which way you were facing.
+  const t0=state.gtilt,h0=state.head,t=performance.now();
+  const h1=state.head>180?360:0;          // unwind the short way round
+  (function ease(){
+    const k=Math.min(1,(performance.now()-t)/420), s=k*k*(3-2*k);
+    state.gtilt=t0*(1-s); state.head=(h0+(h1-h0)*s)%360; camSync();
+    if(k<1) requestAnimationFrame(ease); else {state.gtilt=0;state.head=0;camSync();}
+  })();
+});
+function mapLonSync(){
+  const v=((state.mapLon%360)+540)%360-180;
+  $('#mapLonLbl').textContent=(v>0?'+':'')+Math.round(v)+'°';
+  mat.uniforms.uMapLon.value=state.mapLon*Math.PI/180;
+}
+$('#mapW').addEventListener('click',()=>{state.mapLon-=30;mapLonSync();});
+$('#mapE').addEventListener('click',()=>{state.mapLon+=30;mapLonSync();});
 document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#viewSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
   state.view=b.dataset.v;const map=state.view==='map';
+  // Tilt and heading do not exist on a flat projection, and longitude arrows
+  // do not exist on a globe you can already drag. Swap the cluster rather than
+  // leave either set present but inert.
+  $('#camGlobe').hidden=map; $('#camMap').hidden=!map;
   // #gl draws terrain in BOTH views now; #map2d is a transparent overlay
   $('#map2d').style.display=map?'block':'none';
   $('#hint').textContent=map?'Click a plate or landmass for details':'Drag to rotate · scroll to zoom · click a plate for details';
@@ -5310,7 +5594,16 @@ document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
 document.querySelectorAll('#shadeSeg button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#shadeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.shade=b.dataset.s;});
 document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
-  const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);});
+  const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);
+  if(k==='rotate') $('#spinwrap').hidden=!state.layers.rotate;});
+// One drawer at a time: opening either closes the other, so the globe is never
+// sandwiched between two panels on a screen that has no room for one.
+$('#mLeft').onclick=()=>{document.body.classList.remove('m-right');
+  document.body.classList.toggle('m-left');};
+$('#mRight').onclick=()=>{document.body.classList.remove('m-left');
+  document.body.classList.toggle('m-right');};
+$('#stage').addEventListener('pointerdown',()=>{
+  document.body.classList.remove('m-left','m-right');});
 $('#ambientBtn').onclick=()=>enterAmbient(true);
 $('#exitAmbient').onclick=()=>enterAmbient(false);
 $('#aboutBtn').onclick=()=>{$('#updatelog').classList.remove('show');
