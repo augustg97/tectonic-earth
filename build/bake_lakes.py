@@ -223,7 +223,13 @@ def load_rain(epath):
 def bake_one(epath, stats=False):
     base = os.path.splitext(os.path.basename(epath))[0].replace("_e", "")
     wpath = epath.replace("_e.avif", "_w.webp")
-    e = np.asarray(Image.open(epath).convert("RGB"))[..., 0].astype(np.float32) / 255.0
+    # Resized to THIS module's working grid. The lake field ships at 2048x1024
+    # and the elevation is 4096x2048, and nothing reconciled them: load_rain
+    # resizes to the small grid while the elevation was read at native size,
+    # so lake_depth got a (1024,2048) rainfall against a (2048,4096) terrain
+    # and refused to broadcast. Latent until something rebaked every frame.
+    _im = Image.open(epath).convert("RGB").resize((ELEV_W, ELEV_H), Image.BILINEAR)
+    e = np.asarray(_im)[..., 0].astype(np.float32) / 255.0
     Z = dec_elev(e)
     Rf = load_rain(epath)
     age = parse_age(base)
@@ -232,7 +238,19 @@ def bake_one(epath, stats=False):
     else:
         depth = lake_depth(Z, Rf, temperature(Z, age), age)
     enc = (enc_depth(depth) * 255.0 + 0.5).astype(np.uint8)
-    Image.fromarray(enc, "L").save(wpath, "WEBP", lossless=True, method=6)
+    # RGB, NOT grayscale any more. R is the lake depth this file has always
+    # carried; G is the DRY-BASIN mask, which tells the shader that ground below
+    # sea level here is exposed rather than submerged. It has to live in a
+    # second channel of an existing per-frame texture rather than a new file:
+    # the shader must know before it decides land or sea, and a grayscale image
+    # has no room to say it. (G == R on a grayscale decode, so every frame has
+    # to be rebaked with this in place, or old files would read their own lake
+    # depth as a dry mask and drain every lake on Earth.)
+    import epeiric as _EP
+    dry = _EP.messinian_mask(depth.shape, float(age))
+    gch = (np.clip(dry, 0.0, 1.0) * 255.0 + 0.5).astype(np.uint8)
+    rgb = np.dstack([enc, gch, np.zeros_like(enc)])
+    Image.fromarray(rgb, "RGB").save(wpath, "WEBP", lossless=True, method=6)
     if stats:
         lake = depth > 0
         h, w = Z.shape

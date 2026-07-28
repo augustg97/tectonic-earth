@@ -308,8 +308,8 @@ def _coastal(land, deg_per_cell):
 #    plain -- and the true depth is stated in words instead. The alternative was
 #    to leave the request unimplemented.
 MESSINIAN_AGE = 5.0            # the keyframe it is drawn on
-MESSINIAN_FLAT = 40.0          # m: the salt-flat surface, as drawn
-MESSINIAN_BRINE = -260.0       # m: brine lakes left in the deepest basins
+MESSINIAN_SALT = 1900.0        # m of evaporite piled on the basin floor
+MESSINIAN_BRINE_BELOW = -3000.0  # m: below this the salt pan holds brine
 # Present-day anchors along the Mediterranean, with radii in km.
 MESSINIAN_ANCHORS = [
     (-4.0, 36.0, 240),   # Alboran
@@ -325,6 +325,26 @@ MESSINIAN_ANCHORS = [
     (17.0, 42.5, 260),   # Adriatic
     (34.0, 43.5, 380),   # Black Sea (Lago Mare)
 ]
+
+
+def messinian_mask(shape, age):
+    """1.0 inside the desiccated Mediterranean at the Messinian keyframe.
+
+    Shared by the elevation carve and by bake_lakes, which bakes it into the
+    lake field's G channel so the shader knows the basin is DRY without having
+    to be told anything about its elevation.
+    """
+    import numpy as _np
+    h, w = shape
+    if abs(age - MESSINIAN_AGE) > 0.01:
+        return _np.zeros((h, w), _np.float32)
+    lon = (_np.arange(w) + 0.5) / w * 360.0 - 180.0
+    lat = 90.0 - (_np.arange(h) + 0.5) / h * 180.0
+    LON, LAT = _np.meshgrid(lon, lat)
+    m = _np.zeros((h, w), _np.float32)
+    for alon, alat, radius in MESSINIAN_ANCHORS:
+        m = _np.maximum(m, _blob(LON, LAT, alon, alat, radius))
+    return _np.clip(m * 3.0, 0.0, 1.0)
 
 
 def desiccate(z, age, reconstructor=None, verbose=False):
@@ -351,12 +371,21 @@ def desiccate(z, age, reconstructor=None, verbose=False):
     m = np.clip(mask * 3.0, 0.0, 1.0) * sea
     if not m.any():
         return z
-    # The deepest floor keeps brine; everything shallower becomes salt flat. The
-    # threshold is on the ORIGINAL depth, so the pattern of lakes follows the
-    # real bathymetry of the basins rather than being painted on.
-    deep = (z < -3400.0)
-    target = np.where(deep, MESSINIAN_BRINE, MESSINIAN_FLAT)
-    out = z * (1.0 - m) + target * m
+    # THE FLOOR KEEPS ITS REAL DEPTH NOW. This used to lift the whole basin to
+    # +40 m, because the shader drew sea wherever the ground was below zero and
+    # a surface that was both dry AND 1.5 km down could not be expressed. That
+    # limitation is gone -- the shader reads a local water surface instead of the
+    # constant zero -- so the honest bathymetry can ship and the basin is drawn
+    # as what it was: a hole, floored by its own real relief.
+    #
+    # What IS added is the salt. Up to 2 km of evaporite accumulated on that
+    # floor, so the deepest parts are partly filled rather than at their marine
+    # depth, and the surface of the fill is flatter than the sea bed under it.
+    fill = np.clip((-z - 1200.0) / 2400.0, 0.0, 1.0) * MESSINIAN_SALT
+    out = z + fill * m
+    # brine lakes survive in the lowest depocentres, below the salt pan
+    deep = (out < MESSINIAN_BRINE_BELOW)
+    out = np.where(deep & (m > 0.5), np.minimum(out, MESSINIAN_BRINE_BELOW), out)
     if verbose:
         print(f"    Messinian: exposed {100.0 * (m > 0.5).mean():.2f}% of the grid, "
               f"brine over {100.0 * (deep & (m > 0.5)).mean():.3f}%")

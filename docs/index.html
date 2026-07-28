@@ -1070,7 +1070,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1539';
+const DATA_V='20260728-1556';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1319,6 +1319,21 @@ varying vec3 vVN;         // view-space surface normal, for limb haze
 
 const float Z_RANGE=8000.0, RF_MAX=1.3, TEMP_REF=-0.55;
 const float LAKE_DMAX=2600.0;   // must match bake_lakes.DMAX
+/* THE LOCAL WATER SURFACE, and the reason it is not just the number zero.
+   Every land/sea test in this shader used to read z-less-than-zero: sea level as a
+   global constant -- which quietly asserts that anywhere below sea level is
+   underwater. That is false on the real Earth (Death Valley at -86 m, the Dead
+   Sea shore at -430, the Danakil at -125, the Qattara at -133) and it was
+   spectacularly false for the Messinian Mediterranean, a desert two kilometres
+   down. It is also the wrong PHYSICS: submerged does not mean "below sea
+   level, it means below the water surface HERE, and an endorheic basin cut
+   off from the ocean has its own surface, far lower, or none at all.
+   So wl is that surface. It is 0 nearly everywhere -- the ocean is connected
+   and level -- and deeply negative inside a basin the model marks as dry, which
+   makes every existing test come out as land without any of them having to know
+   why. Baked into the G channel of the lake field, which was a grayscale image
+   carrying only depth in R. */
+float wl=0.0;
 const float PI=3.14159265359;
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -1496,9 +1511,9 @@ float elevDetail(float z, vec3 d, float rug){
      zoom. Submarine slopes are smooth-swelled, and the reference shows them
      that way. Keep a quarter of it so the character does not step at the
      shoreline, and let the anisotropic fabric own the sea-floor texture. */
-  float rugw = z<0.0 ? rug*0.25 : rug;
+  float rugw = z<wl ? rug*0.25 : rug;
   float n=detail3(d*260.0,rugw), n2=detail3(d*70.0+13.7,rugw);
-  if(z<0.0){
+  if(z<wl){
     // The seafloor is not a flat sheet: give it its own gentle relief so
     // shelves, ridge flanks and the abyssal plain read as different terrain.
     // Muted on the shelf, a little bolder out on the plain. Deliberately
@@ -1695,6 +1710,11 @@ void main(){
     float mlon=mod(ll.x+uMapLon+PI, 2.0*PI)-PI;
     uv=vec2(mlon/(2.0*PI)+0.5, 0.5+ll.y/PI);
   }
+  // Set the water surface BEFORE anything reads z, because elevDetail() tests
+  // it while it is still shaping the terrain. Plain sample, no shoreline
+  // jitter: this decides land-or-sea, and a wobbling decision would crawl.
+  float dryb=mix(texture2D(waterA,uv).g, texture2D(waterB,uv).g, mixf);
+  wl = dryb>0.5 ? -9000.0 : 0.0;
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
   // out every per-pixel computation that depends on the longitude direction --
@@ -2053,7 +2073,7 @@ void main(){
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
 
   vec3 col;
-  if(z<0.0){
+  if(z<wl){
     /* COLOUR FOLLOWS THE REGIONAL DEPTH, not the texel's own. Bottom return is
        exponential -- exp(z/70) changes seventeenfold between 100 and 300 m --
        and the shipped field carries 206 to 303 m rms of texel-scale content in
@@ -2396,7 +2416,7 @@ void main(){
      sea-floor relief is shaded: pack ice is a raft, and what you see from
      above is its own surface, not the bathymetry five kilometres beneath it. */
   float floatIce=0.0;
-  if(z>=0.0){
+  if(z>=wl){
     landIce=clamp((dT+lobe*nearL)/6.0,0.0,1.0);
     col=mix(col, vec3(0.906,0.941,0.965), landIce);
   }else{
@@ -2452,7 +2472,7 @@ void main(){
     float leadn=fbm3(sdir*6.0+13.0);
     float lead=smoothstep(0.60,0.79,leadn)*trop*uSnowball;
     // a lead over ocean is open water; over land it is wind-scoured bare rock
-    vec3 openc = z<0.0 ? mix(vec3(0.047,0.153,0.161), vec3(0.031,0.106,0.204), uSeaTint)
+    vec3 openc = z<wl ? mix(vec3(0.047,0.153,0.161), vec3(0.031,0.106,0.204), uSeaTint)
                        : vec3(0.325,0.310,0.290);
     col=mix(col, openc, clamp(lead,0.0,1.0)*0.85);
     // cryoconite ponds: small dark meltwater pools ON the surviving ice
@@ -2510,10 +2530,10 @@ void main(){
      meaningful together with da, and they are unchanged because da is. See the
      note there for why the gradient baseline keeps its ANGLE through the
      resolution change instead of following the grid. */
-  float vex = z<0.0 ? mix(520.0, 780.0, smoothstep(-20.0,-400.0,z)) : 300.0;
+  float vex = z<wl ? mix(520.0, 780.0, smoothstep(-20.0,-400.0,z)) : 300.0;
   vec3 nrm=normalize(vec3(-gE, gN, vex));
 
-  if(z>=0.0){
+  if(z>=wl){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
        rock, so mountains gain rocky flanks with vegetation in the valleys --
        one of the strongest photoreal cues on a global view. Slope comes from
@@ -3296,7 +3316,7 @@ void main(){
      Only at sea. The ceiling is a blow-out guard and it is still needed on
      land, where base colours run to 0.85 and 1.34 would clip them; the ocean's
      are dark enough that the extra headroom costs nothing. */
-  float shade=clamp(0.70+0.62*hs, 0.0, z<0.0 ? 1.34 : 1.18);
+  float shade=clamp(0.70+0.62*hs, 0.0, z<wl ? 1.34 : 1.18);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead
@@ -3314,10 +3334,10 @@ void main(){
      dealt with at source now, so there is nothing left to hide, and the
      reference is emphatic on this point: below the shelf break its ocean is one
      colour and EVERY feature you can see is hillshade. */
-  float hw=(z<0.0)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
+  float hw=(z<wl)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
 
-  if(z<0.0 && uSchem<0.5){
+  if(z<wl && uSchem<0.5){
     // A moving sea surface, without ever touching the height field: fine
     // ripples perturb only the SHADING normal, so the coastline derived from
     // elevation stays exact. Kept subtle — a low sheen, not chrome.
@@ -3374,7 +3394,7 @@ void main(){
      Great Basin, Lake Eyre) with shorelines that follow the ground, and they grow,
      shrink and migrate WITH the terrain instead of being stamped discs. Rendered
      with the ocean's own water cues so they read as part of the landscape. */
-  if(z>=0.0 && uSchem<0.5){
+  if(z>=wl && uSchem<0.5){
     // Break the lake field's coarse grid into a natural, geography-scale
     // coastline: warp the sample point with fractal noise at three scales --
     // broad inlets, bays, and fine crenellation -- so the waterline meanders
@@ -3434,7 +3454,7 @@ void main(){
 
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
-    vec3 s=(z<0.0)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    vec3 s=(z<wl)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
     s*=(0.82+0.36*lum);
     col=mix(col,s,uSchem);
   }
