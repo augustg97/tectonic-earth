@@ -373,6 +373,14 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 @media (max-width:1180px){
   #info{right:20px;top:auto;bottom:158px;max-height:calc(100vh - 400px)}
 }
+.mtab{display:none;position:fixed;top:12px;z-index:38;width:38px;height:38px;
+  align-items:center;justify-content:center;border-radius:10px;
+  background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--ink);
+  font-family:var(--font);font-size:15px;cursor:pointer}
+#mLeft{left:12px} #mRight{right:12px}
+body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
+body.ambient .mtab{display:none}
+
 /* ===== MOBILE =====================================================
    The rails were built for a desktop viewport and simply kept their size on a
    phone: #readout had no mobile rule at all, so the whole conditions block --
@@ -412,13 +420,6 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   #tiltR,#headR{width:64px}
   #contact{display:none}
 }
-.mtab{display:none;position:fixed;top:12px;z-index:38;width:38px;height:38px;
-  align-items:center;justify-content:center;border-radius:10px;
-  background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--ink);
-  font-family:var(--font);font-size:15px;cursor:pointer}
-#mLeft{left:12px} #mRight{right:12px}
-body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
-body.ambient .mtab{display:none}
 
 /* ===== About one-pager overlay =====================================
    Fully namespaced under #aboutPage with its own palette variables, so
@@ -1014,7 +1015,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1109';
+const DATA_V='20260728-1113';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
