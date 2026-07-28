@@ -920,7 +920,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-0410';
+const DATA_V='20260728-0428';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1173,6 +1173,11 @@ vec2 uvFromDir(vec3 d){
   return vec2(lon/(2.0*PI)+0.5, 0.5 - lat/PI);
 }
 float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
+/* One step of iteratively-reweighted least squares: how much a sample counts,
+   given how far it sits from the plain mean. Smooth in its argument -- which is
+   the whole point, see the ring below -- and it falls away as the square, so a
+   seamount 3.5 km above the plain around it ends up weighted about 1/16. */
+float rwt(float t, float m){ float d=(t-m)*(1.0/900.0); return 1.0/(1.0+d*d); }
 float vnoise3(vec3 p){
   vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
   float a=mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y);
@@ -1699,74 +1704,64 @@ void main(){
          per fragment, measured at 11.5 ms a frame at 1400x900, for a
          contribution that is procedural micro-relief and has no business in a
          160 km baseline anyway. */
-      /* THE CROSS IS ROTATED, AND THAT IS WHAT KILLS THE STAIRCASE.
+      /* EIGHT TAPS ON A RING, COMBINED SMOOTHLY -- NOT FOUR ON A CROSS,
+         RANKED.
 
-         hi2 below is a RANK STATISTIC over these four taps, and the contours of
-         a rank statistic take the shape of the stencil it is computed on. A
-         cross locked to north and east therefore draws its shelf boundary in
-         axis-aligned steps of the tap radius -- 16 texels, about 1.4 degrees --
-         so a margin running diagonally came out as a flight of stairs with
-         square 90-degree corners, tens of pixels on a side at zoom. Reproduced
-         offline on the shipped field: at a 16-texel radius the gate boundary is
-         all right angles, at 4 texels the same boundary is smoothly curved. The
-         data was never the problem; the stencil was.
+         shelfHi and prom used to be RANK statistics (2nd highest, 2nd
+         lowest) over four taps due N/S/E/W. A rank statistic is not a smooth
+         function of position -- it switches which sample it is reading -- and
+         its contours therefore take the shape of the stencil. With the taps on
+         a cross that shape is a cross, so a margin running diagonally came out
+         as a flight of stairs with square corners a tap-radius on a side, and
+         the same steps appeared in the abyssal shading through prom.
 
-         Spinning the cross by a smoothly varying angle fixes it for free. Each
-         fragment still takes FOUR taps at ONE radius, so the seamount rejection
-         below is untouched -- an isolated rise still lands under exactly one tap
-         whatever the orientation -- but neighbouring fragments no longer agree
-         about which way is "along", so the contour stops being able to follow a
-         texel row. The angle comes from a value noise with a wavelength of about
-         two tap radii: slow enough that adjacent pixels almost agree (no
-         speckle), fast enough that no straight run survives. Tried and rejected:
-         an eight-tap ring, which just trades square steps for octagonal ones.
+         It is the stencil, not the data: the same field thresholded directly
+         gives a smooth curved coastline, and dropping the tap radius from 16
+         texels to 4 turns the right angles back into curves.
 
-         The wide gradient is measured in the ROTATED frame and rotated back
-         exactly, so wN and wE still mean north and east. */
-      float rth=vnoise3(sdir*20.0)*6.2831853;
-      float rc=cos(rth), rs=sin(rth);
-      vec3 Aax=Nax*rc+Eax*rs, Bax=Eax*rc-Nax*rs;
-      float e1=baseElev(uvFromDir(normalize(sdir+Aax*db)));
-      float e2=baseElev(uvFromDir(normalize(sdir-Aax*db)));
-      float e3=baseElev(uvFromDir(normalize(sdir+Bax*db)));
-      float e4=baseElev(uvFromDir(normalize(sdir-Bax*db)));
-      float dA=(e1-e2)*ds, dB=(e3-e4)*ds;
-      float wN=dA*rc-dB*rs;
-      /* THE FOUR TAPS ARE A CROSS, AND A CROSS IMPRINTS ITS OWN SHAPE.
+         Two fixes were tried and are recorded because both look reasonable and
+         neither works. SPINNING the cross by a noise field replaces the
+         staircase with a RAGGED edge -- randomising a stencil does not smooth
+         it, and it made the shelf break visibly jagged. A rank statistic over
+         EIGHT taps just trades square steps for octagonal ones.
 
-         max and mean over four samples are not robust to one outlier, and
-         beside an isolated rise there is always exactly one: the pixel 16 texels
-         north of a seamount has its SOUTH tap on the summit. Consequences, all
-         visible on screen as four symmetrical textured dots at the cardinal
-         offsets around every seamount and chain:
+         What works is to stop ranking. One IRLS step -- take the plain mean,
+         then re-weight every tap by rwt and take the weighted mean -- is
+         smooth in all eight inputs, so the contours are smooth, while still
+         throwing away a lone outlier: a seamount under one tap is 3.5 km from
+         the mean and keeps about a sixteenth of a vote. Verified on synthetics:
+         an isolated seamount leaves the shelf gate at 0.0% and a broad margin
+         fires it over 50.0%, both identical to the old cross, so the four-dot
+         fix this replaced is fully preserved.
 
-           shelfHi = max(...)  read the summit as a shelf, so the canyon system
-                               concluded there was a shelf above this slope and
-                               combed dendritic canyons into the abyssal plain;
-           prom = z - mean(...) went strongly NEGATIVE, which un-gated the
-                               abyssal fabric (flatw) and brightened the palette.
+         shelfHi is the robust mean plus 900 m. A mean sits lower than a 2nd
+         highest, and the offset is not a fudge -- it is calibrated so the gate
+         fires over the same 7% of sea floor it did before, measured on the
+         shipped field, which is what keeps the shelf and canyon detail exactly
+         as broad as it was.
 
-         The fix is to say what a shelf and a surrounding actually are.
-
-         A SHELF IS BROAD -- tens to hundreds of kilometres -- so on a real
-         margin at least two of the four taps land on it. An isolated seamount is
-         narrower than the tap spacing, so exactly one does. Taking the SECOND
-         highest therefore keeps every continental slope and rejects every
-         seamount, with no extra texture fetch. The cost is a canyon suppressed
-         where a shelf survives in only one direction from the slope, which is a
-         sliver of shelf and not a sediment supply anyway.
-
-         A SURROUNDING IS THE TYPICAL LEVEL AROUND YOU, so take the median rather
-         than the mean: mean(2nd highest, 2nd lowest) discards one high outlier
-         (a neighbouring seamount) and one low one (a neighbouring trench) at the
-         cost of four min/max ops. */
-      float m12=max(e1,e2), n12=min(e1,e2);
-      float m34=max(e3,e4), n34=min(e3,e4);
-      float hi2=max(min(m12,m34), max(n12,n34));   // 2nd highest of the four
-      float lo2=min(max(n12,n34), min(m12,m34));   // 2nd lowest
-      prom = z - (hi2+lo2)*0.5;
-      shelfHi = hi2;
-      float wE=dA*rs+dB*rc;
+         Eight taps rather than four is four more texture reads, and only on
+         submarine fragments, which is what this whole block is gated on. */
+      vec3 dNE=(Nax+Eax)*0.70710678, dNW=(Nax-Eax)*0.70710678;
+      float t1=baseElev(uvFromDir(normalize(sdir+Nax*db)));
+      float t2=baseElev(uvFromDir(normalize(sdir-Nax*db)));
+      float t3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
+      float t4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
+      float t5=baseElev(uvFromDir(normalize(sdir+dNE*db)));
+      float t6=baseElev(uvFromDir(normalize(sdir-dNE*db)));
+      float t7=baseElev(uvFromDir(normalize(sdir+dNW*db)));
+      float t8=baseElev(uvFromDir(normalize(sdir-dNW*db)));
+      float mAll=(t1+t2+t3+t4+t5+t6+t7+t8)*0.125;
+      float q1=rwt(t1,mAll),q2=rwt(t2,mAll),q3=rwt(t3,mAll),q4=rwt(t4,mAll);
+      float q5=rwt(t5,mAll),q6=rwt(t6,mAll),q7=rwt(t7,mAll),q8=rwt(t8,mAll);
+      float regional=(t1*q1+t2*q2+t3*q3+t4*q4+t5*q5+t6*q6+t7*q7+t8*q8)
+                    /(q1+q2+q3+q4+q5+q6+q7+q8);
+      prom = z - regional;
+      shelfHi = regional + 900.0;
+      /* The wide gradient stays on the two CARDINAL pairs: a central difference
+         is already a smooth linear operator, so it never had this problem. */
+      float wN=(t1-t2)*ds;
+      float wE=(t3-t4)*ds;
       /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
          texels, so two of them can be up to about 1.4 levels apart on ground
          that is genuinely flat. Under-shrinking leaves a visible residue and

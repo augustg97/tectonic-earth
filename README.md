@@ -316,6 +316,8 @@ Run `check_shader.py` before any shader edit ships. It catches every failure mod
 
 Chain it: `python check_shader.py && <rebuild>`, so a bad shader blocks the build.
 
+
+**Occurrence five, 2026-07-28.** Writing `` `rwt` `` -- prose backticks around an identifier -- inside a shader comment. Ten of them in one comment block. `check_shader.py` caught it immediately and named it; without that the globe goes black and the cause is three edits back. The rule has no exceptions: **no backtick ever appears between the FRAG backticks**, not even quoting a variable name.
 ### 7.2 Quantisation
 
 An 8-bit channel whose quantisation step is coarser than a texel does not read as a slightly rough field — it reads as a **staircase of flat terraces**, and anything periodic keyed to it draws the terrace *contours*. This produced a right-angled circuit-board maze across the ocean.
@@ -470,13 +472,22 @@ Three hypotheses were tested and disproved first -- crustal-age quantisation, th
 
 ### 7.14 A rank statistic is shaped like the stencil it is computed on
 
-`shelfHi = hi2`, the second highest of four elevation taps, decides whether there is a shelf above this slope. The four taps sat due N/S/E/W at a fixed 16-texel radius -- and **the contours of a rank statistic take the shape of the stencil**. So a margin running diagonally was drawn as a flight of stairs with square 90-degree corners, one tap-radius (about 1.4 degrees) on a side.
+`shelfHi` and `prom` decided whether there is a shelf above this slope, and how high the ground stands against its surroundings. Both were RANK statistics -- second highest and second lowest -- over four elevation taps due N/S/E/W at a fixed 16-texel radius.
 
-It is the stencil, not the data. Reproduced offline on the shipped field: at a 16-texel radius the gate boundary is all right angles; at 4 texels the same boundary on the same field is smoothly curved. Note that this is a SEPARATE artefact from 7.13 -- that one is four pixels and comes from the codec, this one is tens of pixels and comes from the shader. Fixing the first did not touch the second.
+A rank statistic is **not a smooth function of position**: it switches which sample it is reading. Its contours therefore take the shape of the stencil, and with the taps on a cross that shape is a cross -- so a margin running diagonally came out as a flight of stairs with square 90-degree corners a tap-radius (about 1.4 degrees) on a side, and the same steps appeared in the abyssal shading through `prom`.
 
-The fix is to spin the cross by a smoothly varying angle (a value noise at about two tap radii) and rotate the measured gradient back into the north/east frame, which is exact. Each fragment still takes FOUR taps at ONE radius, so the seamount rejection the second-highest was introduced for is untouched -- verified on synthetics: an isolated seamount leaves the gate at 0% either way, a broad shelf fires it over half the frame either way. Neighbouring fragments simply no longer agree about which way is "along", so no contour can follow a texel row.
+It is the stencil, not the data. Two offline checks settle that: thresholding the shipped field directly gives a smooth curved coastline and shelf contour, and dropping the tap radius from 16 texels to 4 turns the same boundary on the same field from right angles back into curves. Note this is a SEPARATE artefact from 7.13 -- that one is four pixels wide and comes from the codec, this is tens of pixels and comes from the shader. Fixing the first did not touch the second, and it is worth measuring the step size before assuming one cause.
 
-Measured: the wide gradient keeps its strength (873 -> 844 m mean), the change correlates with the rotation field at only +0.105, and band power at the rotation wavelength goes DOWN -- so it does not trade a staircase for mottling, which is the obvious way to get this wrong. An eight-tap ring was tried and rejected: it trades square steps for octagonal ones.
+**Two plausible fixes were tried and both failed**, which is the part worth keeping:
+
+- **Spinning the cross** by a smooth noise field, so no contour can follow a texel row. It replaces the staircase with a RAGGED edge. Randomising a stencil does not smooth it -- it makes the boundary wander at random, and on the continental slope that read as visibly jagged. Shipped briefly and reverted.
+- **A rank statistic over eight taps** instead of four. It trades square steps for octagonal ones, which is exactly what it should do and is not what was wanted.
+
+What works is to **stop ranking**. Eight taps on a ring, combined by one step of iteratively-reweighted least squares: take the plain mean, re-weight each tap by `1/(1+((t-m)/900)^2)`, take the weighted mean. That is smooth in all eight inputs, so its contours are smooth, while a lone outlier still loses its vote -- a seamount 3.5 km above the plain around it keeps about a sixteenth. Verified on synthetics against the old cross: an isolated seamount leaves the shelf gate at **0.0%** under both and a broad margin fires it over **50.0%** under both, so the four-dot fix this replaces is fully preserved.
+
+`shelfHi` is that robust mean **plus 900 m**, and the offset is calibrated rather than guessed: a mean sits lower than a second-highest, and +900 is what makes the gate fire over the same 7.7% of sea floor it did before, measured on the shipped field. That is what keeps the shelf and canyon detail as broad as it was. `prom` keeps its distribution too -- standard deviation 298.4 m before, 298.3 after.
+
+The wide gradient stays on the two cardinal pairs: a central difference is a smooth linear operator and never had this problem.
 
 ### 7.15 One control for two quantities means neither can be right
 
