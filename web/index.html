@@ -411,7 +411,8 @@ body.ambient .mtab{display:none}
   body.m-right #readout #env,body.m-right #readout #eraName{display:block}
   #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:40vh}
   #age{font-size:24px}
-  #title h1{font-size:15px} #title .sub{display:none}
+  /* clear the drawer button, which was sitting on top of 'TEC' */
+  #title{padding-left:46px} #title h1{font-size:14px} #title .sub{display:none}
   /* the bottom bar is the one thing that must stay usable, so it wraps rather
      than pushing the camera cluster off the edge */
   #ctlrow{flex-wrap:wrap;gap:8px;row-gap:10px}
@@ -1031,7 +1032,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1115';
+const DATA_V='20260728-1117';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
