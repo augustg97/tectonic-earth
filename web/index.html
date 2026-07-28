@@ -920,7 +920,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-0341';
+const DATA_V='20260728-0410';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1699,11 +1699,39 @@ void main(){
          per fragment, measured at 11.5 ms a frame at 1400x900, for a
          contribution that is procedural micro-relief and has no business in a
          160 km baseline anyway. */
-      float e1=baseElev(uvFromDir(normalize(sdir+Nax*db)));
-      float e2=baseElev(uvFromDir(normalize(sdir-Nax*db)));
-      float wN=(e1-e2)*ds;
-      float e3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
-      float e4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
+      /* THE CROSS IS ROTATED, AND THAT IS WHAT KILLS THE STAIRCASE.
+
+         hi2 below is a RANK STATISTIC over these four taps, and the contours of
+         a rank statistic take the shape of the stencil it is computed on. A
+         cross locked to north and east therefore draws its shelf boundary in
+         axis-aligned steps of the tap radius -- 16 texels, about 1.4 degrees --
+         so a margin running diagonally came out as a flight of stairs with
+         square 90-degree corners, tens of pixels on a side at zoom. Reproduced
+         offline on the shipped field: at a 16-texel radius the gate boundary is
+         all right angles, at 4 texels the same boundary is smoothly curved. The
+         data was never the problem; the stencil was.
+
+         Spinning the cross by a smoothly varying angle fixes it for free. Each
+         fragment still takes FOUR taps at ONE radius, so the seamount rejection
+         below is untouched -- an isolated rise still lands under exactly one tap
+         whatever the orientation -- but neighbouring fragments no longer agree
+         about which way is "along", so the contour stops being able to follow a
+         texel row. The angle comes from a value noise with a wavelength of about
+         two tap radii: slow enough that adjacent pixels almost agree (no
+         speckle), fast enough that no straight run survives. Tried and rejected:
+         an eight-tap ring, which just trades square steps for octagonal ones.
+
+         The wide gradient is measured in the ROTATED frame and rotated back
+         exactly, so wN and wE still mean north and east. */
+      float rth=vnoise3(sdir*20.0)*6.2831853;
+      float rc=cos(rth), rs=sin(rth);
+      vec3 Aax=Nax*rc+Eax*rs, Bax=Eax*rc-Nax*rs;
+      float e1=baseElev(uvFromDir(normalize(sdir+Aax*db)));
+      float e2=baseElev(uvFromDir(normalize(sdir-Aax*db)));
+      float e3=baseElev(uvFromDir(normalize(sdir+Bax*db)));
+      float e4=baseElev(uvFromDir(normalize(sdir-Bax*db)));
+      float dA=(e1-e2)*ds, dB=(e3-e4)*ds;
+      float wN=dA*rc-dB*rs;
       /* THE FOUR TAPS ARE A CROSS, AND A CROSS IMPRINTS ITS OWN SHAPE.
 
          max and mean over four samples are not robust to one outlier, and
@@ -1738,7 +1766,7 @@ void main(){
       float lo2=min(max(n12,n34), min(m12,m34));   // 2nd lowest
       prom = z - (hi2+lo2)*0.5;
       shelfHi = hi2;
-      float wE=(e3-e4)*ds;
+      float wE=dA*rs+dB*rc;
       /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
          texels, so two of them can be up to about 1.4 levels apart on ground
          that is genuinely flat. Under-shrinking leaves a visible residue and

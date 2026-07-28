@@ -468,7 +468,17 @@ Elevation ships as **AVIF** now. AV1's larger transforms and better prediction o
 
 Three hypotheses were tested and disproved first -- crustal-age quantisation, the new GDH1 depth law, and dithering before quantisation -- and two A/B runs were invalid because they re-encoded an ALREADY-DAMAGED file, which faithfully reproduces the artefact and looks like a null result. When A/B-ing a codec, always start from the array, never from the shipped file.
 
-### 7.14 One control for two quantities means neither can be right
+### 7.14 A rank statistic is shaped like the stencil it is computed on
+
+`shelfHi = hi2`, the second highest of four elevation taps, decides whether there is a shelf above this slope. The four taps sat due N/S/E/W at a fixed 16-texel radius -- and **the contours of a rank statistic take the shape of the stencil**. So a margin running diagonally was drawn as a flight of stairs with square 90-degree corners, one tap-radius (about 1.4 degrees) on a side.
+
+It is the stencil, not the data. Reproduced offline on the shipped field: at a 16-texel radius the gate boundary is all right angles; at 4 texels the same boundary on the same field is smoothly curved. Note that this is a SEPARATE artefact from 7.13 -- that one is four pixels and comes from the codec, this one is tens of pixels and comes from the shader. Fixing the first did not touch the second.
+
+The fix is to spin the cross by a smoothly varying angle (a value noise at about two tap radii) and rotate the measured gradient back into the north/east frame, which is exact. Each fragment still takes FOUR taps at ONE radius, so the seamount rejection the second-highest was introduced for is untouched -- verified on synthetics: an isolated seamount leaves the gate at 0% either way, a broad shelf fires it over half the frame either way. Neighbouring fragments simply no longer agree about which way is "along", so no contour can follow a texel row.
+
+Measured: the wide gradient keeps its strength (873 -> 844 m mean), the change correlates with the rotation field at only +0.105, and band power at the rotation wavelength goes DOWN -- so it does not trade a staircase for mottling, which is the obvious way to get this wrong. An eight-tap ring was tried and rejected: it trades square steps for octagonal ones.
+
+### 7.15 One control for two quantities means neither can be right
 
 `handoff_blend` cross-fades the real 540 Ma DEM into the generated Precambrian world, and a single `wq` drove both what the ground looks like and how much of it is land. Those want opposite ramps:
 

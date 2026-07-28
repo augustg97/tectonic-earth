@@ -10,6 +10,7 @@
     {
      "name": "The ocean floor",
      "items": [
+      "Shelf edges and slope boundaries are curved again. They had been drawn as flights of stairs with square corners — most obvious where a margin runs diagonally. The app decides \"is there a shelf above this slope\" by sampling the sea floor at four points around each pixel, and those four points sat due north, south, east and west; anything decided from a cross ends up shaped like one. The four samples now spin slowly from place to place, so the boundary follows the ground instead of the pixel grid.",
       "The staircase is gone. Zoomed in, the sea floor was crossed by faint square steps — most visible on smooth abyssal plains and along the edges of ridges and shelves. They were never in the model: they came from the image format the elevation was stored in, which compresses in four-pixel blocks and left a one-step ledge at every block edge. The lighting then treated each ledge as a real slope.",
       "Elevation is now stored in a newer format that handles smooth ground far better. The leftover step is a third of what it was, and small enough that the app's existing correction removes it — while the files are slightly smaller and load just as fast.",
       "Coastlines and shelf edges are smoother for the same reason."
