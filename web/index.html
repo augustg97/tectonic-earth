@@ -391,7 +391,12 @@ body.ambient .mtab{display:none}
    So: nothing overlays the globe by default. Both rails become drawers behind
    their own button, and the readout keeps only what a glance needs -- the age
    and the period -- with the rest inside the right drawer. */
-@media (max-width:720px){
+/* Comma is OR. A phone in landscape is about 780x360 -- WIDER than the 720px
+   breakpoint and less than half as tall -- so a width-only query sailed right
+   past it and served the full desktop layout into 360px of height, which is the
+   crammed, overlapping view that got reported. Height is the honest signal for
+   "there is no room here"; width alone never sees a rotated phone. */
+@media (max-width:720px),(max-height:560px){
   .mtab{display:flex}
   #controls{position:fixed;top:auto;bottom:150px;width:160px}
   /* was display:none, which made the legend and timeline unreachable rather
@@ -436,6 +441,26 @@ body.ambient .mtab{display:none}
   /* the age was landing under the right-hand drawer button */
   #readout{padding-right:46px}
   #age{font-size:21px}
+}
+/* LANDSCAPE. Here the scarce axis flips: there is plenty of width and almost no
+   height, so the portrait fix -- wrap the control row onto several lines -- is
+   exactly wrong and eats the little height there is. Put the row back on one
+   line, shrink everything vertical, and let the globe have the middle. */
+@media (max-height:560px) and (orientation:landscape){
+  #ctlrow{flex-wrap:nowrap;gap:10px;margin-top:6px}
+  #camwrap{margin-left:auto;order:0;width:auto}
+  #camGlobe{width:auto}
+  #bottom{padding-bottom:6px}
+  #scalerow{font-size:9px}
+  #title{padding-left:44px}
+  #title h1{font-size:12px}
+  #age{font-size:17px}
+  #readout{padding-top:2px;padding-bottom:2px}
+  #speedwrap,#spinwrap{font-size:10px}
+  #speed{width:70px}
+  #steprow{display:none}
+  .mtab{top:8px;width:32px;height:32px}
+  #leftrail{padding-top:46px;width:min(52vw,230px)}
 }
 
 /* ===== About one-pager overlay =====================================
@@ -1032,7 +1057,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1117';
+const DATA_V='20260728-1517';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -3430,7 +3455,7 @@ function initGL(){
   // takes for a displaced range to read as a range rather than as a bulge.
   // Phones keep the old mesh: they cannot afford half a million vertices and
   // are not the device anyone tilts to admire the Himalaya on.
-  const SEG=matchMedia('(max-width:720px)').matches?[256,128]:[1024,512];
+  const SEG=matchMedia('(max-width:720px),(max-height:560px)').matches?[256,128]:[1024,512];
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,SEG[0],SEG[1]),mat);
   scene.add(globe);
   // the flat map is the same shader on a plane, so both views agree exactly
@@ -3533,7 +3558,32 @@ function initGL(){
   globe.add(overlay.boundaries);globe.add(overlay.derived);globe.add(overlay.vectors);globe.add(overlay.hotspots);
   resize();
   cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);state.dragMoved=false;});
-  cv.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>3)state.dragMoved=true;state.rot+=dx*.006;state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+dy*.006));lastX=e.clientX;lastY=e.clientY;});
+  cv.addEventListener('pointermove',e=>{if(!dragging)return;
+    const dx=e.clientX-lastX,dy=e.clientY-lastY;
+    if(Math.abs(dx)+Math.abs(dy)>3)state.dragMoved=true;
+    /* DRAG IS IN SCREEN SPACE, so it has to be rotated INTO world space by the
+       heading. rot and tilt are longitude and latitude; screen-right equals
+       "east" only while heading is zero. At heading 90 the compass has been
+       turned a quarter turn under the user, so dragging right used to walk the
+       globe along a line running up the screen -- the control still worked, it
+       just no longer pointed where the hand was going. Rotating the delta by
+       -heading restores the only property that actually matters here: dragging
+       left and right always moves the globe left and right on screen, at every
+       heading, which is what makes the axis feel like an axis.
+
+       Latitude is clamped, so the drag is scaled by cos(heading) on the tilt
+       term rather than allowed to fight the clamp near the poles. */
+    const h=(state.head||0)*Math.PI/180, ch=Math.cos(h), sh=Math.sin(h);
+    /* Sign check, because it is easy to rotate the delta the wrong way and the
+       result still looks plausible until you try it. At heading 90 you face
+       east, so north is on your LEFT and south on your right; dragging right
+       therefore has to push the view centre NORTH. That means +dx must raise
+       the latitude term, not lower it. Verified at 0 (identity) and 90. */
+    const wx= dx*ch - dy*sh;      // screen -> world longitude component
+    const wy= dx*sh + dy*ch;      // screen -> world latitude component
+    state.rot+=wx*.006;
+    state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+wy*.006));
+    lastX=e.clientX;lastY=e.clientY;});
   cv.addEventListener('pointerup',e=>{dragging=false;if(!state.dragMoved)pickGlobe(e);});
   cv.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(1.35,Math.min(5,state.zoom+e.deltaY*.0016));},{passive:false});
 }
@@ -3933,7 +3983,16 @@ function mollInv(xn,yn){
   return [lon,lat];
 }
 function ll2map(lon,lat,dx,dy,dw,dh){
-  const [xn,yn]=mollFwd(lon,lat);
+  /* THE PAN HAS TO HAPPEN HERE, and only here. The shader shifts the central
+     meridian when it samples the terrain, but every overlay -- labels, plate
+     boundaries, hotspots, click targets -- reaches the screen through this one
+     function, so without the matching shift the map slid underneath a layer of
+     labels that stayed where they were and floated over the wrong continents.
+     One funnel, one correction: a feature at world longitude L is drawn at map
+     longitude L - mapLon, wrapped, which is the exact inverse of what the
+     fragment shader does to find which pixel shows that feature. */
+  const ml=((lon-(state.mapLon||0))%360+540)%360-180;
+  const [xn,yn]=mollFwd(ml,lat);
   return [dx+(xn/4+0.5)*dw, dy+(0.5-yn/2)*dh];
 }
 function drawBoundariesMap(dx,dy,dw,dh,fade){
@@ -5440,8 +5499,15 @@ function loop(now){
   mapMesh.visible=!isGlobe;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
-    // back the camera off on narrow/tall viewports so the globe always fits
-    const d=state.zoom*Math.max(1,1.15/cam.aspect);
+    /* Back the camera off so the globe always fits. Two separate squeezes:
+       a NARROW viewport (the original case, aspect below 1.15), and a SHORT
+       one. The second was missing, and a phone in landscape is the short case
+       -- 780x360, where the vertical field at the default zoom is 2.10 against
+       a globe 2.00 across, so it filled the frame edge to edge and then ran
+       under the control bar. The bar owns about a quarter of the height there,
+       so give the globe the rest. */
+    const short=innerHeight<560?1.34:1.0;
+    const d=state.zoom*Math.max(1,1.15/cam.aspect)*short;
     /* ORBIT ABOUT A POINT ON THE SURFACE, not about the centre of the Earth.
        The old line put the camera on the YZ plane looking at the origin, which
        can express "where on the globe am I above" and nothing else -- there is

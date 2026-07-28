@@ -4,8 +4,8 @@
   {
    "version": "1.9",
    "date": "28 July 2026",
-   "title": "Smoother seas, a future that weathers, and animals on land",
-   "summary": "The stair-step pattern across the deep ocean is gone, and this time for the right reason. The future era now erodes its mountains and builds new ones where continents collide. Land cards list the animals that lived there, not only the plants.",
+   "title": "Tilt the Earth, and a globe that fits your phone",
+   "summary": "You can now lean the camera over and look at the horizon, with real three-dimensional terrain under it. The sea floor is smooth again — the stair-step pattern is gone, and this time for the right reason. Land cards list the animals that lived there, not only the plants.",
    "sections": [
     {
      "name": "The ocean floor",
@@ -40,6 +40,23 @@
      "items": [
       "The Mediterranean at 5 million years ago is drawn as the salt desert it was. Between 5.97 and 5.33 million years ago the Gibraltar gateway closed and the sea evaporated faster than its rivers could refill it, leaving a desert floored by up to 2 km of salt, with brine lakes in the deepest basins and the Nile cutting a canyon kilometres deep to reach the new base level. It ended in a flood that refilled the entire basin in perhaps a few months.",
       "Two honest compromises, both worth stating: keyframes step 5 million years, so a 640,000-year event is drawn on the nearest one; and the app draws sea wherever the ground is below sea level, so a surface that was both dry and 1.5 km below the Atlantic cannot be expressed exactly — the salt flats are lifted just enough to read as exposed ground."
+     ]
+    },
+    {
+     "name": "Looking around",
+     "items": [
+      "Tilt and Heading sliders, with Reset to north, sit under the timeline. Tilt leans the camera off vertical the way Google Earth does, so you can look across the landscape to a curved horizon instead of only straight down at a disc.",
+      "The terrain is genuinely three-dimensional now. It used to be a perfectly smooth ball with the relief painted on by shading — which is convincing looking straight down and falls apart the moment you tilt, because a shaded sphere seen edge-on is still a sphere. The elevation now shapes the surface itself, so mountains stand against the sky and the sea floor has real depth. Height is exaggerated when you come in close, and not at all when you are far out, where you could not see it anyway.",
+      "Dragging works the same at any heading. Left and right always move the globe left and right on screen, even after you have turned the compass — the drag is rotated to match where you are facing.",
+      "A spin-speed slider next to the time speed, for when auto-rotate is on.",
+      "In map view, arrows pan east and west so you can look at any face of the Earth rather than one fixed half. Labels, plate boundaries and click targets all pan with it."
+     ]
+    },
+    {
+     "name": "On a phone",
+     "items": [
+      "The globe now owns the screen. The conditions panel had no mobile layout at all and rendered at full desktop width straight over the map, and the left-hand timeline was hidden outright rather than made reachable. Both are now drawers behind their own button, one open at a time, and touching the globe closes them.",
+      "Landscape is handled too. A phone turned sideways is wider than the threshold that decides 'this is a small screen' and less than half as tall, so it had been getting the full desktop layout squeezed into 360 pixels of height. Height is now what decides it, and the controls collapse to a single row."
      ]
     }
    ]
