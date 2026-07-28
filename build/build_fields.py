@@ -379,31 +379,71 @@ PLATE_GROUP = {
 GROUPS = sorted(set(GROUP_TARGET))
 
 
-def rasterise_groups(h=360, w=720):
-    """Group id per cell on the present-day sphere (-1 = unassigned ocean)."""
+def rasterise_groups(h=1440, w=2880):
+    """Group id per cell on the present-day sphere (-1 = unassigned ocean).
+
+    0.125 DEGREES, not the 0.5 this used to be. The future series inverse-warps
+    the present DEM and asks this mask "which group owns the place this cell came
+    from"; at 0.5 degrees that question was answered on a grid SIX TIMES COARSER
+    than the 0.088-degree output, so every future coastline was quantised into
+    half-degree steps. That is the future era's staircase, and it is a completely
+    different mechanism from the ocean one (WP-06, the crustal-age Voronoi).
+
+    Sixteen times the cells needs the scanline restricted to each ring's bounding
+    box or this takes tens of minutes: 6,605 ring vertices against 4.1M cells is
+    2.7e10 point-in-polygon tests. Restricting the TESTED CELLS to the bbox is
+    exact, not an approximation -- a point outside a ring's bbox cannot be inside
+    the ring -- and it is what makes the finer mask affordable at all.
+    """
     plates = json.load(open("../web/plates.json"))
     lon = (np.arange(w) + 0.5) / w * 360 - 180
     lat = 90 - (np.arange(h) + 0.5) / h * 180
-    LON, LAT = np.meshgrid(lon, lat)
     gid = np.full((h, w), -1, np.int16)
     for p in plates:
         g = PLATE_GROUP.get(p["name"])
         if g is None:
             continue
         gi = GROUPS.index(g)
-        inside = np.zeros((h, w), bool)
         for ring in p["rings"]:
             ring = np.asarray(ring, float)
             x, y = ring[:, 0], ring[:, 1]
-            acc = np.zeros((h, w), bool)
+            # rows/cols the ring can possibly touch
+            r0 = max(0, int(np.floor((90 - y.max()) / 180 * h)) - 1)
+            r1 = min(h, int(np.ceil((90 - y.min()) / 180 * h)) + 1)
+            c0 = max(0, int(np.floor((x.min() + 180) / 360 * w)) - 1)
+            c1 = min(w, int(np.ceil((x.max() + 180) / 360 * w)) + 1)
+            if r1 <= r0 or c1 <= c0:
+                continue
+            LON, LAT = np.meshgrid(lon[c0:c1], lat[r0:r1])
+            acc = np.zeros(LAT.shape, bool)
             for i in range(len(ring)):
                 j = (i - 1) % len(ring)
                 cond = ((y[i] > LAT) != (y[j] > LAT)) & \
                        (LON < (x[j] - x[i]) * (LAT - y[i]) / (y[j] - y[i] + 1e-12) + x[i])
                 acc ^= cond
-            inside |= acc
-        gid[inside & (gid < 0)] = gi
+            sub = gid[r0:r1, c0:c1]
+            sub[acc & (sub < 0)] = gi
     return gid
+
+
+def _bilerp(Z, lat, lon):
+    """Bilinear sample of a north-up equirectangular grid at lat/lon degrees.
+
+    NEAREST NEIGHBOUR IS THE OTHER HALF OF THE FUTURE STAIRCASE. The source DEM
+    is 0.2 degrees against a 0.088-degree output, so a floor lookup replicates
+    each source texel across 2.3 output cells and every slope becomes a flight of
+    steps. Longitude WRAPS (mod) and latitude CLAMPS -- getting that backwards
+    puts a seam down the antimeridian, which this file has already paid for once.
+    """
+    hh, ww = Z.shape
+    fy = np.clip((90.0 - lat) / 180.0 * hh - 0.5, 0.0, hh - 1.0)
+    fx = (lon + 180.0) / 360.0 * ww - 0.5
+    y0 = np.floor(fy).astype(np.int32); wy = (fy - y0).astype(np.float32)
+    x0 = np.floor(fx).astype(np.int32); wx = (fx - x0).astype(np.float32)
+    y1 = np.minimum(y0 + 1, hh - 1)
+    x0 %= ww; x1 = (x0 + 1) % ww
+    return (Z[y0, x0] * (1 - wx) * (1 - wy) + Z[y0, x1] * wx * (1 - wy) +
+            Z[y1, x0] * (1 - wx) * wy + Z[y1, x1] * wx * wy)
 
 
 def axis_angle_scale(Rm, frac):
@@ -445,8 +485,52 @@ PACK = 1.0
 #     mean land elevation 620 -> 781 m
 # which is a Himalaya-scale addition rather than a world of mountains.
 SUTURE_DEG = 3.0        # half-width of a collisional belt, degrees (~330 km)
-SUTURE_UPLIFT = 3400.0  # m of crustal thickening at the contact by +250 Myr
-SUTURE_POW = 3.0        # sharpens the belt; see the note where it is applied
+# RE-CALIBRATED once erosion (S3) went in, and the reason is physical rather than
+# a fudge: 3400 m was tuned to ADD to inherited relief that was already near 2 km,
+# and once the inherited relief is correctly worn away the belt has to build its
+# orogen from a peneplain instead of topping up a mountain that was already there.
+# The two changes have to be calibrated together or the world ends up either all
+# mountains (no erosion) or none (erosion, old uplift: >3 km fell to 0.0 Mkm2).
+# Measured on the SHIPPED 2048x4096 field at +250 Myr, not on a convenient
+# low-resolution return value -- that mistake is what Finding 2 of WP-07 was:
+#     >1 km 25.2 Mkm2   >2 km 10.7   >3 km 5.8   max 6.4 km
+# against today's 29.9 / 8.8 / 4.3. More high ground than today because a
+# supercontinent is assembling, less moderate upland because 250 Myr of weather
+# has taken the old ranges down. Pow 2.5 rather than 3.0 broadens the belt a
+# little, which it needs now that there is no inherited high ground helping it.
+SUTURE_UPLIFT = 9000.0  # m of crustal thickening at the contact by +250 Myr
+SUTURE_POW = 2.5        # sharpens the belt; see the note where it is applied
+# THE SEED WIDENING IS IN DEGREES, NOT CELLS. It used to be maximum_filter(size=3),
+# and a size in cells is a claim about the raster rather than about the world: the
+# same physical future gave land above 2 km of 11.5 Mkm2 at 512 rows, 9.3 at 1024
+# and 8.9 at the shipped 2048 -- i.e. the uplift I measured and signed off at low
+# resolution EVAPORATED in the field that actually ships, leaving >2 km and >3 km
+# identical to today's to the decimal after a quarter of a billion years. 0.35 deg
+# reproduces the 512-row footprint at every resolution. This is the second time a
+# filter written in cells has silently changed meaning here; see the module note.
+SUTURE_SEED_DEG = 0.35
+# EROSION (S3). Rigid rotation cannot wear a mountain down, so every present-day
+# range was still standing at its present height at +250 Myr. Two time constants,
+# because they are two different processes: local RELIEF (peaks against their own
+# valleys) goes fast, while a regionally high PLATEAU is isostatically supported
+# and goes slowly. Calibrated on the Appalachian analogue -- above 4 km at 300 Ma,
+# 1-2 km today -- which these constants reproduce at about 1.8 km.
+EROSION_TAU_RELIEF = 150.0    # Myr, local excess above the regional mean
+EROSION_TAU_REGION = 400.0    # Myr, the regional mean itself
+EROSION_FLOOR = 300.0         # m, the peneplain a worn craton tends toward
+EROSION_REGION_DEG = 8.0      # radius defining "regional"
+# COLLISIONAL SHORTENING (S4). Where two groups' warped land lands on the same
+# cell, that overlap IS the convergence -- 12.8 Mkm2 of it at +250 Myr, larger
+# than the whole Alpine-Himalayan zone -- and the model used to compute it and
+# then throw it away with a max(). Capped by total overlap depth rather than
+# summed pairwise, so a four-way pile-up cannot stack into an absurd height.
+OVERLAP_CAP = 2.0
+# RIFTED MARGINS (S5). A trailing margin facing ocean that opened behind it
+# subsides and accumulates a shelf wedge; that is what turns East Africa's
+# knife-edge sliver into a continent with a real passive margin instead of the
+# same snakey outline for 250 Myr.
+RIFT_SUBSIDE = 700.0    # m at the margin by +250 Myr
+RIFT_DEG = 2.5          # how far inboard the flexural moat reaches
 SPRING = 0.55     # pull back toward the authored arrangement each pass
 RELAX = 0.35      # step size; small enough that the two forces find a balance
 _PACK_CACHE = {}
@@ -657,6 +741,7 @@ def future_grid(frac, gid, Zsrc, h, w):
         cent[g] = v
 
     packed = _packed_targets(gid, Zsrc)
+    nland = np.zeros((h, w), np.float32)   # land-on-land overlap depth (S4)
     for i, g in enumerate(GROUPS):
         if g not in cent:
             continue
@@ -679,9 +764,12 @@ def future_grid(frac, gid, Zsrc, h, w):
         claims = gid[gy, gx] == i
         if not claims.any():
             continue
-        sy = np.clip(((90 - slat) / 180 * Zsrc.shape[0]).astype(int), 0, Zsrc.shape[0] - 1)
-        sx = ((slon + 180) / 360 * Zsrc.shape[1]).astype(int) % Zsrc.shape[1]
-        z = np.where(claims, Zsrc[sy, sx], -9999.0).reshape(h, w)
+        # BILINEAR, not the floor lookup this used to do -- see _bilerp.
+        z = np.where(claims, _bilerp(Zsrc, slat, slon), -9999.0).reshape(h, w)
+        # Count LAND-ON-LAND overlap before the max() discards it: this is the
+        # convergence, and S4 below turns it into crustal thickening instead of
+        # letting one map simply win and look like interpenetration.
+        nland += ((z >= 0.0) & (out >= 0.0)).astype(np.float32)
         owner = np.where(z > out, i, owner)
         out = np.maximum(out, z)          # overlap -> collision keeps the high ground
 
@@ -705,6 +793,26 @@ def future_grid(frac, gid, Zsrc, h, w):
     # reconstruction would put them, and the app's card says so.
     if frac > 0.02:
         from scipy.ndimage import gaussian_filter, maximum_filter
+        myr = frac * 250.0
+
+        # ---- S3: ERODE THE INHERITED RELIEF, BEFORE anything new is raised ----
+        # Order matters: old ranges must wear down while new ones rise, not after.
+        land0 = out >= 0.0
+        lf = land0.astype(np.float32)
+        rs = EROSION_REGION_DEG / (180.0 / h)
+        num = gaussian_filter(np.where(land0, out, 0.0).astype(np.float32), rs,
+                              mode=("nearest", "wrap"))
+        den = gaussian_filter(lf, rs, mode=("nearest", "wrap"))
+        region = np.where(den > 1e-3, num / np.maximum(den, 1e-3), 0.0)
+        relief = out - region
+        kR = float(np.exp(-myr / EROSION_TAU_RELIEF))
+        kG = float(np.exp(-myr / EROSION_TAU_REGION))
+        worn = (EROSION_FLOOR + (region - EROSION_FLOOR) * kG) + relief * kR
+        # Only land erodes. Sea floor is not subaerially weathered, and letting
+        # this touch it would quietly re-cut the bathymetry the ocean pass just
+        # spent a rebuild smoothing.
+        out = np.where(land0, worn, out)
+
         land = out >= 0.0
         own = np.where(land, owner, -1)
         diff = np.zeros((h, w), np.float32)
@@ -727,8 +835,26 @@ def future_grid(frac, gid, Zsrc, h, w):
         # also lifted ten million square kilometres past a kilometre; the power
         # concentrates the same uplift onto the contact and lets the flanks fall
         # away, which is both the right shape and the right area.
-        belt = gaussian_filter(maximum_filter(seed, size=3), sigma) ** SUTURE_POW
+        # ---- S4: the discarded overlap IS the shortening, so drive the belt
+        # with it as well as with mere adjacency. Adjacency only knows that two
+        # groups are NEAR each other; overlap knows how hard they are converging.
+        shorten = np.clip(nland / OVERLAP_CAP, 0.0, 1.0) * land
+        seed = np.maximum(seed, shorten)
+        # ---- S2: the widening is in DEGREES (see SUTURE_SEED_DEG) ----
+        n = int(round(SUTURE_SEED_DEG / (180.0 / h))) * 2 + 1
+        belt = gaussian_filter(maximum_filter(seed, size=max(3, n)), sigma) ** SUTURE_POW
         out = out + SUTURE_UPLIFT * frac * belt * land
+
+        # ---- S5: SUBSIDE THE RIFTED MARGINS ----
+        # Ocean that no group claims is ocean that OPENED during the warp, so
+        # land facing it is a young trailing margin: it subsides and takes a
+        # shelf wedge, which is how a rift sliver becomes a continent with a
+        # real passive margin rather than keeping its knife-edge outline.
+        newocean = ((owner < 0) & (out < 0.0)).astype(np.float32)
+        near = gaussian_filter(newocean, max(1.0, RIFT_DEG / (180.0 / h)),
+                               mode=("nearest", "wrap"))
+        near = np.clip(near / max(near.max(), 1e-6), 0.0, 1.0)
+        out = out - RIFT_SUBSIDE * frac * near * land
     return out
 
 

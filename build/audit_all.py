@@ -74,6 +74,11 @@ CHECKS = [
           "a label whose coordinate is a PALAEO position that happens to be land "
           "today, so it is silently tracked on whichever continent now sits "
           "there. Found eleven, including all four Sloss seas"),
+    Check("province markers describable", os.path.join(HERE, "provinces.py"),
+          r"province markers undescribable: (\d+)", "gt", 0,
+          "every taxon the province model can name must have an icon, a rank and "
+          "a sentence, or the card shows fewer organisms than the province has. "
+          "This selftest existed and was correct and was never wired to the gate"),
     Check("frame gate · true regressions", os.path.join(MODELING, "regression_gate.py"),
           r"^  TRUE\s+(\d+)", "gt", 0,
           "features the frame switch made worse with no other explanation",

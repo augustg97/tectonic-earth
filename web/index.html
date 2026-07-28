@@ -1742,15 +1742,25 @@ void main(){
 
          Eight taps rather than four is four more texture reads, and only on
          submarine fragments, which is what this whole block is gated on. */
+      /* THE DIAGONALS SIT AT db*sqrt(2), NOT db. Putting all eight taps at the
+         same radius makes this a RING, and a ring is not a neighbourhood: its
+         transfer function is a Bessel J0, which has negative lobes, so it does
+         not merely fail to smooth some spatial frequencies -- it INVERTS them.
+         Against the shader periodic fault fabric that beats into a visible
+         lattice (seen over Ontong Java). Offsetting the diagonals by root two
+         makes the stencil a true 3x3 square neighbourhood, which is separable
+         and monotonic and cannot ring. This is what "eight neighbours" always
+         meant; the equal radius was the bug. */
       vec3 dNE=(Nax+Eax)*0.70710678, dNW=(Nax-Eax)*0.70710678;
+      float dd=db*1.41421356;
       float t1=baseElev(uvFromDir(normalize(sdir+Nax*db)));
       float t2=baseElev(uvFromDir(normalize(sdir-Nax*db)));
       float t3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
       float t4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
-      float t5=baseElev(uvFromDir(normalize(sdir+dNE*db)));
-      float t6=baseElev(uvFromDir(normalize(sdir-dNE*db)));
-      float t7=baseElev(uvFromDir(normalize(sdir+dNW*db)));
-      float t8=baseElev(uvFromDir(normalize(sdir-dNW*db)));
+      float t5=baseElev(uvFromDir(normalize(sdir+dNE*dd)));
+      float t6=baseElev(uvFromDir(normalize(sdir-dNE*dd)));
+      float t7=baseElev(uvFromDir(normalize(sdir+dNW*dd)));
+      float t8=baseElev(uvFromDir(normalize(sdir-dNW*dd)));
       float mAll=(t1+t2+t3+t4+t5+t6+t7+t8)*0.125;
       float q1=rwt(t1,mAll),q2=rwt(t2,mAll),q3=rwt(t3,mAll),q4=rwt(t4,mAll);
       float q5=rwt(t5,mAll),q6=rwt(t6,mAll),q7=rwt(t7,mAll),q8=rwt(t8,mAll);
@@ -4246,8 +4256,20 @@ function lifeSection(l){
             `block this sat on; treat its boundary as a gradient, not a line.</p>`:'');
     }
   }
+  /* TIER 2b. The model named a province but has no DIAGNOSTIC taxa for it.
+     That is the honest state of affairs for the generic latitude bands -- a
+     "warm-temperate shelf" exists at every age from the Cambrian on, and naming
+     genera for it would be an anachronism at most of them. But falling straight
+     through to a bare global card threw away the one thing the model DID know:
+     which province this place was in, and what that province was like.
+
+     So keep the province heading and its note, and let the era-correct global
+     list run underneath it. The reader gets the place AND the right organisms
+     for the age, instead of neither. */
+  const bandNote = (provOK && prov.note) ? `<div class="ihead">${esc(prov.n)} · ${when}</div>`+
+      `<p class="desc">${esc(prov.note)}</p>` : '';
   const why=sparseAt(l.n,age);
-  if(why)return `<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;
+  if(why)return bandNote+`<div class="ihead">Fossil record here</div><p class="desc">${esc(why)}</p>`;
   const L=lifeAt(age);
   if(!L||!L.taxa||!L.taxa.length)return '';
   const want=wantR;
@@ -4287,11 +4309,16 @@ function lifeSection(l){
       : (marine?`Worldwide in the sea at ${when}`:`Worldwide on land at ${when}`);
     const caveat = recent ? '' :
       `<p class="desc">This is the GLOBAL list for the interval — `+
-      (provOK?`the province model places this in the ${esc(prov.n)} but has no `+
-              `diagnostic taxa for it, and nothing`
+      (provOK?`the model has no taxa diagnostic of this province in particular, `+
+              `and nothing`
              :`neither the province model nor the catalogue can place this, and nothing`)+
       ` is catalogued for this spot. Not a claim that these lived here.</p>`;
-    return `<div class="ihead">${head}</div>`+lifeHTML(pick,5)+caveat;
+    /* Lead with the PLACE when the model knows it. bandNote carries the
+       province name and its description, so a "warm-temperate shelf" card says
+       what a warm-temperate shelf is and then lists the era's organisms, rather
+       than opening with a worldwide list and mentioning the province in a
+       footnote. */
+    return bandNote+`<div class="ihead">${head}</div>`+lifeHTML(pick,5)+caveat;
   }
   if(marine){
     return `<div class="ihead">In the sea at ${when}</div><p class="desc">`+

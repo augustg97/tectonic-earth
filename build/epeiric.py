@@ -283,6 +283,86 @@ def _coastal(land, deg_per_cell):
     return np.clip((1.0 - frac) / max(SHELF_REACH, 1e-6), 0.0, 1.0)
 
 
+# ---------------------------------------------------------------------------
+# D10 -- the Messinian salinity crisis: a sea that is REMOVED, not seeded.
+# ---------------------------------------------------------------------------
+#
+# Between 5.97 and 5.33 Ma the Gibraltar gateway closed and the Mediterranean
+# evaporated faster than its rivers could fill it. It became a desert 1.5-2 km
+# below the Atlantic, floored by up to 2 km of salt, with hypersaline brine
+# lakes in the deepest basins and the Nile and Rhone cutting canyons kilometres
+# deep to reach the new base level. It ended in the Zanclean flood, which
+# refilled the whole basin in something between a few months and two years.
+#
+# TWO HONEST COMPROMISES, both stated on the card in the app:
+#
+# 1. TIMING. Keyframes step 5 Myr, so the crisis -- 640 kyr long -- falls
+#    between the 10 and 5 Ma frames. It is drawn at 5 Ma, the nearest keyframe,
+#    the same nearest-keyframe rule every other feature in the model lives under.
+#
+# 2. ELEVATION. The app draws sea wherever elevation is below zero, so a surface
+#    that is BOTH dry AND below sea level cannot be expressed in the one channel
+#    that ships. Drawing the salt flats at their true -1500 m would render them
+#    as ordinary sea and show nothing at all. They are therefore lifted just
+#    above zero -- enough to read as exposed ground, low enough to read as a
+#    plain -- and the true depth is stated in words instead. The alternative was
+#    to leave the request unimplemented.
+MESSINIAN_AGE = 5.0            # the keyframe it is drawn on
+MESSINIAN_FLAT = 40.0          # m: the salt-flat surface, as drawn
+MESSINIAN_BRINE = -260.0       # m: brine lakes left in the deepest basins
+# Present-day anchors along the Mediterranean, with radii in km.
+MESSINIAN_ANCHORS = [
+    (-4.0, 36.0, 240),   # Alboran
+    (0.5, 38.5, 340),    # Algerian basin, west
+    (5.0, 39.5, 340),    # Balearic
+    (9.0, 40.0, 320),    # Tyrrhenian
+    (12.0, 36.5, 320),   # Sicily / Sirte gateway
+    (16.0, 34.5, 360),   # Ionian
+    (20.0, 35.0, 360),   # Ionian east
+    (24.5, 34.5, 340),   # Cretan
+    (26.0, 39.0, 300),   # Aegean
+    (30.0, 33.5, 360),   # Levantine
+    (17.0, 42.5, 260),   # Adriatic
+    (34.0, 43.5, 380),   # Black Sea (Lago Mare)
+]
+
+
+def desiccate(z, age, reconstructor=None, verbose=False):
+    """Expose the Mediterranean floor for the single Messinian keyframe."""
+    if abs(age - MESSINIAN_AGE) > 0.01:
+        return z
+    h, w = z.shape
+    lon = (np.arange(w) + 0.5) / w * 360.0 - 180.0
+    lat = 90.0 - (np.arange(h) + 0.5) / h * 180.0
+    LON, LAT = np.meshgrid(lon, lat)
+    mask = np.zeros_like(z)
+    for alon, alat, radius in MESSINIAN_ANCHORS:
+        mask = np.maximum(mask, _blob(LON, LAT, alon, alat, radius))
+    # Only where there is actually sea to remove: this must never touch land,
+    # and never touch the Atlantic outside the basin.
+    sea = z < 0.0
+    # SHARPENED, and this is the difference between the feature appearing and
+    # not appearing at all. _blob is a soft radial falloff, and blending a
+    # -1500 m floor toward a +40 m flat at weight 0.6 gives -576 m -- still sea.
+    # With a soft mask only the few cells at the very centre of an anchor ever
+    # crossed zero, and the basin stayed flooded: land moved by 0.02% when the
+    # Mediterranean is 0.5% of the globe. The core has to be FULL strength, with
+    # the falloff kept only for the last stretch to the shoreline.
+    m = np.clip(mask * 3.0, 0.0, 1.0) * sea
+    if not m.any():
+        return z
+    # The deepest floor keeps brine; everything shallower becomes salt flat. The
+    # threshold is on the ORIGINAL depth, so the pattern of lakes follows the
+    # real bathymetry of the basins rather than being painted on.
+    deep = (z < -3400.0)
+    target = np.where(deep, MESSINIAN_BRINE, MESSINIAN_FLAT)
+    out = z * (1.0 - m) + target * m
+    if verbose:
+        print(f"    Messinian: exposed {100.0 * (m > 0.5).mean():.2f}% of the grid, "
+              f"brine over {100.0 * (deep & (m > 0.5)).mean():.3f}%")
+    return out
+
+
 def carve(z, age, reconstructor=None, verbose=False):
     """Flood the seeded seas into an elevation grid for one age.
 
@@ -291,7 +371,7 @@ def carve(z, age, reconstructor=None, verbose=False):
     total = sum(_curve(age, s["depth"]) for s in SEAS.values())
     shelfw = _curve(age, SHELF_WINDOW)
     if total <= 0 and shelfw <= 0:
-        return z
+        return desiccate(z, age, reconstructor, verbose)
     h, w = z.shape
     lon = (np.arange(w) + 0.5) / w * 360.0 - 180.0
     lat = 90.0 - (np.arange(h) + 0.5) / h * 180.0
@@ -410,4 +490,5 @@ def carve(z, age, reconstructor=None, verbose=False):
         elif verbose:
             print(f"    Pangaean shelf: none needed "
                   f"({100 * have:.1f}% already, target {100 * target:.1f}%)")
-    return out
+    # LAST, so a flooded sea cannot re-drown the basin this just exposed.
+    return desiccate(out, age, reconstructor, verbose)

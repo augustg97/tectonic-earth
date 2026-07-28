@@ -124,7 +124,98 @@ contested and the basins sit under kilometres of Messinian salt. Written into RE
 rather than special-cased: one basin's disputed age does not earn a branch in the depth
 law.
 
-**Still open: nothing that changes the app.** The remaining register items are E1–E3, which
+**D9 — the crustal-age field is a Voronoi tessellation, and that is the deeper fix still to
+make.** `crustage.build` assigns every cell the age of the NEAREST isochron *within its own
+plate*, so the field comes out as flat facets with a hard step at every isochron Voronoi
+boundary and, worse, at every PLATE boundary — long straight polygon edges. Measured at
+615 Ma: the 99.5th percentile age change between adjacent cells is 70 Myr, which the
+depth–age law renders as a **1,349 m wall across 25 km**. That is the origin of the large
+angular slabs in the deep ocean, and it is worst in the Precambrian, where the plate model
+has almost no isochrons to interpolate between.
+
+Interpolating between the four nearest isochrons (inverse-distance) was implemented and
+measured: it takes the step from 70 to 47.5 Myr, i.e. 1,349 m to 1,061 m. Better, and not
+enough on its own, because the residual is at PLATE boundaries where the per-plate searches
+meet. It was reverted only because it invalidates 2.7 GB of isochron cache across 251 ages,
+which is hours of pyGPlates work — worth doing, but as its own pass. The shipped fix
+instead smooths the age **for the depth term only** (3.3°, bringing the step to ~90 m per
+cell, inside the 50–125 m a real abyssal plain does) and leaves the raw age to the fabric.
+The remaining known cost is that fracture-zone detection still sees the artificial plate-edge
+steps and can draw a false scar along one.
+
+**D10 — draw the Messinian Mediterranean.** The Pliocene card already says the
+Mediterranean had just spent 600,000 years as a desiccating salt desert two kilometres below
+sea level, and the app never shows it. The labels exist (`Messinian Salt Basin` 5–6 Ma,
+`Lago Mare (Messinian Mediterranean)` 5.33–5.6 Ma, with curated biota flagged as an
+exception locality); only the terrain is missing.
+
+*The mechanism exists and is proven.* The Holocene lakes use exactly this pattern: a variant
+texture for one frame (`phan_0000_wold.webp`) plus a sharp age gate
+(`holoceneLakeWeight(age)`: `if (age > 0.02) return 0`). The same shape works here.
+
+*Timing, and it matters.* The crisis runs 5.96–5.33 Ma, peak desiccation ~5.6–5.5 Ma, ended
+by the Zanclean flood at 5.33 Ma. Keyframes are at 5 and 10 Ma, so **the 5 Ma keyframe is
+already refilled** — 330 kyr too late. The depiction therefore has to be gated on AGE inside
+the interpolated 10→5 Ma window (~5.9–5.4 Ma), not painted onto the 5 Ma frame. That is what
+the lake gate already does, so this is a feature of the pattern rather than a fight with it.
+
+*The open technical question, to settle first.* The shader decides land from the sign of
+elevation. A basin that is 2 km **below** sea level and **dry** cannot be expressed by
+elevation alone — it would render as ocean. This needs an explicit "subaerial despite being
+below the datum" mask, analogous to the lake-depth field. Confirm the exact land/sea test
+before designing anything else; it determines whether this is a new field or a channel on an
+existing one.
+
+*What an accurate depiction contains:*
+- basin floor exposed at roughly −1.5 to −2 km, with the deepest sub-basins lower
+- evaporites: about a million cubic kilometres of halite and gypsum, so a pale salt-flat
+  surface in the deep basins rather than ordinary ground
+- **Lago Mare** — residual brackish/hypersaline lakes in the deepest sub-basins (Balearic,
+  Tyrrhenian, Ionian, Levantine), not one continuous sheet
+- Gibraltar closed, so Iberia and Morocco are joined; the Sicily sill divides west from east
+- the incised canyons, which are the most striking part and are real and mapped: the Nile cut
+  a gorge ~2.5 km deep at Aswan, the Rhône one over 1 km deep near Lyon, both graded to the
+  drawn-down base level
+
+**B13 — every deep-time LAND card is plants only, with no animals at all.** Confirmed by
+reading the marker list of all 23 terrestrial provinces. The cause is structural, not an
+oversight: the terrestrial schemes in `paleobiogeography.py` are *floral* provinces --
+`_cenozoic_flora`, `_mesozoic_flora`, `_carboniferous_permian_flora`,
+`_devonian_carboniferous_flora`. Palaeobotanical provinces are the standard way to divide
+Palaeozoic and Mesozoic land, which is why the model was built that way, and the consequence
+is that **the app can never show a land animal from a province card**:
+
+| province | markers | animals |
+|---|---|---|
+| Euramerican Province | Lepidodendron, Sigillaria, Calamites, Medullosa, Cordaites | **0** |
+| Gondwanan Province | Glossopteris, Gangamopteris, Vertebraria, Noeggerathiopsis | **0** |
+| Cathaysian Province | Gigantopteris, Lobatannularia, Cathaysiodendron | **0** |
+| Angaran Province | Rufloria, Cordaites, Vojnovskya | **0** |
+| Dicroidium Flora | Dicroidium, Umkomasia, Pleuromeia | **0** |
+| Cosmopolitan Jurassic gymnosperm flora | Williamsonia, Ptilophyllum | **0** |
+| Early angiosperm flora | Archaefructus, Nymphaeales, Platanaceae | **0** |
+| Archaeopteris forest | Archaeopteris, Wattieza, Prototaxites, Elkinsia | **0** |
+| Early tracheophyte ground cover | Cooksonia, Baragwanathia, Rhynia | **0** |
+| Boreal conifer forest / tundra / rainforest / desert belts | all plants | **0** |
+
+The only terrestrial provinces with any fauna are the seven modern realms, and only because
+they were given some in this round. Everything from the Silurian to the Pliocene shows a
+reader vegetation and nothing that moves -- no tetrapods, no insects, no dinosaurs, no
+mammals, on any land card at any age.
+
+*Fix:* add characteristic FAUNA alongside the flora in every terrestrial province -- e.g.
+Euramerican coal forest: *Arthropleura*, *Meganeura*, *Hylonomus*, *Eryops*; Gondwanan:
+*Lystrosaurus*, *Dicynodon*, *Mesosaurus*; Dicroidium flora: *Cynognathus*, *Thrinaxodon*;
+Jurassic gymnosperm flora: *Allosaurus*, *Stegosaurus*, *Diplodocus*; Archaeopteris forest:
+*Ichthyostega*, trigonotarbids. Roughly 20 provinces x 2-3 taxa, most needing a description
+in `MARKER_NOTES`. `taxa_db` already covers many of them, and the province selftest (now
+block-aware and wired into `audit_all`) will catch any that lack one.
+
+*Also worth doing at the same time:* rename the province where the name is now wrong. A
+province carrying both flora and fauna should not be called "Dicroidium **Flora**" on a card
+that lists a cynodont.
+
+**Still open: nothing else that changes the app.** The remaining register items are E1–E3, which
 are about the research folder itself — retrying rate-limited figure fetches, obtaining two
 paywalled sources, and filling four empty dossier directories. E2 and F10/F11 were already
 closed as negative results after repeated attempts.

@@ -37,6 +37,14 @@ import crustage
 import realage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# How far to smooth the MODEL age, and the surveyed-model correction, in degrees.
+# Chosen by measurement across the whole timeline -- see the note in fuse(). With
+# both, the 99.5th-percentile depth step lands at 55-72 m at EVERY age from 0 to
+# 725 Ma, inside the 50-125 m a real abyssal plain does. Model-only leaves 45 Ma
+# at 703 m.
+MODEL_SMOOTH_DEG = 3.0
+SPREAD_SMOOTH_DEG = 1.5
+
 CACHE = os.path.join(HERE, "cache", "ocean")
 
 MAX_AGE = 200.0
@@ -110,10 +118,55 @@ def fuse(T, h=512, w=1024):
     surv, ok = realage.cached(T, h, w)
 
     model = np.where(np.isfinite(model), model, MAX_AGE).astype(np.float64)
+
+    # THE MODEL AGE IS A VORONOI TESSELLATION, AND IT HAS TO BE SMOOTHED HERE.
+    #
+    # crustage assigns every cell the age of the NEAREST isochron, searched
+    # INDEPENDENTLY PER PLATE. That makes the field flat facets with a hard step
+    # at every isochron boundary and, far worse, at every PLATE boundary -- and
+    # plate polygons are long straight edges. Measured at 615 Ma: 70 Myr between
+    # adjacent cells, which the depth-age law renders as a **1,349 m wall across
+    # 25 km**, against the 50-125 m a real abyssal plain does. That is the origin
+    # of the large angular slabs in the deep ocean, and their shape is the plate
+    # geometry that produced them.
+    #
+    # It has to be fixed HERE, at the source, because the age field has SIX
+    # consumers and each is a separate route to the screen: the depth law, the
+    # spreading direction, the fracture-zone detector, the seamount amplitude,
+    # the sediment thickness, and the across-ridge coordinate the shader keys its
+    # fault sets to. Patching any one of them leaves the other five to re-impose
+    # the edges -- which was measured, and is why an earlier attempt that smoothed
+    # only the depth term changed nothing on screen.
+    #
+    # Only the MODEL is smoothed. Surveyed age is measurement and is re-imposed
+    # exactly below, so the `both` mask already draws the line between what may
+    # be smoothed and what may not. Verified: inside surveyed water the flagged
+    # fracture zones move 3.17% -> 3.11% at 0 Ma, while outside they fall
+    # 10.21% -> 2.76%. In the Precambrian, where there is no survey at all, 92%
+    # of what the model called a fracture zone was invented by its own facet
+    # edges.
+    #
+    # This is also more physically correct than what it replaces. Crustal age
+    # varies smoothly away from a ridge; a step function is the wrong shape for
+    # the quantity, and `k=1` was an implementation convenience. Interpolating
+    # between the four nearest isochrons instead is better still and is not
+    # enough on its own -- it cannot cross a plate boundary the search never sees.
+    # Recorded as D9.
+    model = gaussian_filter(model, MODEL_SMOOTH_DEG * h / 180.0,
+                            mode=("nearest", "wrap"))
+
     both = ok & np.isfinite(surv)
     if both.sum() > 256:
-        age = model + _spread(np.where(both, surv - model, 0.0), both)
-        age = np.where(both, surv, age)
+        # `_spread` diffuses the surveyed-minus-model correction outward, so it
+        # inherits gradients from HOW WRONG the model was -- 12.1 Myr of step at
+        # 135 Ma even after the model itself is smooth. Smooth the correction too,
+        # or the seam between data and model becomes the new staircase. This is
+        # the hardest case in the series: 45 Ma, at 37% coverage, not the
+        # Precambrian at 0%.
+        sp = _spread(np.where(both, surv - model, 0.0), both)
+        sp = gaussian_filter(sp, SPREAD_SMOOTH_DEG * h / 180.0,
+                             mode=("nearest", "wrap"))
+        age = np.where(both, surv, model + sp)
     else:
         age = model
     age = np.clip(age, 0.0, MAX_AGE).astype(np.float32)

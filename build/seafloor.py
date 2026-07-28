@@ -72,6 +72,11 @@ GDH1_D0 = 5651.0            # m: asymptotic plate depth
 GDH1_DD = 2473.0            # m: the amplitude that decays away
 GDH1_K = 0.0278             # per Myr
 GDH1_T = 20.0               # Myr: where the two branches meet
+# How far to smooth the crustal age BEFORE it sets depth. Chosen by
+# measurement: 0 deg leaves 1,061 m cliffs at plate boundaries, 0.9 leaves
+# 237, 1.9 leaves 130, and 3.3 brings it to ~90 m per 25 km cell, which is
+# what a real abyssal plain does. Only the depth term uses it.
+AGE_DEPTH_SMOOTH_DEG = 3.3
 
 
 def depth_from_age(age_myr):
@@ -752,7 +757,26 @@ def apply(z, age, reconstructor=None, motion=None, verbose=False):
                 fz_field = None
                 age_ok = False
 
-            model_depth = -depth_from_age(age_myr)
+            # DEPTH READS A SMOOTHED AGE; THE FABRIC READS THE RAW ONE.
+            #
+            # crustage assigns age per PLATE, from that plate's own isochrons, so
+            # the field steps at every plate boundary -- and the boundaries are
+            # long straight polygon edges. The depth-age law turns each step into
+            # a wall: measured at 615 Ma, the 99.5th percentile change between
+            # adjacent cells was 1,061 m over 25 km, against the 50-125 m a real
+            # ocean does. That is the staircase, and its shape is the plate
+            # geometry, which is why it reads as huge angular slabs rather than
+            # anything oceanographic. It is worst in the Precambrian, where the
+            # plate model has almost no isochrons to interpolate between.
+            #
+            # Depth is a REGIONAL quantity -- it varies over hundreds of km -- so
+            # smoothing it over ~3 degrees costs nothing real and brings the
+            # cell-to-cell step to about 90 m, inside the physical range. The
+            # fabric, the fracture zones and the spreading direction keep the RAW
+            # age, because those are fine-scale and a blur would erase them.
+            _sg = AGE_DEPTH_SMOOTH_DEG * h / 180.0
+            age_depth = _nd.gaussian_filter(age_myr, _sg, mode=("nearest", "wrap"))
+            model_depth = -depth_from_age(age_depth)
             model_depth = np.clip(model_depth, -MAX_ABYSS, -RIDGE_DEPTH)
 
             # Blend over deep ocean only, leaving shelves and any real surveyed

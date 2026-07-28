@@ -108,7 +108,9 @@ def _ordovician_silurian_marine(age, lat, block):
                         "oligotrophic water during the GOBE and its reef biota diversify.",
                         ("Asaphus", "Megistaspis"))
     if block == "Siberia":
-        return Province("Siberian Province", "marine", "block", "moderate", "", ())
+        return Province("Siberian Province", "marine", "block", "moderate",
+                        "A cool, isolated Cambrian shelf with its own trilobite fauna.",
+                        _band_taxa(age, 2))
     if block in ("Avalonia", "Armorica", "Iberia") or (block and lat < -40):
         return Province("Mediterranean (peri-Gondwanan) Province", "marine", "both",
                         "moderate",
@@ -126,7 +128,8 @@ def _devonian_carboniferous_flora(age, lat, block):
                         "Low, rhyniophyte- and zosterophyll-grade vegetation confined to "
                         "damp lowlands. No canopy, no soil profile worth the name, "
                         "no provinces.", ("Cooksonia", "Aglaophyton", "Zosterophyllum",
-                                          "Baragwanathia"))
+                                          "Baragwanathia", "Pneumodesmus",
+                                          "Rhyniella", "trigonotarbids"))
     if age > 358.9:
         return Province("Archaeopteris forest flora", "terrestrial", "age", "good",
                         "The first forests, and near-cosmopolitan. Archaeopteris to 30 m "
@@ -134,7 +137,8 @@ def _devonian_carboniferous_flora(age, lat, block):
                         "Prototaxites, a probable fungus to 8 m, has no modern analogue. "
                         "First seeds (Elkinsia) in the Late Devonian.",
                         ("Archaeopteris", "Wattieza", "Prototaxites", "Elkinsia",
-                         "Rhacophyton"))
+                         "Rhacophyton", "Ichthyostega", "Acanthostega",
+                         "Eoarthropleura"))
     return None
 
 
@@ -202,7 +206,7 @@ def _late_paleozoic_marine(age, lat, block):
                         "marker; reef-rich.", ("Fusulinids", "Verbeekina", "Waagenophyllum"))
     if lat >= 30:
         return Province("Boreal Realm", "marine", "latitude", "good",
-                        "Cool northern shelves; no fusulinids.", ())
+                        "Cool northern shelves; no fusulinids.", _band_taxa(age, 2))
     return Province("Gondwanan (Austral) Realm", "marine", "latitude", "good",
                     "Cool southern shelves under the Late Palaeozoic Ice Age; "
                     "glacially influenced, Eurydesma fauna.", ("Eurydesma", "Deltopecten"))
@@ -219,7 +223,8 @@ def _mesozoic_marine(age, lat, block):
                         "Hispanic Corridors switch its exchange with Tethys on and off.",
                         ("Buchia", "belemnites"))
     return Province("Austral Realm", "marine", "latitude", "moderate",
-                    "Cool southern; increasingly isolated as Gondwana fragments.", ())
+                    "Cool southern; increasingly isolated as Gondwana fragments.",
+                    ("belemnites", "Nothofagus", "Inoceramus"))
 
 
 def _cenozoic_marine(age, lat, block):
@@ -228,14 +233,18 @@ def _cenozoic_marine(age, lat, block):
         return Province("Southern Ocean", "marine", "latitude", "good",
                         "Thermally isolated behind the Antarctic Circumpolar Current, "
                         "which exists only because Drake Passage and the Tasman Gateway "
-                        "are open (crust 34-29 Ma; full ACC ~23 Ma).", ())
+                        "are open (crust 34-29 Ma; full ACC ~23 Ma).", _band_taxa(age, 3))
     if lat >= 66:
-        return Province("Arctic", "marine", "latitude", "good", "", ())
+        return Province("Arctic", "marine", "latitude", "good",
+                        "Ice-influenced, seasonally productive, low diversity.",
+                        _band_taxa(age, 3))
     if abs(lat) < 30:
         return Province("Tropical", "marine", "latitude", "good",
                         "Split into Indo-Pacific and Atlantic provinces once the Tethys "
-                        "seaway closes (~19-14 Ma) and Panama shoals (~10-2.7 Ma).", ())
-    return Province(f"{_hemisphere(lat).title()} temperate", "marine", "latitude", "moderate", "", ())
+                        "seaway closes (~19-14 Ma) and Panama shoals (~10-2.7 Ma).", _band_taxa(age, 0))
+    return Province(f"{_hemisphere(lat).title()} temperate", "marine", "latitude",
+                    "moderate", "Seasonal, siliciclastic, reef-free shelf.",
+                    _band_taxa(age, 2))
 
 
 
@@ -277,7 +286,8 @@ def _tonian_cryogenian_marine(age, lat, block, habitat=None):
     return Province("Post-Marinoan recovery sea", "marine", "age", "moderate",
                     "Between the Marinoan thaw and the Ediacaran biota: oxygen rising, "
                     "the deep ocean ventilating for the first time, and the water column "
-                    "becoming habitable for something larger than a cell.", ())
+                    "becoming habitable for something larger than a cell.",
+                    ("Acritarchs", "cap carbonates", "microbialites"))
 
 
 def _ediacaran_marine(age, lat, block, habitat=None):
@@ -339,7 +349,7 @@ def _ordovician_marine(age, lat, block, habitat=None):
     if block in _SIBERIAN_BLOCKS:
         return Province("Siberian Province", "marine", "block", "moderate",
                         "An isolated equatorial platform with a distinctive endemic "
-                        "shelly fauna.", ())
+                        "shelly fauna.", _band_taxa(age, 2))
     if block in _PERIGONDWANAN or (block in _GONDWANAN_BLOCKS and abs(lat) > 40):
         return Province("Mediterranean (peri-Gondwanan) Province", "marine", "block",
                         "good",
@@ -350,9 +360,10 @@ def _ordovician_marine(age, lat, block, habitat=None):
                         ("Neseuretus", "calymenid trilobites", "Hirnantia fauna"))
     if abs(lat) < 30:
         return Province("Tropical shelf (Ordovician)", "marine", "latitude", "moderate",
-                        "Carbonate platform in the warm belt.", ())
+                        "Carbonate platform in the warm belt.", _band_taxa(age, 0))
     return Province(f"{_hemisphere(lat).title()} temperate shelf (Ordovician)",
-                    "marine", "latitude", "moderate", "", ())
+                    "marine", "latitude", "moderate",
+                    "A latitudinal shelf band.", _band_taxa(age, 2))
 
 
 def _silurian_marine(age, lat, block, habitat=None):
@@ -374,7 +385,8 @@ def _silurian_marine(age, lat, block, habitat=None):
                         "coral-stromatoporoid barrier reefs are found nearly everywhere.",
                         ("Pentamerus", "Favosites", "Halysites", "eurypterids"))
     return Province(f"{_hemisphere(lat).title()} temperate shelf (Silurian)", "marine",
-                    "latitude", "moderate", "", ())
+                    "latitude", "moderate",
+                    "A latitudinal shelf band.", _band_taxa(age, 2))
 
 
 def _triassic_marine(age, lat, block, habitat=None):
@@ -394,7 +406,11 @@ def _triassic_marine(age, lat, block, habitat=None):
                         "scleractinian corals and calcisponges.",
                         ("Dachstein reef fauna", "ceratitid ammonoids", "Daonella"))
     return Province("Boreal Realm (Triassic)" if lat > 0 else "Austral Realm (Triassic)",
-                    "marine", "latitude", "moderate", "", ())
+                    "marine", "latitude", "moderate",
+                    "Cool, reef-free shelf at high latitude while the Tethys builds "
+                    "carbonate platforms in the tropics -- the Triassic world is strongly "
+                    "zoned because Pangaea leaves no way round it.",
+                    ("Daonella", "Claraia", "ceratitid ammonoids"))
 
 
 def _cenozoic_marine_extended(age, lat, block, habitat=None):
@@ -409,7 +425,8 @@ def _cenozoic_marine_extended(age, lat, block, habitat=None):
                         "limestones from Spain to Indonesia.",
                         ("Nummulites", "Discocyclina")) if abs(lat) < 35 else \
                Province(("Boreal" if lat > 0 else "Austral") + " Realm (Palaeogene)",
-                        "marine", "latitude", "moderate", "", ())
+                        "marine", "latitude", "moderate",
+                    "A latitudinal shelf band.", _band_taxa(age, 2))
     if abs(lat) > 55 and lat < 0:
         return Province("Southern Ocean Realm", "marine", "latitude", "good",
                         "Created by tectonics: the Antarctic Circumpolar Current, "
@@ -421,14 +438,16 @@ def _cenozoic_marine_extended(age, lat, block, habitat=None):
         return Province("Arctic Realm", "marine", "latitude", "good",
                         "Young and species-poor - the Arctic basin was only connected "
                         "to the Pacific when the Bering Strait opened at ~5.5-5.3 Ma, "
-                        "and the trans-Arctic interchange follows.", ())
+                        "and the trans-Arctic interchange follows.",
+                        ("Boreogadus saida", "Mytilus", "sea-ice algae"))
     if abs(lat) < 30:
         if age > 14:
             return Province("Tethyan tropical belt (Neogene)", "marine", "both", "good",
                             "Still one tropical ocean: the Tethys closes at the "
                             "Gomphotherium land bridge ~19-14 Ma and Panama shoals from "
                             "~10 Ma. Before that, Atlantic and Indo-Pacific shallow "
-                            "faunas are continuous.", ())
+                            "faunas are continuous.",
+                            ("Porites", "Halimeda", "seagrass meadows"))
         return Province("Indo-Pacific Realm", "marine", "both", "good",
                         "The world's richest shallow-marine fauna, cut off from the "
                         "Atlantic by the Tethys closure and then by Panama. The Coral "
@@ -436,7 +455,8 @@ def _cenozoic_marine_extended(age, lat, block, habitat=None):
                         ("Acropora", "giant clams", "reef fish radiation")) \
             if (block is None or True) and lat > -30 else None
     return Province(("North" if lat > 0 else "South") + " temperate shelf", "marine",
-                    "latitude", "moderate", "", ())
+                    "latitude", "moderate",
+                    "A latitudinal shelf band.", _band_taxa(age, 2))
 
 
 def _silurian_devonian_flora(age, lat, block, habitat=None):
@@ -450,19 +470,22 @@ def _silurian_devonian_flora(age, lat, block, habitat=None):
                         "Cooksonia, rhyniophytes, early lycophytes. Spore-dispersed and "
                         "effectively worldwide - there is not enough plant to be "
                         "provincial with.",
-                        ("Cooksonia", "Baragwanathia", "Rhynia"))
+                        ("Cooksonia", "Baragwanathia", "Rhynia",
+                         "Pneumodesmus", "Kampecaris", "trigonotarbids"))
     if age > 385:
         return Province("Early Devonian rhyniophyte-zosterophyll flora", "terrestrial",
                         "latitude", "good",
                         "Still knee-high. Trimerophytes and zosterophylls, with the "
                         "Rhynie chert preserving a whole ecosystem including the first "
                         "arthropod herbivores and mycorrhizal fungi.",
-                        ("Zosterophyllum", "Asteroxylon", "Aglaophyton"))
+                        ("Zosterophyllum", "Asteroxylon", "Aglaophyton",
+                         "Rhyniella", "Palaeocharinus", "Rhyniognatha"))
     return Province("Archaeopteris forest", "terrestrial", "latitude", "good",
                     "The first forests. Archaeopteris reaches 30 m with real wood and "
                     "roots a metre deep, and its arrival changes weathering, soils, "
                     "river form and atmospheric CO2 permanently.",
-                    ("Archaeopteris", "Wattieza", "Prototaxites", "Elkinsia"))
+                    ("Archaeopteris", "Wattieza", "Prototaxites", "Elkinsia",
+                     "Ichthyostega", "Acanthostega", "Eoarthropleura"))
 
 
 MARINE_SCHEMES = [
@@ -497,24 +520,75 @@ def _carboniferous_permian_flora(age, lat, block):
                         "Everwet tropical. Gigantopterids. Coal continues here when it "
                         "has stopped everywhere else - the Carboniferous rainforest "
                         "collapse at ~305 Ma is a EURAMERICAN event only.",
-                        ("Gigantopteris", "Lobatannularia", "Cathaysiodendron"))
+                        ("Gigantopteris", "Lobatannularia", "Cathaysiodendron",
+                         "Sinophoneus", "Palaeodictyoptera"))
     if block in _ANGARAN or (lat > 30 and block not in _EURAMERICAN):
         return Province("Angaran Province", "terrestrial", "both", "good",
                         "Northern mid-to-high latitude, cool temperate. Cordaitalean-"
                         "dominated, deciduous, strong growth rings.",
-                        ("Rufloria", "Cordaites", "Vojnovskya"))
+                        ("Rufloria", "Cordaites", "Vojnovskya",
+                         "Estemmenosuchus", "Inostrancevia", "Kotlassia"))
     if lat < -30:
         return Province("Gondwanan Province", "terrestrial", "latitude", "good",
                         "Glossopteris flora. Wet-soil seed-fern forest to 30 m, tolerant "
                         "of a polar light regime; the source of Gondwanan coal.",
-                        ("Glossopteris", "Gangamopteris", "Vertebraria", "Noeggerathiopsis"))
+                        ("Glossopteris", "Gangamopteris", "Vertebraria", "Noeggerathiopsis",
+                         "Lystrosaurus", "Dicynodon", "Mesosaurus"))
     if block in _EURAMERICAN or abs(lat) <= 30:
         return Province("Euramerican Province", "terrestrial", "both", "good",
                         "Low, tropical. Carboniferous lycopsid coal forest (Lepidodendron "
                         ">50 m tall, 2 m across), then increasingly seasonally dry after "
                         "the ~305 Ma rainforest collapse: tree ferns, conifers, peltasperms.",
-                        ("Lepidodendron", "Sigillaria", "Calamites", "Medullosa", "Cordaites"))
+                        ("Lepidodendron", "Sigillaria", "Calamites", "Medullosa", "Cordaites",
+                         "Arthropleura", "Meganeura", "Eryops", "Dimetrodon"))
     return None
+
+
+# A shelf card that names no organism is the same defect as a land card that
+# names no animal: the band is a real statement about the water, but "Tropical
+# shelf" on its own tells a reader nothing about what lived in it. These bands
+# already know the AGE, so they can name the era's actual shelf fauna -- and the
+# reef builders in particular, because who builds the reef is the single thing
+# that changes most across the Phanerozoic.
+_BAND_TAXA = [
+    # (older, younger, tropical, warm, cool, polar)
+    (538.8, 485.4, ("archaeocyaths", "trilobites", "brachiopods"),
+                   ("trilobites", "brachiopods", "hyoliths"),
+                   ("trilobites", "brachiopods"),
+                   ("trilobites", "brachiopods")),
+    (485.4, 443.8, ("stromatoporoids", "tabulate corals", "nautiloids"),
+                   ("brachiopods", "bryozoans", "crinoids"),
+                   ("brachiopods", "trilobites", "graptolites"),
+                   ("brachiopods", "graptolites")),
+    (443.8, 419.6, ("stromatoporoids", "rugose corals", "crinoids"),
+                   ("brachiopods", "bryozoans", "crinoids"),
+                   ("brachiopods", "graptolites", "eurypterids"),
+                   ("brachiopods", "graptolites")),
+    (419.6, 358.9, ("stromatoporoids", "rugose corals", "brachiopods"),
+                   ("brachiopods", "crinoids", "placoderms"),
+                   ("brachiopods", "crinoids"),
+                   ("brachiopods", "crinoids")),
+    (358.9, 251.9, ("fusulinids", "rugose corals", "crinoids"),
+                   ("brachiopods", "bryozoans", "crinoids"),
+                   ("brachiopods", "bryozoans"),
+                   ("brachiopods", "bivalves")),
+    (251.9, 66.0, ("scleractinian corals", "rudist bivalves", "ammonites"),
+                  ("ammonites", "belemnites", "bivalves"),
+                  ("belemnites", "bivalves", "brachiopods"),
+                  ("bivalves", "brachiopods")),
+    (66.0, -260.0, ("scleractinian corals", "reef fish", "coralline algae"),
+                   ("bivalves", "gastropods", "foraminifera"),
+                   ("bivalves", "diatoms", "kelp"),
+                   ("diatoms", "krill", "bivalves")),
+]
+
+
+def _band_taxa(age, band):
+    """Era-appropriate shelf fauna for a latitudinal band. band 0=tropical..3=polar."""
+    for older, younger, *bands in _BAND_TAXA:
+        if younger <= age <= older:
+            return bands[band]
+    return ()
 
 
 def _fallback_marine(age, lat, label=""):
@@ -527,19 +601,20 @@ def _fallback_marine(age, lat, label=""):
     suffix = f" ({label})" if label else ""
     if abs(lat) > 60:
         return Province("Polar sea" + suffix, "marine", "latitude", "moderate",
-                        "Cold, seasonally ice-influenced, low diversity, no reefs.", ())
+                        "Cold, seasonally ice-influenced, low diversity, no reefs.",
+                        _band_taxa(age, 3))
     if abs(lat) > 35:
         return Province(("Boreal" if lat > 0 else "Austral") + " Realm" + suffix,
                         "marine", "latitude", "moderate",
                         "Cool-temperate shelf: siliciclastic rather than carbonate, "
-                        "and reef-free.", ())
+                        "and reef-free.", _band_taxa(age, 2))
     if abs(lat) > 23:
         return Province("Warm-temperate shelf" + suffix, "marine", "latitude", "moderate",
                         "The transition belt; its position is the single most sensitive "
-                        "indicator of a warm or cold world.", ())
+                        "indicator of a warm or cold world.", _band_taxa(age, 1))
     return Province("Tropical shelf" + suffix, "marine", "latitude", "moderate",
                     "Carbonate platform, reef-building where the water is clear and "
-                    "shallow enough.", ())
+                    "shallow enough.", _band_taxa(age, 0))
 
 
 def _mesozoic_flora(age, lat, block):
@@ -548,23 +623,27 @@ def _mesozoic_flora(age, lat, block):
             return Province("Dicroidium Flora", "terrestrial", "latitude", "good",
                             "Triassic Gondwana. Replaces Glossopteris, which died out "
                             "BEFORE 252.3 Ma - some 350 kyr ahead of the marine extinction.",
-                            ("Dicroidium", "Umkomasia", "Pleuromeia"))
+                            ("Dicroidium", "Umkomasia", "Pleuromeia",
+                             "Lystrosaurus", "Cynognathus", "Proterosuchus"))
         return Province("Northern Triassic conifer flora", "terrestrial", "latitude",
                         "moderate", "Voltzialean conifers, cycadophytes, seed ferns.",
-                        ("Voltzia", "Pleuromeia", "Neocalamites"))
+                        ("Voltzia", "Pleuromeia", "Neocalamites",
+                         "Plateosaurus", "Coelophysis", "Placerias"))
     if age > 130:
         return Province("Cosmopolitan Jurassic gymnosperm flora", "terrestrial", "age",
                         "good",
                         "Strikingly uniform pole to pole: conifers, cycads, Bennettitales, "
                         "ginkgoes, ferns. The same forest type from Greenland to Antarctica "
                         "- a real and drawable fact about a dispersing but still connected world.",
-                        ("Araucaria", "Ginkgo", "Williamsonia", "Ptilophyllum"))
+                        ("Araucaria", "Ginkgo", "Williamsonia", "Ptilophyllum",
+                         "Allosaurus", "Stegosaurus", "Archaeopteryx"))
     return Province("Early angiosperm flora", "terrestrial", "age", "good",
                     "Angiosperms originate and diversify from ~130 Ma; by the Late "
                     "Cretaceous >50% of modern orders exist and the clade is ~70% of "
                     "species, and flowering trees overtake conifers. As Gondwana "
                     "fragments each piece begins its own experiment.",
-                    ("Archaefructus", "Nymphaeales", "Platanaceae"))
+                    ("Archaefructus", "Nymphaeales", "Platanaceae",
+                     "Iguanodon", "Repenomamus", "Confuciusornis"))
 
 
 _REALM_BOXES = [
@@ -583,6 +662,60 @@ _REALM_BOXES = [
 ]
 
 
+# WHAT ACTUALLY LIVES IN EACH MODERN REALM.
+#
+# These used to be `Province(guess, ..., "", ())` -- a realm NAME with an empty
+# note and no organisms at all. Every large Cenozoic landmass therefore fell
+# through the province tier of the biota panel and showed the GLOBAL interval
+# list instead: Africa, India, Antarctica, the Rockies, the Urals and the rest
+# all reporting the world's biota rather than their own. A realm is defined by
+# the animals and plants its barriers kept in, so a realm with no taxa is not
+# saying anything.
+_REALM_LIFE = {
+    "Nearctic": (
+        "North America, isolated from Eurasia when Beringia floods but repeatedly "
+        "rejoined to it -- so its fauna is a Palearctic one with additions, and it "
+        "shares almost nothing with the Neotropics until Panama closes.",
+        ("Bison", "Antilocapra", "Sequoiadendron")),
+    "Palearctic": (
+        "Eurasia north of the Himalaya plus North Africa: the largest realm, and "
+        "the one whose Ice Age losses were heaviest -- its megafauna is a list of "
+        "recent absences.",
+        ("Cervus", "Ginkgo", "Betula")),
+    "Afrotropical": (
+        "Africa south of the Sahara. The Sahara is the barrier, and it is young: "
+        "the realm's identity is Miocene, when the forest belt broke up and "
+        "grassland spread. Alone among the realms it kept its large mammals.",
+        ("Loxodonta", "Adansonia", "Vachellia")),
+    "Neotropical": (
+        "South America, an island continent for some 60 million years. That "
+        "isolation produced ground sloths, glyptodonts, notoungulates and the "
+        "flightless terror birds, and most of it ended when Panama closed.",
+        ("Megatherium", "Toxodon", "Phorusrhacids", "Bromeliaceae")),
+    "Indomalayan": (
+        "Tropical South and South-East Asia, assembled as India docked and the "
+        "monsoon strengthened. Its forests are dominated by a single family to a "
+        "degree unmatched anywhere else.",
+        ("Dipterocarpaceae", "Elephas", "Rhizophora")),
+    "Australasian": (
+        "Australia and New Guinea, separated since the Eocene and the only realm "
+        "where marsupials remained the dominant mammals. Its flora is a Gondwanan "
+        "inheritance reworked by fire and aridity.",
+        ("Eucalyptus", "Macropodidae", "Nothofagus", "Araucaria")),
+    "Antarctic": (
+        "Cool-temperate Nothofagus forest until the ice sheets close over it near "
+        "34 Ma, after which the land biota is reduced to lichens, mosses and two "
+        "flowering plants, and everything else moves offshore.",
+        ("Nothofagus", "lichens", "Deschampsia antarctica",
+         "Belgica antarctica", "springtails and mites")),
+    "Oceanian": (
+        "The Pacific islands: young, remote volcanic land colonised across open "
+        "ocean, so its biota is a filtered subset -- rich in what can raft, fly or "
+        "float, and missing whole groups that cannot.",
+        ("Metrosideros", "Rhizophora", "Pteropus", "Partulidae")),
+}
+
+
 def _cenozoic_flora(age, lat, block):
     """Modern realms only become meaningful as their barriers form. Before the
     relevant tectonic event the realm name is an anachronism."""
@@ -598,7 +731,8 @@ def _cenozoic_flora(age, lat, block):
                  "Siberia": "Palearctic", "Congo Craton": "Afrotropical",
                  "Kalahari Craton": "Afrotropical"}.get(block)
         if guess and age <= realm_ages[guess]:
-            return Province(guess, "terrestrial", "block", "good", "", ())
+            note, mk = _REALM_LIFE.get(guess, ("", ()))
+            return Province(guess, "terrestrial", "block", "good", note, mk)
     # Without a block we cannot name a REALM - a realm is defined by its barriers -
     # but we can still name the vegetation province, which is what a card needs.
     # Returning None here left 35 Cenozoic cells unnamed.
@@ -607,30 +741,33 @@ def _cenozoic_flora(age, lat, block):
                         "Treeless. Continuous permafrost below; a short intense growing "
                         "season above. One of the largest biomes on Earth by area and "
                         "younger than almost any other - it barely exists before the "
-                        "Late Cenozoic ice age.", ("dwarf birch", "sedges", "lichens"))
+                        "Late Cenozoic ice age.", ("dwarf birch", "sedges", "lichens",
+                         "Rangifer", "Ovibos", "Mammuthus"))
     if abs(lat) > 48:
         return Province("Boreal conifer forest", "terrestrial", "latitude", "good",
                         "The taiga: a near-monotypic conifer belt circling the northern "
                         "continents. Also a Cenozoic novelty - it needs both cold winters "
                         "and the modern conifer families.",
-                        ("Picea", "Larix", "Pinus"))
+                        ("Picea", "Larix", "Pinus", "Alces", "Ursus", "Gulo"))
     if abs(lat) > 30:
         return Province("Temperate mixed forest and grassland", "terrestrial", "latitude",
                         "good",
                         "Deciduous broadleaf where wet, grassland where seasonally dry. "
                         "The grassland half is late: grasses matter ecologically only "
                         "from ~40 Ma and C4 grassland expands from ~8 Ma.",
-                        ("Quercus", "Fagus", "Poaceae"))
+                        ("Quercus", "Fagus", "Poaceae", "Equus", "Bison", "Cervus"))
     if abs(lat) > 15:
         return Province("Subtropical desert and savanna belt", "terrestrial", "latitude",
                         "good",
                         "Under the descending limb of the Hadley cell. Deserts here are a "
                         "permanent feature of a rotating planet, not an accident of any "
-                        "one geography.", ("Acacia", "succulents", "C4 grasses"))
+                        "one geography.", ("Acacia", "succulents", "C4 grasses",
+                         "Camelus", "Oryx", "Struthio"))
     return Province("Tropical rainforest belt", "terrestrial", "latitude", "good",
                     "Everwet equatorial forest - the most species-rich terrestrial biome, "
                     "and after the Cretaceous an angiosperm one.",
-                    ("angiosperm canopy trees", "epiphytes", "lianas"))
+                    ("angiosperm canopy trees", "epiphytes", "lianas",
+                    "primates", "Panthera", "frugivorous birds"))
 
 
 TERRESTRIAL_SCHEMES = [

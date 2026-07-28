@@ -4,25 +4,42 @@
   {
    "version": "1.9",
    "date": "28 July 2026",
-   "title": "Smoother water, steadier continents",
-   "summary": "Two things you could see: a stair-step pattern across the sea floor, and two continents that swam away from their own names just before the Cambrian. Both are gone.",
+   "title": "Smoother seas, a future that weathers, and animals on land",
+   "summary": "The stair-step pattern across the deep ocean is gone, and this time for the right reason. The future era now erodes its mountains and builds new ones where continents collide. Land cards list the animals that lived there, not only the plants.",
    "sections": [
     {
      "name": "The ocean floor",
      "items": [
-      "Shelf edges and slope boundaries are curved again. They had been drawn as flights of stairs with square corners — most obvious where a margin runs diagonally, and the same steps showed up in the shading of the open abyssal plain. The app decides \"is there a shelf above this slope\" by picking the second-highest of four depth samples around each pixel, and picking the second-highest of a handful of points is not a smooth thing to do: the answer jumps as it switches which point it is reading, and it switches along the lines those points sit on. Four points due north, south, east and west therefore draw square corners.",
-      "It now reads eight points in a ring and blends them, weighting each by how typical it is, so the answer changes smoothly from place to place and the boundary follows the sea floor instead of the pixel grid. An isolated seamount still gets ignored — that was the point of taking the second-highest, and it is preserved — and the shelf and canyon detail covers exactly as much ground as before, matched by measurement rather than by eye.",
-      "The staircase is gone. Zoomed in, the sea floor was crossed by faint square steps — most visible on smooth abyssal plains and along the edges of ridges and shelves. They were never in the model: they came from the image format the elevation was stored in, which compresses in four-pixel blocks and left a one-step ledge at every block edge. The lighting then treated each ledge as a real slope.",
-      "Elevation is now stored in a newer format that handles smooth ground far better. The leftover step is a third of what it was, and small enough that the app's existing correction removes it — while the files are slightly smaller and load just as fast.",
-      "Coastlines and shelf edges are smoother for the same reason."
+      "The staircase is gone. Zoomed in, the deep ocean was crossed by large angular slabs — flat panels of constant shade with long straight edges and square corners, tens of degrees across, at every age.",
+      "The cause was in the crust's age, not in the picture. Where there is no survey data the model works out how old each patch of sea floor is by finding the nearest dated stripe and copying its age wholesale — done separately for each plate. That builds a mosaic of flat tiles with a hard step at every edge, and the plate edges are long and straight. At 615 million years ago the jump between two neighbouring cells was 70 million years of age, which the depth-versus-age law turns into a wall 1,349 m high across 25 km. A real abyssal plain changes by 50 to 125 m.",
+      "Crustal age now varies smoothly away from a spreading ridge, which is what it does in nature. Measured across the whole timeline the step is now 55 to 72 m at every age, inside the physical range. Surveyed sea floor is untouched and still wins exactly where it exists.",
+      "Three quarters of the ocean's \"fracture zone\" scars turned out to be this artefact and have gone with it. Before the Cambrian, where there has never been any survey data, 92 per cent of them were invented by the model's own tile edges. Real scars survive to within a rounding error.",
+      "Earlier attempts fixed two other real defects that were not this one — the image format's four-pixel compression blocks, and the way the shelf edge was detected — and both improvements are kept."
      ]
     },
     {
-     "name": "Where things are",
+     "name": "The future",
      "items": [
-      "Siberia and Laurentia stay on their own land through the run-up to the Cambrian. Between 570 and 541 million years ago the two names drifted out over open ocean, because the deep-time map and the plate model that carries the labels disagreed about where those continents were — by as much as a hemisphere at the join.",
-      "The deep-time map now follows the same plate model the labels do, sampled every twenty million years across the handover so it tracks their real path rather than cutting the corner. Both continents sit on solid ground at every frame.",
-      "Land area still changes smoothly through the handover, which was the trap: fixing the positions with a single control made continents flood and re-emerge. Position and land area are now handled separately."
+      "Mountains now wear down. The future was built by rotating today's terrain into new positions, and nothing in it could erode: every present-day range was still standing at its present height a quarter of a billion years from now. Land above 2 km and above 3 km were identical to today's, to the decimal.",
+      "Relief now decays with time, fast for peaks and valleys and slowly for high plateaus, calibrated so that a range like the Appalachians — above 4 km when Pangaea assembled, 1 to 2 km today — wears down at the right rate.",
+      "New mountains rise where continents actually collide. Where two landmasses' paths overlap, that overlap is the convergence, and it used to be calculated and then thrown away — 12.8 million square kilometres of it, larger than the whole Alpine–Himalayan belt. It now drives crustal thickening, so a collision builds a range instead of two outlines passing through each other.",
+      "Rifted coasts subside and gain a shelf, so a continent that splits off no longer keeps its original knife-edge outline for 250 million years.",
+      "The future's own staircase is gone too. Its coastlines were quantised to half a degree — six times coarser than the map they were drawn on — and its elevations were sampled without smoothing. Both now work at the map's own resolution, and the coastline is a quarter less jagged by measurement."
+     ]
+    },
+    {
+     "name": "Life on land",
+     "items": [
+      "Land cards now show animals. Every land region in the model was described by a vegetation scheme and nothing else, so a card for a continent said what grew there and never what lived there — flowers and forests, no animals, across the whole timeline.",
+      "All eighteen land provinces now list their fauna alongside their flora: the first air-breathing millipede in the Silurian, giant dragonflies and 2.5 m millipedes in the coal forests, Lystrosaurus after the end-Permian, Archaeopteryx in the Jurassic, mammoths and muskoxen on the tundra. Forty-eight animals were added, each with its own description.",
+      "A check now fails the build if any land region lists plants and no animals, so this cannot quietly come back."
+     ]
+    },
+    {
+     "name": "One frame in particular",
+     "items": [
+      "The Mediterranean at 5 million years ago is drawn as the salt desert it was. Between 5.97 and 5.33 million years ago the Gibraltar gateway closed and the sea evaporated faster than its rivers could refill it, leaving a desert floored by up to 2 km of salt, with brine lakes in the deepest basins and the Nile cutting a canyon kilometres deep to reach the new base level. It ended in a flood that refilled the entire basin in perhaps a few months.",
+      "Two honest compromises, both worth stating: keyframes step 5 million years, so a 640,000-year event is drawn on the nearest one; and the app draws sea wherever the ground is below sea level, so a surface that was both dry and 1.5 km below the Atlantic cannot be expressed exactly — the salt flats are lifted just enough to read as exposed ground."
      ]
     }
    ]
