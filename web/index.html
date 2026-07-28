@@ -14,7 +14,13 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidden;-webkit-font-smoothing:antialiased}
-#stage{position:fixed;inset:0}
+/* touch-action:none is what actually stops a phone browser from taking the
+   gesture for itself. Without it a two-finger pinch is a PAGE zoom before any
+   listener runs, and the whole window scales instead of the globe -- and on
+   iOS Safari the viewport meta's user-scalable=no has been ignored since
+   iOS 10, so the meta tag alone was never going to hold. */
+#stage{position:fixed;inset:0;touch-action:none}
+#gl,#map2d{touch-action:none}
 canvas{display:block}
 #map2d{position:fixed;inset:0;display:none;background:transparent;z-index:5}
 .hidden{display:none!important}
@@ -377,8 +383,10 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
   align-items:center;justify-content:center;border-radius:10px;
   background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--ink);
   font-family:var(--font);font-size:15px;cursor:pointer}
-#mLeft{left:12px} #mRight{right:12px}
+#mLeft{left:12px} #mRight{right:12px} #mLabels{right:12px;top:58px}
 body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
+#mLabels.on{border-color:var(--accent);color:var(--accent)}
+#mLabels{font-size:12px;letter-spacing:.02em}
 body.ambient .mtab{display:none}
 
 /* ===== MOBILE =====================================================
@@ -460,6 +468,7 @@ body.ambient .mtab{display:none}
   #speed{width:70px}
   #steprow{display:none}
   .mtab{top:8px;width:32px;height:32px}
+  #mLabels{top:46px}
   #leftrail{padding-top:46px;width:min(52vw,230px)}
 }
 
@@ -591,6 +600,10 @@ body.ambient .mtab{display:none}
      to reach the rails, which are otherwise off-screen. -->
 <button id="mLeft" class="mtab" aria-label="Timeline and legend">☰</button>
 <button id="mRight" class="mtab" aria-label="Conditions and details">i</button>
+<!-- Era labels is the one layer toggle worth reaching without opening a
+     drawer: it is what tells you WHAT you are looking at, and on a small
+     screen it is also the control most likely to be wanted off. -->
+<button id="mLabels" class="mtab on" aria-label="Era labels" title="Era labels">Aa</button>
 
 <div id="topbar">
   <div id="title">
@@ -1057,7 +1070,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1517';
+const DATA_V='20260728-1539';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -3557,8 +3570,36 @@ function initGL(){
   scene.add(starfield);
   globe.add(overlay.boundaries);globe.add(overlay.derived);globe.add(overlay.vectors);globe.add(overlay.hotspots);
   resize();
-  cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);state.dragMoved=false;});
-  cv.addEventListener('pointermove',e=>{if(!dragging)return;
+  /* PINCH. The old code tracked one pointer, so a second finger was invisible
+     to the app and the browser handled the gesture instead. Every active
+     pointer is now kept, and two of them mean pinch rather than drag: the zoom
+     follows the RATIO of the finger separation, which is what makes it track
+     the fingers instead of drifting, and dragging is suspended so the globe
+     does not lurch as the midpoint wanders. */
+  const ptrs=new Map(); let pinchD=0;
+  cv.addEventListener('pointerdown',e=>{
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size>=2){dragging=false;pinchD=0;state.dragMoved=true;return;}
+    dragging=true;lastX=e.clientX;lastY=e.clientY;
+    try{cv.setPointerCapture(e.pointerId);}catch(_){}
+    state.dragMoved=false;});
+  const endPtr=e=>{ptrs.delete(e.pointerId);
+    if(ptrs.size<2){pinchD=0;
+      // hand the remaining finger back to drag, from where it is NOW, or the
+      // globe jumps by however far the pinch travelled
+      if(ptrs.size===1){const q=[...ptrs.values()][0];
+        lastX=q.x;lastY=q.y;dragging=true;}else dragging=false;}};
+  cv.addEventListener('pointercancel',endPtr);
+  cv.addEventListener('pointermove',e=>{
+    if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size>=2){
+      const[a,b]=[...ptrs.values()];
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(pinchD>0&&d>0)
+        state.zoom=Math.max(1.35,Math.min(5,state.zoom*(pinchD/d)));
+      pinchD=d; return;
+    }
+    if(!dragging)return;
     const dx=e.clientX-lastX,dy=e.clientY-lastY;
     if(Math.abs(dx)+Math.abs(dy)>3)state.dragMoved=true;
     /* DRAG IS IN SCREEN SPACE, so it has to be rotated INTO world space by the
@@ -3584,7 +3625,12 @@ function initGL(){
     state.rot+=wx*.006;
     state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+wy*.006));
     lastX=e.clientX;lastY=e.clientY;});
-  cv.addEventListener('pointerup',e=>{dragging=false;if(!state.dragMoved)pickGlobe(e);});
+  cv.addEventListener('pointerup',e=>{const solo=ptrs.size<=1;endPtr(e);
+    if(solo){dragging=false;if(!state.dragMoved)pickGlobe(e);}});
+  // Safari's own gesture events fire even with touch-action set, and they are
+  // what scale the page on iOS. Refuse them explicitly.
+  for(const g of ['gesturestart','gesturechange','gestureend'])
+    cv.addEventListener(g,e=>e.preventDefault(),{passive:false});
   cv.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(1.35,Math.min(5,state.zoom+e.deltaY*.0016));},{passive:false});
 }
 
@@ -5682,6 +5728,11 @@ document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
   if(k==='rotate') $('#spinwrap').hidden=!state.layers.rotate;});
 // One drawer at a time: opening either closes the other, so the globe is never
 // sandwiched between two panels on a screen that has no room for one.
+// Clicks the real toggle rather than setting state itself: two controls for one
+// boolean is how they drift apart, and the drawer's switch has to stay right.
+$('#mLabels').onclick=()=>{
+  document.querySelector('.tog[data-layer="labels"]').click();
+  $('#mLabels').classList.toggle('on',!!state.layers.labels);};
 $('#mLeft').onclick=()=>{document.body.classList.remove('m-right');
   document.body.classList.toggle('m-left');};
 $('#mRight').onclick=()=>{document.body.classList.remove('m-left');

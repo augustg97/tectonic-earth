@@ -56,7 +56,9 @@
      "name": "On a phone",
      "items": [
       "The globe now owns the screen. The conditions panel had no mobile layout at all and rendered at full desktop width straight over the map, and the left-hand timeline was hidden outright rather than made reachable. Both are now drawers behind their own button, one open at a time, and touching the globe closes them.",
-      "Landscape is handled too. A phone turned sideways is wider than the threshold that decides 'this is a small screen' and less than half as tall, so it had been getting the full desktop layout squeezed into 360 pixels of height. Height is now what decides it, and the controls collapse to a single row."
+      "Landscape is handled too. A phone turned sideways is wider than the threshold that decides 'this is a small screen' and less than half as tall, so it had been getting the full desktop layout squeezed into 360 pixels of height. Height is now what decides it, and the controls collapse to a single row.",
+      "Pinch to zoom works on the globe instead of the page. Two fingers used to scale the whole browser window, because the app only ever listened for one finger and the gesture was the browser's before any of our code saw it. The canvas now claims touch gestures for itself and tracks both fingers, so the zoom follows the distance between them.",
+      "An Era labels button sits on the right, so the one layer worth turning on and off — the thing that tells you what you are looking at — no longer needs a panel opened to reach it."
      ]
     }
    ]
