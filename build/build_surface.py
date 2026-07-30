@@ -255,6 +255,22 @@ def build_one(base, verbose=False):
     drain = drain * 0.55 + 0.30 * (drain > 0.001)      # channels land near 0.85
     drain = np.clip(drain, 0, 1)
     drain[sea] = 0.0
+    # BAND-LIMIT THE POLEWARD ROWS, like every other shipped field. This one
+    # was missed, and it is the loudest possible field to miss it in: D8 flow
+    # routing on an equirectangular grid sends every polar column's drainage
+    # toward the same vanishing circle, so the surplus is not merely noise, it
+    # is ORGANISED into channels converging on the pole. Rendered on a globe
+    # that is a radial starburst of dark valleys, which is exactly the artefact
+    # reported at 216 Ma over the Arctic.
+    #
+    # Measured before this line, at 216 Ma: longitudinal power above k=30 in the
+    # drainage channel ran 22.7% at 70 N, 43.1% at 78 N and 74.7% at 84 N --
+    # RISING toward the pole, where the elevation field (which is filtered)
+    # falls from 16 m per column at 40 N to 2.3 m at 88 N.
+    from build_fields import polar_lowpass
+    drain = polar_lowpass(drain)
+    hard = polar_lowpass(hard)
+    fet = polar_lowpass(fet)
     rgb = np.stack([drain, hard, fet], -1)
     img = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8), "RGB")
     # method=6, matching every other field. `method` is encoder SEARCH EFFORT at

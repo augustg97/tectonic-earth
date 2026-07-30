@@ -283,7 +283,9 @@ def export(age, Z_hi, z_for_climate, tag):
     for _c in range(ofield.shape[2]):
         ofield[..., _c] = polar_lowpass(ofield[..., _c])
     e = _gray(enc_elev(smooth_bathymetry(Z_hi)))
-    r = _gray(rain)
+    # Rain was the other field going out unfiltered. It drives biomes, cloud and
+    # vegetation colour, so its polar surplus lands on screen too.
+    r = _gray(polar_lowpass(rain))
     # ocean-structure field: R = crustal age, G/B = spreading direction. The
     # shader grows the abyssal-hill fabric from it, so it need only be smooth.
     o = Image.fromarray((np.clip(ofield, 0, 1) * 255 + 0.5).astype(np.uint8)
