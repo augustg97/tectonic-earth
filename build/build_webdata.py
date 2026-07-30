@@ -1057,7 +1057,17 @@ def build_labels():
                     out_tr.append([a, lo_, la_])
                 else:
                     out_tr.append([a, round(w[0], 1), round(w[1], 1)])
-                    water_placed.setdefault(a, []).append(w)
+                    # ONLY RESERVE A CELL AT AN AGE WHERE THE LABEL IS DRAWN.
+                    # Tracks are built with a +/-5 Myr margin so interpolation
+                    # has something either side, but reserving on those margin
+                    # ages let a label hold water it was not using and push a
+                    # neighbour out of the basin. That is the 75 Ma cluster:
+                    # three seas (the Western Interior Seaway, the Bearpaw and
+                    # the West Siberian) all stepping at the one age where a
+                    # window edge falls, because a name that had just left the
+                    # map was still occupying the seaway.
+                    if min(l["a0"], l["a1"]) <= a <= max(l["a0"], l["a1"]):
+                        water_placed.setdefault(a, []).append(w)
             if len(out_tr) > 1:
                 # NOT smoothed, unlike the composites. nearest_water picks a
                 # specific water cell per keyframe, and a rolling mean walks the

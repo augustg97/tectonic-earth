@@ -197,7 +197,13 @@ LABELS = [
     # separation rule, the third was expelled 30 degrees into the open Pacific.
     # The split is also the stratigraphy: the Mowry is Late Albian-early
     # Cenomanian, and the fully connected seaway is Greenhorn onward.
-    ("sea", "Western Interior Seaway", -95, 45, 72, 95),
+    # Runs 78-95, between its two named phases rather than across them. The
+    # Mowry (95-103) is its first pulse and the Bearpaw (72-78) is its last --
+    # both cards say so -- and overlapping either meant two names for one body
+    # of water, which under the nearest_water separation rule evicts one of
+    # them from the basin. That is what produced the 75 Ma jump. The seaway is
+    # now a clean sequence of phases: Mowry, seaway, Bearpaw, Cannonball.
+    ("sea", "Western Interior Seaway", -95, 45, 78, 95),
     ("sea", "Turgai Strait",         65,  50,   29, 160),
     ("sea", "Eromanga Sea",         140, -28,   95, 125),
     ("orogen", "Cordillera",       -115,  40,   0, 150),
@@ -418,7 +424,17 @@ LABELS = [
     ("ocean", "Reykjanes Ridge", -30, 60, 0, 60),
     ("ocean", "Gakkel Ridge", 60, 82, 0, 55),
     ("ocean", "Nazca Ridge", -80, -18, 0, 30),
-    ("island", "Kerguelen Microcontinent", 72, -52, 90, 122),
+    # (72,-52) is the NORTHERN Kerguelen Plateau, close enough to the Indian
+    # plate boundary to be carried by it -- so the label drifted north with
+    # India through the Late Cretaceous and read as attached to it. The
+    # plateau did not go anywhere: it is Antarctic-plate crust that India
+    # tore away FROM. Anchored on the southern plateau near Heard Island,
+    # unambiguously on the Antarctic side.
+    # Still riding India at (73,-58): 9 degrees from the India label and 35
+    # from Antarctica at 100 Ma. The plateau is Antarctic-plate crust, so the
+    # anchor goes to its far southern end, on the Antarctic continental side
+    # of the SE Indian Ridge rather than the Indian side of it.
+    ("island", "Kerguelen Microcontinent", 78, -63, 90, 122),
     # Submarine oceanic plateaus. seafloor.py seeds them into the elevation
     # field; these name them, tracked from the same anchors.
     ("region", "Ontong Java Plateau", 160, -3, 0, 126),
