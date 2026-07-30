@@ -4,7 +4,7 @@
    "version": "2.0",
    "date": "30 July 2026",
    "title": "Continents that slide, and mountains that look shortened",
-   "summary": "Until now the map cross-faded between its five-million-year snapshots, so a continent dissolved from one position into the next instead of moving. It now slides: each frame is carried along its own plate's real rotation before the two are blended. Mountain texture travels with the rock rather than staying pinned to the globe, mountain belts draw as parallel ridges the way shortened crust actually looks, and lowlands finally carry detail instead of reading as smooth wash.",
+   "summary": "Until now the map cross-faded between its five-million-year snapshots, so a continent dissolved from one position into the next instead of moving. It now slides: each frame is carried along its own plate's real rotation before the two are blended. Mountain texture travels with the rock rather than staying pinned to the globe, mountain belts draw as parallel ridges the way shortened crust actually looks, and lowlands finally carry detail instead of reading as smooth wash. Mountain belts also gain the low basin that always forms in front of them.",
    "sections": [
     {
      "name": "Continents move instead of dissolving",
@@ -34,6 +34,14 @@
       "Low ground was given about a fourteenth of the surface detail that mountains got, which is why plains and continental interiors read as smooth wash however far you zoomed in. Detail now follows what the ground is made of — a floodplain and a shield are different — rather than simply how high it is.",
       "Most of the fine relief was being computed and then thrown away, because the shading sampled it over a baseline eighteen times coarser than the detail itself. The missing range of scales is now handed to the surface directly.",
       "The elevation data was deliberately NOT enlarged. It is already finer than the source maps behind it, so a bigger texture would have cost four times the memory and added nothing."
+     ]
+    },
+    {
+     "name": "The trough in front of a mountain range",
+     "items": [
+      "A range and the long low basin beside it are the same event: the weight of the mountains bends the crust down, and the trough fills with their own eroded sediment. The Ganges plain, the Po basin and the plains east of the Andes are all this. None of them was drawn, because the elevation data is too coarse to carry a basin a couple of hundred metres deep.",
+      "Which side the basin falls on is the hard part, and there is no single rule: India dives under Asia and the Ganges lies on the Indian side, but the Pacific floor dives under South America and the basin lies on the far side, inland. The map now works it out by asking what is actually there across the range — open ocean cannot hold a basin, and the lower side wins.",
+      "The mountains themselves do not move by so much as a metre. Nothing above 1,500 m is altered at all, and that is measured rather than assumed."
      ]
     },
     {

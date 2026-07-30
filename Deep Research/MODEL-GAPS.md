@@ -455,14 +455,33 @@ G7+G8's standing rule is *record it, do not tune to it*. **Recorded.** The speci
 frames are worth chasing to their source map, which is a data-provenance question rather than
 a modelling one.
 
-**H5 — NOT SHIPPED, and the reason is this section's own constraint.** A foreland basin is a
-flexural depression, so drawing it means changing hypsometry — which H5 is explicitly
-forbidden to do. Drawing it *correctly* also needs a vergence direction, which side of the
-range the trough falls on, and that follows from subduction polarity, which nothing in the
-pipeline models. A symmetric moat would be defensible physics and would put troughs on the
-wrong side of half the world's ranges. **Deferred with its blockers named**: it needs either
-an explicit exemption from the hypsometry gate or a polarity model, and both are decisions
-rather than code. F4 (back-arc basins by roll-back) remains folded into this item.
+**H5 — SHIPPED, 2026-07-30, with a polarity model that works.** The two blockers recorded
+when it was deferred were real and are both closed. *Hypsometry:* nothing at or above 1500 m
+is touched, enforced at bake time and again in the shader, and `audit_foreland.py` measures
+it — **0 cells altered at seven ages spanning 0–500 Ma**, with the >2 km and >3 km hypsometry
+identical to three decimals. Land area falls 0.03–0.13 pp, which is the basins themselves and
+is the feature. *Polarity:* solved, and the interesting part is that **one rule cannot do it**.
+"The foreland sits on the underthrusting plate" gets the Himalaya right and the Andes exactly
+wrong — Nazca subducts beneath South America yet the Chaco-Beni foreland lies east, on the
+overriding plate, because the western side is ocean. What covers both is asking what is
+actually there across strike: deep ocean is disqualified, the lower side wins, and the basin
+must be genuinely lower than the range that loads it. Scored against five present-day
+forelands: **3 correct, 2 weak, 0 on the wrong side.**
+
+Three findings from building it, each a bug that produced a plausible-looking wrong answer:
+a single across-strike probe of 320 km is still **on** Tibet, so the model scored the range as
+its own foreland; `w0` read the elevation of the *nearest* load cell, which is by construction
+the range's outermost foothill rather than the massif behind it, so every basin came out a
+tenth of its depth; and the flexural profile peaks at the load's edge, exactly where the
+mountain-protecting gate suppresses it, so distance is now measured from the range's footprint
+instead of its high core. **And the load could not be gated on shortening**: PALEOMAP's static
+polygons carry no distinct motion for oceanic plates, so `_t` sees India–Asia at 0.58 and is
+blind to Nazca–South America, reading 0.02–0.10 across the whole Andean transect including the
+trench. Gating on it built a Ganges and refused an Andean, Alpine and Zagros foreland. The
+load is therefore the range itself, which the DEM gives directly, and across-strike comes from
+the terrain's own regional slope rather than from the strain field's fold axis. **Recorded as a
+known limit of the rotation model, not tuned around.** F4 (back-arc basins by roll-back)
+remains open and is no longer folded into this item.
 
 **A pre-existing artefact found while verifying, and NOT caused by this work.** A dark
 dithered stipple hugs shallow-water margins at zoom — visible in the user's own screenshots

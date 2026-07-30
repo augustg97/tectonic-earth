@@ -1013,7 +1013,7 @@ const state={
   gtilt:0, head:0, spin:1, mapLon:0
 };
 let DATA={};   // timeline, boundaries, plates, hotspots, labels
-let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[], OCI=[], VLI=[], PLI=[], TCI=[];   // elevation / rainfall / motion / lake-depth / surface-process / ocean-structure / displacement fields
+let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[], OCI=[], VLI=[], PLI=[], TCI=[], FRI=[];   // elevation / rainfall / motion / lake-depth / surface-process / ocean-structure / displacement fields
 let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene ones
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
@@ -1021,7 +1021,7 @@ const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
    video memory for textures that are almost never on screen at once. */
 const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:MOI)[i];
+  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:kind==='f'?FRI:MOI)[i];
   if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
@@ -1105,7 +1105,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-1401';
+const DATA_V='20260730-1433';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1153,7 +1153,7 @@ async function loadAll(){
    So the only genuinely new requirement is that the frames around the CURRENT
    age be there, which is what ensureFrames and the prefetch pump below do. */
 const FIELD_KINDS=[['e',()=>ELI],['r',()=>RNI],['m',()=>MOI],
-                   ['w',()=>WLI],['d',()=>SFI],['o',()=>OCI],['v',()=>VLI],['p',()=>PLI],['t',()=>TCI]];
+                   ['w',()=>WLI],['d',()=>SFI],['o',()=>OCI],['v',()=>VLI],['p',()=>PLI],['t',()=>TCI],['f',()=>FRI]];
 const fieldSrc=n=>'fields/'+n+'?v='+FIELD_V;
 const _fieldTried=new Set();     // kind+i once a fetch has SETTLED, success or not
 const _fieldPending=new Map();   // kind+i -> in-flight promise, so nothing is asked for twice
@@ -1376,6 +1376,13 @@ uniform float uMat;
    angle would average them to 90 -- exactly perpendicular to the truth. */
 uniform sampler2D tectA;
 uniform float uTect;
+/* Foreland flexure, baked per keyframe by build_foreland.py. R is the moat's
+   depth (0..620 m), G the forebulge beyond it (0..90 m). An orogen loads the
+   lithosphere and the plate bends: the range plus its parallel trough is the
+   diagnostic signature of a collision, and a 20 km grid authored at 1 degree
+   cannot carry a trough 100-300 km wide and a few hundred metres deep. */
+uniform sampler2D foreA;
+uniform float uFore;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 /* 0..1: do GRASSES exist and form a sward here yet. Vegetation as a whole is
    already gated by uVeg, which the climate table drives correctly -- 0.00 before
@@ -1505,6 +1512,7 @@ vec3 gMatAxis=vec3(0.0,0.0,1.0); float gMatAng=0.0;
    times per pixel for the hillshade stencil and these must not vary across it,
    or the shading would report the fabric's own variation as terrain slope. */
 vec3 gFold=vec3(0.0); float gShort=0.0; float gHard=0.5;
+float gFore=0.0;   // metres of flexural deflection, positive = down
 vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
   float c=cos(gMatAng), sn=sin(gMatAng);
@@ -1686,6 +1694,20 @@ float elevDetail(float z, vec3 d, float rug){
      zoom. Submarine slopes are smooth-swelled, and the reference shows them
      that way. Keep a quarter of it so the character does not step at the
      shoreline, and let the anisotropic fabric own the sea-floor texture. */
+  /* FORELAND FLEXURE (H5), applied before anything reads z.
+
+     THE GATE IS THE POINT. The brief was to build this WITHOUT altering the
+     final elevations of mountain ranges, so nothing at or above 1500 m moves --
+     enforced here as well as at bake time, belt and braces, because it is the
+     one promise this feature makes and it should not depend on a single place
+     getting it right. audit_foreland.py measures that the >1 km, >2 km and
+     >3 km hypsometry is unchanged.
+
+     Applied to the BASE elevation rather than after the detail, because a
+     foreland is a property of the crust's flexure, not a texture on top of it:
+     the basin has to be able to change what biome grows there and where the
+     coast runs, which is exactly what the Western Interior Seaway was. */
+  if(uFore>0.5 && gFore!=0.0) z -= gFore*smoothstep(1500.0,700.0,z);
   float rugw = z<wl ? rug*0.25 : rug;
   /* ANISOTROPIC FOLD FABRIC (H4). detail3 makes rough ground at every
      orientation at once, and real orogens are stripes -- the Valley-and-Ridge
@@ -1959,6 +1981,21 @@ void main(){
   /* Fold fabric. The stored double angle is halved back into an axis and then
      lifted into 3-D on the local east/north frame, because the noise it steers
      is evaluated on the sphere and a 2-D angle cannot rotate a 3-D domain. */
+  if(uFore>0.5){
+    vec3 F=texture2D(foreA,wA(uv)).rgb;
+    gFore=F.r*620.0 - F.g*90.0;      // moat down, forebulge up
+    /* A FORELAND IS A SEDIMENT BASIN, and saying so is most of what makes it
+       visible. The flexural deflection alone is honest but slight -- a few
+       hundred metres, because a real foreland is filled as fast as it subsides,
+       so its topographic expression is a low PLAIN and not a hole. What the eye
+       actually reads at this scale is the fill: the Ganges, the Po and the
+       Chaco are flat alluvium, not shield. So push the substrate toward soft
+       sediment in proportion to the moat, which flattens the procedural relief
+       through elevDetail's amplitude term and moves the lithology colour off
+       hard rock at the same time. Physically it is the same statement as the
+       subsidence, and it costs nothing -- gFore is already in hand. */
+    gHard=mix(gHard, 0.05, clamp(F.r*620.0/260.0, 0.0, 0.85));
+  }
   if(uTect>0.5){
     vec3 T=texture2D(tectA,wA(uv)).rgb;
     gShort=T.r;
@@ -3843,6 +3880,7 @@ function initGL(){
     dispA:{value:null},uWarp:{value:0},
     plateA:{value:null},uMat:{value:0},
     tectA:{value:null},uTect:{value:0},
+    foreA:{value:null},uFore:{value:0},
     uPlateQ:{value:Array.from({length:48},()=>new THREE.Vector4(0,0,1,0))},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uGrass:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
@@ -5882,6 +5920,10 @@ function bindTextures(){
   const ta=getTex('t',f.i);
   if(ta)mat.uniforms.tectA.value=ta;
   mat.uniforms.uTect.value=ta?1.0:0.0;
+  // Foreland flexure: the moat in front of a mountain belt.
+  const fa=getTex('f',f.i);
+  if(fa)mat.uniforms.foreA.value=fa;
+  mat.uniforms.uFore.value=fa?1.0:0.0;
   // Linear in t: the shader interpolates the height field, so this drives the
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
