@@ -488,7 +488,15 @@ LABELS = [
     ("sea", "Hispanic Corridor", -55, 5, 150, 190),
     ("sea", "Boreal Sea", 45, 70, 90, 190),
     ("sea", "Solnhofen Lagoon", 11, 25, 149, 152),
-    ("sea", "Mowry Sea", -100, 50, 95, 103),
+    # (-100, 50) is 5 degrees from the Western Interior Seaway's own anchor
+    # (-95, 45) on the same craton, yet it rendered 30 degrees further west,
+    # out in the Pacific past the Cordillera. The cause is the SNAP: the
+    # back-advected point lands on dry ground beside a narrow seaway, and the
+    # nearest-water search then finds the open Pacific before it finds the
+    # seaway. Anchoring it inside the seaway means there is nothing to snap.
+    # North of the WIS anchor too, because the Mowry is the BOREAL phase --
+    # the card calls it an arm of the Arctic reaching south.
+    ("sea", "Mowry Sea", -91, 53, 95, 103),
     ("sea", "Bearpaw Sea", -104, 50, 72, 78),
     ("sea", "Cannonball Sea", -100, 47, 58, 62),
     ("sea", "Lake Pannon", 19, 46, 4, 11),
@@ -1200,9 +1208,7 @@ DESCRIPTIONS = {
  "Great Plains": "Grassland that spread across the North American interior as the Rockies cast a rain "
   "shadow and the Miocene climate dried. Grazing mammals evolved high-crowned teeth to "
   "cope with its silica-rich grasses.",
- "Greater Adria": "A Greenland-sized continent that rifted off North Africa, then was shoved beneath "
-  "southern Europe. Its carbonate cover was scraped off to build the Alps, Apennines and "
-  "Dinarides; the rest went down the subduction zone.",
+ "Greater Adria": "A Greenland-sized block of continental crust that pulled away from North Africa in the Triassic and drifted into Tethys, before being shoved beneath southern Europe. Its carbonate cover was scraped off to build the Alps, Apennines and Dinarides; the rest went down the subduction zone.\n\nIt is drawn as coast and shallow platform rather than as an island, and that is the honest reading: for most of its life Greater Adria was a drowned carbonate bank -- a Bahamas the size of Greenland -- not emergent land. It shows on the map as the shelf reaching north from Africa into Tethys, which is what a reconstruction can actually place.",
  "Greater India": "India plus a large northern extension of continental crust, now missing. Whether it "
   "was thrust under Tibet or subducted outright is one of the standing arguments about "
   "the Himalayan collision.",
