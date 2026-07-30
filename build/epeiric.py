@@ -351,8 +351,16 @@ def messinian_mask(shape, age, Z=None):
     # Mediterranean + Aegean + Marmara, and the Black Sea, which drew down with
     # it as the Lago Mare. Gibraltar is the western limit -- the Atlantic side of
     # the sill must never be touched, so the box stops at 6 W.
-    box = (((LON >= -6.0) & (LON <= 42.0) & (LAT >= 29.5) & (LAT <= 47.5)) |
-           ((LON >= 26.0) & (LON <= 42.5) & (LAT >= 40.0) & (LAT <= 48.0)))
+    # THE BAY OF BISCAY IS NOT THE MEDITERRANEAN. The first box ran to 47.5 N at
+    # its western edge, which swallows Biscay and the Atlantic shelf off northern
+    # Spain and southern France -- and they duly dried out too. A box is a blunt
+    # instrument on a sea shaped like this one: west of the Greenwich meridian
+    # the basin is only the Alboran and the approach to Gibraltar, all of it
+    # south of about 43 N, so cut the north-west corner off explicitly.
+    med = ((LON >= -6.0) & (LON <= 37.0) & (LAT >= 30.0) & (LAT <= 46.0)
+           & ~((LON < 0.0) & (LAT > 43.0)))
+    black = (LON >= 27.0) & (LON <= 42.5) & (LAT >= 40.0) & (LAT <= 48.0)
+    box = med | black
     m = (box & (Z < 0.0)).astype(_np.float32)
     # Soften by one cell so the rim is a shoreline rather than a jagged staircase,
     # then re-harden: a fractional mask would leave a ring of half-drained sea.

@@ -1070,7 +1070,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-0444';
+const DATA_V='20260730-0455';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -3495,8 +3495,8 @@ void main(){
                     +0.04*fbm3(sdir*1100.0);
     // Off-white, not paper. A salt pan is grey-buff with dust on it; pure white
     // reads as cloud or ice, and at this size it blew out to a silhouette.
-    vec3 salt=vec3(0.735,0.716,0.668)*crust;
-    salt=mix(vec3(0.600,0.560,0.474)*crust, salt, pan);   // damp sabkha at the rim
+    vec3 salt=vec3(0.700,0.684,0.640)*crust;
+    salt=mix(vec3(0.545,0.508,0.430)*crust, salt, pan);   // damp sabkha at the rim
     /* The shade multiplier has to CENTRE ON ONE, or it stops carrying the
        hillshade and starts amplifying it: at 1.48 on already-bright ground the
        result clipped past white and the pan went back to being a flat sheet,
@@ -3504,9 +3504,21 @@ void main(){
        tightly either side, and cap the result below pure white so the crust can
        never saturate. */
     float lum=dot(col, vec3(0.299,0.587,0.114));
-    salt*=clamp(lum/0.55, 0.55, 1.12);
-    salt=min(salt, vec3(0.885,0.875,0.845));
-    col=mix(col, salt, 0.84);
+    salt*=clamp(lum/0.55, 0.38, 1.06);
+    salt=min(salt, vec3(0.855,0.845,0.815));
+    /* THE PAN IS THE FLOOR, NOT THE WHOLE BASIN. Two things were wrong. The
+       depth term was inverted -- it darkened the ground nearest the old
+       shoreline and left the deep floor bright, the opposite of a hole. And the
+       salt ran right to the edge of the mask, so the boundary was the mask's own
+       2048-wide staircase rather than a shore, which is the hard jagged rim.
+
+       Evaporite settles where the brine stood longest: on the floor. The walls
+       are bare slope. Fading the salt out over the last few hundred metres of
+       depth gives the basin sloping sides instead of a cliff of paint, and
+       hides the mask edge behind a gradient at the same time. */
+    float saltAmt = smoothstep(0.30, 0.70, dryb)
+                  * (1.0 - smoothstep(-1100.0, -250.0, z));
+    col=mix(col, salt, 0.80*saltAmt);
   }
   gl_FragColor=vec4(col,1.0);
 }`;
