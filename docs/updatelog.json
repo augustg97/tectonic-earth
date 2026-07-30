@@ -49,7 +49,8 @@
      "items": [
       "Ice and shoreline edges no longer trace the square cells of the rainfall grid they were derived from.",
       "The raised terrain and the shaded terrain agreed everywhere except mid-way between keyframes, where they could differ by up to two and a half kilometres. They agree now.",
-      "Procedural detail can no longer move a coastline in either direction — it cannot carve new water, and it cannot lift sea floor into land."
+      "Procedural detail can no longer move a coastline in either direction — it cannot carve new water, and it cannot lift sea floor into land.",
+      "Charts and photographs in cards now open full size when clicked, as the diagrams already did. The climate-event cards were the worst of it: their chart is the only graphic they carry, it is drawn about 270 pixels wide, and at that size you can see it is a graph but not read one."
      ]
     }
    ]

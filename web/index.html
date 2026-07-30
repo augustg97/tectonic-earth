@@ -245,14 +245,19 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
    only. These are diagrams of the KIND of thing, which the caption says. */
 .cardfig{margin:11px 0 2px}
 .zoomfig{cursor:zoom-in}
-.zoomfig:hover svg,.zoomfig:focus svg{outline:1px solid var(--accent);outline-offset:1px}
+.zoomfig:hover svg,.zoomfig:focus svg,
+.zoomfig:hover img,.zoomfig:focus img{outline:1px solid var(--accent);outline-offset:1px}
+.zoomfig:focus{outline:none}
 #figZoom{position:fixed;inset:0;z-index:60;background:rgba(6,8,12,.86);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:4vmin}
 #figZoom[hidden]{display:none}
 #figZoomInner{position:relative;max-width:min(1100px,92vw);width:100%}
-#figZoomArt svg{width:100%;height:auto;max-height:78vh;border-radius:10px;
+#figZoomArt svg,#figZoomArt img{width:100%;height:auto;max-height:78vh;
+  object-fit:contain;border-radius:10px;
   background:#0d1218;border:1px solid var(--line)}
+#figZoomCap .cred{display:block;font-size:11px;opacity:.72;padding-top:4px}
+#figZoomCap .cred a{color:#8794a4}
 #figZoomCap{margin:12px 2px 0;color:var(--dim);font-size:13px;line-height:1.5;text-align:center}
 #figZoomX{position:absolute;top:-14px;right:-6px;width:36px;height:36px;
   border-radius:50%;background:rgba(10,13,18,.9);border:1px solid var(--line);
@@ -1105,7 +1110,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-1433';
+const DATA_V='20260730-1825';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5077,7 +5082,9 @@ function photoHTML(name){
   if(!p)return '';
   const by=p.artist&&p.artist!=='(unattributed)'?esc(p.artist):'unattributed';
   const link=p.page?`<a href="${esc(p.page)}" target="_blank" rel="noopener">Wikimedia Commons</a>`:'Wikimedia Commons';
-  return `<figure class="cardphoto"><img src="${esc(p.file)}" alt="${esc(p.title)}" loading="lazy">`
+  return `<figure class="cardphoto zoomfig" tabindex="0" role="button"`
+    +` aria-label="Enlarge photograph: ${esc(p.title)}" title="Click to enlarge">`
+    +`<img src="${esc(p.file)}" alt="${esc(p.title)}" loading="lazy">`
     +`<figcaption>${esc(p.caption)}`
     +`<span class="cred">${by} · ${esc(p.licence)} · ${link}</span>`
     +`</figcaption></figure>`;
@@ -5131,7 +5138,15 @@ function modelFigHTML(name){
      a card opens, so deferring buys nothing -- and a lazy image inside a panel
      that has just been written to the DOM does not always get an intersection
      callback, which showed up here as a figure that never appeared. */
-  return `<figure class="modelfig"><img src="figures/${f[0]}" alt="${esc(f[1])}">`
+  /* CLICKABLE, like the schematic above it. These are CHARTS -- an oxygen
+     curve, a Cenozoic event axis -- drawn at card width, which is about 210px
+     in the climate-event card. That is wide enough to see there is a graph and
+     too narrow to read one, which is exactly the case the zoom overlay exists
+     for. It was only ever wired to figHTML's inline SVG, so every model figure
+     looked identical to a clickable schematic and did nothing. */
+  return `<figure class="modelfig zoomfig" tabindex="0" role="button"`
+    +` aria-label="Enlarge chart: ${esc(f[1])}" title="Click to enlarge">`
+    +`<img src="figures/${f[0]}" alt="${esc(f[1])}">`
     +`<figcaption>${esc(f[1])}<span class="cred">Generated from this model’s own tables, `
     +`so it cannot disagree with the map.</span></figcaption></figure>`;
 }
@@ -6208,15 +6223,25 @@ document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
    close it -- an overlay you can only leave by hitting a small x is a trap. */
 function closeFigZoom(){ $('#figZoom').hidden=true; $('#figZoomArt').innerHTML=''; }
 document.addEventListener('click',e=>{
+  // A credit line can carry a link (CC-BY requires attribution and the licence
+  // link is part of it). Swallowing that click to open a lightbox would break
+  // the one piece of a photo caption that legally has to work.
+  if(e.target.closest && e.target.closest('a')) return;
   const f=e.target.closest && e.target.closest('.zoomfig');
-  if(f){ const svg=f.querySelector('svg'); if(!svg) return;
-    const big=svg.cloneNode(true);
+  if(f){
+    /* svg OR img. The schematics are inline SVG; the model charts and the
+       photographs are <img>, and requiring an <svg> is why they silently did
+       nothing -- they carried the cursor and the focus ring and then returned. */
+    const gfx=f.querySelector('svg,img'); if(!gfx) return;
+    const big=gfx.cloneNode(true);
     big.removeAttribute('aria-hidden');
+    big.removeAttribute('loading');          // it is on screen NOW
     // meet, not slice: the point of the overlay is to see ALL of it
-    big.setAttribute('preserveAspectRatio','xMidYMid meet');
+    if(big.tagName.toLowerCase()==='svg') big.setAttribute('preserveAspectRatio','xMidYMid meet');
     $('#figZoomArt').innerHTML=''; $('#figZoomArt').appendChild(big);
     const cap=f.querySelector('figcaption');
-    $('#figZoomCap').textContent=cap?cap.textContent:'';
+    // innerHTML, not textContent: keeps the attribution link live in the overlay
+    $('#figZoomCap').innerHTML=cap?cap.innerHTML:'';
     $('#figZoom').hidden=false; $('#figZoomX').focus(); return; }
   if(e.target.id==='figZoom'||e.target.id==='figZoomX') closeFigZoom();
 });
