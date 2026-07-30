@@ -793,7 +793,14 @@ def resolve_to_landmasses(tracks, windows, order):
                 # and without a strong pull toward where the label just was it
                 # hops island to island -- which is the Ediacaran "jump". In the
                 # Phanerozoic the terrain is real and distance can lead.
-                cw = 0.55 if age < 540 else 1.6
+                # 0.55 in the Phanerozoic was too weak. Measured on Laurussia
+                # across 175-430 Ma it left THIRTEEN frame-to-frame jumps over
+                # 9 degrees, the worst 25 -- the label re-picking its landmass,
+                # and its nearest cell within that landmass, on small centroid
+                # moves. The islet-latch this low weight was guarding against is
+                # now handled separately by the area penalty two lines below, so
+                # continuity can carry its proper share without that risk.
+                cw = 1.6 if age < 540 else 1.6
                 score = d if prev is None else d + cw * _nearest_cell(
                     cells, prev[0], prev[1])[2]
                 # and a continent does not belong on a speck

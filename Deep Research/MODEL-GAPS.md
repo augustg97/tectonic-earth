@@ -396,7 +396,74 @@ with an independent source), and any Palaeozoic ice outside the literature range
 
 ---
 
-**Count: 59 items — 14 at P1.** The seven that would move the app furthest, in order:
+## H. Terrain in motion — why landforms do not appear to emerge (round 9, 2026-07-29) — [WP-08](research%20reports/WP-08-terrain-in-motion.md)
+
+The user's report: mountain ranges, seabeds and other places where crust piles up "seem
+accurate, but do not visually appear to form in a natural geophysical fluid dynamic way."
+Every item here is re-checkable with `modeling/audit_terrain_motion.py`, which reads the
+**shipped** fields rather than the source DEMs, so it scores what a viewer sees.
+
+**Finding 0 governs this whole section, so read it before touching anything.** The
+PaleoDEMs already encode orogeny correctly: the Himalaya go 889 m (60 Ma) → 7,751 (40) →
+5,272 today; the Appalachians peak at 2,805 m and 20.6% above 2 km at 300 Ma and wear to
+620 m; the Caledonides 2,731 m at 340 Ma → 151 m. **This is not a data problem and there is
+no orogeny model to build for 0–540 Ma.** The heights and their timing are right; what is
+wrong is the transition between keyframes and the character of the surface.
+
+So the constraint on every item below: **the PaleoDEM is authoritative for where a mountain
+is and how high it is. H1, H2, H4, H5 and H6 must not change any keyframe's hypsometry —
+that is a measurable gate, not an aspiration. H3 deliberately does change it, and is the
+only item here that can trip `audit_all.py`.** A session that "improves" the Himalaya is
+adding error to data that is currently correct.
+
+| # | P | item | touches | evidence |
+|---|---|---|---|---|
+| H1 | **P1** | **Advect the fields between keyframes instead of cross-fading them.** `baseElev` is `mix(decElev(A), decElev(B), mixf)` — a dissolve between two stationary images. Crust moves a median of **14–42 texels** of the 4096 grid per 5 Myr step (p90 25–51, max **65**; worst at 400 Ma, where the median is 410 km). At that scale a dissolve is a double exposure: every mountain front, coastline and trench splits into two half-amplitude copies mid-interval and snaps at the keyframe. Warp each keyframe toward the other along a per-pixel displacement field and blend the warped pair. **The overlap this produces at a convergent margin IS the shortening signal H4 needs** — the same insight WP-07 recorded for the future branch, where 12.8 Mkm² of convergence is computed and deleted. Warp everything in crust coordinates (`_e`, `_d`, `_w`, `_o`); **do not warp `_r`**, which is a property of the atmosphere over a position. | `web/index.html` FRAG+VERT, new `_v` field | WP-08 F1 |
+| H2 | **P1** | **Give the shader a material coordinate so texture rides with the crust.** `elevAt` evaluates every noise tap at `dirFromUv(uv)`, a pure function of position with no age term anywhere — so a continent slides out from under its own ridges and valleys, and only the amplitude travels with the plate. Identical to the sea-floor defect fixed in README §5.3 (fabric keyed to the present ridge, not the isochron); land never got the fix. Cheapest correct form is a nearest-filtered plate-ID texture plus a per-plate rotation uniform array — **not** an 8-bit lon/lat field, which quantises to ~156 km against noise that resolves 1.3 km. | `web/index.html` FRAG, new plate-ID field | WP-08 F2 |
+| H3 | P2 | **Regularise the source series in time.** Two problems in one field. (a) *Authoring noise*: land above 1 km moves **+2.30 pp then −2.80 pp** across 15→20→25 Ma and **+2.52 then −2.75** across 95→100→105 — spike-and-revert on single frames, ~1.5 Mkm² per pp, and no eustatic curve can move land above a kilometre at all. This is G1's finding in relief instead of shelf area; use G1's remedy, scoring each frame against its own neighbourhood. (b) *The 5 Myr step*: the Himalaya gain **+5,890 m in one keyframe** (45→40 Ma) and then sit flat for 15 Myr. Try (a) alone first and re-measure — H1 and H4 may carry (b) on their own. **If easing is needed it must apply to the relief residual only, never to the base**: the comment at `web/index.html:5593` is explicit that easing `mixf` globally makes continents accelerate and stall at every keyframe. | `build_fields.py`, `epeiric.py` pattern | WP-08 F3 |
+| H4 | **P1** | **Ship a tectonic-state field and draw an anisotropic fold fabric from it.** Nothing tectonic reaches the shader today: `motA` is bound and never sampled, `motion.classify()` and `encode_bounds()` are dead code, `build_plates_gplates.py:51` collapses Merdith's own `OrogenicBelt` into `"trench"`, and `plates_time.json` carries no velocity at any age ≥ 0. A new `_t` texture — **R shortening rate, G orogen age, B structural azimuth** — is derivable from the plate topologies plus H1's displacement field with no DEM, so it costs ~2 s a keyframe like `build_surface.py`, not a full rebuild. Then: fold ridges **parallel to the suture** (real belts are stripes; isotropic roughness reads as bumpy ground however tall it is), and character by orogen age — sharp crests and bare rock when young, rounded and soil-covered when old, so the Appalachians visibly wear down instead of merely getting shorter. **This is the item that makes it read as collision.** | new `_t` field, `web/index.html` FRAG, `build_plates_gplates.py` | WP-08 F4, F5 |
+| H5 | P2 | **Seed the landforms of collision a 20 km grid cannot resolve** — same deliberate-exception discipline as `epeiric.py` and the present-day lakes, and only where the DEM provably cannot carry the feature. **Foreland basins** first: a range *plus its parallel trough* is the diagnostic signature of collision, the trough is 100–300 km wide and a few hundred metres deep, and it follows from a flexural response to H4's own load with one free parameter. Then **accretionary wedges** — the sea floor already builds trenches with an outer rise, and the wedge is the half that makes subduction read as scraping rather than as a groove. **Subsumes F4** (back-arc basins by roll-back), which belongs with this work rather than apart from it. | `seafloor.py`, new module | WP-08 F0 |
+| H6 | P3 | **Fix the interpolation-domain mismatch and clear the dead code behind H4.** The vertex stage mixes the encoded byte and decodes after (`:1287`); `baseElev` decodes then mixes (`:1512`). `dec_elev` is quadratic, so displaced geometry and shaded elevation disagree mid-interval, worst at a migrating coastline. Three lines, and it muddies every before/after comparison until it is done. With it: either use `motion.classify()`/`encode_bounds()` or delete them — two independent surveys read them as working features — and give `OrogenicBelt` its own class. | `web/index.html`, `build/motion.py`, `build_plates_gplates.py` | WP-08 F6 |
+
+**Recorded, not scheduled.** At 20–40 Ma the Himalaya box reaches **8,000 m exactly** — the
+`Z_RANGE` ceiling in `build/fieldpack.py:13`. Scotese's Tibet is being clipped at those ages.
+Whether the source exceeds 8,000 m is unmeasured, and raising `Z_RANGE` changes the elevation
+quantum everywhere and invalidates all 251 shipped `_e` textures, so this needs a measurement
+before it needs a decision.
+
+**Documentation errors found on the way, all cheap:** `README.md:90` says every field texture
+is WebP (`_e` has been AVIF since the DC-blocking fix); `fieldpack.pack()`'s docstring
+describes an RGB packing the build no longer uses; `handoff_blend`'s docstring
+(`build_fields.py:875-877`) justifies itself on the claim that the shader interpolates in the
+signed-sqrt domain, which is true of the vertex stage only — the blend is still right, but
+for a different reason; and the "35-minute rebuild" repeated in four files predates the
+elevation grid doubling to 2048×4096 and is stale by roughly 2.4×.
+
+**Sequencing, and the reason is WP-07's calibration trap — two changes that compose are one
+calibration.** H1 and H2 are independent of each other, are pure presentation, and change no
+shipped field, so they go first and are also the cheapest to revert. H6 is three lines and
+unblocks honest before/after comparison, so it rides with them. H4 depends on H1's
+displacement field. H5's constants must be tuned *after* H4 ships, because H4 changes what
+the relief under them looks like. H3 changes the shipped fields and so invalidates anything
+tuned against them. **H1 → H2 → H6 → H4 → H3 → H5.**
+
+**Validation assets already in the folder.** Five Britannica paleogeographic maps carry an
+explicit **Mountains** legend class at 306, 255, 237 and 152 Ma
+(`Distribution-landmasses-regions-seas-ocean-basins-Permian.webp`, `-locations*.webp`) — the
+only source here that maps mountains as a class. The 16 labelled Scotese PALEOMAP maps name
+mountain belts. `FRAME-REGRESSION-gate.md` already scores **39 named orogen features** and is
+a ready-made harness. There is no authored orogeny/collision figure in
+`diagrams and illustrations/authored/` — an obvious slot once H4 lands.
+
+**What this section does NOT claim.** That the app's mountains are in the wrong place, at the
+wrong height, or at the wrong time — Finding 0 measured the opposite at four orogens. That an
+uplift model is needed for 0–540 Ma. That the future branch needs more work than G5/WP-07
+already gave it. And it takes no position on the Palaeozoic land/shelf disagreement recorded
+in G7+G8, which stands as *record it, do not tune to it*.
+
+---
+
+**Count: 65 items — 17 at P1.** The seven that would move the app furthest, in order:
 **A1** (adopt the PALEOMAP rotations — measured, ready), **G1** (flood the Triassic–Jurassic
 epeiric seas — 93% of an independent reconstruction's shelf sea is dry land in ours),
 **G2** (stop the future series destroying 37% of continental area), **D1+D2** (hotspot

@@ -211,7 +211,13 @@ LABELS = [
     ("orogen", "Appalachians",      -80,  38,  0, 470),
     ("orogen", "Variscan Belt",       3,  46,  280, 360),   # Massif Central, not the Sahara
     # ---------- Paleozoic ----------
-    ("continent", "Laurussia (Euramerica)", -20, 10, 175, 430),
+    # Ends at 300, not 175. Laurussia is the continent Laurentia and Baltica
+    # made; once Pangaea closes around it there is no separate landmass for
+    # the name to sit on, and "nearest cell of the landmass" then has a whole
+    # supercontinent to wander across -- which is most of the jumping. The
+    # northern half of Pangaea already has its own label, Laurasia, for the
+    # era after the breakup, so nothing is lost by stopping here.
+    ("continent", "Laurussia (Euramerica)", -20, 10, 300, 430),
     # THE SILENT-TRACKING TRAP. A coordinate that is LAND today is taken as a
     # present-day position and plate-tracked; one on today's ocean is understood
     # to be authored in its own era's frame and is left where it is. So a PALAEO
@@ -961,9 +967,21 @@ COMPOSITE_LABELS = {
         "modern": [(-2, 52), (-3, 51), (4, 51), (-63, 45), (-53, 47)],
     },
     "Laurussia (Euramerica)": {
-        # Laurentia + Baltica welded by the Caledonian collision, plus Avalonia
-        "modern": [(-95, 55), (-85, 50), (-75, 58), (-42, 72),
-                   (16, 62), (28, 60), (24, 57), (-2, 52), (-56, 47)],
+        # Laurentia + Baltica welded by the Caledonian collision, plus Avalonia.
+        #
+        # NINE anchors spanning Alberta to Finland made the centroid wander: the
+        # western North American points and the Baltic ones rotate differently,
+        # so their mean drifts, and resolve_to_landmasses then re-seats the whole
+        # label on whichever landmass currently matches best. Scanned across the
+        # window that produced TWELVE jumps over 9 degrees, the worst of them 22,
+        # including hops onto the northern landmass that used to be Siberia.
+        #
+        # Anchored on the WELD instead -- east Greenland, Scandinavia, Britain,
+        # Newfoundland, the ground either side of the Caledonian suture. That is
+        # what "Laurussia" names: the Old Red Sandstone continent, the join
+        # itself, not the far interior of a fragment that had not collided yet.
+        "modern": [(-42, 72), (-25, 70), (-56, 47), (-2, 52),
+                   (16, 62), (24, 57)],
         "cratons": ["Laurentia", "Baltica"],
     },
     "Pannotia": {
