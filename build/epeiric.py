@@ -308,8 +308,8 @@ def _coastal(land, deg_per_cell):
 #    plain -- and the true depth is stated in words instead. The alternative was
 #    to leave the request unimplemented.
 MESSINIAN_AGE = 5.0            # the keyframe it is drawn on
-MESSINIAN_SALT = 1900.0        # m of evaporite piled on the basin floor
-MESSINIAN_BRINE_BELOW = -3000.0  # m: below this the salt pan holds brine
+MESSINIAN_SALT = 1250.0        # m of evaporite piled on the basin floor
+MESSINIAN_BRINE_BELOW = -4200.0  # m: below this the salt pan holds brine
 # Present-day anchors along the Mediterranean, with radii in km.
 MESSINIAN_ANCHORS = [
     (-4.0, 36.0, 240),   # Alboran
@@ -327,24 +327,42 @@ MESSINIAN_ANCHORS = [
 ]
 
 
-def messinian_mask(shape, age):
+def messinian_mask(shape, age, Z=None):
     """1.0 inside the desiccated Mediterranean at the Messinian keyframe.
 
-    Shared by the elevation carve and by bake_lakes, which bakes it into the
-    lake field's G channel so the shader knows the basin is DRY without having
-    to be told anything about its elevation.
+    DERIVED FROM THE BATHYMETRY, not from a set of discs. The first version was
+    a maximum over twelve _blob anchors, clipped to 1 -- which draws the basin as
+    twelve overlapping CIRCLES, and that is exactly what it looked like on the
+    globe: a scatter of round islands where a sea should be. A footprint made of
+    circles can only ever be circles.
+
+    The basin already has a shape: it is the sea floor. Take everything inside a
+    generous box around the Mediterranean, the Aegean and the Black Sea that the
+    reconstruction itself says is BELOW SEA LEVEL, and that is the coastline,
+    with its gulfs and peninsulas and islands, for free and correct.
     """
     import numpy as _np
     h, w = shape
-    if abs(age - MESSINIAN_AGE) > 0.01:
+    if abs(age - MESSINIAN_AGE) > 0.01 or Z is None:
         return _np.zeros((h, w), _np.float32)
     lon = (_np.arange(w) + 0.5) / w * 360.0 - 180.0
     lat = 90.0 - (_np.arange(h) + 0.5) / h * 180.0
     LON, LAT = _np.meshgrid(lon, lat)
-    m = _np.zeros((h, w), _np.float32)
-    for alon, alat, radius in MESSINIAN_ANCHORS:
-        m = _np.maximum(m, _blob(LON, LAT, alon, alat, radius))
-    return _np.clip(m * 3.0, 0.0, 1.0)
+    # Mediterranean + Aegean + Marmara, and the Black Sea, which drew down with
+    # it as the Lago Mare. Gibraltar is the western limit -- the Atlantic side of
+    # the sill must never be touched, so the box stops at 6 W.
+    box = (((LON >= -6.0) & (LON <= 42.0) & (LAT >= 29.5) & (LAT <= 47.5)) |
+           ((LON >= 26.0) & (LON <= 42.5) & (LAT >= 40.0) & (LAT <= 48.0)))
+    m = (box & (Z < 0.0)).astype(_np.float32)
+    # Soften by one cell so the rim is a shoreline rather than a jagged staircase,
+    # then re-harden: a fractional mask would leave a ring of half-drained sea.
+    try:
+        from scipy.ndimage import gaussian_filter, binary_closing
+        m = binary_closing(m > 0.5, structure=_np.ones((3, 3))).astype(_np.float32)
+        m = (gaussian_filter(m, 1.0) > 0.45).astype(_np.float32)
+    except Exception:
+        pass
+    return m
 
 
 def desiccate(z, age, reconstructor=None, verbose=False):
@@ -355,9 +373,7 @@ def desiccate(z, age, reconstructor=None, verbose=False):
     lon = (np.arange(w) + 0.5) / w * 360.0 - 180.0
     lat = 90.0 - (np.arange(h) + 0.5) / h * 180.0
     LON, LAT = np.meshgrid(lon, lat)
-    mask = np.zeros_like(z)
-    for alon, alat, radius in MESSINIAN_ANCHORS:
-        mask = np.maximum(mask, _blob(LON, LAT, alon, alat, radius))
+    mask = messinian_mask(z.shape, age, z)
     # Only where there is actually sea to remove: this must never touch land,
     # and never touch the Atlantic outside the basin.
     sea = z < 0.0
@@ -368,7 +384,7 @@ def desiccate(z, age, reconstructor=None, verbose=False):
     # crossed zero, and the basin stayed flooded: land moved by 0.02% when the
     # Mediterranean is 0.5% of the globe. The core has to be FULL strength, with
     # the falloff kept only for the last stretch to the shoreline.
-    m = np.clip(mask * 3.0, 0.0, 1.0) * sea
+    m = mask * sea          # already a hard 0/1 basin outline
     if not m.any():
         return z
     # THE FLOOR KEEPS ITS REAL DEPTH NOW. This used to lift the whole basin to

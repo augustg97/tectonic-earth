@@ -1070,7 +1070,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260728-1556';
+const DATA_V='20260730-0424';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1276,6 +1276,7 @@ const FRAG=`
 precision highp float;
 uniform sampler2D elevA, elevB, rainA, rainB, motA;
 uniform sampler2D waterA, waterB;   // baked lake-depth field (sqrt-encoded metres), per keyframe
+uniform float uDry;                 // 1 only in the frames a basin is desiccated
 /* Surface-process field, derived per keyframe by build_surface.py.
    R drainage  log flow accumulation -- where the water of this age goes
    G substrate 0 soft sediment basin .. 1 hard shield or resistant orogen
@@ -1713,8 +1714,24 @@ void main(){
   // Set the water surface BEFORE anything reads z, because elevDetail() tests
   // it while it is still shaping the terrain. Plain sample, no shoreline
   // jitter: this decides land-or-sea, and a wobbling decision would crawl.
-  float dryb=mix(texture2D(waterA,uv).g, texture2D(waterB,uv).g, mixf);
-  wl = dryb>0.5 ? -9000.0 : 0.0;
+  /* MAX, not mix, and gated by uDry. Two separate reasons.
+
+     MAX: the mask is baked on the 5 Ma keyframe only, so a linear blend against
+     its neighbours leaks a partial drawdown across the entire 0-10 Ma span --
+     which is why the Mediterranean was found half-drained at 3 Ma, an age where
+     the crisis was already 2.4 Myr over.
+
+     uDry: even with max, one keyframe covers 5 Myr of a 640 kyr event. The JS
+     side gates on the actual age so the basin is drained for about two frames
+     around 5 Ma and is simply the sea everywhere else.
+
+     And wl is the BRINE SURFACE, not minus infinity. That is what makes the
+     water pool by itself: the shader already draws sea wherever the ground is
+     below the water surface, so setting that surface to -2800 m leaves the
+     deep depocentres flooded and everything above them a salt flat, following
+     the real bathymetry with no separate lake mask at all. */
+  float dryb=max(texture2D(waterA,uv).g, texture2D(waterB,uv).g)*uDry;
+  wl = dryb>0.5 ? -2800.0 : 0.0;
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
   // out every per-pixel computation that depends on the longitude direction --
@@ -3459,6 +3476,20 @@ void main(){
     col=mix(col,s,uSchem);
   }
 
+  /* EVAPORITE. A drained basin left to the ordinary land palette is coloured
+     by elevation and rainfall like anywhere else, which at -2 km reads as dark
+     lowland -- not the blinding white salt pan the card describes. Salt is what
+     was actually on that floor: up to 2 km of it. Bright, desaturated, almost
+     flat-lit because a pan has no relief to shade, and faintly mottled so it
+     reads as crust rather than paint. Brighter still on the lowest ground,
+     where the brine evaporated last and the crust is thickest. */
+  if(wl<-50.0 && z>=wl){
+    float pan=clamp((z-wl)/900.0,0.0,1.0);          // 0 at the brine edge
+    float crust=0.86+0.10*fbm3(sdir*180.0)+0.05*fbm3(sdir*640.0);
+    vec3 salt=vec3(0.905,0.890,0.855)*crust;
+    salt=mix(vec3(0.815,0.780,0.700)*crust, salt, pan);   // damp sabkha at the rim
+    col=mix(col, salt, 0.90);
+  }
   gl_FragColor=vec4(col,1.0);
 }`;
 
@@ -3476,7 +3507,7 @@ function initGL(){
     oceanA:{value:null},oceanB:{value:null},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uGrass:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
-    uMapProj:{value:0},uBounds:{value:0},uMapLon:{value:0},uDisp:{value:0},uSeaTint:{value:1},uTime:{value:0},
+    uMapProj:{value:0},uBounds:{value:0},uMapLon:{value:0},uDisp:{value:0},uDry:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uSnowball:{value:0},
     uDbg:{value:new THREE.Vector4(1,1,1,1)},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
@@ -5483,6 +5514,10 @@ function bindTextures(){
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
   mat.uniforms.mixf.value=f.t;
+  /* The Messinian lasted 5.97-5.33 Ma: 640 kyr, an eighth of one keyframe gap.
+     Gate it to a two-frame window around 5 Ma rather than let a 5 Myr keyframe
+     imply the Mediterranean spent ten million years as a desert. */
+  mat.uniforms.uDry.value=(state.age>=4.4&&state.age<=6.6)?1.0:0.0;
   const A=DATA.timeline[f.i], B=DATA.timeline[f.j], t=f.t;
   const L=(k)=>A[k]+(B[k]-A[k])*t;
   mat.uniforms.uTemp.value=L('temp');

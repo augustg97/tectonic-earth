@@ -247,7 +247,10 @@ def bake_one(epath, stats=False):
     # to be rebaked with this in place, or old files would read their own lake
     # depth as a dry mask and drain every lake on Earth.)
     import epeiric as _EP
-    dry = _EP.messinian_mask(depth.shape, float(age))
+    # Z, not just the shape: the basin outline IS the bathymetry now, so the
+    # mask cannot be built without it. Omitting it returns an empty mask and
+    # the feature silently does not ship.
+    dry = _EP.messinian_mask(depth.shape, float(age), Z)
     gch = (np.clip(dry, 0.0, 1.0) * 255.0 + 0.5).astype(np.uint8)
     rgb = np.dstack([enc, gch, np.zeros_like(enc)])
     Image.fromarray(rgb, "RGB").save(wpath, "WEBP", lossless=True, method=6)
