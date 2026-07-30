@@ -1,0 +1,105 @@
+<!doctype html>
+<!-- Headless verification driver — a PERMANENT dev tool. It never deploys:
+     build_site.py copies an explicit whitelist and this is not on it.
+     All modes POST results to build/verify_server.py on :8901.
+       ?shots=name,lon,lat,age[,zoom];...   screenshot set via APP.lookAt/shoot
+       ?timing=NAME                         frame-time p50 at 2560x1440 -> NAME.json.png
+       ?storm=NAME                          keyframe-crossing upload storm -> NAME.json.png
+       ?pin=1                               freeze time (uTime + dt) for exact A/B
+       ?oldnoise=1                          passed through to the app iframe
+       ?layers=1                            turn hotspot/vector/boundary layers on -->
+<meta charset="utf-8">
+<title>verify driver</title>
+<iframe id="app" style="width:1280px;height:960px;border:0"></iframe>
+<script>
+const q = new URLSearchParams(location.search);
+const passthrough = ['oldnoise','zeronoise'].filter(k => q.get(k)).map(k => '&' + k + '=1').join('');
+document.getElementById('app').src = 'index.html?run=verify' + passthrough;
+const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
+  const [name, lon, lat, age, zoom] = s.split(',');
+  return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null};
+});
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const W = () => document.getElementById('app').contentWindow;
+(async () => {
+  let t0 = Date.now();
+  while (!(W() && W().APP) && Date.now() - t0 < 60000) await sleep(300);
+  if (!(W() && W().APP)) { document.title = 'VERIFY-FAIL-BOOT'; return; }
+  const A = W().APP;
+  if (q.get('pin')) {
+    // Freeze the clock that reaches loop(): uTime, cloud drift and the sea
+    // sheen become deterministic, so two runs differ only by code under test.
+    W().performance.now = () => 777000;
+    const orf = W().requestAnimationFrame.bind(W());
+    W().requestAnimationFrame = cb => orf(() => cb(777000));
+  }
+  if (q.get('layers')) { A.state.layers.hotspots = true; A.state.layers.vectors = true; A.state.layers.boundaries = true; }
+
+  if (q.get('timing')) {
+    const R = A.gl.renderer, gl = R.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const glr = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'unknown';
+    const aim = A.lookAt(0, 20, {age: 0, w: 1280, h: 720});
+    await sleep(4000);                                   // let the age-0 fields land
+    R.setPixelRatio(2); R.setSize(1280, 720, false);
+    A.gl.cam.aspect = 1280 / 720; A.gl.cam.updateProjectionMatrix();
+    const px = new Uint8Array(4);
+    const sync = () => gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    for (let i = 0; i < 6; i++) A.step(); sync();
+    const a = [];
+    for (let i = 0; i < 15; i++) { const t = performance.now(); A.step(); sync(); a.push(performance.now() - t); }
+    a.sort((x, y) => x - y);
+    const mid = new Uint8Array(4);
+    gl.readPixels(gl.drawingBufferWidth >> 1, gl.drawingBufferHeight >> 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, mid);
+    const out = {glr, buf: [gl.drawingBufferWidth, gl.drawingBufferHeight],
+                 aimOk: aim.ok, p50: +a[7].toFixed(1), min: +a[0].toFixed(1),
+                 center: Array.from(mid).slice(0, 3),
+                 lutInFrag: A.gl.mat.fragmentShader.includes('(t0+xy)*(1.0/528.0)'),
+                 uNzBound: !!A.gl.mat.uniforms.uNz.value};
+    await fetch('http://127.0.0.1:8901/' + q.get('timing') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify(out))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('storm')) {
+    /* THE STORM GATE (perf audit P9). A keyframe crossing must not pay a
+       synchronous decode+upload pile on the render path -- that was the
+       ~153 ms hitch this audit started from. Counts texture uploads landing
+       inside the crossing frame itself, after the warmers have had time to
+       do their job. Count-based, not time-based: valid even when headless
+       falls back to software GL. */
+    A.state.age = 152;
+    for (let k = 0; k < 24; k++) { A.step(); await sleep(350); }   // fetch + warm
+    for (let k = 0; k < 60; k++) A.step();                          // drain queue
+    const gl = A.gl.renderer.getContext();
+    const proto = Object.getPrototypeOf(gl);
+    let count = 0;
+    for (const nm of ['texImage2D', 'texSubImage2D', 'texStorage2D']) {
+      const orig = proto[nm];
+      proto[nm] = function(...args) { count++; return orig.apply(this, args); };
+    }
+    const crossings = [];
+    for (const a of [155.2, 160.3, 152.1]) {
+      for (let k = 0; k < 30; k++) A.step();                        // settle + drain
+      count = 0;
+      A.state.age = a;
+      const t = performance.now(); A.step();
+      crossings.push({age: a, ms: +(performance.now() - t).toFixed(1), uploads: count});
+    }
+    await fetch('http://127.0.0.1:8901/' + q.get('storm') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({crossings}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  for (const s of shots) {
+    const o = {age: s.age, w: 1280, h: 960};
+    if (s.zoom != null) o.zoom = s.zoom;
+    const aim = A.lookAt(s.lon, s.lat, o);
+    await sleep(2600);
+    A.step(); A.step();
+    const r = await A.shoot(s.name, 760);
+    console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, saved: !!r.saved, err: r.error || null}));
+  }
+  document.title = 'VERIFY-DONE';
+})();
+</script>

@@ -27,6 +27,18 @@ if os.environ.get("SKIP_AUDIT") != "1":
         raise SystemExit("build_site: a validator moved backwards (above). Fix it, "
                          "or move the baseline in audit_all.py in the same commit "
                          "and say why. SKIP_AUDIT=1 overrides.")
+    # The keyframe-crossing storm gate (perf audit P9). ~90 s because it drives
+    # the real app headless -- the stall it protects against is invisible in any
+    # static check, and it silently returns the moment a new field kind misses
+    # the warm-ahead pipeline. SKIP_PERF=1 skips just this one.
+    if os.environ.get("SKIP_PERF") != "1":
+        _p = subprocess.run([sys.executable,
+                             os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "audit_perf.py")])
+        if _p.returncode != 0:
+            raise SystemExit("build_site: the crossing-storm gate failed (above). "
+                             "A keyframe crossing is paying synchronous texture "
+                             "uploads again. SKIP_PERF=1 overrides.")
 
 WEB = "../web"
 SITE = "../docs"   # GitHub Pages serves main:/docs natively

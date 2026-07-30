@@ -558,3 +558,74 @@ carries no detail below 900 m — one calibration, not two), **H8** (a 26 km fie
 into polygons), **D9** (the crustal-age Voronoi, whose deeper fix is still outstanding),
 **H5+F4** (the landforms of collision and back-arc basins, one item), **D10** (draw the
 Messinian Mediterranean), **H3** (the source series' own authoring noise in relief).
+
+## P. Performance — why it lags, and what recovers it without touching the picture (audit round, 2026-07-30) — [WP-09](research%20reports/WP-09-performance-audit.md)
+
+The user's report: "often lags, or is slow to render when jumping across the timeline, and
+the frame rate seems a bit jagged." Measured on the M1 itself (method + caveats in WP-09):
+the steady frame is fragment-bound and **~80% of it is sin-hash procedural noise** (72 ms →
+14.4 ms with `vnoise3` constant, 2560×1440); a keyframe crossing stalls the main thread
+**~153 ms** (18 synchronous image decodes + GPU uploads) and scrubbing back replays it
+(~101 ms) because `TEX_CAP=24` holds barely one bound pair now that a pair is 15–18
+textures; a far jump is 164–263 ms locally plus 296–580 ms/file network when unprefetched.
+Steady-state JS is ~1 ms/frame — labels, cards and readout are NOT the problem.
+
+**The governing constraint mirrors section H's: the PICTURE is authoritative.** Every item
+below must be output-identical (same pixels) or output-invisible (A/B-verified same look).
+Resolution drops, octave cuts, layer simplification and shorter shaders that draw less are
+all out of scope by definition. What changes is WHEN work happens (decode/upload off the
+render path), WHETHER it recomputes (noise values from a baked lattice instead of 8 sins
+per octave per tap), and HOW MUCH survives in caches (a texture budget sized for the field
+set that exists).
+
+| # | P | item | touches | evidence |
+|---|---|---|---|---|
+| P1 | **P1** | **Decode images off the render path.** `loadField` stores a raw `HTMLImageElement`; the first `render()` that binds it pays AVIF/WebP decode + upload inside one frame — the two 4096×2048 `_e` AVIFs alone are ~112 ms. Fetch → `createImageBitmap` (worker-pool decode) and store the bitmap; three.js uploads ImageBitmap directly, and `drawImage` readers (`elevField`, `MOTDATA`, `WOLD`) accept it unchanged. | `web/index.html` loadField | WP-09 F4 |
+| P2 | **P1** | **Size the texture cache for 10 field kinds, by bytes not count.** 24 slots ÷ 15–18/pair = every crossing evicts the frame it just left; scrub-back re-uploads 18 textures. Budget ~450 MB (≈4 keyframes) with per-texture byte estimates, LRU by bytes. This is the raise the terrain-motion memory already called for. | `web/index.html` TEXCACHE | WP-09 F5 |
+| P3 | **P1** | **Idle-time predictive upload.** Current pair + the next keyframe in the playback direction (both neighbours when paused) get `renderer.initTexture()` during idle, budgeted ≤2 uploads/frame so the storm never lands in one frame. A crossing then binds textures that are already resident: the ~153 ms hitch becomes ~0. | `web/index.html` loop/prefetch | WP-09 F4–F6 |
+| P4 | **P1** | **Noise from a baked lattice, not 8 sins per octave.** `vnoise3` (68 call sites; `fbm3`=5 oct, `detail3`=10, hillshade ×5 evaluations) and the clouds' `cn/cfb` become 2 bilinear fetches + 1 mix from a small tiled lattice atlas carrying the EXACT `hash3` values (period ≥64/axis; octave growth 2.07 makes repeats incommensurate; R8 first, 16-bit if A/B shows banding). Output-invisible by construction, verified by pixel-diff at fixed ages/views. The one measured 80% share is an upper bound — `?nonoise` also collapsed branches a LUT keeps — so the committed claim is 2.5–3× frame time, measured at each step. **P4b if needed:** bake whole static-domain sums (`fbm3(sdir*K+C)` families) into equirect textures — exact, since they are pure functions of direction. | FRAG `vnoise3`, CFRAG `cn`; small bake script | WP-09 F1–F2 |
+| P5 | P2 | **`preserveDrawingBuffer:false`** (pixel-identical; `APP.shoot` renders once before reading) and an **MSAA verdict by screenshot** — silhouette + overlay lines decide, not the timer; keep MSAA if lines degrade. Together worth ~15 ms/frame. | `web/index.html` initGL, shoot | WP-09 F3 |
+| P6 | P2 | **Jumps bind progressively, elevation first.** Request/bind `_e`+`_r` of the target pair before the other eight kinds — the per-kind uniform gates already make partial binds safe, so the first CORRECT frame arrives at ~1 fetch RTT on the live site instead of after the full set. | `web/index.html` ensureFrames order | WP-09 F4, network table |
+| P7 | P3 | **Overlay rebuilds off the crossing frame.** `buildHotspots`/`buildVectors`/`buildDerivedBounds` (+`buildBoundaries` in jumpTo) are pure per-keyframe: memoize last N and/or spread across 2–3 frames. The ~50 ms non-texture tail of a jump. | `web/index.html` loop, jumpTo | WP-09 F7 |
+| P8 | P3 | **Micro-hygiene:** `frameAt` allocates a fresh 251-element `ages()` array per call (several/frame); `uiRects` forces reflow every frame via getComputedStyle+getBoundingClientRect ×6 against layout dirtied by label writes — cache on resize/panel change; hoist the loop's per-frame `Vector3`s. Small, free, and they sharpen every future measurement. | `web/index.html` | WP-09 |
+| P9 | P2 | **Keep it fixed: a perf harness in the app and a storm gate in the publish path.** `?perf=1` HUD (frame-time EMA, upload-queue depth, cache occupancy); a headless check that steps 10 crossings and FAILS if any synchronous decode >8 ms lands on the render path — the next field kind added must not silently reintroduce F4/F5. Prints its numbers on pass, per the validator rule. | `web/index.html`, `build/` check | WP-09 |
+
+**Sequence: P1 → P2 → P3 ship together** (pure win, zero visual risk — this alone ends
+"jagged" and makes scrubbing instant on cached ground), **then P4** behind the pixel-diff
+A/B, **then P5/P6**, then P7–P9. After P1–P3 the remaining lag is the honest GPU frame;
+after P4 the target is a steady 25–35 ms at 2560×1440 (from 72–110), fullscreen
+proportional. Not promised: locked-60 fullscreen on M1 without P4b.
+
+## P — IMPLEMENTED, 2026-07-30 (same day)
+
+| item | what shipped | measured |
+|---|---|---|
+| **P1** | `loadField` fetches and decodes via `createImageBitmap` (worker-pool decode, `colorSpaceConversion:'none'`); bitmaps baked pre-flipped because `UNPACK_FLIP_Y_WEBGL` is ignored for ImageBitmap by spec, `getTex` sets `flipY=false`, and the two CPU readers un-flip through `drawFieldImage`. Image fallback kept for browsers without the API. | Orientation verified both sides (CPU probes: Himalaya +4,775 m, Gulf of Guinea −4,678 m; screenshots pixel-consistent with baseline). Decode left the render path entirely. |
+| **P2** | Byte-budgeted LRU (450 MB, 200 MB when `deviceMemory < 8`), evicting by bytes until under budget. | Scrub-back across a just-crossed boundary: **101 ms → 7–9 ms**; ~4 keyframes stay resident (~268 MB steady). |
+| **P3** | `queueUploads`: pair + direction-aware neighbours warmed one `renderer.initTexture` per frame; drains only off crossing frames; on the crossing frame it pre-decodes the neighbour's 256×128 label-probe raster instead. | Crossing with warm neighbour: **152.7 ms → 1–9 ms** (0 synchronous uploads — see P9 gate). Cold first-visit crossings ~20–28 ms (label snap work, not uploads). |
+| **P6** | Two-wave `loadFrame` (e+r first at `fetch` priority high) + budgeted `bindTex`: cold jumps bind elevation+rainfall immediately, defer the other kinds to the queue front, one per frame — the same partial-bind contract the network path always used. | Far jump, files local: **164–263 ms → 44–99 ms** first frame, fully refined over ~10 background frames. Live-site jumps now show correct coastlines after e+r instead of after all ten kinds. |
+| **P7** | `clearGroup()` disposes unique geometries/materials before `Group.clear()` in all four overlay builders. Builders measured cheap (0.2–2.1 ms) — no memoization needed. | Leak: **+93 geometries per crossing → +0** (95 → 127 steady over 25 crossings, was 2,425). |
+| **P5** | `preserveDrawingBuffer:false` (all readers render-then-read in-task; `APP.snap` verified). **MSAA kept** — the constraint forbids degrading overlay lines and the silhouette. | Gain expressed under real compositing (removes a full-frame copy); not measurable in the forced-sync harness. |
+| **P4** | `vnoise3`/`cn` read a seeded 64³ lattice from a 528×528 atlas (one-texel wrap gutters; sampling at corner + smoothstepped fraction makes hardware bilinear reproduce the exact mix() tree). **R16F, not R8** — 8-bit lattice values measurably softened ridged crests (−11% Laplacian in the ridge crop); half floats restore parity (16/25 regions LUT-crisper, 9/25 hash-crisper = instance variance). `?oldnoise` restores sin-hash for A/B. | Real-GPU (headless Metal, 2560×1440): sin-hash 249.2 ms → LUT16 **233.7 ms (−6%)**. R8 was −13% but rejected on the crispness measurement. Noise-free floor on the same scene: **28.7 ms** — the remaining prize, and why P4b matters. |
+| **P8** | `ages()` cached; `uiRects` cached 200 ms + resize (kills a per-frame forced reflow against label-dirtied layout); camera scratch vectors hoisted. | Steady main-thread JS: **0.6–1.5 ms/frame**. |
+| **P9** | `?perf=1` HUD (frame-interval EMA + worst, upload-queue depth, cache occupancy). `build/audit_perf.py` + `_verify.html?storm=` drive the real app headless and count uploads landing inside crossing frames; wired into `build_site.py` after `audit_all` (`SKIP_PERF=1` escape; skips LOUDLY without Chrome). | Gate at ship: **0 synchronous uploads on all three crossings** (4–17 ms steps). Prints its numbers on pass, per the validator rule. |
+
+**What was tried, measured, and deliberately NOT shipped** — both are the next round's levers,
+both need eyes on screenshots because they change (or risk changing) the picture:
+- **Gradient-on-base** (hillshade's 4 full `elevAt` taps → `baseElev` taps): ~24% of the noise
+  bill, but the pinned-time A/B shows 28–35% of land pixels shift (max 153/255) — the detail
+  jitter in the wide gradient is load-bearing texture, not noise. Archived pairs:
+  `build/verify/ab_A_*` vs `ab_B_*`. Superseded judgement belongs with H7's owner: the shipped
+  normal-perturbation scales may make a *calibrated* version of this visually neutral.
+- **P4b direction-domain bakes**: cloud `cfb` sums and other pure-functions-of-direction sites
+  bake exactly into equirect textures (drift is a uv shift). Clouds alone ≈ 10 ms. Needs an
+  offline bake (a JS boot bake of 8.4M texels × 20 octaves is seconds of main thread).
+- Also parked: a `mediump` pass on the colour-side math (Apple runs fp16 at double rate), and
+  the interaction-time resolution floor the user explicitly tabled.
+
+**The honest headline**: the *hitches* — the reported symptom — are gone at the root
+(crossings ~150 ms → ~0–9 ms warm; scrub-back ~free; jumps progressive). The *steady* GPU
+frame improved only ~6–13% because Apple Silicon hides ALU cost too well for a value-noise
+LUT to pay the way it would on bandwidth-rich desktop GPUs; the measured 28.7 ms floor says
+where the next 7× lives, and the two named levers above are how to get part of it without
+breaking the no-visual-compromise rule.

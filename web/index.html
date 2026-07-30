@@ -1043,8 +1043,17 @@ let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene on
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
 /* GPU textures are created on demand around the current age and evicted by
    LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
-   video memory for textures that are almost never on screen at once. */
-const TEXCACHE=new Map(); const TEX_CAP=24; let texClock=0;
+   video memory for textures that are almost never on screen at once.
+
+   THE BUDGET IS BYTES, NOT A COUNT (perf audit P2, WP-09 F5). The old cap of
+   24 textures was sized when a keyframe carried six kinds; a bound pair now
+   holds 15-18, so the cache fit ~1.3 keyframes -- every crossing evicted the
+   frame it had just left, and scrubbing back re-uploaded all of it (~101 ms,
+   measured). Counting bytes keeps ~4 keyframes resident (the pair plus a
+   neighbour each way) whatever the mix of texture sizes, and a smaller budget
+   on low-memory devices keeps phones out of trouble. */
+const TEXCACHE=new Map(); let texClock=0, _texBytes=0;
+const TEX_BUDGET=((navigator.deviceMemory||8)<8?200:450)*1048576;
 function getTex(kind,i){
   const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:kind==='f'?FRI:MOI)[i];
   if(!src)return null;
@@ -1055,6 +1064,9 @@ function getTex(kind,i){
     // Field data, not colour: keep it linear and unfiltered by mipmaps so
     // elevation isn't averaged across scales before the shader reads it.
     t.colorSpace=THREE.NoColorSpace;
+    // ImageBitmaps are baked pre-flipped (see loadField): UNPACK_FLIP_Y_WEBGL
+    // is ignored for them by spec, so flipY must not be left on.
+    if(_BITMAPS&&src instanceof ImageBitmap)t.flipY=false;
     /* NEAREST for the plate-slot raster only. Every other field is a
        quantity and wants smoothing; a slot is a LABEL, and interpolating
        between slot 3 and slot 17 gives slot 10 -- a plate that is not there,
@@ -1064,13 +1076,15 @@ function getTex(kind,i){
     t.magFilter=nearest?THREE.NearestFilter:THREE.LinearFilter;
     t.generateMipmaps=false; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
     t.needsUpdate=true;
-    e={t,u:0}; TEXCACHE.set(key,e);
+    e={t,u:0,b:(src.width*src.height*4)||1048576}; TEXCACHE.set(key,e);
+    _texBytes+=e.b;
   }
   e.u=++texClock;
-  if(TEXCACHE.size>TEX_CAP){
+  while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
     let victim=null,best=Infinity;
     for(const[k,v]of TEXCACHE){if(k!==key&&v.u<best){best=v.u;victim=k;}}
-    if(victim!==null){TEXCACHE.get(victim).t.dispose();TEXCACHE.delete(victim);}
+    if(victim===null)break;
+    const v=TEXCACHE.get(victim);_texBytes-=v.b;v.t.dispose();TEXCACHE.delete(victim);
   }
   return e.t;
 }
@@ -1102,6 +1116,7 @@ function oldLakeTex(){
   if(!WOLD_TEX){
     WOLD_TEX=new THREE.Texture(WOLD);
     WOLD_TEX.colorSpace=THREE.NoColorSpace;
+    if(_BITMAPS&&WOLD instanceof ImageBitmap)WOLD_TEX.flipY=false;
     WOLD_TEX.minFilter=THREE.LinearFilter; WOLD_TEX.magFilter=THREE.LinearFilter;
     WOLD_TEX.generateMipmaps=false;
     WOLD_TEX.wrapS=THREE.RepeatWrapping; WOLD_TEX.wrapT=THREE.ClampToEdgeWrapping;
@@ -1130,7 +1145,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-2107';
+const DATA_V='20260730-2323';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1144,8 +1159,13 @@ async function loadAll(){
   // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
   // Seven kilobytes, and the lake swap can be asked for at any age, so it is the
   // one field that is always resident.
-  await new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
-    im.onerror=()=>res();im.src=fieldSrc('phan_0000_wold.webp');});
+  await (_BITMAPS
+    ? fetch(fieldSrc('phan_0000_wold.webp')).then(r=>{if(!r.ok)throw 0;return r.blob();})
+        .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
+          premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+        .then(bm=>{WOLD=bm;}).catch(()=>{})
+    : new Promise(res=>{const im=new Image();im.onload=()=>{WOLD=im;res();};
+        im.onerror=()=>res();im.src=fieldSrc('phan_0000_wold.webp');}));
   // ...and the two keyframes the opening age actually sits between. Everything
   // else arrives in the background; see the note on loadFrame below.
   await ensureFrames(state.age, true);
@@ -1203,29 +1223,67 @@ function fieldFile(i,kind){
    else. It used to count all 1,506 -- which is why it sat at low percentages for
    most of a minute and then jumped. */
 let _bootWant=0,_bootGot=0;
+/* DECODE OFF THE RENDER PATH (perf audit P1, WP-09 F4). The old loader stored a
+   raw HTMLImageElement, and nothing ever decoded it until the first render()
+   that bound it -- where Chrome paid AVIF/WebP decode plus GPU upload inside
+   ONE frame. Measured on the M1: a keyframe crossing stalled ~153 ms, of which
+   ~122 ms was exactly this (the two 4096x2048 elevation AVIFs alone are
+   ~112 ms). createImageBitmap decodes on the browser's worker pool instead, so
+   what reaches texSubImage2D is finished pixels.
+
+   THE FLIP LIVES AT DECODE TIME NOW. UNPACK_FLIP_Y_WEBGL is IGNORED for
+   ImageBitmap uploads by spec, so the usual Texture.flipY=true silently does
+   nothing for these -- the bitmap is therefore baked flipped
+   (imageOrientation:'flipY') and getTex sets flipY=false for bitmap sources.
+   The two CPU readers (elevField, the motion decoder) un-flip at drawImage
+   through drawFieldImage below, so every consumer sees the orientation it
+   always did. colorSpaceConversion:'none' because these are DATA rasters, not
+   colour -- a profile-aware decode would silently rewrite elevation bytes. */
+const _BITMAPS=typeof createImageBitmap==='function';
+function drawFieldImage(cx,img,w,h){
+  if(_BITMAPS&&img instanceof ImageBitmap){
+    cx.save();cx.translate(0,h);cx.scale(1,-1);cx.drawImage(img,0,0,w,h);cx.restore();
+  } else cx.drawImage(img,0,0,w,h);
+}
 function loadField(i,kind,boot){
   const key=kind+i;
   if(_fieldTried.has(key))return Promise.resolve();
   const p0=_fieldPending.get(key); if(p0)return p0;
   const arr=FIELD_KINDS.find(k=>k[0]===kind)[1]();
   if(boot)_bootWant++;
-  const p=new Promise(res=>{
+  // Mark tried on BOTH paths. A 404 is legitimate here -- a keyframe may have
+  // no lake field -- and retrying it forever would make the prefetch pump spin.
+  const fin=()=>{
+    _fieldPending.delete(key);_fieldTried.add(key);
+    if(boot){_bootGot++;const el=$('#loadPct');
+      if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}};
+  let p;
+  if(_BITMAPS){
+    /* Elevation and rainfall gate what a frame LOOKS like, so they ride the
+       network at high priority; the other kinds refine it and follow. */
+    const pri=(kind==='e'||kind==='r')?'high':'low';
+    p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
+      .then(r=>{if(!r.ok)throw 0;return r.blob();})
+      .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
+        premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+      .then(bm=>{arr[i]=bm;fin();})
+      .catch(fin);
+  } else p=new Promise(res=>{
     const img=new Image();
-    // Mark tried on BOTH paths. A 404 is legitimate here -- a keyframe may have
-    // no lake field -- and retrying it forever would make the prefetch pump spin.
-    const fin=()=>{
-      _fieldPending.delete(key);_fieldTried.add(key);
-      if(boot){_bootGot++;const el=$('#loadPct');
-        if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}
-      res();};
-    img.onload=()=>{arr[i]=img;fin();};
-    img.onerror=fin;
+    img.onload=()=>{arr[i]=img;fin();res();};
+    img.onerror=()=>{fin();res();};
     img.src=fieldSrc(fieldFile(i,kind));
   });
   _fieldPending.set(key,p);
   return p;
 }
-const loadFrame=(i,boot)=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot)));
+/* Two waves (perf audit P6): elevation+rainfall first -- the per-kind uniform
+   gates in bindTextures make a partial bind safe, so on a jump the first
+   CORRECT frame needs only these two, and the other eight kinds land behind
+   them without holding it up. */
+const loadFrame=(i,boot)=>
+  Promise.all([loadField(i,'e',boot),loadField(i,'r',boot)])
+    .then(()=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot))));
 const frameSettled=i=>FIELD_KINDS.every(([k])=>_fieldTried.has(k+i));
 
 /* The frames an age sits between. `block` is true only at boot: everywhere else
@@ -1261,8 +1319,64 @@ function pumpPrefetch(){
 }
 function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
 
+/* PREDICTIVE GPU RESIDENCY (perf audit P3, WP-09 F4-F6). Fetch-and-decode
+   (loadField) gets pixels into memory; this gets them onto the GPU BEFORE the
+   crossing that needs them, so bindTextures binds already-resident textures
+   and the per-crossing upload storm never lands in a visible frame. One
+   texture per frame: the largest (elevation) uploads in ~5-15 ms from a
+   decoded bitmap, which one frame can absorb, while a crossing used to demand
+   eighteen at once. Direction-aware -- playback warms the keyframe ahead;
+   paused warms both neighbours, which is what scrubbing wants. */
+const _upQ=[];
+function queueUploads(f){
+  if(!DATA.timeline||!renderer.initTexture)return;
+  const n=DATA.timeline.length;
+  const dir=state.playing?(state.dir<0?-1:+1):0;
+  /* The pair itself comes first: bindTextures touches only the kinds it binds,
+     and the interval kinds (v/p/t/f/m) of the B-frame are NOT among them --
+     yet they are exactly what the next crossing binds. Warming "the pair" is
+     really warming those. */
+  const want=[f.i,f.j];
+  if(dir<=0){want.push(f.i-1);if(dir<0)want.push(f.i-2);}
+  if(dir>=0){want.push(f.j+1);if(dir>0)want.push(f.j+2);}
+  for(const w of want){
+    if(w<0||w>=n)continue;
+    for(const[k,get]of FIELD_KINDS){
+      if(TEXCACHE.has(k+w))continue;
+      if(!get()[w])continue;                        // not fetched yet
+      if(_upQ.some(q=>q.k===k&&q.i===w))continue;
+      _upQ.push({k,i:w});
+    }
+  }
+  // The current pair's own arrivals go through bindTextures; while those are
+  // still outstanding they own the frame budget, so hold the speculative work.
+  if(!frameSettled(f.i)||!frameSettled(f.j))return;
+  // And a crossing frame already carries the new frame's label work -- don't
+  // stack a speculative upload on the one frame that can least afford it.
+  // Instead, spend this one on the OTHER thing the next crossing will need:
+  // the 256x128 CPU elevation raster snapLabel probes against.
+  if(f.i!==queueUploads._lf){
+    queueUploads._lf=f.i;
+    if(typeof elevField==='function'){elevField(Math.max(0,f.i-1));elevField(Math.min(DATA.timeline.length-1,f.j+1));}
+    return;
+  }
+  while(_upQ.length){
+    const q=_upQ.shift();
+    if(Math.abs(q.i-f.i)>3)continue;                // stale after a far jump
+    if(!TEXCACHE.has(q.k+q.i)){
+      const t=getTex(q.k,q.i);
+      if(t)renderer.initTexture(t);
+    }
+    break;                                          // at most one per frame
+  }
+}
+
 /* map timeline (sorted asc by age) to helpers */
-function ages(){return DATA.timeline.map(f=>f.age);}
+/* The timeline never changes after load, but this used to rebuild a fresh
+   251-element array on EVERY call -- and frameAt calls it several times a
+   frame. Pure allocation churn; cache it once. */
+let _AGES=null;
+function ages(){return _AGES||(_AGES=DATA.timeline.map(f=>f.age));}
 function frameAt(age){
   // returns {i,j,t} interpolation between adjacent frames
   const A=ages();
@@ -1327,6 +1441,94 @@ function ll2v(lon,lat,r){
    the same divorce between height and colour that decode-then-mix just closed,
    at up to 65 texels instead of a few hundred metres. Same offsets, duplicated
    for the same reason the decode is. */
+/* THE NOISE LATTICE, BAKED (perf audit P4, WP-09 F1). Measured on the M1:
+   ~80% of the whole GPU frame was vnoise3 -- eight sin()-hash lattice corners
+   and a trilinear mix, per octave, per tap, per fragment, with fbm3 running
+   five octaves and detail3 ten. The values at integer lattice points are just
+   fixed random numbers, so they are baked once into a 64^3 lattice stored as
+   an 8x8 atlas of 66x66 tiles (one-texel gutters carry the wrap so bilinear
+   never bleeds a neighbouring slice). The shader then reads a corner-mixed
+   value with TWO texture fetches: sampling at (corner + smoothstepped
+   fraction) makes the hardware bilinear compute exactly the mix() tree the
+   old code computed -- same interpolation weights, same lattice periodicity
+   trick fbm's 2.07 octave growth already relies on to stay incommensurate.
+   Seeded PRNG, so every visitor and every deploy sees the same Earth.
+   ?oldnoise switches the sin()-hash implementation back on for A/B.
+
+   The one real difference: the lattice VALUES are a different random draw
+   than sin-hash produced (sin-hash is aperiodic and cannot be tabulated), so
+   the specific instance of each mottle moves while its amplitude, frequency,
+   anisotropy and character are bit-identical -- the statistics are the model;
+   the instance never was. Verified by side-by-side screenshot pairs. */
+const NZOLD=new URLSearchParams(location.search).has('oldnoise');
+/* The two implementations, chosen once at boot. Plain top-level literals --
+   NEVER nest a backtick string inside the FRAG/CFRAG literals; that is the
+   template-literal trap check_shader.py exists to catch. */
+const VN_OLD=`float vnoise3(vec3 p){
+  vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+  float a=mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y);
+  float b=mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y);
+  return mix(a,b,f.z);
+}`;
+const VN_NEW=`float vnoise3(vec3 p){
+  vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+  vec3 w=mod(i,64.0);
+  vec2 xy=w.xy+f.xy+0.5;
+  float z1=mod(w.z+1.0,64.0);
+  vec2 t0=vec2(mod(w.z,8.0),floor(w.z*0.125))*66.0+1.0;
+  vec2 t1=vec2(mod(z1,8.0),floor(z1*0.125))*66.0+1.0;
+  float a=texture2D(uNz,(t0+xy)*(1.0/528.0)).r;
+  float b=texture2D(uNz,(t1+xy)*(1.0/528.0)).r;
+  return mix(a,b,f.z);
+}`;
+const CN_OLD=`float ch(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+    float cn(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+      float a=mix(mix(ch(i),ch(i+vec3(1,0,0)),f.x),mix(ch(i+vec3(0,1,0)),ch(i+vec3(1,1,0)),f.x),f.y);
+      float b=mix(mix(ch(i+vec3(0,0,1)),ch(i+vec3(1,0,1)),f.x),mix(ch(i+vec3(0,1,1)),ch(i+vec3(1,1,1)),f.x),f.y);
+      return mix(a,b,f.z);}`;
+const CN_NEW=`float cn(vec3 p){
+      vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+      vec3 w=mod(i,64.0);
+      vec2 xy=w.xy+f.xy+0.5;
+      float z1=mod(w.z+1.0,64.0);
+      vec2 t0=vec2(mod(w.z,8.0),floor(w.z*0.125))*66.0+1.0;
+      vec2 t1=vec2(mod(z1,8.0),floor(z1*0.125))*66.0+1.0;
+      float a=texture2D(uNz,(t0+xy)*(1.0/528.0)).r;
+      float b=texture2D(uNz,(t1+xy)*(1.0/528.0)).r;
+      return mix(a,b,f.z);}`;
+function bakeNoiseLUT(){
+  const mulberry32=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+    t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  const rnd=mulberry32(0x9E3779B9);
+  const P=64,A=528;
+  const V=new Float32Array(P*P*P);
+  // Floor at the smallest NORMAL half float: the encoder below has no
+  // subnormal path, and an unlucky tiny value would decode as ~2.0 -- a
+  // bright pinprick somewhere on the planet. 6e-5 on a noise value is
+  // beneath any visible threshold; a mangled lattice point is not.
+  for(let i=0;i<V.length;i++)V[i]=Math.max(6.104e-5,rnd());
+  /* Half-float, not bytes. An R8 lattice quantises the values to 1/255, and
+     detail3's ridged transform -- (1-|2n-1|)^2 -- turns each tiny flat step
+     near n=0.5 into a flat facet exactly at the crease tip. Measured: the
+     ridge crop lost ~11% of its Laplacian energy, i.e. visibly softer crests.
+     Half floats carry ~2,000 levels through the same trick at 2 bytes/texel
+     (557 KB), and the crispness comes back to parity. */
+  const f2h=v=>{const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+    f32[0]=v;const x=u32[0];
+    return((x>>16)&0x8000)|((((x>>23)&0xff)-112)<<10)&0x7c00|((x>>13)&0x03ff);};
+  const data=new Uint16Array(A*A);
+  for(let z=0;z<P;z++){
+    const col=z%8,row=(z/8)|0;
+    for(let y=0;y<66;y++){const ly=(y+63)%64;
+      for(let x=0;x<66;x++){const lx=(x+63)%64;
+        data[(row*66+y)*A+col*66+x]=f2h(V[(z*P+ly)*P+lx]);}}}
+  const t=new THREE.DataTexture(data,A,A,THREE.RedFormat,THREE.HalfFloatType);
+  t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;
+  t.generateMipmaps=false;t.colorSpace=THREE.NoColorSpace;
+  t.wrapS=THREE.ClampToEdgeWrapping;t.wrapT=THREE.ClampToEdgeWrapping;
+  t.needsUpdate=true;
+  return t;
+}
 const VERT=`
 varying vec2 vUv; varying vec3 vVN;
 uniform sampler2D elevA, elevB, dispA;
@@ -1584,12 +1786,8 @@ float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453)
    the whole point, see the ring below -- and it falls away as the square, so a
    seamount 3.5 km above the plain around it ends up weighted about 1/16. */
 float rwt(float t, float m){ float d=(t-m)*(1.0/900.0); return 1.0/(1.0+d*d); }
-float vnoise3(vec3 p){
-  vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
-  float a=mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y);
-  float b=mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y);
-  return mix(a,b,f.z);
-}
+uniform sampler2D uNz;
+${NZOLD?VN_OLD:VN_NEW}
 float fbm3(vec3 p){ float s=0.0,a=0.5; for(int i=0;i<5;i++){ s+=a*vnoise3(p); p*=2.07; a*=0.5; } return s; }
 /* Band-limited fractal for the abyssal fabric. Marine geophysics describes sea
    floor roughness with a von Karman model -- a power-law spectrum, i.e. a
@@ -3892,7 +4090,13 @@ void main(){
 
 function initGL(){
   const cv=$('#gl');
-  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  /* preserveDrawingBuffer costs a copy of the whole frame at this resolution
+     (perf audit P5) and exists only so pixels can be read back later. Every
+     reader in this project -- APP.snap, the screenshot recipes -- renders and
+     then reads in the SAME task, which the spec guarantees without preserve.
+     MSAA stays: the globe interior is shaded per-pixel either way, but the
+     silhouette against the stars and the overlay LINES visibly need it. */
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:false});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   scene=new THREE.Scene();
   cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
@@ -3912,6 +4116,7 @@ function initGL(){
     uMapProj:{value:0},uBounds:{value:0},uMapLon:{value:0},uDisp:{value:0},uDry:{value:0},uSeaTint:{value:1},uTime:{value:0},
     uSnowball:{value:0},
     uDbg:{value:new THREE.Vector4(1,1,1,1)},
+    uNz:{value:bakeNoiseLUT()},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
     // it is used to warp -- not the elevation, which is now twice that.
     uTexel:{value:new THREE.Vector2(1/2048,1/1024)}
@@ -3973,11 +4178,8 @@ function initGL(){
     precision highp float;
     uniform sampler2D rainA, rainB; uniform float mixf, uTime, uCloud;
     varying vec2 vUv; varying vec3 vN;
-    float ch(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
-    float cn(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
-      float a=mix(mix(ch(i),ch(i+vec3(1,0,0)),f.x),mix(ch(i+vec3(0,1,0)),ch(i+vec3(1,1,0)),f.x),f.y);
-      float b=mix(mix(ch(i+vec3(0,0,1)),ch(i+vec3(1,0,1)),f.x),mix(ch(i+vec3(0,1,1)),ch(i+vec3(1,1,1)),f.x),f.y);
-      return mix(a,b,f.z);}
+    uniform sampler2D uNz;
+    ${NZOLD?CN_OLD:CN_NEW}
     float cfb(vec3 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*cn(p);p*=2.03;a*=0.5;}return s;}
     void main(){
       float lat=90.0-vUv.y*180.0;
@@ -4010,6 +4212,7 @@ function initGL(){
     side:THREE.FrontSide, uniforms:{
       rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // shared with terrain
       mixf:mat.uniforms.mixf, uTime:mat.uniforms.uTime,
+      uNz:mat.uniforms.uNz,   // the baked noise lattice, shared with the terrain
       uCloud:{value:1.0}},
     vertexShader:CVERT, fragmentShader:CFRAG});
   clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
@@ -4129,8 +4332,23 @@ function chaikin(pts,iter){
   }
   return pts;
 }
+/* Group.clear() detaches children but never frees their GPU buffers, and the
+   overlay groups rebuild on every keyframe crossing -- measured: +93 orphaned
+   geometries per crossing with the layers on, 2,400 within a minute of
+   playback (perf audit P7). Dispose what the group owns, then clear it.
+   Geometries and materials are often shared across children of one build, so
+   collect unique ones first. */
+function clearGroup(grp){
+  const gs=new Set(), ms=new Set();
+  grp.traverse(c=>{
+    if(c.geometry)gs.add(c.geometry);
+    if(c.material){Array.isArray(c.material)?c.material.forEach(m=>ms.add(m)):ms.add(c.material);}
+  });
+  gs.forEach(g=>g.dispose()); ms.forEach(m=>m.dispose());
+  grp.clear();
+}
 function buildDerivedBounds(){
-  overlay.derived.clear();
+  clearGroup(overlay.derived);
   const R=1.006;
   for(const b of eraPlates().b){
     let run=[];
@@ -4152,7 +4370,7 @@ function buildDerivedBounds(){
   }
 }
 function buildBoundaries(){
-  overlay.boundaries.clear();
+  clearGroup(overlay.boundaries);
   const R=1.006;
   overlay.boundaries.add(lineSeg(DATA.boundaries.ridge,0xe8534e,1,R));
   overlay.boundaries.add(lineSeg(DATA.boundaries.trench,0x59b0d6,1,R));
@@ -4168,7 +4386,7 @@ function motionField(i){
   const img=MOI[i]; if(!img)return null;
   const c=document.createElement('canvas');c.width=MOT_W;c.height=MOT_H;
   const cx=c.getContext('2d',{willReadFrequently:true});
-  cx.drawImage(img,0,0,MOT_W,MOT_H);
+  drawFieldImage(cx,img,MOT_W,MOT_H);
   const d=cx.getImageData(0,0,MOT_W,MOT_H).data;
   const out={vx:new Float32Array(MOT_W*MOT_H),vy:new Float32Array(MOT_W*MOT_H),
              cf:new Float32Array(MOT_W*MOT_H)};
@@ -4198,7 +4416,7 @@ function elevField(i){
   const img=ELI[i]; if(!img)return null;
   const c=document.createElement('canvas');c.width=ELEV_W;c.height=ELEV_H;
   const cx=c.getContext('2d',{willReadFrequently:true});
-  cx.drawImage(img,0,0,ELEV_W,ELEV_H);
+  drawFieldImage(cx,img,ELEV_W,ELEV_H);
   const d=cx.getImageData(0,0,ELEV_W,ELEV_H).data;
   const z=new Float32Array(ELEV_W*ELEV_H);
   for(let k=0;k<z.length;k++){
@@ -4301,7 +4519,7 @@ function trackPos(tr,lon,lat){
 }
 function featurePos(h){ return trackPos(h.tr, h.lon, h.lat); }
 function buildHotspots(){
-  overlay.hotspots.clear();
+  clearGroup(overlay.hotspots);
   const geo=new THREE.SphereGeometry(.008,8,8);
   const mm=new THREE.MeshBasicMaterial({color:0xff7d3a});
   const lipm=new THREE.MeshBasicMaterial({color:0xffd257});
@@ -4384,7 +4602,7 @@ function velocityAt(lon,lat,motion){
   return {v,speed};
 }
 function buildVectors(){
-  overlay.vectors.clear();
+  clearGroup(overlay.vectors);
   const fld=motionField(curFrame().i); if(!fld)return;
   const arr=[];const heads=[];
   for(let lat=-78;lat<=78;lat+=9){
@@ -5370,8 +5588,16 @@ const RINGS=(()=>{
   return o;
 })();
 /* Panels are opaque, so a name underneath one is simply lost. Read their real
-   rects each frame so this stays right as panels collapse, open and resize. */
+   rects so this stays right as panels collapse, open and resize -- but not
+   EVERY frame: layoutLabels writes label styles each frame, so a same-frame
+   getBoundingClientRect forces a synchronous reflow against dirty layout.
+   Panels move on user actions, not per frame; a 200 ms-stale rect is
+   indistinguishable on screen and the forced reflow goes away. */
+let _uiRects=null,_uiRectsAt=-1e9;
+addEventListener('resize',()=>{_uiRectsAt=-1e9;});
 function uiRects(){
+  const now=performance.now();
+  if(_uiRects&&now-_uiRectsAt<200)return _uiRects;
   const out=[];
   /* Use #title and #readout rather than #topbar: the bar spans the full width
      and stands 210px tall to fit the readout, but it is transparent in
@@ -5383,6 +5609,7 @@ function uiRects(){
     const r=el.getBoundingClientRect();
     if(r.width>0&&r.height>0)out.push(r);
   }
+  _uiRects=out;_uiRectsAt=now;
   return out;
 }
 let _leadStr='';
@@ -5909,6 +6136,25 @@ function markExtinctList(cur){
 }
 
 /* ================= render loop ================= */
+/* A JUMP MUST NOT PAY EVERY UPLOAD IN ONE FRAME (perf audit P1/P3, WP-09 F4).
+   Binding a cold pair used to create ~15 GPU textures inside one bindTextures
+   call -- a 150-260 ms freeze. The per-kind gates below already define what a
+   partially-arrived frame looks like (they were built for the network case,
+   where kinds trickle in), so a cold jump now uses the SAME contract: the two
+   kinds that carry the frame's identity -- elevation and rainfall -- upload
+   immediately, and the refinement kinds take the queue, one per frame, front
+   of the line. Visually identical to loading the age over the network, minus
+   the freeze. */
+let _texMakeBudget=2;
+function bindTex(kind,i,essential){
+  if(TEXCACHE.has(kind+i))return getTex(kind,i);
+  if(!essential&&_texMakeBudget<=0){
+    if(!_upQ.some(q=>q.k===kind&&q.i===i))_upQ.unshift({k:kind,i});
+    return null;
+  }
+  _texMakeBudget--;
+  return getTex(kind,i);
+}
 function bindTextures(){
   const f=curFrame();
   /* Ask for whatever this age needs, every frame. loadField is a no-op once a
@@ -5916,13 +6162,13 @@ function bindTextures(){
      dozen Map lookups -- and putting it here rather than on each of the many
      paths that can change state.age means none of them can be forgotten. */
   if(!frameSettled(f.i)||!frameSettled(f.j)){ensureFrames(state.age);pumpPrefetch();}
-  const ea=getTex('e',f.i), eb=getTex('e',f.j);
-  const ra=getTex('r',f.i), rb=getTex('r',f.j);
+  const ea=bindTex('e',f.i,true), eb=bindTex('e',f.j,true);
+  const ra=bindTex('r',f.i,true), rb=bindTex('r',f.j,true);
   // Outside the Holocene window, the present frame contributes its long-lived
   // lakes only — otherwise the Great Lakes bleed several Myr into the past.
   const P=presentIndex(), swap=youngLakeWeight(state.age)<0.5 && oldLakeTex();
-  const wa=(swap&&f.i===P)?oldLakeTex():getTex('w',f.i);
-  const wb=(swap&&f.j===P)?oldLakeTex():getTex('w',f.j);
+  const wa=(swap&&f.i===P)?oldLakeTex():bindTex('w',f.i);
+  const wb=(swap&&f.j===P)?oldLakeTex():bindTex('w',f.j);
   if(ea)mat.uniforms.elevA.value=ea;
   if(eb||ea)mat.uniforms.elevB.value=eb||ea;
   if(ra)mat.uniforms.rainA.value=ra;
@@ -5930,12 +6176,12 @@ function bindTextures(){
   // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
   if(wa)mat.uniforms.waterA.value=wa;
   if(wb||wa)mat.uniforms.waterB.value=wb||wa;
-  const sa=getTex('d',f.i), sb=getTex('d',f.j);
+  const sa=bindTex('d',f.i), sb=bindTex('d',f.j);
   if(sa)mat.uniforms.surfA.value=sa;
   if(sb||sa)mat.uniforms.surfB.value=sb||sa;
   // Ocean-structure field (crustal age + spreading direction), interpolated
   // like elevation so the abyssal-hill grain drifts and re-orients with the plates.
-  const oa=getTex('o',f.i), ob=getTex('o',f.j);
+  const oa=bindTex('o',f.i), ob=bindTex('o',f.j);
   if(oa)mat.uniforms.oceanA.value=oa;
   if(ob||oa)mat.uniforms.oceanB.value=ob||oa;
   /* Displacement, which makes the crust SLIDE between keyframes instead of
@@ -5945,13 +6191,13 @@ function bindTextures(){
      would read as black -- which decodes to a full-scale displacement to the
      south-west rather than to none. Falls back to the old cross-fade, which is
      exactly what those intervals did before. */
-  const va=(f.i!==f.j)?getTex('v',f.i):null;
+  const va=(f.i!==f.j)?bindTex('v',f.i):null;
   if(va)mat.uniforms.dispA.value=va;
   mat.uniforms.uWarp.value=va?1.0:0.0;
   /* Material coordinates. The slot raster and the rotation table must come
      from the SAME keyframe or the texture rides crust it does not belong to,
      so both are taken from f.i and uMat is off unless both are present. */
-  const pa=getTex('p',f.i), prot=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[f.i].age)];
+  const pa=bindTex('p',f.i), prot=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[f.i].age)];
   if(pa&&prot){
     mat.uniforms.plateA.value=pa;
     const Q=mat.uniforms.uPlateQ.value;
@@ -5959,11 +6205,11 @@ function bindTextures(){
     mat.uniforms.uMat.value=1.0;
   } else mat.uniforms.uMat.value=0.0;
   // Tectonic state: shortening + fold axis, from the same keyframe as the warp.
-  const ta=getTex('t',f.i);
+  const ta=bindTex('t',f.i);
   if(ta)mat.uniforms.tectA.value=ta;
   mat.uniforms.uTect.value=ta?1.0:0.0;
   // Foreland flexure: the moat in front of a mountain belt.
-  const fa=getTex('f',f.i);
+  const fa=bindTex('f',f.i);
   if(fa)mat.uniforms.foreA.value=fa;
   mat.uniforms.uFore.value=fa?1.0:0.0;
   // Linear in t: the shader interpolates the height field, so this drives the
@@ -6001,14 +6247,37 @@ function bindTextures(){
   const ag=state.age;
   mat.uniforms.uSeaTint.value = ag<=150 ? 1.0 : ag>=680 ? 0.12
      : 1.0 - 0.88*(ag-150.0)/530.0;
-  const mtex=getTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
+  const mtex=bindTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
   return f;
 }
+/* ?perf=1 -- a tiny live meter (perf audit P9). Frame interval measured from
+   the loop's own timestamps, so a stall shows as itself rather than being
+   clamped away like dt is; upload-queue depth and texture-cache occupancy are
+   the two numbers that explain almost every hitch this audit found. */
+const PERFHUD=new URLSearchParams(location.search).has('perf');
+let _phPrev=0,_phN=0,_phSum=0,_phMax=0,_phEl=null,_phLast='';
+function perfHud(now){
+  if(!PERFHUD)return;
+  if(_phPrev){const iv=now-_phPrev;_phN++;_phSum+=iv;if(iv>_phMax)_phMax=iv;}
+  _phPrev=now;
+  if(_phN<30)return;
+  if(!_phEl){_phEl=document.createElement('div');_phEl.id='perfhud';
+    _phEl.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99;font:10px/1.5 ui-monospace,monospace;color:#8fd18f;background:rgba(10,14,18,.72);padding:5px 8px;border-radius:6px;pointer-events:none;white-space:pre';
+    document.body.appendChild(_phEl);}
+  const ms=_phSum/_phN;
+  const txt='frame '+ms.toFixed(1)+' ms ('+(1000/ms).toFixed(0)+' fps)  worst '+_phMax.toFixed(0)+' ms'+
+    String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB';
+  if(txt!==_phLast){_phEl.textContent=txt;_phLast=txt;}
+  _phN=0;_phSum=0;_phMax=0;
+}
 let last=performance.now();
+const _camC=new THREE.Vector3(),_camUp=new THREE.Vector3(),_camN=new THREE.Vector3(),
+      _camE=new THREE.Vector3(),_camH=new THREE.Vector3();
 function loop(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
+  _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   if(state.playing){
     state.age+=state.dir*state.speed*dt;
     if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
@@ -6027,6 +6296,7 @@ function loop(now){
   // so scrubbing time and this clock stay independent.
   mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
+  queueUploads(f);   // warm the next keyframe's textures, one upload a frame
   // overlays visibility & fade
   const fade=presentFade();
   // Hotspots and motion vectors are era-specific, so rebuild them whenever the
@@ -6130,11 +6400,12 @@ function loop(now){
     }
     const t=state.gtilt*Math.PI/180, hd=state.head*Math.PI/180;
     const cp=Math.cos(state.tilt), sp=Math.sin(state.tilt);
-    const C  =new THREE.Vector3(0,sp,cp);              // surface point, r=1
-    const up =C.clone();
-    const north=new THREE.Vector3(0,cp,-sp);
-    const east=new THREE.Vector3().crossVectors(north,up);
-    const horiz=north.clone().multiplyScalar(Math.cos(hd))
+    // scratch vectors, allocated once -- this block runs every frame
+    const C  =_camC.set(0,sp,cp);                      // surface point, r=1
+    const up =_camUp.copy(C);
+    const north=_camN.set(0,cp,-sp);
+    const east=_camE.crossVectors(north,up);
+    const horiz=_camH.copy(north).multiplyScalar(Math.cos(hd))
                      .addScaledVector(east,Math.sin(hd));
     // d is measured from the Earth's centre at tilt 0, so the orbit radius is
     // d-1; without that subtraction every view would jump backwards by one
@@ -6153,6 +6424,7 @@ function loop(now){
     drawMapOverlays();
   }
   layoutLabels();
+  perfHud(now);
   requestAnimationFrame(loop);
 }
 function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==undefined){c.material.opacity=(c.userData.baseOp||0.88)*o;}});}

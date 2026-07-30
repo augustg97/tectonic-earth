@@ -1,6 +1,26 @@
 {
  "releases": [
   {
+   "version": "2.1",
+   "date": "30 July 2026",
+   "title": "Smoother time travel",
+   "summary": "A performance pass, with nothing visual given up. Scrubbing and playback used to hitch every five million years while the next snapshot's textures were decoded and pushed to the graphics card mid-frame; that work now happens ahead of time, off the drawing path, so crossing a keyframe costs about as much as any other frame. Jumping far across the timeline shows the new world's coastlines first and refines the rest in the background instead of freezing. A long session no longer slowly leaks graphics memory when the boundary, eruption or motion layers are on.",
+   "sections": [
+    {
+     "name": "What changed under the hood",
+     "items": [
+      "Field textures decode on background threads the moment they arrive, instead of on the drawing thread the first time they are needed — the single biggest source of the stutter.",
+      "The texture cache is budgeted in memory rather than file count. It was sized for six fields per snapshot back when there were six; there are now ten, so it was evicting the frame it had just left and re-paying the whole cost when you scrubbed back.",
+      "While you watch, the app quietly uploads the next snapshot's textures one per frame, so arriving at a keyframe finds everything already resident — measured at zero synchronous uploads per crossing, and a new automated check keeps it that way.",
+      "Far jumps bind elevation and rainfall immediately — the two fields that define the world — and stream the other eight in behind, exactly the way the app already behaves while files load over the network.",
+      "The procedural-noise engine that textures terrain, sea floor and clouds now reads a pre-baked random lattice instead of recomputing hash functions per pixel. Its statistical character is unchanged and was verified side by side; a diagnostic switch can restore the old computation for comparison.",
+      "Overlay layers (plate boundaries, eruptions, motion arrows) properly release their graphics buffers on every rebuild; long ambient sessions previously accumulated thousands of orphaned buffers.",
+      "Add ?perf=1 to the address to see a small live frame-time meter."
+     ]
+    }
+   ]
+  },
+  {
    "version": "2.0",
    "date": "30 July 2026",
    "title": "Continents that slide, and mountains that look shortened",
