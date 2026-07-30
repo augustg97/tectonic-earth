@@ -550,6 +550,24 @@ if __name__ == "__main__":
 #: as unrestricted, which is the safe default: over-filtering would silently
 #: hide real animals, and the fallback already announces itself as a global list.
 ENDEMIC = {
+    # Hominins and other post-Cretaceous land taxa that were NOT global.
+    # Homo erectus is the one that was reported: it was being listed for a Lake
+    # Titicaca card at 1 Ma, and it never reached the Americas -- no hominin did
+    # until Homo sapiens, around 20,000 years ago. The taxon carried an age
+    # window and no region, and an unrestricted entry is shown everywhere the
+    # age matches, so "when" was right and "where" was unconstrained.
+    "Homo erectus": {"af", "as", "eu"},
+    "Paranthropus boisei": {"af"},
+    "Armillaria ostoyae": {"na"},          # one clone, in Oregon
+    # Homo sapiens reached everywhere, but not at once, and the entry's own note
+    # already says the map should not show it before it arrived.
+    "Homo sapiens": {"af", "as", "eu", "au", "na", "sa"},
+    "Metasequoia": {"as", "na", "eu"},     # northern-hemisphere dawn redwood
+    "Multituberculata": {"na", "eu", "as"},
+    "Condylarthra": {"na", "eu", "as"},
+    "Plesiadapiformes": {"na", "eu"},
+    "Nypa": {"as", "au"},                  # mangrove palm, Indo-Pacific
+    "Hipparion": {"na", "eu", "as", "af"},  # never South America or Australia
     # Africa
     "Proconsul": {"af"}, "Sahelanthropus tchadensis": {"af"},
     "Aegyptopithecus": {"af"}, "Australopithecus afarensis": {"af"},

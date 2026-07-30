@@ -210,7 +210,13 @@ LABELS = [
     # this whole class now; five more were found the same way.
     ("continent", "Laurentia",      -95,  55,  430, 600),
     ("continent", "Baltica",         10,  -35,  430, 540),
-    ("continent", "Siberia",         90,  20,  430, 600),
+    # 430 was the Caledonian collision -- which is when LAURUSSIA formed, not
+    # when Siberia stopped existing. Siberia stayed an independent continent
+    # through the Devonian and Carboniferous, welded to Kazakhstania about
+    # 324 Ma, docked with Laurussia by ~250, and is still there: the name
+    # belongs on the map for the whole run, not only before the collision
+    # that formed something else.
+    ("continent", "Siberia",         90,  20,    0, 600),
     ("continent", "Avalonia",       -18,  -35,  430, 490),
     ("continent", "Cimmeria",        60,  25,  180, 290),
     ("ocean", "Iapetus Ocean",      -30,  20,  400, 600),
@@ -474,7 +480,11 @@ LABELS = [
     ("sea", "Kaskaskia Sea", -89.5, 38.5, 360, 418),
     ("sea", "Absaroka Sea", -110, 44.5, 252, 330),
     ("sea", "Muschelkalk Sea", 10.5, 50, 237, 247),   # central Germany, which it floods
-    ("sea", "Viking Corridor", 2, 42, 155, 195),
+    # (2, 42) is the Pyrenees. The Viking Corridor is the Greenland-Scandinavia
+    # gateway -- the seaway that let the Boreal ocean reach Tethys -- so its
+    # modern anchor belongs in the Norwegian-Greenland Sea, not in Iberia. The
+    # card said "the gap between Greenland and Scandinavia" the whole time.
+    ("sea", "Viking Corridor", -2, 67, 155, 195),
     ("sea", "Hispanic Corridor", -55, 5, 150, 190),
     ("sea", "Boreal Sea", 45, 70, 90, 190),
     ("sea", "Solnhofen Lagoon", 11, 25, 149, 152),
@@ -922,7 +932,7 @@ DESCRIPTIONS = {
  "Mozambique Ocean": "The ocean between eastern and western Gondwana, closing in stages between about 600 and 550 Ma. Its closure welded the two halves together along the East African Orogeny, one of the great mountain-building events of the Precambrian.",
  "Adamastor Ocean": "The water that separated the Congo and Rio de la Plata cratons before Gondwana assembled -- how much of it was true oceanic crust rather than a wide continental rift is still argued. It closed along what is now the Brazil-Namibia suture -- and hundreds of millions of years later the South Atlantic reopened along almost the same line.",
  "Tornquist Sea": "The narrow sea between Baltica and Avalonia. Its closure was the first stage of the Caledonian collision, before Iapetus itself shut.",
- "Ural Ocean": "The ocean between Baltica and Siberia. Closing it raised the Urals and welded the last major piece of Pangaea into place.",
+ "Ural Ocean": "The ocean between Siberia and the western continents, and it closed in two stages rather than one. For its first half it separated Siberia from BALTICA; after about 423 Ma Baltica was itself part of Laurussia, so the same ocean then lay between Siberia and Laurussia. The Urals rose in the second stage -- Siberia had already welded to Kazakhstania by around 324 Ma, and that combined mass then collided with Laurussia through the Permian, raising the range and closing the last major ocean inside Pangaea by about 250 Ma.",
  "Sundance Sea": "A Jurassic arm of the Arctic reaching south into western North America, leaving the marine shales that underlie the Rocky Mountain foreland.",
  "Trans-Saharan Sea": "A shallow seaway flooding across West Africa during the Cretaceous high-stand, briefly separating the Sahara into islands.",
  "Central American Sea": "The open gap between North and South America, and the "

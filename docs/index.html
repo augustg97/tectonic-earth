@@ -244,6 +244,20 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
    silhouette; everything else — a rift, a crater, a flood basalt — was text
    only. These are diagrams of the KIND of thing, which the caption says. */
 .cardfig{margin:11px 0 2px}
+.zoomfig{cursor:zoom-in}
+.zoomfig:hover svg,.zoomfig:focus svg{outline:1px solid var(--accent);outline-offset:1px}
+#figZoom{position:fixed;inset:0;z-index:60;background:rgba(6,8,12,.86);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:4vmin}
+#figZoom[hidden]{display:none}
+#figZoomInner{position:relative;max-width:min(1100px,92vw);width:100%}
+#figZoomArt svg{width:100%;height:auto;max-height:78vh;border-radius:10px;
+  background:#0d1218;border:1px solid var(--line)}
+#figZoomCap{margin:12px 2px 0;color:var(--dim);font-size:13px;line-height:1.5;text-align:center}
+#figZoomX{position:absolute;top:-14px;right:-6px;width:36px;height:36px;
+  border-radius:50%;background:rgba(10,13,18,.9);border:1px solid var(--line);
+  color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+#figZoomX:hover{border-color:var(--accent);color:var(--accent)}
 /* Photograph figure. Sits BELOW the schematic, not instead of it: the diagram
    says what kind of thing this is, the photograph says what it looks like, and
    for anything with a modern counterpart both are worth having. Attribution is
@@ -948,6 +962,13 @@ body.ambient .mtab{display:none}
   </div>
 </div>
 
+<!-- Full-size diagram overlay. One element, reused: the figure that was
+     clicked copies its own SVG in, so nothing has to be re-generated and the
+     drawing is identical to the one in the card. -->
+<div id="figZoom" hidden><div id="figZoomInner">
+  <button id="figZoomX" aria-label="Close">&times;</button>
+  <div id="figZoomArt"></div><p id="figZoomCap"></p>
+</div></div>
 <div id="ambientExit"><button class="txtbtn" id="fullscreenBtn">Full screen</button><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
 
 <div id="load">
@@ -1078,7 +1099,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-0545';
+const DATA_V='20260730-0614';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -4682,9 +4703,12 @@ function lifeSection(l){
        "In the sea at 250 Ma" on a card titled Verkhoyansk Belt reads as a claim
        about the Verkhoyansk Belt however global the intent, so the word GLOBAL
        goes in the heading rather than only in the small print underneath. */
+    /* "in the present era", not "today". Every frame spans a million years and
+       the slider steps in whole Myr, so "today" claims a precision the model
+       does not have -- and at 1 or 2 Ma it is simply false. */
     const recent = age<=2.6;
     const head = recent
-      ? (marine?`In the sea here today`:`Living here today`)
+      ? (marine?`In the sea here in the present era`:`Living here in the present era`)
       : (marine?`Worldwide in the sea at ${when}`:`Worldwide on land at ${when}`);
     const caveat = recent ? '' :
       `<p class="desc">This is the GLOBAL list for the interval — `+
@@ -4811,8 +4835,14 @@ function figHTML(a){
      card's dropdown is only ~158px tall in total) it crops to a banner instead
      of squashing the drawing. Where height is left to the width, the aspect
      matches the viewBox exactly and slice and meet are the same thing. */
-  return `<figure class="cardfig"><svg viewBox="0 0 300 118" role="img"`+
-    ` preserveAspectRatio="xMidYMid slice" aria-label="${esc(a.caption)}">`+
+  /* CLICKABLE. In the climate-event dropdown the figure is cropped to a ~50px
+     banner, which is enough to say "there is a diagram here" and far too small
+     to read one. The same markup now opens full size in an overlay, so the
+     small version can stay small without the drawing being wasted. */
+  return `<figure class="cardfig zoomfig" tabindex="0" role="button"`+
+    ` aria-label="Enlarge: ${esc(a.caption)}" title="Click to enlarge">`+
+    `<svg viewBox="0 0 300 118" role="img"`+
+    ` preserveAspectRatio="xMidYMid slice" aria-hidden="true">`+
     `${a.svg}</svg><figcaption>${esc(a.caption)}</figcaption></figure>`;
 }
 function openInfo(o){
@@ -5839,6 +5869,29 @@ document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
 // sandwiched between two panels on a screen that has no room for one.
 // Clicks the real toggle rather than setting state itself: two controls for one
 // boolean is how they drift apart, and the drawer's switch has to stay right.
+/* Delegated, because cards are rebuilt constantly and binding per figure would
+   miss every one drawn after load. Escape and a click on the backdrop both
+   close it -- an overlay you can only leave by hitting a small x is a trap. */
+function closeFigZoom(){ $('#figZoom').hidden=true; $('#figZoomArt').innerHTML=''; }
+document.addEventListener('click',e=>{
+  const f=e.target.closest && e.target.closest('.zoomfig');
+  if(f){ const svg=f.querySelector('svg'); if(!svg) return;
+    const big=svg.cloneNode(true);
+    big.removeAttribute('aria-hidden');
+    // meet, not slice: the point of the overlay is to see ALL of it
+    big.setAttribute('preserveAspectRatio','xMidYMid meet');
+    $('#figZoomArt').innerHTML=''; $('#figZoomArt').appendChild(big);
+    const cap=f.querySelector('figcaption');
+    $('#figZoomCap').textContent=cap?cap.textContent:'';
+    $('#figZoom').hidden=false; $('#figZoomX').focus(); return; }
+  if(e.target.id==='figZoom'||e.target.id==='figZoomX') closeFigZoom();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!$('#figZoom').hidden) closeFigZoom();
+  else if((e.key==='Enter'||e.key===' ')&&document.activeElement
+          &&document.activeElement.classList.contains('zoomfig')){
+    e.preventDefault(); document.activeElement.click(); }
+});
 $('#rotBtn').onclick=()=>{
   state.layers.rotate=!state.layers.rotate;
   $('#rotBtn').classList.toggle('on',state.layers.rotate);
