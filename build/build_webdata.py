@@ -608,7 +608,16 @@ def elev_grid(age, nx=720, ny=360):
     return _GRID_CACHE[key]
 
 
-def nearest_water(age, lon, lat, avoid=(), avoid_deg=14.0, max_deg=60.0,
+# avoid_deg was 14, and that is wider than some of the seas it is separating.
+# The Western Interior Seaway is a narrow strip about 25 degrees long; three
+# labels belong in it (the seaway, the Hudson arm and the Mowry pulse) and at
+# 14 degrees only two fit, so the third was pushed out of the basin entirely
+# and the nearest free water was the open Pacific, thirty degrees west past
+# the Cordillera. A separation rule is meant to stop two names overprinting,
+# not to evict one of them from its own sea. Reserved cells also come from
+# tracks built with a +/-5 Myr margin, so a label can hold a cell at an age
+# where it is not even drawn -- which is what happened here.
+def nearest_water(age, lon, lat, avoid=(), avoid_deg=7.0, max_deg=60.0,
                   min_depth=40.0, prefer=None):
     """Closest sea cell to a position, keeping clear of already-placed names.
 

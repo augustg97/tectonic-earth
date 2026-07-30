@@ -174,7 +174,12 @@ LABELS = [
     ("ocean", "Southern Ocean",       0, -62,    0,  30),
     ("ocean", "Arctic Ocean",         0,  85,    0,  55),
     ("sea", "Mediterranean",         18,  36,    0,  28),
-    ("sea", "Paratethys",            45,  45,   5,  34),
+    # (45,45) back-advected to 37 N at 34 Ma, which is inside the Alpine belt
+    # rather than north of it. The Paratethys was the basin BEHIND the rising
+    # Alps -- Vienna, Pannonian, Black Sea, Caspian -- at 44-48 N. Anchored on
+    # the Pannonian/Black Sea side instead of the Caspian, which drags it east
+    # and south.
+    ("sea", "Paratethys",            32,  46,   5,  34),
     ("orogen", "Himalaya",           85,  30,    0,  55),
     ("orogen", "Andes",             -70, -20,    0,  60),
     ("orogen", "Rocky Mountains",  -112,  43,    0,  60),
@@ -185,7 +190,14 @@ LABELS = [
     ("continent", "Gondwana",        30, -40,  120, 650),
     ("ocean", "Tethys Ocean",        90,   5,  120, 260),
     ("ocean", "Panthalassa",       -150,   0,  160, 320),
-    ("sea", "Western Interior Seaway", -95, 45, 72, 100),
+    # Ends at 95, not 100, because the Mowry Sea (95-103) IS its first pulse --
+    # the Mowry card says so in as many words. Overlapping them made two names
+    # for one body of water, and with three sea labels (these two plus the
+    # Hudson Seaway) competing for one narrow seaway under a 14-degree
+    # separation rule, the third was expelled 30 degrees into the open Pacific.
+    # The split is also the stratigraphy: the Mowry is Late Albian-early
+    # Cenomanian, and the fully connected seaway is Greenhorn onward.
+    ("sea", "Western Interior Seaway", -95, 45, 72, 95),
     ("sea", "Turgai Strait",         65,  50,   29, 160),
     ("sea", "Eromanga Sea",         140, -28,   95, 125),
     ("orogen", "Cordillera",       -115,  40,   0, 150),
@@ -804,7 +816,15 @@ COMPOSITE_WATER = {
     "West Siberian Sea": {
         "modern": [(72, 62), (78, 65), (68, 58)], "target": "sea"},
     "Paratethys": {
-        "modern": [(40, 45), (48, 44), (32, 46)], "target": "sea"},
+        # Margins were (40,45),(48,44),(32,46) -- centroid 40 E, 45 N, which is
+        # the Caspian end. Back-advected that lands at 37 N, inside the Alpine
+        # belt rather than behind it, so the label read ~8 degrees too far south
+        # through 34-25 Ma. The Paratethys was the basin NORTH of the rising
+        # Alps and Carpathians: Vienna, Pannonian, Black Sea, Caspian, a chain
+        # running WNW. Weighting the western (Pannonian) end and pushing the
+        # whole set north puts it on the correct side of the mountains.
+        "modern": [(17, 48), (24, 47), (30, 46), (38, 45), (48, 44)],
+        "target": "sea"},
     "Iapetus Ocean": {
         # Laurentian shore + Baltic/Avalonian shore: the centroid is the ocean
         "modern": [(-70, 47), (-55, 50), (-30, 70), (10, 60), (-3, 54), (16, 62)],
@@ -834,7 +854,16 @@ COMPOSITE_WATER = {
         # the first, Arctic-fed pulse of the Western Interior Seaway -- anchors in
         # the western interior of Laurentia (land today) so it sits in the seaway,
         # not on the Cordilleran west coast where the static coord had drifted
-        "modern": [(-108, 47), (-105, 49), (-110, 45), (-103, 51), (-106, 43)],
+        # WAS (-108,47) and friends -- Montana, Wyoming, Idaho. Six degrees west
+        # of the Western Interior Seaway's own margins at (-100,45)..(-101,55),
+        # and THIRTY degrees west of it once back-advected, which put the label
+        # in the open Pacific beyond the Cordillera. Six degrees of present-day
+        # longitude cannot become thirty under a rigid rotation: west of about
+        # -104 the margins leave the stable craton for the Cordilleran terranes,
+        # which carry a different rotation entirely. Same craton as the seaway
+        # now, and about seven degrees north of it, because the Mowry is the
+        # BOREAL pulse -- the arm of the Arctic reaching south, as the card says.
+        "modern": [(-100, 52), (-103, 54), (-98, 50), (-101, 56)],
         "target": "sea"},
     "Piedmont-Ligurian Ocean": {
         # the Alpine branch of Tethys: European margin (N France/Switzerland)
@@ -857,14 +886,19 @@ COMPOSITE_WATER = {
 COMPOSITE_BELTS = {
     "Central Asian Orogenic Belt": {
         "modern": [(60, 44), (68, 45), (80, 46), (90, 48), (103, 48)]},
-    "Caledonides": {
-        # the belt is now split across Scotland, Scandinavia and East Greenland,
-        # so a single centroid of all three lands in the North Atlantic. Anchor it
-        # on the Scottish Highlands fragment (land at every age in its window);
-        # back-advected it tracks to the Iapetus suture where the range was raised,
-        # instead of the static coord that jumped between continents and ocean.
-        "modern": [(-4, 57), (-5, 58), (-3, 56), (-4.5, 57.5)]},
 }
+
+# Caledonides was here and is deliberately NOT any more. Its four anchors were
+# all inside two degrees of each other in the Scottish Highlands -- a single
+# point, not a composite -- but being IN this table sent it through
+# resolve_to_landmasses, which re-seats a composite on whichever landmass its
+# centroid best matches. For a genuine composite (Gondwana, Laurussia) that is
+# the right behaviour. For a point it is a hazard: the belt hopped between
+# continents and out to sea, reaching (23 E, 54 S) at 400 Ma -- deep in Gondwana,
+# on the far side of the planet from the Iapetus suture that raised it, and back
+# again by 360. Plain plate tracking from its own coordinate cannot do that,
+# because a rigid rotation moves a point continuously. A composite entry is for
+# something that really is scattered; a range in one place should just track.
 
 COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
                    "Laurussia (Euramerica)", "Laurentia", "Siberia",
