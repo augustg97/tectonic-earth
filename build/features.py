@@ -230,7 +230,13 @@ LABELS = [
     # that formed something else.
     ("continent", "Siberia",         90,  20,    0, 600),
     ("continent", "Avalonia",       -18,  -35,  430, 490),
-    ("continent", "Cimmeria",        60,  25,  180, 290),
+    # 290 was too early and the label showed it: at 285 Ma it floats in open
+    # ocean with no land near it. That is not a placement bug so much as a
+    # dating one -- at 290 these fragments were still the northern margin OF
+    # Gondwana, not a separate ribbon. Cimmeria begins when it peels away,
+    # which the card says in as many words, and that is Early Permian rifting
+    # around 280.
+    ("continent", "Cimmeria",        60,  25,  180, 280),
     ("ocean", "Iapetus Ocean",      -30,  20,  400, 600),
     ("ocean", "Rheic Ocean",        -10, -20,  320, 490),
     ("ocean", "Panthalassic Ocean", -150,  0,  330, 540),

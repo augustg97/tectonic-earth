@@ -1099,7 +1099,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-0651';
+const DATA_V='20260730-0701';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -6145,7 +6145,7 @@ function buildLegend(){
                  downsamples to 800x450, which is below the scale of several
                  artefacts this project has chased -- so eyeballing the pane is
                  not a check, it is a vibe. */
-              snap(w, h, cx, cy){
+              snap(w, h, cx, cy, opts){
                 loop(performance.now());
                 const c = renderer.domElement, gl = renderer.getContext();
                 w = w || 480; h = h || 480;
@@ -6163,14 +6163,65 @@ function buildLegend(){
                   im.data[d+2] = px[s+2]; im.data[d+3] = 255;
                 }
                 ctx.putImageData(im, 0, 0);
+                /* LABELS, DRAWN IN. They live in a DOM overlay, so a readPixels
+                   capture of the WebGL canvas never contained them -- which meant
+                   every label bug had to be verified numerically and taken on
+                   trust. The DOM positions are no use either: layoutLabels sizes
+                   from innerWidth, which is 0 in a hidden pane, so every element
+                   reports a rect at the origin.
+
+                   So project them here instead, with the same camera the frame
+                   was rendered with. No DOM, no viewport, works headless.
+
+                   Crop mapping: readPixels takes y0 from the BOTTOM, and the loop
+                   above flips into a top-down image, so the crop's top edge in
+                   top-down canvas coordinates is height - y0 - h. */
+                if (opts && opts.labels) {
+                  const topY = c.height - y0 - h;
+                  const fi = curFrame().i;
+                  ctx.font = '600 13px system-ui, sans-serif';
+                  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                  ctx.lineJoin = 'round';
+                  let drawn = 0;
+                  for (const L of (DATA.labels || [])) {
+                    if (!labelVisible(L)) continue;
+                    const sp = snapLabel(L, fi); if (!sp) continue;
+                    /* OCCLUSION IS A NORMAL TEST, NOT A DEPTH TEST. z < 1 only
+                       says "inside the far plane", which every point on the far
+                       side of the globe also satisfies -- so the first version
+                       of this drew Yilgarn Craton and Lachlan Orogen across
+                       North America. The globe is opaque: a label is visible
+                       only where its own surface normal faces the camera, which
+                       is the test projectLL already uses. */
+                    const lp = ll2v(sp[0], sp[1], 1.02);
+                    const wp = lp.clone().applyMatrix4(globe.matrixWorld);
+                    const nrm = lp.clone().applyQuaternion(globe.quaternion).normalize();
+                    const toCam = cam.position.clone().sub(wp).normalize();
+                    if (nrm.dot(toCam) < 0.12) continue;    // over the horizon
+                    const v = wp.clone().project(cam);
+                    if (v.z >= 1) continue;
+                    const px = (v.x * 0.5 + 0.5) * c.width - x0;
+                    const py = (1 - (v.y * 0.5 + 0.5)) * c.height - topY;
+                    if (px < -60 || py < -20 || px > w + 60 || py > h + 20) continue;
+                    ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.lineWidth = 3.5;
+                    ctx.strokeText(L.n, px, py);
+                    ctx.fillStyle = (L.t === 'ocean' || L.t === 'sea')
+                                    ? '#bcd8ee' : '#ffffff';
+                    ctx.fillText(L.n, px, py);
+                    drawn++;
+                  }
+                  return {png: cv.toDataURL('image/png').slice(22), w: w, h: h,
+                          labelsDrawn: drawn};
+                }
                 return {png: cv.toDataURL('image/png').slice(22), w: w, h: h};
               },
               /* Render and POST the pixels to build/verify_server.py, which
                  writes them to build/verify/. This is the only route that works
                  with the pane hidden: an anchor-click download needs a visible
                  document and silently does nothing without one. */
-              async shoot(name, size, cx, cy){
-                const s = APP.snap(size || 600, size || 600, cx, cy);
+              async shoot(name, size, cx, cy, opts){
+                const s = APP.snap(size || 600, size || 600, cx, cy,
+                                   opts || {labels: true});
                 if (s.error) return s;
                 try{
                   const r = await fetch('http://127.0.0.1:8901/' + (name || 'shot'),
