@@ -448,8 +448,9 @@ the relief under them looks like. H3 changes the shipped fields and so invalidat
 tuned against them. **H1 → H2 → H6 → H4 → H3 → H5.**
 
 **Validation assets already in the folder.** Five Britannica paleogeographic maps carry an
-explicit **Mountains** legend class at 306, 255, 237 and 152 Ma
-(`Distribution-landmasses-regions-seas-ocean-basins-Permian.webp`, `-locations*.webp`) — the
+explicit **Mountains** legend class at 306, 255, 237 and 152 Ma — all named
+`Distribution-landmasses-regions-seas-ocean-basins-*.webp`, the five suffixes being
+`Permian`, `locations`, `locations-1`, `locations-2` and `locations-3` — and they are the
 only source here that maps mountains as a class. The 16 labelled Scotese PALEOMAP maps name
 mountain belts. `FRAME-REGRESSION-gate.md` already scores **39 named orogen features** and is
 a ready-made harness. There is no authored orogeny/collision figure in
@@ -463,9 +464,20 @@ in G7+G8, which stands as *record it, do not tune to it*.
 
 ---
 
-**Count: 65 items — 17 at P1.** The seven that would move the app furthest, in order:
-**A1** (adopt the PALEOMAP rotations — measured, ready), **G1** (flood the Triassic–Jurassic
-epeiric seas — 93% of an independent reconstruction's shelf sea is dry land in ours),
-**G2** (stop the future series destroying 37% of continental area), **D1+D2** (hotspot
-catalogue → seamount chains), **F2** (the climate-events panel — 11 cards already drafted, no
-geometry needed), **B1** (province model behind the biota panel), **C1** (PhanDA diff).
+**Count: 65 items — 17 at P1.**
+
+*The seven that would move the app furthest, as ranked at round 8:* **A1** (adopt the
+PALEOMAP rotations — measured, ready), **G1** (flood the Triassic–Jurassic epeiric seas —
+93% of an independent reconstruction's shelf sea is dry land in ours), **G2** (stop the
+future series destroying 37% of continental area), **D1+D2** (hotspot catalogue → seamount
+chains), **F2** (the climate-events panel — 11 cards already drafted, no geometry needed),
+**B1** (province model behind the biota panel), **C1** (PhanDA diff). **All seven have since
+landed** — see the APPLIED tables at the top of this file. The ranking is left in place
+because it is the record of what was judged most valuable, not a live queue.
+
+*The live ranking, as of round 9:* **H1** and **H2** (the crust does not move like crust, and
+its texture does not move with it — the two largest remaining visual defects, and neither
+touches a shipped field), **H4** (nothing tectonic reaches the shader at all), **D9** (the
+crustal-age Voronoi, whose deeper fix is still outstanding), **H5+F4** (the landforms of
+collision and back-arc basins, one item), **D10** (draw the Messinian Mediterranean), **H3**
+(the source series' own authoring noise in relief).

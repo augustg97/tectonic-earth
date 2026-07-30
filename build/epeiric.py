@@ -136,6 +136,24 @@ SEAS = {
         "anchors": [(-70.0, -37.0, 380), (-68.0, -34.0, 320), (-71.5, -40.0, 300)],
         "depth": [(130, 0), (145, 70), (165, 115), (185, 100), (200, 0)],
     },
+    # The PARATETHYS. Added because the label kept rendering ~8 degrees too far
+    # south and the cause was not the label: there was no basin under it. The
+    # 20 km grid loses it for the same reason it loses the Trans-Saharan Seaway
+    # -- an epicontinental sea a few hundred metres deep over continental crust
+    # -- so the nearest water to the label was Tethys, on the WRONG SIDE of the
+    # Alps, and it snapped there. Seeding the basin puts water where the name
+    # belongs and the snap then has nothing to do.
+    #
+    # It formed as the Alpine-Carpathian orogeny cut a northern arm of Tethys
+    # off from the main ocean around 34 Ma, and shrank through the Neogene into
+    # the Pannonian lake, the Black Sea and the Caspian -- which are its
+    # surviving remnants, and why the depth curve tails rather than stops.
+    "Paratethys": {
+        "anchors": [(17.0, 47.5, 380), (24.0, 46.5, 400), (30.0, 46.0, 420),
+                    (38.0, 45.0, 420), (48.0, 43.5, 400), (55.0, 45.0, 360)],
+        "depth": [(3, 0), (6, 45), (12, 80), (18, 120), (24, 150),
+                  (30, 165), (34, 120), (38, 0)],
+    },
     # The Northern Calcareous Alps and the Dolomites: the Tethyan carbonate
     # platforms of the Triassic, and the reefs the Dachstein fauna built.
     "Tethyan Platform (Alpine)": {

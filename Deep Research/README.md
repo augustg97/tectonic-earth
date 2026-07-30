@@ -67,6 +67,7 @@ cd "Deep Research/modeling" && ../../venv/bin/python deeptime.py
 | [`climate_audit.py`](modeling/climate_audit.py) | `climate.py` against PhanDA and GEOCARBSULF | **6 findings** |
 | [`frame_experiment.py`](modeling/frame_experiment.py) | reconstruction frame quality, measured on a population | **the A1 result** · note: its `_decode()` uses the wrong `Z_RANGE`, see E6 |
 | [`audit_reconstruction.py`](modeling/audit_reconstruction.py) | the shipped palaeogeography against Deep Time Maps and Scotese PALEOMAP — land, shelf, ice, position — plus the future series against PALEOMAP's own future rotations | **the A5 / F1 result**, 31 ages · selftest passes |
+| [`audit_terrain_motion.py`](modeling/audit_terrain_motion.py) | the keyframe *transition* rather than the keyframes — how far crust moves per step in texels of the shipped grid, how much relief arrives in one step, and whether the source series is temporally jumpy | **the section H baseline**: 42 texels median at 400 Ma, **+5,890 m in one step**, **2.80 pp** hypsometry spike · selftest passes |
 
 The models are deliberately dependency-light (stdlib only, except numpy for the EBM) so
 that `build/` can import any of them later without adding a dependency.
@@ -96,12 +97,16 @@ that `build/` can import any of them later without adding a dependency.
 | [`WP-03 · The climate system across deep time`](research%20reports/WP-03-the-climate-system.md) | our climate table predates PhanDA; what to re-check, what to add, and what the app should stop claiming |
 | [`WP-04 · Closing the gaps: four measured results`](research%20reports/WP-04-closing-the-gaps.md) | **Scotese publishes his own rotations** and using them cuts placement error fourfold; the Cretaceous is 6 °C too cool; one hotspot catalogue closes four register items |
 | [`WP-05 · The reconstruction, audited against two published series`](research%20reports/WP-05-reconstruction-audit.md) | our terrain is in the PALEOMAP frame **to within 2° at ten ages**, so the Palaeozoic disagreement with Blakey is between the two references and not ours; but **93% of Blakey's Triassic shelf sea is dry land in ours**, and the future series **destroys 37% of Earth's continental area** |
+| [`WP-06 · The staircase`](research%20reports/WP-06-the-staircase.md) | the deep ocean's angular slabs are **one** cause with **six** consumers — the crustal-age field is a Voronoi tessellation built per plate — and four plausible fixes failed because each touched only one consumer. Depth step per 25 km cell **719–1,504 m → 55–72**, against a real abyssal plain's 50–125 |
+| [`WP-07 · The future era is too stiff`](research%20reports/WP-07-the-future-is-too-stiff.md) | a **second**, separate staircase, this one on land and caused by nearest-neighbour sampling; G5's uplift never reached the shipped fields; the future terrain has no erosion, shortening, accretion or subsidence, so **every present-day range is still standing at +250 Myr**; and 12.8 Mkm² of convergence is computed and deleted |
+| [`WP-08 · Terrain in motion`](research%20reports/WP-08-terrain-in-motion.md) | mountains are in the right place at the right height — **the PaleoDEMs already did the geology** — but the app cross-fades between keyframes **14–42 texels apart**, pins its ridge-and-valley detail to latitude and longitude so crust slides out from under its own texture, and delivers **+5,890 m of Himalaya in one 5 Myr step**. Six mechanisms, one symptom |
 
 ## Handoff prompts
 
 | file | for |
 |---|---|
-| [`HANDOFF-IMPLEMENTATION.md`](HANDOFF-IMPLEMENTATION.md) | **the session that finally changes the app.** Tiered by measured value, with the traps that have each cost real time. |
+| [`HANDOFF-IMPLEMENTATION.md`](HANDOFF-IMPLEMENTATION.md) | **the session that finally changes the app.** Tiered by measured value, with the traps that have each cost real time. **Executed 2026-07-26/27**; kept for provenance. |
+| [`HANDOFF-TERRAIN-MOTION.md`](HANDOFF-TERRAIN-MOTION.md) | **open.** The session that makes landforms emerge tectonically — MODEL-GAPS section H, sequenced H1→H2→H6→H4→H3→H5, with the shader traps, the cache trap that this work specifically will hit, and the reason a screenshot cannot verify it. |
 | [`HANDOFF-A5-F1-reference-map-audit.md`](HANDOFF-A5-F1-reference-map-audit.md) | **consumed in round 8** → [WP-05](research%20reports/WP-05-reconstruction-audit.md). Kept for provenance. One correction: it says to decode the field "exactly as `frame_experiment.py:_decode()` does", and that decode uses `Z_RANGE = 11000.0` where `build/` uses **8000.0**. |
 
 ## Staged for the build
@@ -189,9 +194,38 @@ reaching the Triassic; and the future series **loses 37% of Earth's continental 
 independent source that there was no ice, and our Palaeozoic ice sits inside the literature
 range where the reference sits below it.
 
-All selftests pass. See [`MODEL-GAPS.md`](MODEL-GAPS.md) for the **59 open items**, 14 at P1.
+*Round 9, 2026-07-29* — **why landforms do not appear to emerge tectonically**, in
+[WP-08](research%20reports/WP-08-terrain-in-motion.md), from the user's report that mountains
+and seabeds "seem accurate, but do not visually appear to form in a natural geophysical fluid
+dynamic way." Research and planning only; **nothing in `build/` or `web/` was touched**,
+because another session was working the repo at the time.
 
-Next round, in priority order: adopt the PALEOMAP rotations, which are measured and ready
-(A1); flood the Triassic–Jurassic epeiric seas (G1); stop the future series destroying land
-(G2); the climate-events panel, whose 11 cards are already drafted (F2); the hotspot
-catalogue and the seamount wiring (D1–D2); the PhanDA diff (C1).
+The result that set the whole plan came first: **this is not a data problem.** Sampling the
+shipped field inside plate-tracked boxes, the Himalaya go 889 m at 60 Ma → 7,751 at 40 →
+5,272 today, the Appalachians peak at 2,805 m and 20.6% above 2 km at 300 Ma and wear to
+620 m, and the Caledonides go 2,731 m → 151 m. Scotese and Wright already did the geology,
+so there is no orogeny model to build for 0–540 Ma and any session that "improves" the
+Himalaya is adding error to correct data.
+
+What is wrong is everything between the keyframes, and it is six mechanisms rather than one:
+crust moves **14–42 texels** of the 4096 grid per 5 Myr step and the app cross-fades across
+that gap, so relief ghosts instead of sliding; the ridge-and-valley detail is evaluated at a
+fixed geographic direction, so a continent drifts out from under its own texture; the
+Himalaya gain **+5,890 m in one keyframe** and the source series spikes **±2.8 pp** of land
+above 1 km on single frames, which is authoring and not geology; no tectonic state reaches
+the shader at all (`motA` bound and never sampled, `motion.classify()` dead,
+`OrogenicBelt` collapsed into `"trench"`); the relief noise is isotropic where real orogens
+are stripes; and the vertex and fragment stages interpolate elevation in different domains.
+New section **H** of [`MODEL-GAPS.md`](MODEL-GAPS.md) is the plan, sequenced H1→H2→H6→H4→H3→H5
+so that the four items carrying most of the visual change need no elevation rebuild;
+[`HANDOFF-TERRAIN-MOTION.md`](HANDOFF-TERRAIN-MOTION.md) is the implementation brief.
+
+All selftests pass. See [`MODEL-GAPS.md`](MODEL-GAPS.md) for the **65 items**, 17 at P1 —
+noting that the seven ranked highest at round 8 have all since landed.
+
+Next round, in priority order: **H1** and **H2** — the crust does not move like crust and its
+texture does not move with it, the two largest remaining visual defects, and neither touches
+a shipped field; **H4**, the tectonic-state field and the fold fabric that makes a belt read
+as shortened crust; **D9**, the crustal-age Voronoi whose deeper fix is still outstanding;
+**H5+F4**, the landforms of collision and back-arc basins, which are one item; **D10**, the
+Messinian Mediterranean; **H3**, the source series' own authoring noise in relief.
