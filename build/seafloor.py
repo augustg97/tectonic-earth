@@ -550,7 +550,16 @@ def _curve(age, points):
 PLATEAUS = {
     # --- microcontinents that were once emergent -------------------------
     "Kerguelen": {
-        "anchors": [(69.0, -49.0, 620), (75.0, -53.0, 520), (64.0, -46.0, 400)],
+        # SOUTHERN plateau, not northern. All three anchors sat on the northern
+        # Kerguelen Plateau, and that end shares its history with Broken Ridge:
+        # it rifted north WITH India and the rotation model carries it that way,
+        # so the bank -- and the label built from the same anchors -- tracked
+        # India to 40 S at 100 Ma, nine degrees from the India label and reading
+        # as attached to it. The southern plateau is the old part (~120 Ma) and
+        # is Antarctic-plate crust that India tore away FROM, which is what the
+        # card describes. Anchored there, the plateau stays where it belongs and
+        # India leaves it behind.
+        "anchors": [(74.0, -55.0, 600), (79.0, -58.5, 520), (70.0, -52.0, 430)],
         "elev": [(120, -1400), (110, 300), (95, 250), (85, -200), (60, -900),
                  (30, -1300), (0, -1400)]},
     "Seychelles": {

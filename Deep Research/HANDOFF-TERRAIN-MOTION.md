@@ -27,7 +27,11 @@ so crust ghosts instead of sliding; the procedural ridge-and-valley detail is na
 latitude and longitude, so a continent drifts out from under its own texture; relief lands
 in one 5 Myr step (+5,890 m for the Himalaya) and inflates uniformly in place; and no
 tectonic information reaches the shader at all, so it cannot draw a fold fabric, a suture or
-a foreland even in principle. Six items, sequenced **H1 → H2 → H6 → H4 → H3 → H5**.
+a foreland even in principle. Two more items came from screenshots on 2026-07-30: land below
+900 m carries almost no procedural detail and what it does carry is shaded at 47 km, and a
+26 km rainfall grid is being thresholded into visible polygons at ice and water margins.
+
+**Eight items, sequenced H1 → H2 → H6 → H8 → (H4 + H7 together) → H3 → H5.**
 
 **The governing constraint, restated because it is the one that can do damage:** the
 PaleoDEM is authoritative. H1, H2, H4, H5 and H6 must leave every keyframe's hypsometry
@@ -246,6 +250,101 @@ number. If a number legitimately improves, tighten its baseline in the same comm
 
 ---
 
+## H7 — Real detail on low ground, shaded at its own scale
+
+**Do not raise the elevation texture.** `_e` is 4,096 × 2,048 (9.8 km) against a source
+PaleoDEM of 3,600 × 1,801 (11.1 km) — already 1.14× finer than the data behind it. Going to
+8192 quadruples memory and rebuild time for zero information. This is worth saying out loud
+because "increase the resolution on land" reads as a texture-size change, and that is the one
+move here that cannot work.
+
+Three changes, all in the FRAG, all free of any rebuild.
+
+**(a) Replace "amplitude by elevation" with "amplitude by terrain type."**
+
+```glsl
+// web/index.html:1583 -- today
+float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
+```
+
+With `rug`≈0 on a plain both multipliers collapse and a 150 m coastal plain gets **±32 m**
+against a mountain's **±447 m**. The suppressor is not simply wrong — it exists to stop low
+ground near the waterline being churned into noise, and deleting it will corrupt coastlines.
+Replace the *proxy* rather than removing the guard: `_d`'s **substrate** channel (G: 0 soft
+sediment basin → 1 hard shield/orogen) already distinguishes a floodplain from a shield at
+every keyframe, and it is the quantity `z/900` was standing in for. Keep a genuine
+near-waterline taper, but make it a function of distance from sea level over a few tens of
+metres, not a ramp that runs to 900 m.
+
+**(b) Give the detail its own gradient.** The hillshade steps ±23.5 km
+(`da=2.4/2048.0*PI`, `:1885`) while the detail runs to 1.3 km, so seven of ten octaves are
+aliased away rather than shaded. Do **not** fix this by shrinking `da` — `elevAt` already
+runs five times per pixel and the base field has nothing below ~10 km anyway, so a small
+`da` would just sharpen the interpolation artefacts of the coarse field.
+
+The right shape is **two scales, two gradients**: keep the ±23.5 km central difference for
+the *base* field, and get the detail's contribution to the normal from the detail itself at
+its own scale — either analytic-derivative noise, or a second, much smaller central
+difference evaluated on `elevDetail`'s output alone. Add the two gradients. This also removes
+the current waste, where the procedural relief is included in all five `elevAt` taps and then
+low-passed out of the result.
+
+**(c) Carve the valleys the model already found.** `_d`'s drainage channel is a real
+per-keyframe valley network from priority-flood + D8 routing, and it currently only tints
+(`:2318-2334`). Let it incise: lower the channel, raise the interfluves. This is what makes a
+floodplain look like a floodplain rather than like fbm, and it is derived from the terrain
+rather than invented. Watch the amplitude — the drainage field is normalised per age, and
+`_d` is 2048×1024 (19.6 km), so incision deeper than the grid can justify will read as
+trenches.
+
+**Calibrate H7 and H4 together.** Both write into `elevDetail` over the same 1–25 km band.
+
+**Verify at zoom, and at more than one age.** The two screenshots that prompted this are a
+~250 Ma globe over Laurasia and a Jurassic North American zoom; both should gain visible
+lowland structure without the mountains becoming noisy. Re-check a present-day zoom against
+`Deep Time Maps and Resources/Google Earth Examples/`, which is the recorded fidelity
+standard.
+
+---
+
+## H8 — Stop thresholding a 26 km field into polygons
+
+The hard quadrilateral edges on shelf ice, shallow water and small lakes are bilinear
+magnification of a coarse grid under a steep threshold: the interpolant is piecewise-bilinear,
+so a threshold through it traces the texel quads.
+
+The arithmetic points at rainfall:
+
+| | |
+|---|---|
+| `_r` grid | 1,536 × 768 = **26.1 km/texel**, 2.7× coarser than `_e` |
+| `arid = 1 − clamp(Rf/0.85,0,1)` → `Tela = −5.0 − 7.0*arid` | **7 °C** of swing |
+| `ela = (T0 − Tela)/0.0058` | **172 m per °C** → **1,207 m** across the range |
+| `snow = clamp((zp − snowline)/400.0, …)` | a **400 m** ramp |
+
+So the aridity term alone can move the snowline **3.0× the width of the ramp that draws it**,
+on a grid 2.7× coarser than the terrain.
+
+**Confirm before fixing** — this is a strong hypothesis from arithmetic, not a measurement of
+the actual screen artefact, and WP-06's first rule is to measure the artefact's scale before
+matching it to a candidate. The one-step test: dump `Rf`, `_w` and `_d` to PNG for the age in
+the screenshot and see which one's texel grid matches the observed cell size.
+
+Then, in order of preference: smooth `Rf` where it feeds `arid` (a few-texel blur costs
+nothing and the quantity is a climate average anyway); or widen the `snow` ramp; or raise the
+rain grid, which is the expensive option and needs a rebuild.
+
+**Do not re-tune the ice line.** `ice_audit.py` passes 22/22 and `MARGIN_OFFSET = −5.0` is
+calibrated against the literature. Whatever changes here must leave that audit at baseline —
+it is in `audit_all.py`, which is the publish gate.
+
+Note this is the same class as the accumulation term removed on 2026-07-22, when polar
+rainfall was found to be "tiny and NOISY … jittering the threshold a couple of degrees
+between neighbouring cells." That removal closed one rainfall→ice path. **The
+`arid → Tela → ela` path was untouched and has three times the leverage.**
+
+---
+
 ## H5 — Landforms of collision the grid cannot resolve
 
 Same discipline as `epeiric.py` and the present-day lakes: seed only what the DEM provably
@@ -364,7 +463,9 @@ the pattern directly, and does not need the camera to be on the lit side.
 | No shader regression | `build/check_shader.py` clean; globe renders; `window.__ERRORS` empty |
 | No audit regression | `build/audit_all.py` at or better than baseline — it is the publish gate |
 | The defect actually moved | `modeling/audit_terrain_motion.py` numbers **down**, and the baselines tightened in the same commit |
-| It looks right | the five-frame temporal strip at India–Asia and at the Appalachians, judged by eye — **the user's eye, on the live site**, for the final call |
+| Ice unchanged by H8 | `ice_audit.py` still 22/22 and the drawn `iceLand`/`iceSea` areas within a point of today's — H8 must change the *edge*, not the area |
+| Coastlines unchanged by H7 | land % identical at every keyframe; lifting the low-ground suppressor must not move the waterline |
+| It looks right | the five-frame temporal strip at India–Asia and at the Appalachians, plus a **zoom** at ~250 Ma Laurasia and Jurassic North America — the two views in the screenshots that prompted H7 — judged by eye. **The user's eye, on the live site**, for the final call |
 
 ---
 
@@ -375,11 +476,14 @@ the pattern directly, and does not need the camera to be on the lit side.
 | H1 | plate-ID rasteriser + `_v` baker + shader | ~2 s/keyframe, ~10 min for 251. **No `_e` rebuild.** |
 | H2 | shares H1's raster; shader + uniform plumbing | none |
 | H6 | three lines + dead-code decision | none |
+| H8 | one PNG dump to confirm, then a blur or a wider ramp | none, unless the rain grid is raised |
 | H4 | `_t` baker + fabric in FRAG | ~2 s/keyframe, ~10 min. **No `_e` rebuild.** |
+| H7 | FRAG only — substrate-driven amplitude, a second gradient, drainage incision | none |
 | H3 | regulariser in `build_fields` | **full field rebuild** — budget ~85 min, not the "35 minutes" four files still claim; that figure predates the grid doubling to 2048×4096 |
 | H5 | flexure module + wedge in `seafloor.py` | full rebuild, or fold into H3's |
 
-**The four items that carry most of the visual change — H1, H2, H6 and H4 — need no
-elevation rebuild between them**, only two ~10-minute field bakes. That is the main reason
-this sequencing is worth following: the bulk of the work can be iterated in minutes rather
-than in hours, and only H3 and H5 pay the full rebuild.
+**Six of the eight items need no elevation rebuild at all** — H2, H6, H8 and H7 need no bake
+whatsoever, and H1 and H4 need one ~10-minute field bake each. Only H3 and H5 pay the full
+run. That is the main reason this sequencing is worth following: everything that carries the
+visual change can be iterated in minutes, and the two expensive items come last, when there
+is something worth spending 85 minutes on.

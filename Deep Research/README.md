@@ -99,7 +99,7 @@ that `build/` can import any of them later without adding a dependency.
 | [`WP-05 · The reconstruction, audited against two published series`](research%20reports/WP-05-reconstruction-audit.md) | our terrain is in the PALEOMAP frame **to within 2° at ten ages**, so the Palaeozoic disagreement with Blakey is between the two references and not ours; but **93% of Blakey's Triassic shelf sea is dry land in ours**, and the future series **destroys 37% of Earth's continental area** |
 | [`WP-06 · The staircase`](research%20reports/WP-06-the-staircase.md) | the deep ocean's angular slabs are **one** cause with **six** consumers — the crustal-age field is a Voronoi tessellation built per plate — and four plausible fixes failed because each touched only one consumer. Depth step per 25 km cell **719–1,504 m → 55–72**, against a real abyssal plain's 50–125 |
 | [`WP-07 · The future era is too stiff`](research%20reports/WP-07-the-future-is-too-stiff.md) | a **second**, separate staircase, this one on land and caused by nearest-neighbour sampling; G5's uplift never reached the shipped fields; the future terrain has no erosion, shortening, accretion or subsidence, so **every present-day range is still standing at +250 Myr**; and 12.8 Mkm² of convergence is computed and deleted |
-| [`WP-08 · Terrain in motion`](research%20reports/WP-08-terrain-in-motion.md) | mountains are in the right place at the right height — **the PaleoDEMs already did the geology** — but the app cross-fades between keyframes **14–42 texels apart**, pins its ridge-and-valley detail to latitude and longitude so crust slides out from under its own texture, and delivers **+5,890 m of Himalaya in one 5 Myr step**. Six mechanisms, one symptom |
+| [`WP-08 · Terrain in motion`](research%20reports/WP-08-terrain-in-motion.md) | mountains are in the right place at the right height — **the PaleoDEMs already did the geology** — but the app cross-fades between keyframes **14–42 texels apart**, pins its ridge-and-valley detail to latitude and longitude so crust slides out from under its own texture, and delivers **+5,890 m of Himalaya in one 5 Myr step**. Then, from screenshots: land below 900 m gets **±32 m** of detail against a mountain's ±447, and **7 of 10 noise octaves are shaded at a 47 km baseline** and aliased away — while the elevation texture is **already 1.14× finer than its own source**, so a bigger texture is the one fix that cannot work. Eight mechanisms, one symptom |
 
 ## Handoff prompts
 
@@ -216,16 +216,27 @@ above 1 km on single frames, which is authoring and not geology; no tectonic sta
 the shader at all (`motA` bound and never sampled, `motion.classify()` dead,
 `OrogenicBelt` collapsed into `"trench"`); the relief noise is isotropic where real orogens
 are stripes; and the vertex and fragment stages interpolate elevation in different domains.
-New section **H** of [`MODEL-GAPS.md`](MODEL-GAPS.md) is the plan, sequenced H1→H2→H6→H4→H3→H5
-so that the four items carrying most of the visual change need no elevation rebuild;
-[`HANDOFF-TERRAIN-MOTION.md`](HANDOFF-TERRAIN-MOTION.md) is the implementation brief.
+Two further items came from screenshots the user supplied on 2026-07-30, both about land
+looking blurry at zoom. Land below 900 m is given **±32 m** of procedural relief against a
+mountain's ±447 — a factor of 14 — and **7 of the 10 noise octaves are differentiated over a
+47 km hillshade baseline** and aliased away rather than shaded. The corrective is *not* a
+bigger texture: `_e` is 4,096 × 2,048 against a source PaleoDEM of 3,600 × 1,801, so it is
+**already 1.14× finer than the data behind it**. Separately, a **26 km** rainfall grid drives
+the snowline with **3× the leverage of the ramp that draws it**, thresholding ice and water
+margins into visible polygons.
 
-All selftests pass. See [`MODEL-GAPS.md`](MODEL-GAPS.md) for the **65 items**, 17 at P1 —
+New section **H** of [`MODEL-GAPS.md`](MODEL-GAPS.md) is the plan — eight items sequenced
+H1→H2→H6→H8→(H4+H7)→H3→H5, so that **six of the eight need no elevation rebuild** and the two
+that do come last. [`HANDOFF-TERRAIN-MOTION.md`](HANDOFF-TERRAIN-MOTION.md) is the
+implementation brief.
+
+All selftests pass. See [`MODEL-GAPS.md`](MODEL-GAPS.md) for the **67 items**, 18 at P1 —
 noting that the seven ranked highest at round 8 have all since landed.
 
 Next round, in priority order: **H1** and **H2** — the crust does not move like crust and its
 texture does not move with it, the two largest remaining visual defects, and neither touches
-a shipped field; **H4**, the tectonic-state field and the fold fabric that makes a belt read
-as shortened crust; **D9**, the crustal-age Voronoi whose deeper fix is still outstanding;
-**H5+F4**, the landforms of collision and back-arc basins, which are one item; **D10**, the
-Messinian Mediterranean; **H3**, the source series' own authoring noise in relief.
+a shipped field; **H4+H7**, the tectonic-state field and the land detail, which write into the
+same scale band and are therefore one calibration rather than two; **H8**, the polygonal
+margins; **D9**, the crustal-age Voronoi whose deeper fix is still outstanding; **H5+F4**, the
+landforms of collision and back-arc basins, which are one item; **D10**, the Messinian
+Mediterranean; **H3**, the source series' own authoring noise in relief.

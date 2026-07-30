@@ -424,6 +424,8 @@ adding error to data that is currently correct.
 | H4 | **P1** | **Ship a tectonic-state field and draw an anisotropic fold fabric from it.** Nothing tectonic reaches the shader today: `motA` is bound and never sampled, `motion.classify()` and `encode_bounds()` are dead code, `build_plates_gplates.py:51` collapses Merdith's own `OrogenicBelt` into `"trench"`, and `plates_time.json` carries no velocity at any age ≥ 0. A new `_t` texture — **R shortening rate, G orogen age, B structural azimuth** — is derivable from the plate topologies plus H1's displacement field with no DEM, so it costs ~2 s a keyframe like `build_surface.py`, not a full rebuild. Then: fold ridges **parallel to the suture** (real belts are stripes; isotropic roughness reads as bumpy ground however tall it is), and character by orogen age — sharp crests and bare rock when young, rounded and soil-covered when old, so the Appalachians visibly wear down instead of merely getting shorter. **This is the item that makes it read as collision.** | new `_t` field, `web/index.html` FRAG, `build_plates_gplates.py` | WP-08 F4, F5 |
 | H5 | P2 | **Seed the landforms of collision a 20 km grid cannot resolve** — same deliberate-exception discipline as `epeiric.py` and the present-day lakes, and only where the DEM provably cannot carry the feature. **Foreland basins** first: a range *plus its parallel trough* is the diagnostic signature of collision, the trough is 100–300 km wide and a few hundred metres deep, and it follows from a flexural response to H4's own load with one free parameter. Then **accretionary wedges** — the sea floor already builds trenches with an outer rise, and the wedge is the half that makes subduction read as scraping rather than as a groove. **Subsumes F4** (back-arc basins by roll-back), which belongs with this work rather than apart from it. | `seafloor.py`, new module | WP-08 F0 |
 | H6 | P3 | **Fix the interpolation-domain mismatch and clear the dead code behind H4.** The vertex stage mixes the encoded byte and decodes after (`:1287`); `baseElev` decodes then mixes (`:1512`). `dec_elev` is quadratic, so displaced geometry and shaded elevation disagree mid-interval, worst at a migrating coastline. Three lines, and it muddies every before/after comparison until it is done. With it: either use `motion.classify()`/`encode_bounds()` or delete them — two independent surveys read them as working features — and give `OrogenicBelt` its own class. | `web/index.html`, `build/motion.py`, `build_plates_gplates.py` | WP-08 F6 |
+| H7 | **P1** | **Carry real detail on low ground, and shade it at its own scale.** Land reads blurry at zoom, and it is not the elevation texture — the shipped `_e` is 4,096 × 2,048 (9.8 km) against a source PaleoDEM of 3,600 × 1,801 (11.1 km), so it is **already 1.14× finer than the data behind it and a bigger texture would add zero information.** Three real causes. (a) `clamp(z/900.0,0.15,1.0)` in `web/index.html:1583`, with `rug`≈0 on a plain, gives a 150 m coastal plain **±32 m** of procedural relief against a mountain's **±447 m** — a factor of 14, and a 0.13% gradient across a 24.5 km cell that no hillshade can show. (b) The hillshade central difference is `da=2.4/2048.0*PI` = ±23.5 km (`:1885`), while the two detail generators run down to 1.3 km: **only 3 of their 10 octaves are coarser than the gradient's half-step**, so seven are computed, added to the height and then aliased away by the shading meant to reveal them. (c) `_d`'s drainage channel already carries a per-keyframe valley network and is used **only for colour** (`:2318-2334`) — the app knows where the valleys on a plain are and declines to carve them. Lowlands need that structure, not more fbm. | `web/index.html` FRAG | WP-08 F7 |
+| H8 | P2 | **Stop thresholding a 26 km field into polygons.** Shelf-ice and shallow-water margins and small lakes show hard quadrilateral edges at a fixed cell size — bilinear magnification of a coarse grid under a steep threshold traces the texel quads. Arithmetic, not impression: `_r` is 1,536 × 768 = **26.1 km/texel**, 2.7× coarser than elevation; `arid → Tela` swings **7 °C**; `ela` moves **172 m per °C**, so **1,207 m** across the range; and `snow` ramps over **400 m** — the aridity term alone can move the snowline **3.0× the width of the ramp that draws it**. Same class as the accumulation term removed 2026-07-22, on a path that removal did not touch and which has three times the leverage. **Smooth the input or widen the ramp; do not re-tune the ice line** — `ice_audit.py` passes 22/22 and that line is measured against the literature. | `web/index.html` FRAG, `build_fields` rain grid | WP-08 F8 |
 
 **Recorded, not scheduled.** At 20–40 Ma the Himalaya box reaches **8,000 m exactly** — the
 `Z_RANGE` ceiling in `build/fieldpack.py:13`. Scotese's Tibet is being clipped at those ages.
@@ -442,10 +444,20 @@ elevation grid doubling to 2048×4096 and is stale by roughly 2.4×.
 **Sequencing, and the reason is WP-07's calibration trap — two changes that compose are one
 calibration.** H1 and H2 are independent of each other, are pure presentation, and change no
 shipped field, so they go first and are also the cheapest to revert. H6 is three lines and
-unblocks honest before/after comparison, so it rides with them. H4 depends on H1's
-displacement field. H5's constants must be tuned *after* H4 ships, because H4 changes what
-the relief under them looks like. H3 changes the shipped fields and so invalidates anything
-tuned against them. **H1 → H2 → H6 → H4 → H3 → H5.**
+unblocks honest before/after comparison, so it rides with them. H8 is independent of all of
+it and cheap, so it goes early while the rest is still stable. **H4 and H7 are one item for
+calibration purposes** — the fold fabric and the isotropic detail amplitude both write into
+`elevDetail` over the same 1–25 km band, so tuning either against a version of the other that
+is about to change guarantees re-tuning. H5's constants must be tuned after that pair. H3
+changes the shipped fields and so invalidates anything tuned against them.
+
+**H1 → H2 → H6 → H8 → (H4 + H7 together) → H3 → H5.**
+
+**H7 comes after H1 and H2 for a reason that is not cost.** More high-frequency land detail
+makes both of those defects *worse*: more content to double-expose across a 14–42 texel
+cross-dissolve, and a far more visible slide when crust moves out from under a texture pinned
+to the globe. Shipping H7 first would make the app look better in a still and worse in
+motion — which is the opposite of what was asked for.
 
 **Validation assets already in the folder.** Five Britannica paleogeographic maps carry an
 explicit **Mountains** legend class at 306, 255, 237 and 152 Ma — all named
@@ -464,7 +476,7 @@ in G7+G8, which stands as *record it, do not tune to it*.
 
 ---
 
-**Count: 65 items — 17 at P1.**
+**Count: 67 items — 18 at P1.**
 
 *The seven that would move the app furthest, as ranked at round 8:* **A1** (adopt the
 PALEOMAP rotations — measured, ready), **G1** (flood the Triassic–Jurassic epeiric seas —
@@ -477,7 +489,8 @@ because it is the record of what was judged most valuable, not a live queue.
 
 *The live ranking, as of round 9:* **H1** and **H2** (the crust does not move like crust, and
 its texture does not move with it — the two largest remaining visual defects, and neither
-touches a shipped field), **H4** (nothing tectonic reaches the shader at all), **D9** (the
-crustal-age Voronoi, whose deeper fix is still outstanding), **H5+F4** (the landforms of
-collision and back-arc basins, one item), **D10** (draw the Messinian Mediterranean), **H3**
-(the source series' own authoring noise in relief).
+touches a shipped field), **H4+H7** (nothing tectonic reaches the shader at all, and land
+carries no detail below 900 m — one calibration, not two), **H8** (a 26 km field thresholded
+into polygons), **D9** (the crustal-age Voronoi, whose deeper fix is still outstanding),
+**H5+F4** (the landforms of collision and back-arc basins, one item), **D10** (draw the
+Messinian Mediterranean), **H3** (the source series' own authoring noise in relief).

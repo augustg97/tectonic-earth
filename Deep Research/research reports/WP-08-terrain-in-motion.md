@@ -204,6 +204,114 @@ the docstring — but the stated reason is wrong.
 
 ---
 
+## Finding 7 — Land is blurry because detail is suppressed on low ground and then shaded at the wrong scale
+
+Added 2026-07-30 from two screenshots the user supplied: a ~250 Ma globe over Siberia and
+Laurasia, and a zoom onto Jurassic North America. Both show the same thing — vast smooth
+tan-and-olive expanses with almost no structure, while the Altai/Tien Shan/Qilian belts in
+the same frame *do* show ridges. Detail is present on high ground and absent everywhere else.
+Four causes, all measured, and the fourth changes what the fix should be.
+
+**(a) The procedural detail is deliberately scaled down on low ground, by a factor of 14.**
+
+```glsl
+// web/index.html:1583
+float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*clamp(z/900.0,0.15,1.0);
+```
+
+`rug` is near zero on a plain, so both multipliers collapse together:
+
+| terrain | z | rug | procedural relief |
+|---|---|---|---|
+| coastal plain | 150 m | 0.00 | **±32 m** |
+| interior lowland | 300 m | 0.05 | **±68 m** |
+| upland | 900 m | 0.30 | ±276 m |
+| mountain | 3,000 m | 0.90 | **±447 m** |
+
+±32 m spread across a 24.5 km noise cell is a gradient of 0.13%. Nothing will shade that.
+Both screenshots are almost entirely the first two rows.
+
+**(b) The hillshade differentiates at 47 km while the detail runs down to 1.3 km.**
+
+```glsl
+// web/index.html:1885 -- central difference, so the baseline is twice this
+float da=2.4/2048.0*PI;   // = 0.00368 rad = 23.5 km
+```
+
+The two detail generators produce ten octaves between them:
+
+| generator | octave sizes |
+|---|---|
+| `detail3(d*260)` | 24.5 · 11.8 · 5.7 · 2.8 · **1.3** km |
+| `detail3(d*70)` | 91.0 · 44.0 · 21.2 · 10.3 · 5.0 km |
+
+Only **three of the ten** are coarser than the gradient's half-step. The other seven are
+computed, added to the height field, and then differentiated over a baseline up to 18×
+their own wavelength — which does not resolve them, it aliases them into low-amplitude
+noise. The app is paying for detail it cannot show. This is the inverse of the
+already-recorded failure where two systems own one scale band: here a wide band, roughly
+1–20 km, is written by one system and read by none.
+
+**(c) Bilinear magnification, no mipmaps, no anisotropy** (`web/index.html:1033-1034`). At
+zoom the 4096-wide field magnifies to smooth ramps, which is the correct behaviour and is
+exactly why the procedural layer has to carry the fine scales — and it currently does not,
+per (a) and (b).
+
+**(d) There is no headroom in the source, so a bigger texture is not the fix.**
+
+| | grid | cell |
+|---|---|---|
+| source PaleoDEM (6 arc-min) | 3,600 × 1,801 | 0.100° = 11.1 km |
+| shipped `_e` | 4,096 × 2,048 | 0.088° = **9.8 km** |
+
+The shipped field is already **1.14× finer than the data behind it.** Raising it to 8192
+would quadruple memory and rebuild time for literally zero additional information. **The
+answer to "more resolution on land" is a better procedural layer and a hillshade that can
+see it, not a bigger elevation texture.** Worth stating plainly because "increase the
+resolution" reads as a texture-size change and that is the one thing here that cannot work.
+
+**One further gap, and it is the interesting one.** `_d`'s drainage channel already carries a
+per-keyframe valley network at 2048×1024, derived from the real terrain by priority-flood and
+D8 routing — and it is used **only for colour** (riparian green, channels, marshes, deltas at
+`web/index.html:2318-2334`). It never touches elevation or the normal. So the app already
+knows where the valleys on a plain are and declines to carve them. Lowlands do not need more
+*noise*; they need the structure the model has already computed. That is what distinguishes a
+real floodplain from fbm.
+
+---
+
+## Finding 8 — The polygonal margins are a coarse field under a steep threshold
+
+Visible in both screenshots and distinct from Finding 7 — the opposite defect. The pale
+shelf-ice and shallow-water margins, and the small lakes, have hard quadrilateral edges at a
+consistent cell size, not the organic fraying the ice model intends. Bilinear magnification of
+a coarse grid followed by a steep threshold produces exactly that: the interpolant is
+piecewise-bilinear, so a threshold through it traces the texel quads.
+
+The rainfall field is the prime suspect on arithmetic, not on impression:
+
+- `_r` is **1536 × 768 = 26.1 km/texel**, against elevation's 9.8 — **2.7× coarser**.
+- `arid = 1 − clamp(Rf/0.85, 0, 1)`, then `Tela = −5.0 − 7.0*arid` — a **7 °C** swing.
+- `ela = (T0 − Tela)/0.0058` — **172 m of snowline per °C**, so **1,207 m** over the range.
+- `snow = clamp((zp − snowline)/400.0, …)` — a **400 m** ramp.
+
+So the aridity term alone can move the snowline **3.0× the width of the ramp that draws it**,
+and it does so on a grid 2.7× coarser than the terrain. A third of that range between two
+adjacent rainfall texels is a full ramp width across 26 km, which thresholds into visible
+polygons.
+
+This is the same class as the accumulation term removed on 2026-07-22 — polar rainfall being
+"tiny and NOISY … jittering the threshold a couple of degrees between neighbouring cells",
+which was found to be the splotchiness rather than the ice model. That fix removed one
+rainfall→ice path. **The `arid → Tela → ela` path was not touched and has three times the
+leverage.**
+
+Constraint on any fix: `ice_audit.py` currently passes 22/22 with the present ice line, and
+the calibration behind `MARGIN_OFFSET = −5.0` is load-bearing. Smooth the *input* or widen the
+*ramp*; do not re-tune the ice line, which is measured against the literature.
+
+---
+
 ## What this adds up to
 
 One symptom, six mechanisms, and WP-06's third method rule says to enumerate every consumer
@@ -211,7 +319,7 @@ before intervening on one. Fixing the cross-dissolve alone leaves the texture pi
 globe; fixing the texture alone leaves the crust ghosting; fixing both still leaves the
 Himalaya inflating in place in one step, with no fabric to say the crust was shortened.
 
-The plan they justify is **section H of `MODEL-GAPS.md`**, in six items:
+The plan they justify is **section H of `MODEL-GAPS.md`**, in eight items:
 
 | | | |
 |---|---|---|
@@ -221,6 +329,20 @@ The plan they justify is **section H of `MODEL-GAPS.md`**, in six items:
 | **H4** | Ship a tectonic-state field and draw an anisotropic fold fabric from it | Findings 4, 5 |
 | **H5** | Seed the landforms of collision the 20 km grid cannot resolve | Finding 0 |
 | **H6** | Fix the interpolation-domain mismatch and the dead code behind it | Finding 6 |
+| **H7** | Carry real detail on low ground, and shade it at its own scale | Finding 7 |
+| **H8** | Stop thresholding a 26 km field into polygons | Finding 8 |
+
+**H4 and H7 must be calibrated as one change, not two.** The fold fabric and the isotropic
+detail amplitude both write into `elevDetail`'s output over the same 1–25 km band. Tuning
+either against a version of the other that is about to change guarantees re-tuning — the
+lesson WP-07 recorded when `SUTURE_UPLIFT`, fitted to relief already near 2 km, had to build
+an orogen from a peneplain once erosion was corrected.
+
+**H7 must come after H1 and H2, and the reason is not cost.** More high-frequency land detail
+makes both of those defects *worse*: more content to double-expose across a 14–42 texel
+cross-dissolve, and a far more visible slide when the crust moves out from under a texture
+that is pinned to the globe. Shipping H7 first would make the app look worse in motion while
+looking better in a still.
 
 `HANDOFF-TERRAIN-MOTION.md` carries the implementation detail, the sequencing argument and
 the traps.
