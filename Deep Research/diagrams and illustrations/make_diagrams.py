@@ -1106,6 +1106,152 @@ def chart_climate_vs_phanda():
                 "Generated from build/climate.py — gap items C1, C3 and C4")
 
 
+# ---------------------------------------------------------------------------
+# 13. The Hirnantian: two pulses, opposite causes
+# ---------------------------------------------------------------------------
+
+def chart_hirnantian():
+    """Why the End-Ordovician needs a figure of its own.
+
+    Every other mass extinction in this app has ONE killer. This one has two,
+    running in opposite directions: the first pulse is a world freezing and
+    draining, the second is the same world thawing and drowning in anoxic
+    water. A single bar on a timeline cannot say that, which is why the
+    Hirnantian Anoxia card was the only climate-event card with no graphic.
+
+    Every date and magnitude is read from deeptime.py rather than typed in, so
+    the figure cannot drift from the catalogues the rest of the app uses.
+    """
+    gl = next((e for e in dt.GLACIATIONS if e.name == "Hirnantian"), None)
+    an = next((e for e in dt.ANOXIC_EVENTS if "Hirnantian" in e.name), None)
+    ex = next((e for e in dt.EXTINCTIONS if e.name == "End-Ordovician"), None)
+    if not (gl and an and ex):
+        return None
+
+    A0, A1 = 447.6, 441.4
+    x0, x1 = 150, W - 42
+    LANE = 82
+    yI, yS, yO = 104, 104 + LANE + 30, 104 + 2 * (LANE + 30)
+    axis = yO + LANE + 26
+    body = []
+
+    def X(a):
+        return x1 - (a - A1) / (A0 - A1) * (x1 - x0)
+
+    # The Hirnantian stage itself, from the glaciation entry.
+    body.append(f'<rect x="{X(gl.base):.1f}" y="{yI-14}" width="{X(gl.top)-X(gl.base):.1f}" '
+                f'height="{axis-yI+14}" fill="#1a222c" stroke="#2a3644"/>')
+    body.append(f'<text class="t small" x="{(X(gl.base)+X(gl.top))/2:.1f}" y="{yI-20}" '
+                f'text-anchor="middle" fill="#9fb2c6">HIRNANTIAN</text>')
+
+    for a in (447, 446, 445, 444, 443, 442):
+        body.append(f'<line class="grid" x1="{X(a):.1f}" y1="{yI-14}" '
+                    f'x2="{X(a):.1f}" y2="{axis}"/>')
+        body.append(f'<text class="t small" x="{X(a):.1f}" y="{axis+18}" '
+                    f'text-anchor="middle">{a} Ma</text>')
+    body.append(f'<line class="axis" x1="{x0}" y1="{axis}" x2="{x1}" y2="{axis}"/>')
+
+    def curve(fn, ytop, colour, opacity, label, sub):
+        pts = []
+        a = A0
+        while a >= A1:
+            pts.append(f"{X(a):.1f},{ytop + LANE - fn(a) * LANE:.1f}")
+            a -= 0.04
+        body.append(f'<polygon points="{X(A0):.1f},{ytop+LANE:.1f} ' + " ".join(pts)
+                    + f' {X(A1):.1f},{ytop+LANE:.1f}" fill="{colour}" opacity="{opacity}"/>')
+        body.append(f'<polyline points="{" ".join(pts)}" fill="none" '
+                    f'stroke="{colour}" stroke-width="1.8"/>')
+        body.append(f'<line class="grid" x1="{x0}" y1="{ytop+LANE:.1f}" x2="{x1}" y2="{ytop+LANE:.1f}"/>')
+        body.append(f'<text class="t lab" x="{x0-14}" y="{ytop+LANE/2-2}" '
+                    f'text-anchor="end" fill="{colour}">{esc(label)}</text>')
+        body.append(f'<text class="t small" x="{x0-14}" y="{ytop+LANE/2+13}" '
+                    f'text-anchor="end">{esc(sub)}</text>')
+
+    def rise(a, a_start, a_end):
+        """0 while older than a_start, 1 once younger than a_end, smooth between.
+
+        Ages run BACKWARDS -- 447 is before 443 -- and the first version of this
+        took (hi, lo) in value order, which silently made every curve read as
+        already-finished at the left edge of the chart. Ice stood full at 447 Ma
+        and the whole figure drew as three flat lines. Naming the arguments for
+        TIME rather than for magnitude is what stops that.
+        """
+        if a >= a_start:
+            return 0.0
+        if a <= a_end:
+            return 1.0
+        t = (a_start - a) / (a_start - a_end)
+        return t * t * (3 - 2 * t)
+
+    on, off = gl.base, gl.top
+    # Ice: absent, grows through the glacial onset, collapses at deglaciation.
+    def ice(a):
+        return (rise(a, on + 0.25, on - 0.55)
+                * (1.0 - rise(a, off + 0.40, off - 0.30))) * 0.92 + 0.04
+
+    curve(ice, yI, "#7fb6d8", 0.30, "ICE", "Gondwanan sheet")
+    # Sea level is the mirror: water locked up on land is water off the shelf.
+    curve(lambda a: 0.94 - ice(a) * 0.80, yS, "#8aa8c0", 0.22,
+          "SEA LEVEL", "shelf seas drain")
+
+    # Shelf oxygen: a cold world is a well-ventilated one, so the glacial phase
+    # is oxic. It is the THAW that suffocates the shelves.
+    def oxy(a):
+        drop = rise(a, off + 0.95, off - 0.10)
+        back = rise(a, off - 0.55, off - 1.50)
+        return 0.86 - 0.64 * drop + 0.48 * back
+
+    curve(oxy, yO, "#c98a5e", 0.26, "SHELF OXYGEN", "high = ventilated")
+    # The anoxia band is drawn as its OWN thin strip along the floor of the
+    # lane, spanning the catalogue's full window, rather than as hatching laid
+    # over the oxygen curve. Those are two different claims and stacking them
+    # made the figure contradict itself: the catalogue records anoxia through
+    # the whole stage, while shelf ventilation only collapses at the thaw, so
+    # stripes over the high part of the curve read as "anoxic and well-oxygenated
+    # at the same time". Separated, each says its own thing -- anoxic water is
+    # present throughout, and it reaches the shelves at the end.
+    xa, xb = X(an.base), X(an.top)
+    ybar = yO + LANE - 15
+    body.append(f'<rect x="{xa:.1f}" y="{ybar:.1f}" width="{xb-xa:.1f}" height="13" '
+                f'fill="#3a2118" stroke="#a8582f" stroke-width="0.8"/>')
+    st = xa + 3
+    while st < xb - 2:
+        body.append(f'<rect x="{st:.1f}" y="{ybar+1.5:.1f}" width="4.5" height="10" '
+                    f'fill="#c96f3c" opacity="0.75"/>')
+        st += 11
+    body.append(f'<text class="t small" x="{xa-8:.1f}" y="{ybar+10:.1f}" '
+                f'text-anchor="end" fill="#e0a070">anoxic water present</text>')
+    body.append(f'<text class="t small" x="{xb+8:.1f}" y="{ybar+10:.1f}" '
+                f'fill="#9fb2c6">— but repeatedly interrupted, not one blanket</text>')
+
+    # The two pulses.
+    for a, ttl, why, col in (
+            (on - 0.15, "PULSE 1", "ice grows · seas drain · shelf habitat lost", "#7fb6d8"),
+            (off + 0.35, "PULSE 2", "ice melts · anoxic water floods back in", "#c98a5e")):
+        body.append(f'<line x1="{X(a):.1f}" y1="{yI-14}" x2="{X(a):.1f}" y2="{axis}" '
+                    f'stroke="{col}" stroke-width="1.6" stroke-dasharray="4 3"/>')
+        body.append(f'<text class="t lab" x="{X(a):.1f}" y="{yI-34}" '
+                    f'text-anchor="middle" fill="{col}">{ttl}</text>')
+        body.append(f'<text class="t small" x="{X(a):.1f}" y="{axis+36}" '
+                    f'text-anchor="middle" fill="{col}">{esc(why)}</text>')
+
+    foot = [
+        f"{ex.name}: {ex.magnitude} lost, the second-largest extinction of the Phanerozoic. "
+        f"{ex.note}",
+        f"Glaciation {gl.base}-{gl.top} Ma ({gl.confidence} confidence). {gl.note}",
+        f"Anoxia {an.base}-{an.top} Ma ({an.confidence} confidence). {an.note} The curves are "
+        "schematic in AMPLITUDE — the dates and the order of events are from the catalogues, "
+        "the shapes are drawn to show the sequence.",
+    ]
+    yy = axis + 62
+    for ln in foot:
+        body.append(f'<text class="t small" x="{x0}" y="{yy}">{esc(ln)}</text>')
+        yy += 15
+    return _svg(yy + 6, "\n".join(body),
+                "The Hirnantian: two pulses, opposite causes",
+                "From modeling/deeptime.py GLACIATIONS, ANOXIC_EVENTS and EXTINCTIONS")
+
+
 def main():
     figs = [
         ("01-deep-time-master-chart.svg", chart_deep_time),
@@ -1120,6 +1266,7 @@ def main():
         ("10-back-arc-rollback.svg", chart_backarc),
         ("11-glossopteris-gondwana.svg", chart_glossopteris),
         ("12-climate-vs-phanda.svg", chart_climate_vs_phanda),
+        ("13-hirnantian-two-pulses.svg", chart_hirnantian),
     ]
     for name, fn in figs:
         svg = fn()

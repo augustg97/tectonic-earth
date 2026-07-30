@@ -50,7 +50,9 @@
       "Ice and shoreline edges no longer trace the square cells of the rainfall grid they were derived from.",
       "The raised terrain and the shaded terrain agreed everywhere except mid-way between keyframes, where they could differ by up to two and a half kilometres. They agree now.",
       "Procedural detail can no longer move a coastline in either direction — it cannot carve new water, and it cannot lift sea floor into land.",
-      "Charts and photographs in cards now open full size when clicked, as the diagrams already did. The climate-event cards were the worst of it: their chart is the only graphic they carry, it is drawn about 270 pixels wide, and at that size you can see it is a graph but not read one."
+      "Charts and photographs in cards now open full size when clicked, as the diagrams already did. The climate-event cards were the worst of it: their chart is the only graphic they carry, it is drawn about 270 pixels wide, and at that size you can see it is a graph but not read one.",
+      "The End-Ordovician now has a figure of its own. It is the one mass extinction here with two killers running in opposite directions — first a world freezing and its shelf seas draining, then the same world thawing and drowning in anoxic water — and a single bar on a timeline cannot say that. The Hirnantian Anoxia card had been the only climate-event card with no graphic at all.",
+      "The auto-rotate button is now a globe with an arrow sweeping over it. It used to be the plain circular arrow that every other interface uses for undo or refresh, so the one control that spins the planet read as “reset”."
      ]
     }
    ]

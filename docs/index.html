@@ -173,6 +173,14 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 .pbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
 .pbtn:hover{border-color:var(--accent);color:var(--accent)}
 .pbtn svg{width:15px;height:15px;fill:currentColor}
+/* The rotate icon is line art, not a filled glyph, so it has to opt out of the
+   fill above -- and by id, because .pbtn.on svg sets fill too and would flood
+   the globe solid the moment auto-rotate was switched on. stroke follows
+   currentColor, which .pbtn.on already swaps to the accent, so the on-state
+   still lights up without a second rule. The arrowhead is the one filled part. */
+#rotBtn svg{fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+#rotBtn svg .head{fill:currentColor;stroke:none}
 #dir{width:34px;height:34px}
 #speedwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
 /* Single-step controls. The slider spans 1250 Myr in ~1200 px, so one pixel is
@@ -924,8 +932,20 @@ body.ambient .mtab{display:none}
          it is: a motion control. It sat in the right-hand LAYER panel among
          plate boundaries and era labels, which are all things you overlay on
          the map -- rotation is not an overlay. -->
+    <!-- A GLOBE WITH AN ARROW OVER IT, not a circular arrow. The old icon was
+         the standard circular-arrow glyph, which every other interface on earth
+         uses for undo or refresh -- so the one control that spins the planet
+         read as "reset". This says what it does: a globe, and a direction.
+         Line art rather than a filled path, so the meridians survive at the
+         15px this renders at; #rotBtn svg below overrides .pbtn svg's fill. -->
     <button class="pbtn" id="rotBtn" title="Auto-rotate" aria-label="Auto-rotate" aria-pressed="false">
-      <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+      <svg viewBox="0 0 24 24">
+        <circle cx="11.4" cy="13.4" r="5.5"/>
+        <path d="M5.9 13.4h11"/>
+        <path d="M11.4 7.9c2.4 3.3 2.4 7.7 0 11M11.4 7.9c-2.4 3.3-2.4 7.7 0 11"/>
+        <path d="M3.6 7.6A9.3 9.3 0 0 1 18.6 5.6"/>
+        <path class="head" d="M19.8 2.4l.6 4-3.9.2z"/>
+      </svg>
     </button>
     <div id="spinwrap" hidden><span>Spin</span><input type="range" id="spin" class="mini" min="0" max="100" value="25"><span id="spinVal">1.0&times;</span></div>
     <div id="steprow">
@@ -1110,7 +1130,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-1825';
+const DATA_V='20260730-2107';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5125,6 +5145,13 @@ const FIGURES={
     'Cenozoic climate events on one axis: warmings above the line, drawdowns below.'],
   'Early Eocene Climatic Optimum':['07-cenozoic-climate-events.svg',
     'Cenozoic climate events on one axis: warmings above the line, drawdowns below.'],
+  /* The only climate-event card that had no graphic at all. It also needs one
+     more than the others do: every other mass extinction here has a single
+     killer, and this one has two running in opposite directions -- a world
+     freezing and draining, then the same world thawing and drowning in anoxic
+     water. A bar on a timeline cannot say that. */
+  'Hirnantian Anoxia':['13-hirnantian-two-pulses.svg',
+    'The End-Ordovician in two pulses: ice grows and the shelf seas drain, then the ice melts and anoxic water floods back in.'],
   'Great Oxidation Event':['08-oxygen-through-time.svg',
     'Oxygen through time, with the Lomagundi overshoot and the crash that followed.'],
   'Guadalupian':['08-oxygen-through-time.svg',
