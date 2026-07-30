@@ -1,1 +1,398 @@
-{"releases":[{"version":"1.9","date":"28 July 2026","title":"Tilt the Earth, and a globe that fits your phone","summary":"You can now lean the camera over and look at the horizon, with real three-dimensional terrain under it. The sea floor is smooth again \u2014 the stair-step pattern is gone, and this time for the right reason. Land cards list the animals that lived there, not only the plants.","sections":[{"name":"The ocean floor","items":["The staircase is gone. Zoomed in, the deep ocean was crossed by large angular slabs \u2014 flat panels of constant shade with long straight edges and square corners, tens of degrees across, at every age.","The cause was in the crust's age, not in the picture. Where there is no survey data the model works out how old each patch of sea floor is by finding the nearest dated stripe and copying its age wholesale \u2014 done separately for each plate. That builds a mosaic of flat tiles with a hard step at every edge, and the plate edges are long and straight. At 615 million years ago the jump between two neighbouring cells was 70 million years of age, which the depth-versus-age law turns into a wall 1,349 m high across 25 km. A real abyssal plain changes by 50 to 125 m.","Crustal age now varies smoothly away from a spreading ridge, which is what it does in nature. Measured across the whole timeline the step is now 55 to 72 m at every age, inside the physical range. Surveyed sea floor is untouched and still wins exactly where it exists.","Three quarters of the ocean's \"fracture zone\" scars turned out to be this artefact and have gone with it. Before the Cambrian, where there has never been any survey data, 92 per cent of them were invented by the model's own tile edges. Real scars survive to within a rounding error.","Earlier attempts fixed two other real defects that were not this one \u2014 the image format's four-pixel compression blocks, and the way the shelf edge was detected \u2014 and both improvements are kept."]},{"name":"The future","items":["Mountains now wear down. The future was built by rotating today's terrain into new positions, and nothing in it could erode: every present-day range was still standing at its present height a quarter of a billion years from now. Land above 2 km and above 3 km were identical to today's, to the decimal.","Relief now decays with time, fast for peaks and valleys and slowly for high plateaus, calibrated so that a range like the Appalachians \u2014 above 4 km when Pangaea assembled, 1 to 2 km today \u2014 wears down at the right rate.","New mountains rise where continents actually collide. Where two landmasses' paths overlap, that overlap is the convergence, and it used to be calculated and then thrown away \u2014 12.8 million square kilometres of it, larger than the whole Alpine\u2013Himalayan belt. It now drives crustal thickening, so a collision builds a range instead of two outlines passing through each other.","Rifted coasts subside and gain a shelf, so a continent that splits off no longer keeps its original knife-edge outline for 250 million years.","The future's own staircase is gone too. Its coastlines were quantised to half a degree \u2014 six times coarser than the map they were drawn on \u2014 and its elevations were sampled without smoothing. Both now work at the map's own resolution, and the coastline is a quarter less jagged by measurement."]},{"name":"Life on land","items":["Land cards now show animals. Every land region in the model was described by a vegetation scheme and nothing else, so a card for a continent said what grew there and never what lived there \u2014 flowers and forests, no animals, across the whole timeline.","All eighteen land provinces now list their fauna alongside their flora: the first air-breathing millipede in the Silurian, giant dragonflies and 2.5 m millipedes in the coal forests, Lystrosaurus after the end-Permian, Archaeopteryx in the Jurassic, mammoths and muskoxen on the tundra. Forty-eight animals were added, each with its own description.","A check now fails the build if any land region lists plants and no animals, so this cannot quietly come back."]},{"name":"One frame in particular","items":["The Mediterranean at 5 million years ago is drawn as the salt desert it was. Between 5.97 and 5.33 million years ago the Gibraltar gateway closed and the sea evaporated faster than its rivers could refill it, leaving a desert floored by up to 2 km of salt, with brine lakes in the deepest basins and the Nile cutting a canyon kilometres deep to reach the new base level. It ended in a flood that refilled the entire basin in perhaps a few months.","Two honest compromises, both worth stating: keyframes step 5 million years, so a 640,000-year event is drawn on the nearest one; and the app draws sea wherever the ground is below sea level, so a surface that was both dry and 1.5 km below the Atlantic cannot be expressed exactly \u2014 the salt flats are lifted just enough to read as exposed ground."]},{"name":"Looking around","items":["Tilt and Heading sliders, with Reset to north, sit under the timeline. Tilt leans the camera off vertical the way Google Earth does, so you can look across the landscape to a curved horizon instead of only straight down at a disc.","The terrain is genuinely three-dimensional now. It used to be a perfectly smooth ball with the relief painted on by shading \u2014 which is convincing looking straight down and falls apart the moment you tilt, because a shaded sphere seen edge-on is still a sphere. The elevation now shapes the surface itself, so mountains stand against the sky and the sea floor has real depth. Height is exaggerated when you come in close, and not at all when you are far out, where you could not see it anyway.","Dragging works the same at any heading. Left and right always move the globe left and right on screen, even after you have turned the compass \u2014 the drag is rotated to match where you are facing.","A spin-speed slider next to the time speed, for when auto-rotate is on.","In map view, arrows pan east and west so you can look at any face of the Earth rather than one fixed half. Labels, plate boundaries and click targets all pan with it."]},{"name":"On a phone","items":["The globe now owns the screen. The conditions panel had no mobile layout at all and rendered at full desktop width straight over the map, and the left-hand timeline was hidden outright rather than made reachable. Both are now drawers behind their own button, one open at a time, and touching the globe closes them.","Landscape is handled too. A phone turned sideways is wider than the threshold that decides 'this is a small screen' and less than half as tall, so it had been getting the full desktop layout squeezed into 360 pixels of height. Height is now what decides it, and the controls collapse to a single row.","Pinch to zoom works on the globe instead of the page. Two fingers used to scale the whole browser window, because the app only ever listened for one finger and the gesture was the browser's before any of our code saw it. The canvas now claims touch gestures for itself and tracks both fingers, so the zoom follows the distance between them.","An Era labels button sits on the right, so the one layer worth turning on and off \u2014 the thing that tells you what you are looking at \u2014 no longer needs a panel opened to reach it."]}]},{"version":"1.8","date":"27 July 2026","title":"Rain that knows where the sea is","summary":"A second pass over the research programme. The weather now responds to the shallow seas the last release added, the deep ocean floor has depth again, and eleven places were found riding the wrong continent.","sections":[{"name":"Climate and weather","items":["Rainfall now knows about the shelf seas. The wind-and-moisture model was still running on a map without them, so flooding the Triassic changed the coastline without making the air over it any wetter. Land that stayed land is 17% wetter at 240 Ma, and the deep Pangaean interior 11%.","The climate readout names the state from the temperature it is showing you. It used to use a separate internal measure, so at 250 Ma the panel read \u201c28.5 \u00b0C\u201d and \u201cHothouse\u201d side by side \u2014 while 28.5 \u00b0C is a warm greenhouse on the scale being quoted.","No grasslands before there were grasses. The world at 100 million years ago was being drawn with grassy plains and savanna stipple; grasses only matter ecologically from about 40 Ma, and tropical savanna from about 8 Ma."]},{"name":"The ocean floor","items":["A third of the sea floor was perfectly flat. Everything older than about 97 million years was drawn at exactly the same depth \u2014 6,000 m \u2014 across the whole old Pacific and the old North Atlantic. Real sea floor keeps deepening, more slowly, and now so does this one.","Old crust sits about 400 m shallower and, more to the point, 100-million-year-old and 180-million-year-old floor are no longer identical."]},{"name":"Where things are","items":["Eleven places were riding the wrong continent, and a new check now catches the whole class. A coordinate written down as an ancient position, which happens to land on modern ground, was silently attached to whatever continent sits there today.","All four of the great floodings of North America \u2014 the Sauk, Tippecanoe, Kaskaskia and Absaroka seas \u2014 were authored in the Caribbean and carried to 67\u00b0 south, while the continent they flooded sat on the equator.","Laurentia, the ancient core of North America, was itself riding South America. The Catskill Delta was in Brazil, the Variscan mountains of France in the Sahara, the Caledonides in Western Sahara, the German Muschelkalk Sea in Libya, and the Sveconorwegian belt of Norway in Algeria. Each is now anchored on the place it is named after."]},{"name":"The future","items":["The continents assemble in the right places relative to one another. Australia had been welded to Africa's eastern edge; it is now a separate southern mass, and the average error in where each continent ends up fell from 38 degrees to 3.","Future collisions build mountains. Land above two kilometres was flat across the whole 250-million-year forecast \u2014 continents met and nothing rose. Now crust thickens where two masses meet, as it does at every collision in the past half of the model."]},{"name":"New: Biotic interchanges","items":["A sixth browsable panel, for what happened when two long-separated faunas finally met. It exists for the same reason the Climate events panel does: a land bridge is a few tens of kilometres wide, so the globe can show two continents approaching and never show the moment they touch \u2014 which is the only moment that matters.","The Great American Interchange, when the Isthmus of Panama joined two continents and North American mammals largely replaced South America's; the Trans-Arctic Interchange, the mirror image, when the Bering Strait flooded and about 300 Pacific species moved into the Atlantic; the Grande Coupure, when a falling sea level drained the Turgai Strait and 60% of Europe's mammal genera were replaced; and the Lystrosaurus Flood, when one animal spread from Antarctica to Russia across an empty Pangaea.","Each card says what opened the route, who crossed, who won, and what is still argued over."]},{"name":"Life","items":["Places that span sea and land show both again. A filter meant to stop oceans listing land animals was also being applied to the hand-catalogued lists, which hid organisms at 37 places. Solnhofen \u2014 a lagoon famous precisely for the pterosaurs and Archaeopteryx that fell into it \u2014 was showing neither, and continents in the Cambrian were being denied the trilobites that are the whole of their fossil record.","Ten more biogeographic provinces, and the Ordovician finally shows the ones it is famous for. The Ordovician has the most distinct regional faunas of any period in the early record, and it had been showing the fewest \u2014 because only labels that were themselves continents could reach the model. The Baltic and Mediterranean shelves appear, the Cambrian trilobite provinces appear, and so do the modern realms at the present day.","Cards say how big an animal was and what it ate. The illustrations have been ahead of the text for a while \u2014 a card could draw a creature accurately and never mention that it was two and a half metres long.","The Carboniferous rainforest collapse is marked as a Euramerican event everywhere it is mentioned. The Cathaysian rainforests of South China carried on to the end of the Permian.","The Devonian now gets less provincial as it goes on, which is what the record shows. Its three great marine realms were being held fixed across the whole period; the cold-water Malvinokaffric fauna of southern Gondwana actually disappears halfway through, and the Old World fauna spreads over most of what it and the Eastern Americas realm had held."]},{"name":"Cards","items":["The five disputed supercontinents now say what is actually disputed about them, instead of sharing one general sentence. Whether Pannotia ever assembled at all is a different kind of doubt from which ocean closes in each of the four rival forecasts of the next supercontinent.","The About panel now names the sea-level curve the model follows, and says that the rival published family puts the Cretaceous high stand at about half of it. It previously credited a curve the app does not use."]}]},{"version":"1.7","date":"27 July 2026","title":"The research release","summary":"Six rounds of background research had been deliberately kept out of the model. This release applies all of it: one reference frame for the whole map, real hotspots, a biogeographic province behind every card, and the shelf seas the Triassic was missing.","sections":[{"name":"Where things are","items":["Every label, crater and volcanic province now travels on the same plate model the terrain is drawn from. Names sit on the ground they describe: features landing in the wrong ocean fell from 20% to 5%, and the number of labels that jumped impossibly far between two frames halved.","Fixed the Newark Rift Valleys, which sat in the Caribbean Sea, 3,300 km from the New Jersey basins they are named for.","Fixed the Cimmerian Belt, which was attached to a plate that never collided with Asia, so the mountains appeared without the collision that built them.","Retired the old reference-frame correction. With one frame there is nothing left to correct."]},{"name":"The ocean floor","items":["Hotspot chains are real places now. Hawaii, Louisville, R\u00e9union, Iceland, the Gal\u00e1pagos, Kerguelen, Tristan da Cunha and 46 others sit at their true positions instead of being scattered at random.","Islands, atolls and flat-topped guyots now form a sequence along each chain as the sea floor cools and sinks beneath them. Midway reads as an atoll; the Emperor seamounts are drowned guyots two kilometres down.","Ten named submarine ridges added: Ninetyeast, the Emperors, Nazca, Cocos, Carnegie, Louisville, Chagos\u2013Laccadive, Greenland\u2013Iceland\u2013Faroe, New England and Vit\u00f3ria\u2013Trindade.","Volcanic islands can break the surface again. Iceland, the Azores, Cape Verde, Samoa, the Marquesas, St Helena and R\u00e9union were all being held 1.3 km under water by a rule meant for procedural noise.","Fixed four dark, textured patches that appeared around every seamount and chain. They were submarine canyons being drawn on open abyssal plain, where there is no continental shelf to feed them."]},{"name":"Land and sea","items":["The Triassic and Jurassic have their shelf seas back. Ten named basins \u2014 the Muschelkalk, Zechstein, Sverdrup, West Siberian, Sundance, Russian Platform, Neuqu\u00e9n and the Alpine platforms \u2014 plus the broad continental shelf that ringed Pangaea.","The future no longer destroys a third of Earth's land. Continents were overlapping as they gathered into Pangaea Proxima, and the lower of the two was being deleted \u2014 which meant coastal plains and continental interiors vanished while mountains survived.","Pangaea Proxima is looser and assembles less abruptly, matching the published reconstruction it is based on."]},{"name":"Climate","items":["Raised the mid-Cretaceous to 33 \u00b0C. The previous curve peaked exactly on the boundary of its hottest category, so in 540 million years the world never once reached it.","Warmed the Palaeocene and Eocene, where carbon dioxide doubled but the temperature barely moved.","Lowered peak atmospheric oxygen from 36% to 30%, in line with the current review \u2014 and corrected the Guadalupian card, which quoted the old figure."]},{"name":"Life","items":["Click almost anywhere and the panel now names the biogeographic province that place sat in, at that age, with its characteristic plants and animals. 315 of 336 places get one; previously 235 of them showed the same worldwide list.","Mountain belts, basins, rifts, deserts and plateaus show life at all now. 133 places previously showed none.","Ten distinctive localities \u2014 Solnhofen, the Zechstein and Nama seas, the Muschelkalk, the Messinian salt basin, the Paratethys, Lake Pannon, the two mid-ocean-ridge vent faunas and the Beringian steppe-tundra \u2014 are flagged so the model never speaks over them.","Where the app can only offer the worldwide list, the heading now says so plainly instead of implying those animals lived at that spot."]},{"name":"New: Climate events","items":["A fifth browsable panel, alongside intervals, supercontinents, glaciations and extinctions. It carries the events that are shorter than the five-million-year spacing between frames and so can never be drawn on the globe.","Includes the Palaeocene\u2013Eocene Thermal Maximum, the Azolla event, the Early Eocene Climatic Optimum, Oceanic Anoxic Events 1a and 2, the Hirnantian anoxia, and the Great Oxidation Event.","Added the Baykonurian glaciation, a terminal-Ediacaran ice age most compilations leave out."]},{"name":"Cards","items":["Four contested claims now say they are contested: giant arthropods and high oxygen, endemism after the Carboniferous rainforest collapse, and the closing of Panama.","Eduard Suess is credited alongside Wegener on the Glossopteris card. He used the same fossil evidence in 1885 and gave Gondwana its name.","New cards for the Permian Basin evaporites, back-arc basins, and Darwin's island-to-atoll-to-guyot sequence.","Large igneous provinces now name the ocean anoxic event or extinction each is the leading trigger for.","Plume cards now say that hotspots are not fixed, and that any track older than about 90 million years is a model output rather than a measurement.","The About panel now states, with numbers, what longitude is and is not: palaeolatitude is measured, but Palaeozoic longitude is a choice, and two published reconstructions differ by up to 146\u00b0.","Six new diagrams, drawn from the model's own tables so they cannot disagree with the map."]}]},{"version":"1.6","date":"26 July 2026","title":"The sea floor, measured","summary":"The ocean was rebuilt against real satellite imagery rather than tuned by eye, and a standing research programme was set up to check the model against the published record.","sections":[{"name":"The ocean floor","items":["The deep ocean is one colour, shaded \u2014 not a rainbow ramp with depth. Below the sunlit zone nothing reflects off the floor, so all you see is the water column, and the old hue ramp was a mapping convention rather than an appearance.","Fixed a black speckle that outlined every continental margin, and pale blue-white flecks scattered across the open ocean \u2014 a sea surface was being lit by the shape of the sea floor kilometres beneath it.","Fixed concentric rings on every seamount, which turned out to be submarine canyons drawing the depth contours of a cone.","Abyssal hill provinces now change character across each fracture zone, as they do on a real chart, instead of running uniformly across the whole ocean.","Doubled the resolution of the elevation used everywhere, matching the source data exactly."]},{"name":"Loading","items":["The globe now appears in under half a second instead of eighteen. It fetches the frames it needs rather than all 1,506 up front, and re-aims as you scrub the timeline."]}]},{"version":"1.5","date":"25 July 2026","title":"The ocean rebuilt on the age of its crust","summary":"The sea floor stopped asking how far a point is from today's ridge and started asking how old the crust is \u2014 which is what actually determines its depth, its grain and its scars.","sections":[{"name":"The ocean floor","items":["Basins now sit at the depth their crust has earned, from real surveyed crustal ages where the record survives and a model of past spreading where it does not.","Abyssal hills comb in straight parallel lines, as a real chart shows, instead of sweeping in arcs around the modern ridge.","Fracture zones persist across whole basins, because a scar travels with the crust it is cut into.","Abyssal plains appear with sharp edges where sediment has buried the hills. The Bengal and Indus Fans show up either side of India without being placed there.","Seamounts are a population of discrete volcanoes with real shapes and collapse scars, not a smeared streak \u2014 about 6,300 of them large enough for this map to hold.","The future ocean is no longer extrapolated from a plate model that has no data past its end."]}]},{"version":"1.4","date":"23\u201324 July 2026","title":"Ice, rivers and the deep sea floor","summary":"","sections":[{"name":"Terrain","items":["Rivers, marshes and delta plains derived from where water would actually flow across the reconstructed land, weighted by where the rain falls.","Drowned continents appear: Zealandia, the Kerguelen Plateau, Mauritia and the Seychelles rise and sink on their own schedules.","Fixed a burning, smeared north pole and the starburst that fanned out of both poles at high zoom.","Four times the rainfall detail, so large continents no longer come out in flat patches."]},{"name":"Ice","items":["The world had a quarter of the ice it should have had. Ice sheets now reach sea level and meet the sea ice beyond them.","The Cryogenian is two separate snowball glaciations with a real warm gap between them, not one long freeze.","Mountain glaciers respond to precipitation as well as temperature, so a cold dry range stays bare."]},{"name":"Life","items":["Fixed oceans showing land animals and every plate showing the same four species at a given age.","An African ape no longer appears on a card about North America."]}]},{"version":"1.3","date":"21\u201322 July 2026","title":"Lakes, labels that travel, and 273 illustrations","summary":"","sections":[{"name":"Water","items":["Lakes are derived from a water balance \u2014 rain in, evaporation out \u2014 so they fill and drain through time instead of being drawn on.","Present-day lakes use real surveyed outlines. The Great Lakes are only 14,000 years old and no longer sit in the Pliocene.","Inland seas that a 20 km grid cannot resolve, such as the Trans-Saharan Seaway, are seeded so their labels have water to sit on."]},{"name":"Labels","items":["Names ride their plate's real motion, so a feature keeps its label as it drifts instead of being snapped to whatever terrain is nearest.","Fixed interior features such as Lake Baikal snapping out to the ocean.","Labels are laid out to avoid overlapping, with a leader line where one has to move, and are dropped rather than drawn on top of another."]},{"name":"Life","items":["273 traced silhouettes, so 45% of species draw themselves rather than showing a generic shape.","Mass-extinction cards, and an extinction-rate readout.","Region-specific marine life, ending the identical fauna in every ocean."]}]},{"version":"1.2","date":"19\u201320 July 2026","title":"Life through time, impacts, and the atmosphere","summary":"","sections":[{"name":"New content","items":["Browsable geological intervals and supercontinents, each with a summary and key events.","73 confirmed impact structures, each fading over its own lifetime \u2014 a marine crater is buried within a few million years while Manicouagan is still visible after 215.","Volcanic provinces persist as landforms for as long as they stood as high ground, rather than flashing for a single frame.","A climate-driven cloud layer, a day\u2013night terminator, and river sediment plumes where big rivers meet the sea.","Solar brightening and a contracting biosphere in the deep future.","An About panel inside the viewer, and a full-screen ambient mode."]},{"name":"Plates","items":["Plate boundaries come from a real published rotation model resolved at every age, so boundaries and motion always agree with each other.","Plates merge going back in time \u2014 49 today, about 8 in the Palaeozoic \u2014 instead of being re-invented at every frame.","Fixed a bug where any click within the last 25 million years selected a plate, making craters, eruptions and labels unreachable."]}]},{"version":"1.0","date":"18 July 2026","title":"First release","summary":"An interactive reconstruction of Earth's surface from 1,000 million years ago to 250 million years ahead, as a globe and an equal-area map.","sections":[{"name":"","items":["251 keyframes at five-million-year steps, built from published palaeo-elevation data.","The app ships physical fields rather than pictures, and assembles the world on your graphics card as you scrub \u2014 so coastlines genuinely migrate between frames instead of one image dissolving into another.","Climate is derived, not painted on: winds carry moisture inland and dry out, mountains cast rain shadows, and continental interiors go arid on their own.","Generated Precambrian continents, because nothing about a 900-million-year-old coastline is known well enough to trace."]}]}]}
+{
+ "releases": [
+  {
+   "version": "2.0",
+   "date": "30 July 2026",
+   "title": "Continents that slide, and mountains that look shortened",
+   "summary": "Until now the map cross-faded between its five-million-year snapshots, so a continent dissolved from one position into the next instead of moving. It now slides: each frame is carried along its own plate's real rotation before the two are blended. Mountain texture travels with the rock rather than staying pinned to the globe, mountain belts draw as parallel ridges the way shortened crust actually looks, and lowlands finally carry detail instead of reading as smooth wash.",
+   "sections": [
+    {
+     "name": "Continents move instead of dissolving",
+     "items": [
+      "Between two keyframes the crust travels a median of 14 to 42 grid cells, and up to 65. Cross-fading across that gap is a double exposure: every mountain front and coastline briefly appeared twice at half strength, then snapped. Each frame is now carried toward the other along the plate rotations the rest of the app already uses, so the same piece of crust lines up in both before they mix.",
+      "The keyframes themselves are untouched, exactly — verified to the metre. Whatever this changes, it cannot change what the map says at a round age.",
+      "Where two plates pull apart the warp opens a gap, and where they converge it overlaps. Both are real: the first is new ocean floor, the second is the collision."
+     ]
+    },
+    {
+     "name": "Texture that belongs to the rock",
+     "items": [
+      "Every ridge and valley finer than the grid used to be a property of the place on the globe rather than of the stone, so a continent slid out from under its own mountains as it drifted. Each pixel now knows where its crust sat at the present day, and the fine detail rides along with it.",
+      "Checked by taking a point, carrying it back a hundred, three hundred and five hundred million years, and asking where its texture thinks it is: eleven of twelve came back within two to six kilometres."
+     ]
+    },
+    {
+     "name": "Mountains that read as shortened crust",
+     "items": [
+      "Real mountain belts are stripes — the Valley-and-Ridge Appalachians, the Zagros, the Jura. The map now works out where crust is being squeezed and which way the folds run, and draws ridges along that grain instead of roughness pointing every way at once.",
+      "The effect is deliberately confined to genuine belts. An early version applied it wherever any strain existed and combed the interior of every plateau."
+     ]
+    },
+    {
+     "name": "Land that holds up at zoom",
+     "items": [
+      "Low ground was given about a fourteenth of the surface detail that mountains got, which is why plains and continental interiors read as smooth wash however far you zoomed in. Detail now follows what the ground is made of — a floodplain and a shield are different — rather than simply how high it is.",
+      "Most of the fine relief was being computed and then thrown away, because the shading sampled it over a baseline eighteen times coarser than the detail itself. The missing range of scales is now handed to the surface directly.",
+      "The elevation data was deliberately NOT enlarged. It is already finer than the source maps behind it, so a bigger texture would have cost four times the memory and added nothing."
+     ]
+    },
+    {
+     "name": "Smaller corrections",
+     "items": [
+      "Ice and shoreline edges no longer trace the square cells of the rainfall grid they were derived from.",
+      "The raised terrain and the shaded terrain agreed everywhere except mid-way between keyframes, where they could differ by up to two and a half kilometres. They agree now.",
+      "Procedural detail can no longer move a coastline in either direction — it cannot carve new water, and it cannot lift sea floor into land."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.9",
+   "date": "28 July 2026",
+   "title": "Tilt the Earth, and a globe that fits your phone",
+   "summary": "You can now lean the camera over and look at the horizon, with real three-dimensional terrain under it. The sea floor is smooth again — the stair-step pattern is gone, and this time for the right reason. Land cards list the animals that lived there, not only the plants.",
+   "sections": [
+    {
+     "name": "The ocean floor",
+     "items": [
+      "The staircase is gone. Zoomed in, the deep ocean was crossed by large angular slabs — flat panels of constant shade with long straight edges and square corners, tens of degrees across, at every age.",
+      "The cause was in the crust's age, not in the picture. Where there is no survey data the model works out how old each patch of sea floor is by finding the nearest dated stripe and copying its age wholesale — done separately for each plate. That builds a mosaic of flat tiles with a hard step at every edge, and the plate edges are long and straight. At 615 million years ago the jump between two neighbouring cells was 70 million years of age, which the depth-versus-age law turns into a wall 1,349 m high across 25 km. A real abyssal plain changes by 50 to 125 m.",
+      "Crustal age now varies smoothly away from a spreading ridge, which is what it does in nature. Measured across the whole timeline the step is now 55 to 72 m at every age, inside the physical range. Surveyed sea floor is untouched and still wins exactly where it exists.",
+      "Three quarters of the ocean's \"fracture zone\" scars turned out to be this artefact and have gone with it. Before the Cambrian, where there has never been any survey data, 92 per cent of them were invented by the model's own tile edges. Real scars survive to within a rounding error.",
+      "Earlier attempts fixed two other real defects that were not this one — the image format's four-pixel compression blocks, and the way the shelf edge was detected — and both improvements are kept."
+     ]
+    },
+    {
+     "name": "The future",
+     "items": [
+      "Mountains now wear down. The future was built by rotating today's terrain into new positions, and nothing in it could erode: every present-day range was still standing at its present height a quarter of a billion years from now. Land above 2 km and above 3 km were identical to today's, to the decimal.",
+      "Relief now decays with time, fast for peaks and valleys and slowly for high plateaus, calibrated so that a range like the Appalachians — above 4 km when Pangaea assembled, 1 to 2 km today — wears down at the right rate.",
+      "New mountains rise where continents actually collide. Where two landmasses' paths overlap, that overlap is the convergence, and it used to be calculated and then thrown away — 12.8 million square kilometres of it, larger than the whole Alpine–Himalayan belt. It now drives crustal thickening, so a collision builds a range instead of two outlines passing through each other.",
+      "Rifted coasts subside and gain a shelf, so a continent that splits off no longer keeps its original knife-edge outline for 250 million years.",
+      "The future's own staircase is gone too. Its coastlines were quantised to half a degree — six times coarser than the map they were drawn on — and its elevations were sampled without smoothing. Both now work at the map's own resolution, and the coastline is a quarter less jagged by measurement."
+     ]
+    },
+    {
+     "name": "Life on land",
+     "items": [
+      "Land cards now show animals. Every land region in the model was described by a vegetation scheme and nothing else, so a card for a continent said what grew there and never what lived there — flowers and forests, no animals, across the whole timeline.",
+      "All eighteen land provinces now list their fauna alongside their flora: the first air-breathing millipede in the Silurian, giant dragonflies and 2.5 m millipedes in the coal forests, Lystrosaurus after the end-Permian, Archaeopteryx in the Jurassic, mammoths and muskoxen on the tundra. Forty-eight animals were added, each with its own description.",
+      "A check now fails the build if any land region lists plants and no animals, so this cannot quietly come back."
+     ]
+    },
+    {
+     "name": "One frame in particular",
+     "items": [
+      "The Mediterranean at 5 million years ago is drawn as the salt desert it was. Between 5.97 and 5.33 million years ago the Gibraltar gateway closed and the sea evaporated faster than its rivers could refill it, leaving a desert floored by up to 2 km of salt, with brine lakes in the deepest basins and the Nile cutting a canyon kilometres deep to reach the new base level. It ended in a flood that refilled the entire basin in perhaps a few months.",
+      "Two honest compromises, both worth stating: keyframes step 5 million years, so a 640,000-year event is drawn on the nearest one; and the app draws sea wherever the ground is below sea level, so a surface that was both dry and 1.5 km below the Atlantic cannot be expressed exactly — the salt flats are lifted just enough to read as exposed ground."
+     ]
+    },
+    {
+     "name": "Looking around",
+     "items": [
+      "Tilt and Heading sliders, with Reset to north, sit under the timeline. Tilt leans the camera off vertical the way Google Earth does, so you can look across the landscape to a curved horizon instead of only straight down at a disc.",
+      "The terrain is genuinely three-dimensional now. It used to be a perfectly smooth ball with the relief painted on by shading — which is convincing looking straight down and falls apart the moment you tilt, because a shaded sphere seen edge-on is still a sphere. The elevation now shapes the surface itself, so mountains stand against the sky and the sea floor has real depth. Height is exaggerated when you come in close, and not at all when you are far out, where you could not see it anyway.",
+      "Dragging works the same at any heading. Left and right always move the globe left and right on screen, even after you have turned the compass — the drag is rotated to match where you are facing.",
+      "A spin-speed slider next to the time speed, for when auto-rotate is on.",
+      "In map view, arrows pan east and west so you can look at any face of the Earth rather than one fixed half. Labels, plate boundaries and click targets all pan with it."
+     ]
+    },
+    {
+     "name": "On a phone",
+     "items": [
+      "The globe now owns the screen. The conditions panel had no mobile layout at all and rendered at full desktop width straight over the map, and the left-hand timeline was hidden outright rather than made reachable. Both are now drawers behind their own button, one open at a time, and touching the globe closes them.",
+      "Landscape is handled too. A phone turned sideways is wider than the threshold that decides 'this is a small screen' and less than half as tall, so it had been getting the full desktop layout squeezed into 360 pixels of height. Height is now what decides it, and the controls collapse to a single row.",
+      "Pinch to zoom works on the globe instead of the page. Two fingers used to scale the whole browser window, because the app only ever listened for one finger and the gesture was the browser's before any of our code saw it. The canvas now claims touch gestures for itself and tracks both fingers, so the zoom follows the distance between them.",
+      "An Era labels button sits on the right, so the one layer worth turning on and off — the thing that tells you what you are looking at — no longer needs a panel opened to reach it."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.8",
+   "date": "27 July 2026",
+   "title": "Rain that knows where the sea is",
+   "summary": "A second pass over the research programme. The weather now responds to the shallow seas the last release added, the deep ocean floor has depth again, and eleven places were found riding the wrong continent.",
+   "sections": [
+    {
+     "name": "Climate and weather",
+     "items": [
+      "Rainfall now knows about the shelf seas. The wind-and-moisture model was still running on a map without them, so flooding the Triassic changed the coastline without making the air over it any wetter. Land that stayed land is 17% wetter at 240 Ma, and the deep Pangaean interior 11%.",
+      "The climate readout names the state from the temperature it is showing you. It used to use a separate internal measure, so at 250 Ma the panel read “28.5 °C” and “Hothouse” side by side — while 28.5 °C is a warm greenhouse on the scale being quoted.",
+      "No grasslands before there were grasses. The world at 100 million years ago was being drawn with grassy plains and savanna stipple; grasses only matter ecologically from about 40 Ma, and tropical savanna from about 8 Ma."
+     ]
+    },
+    {
+     "name": "The ocean floor",
+     "items": [
+      "A third of the sea floor was perfectly flat. Everything older than about 97 million years was drawn at exactly the same depth — 6,000 m — across the whole old Pacific and the old North Atlantic. Real sea floor keeps deepening, more slowly, and now so does this one.",
+      "Old crust sits about 400 m shallower and, more to the point, 100-million-year-old and 180-million-year-old floor are no longer identical."
+     ]
+    },
+    {
+     "name": "Where things are",
+     "items": [
+      "Eleven places were riding the wrong continent, and a new check now catches the whole class. A coordinate written down as an ancient position, which happens to land on modern ground, was silently attached to whatever continent sits there today.",
+      "All four of the great floodings of North America — the Sauk, Tippecanoe, Kaskaskia and Absaroka seas — were authored in the Caribbean and carried to 67° south, while the continent they flooded sat on the equator.",
+      "Laurentia, the ancient core of North America, was itself riding South America. The Catskill Delta was in Brazil, the Variscan mountains of France in the Sahara, the Caledonides in Western Sahara, the German Muschelkalk Sea in Libya, and the Sveconorwegian belt of Norway in Algeria. Each is now anchored on the place it is named after."
+     ]
+    },
+    {
+     "name": "The future",
+     "items": [
+      "The continents assemble in the right places relative to one another. Australia had been welded to Africa's eastern edge; it is now a separate southern mass, and the average error in where each continent ends up fell from 38 degrees to 3.",
+      "Future collisions build mountains. Land above two kilometres was flat across the whole 250-million-year forecast — continents met and nothing rose. Now crust thickens where two masses meet, as it does at every collision in the past half of the model."
+     ]
+    },
+    {
+     "name": "New: Biotic interchanges",
+     "items": [
+      "A sixth browsable panel, for what happened when two long-separated faunas finally met. It exists for the same reason the Climate events panel does: a land bridge is a few tens of kilometres wide, so the globe can show two continents approaching and never show the moment they touch — which is the only moment that matters.",
+      "The Great American Interchange, when the Isthmus of Panama joined two continents and North American mammals largely replaced South America's; the Trans-Arctic Interchange, the mirror image, when the Bering Strait flooded and about 300 Pacific species moved into the Atlantic; the Grande Coupure, when a falling sea level drained the Turgai Strait and 60% of Europe's mammal genera were replaced; and the Lystrosaurus Flood, when one animal spread from Antarctica to Russia across an empty Pangaea.",
+      "Each card says what opened the route, who crossed, who won, and what is still argued over."
+     ]
+    },
+    {
+     "name": "Life",
+     "items": [
+      "Places that span sea and land show both again. A filter meant to stop oceans listing land animals was also being applied to the hand-catalogued lists, which hid organisms at 37 places. Solnhofen — a lagoon famous precisely for the pterosaurs and Archaeopteryx that fell into it — was showing neither, and continents in the Cambrian were being denied the trilobites that are the whole of their fossil record.",
+      "Ten more biogeographic provinces, and the Ordovician finally shows the ones it is famous for. The Ordovician has the most distinct regional faunas of any period in the early record, and it had been showing the fewest — because only labels that were themselves continents could reach the model. The Baltic and Mediterranean shelves appear, the Cambrian trilobite provinces appear, and so do the modern realms at the present day.",
+      "Cards say how big an animal was and what it ate. The illustrations have been ahead of the text for a while — a card could draw a creature accurately and never mention that it was two and a half metres long.",
+      "The Carboniferous rainforest collapse is marked as a Euramerican event everywhere it is mentioned. The Cathaysian rainforests of South China carried on to the end of the Permian.",
+      "The Devonian now gets less provincial as it goes on, which is what the record shows. Its three great marine realms were being held fixed across the whole period; the cold-water Malvinokaffric fauna of southern Gondwana actually disappears halfway through, and the Old World fauna spreads over most of what it and the Eastern Americas realm had held."
+     ]
+    },
+    {
+     "name": "Cards",
+     "items": [
+      "The five disputed supercontinents now say what is actually disputed about them, instead of sharing one general sentence. Whether Pannotia ever assembled at all is a different kind of doubt from which ocean closes in each of the four rival forecasts of the next supercontinent.",
+      "The About panel now names the sea-level curve the model follows, and says that the rival published family puts the Cretaceous high stand at about half of it. It previously credited a curve the app does not use."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.7",
+   "date": "27 July 2026",
+   "title": "The research release",
+   "summary": "Six rounds of background research had been deliberately kept out of the model. This release applies all of it: one reference frame for the whole map, real hotspots, a biogeographic province behind every card, and the shelf seas the Triassic was missing.",
+   "sections": [
+    {
+     "name": "Where things are",
+     "items": [
+      "Every label, crater and volcanic province now travels on the same plate model the terrain is drawn from. Names sit on the ground they describe: features landing in the wrong ocean fell from 20% to 5%, and the number of labels that jumped impossibly far between two frames halved.",
+      "Fixed the Newark Rift Valleys, which sat in the Caribbean Sea, 3,300 km from the New Jersey basins they are named for.",
+      "Fixed the Cimmerian Belt, which was attached to a plate that never collided with Asia, so the mountains appeared without the collision that built them.",
+      "Retired the old reference-frame correction. With one frame there is nothing left to correct."
+     ]
+    },
+    {
+     "name": "The ocean floor",
+     "items": [
+      "Hotspot chains are real places now. Hawaii, Louisville, Réunion, Iceland, the Galápagos, Kerguelen, Tristan da Cunha and 46 others sit at their true positions instead of being scattered at random.",
+      "Islands, atolls and flat-topped guyots now form a sequence along each chain as the sea floor cools and sinks beneath them. Midway reads as an atoll; the Emperor seamounts are drowned guyots two kilometres down.",
+      "Ten named submarine ridges added: Ninetyeast, the Emperors, Nazca, Cocos, Carnegie, Louisville, Chagos–Laccadive, Greenland–Iceland–Faroe, New England and Vitória–Trindade.",
+      "Volcanic islands can break the surface again. Iceland, the Azores, Cape Verde, Samoa, the Marquesas, St Helena and Réunion were all being held 1.3 km under water by a rule meant for procedural noise.",
+      "Fixed four dark, textured patches that appeared around every seamount and chain. They were submarine canyons being drawn on open abyssal plain, where there is no continental shelf to feed them."
+     ]
+    },
+    {
+     "name": "Land and sea",
+     "items": [
+      "The Triassic and Jurassic have their shelf seas back. Ten named basins — the Muschelkalk, Zechstein, Sverdrup, West Siberian, Sundance, Russian Platform, Neuquén and the Alpine platforms — plus the broad continental shelf that ringed Pangaea.",
+      "The future no longer destroys a third of Earth's land. Continents were overlapping as they gathered into Pangaea Proxima, and the lower of the two was being deleted — which meant coastal plains and continental interiors vanished while mountains survived.",
+      "Pangaea Proxima is looser and assembles less abruptly, matching the published reconstruction it is based on."
+     ]
+    },
+    {
+     "name": "Climate",
+     "items": [
+      "Raised the mid-Cretaceous to 33 °C. The previous curve peaked exactly on the boundary of its hottest category, so in 540 million years the world never once reached it.",
+      "Warmed the Palaeocene and Eocene, where carbon dioxide doubled but the temperature barely moved.",
+      "Lowered peak atmospheric oxygen from 36% to 30%, in line with the current review — and corrected the Guadalupian card, which quoted the old figure."
+     ]
+    },
+    {
+     "name": "Life",
+     "items": [
+      "Click almost anywhere and the panel now names the biogeographic province that place sat in, at that age, with its characteristic plants and animals. 315 of 336 places get one; previously 235 of them showed the same worldwide list.",
+      "Mountain belts, basins, rifts, deserts and plateaus show life at all now. 133 places previously showed none.",
+      "Ten distinctive localities — Solnhofen, the Zechstein and Nama seas, the Muschelkalk, the Messinian salt basin, the Paratethys, Lake Pannon, the two mid-ocean-ridge vent faunas and the Beringian steppe-tundra — are flagged so the model never speaks over them.",
+      "Where the app can only offer the worldwide list, the heading now says so plainly instead of implying those animals lived at that spot."
+     ]
+    },
+    {
+     "name": "New: Climate events",
+     "items": [
+      "A fifth browsable panel, alongside intervals, supercontinents, glaciations and extinctions. It carries the events that are shorter than the five-million-year spacing between frames and so can never be drawn on the globe.",
+      "Includes the Palaeocene–Eocene Thermal Maximum, the Azolla event, the Early Eocene Climatic Optimum, Oceanic Anoxic Events 1a and 2, the Hirnantian anoxia, and the Great Oxidation Event.",
+      "Added the Baykonurian glaciation, a terminal-Ediacaran ice age most compilations leave out."
+     ]
+    },
+    {
+     "name": "Cards",
+     "items": [
+      "Four contested claims now say they are contested: giant arthropods and high oxygen, endemism after the Carboniferous rainforest collapse, and the closing of Panama.",
+      "Eduard Suess is credited alongside Wegener on the Glossopteris card. He used the same fossil evidence in 1885 and gave Gondwana its name.",
+      "New cards for the Permian Basin evaporites, back-arc basins, and Darwin's island-to-atoll-to-guyot sequence.",
+      "Large igneous provinces now name the ocean anoxic event or extinction each is the leading trigger for.",
+      "Plume cards now say that hotspots are not fixed, and that any track older than about 90 million years is a model output rather than a measurement.",
+      "The About panel now states, with numbers, what longitude is and is not: palaeolatitude is measured, but Palaeozoic longitude is a choice, and two published reconstructions differ by up to 146°.",
+      "Six new diagrams, drawn from the model's own tables so they cannot disagree with the map."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.6",
+   "date": "26 July 2026",
+   "title": "The sea floor, measured",
+   "summary": "The ocean was rebuilt against real satellite imagery rather than tuned by eye, and a standing research programme was set up to check the model against the published record.",
+   "sections": [
+    {
+     "name": "The ocean floor",
+     "items": [
+      "The deep ocean is one colour, shaded — not a rainbow ramp with depth. Below the sunlit zone nothing reflects off the floor, so all you see is the water column, and the old hue ramp was a mapping convention rather than an appearance.",
+      "Fixed a black speckle that outlined every continental margin, and pale blue-white flecks scattered across the open ocean — a sea surface was being lit by the shape of the sea floor kilometres beneath it.",
+      "Fixed concentric rings on every seamount, which turned out to be submarine canyons drawing the depth contours of a cone.",
+      "Abyssal hill provinces now change character across each fracture zone, as they do on a real chart, instead of running uniformly across the whole ocean.",
+      "Doubled the resolution of the elevation used everywhere, matching the source data exactly."
+     ]
+    },
+    {
+     "name": "Loading",
+     "items": [
+      "The globe now appears in under half a second instead of eighteen. It fetches the frames it needs rather than all 1,506 up front, and re-aims as you scrub the timeline."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.5",
+   "date": "25 July 2026",
+   "title": "The ocean rebuilt on the age of its crust",
+   "summary": "The sea floor stopped asking how far a point is from today's ridge and started asking how old the crust is — which is what actually determines its depth, its grain and its scars.",
+   "sections": [
+    {
+     "name": "The ocean floor",
+     "items": [
+      "Basins now sit at the depth their crust has earned, from real surveyed crustal ages where the record survives and a model of past spreading where it does not.",
+      "Abyssal hills comb in straight parallel lines, as a real chart shows, instead of sweeping in arcs around the modern ridge.",
+      "Fracture zones persist across whole basins, because a scar travels with the crust it is cut into.",
+      "Abyssal plains appear with sharp edges where sediment has buried the hills. The Bengal and Indus Fans show up either side of India without being placed there.",
+      "Seamounts are a population of discrete volcanoes with real shapes and collapse scars, not a smeared streak — about 6,300 of them large enough for this map to hold.",
+      "The future ocean is no longer extrapolated from a plate model that has no data past its end."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.4",
+   "date": "23–24 July 2026",
+   "title": "Ice, rivers and the deep sea floor",
+   "summary": "",
+   "sections": [
+    {
+     "name": "Terrain",
+     "items": [
+      "Rivers, marshes and delta plains derived from where water would actually flow across the reconstructed land, weighted by where the rain falls.",
+      "Drowned continents appear: Zealandia, the Kerguelen Plateau, Mauritia and the Seychelles rise and sink on their own schedules.",
+      "Fixed a burning, smeared north pole and the starburst that fanned out of both poles at high zoom.",
+      "Four times the rainfall detail, so large continents no longer come out in flat patches."
+     ]
+    },
+    {
+     "name": "Ice",
+     "items": [
+      "The world had a quarter of the ice it should have had. Ice sheets now reach sea level and meet the sea ice beyond them.",
+      "The Cryogenian is two separate snowball glaciations with a real warm gap between them, not one long freeze.",
+      "Mountain glaciers respond to precipitation as well as temperature, so a cold dry range stays bare."
+     ]
+    },
+    {
+     "name": "Life",
+     "items": [
+      "Fixed oceans showing land animals and every plate showing the same four species at a given age.",
+      "An African ape no longer appears on a card about North America."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.3",
+   "date": "21–22 July 2026",
+   "title": "Lakes, labels that travel, and 273 illustrations",
+   "summary": "",
+   "sections": [
+    {
+     "name": "Water",
+     "items": [
+      "Lakes are derived from a water balance — rain in, evaporation out — so they fill and drain through time instead of being drawn on.",
+      "Present-day lakes use real surveyed outlines. The Great Lakes are only 14,000 years old and no longer sit in the Pliocene.",
+      "Inland seas that a 20 km grid cannot resolve, such as the Trans-Saharan Seaway, are seeded so their labels have water to sit on."
+     ]
+    },
+    {
+     "name": "Labels",
+     "items": [
+      "Names ride their plate's real motion, so a feature keeps its label as it drifts instead of being snapped to whatever terrain is nearest.",
+      "Fixed interior features such as Lake Baikal snapping out to the ocean.",
+      "Labels are laid out to avoid overlapping, with a leader line where one has to move, and are dropped rather than drawn on top of another."
+     ]
+    },
+    {
+     "name": "Life",
+     "items": [
+      "273 traced silhouettes, so 45% of species draw themselves rather than showing a generic shape.",
+      "Mass-extinction cards, and an extinction-rate readout.",
+      "Region-specific marine life, ending the identical fauna in every ocean."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.2",
+   "date": "19–20 July 2026",
+   "title": "Life through time, impacts, and the atmosphere",
+   "summary": "",
+   "sections": [
+    {
+     "name": "New content",
+     "items": [
+      "Browsable geological intervals and supercontinents, each with a summary and key events.",
+      "73 confirmed impact structures, each fading over its own lifetime — a marine crater is buried within a few million years while Manicouagan is still visible after 215.",
+      "Volcanic provinces persist as landforms for as long as they stood as high ground, rather than flashing for a single frame.",
+      "A climate-driven cloud layer, a day–night terminator, and river sediment plumes where big rivers meet the sea.",
+      "Solar brightening and a contracting biosphere in the deep future.",
+      "An About panel inside the viewer, and a full-screen ambient mode."
+     ]
+    },
+    {
+     "name": "Plates",
+     "items": [
+      "Plate boundaries come from a real published rotation model resolved at every age, so boundaries and motion always agree with each other.",
+      "Plates merge going back in time — 49 today, about 8 in the Palaeozoic — instead of being re-invented at every frame.",
+      "Fixed a bug where any click within the last 25 million years selected a plate, making craters, eruptions and labels unreachable."
+     ]
+    }
+   ]
+  },
+  {
+   "version": "1.0",
+   "date": "18 July 2026",
+   "title": "First release",
+   "summary": "An interactive reconstruction of Earth's surface from 1,000 million years ago to 250 million years ahead, as a globe and an equal-area map.",
+   "sections": [
+    {
+     "name": "",
+     "items": [
+      "251 keyframes at five-million-year steps, built from published palaeo-elevation data.",
+      "The app ships physical fields rather than pictures, and assembles the world on your graphics card as you scrub — so coastlines genuinely migrate between frames instead of one image dissolving into another.",
+      "Climate is derived, not painted on: winds carry moisture inland and dry out, mountains cast rain shadows, and continental interiors go arid on their own.",
+      "Generated Precambrian continents, because nothing about a 900-million-year-old coastline is known well enough to trace."
+     ]
+    }
+   ]
+  }
+ ]
+}

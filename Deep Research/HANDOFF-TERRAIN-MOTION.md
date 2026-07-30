@@ -227,7 +227,22 @@ relief under H4 looks like at every non-keyframe age.
 
 ---
 
-## H3 — Regularise the source series (the only item that can trip the publish gate)
+## H3 — Regularise the source series
+
+**PROMOTE THIS. Measured 2026-07-30, after H1 shipped, and it changes the ranking.** H1
+removes the ghost caused by crust MOVING between keyframes, and that is only part of what
+changes between keyframes. The elevation histogram — which a rigid rotation cannot alter at
+all, by definition — moves by **5.5 to 9.4% of the globe** across a single 5 Myr step at
+every age sampled. Land area swings 33.1% → 29.1% between 45 and 50 Ma alone.
+
+So a large share of the frame-to-frame difference is not motion and no warp can follow it:
+it is authoring in the source, eustasy, and our own `epeiric.carve`, which floods ground in
+place at 150–250 Ma. That is exactly why H1's measured gain is real but partial (mid-interval
+relief sag 27.8% → 25.4%) and why 200–205 Ma — inside the epeiric range — is the one interval
+where the warp scores worse. **H1 and H3 are not independent: H3 is the other half of the
+same artefact, and until it lands H1 cannot be judged at full strength.**
+
+Everything below stands; only its priority changed, P2 → P1.
 
 Two problems. Do **(a) alone first and re-measure** — H1 and H4 may carry (b) on their own,
 and (b)'s fix is the riskier one.
@@ -388,12 +403,15 @@ geographic latitude, on both the globe and the map. It went unnoticed for years 
 only ever fed hemisphere-symmetric climate. Any new code needing true latitude must use
 `-lat`. `lonD` *is* true longitude.
 
-**Field textures carry no cache version — and this work adds two new ones.** The eight JSON
-files are fetched as `name.json?v=DATA_V` and stamped by `build/stamp_data_version.py`;
-`web/fields/*` deliberately does not, because it is ~750 files that rarely change. **While
-you are iterating on `_v` or `_t` you will be served stale textures** and the app will run
-perfectly while showing the old ones. Hard-reload, or add a version to the new textures while
-developing and strip it before shipping.
+**~~Field textures carry no cache version~~ — WRONG, corrected 2026-07-30.** They do:
+`const FIELD_V` in index.html, applied by `fieldSrc`, bumped by hand. Bump it when an
+existing texture's CONTENT changes; a brand-new suffix needs nothing.
+
+**The real cache trap here is the app's own negative cache, and it cost time.** `_fieldTried`
+records a fetch as settled whether it succeeded or 404'd, so a page opened while a bake is
+still running permanently remembers every field that did not exist yet. Symptom: `uWarp`
+stays 0 at exactly the ages you baked most recently, the app runs perfectly, and nothing is
+logged. **Reload after a bake finishes** — a hard-refresh of the page, not of the texture.
 
 **`TEX_CAP = 24`** (`web/index.html:1022`) is the LRU texture cache. Six kinds per keyframe
 today; two more takes it to eight, so 24 slots is three keyframes' worth and playback needs
