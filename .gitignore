@@ -34,3 +34,4 @@ data/Muller2019_PresentDay_AgeGrid.nc
 # Reference material for the sea-floor work: ~80 large screenshots and
 # process diagrams, several hundred MB. README §11 describes what is in it.
 Deep Time Maps and Resources/
+build/verify/

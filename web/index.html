@@ -1070,7 +1070,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-0424';
+const DATA_V='20260730-0444';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1731,7 +1731,7 @@ void main(){
      deep depocentres flooded and everything above them a salt flat, following
      the real bathymetry with no separate lake mask at all. */
   float dryb=max(texture2D(waterA,uv).g, texture2D(waterB,uv).g)*uDry;
-  wl = dryb>0.5 ? -2800.0 : 0.0;
+  wl = dryb>0.5 ? -2350.0 : 0.0;   // brine surface; deeper ground floods itself
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
   // out every per-pixel computation that depends on the longitude direction --
@@ -3484,11 +3484,29 @@ void main(){
      reads as crust rather than paint. Brighter still on the lowest ground,
      where the brine evaporated last and the crust is thickest. */
   if(wl<-50.0 && z>=wl){
-    float pan=clamp((z-wl)/900.0,0.0,1.0);          // 0 at the brine edge
-    float crust=0.86+0.10*fbm3(sdir*180.0)+0.05*fbm3(sdir*640.0);
-    vec3 salt=vec3(0.905,0.890,0.855)*crust;
-    salt=mix(vec3(0.815,0.780,0.700)*crust, salt, pan);   // damp sabkha at the rim
-    col=mix(col, salt, 0.90);
+    /* KEEP THE HILLSHADE. The first version blended a flat colour over col at
+       0.90 -- and col already carries all the shading, so the basin came out as
+       a featureless white sheet with no relief, no escarpments and no sense of
+       being a hole at all. Carrying the existing luminance across instead means
+       the salt is an ALBEDO, which is what it physically is: the crust is pale,
+       the topography underneath it still catches the light. */
+    float pan=clamp((z-wl)/700.0,0.0,1.0);          // 0 at the brine edge
+    float crust=0.93+0.09*fbm3(sdir*130.0)+0.06*fbm3(sdir*430.0)
+                    +0.04*fbm3(sdir*1100.0);
+    // Off-white, not paper. A salt pan is grey-buff with dust on it; pure white
+    // reads as cloud or ice, and at this size it blew out to a silhouette.
+    vec3 salt=vec3(0.735,0.716,0.668)*crust;
+    salt=mix(vec3(0.600,0.560,0.474)*crust, salt, pan);   // damp sabkha at the rim
+    /* The shade multiplier has to CENTRE ON ONE, or it stops carrying the
+       hillshade and starts amplifying it: at 1.48 on already-bright ground the
+       result clipped past white and the pan went back to being a flat sheet,
+       which is the bug this line was added to fix. Divide by a mid-tone, clamp
+       tightly either side, and cap the result below pure white so the crust can
+       never saturate. */
+    float lum=dot(col, vec3(0.299,0.587,0.114));
+    salt*=clamp(lum/0.55, 0.55, 1.12);
+    salt=min(salt, vec3(0.885,0.875,0.845));
+    col=mix(col, salt, 0.84);
   }
   gl_FragColor=vec4(col,1.0);
 }`;
@@ -5977,6 +5995,95 @@ function buildLegend(){
                  never fires requestAnimationFrame — the app looks frozen when
                  it is simply not being asked to draw. */
               step(){loop(performance.now());},
+              /* ---- VISUAL-VERIFICATION HARNESS ----------------------------
+                 Every "I checked it on screen" claim in this project runs
+                 through here, because doing it by hand went wrong in three
+                 separate ways and each one produced confident, wrong reports:
+
+                 1. STALE FRAMES. A backgrounded tab gets no requestAnimationFrame,
+                    so setting state changed nothing on screen and a screenshot
+                    returned the previous frame. step() already existed for this
+                    and was simply never used.
+                 2. THE CAMERA WAS AIMED BY GUESS. rot was assumed to be minus
+                    the centre longitude. It is not: ll2v puts the XZ angle at
+                    lon+90, so centre longitude = -rot - 90. Ninety degrees out,
+                    which is why asking for the Mediterranean gave the Appalachians.
+                 3. NOTHING EVER CHECKED. There was no step between "aim" and
+                    "screenshot" that could fail, so a mis-aimed camera was
+                    indistinguishable from a correct one until a human looked.
+
+                 lookAt derives the rotation instead of assuming it, forces a
+                 frame, and then PROJECTS THE TARGET BACK and reports where it
+                 actually landed. If offCentre is not small, the view is wrong
+                 and the screenshot must not be believed. */
+              lookAt(lon, lat, o){
+                o = o || {};
+                // exact inverse of ll2v's XZ angle; no assumption involved
+                state.rot = -((lon + 90) * DEG);
+                state.tilt = lat * DEG;
+                if (o.zoom != null) state.zoom = o.zoom;
+                if (o.gtilt != null) state.gtilt = o.gtilt;
+                if (o.head != null) state.head = o.head;
+                if (o.age != null) jumpTo(o.age);
+                // A HIDDEN PANE HAS A 0x0 VIEWPORT. innerWidth and innerHeight go
+                // to zero, the camera aspect goes to NaN, and projectLL -- which
+                // scales NDC by innerWidth -- returns null. That single fact is
+                // behind every unreliable visual check in this project: the page
+                // was not frozen, it had no size. Give it one explicitly.
+                const W = o.w || 1200, H = o.h || 900;
+                if (!innerWidth || !innerHeight || o.w) {
+                  renderer.setSize(W, H, false);
+                  cam.aspect = W / H; cam.updateProjectionMatrix();
+                }
+                // twice: the first pass updates matrices the projection reads
+                loop(performance.now()); loop(performance.now());
+                // Measured in NDC, not pixels, so the answer does not depend on
+                // a viewport that may not exist. Centre is (0,0); z<1 is in front.
+                const v = ll2v(lon, lat, 1.02).applyMatrix4(globe.matrixWorld).project(cam);
+                const off = Math.hypot(v.x, v.y);
+                return {ok: v.z < 1 && off < 0.10,
+                        offNDC: +off.toFixed(4),
+                        px: Math.round(off * W / 2),
+                        centreLon: -(state.rot / DEG) - 90, centreLat: state.tilt / DEG,
+                        viewport: W + 'x' + H, age: state.age};
+              },
+              /* Full-resolution crop, rendered on demand. The browser pane
+                 downsamples to 800x450, which is below the scale of several
+                 artefacts this project has chased -- so eyeballing the pane is
+                 not a check, it is a vibe. */
+              snap(w, h, cx, cy){
+                loop(performance.now());
+                const c = renderer.domElement, gl = renderer.getContext();
+                w = w || 480; h = h || 480;
+                const x0 = Math.max(0, Math.round((cx != null ? cx : c.width / 2) - w / 2));
+                const y0 = Math.max(0, Math.round((cy != null ? cy : c.height / 2) - h / 2));
+                const px = new Uint8Array(w * h * 4);
+                gl.readPixels(x0, y0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+                let sum = 0; for (let i = 0; i < px.length; i += 4) sum += px[i] + px[i+1] + px[i+2];
+                if (sum === 0) return {error: 'empty framebuffer -- nothing was drawn'};
+                const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+                const ctx = cv.getContext('2d'), im = ctx.createImageData(w, h);
+                for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+                  const s = ((h - 1 - y) * w + x) * 4, d = (y * w + x) * 4;
+                  im.data[d] = px[s]; im.data[d+1] = px[s+1];
+                  im.data[d+2] = px[s+2]; im.data[d+3] = 255;
+                }
+                ctx.putImageData(im, 0, 0);
+                return {png: cv.toDataURL('image/png').slice(22), w: w, h: h};
+              },
+              /* Render and POST the pixels to build/verify_server.py, which
+                 writes them to build/verify/. This is the only route that works
+                 with the pane hidden: an anchor-click download needs a visible
+                 document and silently does nothing without one. */
+              async shoot(name, size, cx, cy){
+                const s = APP.snap(size || 600, size || 600, cx, cy);
+                if (s.error) return s;
+                try{
+                  const r = await fetch('http://127.0.0.1:8901/' + (name || 'shot'),
+                                        {method: 'POST', body: s.png});
+                  return {saved: await r.text(), bytes: s.png.length};
+                }catch(e){ return {error: 'receiver not running? ' + e.message}; }
+              },
               gl:{mat,scene,globe,atmo,clouds,renderer,cam}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
