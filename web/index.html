@@ -185,6 +185,8 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 input[type=range].mini{-webkit-appearance:none;appearance:none;height:3px;background:#2b3240;border-radius:2px;outline:none}
 input[type=range].mini::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
 input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+.pbtn.on{border-color:var(--accent);color:var(--accent)}
+.pbtn.on svg{fill:var(--accent)}
 #spinwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
 #spinwrap[hidden]{display:none}
 #spin{width:72px}
@@ -670,7 +672,6 @@ body.ambient .mtab{display:none}
   <div class="grp">
     <div class="grp-h">Annotation</div>
     <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
-    <div class="tog" data-layer="rotate"><span>Auto-rotate</span><div class="sw"></div></div>
   </div>
 </div>
 
@@ -900,6 +901,13 @@ body.ambient .mtab{display:none}
          control -- how fast something moves -- and separating them would make
          the user hunt for the second one. It only appears when auto-rotate is
          on, since a speed control for a thing that is not moving is furniture. -->
+    <!-- Auto-rotate lives here, beside the speed controls, because that is what
+         it is: a motion control. It sat in the right-hand LAYER panel among
+         plate boundaries and era labels, which are all things you overlay on
+         the map -- rotation is not an overlay. -->
+    <button class="pbtn" id="rotBtn" title="Auto-rotate" aria-label="Auto-rotate" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+    </button>
     <div id="spinwrap" hidden><span>Spin</span><input type="range" id="spin" class="mini" min="0" max="100" value="25"><span id="spinVal">1.0&times;</span></div>
     <div id="steprow">
       <button class="pbtn small" id="stepBack" title="Back 1 Myr (←)" aria-label="Back one million years">
@@ -1070,7 +1078,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-0455';
+const DATA_V='20260730-0517';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos'];
@@ -1784,8 +1792,20 @@ void main(){
      band-limits each row to the resolution its latitude can actually carry. Two
      mild filters beat one heavy one -- over-blurring here is what stripped the
      caps of detail before. */
-  float pwL=smoothstep(0.940,0.9950,abs(sdir.y));
-  float pw=smoothstep(0.985,0.9995,abs(sdir.y));
+  /* WIDE bands, and that is the whole fix. Both of these were narrow -- pw ran
+     from 0.985 to 0.9995, which is 80.1 to 88.4 degrees -- and a narrow ramp
+     does not hide a transition, it DRAWS one: the visible circle stamped around
+     Antarctica is this smoothstep's own leading edge, not anything in the data.
+     Meanwhile the starburst it was meant to suppress is plainly visible from
+     about 55 degrees out, long before either weight had begun.
+
+     Longitude crowding is not a polar phenomenon with an edge; it is continuous
+     and goes as 1/cos(lat) everywhere. So the correction has to begin where the
+     crowding begins and arrive gradually. 0.78 is 51 degrees and 0.89 is 63 --
+     by which point columns are already 1.6x and 2.2x over-sampled. Spread over
+     30-plus degrees there is no edge left to see. */
+  float pwL=smoothstep(0.780,0.9860,abs(sdir.y));
+  float pw=smoothstep(0.890,0.9990,abs(sdir.y));
   /* World-fixed tangent frame for the cap. Built from the X axis, NOT from east:
      a frame that spins around the pole would make neighbouring pixels sample
      different points and re-introduce the very jitter this removes. */
@@ -5767,11 +5787,15 @@ function camSync(){
   $('#tiltVal').textContent=Math.round(state.gtilt)+'°';
   $('#headVal').textContent=Math.round(state.head)+'°';
   $('#tiltR').value=state.gtilt; $('#headR').value=state.head;
-  // Heading is only meaningful once you have leaned over -- looking straight
-  // down, every heading shows the same disc rotated. Say so rather than let it
-  // read as broken.
-  $('#headR').disabled=state.gtilt<1;
-  $('#headR').style.opacity=state.gtilt<1?0.4:1;
+  /* Heading works at EVERY tilt, including zero. The old reasoning -- that
+     looking straight down, every heading shows the same disc -- is wrong about
+     what the control is for: it rotates the axis you are viewing along, so at
+     tilt 0 it spins the globe's north away from screen-up, which is exactly
+     what "shift the axis to align" asks for. The camera already does this
+     correctly, because screenUp is built from the heading; the slider was
+     disabled for a reason that never applied. */
+  $('#headR').disabled=false;
+  $('#headR').style.opacity=1;
 }
 $('#tiltR').addEventListener('input',e=>{state.gtilt=+e.target.value;camSync();});
 $('#headR').addEventListener('input',e=>{state.head=+e.target.value;camSync();});
@@ -5810,11 +5834,16 @@ document.querySelectorAll('#shadeSeg button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#shadeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.shade=b.dataset.s;});
 document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
   const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);
-  if(k==='rotate') $('#spinwrap').hidden=!state.layers.rotate;});
+});
 // One drawer at a time: opening either closes the other, so the globe is never
 // sandwiched between two panels on a screen that has no room for one.
 // Clicks the real toggle rather than setting state itself: two controls for one
 // boolean is how they drift apart, and the drawer's switch has to stay right.
+$('#rotBtn').onclick=()=>{
+  state.layers.rotate=!state.layers.rotate;
+  $('#rotBtn').classList.toggle('on',state.layers.rotate);
+  $('#rotBtn').setAttribute('aria-pressed',state.layers.rotate?'true':'false');
+  $('#spinwrap').hidden=!state.layers.rotate;};
 $('#mLabels').onclick=()=>{
   document.querySelector('.tog[data-layer="labels"]').click();
   $('#mLabels').classList.toggle('on',!!state.layers.labels);};
