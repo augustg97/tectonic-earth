@@ -746,3 +746,32 @@ sweep 1 → 12** at realistic load (5 under the harness's CPU-starved worst case
 is decode-throughput-scaled by design), release-to-render 397 ms, no blanks, coherence
 still 100/100, storm gate 0. Re-scrubbing a recently visited span steps entirely from
 residency — per-keyframe live — which is the actual study-a-transition workflow.
+
+## Q. Fidelity round toward the Google Earth bar (2026-07-31) — first iteration
+
+The user set the bar explicitly: nine Google Earth references, "match the fidelity...
+without compromising existing dynamics", loop with visual confirmation. First iteration
+shipped; the loop continues with the user's eyes on the live build.
+
+| what | mechanism found | what shipped |
+|---|---|---|
+| Flat land ≥63° (defect 1/2) | The anti-starburst polar branch computed its hillshade gradient from the ring-averaged BASE field only — the detail term never reached the gradient poleward of ~63°, and the gradient is what makes detail visible (H7) | The detail term's own central difference, taken in the world-fixed tangent frame with base height held constant (base cancels; pole-safe because the detail is isotropic 3D noise). Land only, mirroring the submarine base-only decision |
+| Amorphous ice blobs (defects 2/3) | One 7°-scale lobe noise on a SIX-degree-C linear ramp, painted flat white | Three edge scales (great lobes / ~34 fingering / ~110 fjord fray), outlet tongues following the real drainage field (symmetric about its midpoint — the first version biased positive exactly over lake basins, icing Manitoba and suppressing lakes), a crisp margin (smoothstep over ~0.9 C, same iso-line), ablation-zone grey-blue with melt speckle, sastrugi grain inside, bed relief ghosting through thin margins, and confidence-graded OPACITY so near-threshold fringes read as patchy cover rather than sheet (the crisp mask alone had promoted Quebec's marginal fringe into a solid sheet at the present day). ice_audit at its 1-finding baseline throughout |
+| Soft white snowfield wash (arctic wide views) | Smooth snowline contour | Same multi-scale zero-mean edge fraying as the sheet margin |
+| Plains read as wash (prairie/Sahel/New Guinea refs) | The drainage network was colour-only — "the app knows where the valleys are and declines to carve them" (H7) | The drainage field's own gradient (two extra taps of the MEANDERED sample) dips the shading normal toward channels: valleys incise, banks catch light. Elevation untouched — coastlines exact |
+| Deep-time/desert land = blank card (defect 1, Australia ref) | ALL land mottles were vegetation-gated, and the barren-era overlay was one flat two-tone ramp painted over everything | Barren and desert palettes now ride the lithology noise (sandstone vs iron-red families, duricrust variation), with the within-biome mottle UNGATED and outcrop grain |
+| Shield missing its thousand lakes (prairie/shield refs) | bake_present_lakes MIN_PX=55 kept ~137 lakes; Winnipeg-class and below were dropped | MIN_PX=6 (~10 km and up): 1,117 real lakes (647 Holocene-windowed, 470 long-lived), FIELD_V bumped 20260731-lakes |
+| Fine grain slightly timid | — | Amplitude 0.30+0.45·rug → 0.36+0.50·rug |
+
+**Verification-harness lesson that cost an hour:** the driver's app IFRAME was heuristically
+cached — headless shots silently rendered a STALE build (old lakes file, old shader) while
+the pane showed the new one; the two disagreeing at the same URL was the tell. The driver
+now cache-busts the iframe every run. Trust two disagreeing instruments to be telling you
+about a third thing.
+
+**Still open in this loop** (next iteration, guided by the user's eyes on this one):
+ocean-floor crispness vs the Hawaii/Scotia references (fracture-zone contrast, trench walls,
+shelf-break sharpening, margin-stipple softening); the rectangular fabric seam (not
+reproduced this session — likely a scrub-transient; watch); Hudson Bay renders annual-mean
+pack ice at the present day (pre-existing climate-model statement — user ruling wanted);
+richer close-zoom land grain; cloud interplay at mid-zoom.

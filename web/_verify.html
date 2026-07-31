@@ -14,7 +14,7 @@
 <script>
 const q = new URLSearchParams(location.search);
 const passthrough = ['oldnoise','zeronoise'].filter(k => q.get(k)).map(k => '&' + k + '=1').join('');
-document.getElementById('app').src = 'index.html?run=verify' + passthrough;
+document.getElementById('app').src = 'index.html?run=verify&cb=' + Date.now() + passthrough;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
   const [name, lon, lat, age, zoom] = s.split(',');
   return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null};

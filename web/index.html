@@ -1271,8 +1271,8 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-1104';
-const FIELD_V='20260727-surf';
+const DATA_V='20260731-1604';
+const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -2504,11 +2504,32 @@ void main(){
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
     // the detail character does not step at the branch.
     rug=clamp(length(gv)*1.78/460.0,0.0,1.0);
-    z=elevDetail(mix(baseElev(uv), sum/6.0, pw), matDir(sdir), rug);
+    float zb=mix(baseElev(uv), sum/6.0, pw);
+    z=elevDetail(zb, matDir(sdir), rug);
     // rotate the gradient back into east/north so BOTH branches speak the same
     // basis and nothing steps as pw crosses its threshold
     vec3 g3=t1*gv.x+t2*gv.y;
     gE=dot(g3,Eax); gN=dot(g3,Nax);
+    /* DETAIL REACHES THE POLAR GRADIENT TOO (fidelity round, 2026-07-31).
+       The ring average above is the anti-starburst cure for the BASE field --
+       but it also silently deleted the procedural detail from the hillshade
+       everywhere poleward of ~63 deg, and the gradient is what makes detail
+       VISIBLE (H7): shields and tundra rendered as blank card, which is the
+       flat polar land the user flagged. The detail term is isotropic 3D noise
+       evaluated on the sphere; it has no polar pathology, so its own central
+       difference, taken in the same world-fixed frame as the ring and with
+       the base height held constant (so the base cancels and only detail
+       remains), is safe at 90 degrees exactly. Land only, mirroring the
+       submarine base-only gradient decision. */
+    if(zb>=wl){
+      float ddc=2.4/2048.0*PI;
+      float dT1=elevDetail(zb, matDir(normalize(sdir+t1*ddc)), rug)
+               -elevDetail(zb, matDir(normalize(sdir-t1*ddc)), rug);
+      float dT2=elevDetail(zb, matDir(normalize(sdir+t2*ddc)), rug)
+               -elevDetail(zb, matDir(normalize(sdir-t2*ddc)), rug);
+      vec3 gD=t1*(dT1*0.5)+t2*(dT2*0.5);
+      gE+=dot(gD,Eax); gN+=dot(gD,Nax);
+    }
   } else {
     float rda=3.2/2048.0*PI;
     rug=clamp(length(vec2(
@@ -3025,10 +3046,28 @@ void main(){
     // and it is why the caps read blank next to the rest of the map.
     col*=1.0+(fine*0.14+fine2*0.07)*veget;
     col.g+=fine*0.045*h;                         // patchy darker/lighter stands
+    /* DESERT AND BARREN LAND GET THEIR OWN GEOLOGY (fidelity round,
+       2026-07-31). Both used to be ONE flat ramp -- which is why the
+       Precambrian, the deep future and every hot-desert interior rendered as
+       blank card while vegetated land was textured: all the existing mottles
+       are vegetation-gated. A real desert is the most legible geology on
+       Earth -- iron-red shield centres, pale sandstone platforms, dark
+       duricrust rises -- so the barren palette now rides the same lithology
+       noise the rock colours do, with the within-biome mottle applied
+       UNGATED and an outcrop-scale grain of its own. */
+    vec3 mdc=matDir(sdir);
+    float duri=vnoise3(mdc*230.0+41.0)-0.5;
     float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
-    col=mix(col, vec3(0.710,0.604,0.404), core*0.5);
+    vec3 coreCol=mix(vec3(0.722,0.608,0.400), vec3(0.706,0.502,0.353),
+                     smoothstep(0.38,0.68,lith));
+    coreCol*=1.0+(fine*0.13+fine2*0.08+duri*0.09);
+    col=mix(col, coreCol, core*0.5);
     if(uVeg<0.999){
-      vec3 barren=mix(vec3(0.612,0.561,0.482), vec3(0.494,0.447,0.388), clamp(zp/2400.0,0.0,1.0));
+      vec3 barrenA=mix(vec3(0.639,0.576,0.478), vec3(0.518,0.467,0.400), clamp(zp/2400.0,0.0,1.0));
+      vec3 barrenB=mix(vec3(0.663,0.494,0.376), vec3(0.541,0.424,0.341), clamp(zp/2400.0,0.0,1.0));
+      vec3 barren=mix(barrenA, barrenB, smoothstep(0.34,0.66,lith));
+      barren=mix(barren, vec3(0.475,0.443,0.392), smoothstep(0.45,0.75,lith2)*0.45);
+      barren*=1.0+(fine*0.15+fine2*0.09+duri*0.10);
       float bf=pow(1.0-uVeg,0.5)*clamp(0.92+0.08*(1.0-h)+zp/9000.0,0.0,1.0);
       col=mix(col,barren,clamp(bf,0.0,1.0));
     }
@@ -3122,6 +3161,12 @@ void main(){
     // everywhere, and the filtered elevation keeps it clean at the pole.
     float snow=clamp((zp-snowline)/400.0+tongue*0.6,0.0,1.0)*snowfall;
     snow=max(snow,glac);
+    /* The snowfield edge takes the same multi-scale fraying as the ice-sheet
+       margin: a snowline is a fractal boundary of aspect, wind and shade, not
+       a smooth contour -- the smooth version is the soft white wash that
+       smothered the arctic in the wide views. Zero-mean, edge-confined. */
+    float snEdge=snow*(1.0-snow)*4.0;
+    snow=clamp(snow+((fbm3(sdir*90.0+7.0)-0.5)*0.55+(vnoise3(sdir*260.0+3.0)-0.5)*0.35)*snEdge,0.0,1.0);
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
@@ -3155,8 +3200,65 @@ void main(){
      above is its own surface, not the bathymetry five kilometres beneath it. */
   float floatIce=0.0;
   if(z>=wl){
-    landIce=clamp((dT+lobe*nearL)/6.0,0.0,1.0);
-    col=mix(col, vec3(0.906,0.941,0.965), landIce);
+    /* CONTINENTAL ICE, REDRAWN (fidelity round, 2026-07-31). The old margin
+       was one 7-degree lobe noise on a SIX-DEGREE-C linear ramp painted flat
+       white: an amorphous blob with a smeared edge and a featureless
+       interior -- the "diffuse white sheet" in the user's screenshots.
+
+       What changes is PRESENTATION ONLY. The mask's zero crossing is the same
+       dT + lobe*nearL iso-line the audit calibrated, the added edge octaves
+       are zero-mean and confined to the margin band by nearL, and the outlet
+       term follows the real drainage field (an ice sheet's margin is not a
+       level set of temperature -- outlet glaciers drain it down the valleys,
+       which is why real margins finger). ice_audit.py verifies the area
+       budget still holds.
+
+       - three edge scales instead of one: great lobes (the old *9), margin
+         fingering at ~34, fjord-scale fraying at ~110;
+       - outlet tongues: the drainage channels pull the margin outward and the
+         inter-channel divides hold it back, roughly zero-mean by subtracting
+         the field's working mean;
+       - a CRISP margin: smoothstep over ~0.9 C instead of a 6 C linear ramp
+         -- same iso-line, one-seventh the smear;
+       - an ablation zone: the outer band of a real sheet is old grey-blue
+         ice, darker and wetter than the dry interior, with melt speckle;
+       - bed relief ghosts through where the sheet is THIN (near the margin),
+         and the interior keeps a whisper of the hillshade instead of erasing
+         it -- a sheet is a surface, not a sticker. */
+    float iceIm = dT + lobe*nearL
+                + (fbm3(sdir*34.0+11.0)-0.5)*2.6*nearL
+                + (fbm3(sdir*110.0+47.0)-0.5)*1.3*nearL
+                + (smoothstep(0.15,0.75,drain)-0.5)*0.6*nearL;
+    landIce=smoothstep(-0.45,0.45,iceIm);
+    if(landIce>0.001){
+      vec3 mdi=matDir(sdir);
+      // how deep into the sheet this pixel sits: 0 at the margin, 1 well inside
+      float iceDeep=smoothstep(0.35,2.6,iceIm);
+      // ablation band: grey-blue old ice with melt speckle, strongest at the edge
+      float melt=vnoise3(mdi*310.0+77.0);
+      vec3 ablC=mix(vec3(0.678,0.753,0.804), vec3(0.769,0.831,0.871), melt);
+      // dry interior snow, faintly textured by wind (sastrugi-scale grain)
+      float sast=(vnoise3(mdi*520.0+91.0)-0.5)*0.5+(fbm3(mdi*130.0+53.0)-0.5);
+      vec3 dryC=vec3(0.914,0.945,0.969)*(1.0+sast*0.045);
+      vec3 iceCol=mix(ablC, dryC, iceDeep);
+      // bed relief ghosts through the thin margin and whispers in the interior
+      float lum=clamp(dot(col,vec3(0.36,0.40,0.24))*1.35,0.0,1.0);
+      float showBed=mix(0.42,0.10,iceDeep);
+      iceCol*=mix(1.0-showBed*0.9, 1.0+showBed*0.35, lum);
+      // crevasse hatching where the bed is rough near the margin
+      float crev=smoothstep(0.25,0.75,rug)*(1.0-iceDeep);
+      iceCol*=1.0-crev*(0.5-vnoise3(mdi*760.0+29.0))*0.16;
+      /* Confidence-graded OPACITY. The old 6-degree ramp hid a truth: ground
+         within a degree of the threshold is not a solid sheet, it is patchy
+         seasonal cover -- and rendering the crisp mask at full opacity there
+         promoted every marginal fringe (Quebec at the present day) into an
+         ice sheet that does not exist. The GEOMETRY stays crisp; the ALPHA
+         now follows how far past the threshold the ground really is, so
+         near-threshold margins read as thin broken snow over visible
+         terrain and only genuinely cold interiors read as sheet. */
+      float iceAlpha=landIce*(0.30+0.70*smoothstep(0.15,2.4,iceIm));
+      col=mix(col, iceCol, iceAlpha);
+    }
   }else{
     /* Sea ice is PACK ice, and it forms MORE readily than an ice sheet, not
        less. An earlier version had this backwards -- sea ice colder than land
@@ -3342,7 +3444,22 @@ void main(){
     float ny=vnoise3(msd*145.0+9.0)-0.5;
     nx+=(vnoise3(msd*400.0+3.0)-0.5)*0.62 + (vnoise3(msd*1100.0+5.0)-0.5)*0.34;
     ny+=(vnoise3(msd*400.0+17.0)-0.5)*0.62 + (vnoise3(msd*1100.0+23.0)-0.5)*0.34;
-    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.30+0.45*rug));
+    /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
+       been in the surface field all along and was used only to tint -- "the
+       app knows where the valleys on a plain are and declines to carve them"
+       (H7). Take the drainage field's own gradient with two extra taps and
+       dip the shading normal toward the channel: rivers incise, banks catch
+       light, and a plain reads as dissected terrain instead of a wash. The
+       gradient is of the MEANDERED sample, so carved valleys curve like the
+       drawn rivers do. Elevation is untouched -- coastlines exact. */
+    float dstep=1.6;
+    float dE=mix(texture2D(surfA,wA(uv+rwarp+vec2(uTexel.x*dstep,0.0))).r,
+                 texture2D(surfB,wB(uv+rwarp+vec2(uTexel.x*dstep,0.0))).r,mixf)-drain;
+    float dN=mix(texture2D(surfA,wA(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,
+                 texture2D(surfB,wB(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,mixf)-drain;
+    float carve=smoothstep(0.18,0.62,drain)*(1.0-smoothstep(2400.0,3400.0,zp));
+    nx+=dE*carve*2.6; ny+=dN*carve*2.6;
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
        Real ocean floor is corrugated: long, low hills 2-5 km across, elongated
