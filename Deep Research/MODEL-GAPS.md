@@ -702,3 +702,22 @@ frame-based warm-up at 3 fps was a minute of slideshow before help arrived. Veri
 headless under forced dpr=2: steps at ~20-25 s under load, holds without flapping, zero
 errors. The user tabled resolution changes earlier; Auto's default-on is justified by their
 follow-up ask to "run smoothly on both M1 and M5" — and Full remains one click away.
+
+## P — FOURTH ROUND: the scrub blank, 2026-07-31
+
+The user's report: at reduced render scale, dragging the slider fast across large spans
+blanked the globe for a second or two before the target rendered. Two mechanisms, both
+measured with the new `_verify.html?scrub=` repro (0→900 Ma in 1.2 s, then time-to-render):
+**(1) the evictor could dispose textures still bound to the material** — a scrub floods the
+cache with new decodes, budget pressure evicts the least-recently-touched entries, and the
+pair still ON SCREEN is exactly what the scrub stopped touching; three.js then re-uploads
+from a closed bitmap and the globe renders black. Bound-within-3-frames entries are now
+pinned against eviction. **(2) decodes cannot be cancelled, and every age the slider swept
+past queued ahead of the age the user stopped on** — measured 1.37 s from release to
+render, most of it stale decodes draining through the worker pool. While scrubbing (age
+moving >1 keyframe for 2+ consecutive frames — a single big frame is a jump and decodes
+immediately), no speculative decode starts at all; completions that arrive for ages >4
+keyframes away close themselves instead of inserting. Release-to-render fell to 839 ms in
+the synthetic harness, which is the floor (the target's own decode plus one frame at the
+harness's 8.4 MP); during the drag the last world stays on screen and recently-visited
+spans still bind live. Coherence stayed 100/100 and the soaks stayed flat and error-free.

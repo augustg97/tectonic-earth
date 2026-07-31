@@ -90,6 +90,40 @@ const W = () => document.getElementById('app').contentWindow;
     document.title = 'VERIFY-DONE'; return;
   }
 
+  if (q.get('scrub')) {
+    /* FAST-SCRUB REPRO. Sweeps the age like a user dragging the slider hard
+       (0 -> 900 Ma in ~1.2 s), then watches the centre of the globe: a blank
+       (all-black) crop is the failure the user reported -- the bound pair got
+       evicted mid-scrub and the target pair had not decoded yet. Reports how
+       long the globe stayed blank after the sweep ended. */
+    A.state.age = 0;
+    await sleep(3500);                          // settle at present
+    const orf2 = W().requestAnimationFrame.bind(W());
+    await new Promise(res => {
+      const t2 = performance.now();
+      const stepFn = () => {
+        const k = (performance.now() - t2) / 1200;
+        A.state.age = Math.min(900, k * 900);
+        if (k < 1) orf2(stepFn); else res();
+      };
+      orf2(stepFn);
+    });
+    const samples = [];
+    const t3 = Date.now();
+    let renderedAt = -1;
+    while (Date.now() - t3 < 8000) {
+      const blank = !!A.snap(32, 32).error;    // all-black centre crop
+      samples.push({t: Date.now() - t3, blank});
+      if (!blank && renderedAt < 0) { renderedAt = Date.now() - t3; break; }
+      await sleep(120);
+    }
+    await fetch('http://127.0.0.1:8901/' + q.get('scrub') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({
+                  blankMs: renderedAt, blankSamples: samples.filter(s=>s.blank).length,
+                  samples: samples.length, errors: (W().__ERRORS || []).slice(0, 4)}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
   if (q.get('coherence')) {
     /* PLAYBACK BIND COHERENCE. At 18 Myr/s a keyframe crossing arrives every
        ~0.28 s; if the new interval's displacement (_v) or material (_p)

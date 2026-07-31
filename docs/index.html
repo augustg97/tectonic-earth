@@ -1090,12 +1090,32 @@ const TEX_BUDGET=((navigator.deviceMemory||8)<8?360:950)*1048576;
    measured 33-48% of playback frames with uWarp or uMat dark. */
 const KIND_PRIORITY=['e','r','v','p','w','d','o','m','t','f'];
 const _bmPending=new Map();   // kind+i -> in-flight decode promise
+/* Textures bound to the material in the last couple of frames are PINNED
+   against eviction. Without this, a fast slider scrub floods the cache with
+   new decodes, the budget evicts the least-recently-TOUCHED entries -- which
+   are exactly the pair still on screen, because the scrub stopped touching
+   them -- and three.js is left holding a disposed texture whose source
+   bitmap is closed: the globe renders BLANK until the target pair lands. */
+let _frameNo=0; const _boundAt=new Map();
+/* Scrubbing = the age moved more than a keyframe for 2+ consecutive frames
+   (one big frame is a JUMP and decodes immediately; a run of them is a drag).
+   While scrubbing, no new decodes start at all: createImageBitmap cannot be
+   cancelled, so every age the slider sweeps past would otherwise queue ahead
+   of the age the user finally stops on -- measured 1.37 s from release to
+   render, almost all of it stale decodes draining. The stale pair stays on
+   screen (pinned above), resident spans still bind live, and the target
+   decodes the moment the drag settles. */
+let _scrubN=0,_scrubbing=false;
 const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
 function _cacheTouch(e){e.u=++texClock;}
 function _cacheEvict(keepKey){
   while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
     let victim=null,best=Infinity;
-    for(const[k,v]of TEXCACHE){if(k!==keepKey&&v.u<best){best=v.u;victim=k;}}
+    for(const[k,v]of TEXCACHE){
+      if(k===keepKey)continue;
+      const ba=_boundAt.get(k);
+      if(ba!==undefined&&_frameNo-ba<3)continue;   // on screen -- never evict
+      if(v.u<best){best=v.u;victim=k;}}
     if(victim===null)break;
     const v=TEXCACHE.get(victim);
     _texBytes-=v.b;
@@ -1106,8 +1126,9 @@ function _cacheEvict(keepKey){
 }
 /* Decode one field into the residency window (idempotent, off-thread). The
    fetch is a cache hit whenever the prefetch pump has been past this file. */
-function ensureBitmap(kind,i){
+function ensureBitmap(kind,i,force){
   if(!_BITMAPS)return Promise.resolve();
+  if(_scrubbing&&!force)return Promise.resolve();
   const key=kind+i;
   const e0=TEXCACHE.get(key);
   if(e0&&e0.bm)return Promise.resolve();
@@ -1120,6 +1141,12 @@ function ensureBitmap(kind,i){
       premultiplyAlpha:'none',colorSpaceConversion:'none'}))
     .then(bm=>{
       _bmPending.delete(key);
+      /* A scrub kicked decodes for every age the slider swept past; by the
+         time one completes the viewer may be hundreds of Myr away. Inserting
+         it would evict something wanted; close it instead -- the HTTP cache
+         still holds the compressed bytes if that age comes back. */
+      const cur=DATA.timeline?frameAt(state.age).i:i;
+      if(Math.abs(i-cur)>4){bm.close&&bm.close();return;}
       const e={bm,t:null,u:0,b:bm.width*bm.height*8};
       TEXCACHE.set(key,e);_texBytes+=e.b;_cacheTouch(e);
       _cacheEvict(key);
@@ -1225,7 +1252,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-0210';
+const DATA_V='20260731-0321';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1366,9 +1393,9 @@ function loadField(i,kind,boot){
    just cached, or the splash would lift onto a globe with nothing to bind. */
 const loadFrame=(i,boot)=>
   Promise.all([loadField(i,'e',boot),loadField(i,'r',boot)])
-    .then(()=>boot?Promise.all([ensureBitmap('e',i),ensureBitmap('r',i)]):null)
+    .then(()=>boot?Promise.all([ensureBitmap('e',i,true),ensureBitmap('r',i,true)]):null)
     .then(()=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot))))
-    .then(()=>boot?Promise.all(FIELD_KINDS.map(([k])=>ensureBitmap(k,i))):null);
+    .then(()=>boot?Promise.all(FIELD_KINDS.map(([k])=>ensureBitmap(k,i,true))):null);
 const frameSettled=i=>FIELD_KINDS.every(([k])=>_fieldTried.has(k+i));
 /* Diagnostic: what image memory is this page actually PINNING? A decoded
    ImageBitmap holds its full uncompressed raster (often an IOSurface on
@@ -6272,14 +6299,18 @@ function markExtinctList(cur){
    the freeze. */
 let _texMakeBudget=2;
 function bindTex(kind,i,essential){
-  const e=TEXCACHE.get(kind+i);
-  if(e&&e.t){_cacheTouch(e);return e.t;}
+  const key=kind+i;
+  const e=TEXCACHE.get(key);
+  if(e&&e.t){_cacheTouch(e);_boundAt.set(key,_frameNo);return e.t;}
   if(_BITMAPS&&(!e||!e.bm)){
     // Not decoded yet: start the off-thread decode now (idempotent) and keep
     // the previous binding this frame -- the same contract a slow network has
     // always had. Essential kinds kick immediately; the rest wait their turn
-    // in the queue unless there is budget to spare.
-    if(essential||_texMakeBudget>0)ensureBitmap(kind,i);
+    // in the queue unless there is budget to spare. The pending caps matter
+    // during a fast scrub: every age the slider sweeps past kicks its own
+    // essentials, and an unbounded backlog is what delays the age the user
+    // actually stopped on.
+    if((essential&&_bmPending.size<10)||(!essential&&_texMakeBudget>0&&_bmPending.size<5))ensureBitmap(kind,i);
     if(!essential&&!_upQ.some(q=>q.k===kind&&q.i===i))_upQ.unshift({k:kind,i});
     return null;
   }
@@ -6288,7 +6319,9 @@ function bindTex(kind,i,essential){
     return null;
   }
   _texMakeBudget--;
-  return getTex(kind,i);
+  const t=getTex(kind,i);
+  if(t)_boundAt.set(key,_frameNo);
+  return t;
 }
 function bindTextures(){
   const f=curFrame();
@@ -6473,6 +6506,15 @@ function loop(now){
   const rawMs=now-last;
   const dt=Math.min(.05,rawMs/1000);last=now;
   qualityGovernor(rawMs);
+  _frameNo++;
+  // A scrub moves more than a keyframe per frame; the speculative queue is
+  // then aimed at ages already behind the slider. Drop it, it re-fills.
+  if(loop._la===undefined)loop._la=state.age;
+  const _ad=Math.abs(state.age-loop._la);
+  if(_ad>6)_upQ.length=0;
+  _scrubN=_ad>6?_scrubN+1:0;
+  _scrubbing=_scrubN>=2;
+  loop._la=state.age;
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   if(state.playing){
     state.age+=state.dir*state.speed*dt;
