@@ -99,11 +99,13 @@ const W = () => document.getElementById('app').contentWindow;
     A.state.age = 0;
     await sleep(3500);                          // settle at present
     const orf2 = W().requestAnimationFrame.bind(W());
+    const seen = new Set();
     await new Promise(res => {
       const t2 = performance.now();
       const stepFn = () => {
-        const k = (performance.now() - t2) / 1200;
+        const k = (performance.now() - t2) / 3200;
         A.state.age = Math.min(900, k * 900);
+        if (W().__MEM) seen.add(W().__MEM().boundE);
         if (k < 1) orf2(stepFn); else res();
       };
       orf2(stepFn);
@@ -119,7 +121,8 @@ const W = () => document.getElementById('app').contentWindow;
     }
     await fetch('http://127.0.0.1:8901/' + q.get('scrub') + '.json',
                 {method: 'POST', body: btoa(JSON.stringify({
-                  blankMs: renderedAt, blankSamples: samples.filter(s=>s.blank).length,
+                  blankMs: renderedAt, statesShownDuringSweep: seen.size,
+                  blankSamples: samples.filter(s=>s.blank).length,
                   samples: samples.length, errors: (W().__ERRORS || []).slice(0, 4)}))});
     document.title = 'VERIFY-DONE'; return;
   }

@@ -1106,6 +1106,16 @@ let _frameNo=0; const _boundAt=new Map();
    screen (pinned above), resident spans still bind live, and the target
    decodes the moment the drag settles. */
 let _scrubN=0,_scrubbing=false;
+let _lastBoundE=-1;   // which elevation keyframe is on screen (diagnostics + scrub stepping)
+function nearestResidentE(target){
+  let bi=-1,bd=1e9;
+  for(const[k,v]of TEXCACHE){
+    if(k.charCodeAt(0)!==101||!v.bm)continue;   // 'e' entries only
+    const i=+k.slice(1), d=Math.abs(i-target);
+    if(d<bd){bd=d;bi=i;}
+  }
+  return bi;
+}
 const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
 function _cacheTouch(e){e.u=++texClock;}
 function _cacheEvict(keepKey){
@@ -1128,7 +1138,11 @@ function _cacheEvict(keepKey){
    fetch is a cache hit whenever the prefetch pump has been past this file. */
 function ensureBitmap(kind,i,force){
   if(!_BITMAPS)return Promise.resolve();
-  if(_scrubbing&&!force)return Promise.resolve();
+  /* During a scrub only ELEVATION decodes: crust shape is what "change over
+     time" means on screen, the climate colouring rides uniforms that already
+     track the slider, and every non-elevation decode would queue ahead of the
+     next crust step. */
+  if(_scrubbing&&!force&&kind!=='e')return Promise.resolve();
   const key=kind+i;
   const e0=TEXCACHE.get(key);
   if(e0&&e0.bm)return Promise.resolve();
@@ -1146,7 +1160,12 @@ function ensureBitmap(kind,i,force){
          it would evict something wanted; close it instead -- the HTTP cache
          still holds the compressed bytes if that age comes back. */
       const cur=DATA.timeline?frameAt(state.age).i:i;
-      if(Math.abs(i-cur)>4){bm.close&&bm.close();return;}
+      let lim=4;
+      if(_scrubbing&&kind==='e'){
+        const nb=nearestResidentE(cur);
+        lim=Math.max(4,nb<0?1e9:Math.abs(nb-cur));   // closer than what's shown
+      }
+      if(Math.abs(i-cur)>lim){bm.close&&bm.close();return;}
       const e={bm,t:null,u:0,b:bm.width*bm.height*8};
       TEXCACHE.set(key,e);_texBytes+=e.b;_cacheTouch(e);
       _cacheEvict(key);
@@ -1252,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-0321';
+const DATA_V='20260731-1104';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1406,7 +1425,8 @@ window.__MEM=()=>{
   for(const[,get]of FIELD_KINDS){for(const im of get()){if(im&&im.width)legacy++;}}
   return {tried:_fieldTried.size,bitmaps:n,pinnedMB:Math.round(bytes/1048576),
           legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),
-          entries:TEXCACHE.size,pendingDecodes:_bmPending.size};
+          entries:TEXCACHE.size,pendingDecodes:_bmPending.size,
+          boundE:_lastBoundE,scrubbing:_scrubbing};
 };
 
 /* The frames an age sits between. `block` is true only at boot: everywhere else
@@ -1453,6 +1473,7 @@ function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
 const _upQ=[];
 function queueUploads(f){
   if(!DATA.timeline||!renderer.initTexture)return;
+  if(_scrubbing)return;   // the queue was flushed; bindTex owns the decode slots
   const n=DATA.timeline.length;
   const dir=state.playing?(state.dir<0?-1:+1):0;
   /* The pair itself comes first: bindTextures touches only the kinds it binds,
@@ -6310,7 +6331,7 @@ function bindTex(kind,i,essential){
     // during a fast scrub: every age the slider sweeps past kicks its own
     // essentials, and an unbounded backlog is what delays the age the user
     // actually stopped on.
-    if((essential&&_bmPending.size<10)||(!essential&&_texMakeBudget>0&&_bmPending.size<5))ensureBitmap(kind,i);
+    if((essential&&_bmPending.size<(_scrubbing?3:10))||(!essential&&_texMakeBudget>0&&_bmPending.size<5))ensureBitmap(kind,i);
     if(!essential&&!_upQ.some(q=>q.k===kind&&q.i===i))_upQ.unshift({k:kind,i});
     return null;
   }
@@ -6330,15 +6351,70 @@ function bindTextures(){
      dozen Map lookups -- and putting it here rather than on each of the many
      paths that can change state.age means none of them can be forgotten. */
   if(!frameSettled(f.i)||!frameSettled(f.j)){ensureFrames(state.age);pumpPrefetch();}
+  /* SCRUB STEPPING (2026-07-31). While the slider is being dragged the exact
+     pair usually is not decoded yet, and the old behaviour -- keep the last
+     bound pair -- froze the crust while the climate tint kept sweeping: the
+     user saw colours travel through time over a fossilised world. Instead the
+     globe now shows the NEAREST RESIDENT elevation keyframe to wherever the
+     slider is, stepping through intermediate states as elevation-only decodes
+     land behind the drag (they cannot be cancelled, so they are capped and
+     lag-tolerant). One coherent WORLD per step: every per-frame field that is
+     resident for that keyframe binds with it, and the interval machinery
+     (mixf blending, uWarp) stands down -- a stepped world is a still, not an
+     interval. On release the exact pair binds and everything resolves. */
+  const bi=_scrubbing?nearestResidentE(f.i):-1;
+  const stepping=bi>=0&&_scrubbing;
+  if(_scrubbing){
+    /* Aim the elevation decodes AHEAD of the drag: a decode takes longer than
+       a frame, so one kicked at the slider's position lands behind it. Kicked
+       a few keyframes along its direction of travel, it lands on time. */
+    const v=f.i-(bindTextures._si===undefined?f.i:bindTextures._si);
+    if(v)ensureBitmap('e',Math.max(0,Math.min(DATA.timeline.length-1,f.i+2*Math.sign(v)+3*v)));
+  }
+  bindTextures._si=f.i;
   const ea=bindTex('e',f.i,true), eb=bindTex('e',f.j,true);
   const ra=bindTex('r',f.i,true), rb=bindTex('r',f.j,true);
   // Outside the Holocene window, the present frame contributes its long-lived
   // lakes only — otherwise the Great Lakes bleed several Myr into the past.
   const P=presentIndex(), swap=youngLakeWeight(state.age)<0.5 && oldLakeTex();
+  if(stepping){
+    const gT=(k)=>{const e=TEXCACHE.get(k+bi);
+      if(!(e&&e.bm))return null;
+      const t=getTex(k,bi); if(t)_boundAt.set(k+bi,_frameNo); return t;};
+    const es=gT('e');
+    if(es){mat.uniforms.elevA.value=es;mat.uniforms.elevB.value=es;_lastBoundE=bi;}
+    const rs=gT('r');
+    if(rs){mat.uniforms.rainA.value=rs;mat.uniforms.rainB.value=rs;}
+    const ws=(swap&&bi===P)?oldLakeTex():gT('w');
+    if(ws){mat.uniforms.waterA.value=ws;mat.uniforms.waterB.value=ws;}
+    const ds=gT('d');
+    if(ds){mat.uniforms.surfA.value=ds;mat.uniforms.surfB.value=ds;}
+    const os=gT('o');
+    if(os){mat.uniforms.oceanA.value=os;mat.uniforms.oceanB.value=os;}
+    mat.uniforms.uWarp.value=0.0;                    // a still, not an interval
+    const ps=gT('p'), pr=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[bi].age)];
+    if(ps&&pr){
+      mat.uniforms.plateA.value=ps;
+      const Q=mat.uniforms.uPlateQ.value;
+      for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
+      mat.uniforms.uMat.value=1.0;
+    } else mat.uniforms.uMat.value=0.0;
+    const ts=gT('t');
+    if(ts)mat.uniforms.tectA.value=ts;
+    mat.uniforms.uTect.value=ts?1.0:0.0;
+    const fs=gT('f');
+    if(fs)mat.uniforms.foreA.value=fs;
+    mat.uniforms.uFore.value=fs?1.0:0.0;
+    const ms=gT('m'); if(ms)mat.uniforms.motA.value=ms;
+    mat.uniforms.mixf.value=0.0;
+    bindClimate(f);
+    return f;
+  }
   const wa=(swap&&f.i===P)?oldLakeTex():bindTex('w',f.i);
   const wb=(swap&&f.j===P)?oldLakeTex():bindTex('w',f.j);
   if(ea)mat.uniforms.elevA.value=ea;
   if(eb||ea)mat.uniforms.elevB.value=eb||ea;
+  if(ea)_lastBoundE=f.i;
   if(ra)mat.uniforms.rainA.value=ra;
   if(rb||ra)mat.uniforms.rainB.value=rb||ra;
   // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
@@ -6390,6 +6466,13 @@ function bindTextures(){
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
   mat.uniforms.mixf.value=f.t;
+  bindClimate(f);
+  return f;
+}
+/* The climate/appearance uniforms interpolate straight from the timeline
+   table, so they track the slider continuously whatever textures are bound --
+   which is why a scrub keeps its sweeping seasons even while the crust steps. */
+function bindClimate(f){
   /* The Messinian lasted 5.97-5.33 Ma: 640 kyr, an eighth of one keyframe gap.
      Gate it to a two-frame window around 5 Ma rather than let a 5 Myr keyframe
      imply the Mediterranean spent ten million years as a desert. */
@@ -6424,7 +6507,6 @@ function bindTextures(){
   const mtex=bindTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
-  return f;
 }
 /* Quality scale: what setPixelRatio actually gets. Auto starts at full and
    is stepped by the governor in loop(); a pinned choice bypasses it. */

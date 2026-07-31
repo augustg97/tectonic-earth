@@ -721,3 +721,28 @@ keyframes away close themselves instead of inserting. Release-to-render fell to 
 the synthetic harness, which is the floor (the target's own decode plus one frame at the
 harness's 8.4 MP); during the drag the last world stays on screen and recently-visited
 spans still bind live. Coherence stayed 100/100 and the soaks stayed flat and error-free.
+
+## P — FIFTH ROUND: the crust must move under the drag, 2026-07-31
+
+The scrub-decode gate (fourth round) fixed the blank and the release latency but froze the
+CRUST mid-drag: the climate uniforms interpolate straight from the timeline table and kept
+sweeping — seasons, ice lines, sea tint all travelling — while the elevation pair stayed
+whatever the drag departed from. Colours moved through time over a fossilised world, until
+release snapped it. The user called it correctly: showing change over time in real time is
+the slider's job.
+
+**Scrub stepping.** While the slider moves, `bindTextures` shows the NEAREST RESIDENT
+elevation keyframe to the slider's position — one coherent world per step (every per-frame
+field resident for that keyframe binds with it; `mixf`=0, `uWarp` stands down: a stepped
+world is a still, not an interval) — and elevation-ONLY decodes keep landing behind the
+drag: capped at 3 in flight, aimed AHEAD along the drag's direction of travel (a decode
+outlives a frame, so one kicked at the slider lands behind it), and a completion is kept if
+it is closer to the slider than what is currently shown rather than by the fixed radius.
+Climate uniforms still track continuously, so the sweep keeps its seasons while the crust
+marches. On release the exact pair binds and the interval machinery resumes.
+
+Measured with `_verify.html?scrub=` (0→900 Ma over 3.2 s): **crust states shown during the
+sweep 1 → 12** at realistic load (5 under the harness's CPU-starved worst case — the rate
+is decode-throughput-scaled by design), release-to-render 397 ms, no blanks, coherence
+still 100/100, storm gate 0. Re-scrubbing a recently visited span steps entirely from
+residency — per-keyframe live — which is the actual study-a-transition workflow.
