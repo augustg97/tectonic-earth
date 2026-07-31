@@ -629,3 +629,42 @@ frame improved only ~6–13% because Apple Silicon hides ALU cost too well for a
 LUT to pay the way it would on bandwidth-rich desktop GPUs; the measured 28.7 ms floor says
 where the next 7× lives, and the two named levers above are how to get part of it without
 breaking the no-visual-compromise rule.
+
+## P — CRASH POST-MORTEM AND SECOND ROUND, 2026-07-30 (evening)
+
+**The first P1 shipped a crash.** Moving decode off the render path via `createImageBitmap`
+was right; RETAINING every decoded bitmap in the per-kind arrays was wrong — a decoded
+bitmap pins its full uncompressed raster (an IOSurface on macOS, invisible to RSS, which is
+why the first soak read "flat" and shipped anyway). The prefetch pump then decoded the whole
+timeline: measured **3,150 MB pinned within seconds of boot**, ~19 GB at completion. The tab
+died in minutes ("Aw, Snap!", error 5), fastest while dragging — and the thrash on the way
+down was itself the residual "still laggy". The user found it; the soak below is how it
+gets found before a deploy next time.
+
+**The fix is unified residency** (`web/index.html`, TEXCACHE): one cache entry per
+kind+keyframe owns BOTH the decoded bitmap and the GPU texture, accounted together at
+8 bytes/px and evicted together (never dispose one and keep the other — a context restore
+would re-upload from a closed bitmap). The prefetch pump now only warms the browser's HTTP
+cache — compressed bytes, browser-managed, ~127 MB for everything — and `ensureBitmap()`
+re-decodes on demand (~1 ms disk-cache hit + off-thread decode) as the window moves.
+Budget 700 MB (360 MB floor on small devices — a bound pair accounts ~300 MB, and a budget
+below the pair is permanent thrash). `queueUploads` gained a decode stage ahead of its
+upload stage; `bindTex` kicks the decode for essential kinds on jumps.
+
+**Verified by a 5-minute soak** (`_verify.html?soak=` — playback + rotate + a far jump
+every 20 s + view flips, under the app's own rAF): **zero errors, pinned memory flat at
+325–344 MB, entries 34–53 churning under budget, JS heap 58–79 MB, GPU process ~200 MB
+flat.** Before the fix the same soak pinned 3.1 GB inside the first minute. Crossings and
+orientation re-verified unchanged; storm gate still 0 synchronous uploads.
+
+**Ocean-only gradient (user-sanctioned).** The user judged the archived gradient A/B: a
+downgrade on land, *not* on ocean crust. Shipped exactly that split: submarine fragments
+take the base-field gradient (the detail jitter there was fighting the abyssal fabric
+anyway), land keeps the full `elevAt` taps bit-identically. Sheds four ten-octave walks
+from the majority of pixels in most framings; verified land-identical (Tibet interior
+0.07% > 2 LSB, residual scattered diffs are the half-float subnormal clamp fix, not the
+gradient) and ocean-clean by screenshot.
+
+**Standing lesson for the register:** decoded-image residency is a BUDGET, never an
+archive; and on macOS, decoded-image memory must be measured in-page (`window.__MEM()`),
+not by RSS.

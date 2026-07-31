@@ -1041,32 +1041,97 @@ let DATA={};   // timeline, boundaries, plates, hotspots, labels
 let ELI=[], RNI=[], MOI=[], WLI=[], SFI=[], OCI=[], VLI=[], PLI=[], TCI=[], FRI=[];   // elevation / rainfall / motion / lake-depth / surface-process / ocean-structure / displacement fields
 let WOLD=null, WOLD_TEX=null;         // present-day lakes minus the Holocene ones
 const MOTDATA=new Map();      // keyframe -> decoded motion pixels (CPU side)
-/* GPU textures are created on demand around the current age and evicted by
-   LRU. With ~250 keyframes, uploading them all would cost hundreds of MB of
-   video memory for textures that are almost never on screen at once.
+/* UNIFIED IMAGE+TEXTURE RESIDENCY (crash fix, 2026-07-30 evening).
 
-   THE BUDGET IS BYTES, NOT A COUNT (perf audit P2, WP-09 F5). The old cap of
-   24 textures was sized when a keyframe carried six kinds; a bound pair now
-   holds 15-18, so the cache fit ~1.3 keyframes -- every crossing evicted the
-   frame it had just left, and scrubbing back re-uploaded all of it (~101 ms,
-   measured). Counting bytes keeps ~4 keyframes resident (the pair plus a
-   neighbour each way) whatever the mix of texture sizes, and a smaller budget
-   on low-memory devices keeps phones out of trouble. */
+   The first ImageBitmap loader decoded every field at fetch time and kept the
+   bitmap in the per-kind arrays forever. A decoded bitmap holds its full
+   uncompressed raster -- on macOS usually an IOSurface, invisible to RSS --
+   and the prefetch pump fetches all ~2,510 files: measured 3,150 MB pinned
+   within seconds of boot, ~19 GB by completion. The GPU process dies within
+   minutes ("Aw, Snap!", error 5), fastest while dragging the globe, and the
+   thrash on the way down is itself jank.
+
+   So decoded pixels are now a WINDOW, not an archive. One cache entry per
+   kind+keyframe owns BOTH the decoded bitmap and the GPU texture built from
+   it; they are accounted and evicted together (never dispose one and keep the
+   other -- a context restore would try to re-upload from a closed bitmap).
+   The prefetch pump only warms the browser's HTTP cache, which stores the
+   COMPRESSED bytes (~127 MB for the whole timeline) and is exactly the store
+   the old <img> pipeline leaned on; re-decoding a frame that left the window
+   is a ~1 ms disk-cache hit plus an off-thread decode.
+
+   Budget counts w*h*8 per entry -- decoded copy plus GPU copy -- so ~4-5
+   keyframes stay warm around the viewer on a desktop, fewer on low-memory
+   devices. */
 const TEXCACHE=new Map(); let texClock=0, _texBytes=0;
-const TEX_BUDGET=((navigator.deviceMemory||8)<8?200:450)*1048576;
+/* The floor matters: a bound PAIR accounts ~300 MB at 8 bytes/px, and a
+   budget below that would evict the very textures being drawn -- permanent
+   thrash. 360 keeps one pair plus a little headroom on small devices. */
+const TEX_BUDGET=((navigator.deviceMemory||8)<8?360:700)*1048576;
+const _bmPending=new Map();   // kind+i -> in-flight decode promise
+const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
+function _cacheTouch(e){e.u=++texClock;}
+function _cacheEvict(keepKey){
+  while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
+    let victim=null,best=Infinity;
+    for(const[k,v]of TEXCACHE){if(k!==keepKey&&v.u<best){best=v.u;victim=k;}}
+    if(victim===null)break;
+    const v=TEXCACHE.get(victim);
+    _texBytes-=v.b;
+    if(v.t)v.t.dispose();
+    if(v.bm&&v.bm.close)v.bm.close();
+    TEXCACHE.delete(victim);
+  }
+}
+/* Decode one field into the residency window (idempotent, off-thread). The
+   fetch is a cache hit whenever the prefetch pump has been past this file. */
+function ensureBitmap(kind,i){
+  if(!_BITMAPS)return Promise.resolve();
+  const key=kind+i;
+  const e0=TEXCACHE.get(key);
+  if(e0&&e0.bm)return Promise.resolve();
+  if(_bmMissing.has(key))return Promise.resolve();
+  const p0=_bmPending.get(key); if(p0)return p0;
+  const pri=(kind==='e'||kind==='r')?'high':'low';
+  const p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
+    .then(r=>{if(!r.ok)throw 0;return r.blob();})
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
+      premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+    .then(bm=>{
+      _bmPending.delete(key);
+      const e={bm,t:null,u:0,b:bm.width*bm.height*8};
+      TEXCACHE.set(key,e);_texBytes+=e.b;_cacheTouch(e);
+      _cacheEvict(key);
+    })
+    .catch(()=>{_bmPending.delete(key);_bmMissing.add(key);});
+  _bmPending.set(key,p);
+  return p;
+}
+function fieldImage(kind,i){
+  if(_BITMAPS){const e=TEXCACHE.get(kind+i);return(e&&e.bm)||null;}
+  return (kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:kind==='f'?FRI:MOI)[i]||null;
+}
 function getTex(kind,i){
-  const src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:kind==='f'?FRI:MOI)[i];
-  if(!src)return null;
   const key=kind+i;
   let e=TEXCACHE.get(key);
-  if(!e){
+  let src=null;
+  if(_BITMAPS){
+    if(!e||!e.bm)return null;             // not decoded into the window yet
+    src=e.bm;
+  }else{
+    src=(kind==='e'?ELI:kind==='r'?RNI:kind==='w'?WLI:kind==='d'?SFI:kind==='o'?OCI:kind==='v'?VLI:kind==='p'?PLI:kind==='t'?TCI:kind==='f'?FRI:MOI)[i];
+    if(!src)return null;
+    if(!e){e={bm:null,t:null,u:0,b:(src.width*src.height*8)||2097152};
+      TEXCACHE.set(key,e);_texBytes+=e.b;}
+  }
+  if(!e.t){
     const t=new THREE.Texture(src);
     // Field data, not colour: keep it linear and unfiltered by mipmaps so
     // elevation isn't averaged across scales before the shader reads it.
     t.colorSpace=THREE.NoColorSpace;
-    // ImageBitmaps are baked pre-flipped (see loadField): UNPACK_FLIP_Y_WEBGL
-    // is ignored for them by spec, so flipY must not be left on.
-    if(_BITMAPS&&src instanceof ImageBitmap)t.flipY=false;
+    // Bitmaps are baked pre-flipped: UNPACK_FLIP_Y_WEBGL is ignored for
+    // ImageBitmap uploads by spec, so flipY must not be left on.
+    if(_BITMAPS)t.flipY=false;
     /* NEAREST for the plate-slot raster only. Every other field is a
        quantity and wants smoothing; a slot is a LABEL, and interpolating
        between slot 3 and slot 17 gives slot 10 -- a plate that is not there,
@@ -1076,16 +1141,10 @@ function getTex(kind,i){
     t.magFilter=nearest?THREE.NearestFilter:THREE.LinearFilter;
     t.generateMipmaps=false; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
     t.needsUpdate=true;
-    e={t,u:0,b:(src.width*src.height*4)||1048576}; TEXCACHE.set(key,e);
-    _texBytes+=e.b;
+    e.t=t;
   }
-  e.u=++texClock;
-  while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
-    let victim=null,best=Infinity;
-    for(const[k,v]of TEXCACHE){if(k!==key&&v.u<best){best=v.u;victim=k;}}
-    if(victim===null)break;
-    const v=TEXCACHE.get(victim);_texBytes-=v.b;v.t.dispose();TEXCACHE.delete(victim);
-  }
+  _cacheTouch(e);
+  _cacheEvict(key);
   return e.t;
 }
 /* The present frame's lake field holds the REAL lakes, traced from Natural
@@ -1145,7 +1204,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260730-2323';
+const DATA_V='20260731-0120';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1259,14 +1318,16 @@ function loadField(i,kind,boot){
       if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}};
   let p;
   if(_BITMAPS){
-    /* Elevation and rainfall gate what a frame LOOKS like, so they ride the
-       network at high priority; the other kinds refine it and follow. */
+    /* Fetch and DISCARD: this populates the browser's HTTP cache (compressed
+       bytes, disk-backed, browser-managed) and nothing else. Decoding into
+       memory is ensureBitmap's job, and only for the residency window --
+       decoding everything here is the exact mistake that pinned gigabytes of
+       IOSurfaces and crashed the tab. Elevation and rainfall still ride at
+       high priority; the refinement kinds follow. */
     const pri=(kind==='e'||kind==='r')?'high':'low';
     p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
       .then(r=>{if(!r.ok)throw 0;return r.blob();})
-      .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
-        premultiplyAlpha:'none',colorSpaceConversion:'none'}))
-      .then(bm=>{arr[i]=bm;fin();})
+      .then(()=>fin())
       .catch(fin);
   } else p=new Promise(res=>{
     const img=new Image();
@@ -1280,11 +1341,25 @@ function loadField(i,kind,boot){
 /* Two waves (perf audit P6): elevation+rainfall first -- the per-kind uniform
    gates in bindTextures make a partial bind safe, so on a jump the first
    CORRECT frame needs only these two, and the other eight kinds land behind
-   them without holding it up. */
+   them without holding it up. At boot the frames must also be DECODED, not
+   just cached, or the splash would lift onto a globe with nothing to bind. */
 const loadFrame=(i,boot)=>
   Promise.all([loadField(i,'e',boot),loadField(i,'r',boot)])
-    .then(()=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot))));
+    .then(()=>boot?Promise.all([ensureBitmap('e',i),ensureBitmap('r',i)]):null)
+    .then(()=>Promise.all(FIELD_KINDS.map(([k])=>loadField(i,k,boot))))
+    .then(()=>boot?Promise.all(FIELD_KINDS.map(([k])=>ensureBitmap(k,i))):null);
 const frameSettled=i=>FIELD_KINDS.every(([k])=>_fieldTried.has(k+i));
+/* Diagnostic: what image memory is this page actually PINNING? A decoded
+   ImageBitmap holds its full uncompressed raster (often an IOSurface on
+   macOS, invisible to RSS) for as long as a reference lives. */
+window.__MEM=()=>{
+  let n=0,bytes=0,legacy=0;
+  for(const[k,v]of TEXCACHE){if(v.bm){n++;bytes+=v.bm.width*v.bm.height*4;}}
+  for(const[,get]of FIELD_KINDS){for(const im of get()){if(im&&im.width)legacy++;}}
+  return {tried:_fieldTried.size,bitmaps:n,pinnedMB:Math.round(bytes/1048576),
+          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),
+          entries:TEXCACHE.size,pendingDecodes:_bmPending.size};
+};
 
 /* The frames an age sits between. `block` is true only at boot: everywhere else
    this is fire-and-forget, because bindTextures already has something to draw. */
@@ -1339,11 +1414,22 @@ function queueUploads(f){
   const want=[f.i,f.j];
   if(dir<=0){want.push(f.i-1);if(dir<0)want.push(f.i-2);}
   if(dir>=0){want.push(f.j+1);if(dir>0)want.push(f.j+2);}
+  let decodesKicked=0;
   for(const w of want){
     if(w<0||w>=n)continue;
-    for(const[k,get]of FIELD_KINDS){
-      if(TEXCACHE.has(k+w))continue;
-      if(!get()[w])continue;                        // not fetched yet
+    for(const[k]of FIELD_KINDS){
+      const key=k+w;
+      if(_bmMissing.has(key))continue;
+      if(!_fieldTried.has(key))continue;            // not even fetched yet
+      const e=TEXCACHE.get(key);
+      if(e&&e.t)continue;                           // fully resident
+      if(_BITMAPS&&(!e||!e.bm)){
+        // Stage 1, DECODE: off-thread, so a few can run concurrently without
+        // touching the frame. ensureBitmap is idempotent.
+        if(decodesKicked<3&&_bmPending.size<4){ensureBitmap(k,w);decodesKicked++;}
+        continue;
+      }
+      // Stage 2, UPLOAD: decoded and waiting for its GPU copy.
       if(_upQ.some(q=>q.k===k&&q.i===w))continue;
       _upQ.push({k,i:w});
     }
@@ -1363,8 +1449,9 @@ function queueUploads(f){
   while(_upQ.length){
     const q=_upQ.shift();
     if(Math.abs(q.i-f.i)>3)continue;                // stale after a far jump
-    if(!TEXCACHE.has(q.k+q.i)){
-      const t=getTex(q.k,q.i);
+    const e=TEXCACHE.get(q.k+q.i);
+    if(!e||!e.t){
+      const t=getTex(q.k,q.i);                      // null until decoded
       if(t)renderer.initTexture(t);
     }
     break;                                          // at most one per frame
@@ -2372,8 +2459,22 @@ void main(){
        fracture zones and as the absence of the aliasing staircase -- not as a
        shorter probe. 2.4 texels of 2048 rows is the same 35 km it always was. */
     float da=2.4/2048.0*PI;
-    gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
-    gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+    /* UNDERWATER, the gradient reads the BASE field only. The four elevAt
+       taps re-run the full two-fractal detail stack each, and on submarine
+       ground the detail's contribution to a 23.5 km central difference is
+       high-frequency jitter the abyssal fabric already owns -- the 2026-07-30
+       A/B was judged on screen: on land the jitter is load-bearing texture
+       and stays; on ocean crust the base-only gradient reads as well or
+       better. Ocean covers most pixels in most framings, so this sheds four
+       ten-octave walks from the majority of fragments while land shading
+       stays bit-identical. */
+    if(z<wl){
+      gE=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
+      gN=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
+    }else{
+      gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
+      gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+    }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
        range, so at abyssal depth ONE quantisation level is 105 m -- and this
@@ -4383,7 +4484,7 @@ function buildBoundaries(){
 const MOT_W=128, MOT_H=64, MOT_RANGE=160;
 function motionField(i){
   if(MOTDATA.has(i))return MOTDATA.get(i);
-  const img=MOI[i]; if(!img)return null;
+  const img=fieldImage('m',i); if(!img){ensureBitmap('m',i);return null;}
   const c=document.createElement('canvas');c.width=MOT_W;c.height=MOT_H;
   const cx=c.getContext('2d',{willReadFrequently:true});
   drawFieldImage(cx,img,MOT_W,MOT_H);
@@ -4413,7 +4514,7 @@ const ELEV_W=256, ELEV_H=128, ELEV_RANGE=8000;
 const ELEVDATA=new Map();
 function elevField(i){
   if(ELEVDATA.has(i))return ELEVDATA.get(i);
-  const img=ELI[i]; if(!img)return null;
+  const img=fieldImage('e',i); if(!img){ensureBitmap('e',i);return null;}
   const c=document.createElement('canvas');c.width=ELEV_W;c.height=ELEV_H;
   const cx=c.getContext('2d',{willReadFrequently:true});
   drawFieldImage(cx,img,ELEV_W,ELEV_H);
@@ -6147,7 +6248,17 @@ function markExtinctList(cur){
    the freeze. */
 let _texMakeBudget=2;
 function bindTex(kind,i,essential){
-  if(TEXCACHE.has(kind+i))return getTex(kind,i);
+  const e=TEXCACHE.get(kind+i);
+  if(e&&e.t){_cacheTouch(e);return e.t;}
+  if(_BITMAPS&&(!e||!e.bm)){
+    // Not decoded yet: start the off-thread decode now (idempotent) and keep
+    // the previous binding this frame -- the same contract a slow network has
+    // always had. Essential kinds kick immediately; the rest wait their turn
+    // in the queue unless there is budget to spare.
+    if(essential||_texMakeBudget>0)ensureBitmap(kind,i);
+    if(!essential&&!_upQ.some(q=>q.k===kind&&q.i===i))_upQ.unshift({k:kind,i});
+    return null;
+  }
   if(!essential&&_texMakeBudget<=0){
     if(!_upQ.some(q=>q.k===kind&&q.i===i))_upQ.unshift({k:kind,i});
     return null;

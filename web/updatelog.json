@@ -1,6 +1,13 @@
 {
  "releases": [
   {
+   "version": "2.1.1",
+   "date": "30 July 2026",
+   "title": "The crash is fixed",
+   "summary": "The 2.1 performance release had a serious bug: it decoded every arriving texture immediately and kept all of them in memory, so a few minutes in — gigabytes later — the tab crashed, fastest while dragging the globe. Decoded textures are now a bounded window (~a third of a gigabyte) around the moment you are viewing; everything else stays compressed in the browser's own cache and is re-decoded in the background as you approach it. A five-minute automated stress run — playback, rotation, a far jump every twenty seconds — now holds memory flat with zero errors. Also: sea-floor shading got measurably cheaper with no visible change, following a side-by-side judgement that the land version of the same change was a downgrade (so land kept its original shading, untouched).",
+   "sections": []
+  },
+  {
    "version": "2.1",
    "date": "30 July 2026",
    "title": "Smoother time travel",
