@@ -2681,7 +2681,27 @@ void main(){
        this ever touched. Fades in below 80 m, which leaves the surf zone and
        the lagoons alone; everything deeper than that is being described by a
        grid too coarse to describe it. */
-    float qw=smoothstep(-25.0,-500.0,z);
+    /* THE GATE IS COMPUTED FROM A SMOOTHED DEPTH (fidelity round iter 6 --
+       and this one was proven, not guessed: an early-return probe of qw
+       showed the margin lace IS the gate. z on the shelf band carries the
+       field's own +/-150 m texel noise, and a 110 m ramp over that noise is
+       a per-pixel coin flip between the RAW narrow gradient and the SHRUNK
+       one -- the bright ridged lace outlining every margin was the flicker
+       between two shading regimes, invisible to every per-system kill
+       switch because it was never a system. H8's standing rule: smooth the
+       input of a steep threshold. Five base taps at ~60 km give a depth the
+       ramp can threshold cleanly; the ramp itself stays semantic (surf zone
+       above -30 m untouched, fully engaged by -140 m). */
+    float qw=0.0;
+    if(z<wl+300.0){
+      float daQ=6.0/2048.0*PI;
+      float zSm=(baseElev(uv)
+                +baseElev(uvFromDir(normalize(sdir+Eax*daQ)))
+                +baseElev(uvFromDir(normalize(sdir-Eax*daQ)))
+                +baseElev(uvFromDir(normalize(sdir+Nax*daQ)))
+                +baseElev(uvFromDir(normalize(sdir-Nax*daQ))))*0.2;
+      qw=smoothstep(-30.0,-140.0,zSm);
+    }
     if(qw>0.01 && uDbg.w>0.5){
       float db=16.0/2048.0*PI, ds=da/db;
 
@@ -2834,8 +2854,13 @@ void main(){
          palette: it is lighting, not colour). Engage earlier and floor
          deeper; open flat floor (wide < 120) is untouched, so fracture zones
          and trench edges keep full strength exactly as documented. */
+      /* Guard thresholds from the MEASURED probe, not the assumed one: the
+         early-return |wide| viz reads ~100-200 on the margin band (white
+         saturation only at the steepest core), so the old 120-520 onset left
+         keep at ~0.44 exactly where the lace lives. Onset 60, saturated by
+         220; fracture zones on open floor sit under 40 and keep everything. */
       float keep=max(rl-QE,0.0)/max(rl,1e-4)*0.55
-               * mix(1.0, 0.10, smoothstep(120.0,520.0,length(vec2(wE,wN))));
+               * mix(1.0, 0.10, smoothstep(60.0,220.0,length(vec2(wE,wN))));
       gE=mix(gE, wE+res.x*keep, qw);
       gN=mix(gN, wN+res.y*keep, qw);
     }

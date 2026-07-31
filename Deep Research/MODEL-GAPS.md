@@ -843,3 +843,17 @@ hillshade multiplies it, so the lace appears in ANY such viz. Next probes, in or
 final shade term; (2) the sea-surface sheen's static component; (3) the shade formula's
 inputs beyond nrm. The crackle sits at z −850…−3000 on old-crust margins, is static in
 time, lighting-borne, and band-limited to the slope — whatever draws it satisfies all four.
+
+## Q — ITERATION 6, 2026-07-31: the lace, narrowed to a facet
+
+Proven this round, each by direct probe: the wide gradient is CLEAN (early-return viz);
+the qw gate WAS a per-pixel coin flip over the field's own texel noise (the gate viz shows
+the lace's own pattern in qw) and now thresholds a five-tap smoothed depth instead — a
+principled H8-class fix that ships regardless; the harness is FRESH (an additive canary
+tint rendered); and the decisive new fact: **the lace's dark cells survive an ADDITIVE
+canary, so the lace is a near-zero MULTIPLIER in the shared tail — a lighting facet at
+near-grazing normal, which requires |gradient| at the vertical-exaggeration scale.** The
+smooth gate alone did not remove it, so the raw magnitude enters somewhere the gate does
+not govern. Next wake, in order: early-return viz of vex, of the post-everything
+|gE,gN|, and of the shade term itself; then the fix at whichever stage the magnitude
+appears. Every eliminated hypothesis above is real elimination — do not re-walk them.
