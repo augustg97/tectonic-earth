@@ -810,3 +810,18 @@ cool-pale cast (vegetation-gated so forests stay forests): a grey modulation of 
 never read as geology, colour family can. Verified at the user's two exact framings and
 Australia/Sahara: interiors now carry basin-and-swell shading, province colour, belt
 texture. ice_audit at baseline; gates green. The /loop continues: ocean-floor pass next.
+
+## Q — ITERATION 4, 2026-07-31: the ocean floor
+
+Against the Hawaii/Scotia references: **submarine macro relief** (the ~137 km second
+difference joins the underwater gradient at 0.22 weight — a continental slope, trench wall
+or ridge flank is a 100-300 km form and is what a bathymetric framing is made of);
+**young-crust brightness** 0.06→0.11 (ridge flanks read light in real bathymetry);
+**abyssal fabric contrast** amp 1.55→1.90, tone 0.30→0.38; **slope-crease quench** (the
+ridged detail creases on the steepest submarine slopes were the dark margin stipple —
+rugw now fades above rug 0.38, real slopes are smooth-swelled). Verified: Hawaiian chain
+with halos and trailing seamount ridge, Scotia arc loop with trench shading, South China
+Sea shelf/basin, Atlantic margin; 122 Ma land framings unchanged. Residual: a granular
+dark field on the Argentine shelf edge persists (not the ridged creases — needs a zoomed
+diagnosis next round); Hawaii wants denser small-seamount pepper and sharper fracture
+lineations. Gates green, ice at baseline.

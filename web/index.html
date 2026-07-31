@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-2128';
+const DATA_V='20260731-2142';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2090,7 +2090,10 @@ float elevDetail(float z, vec3 d, float rug){
      the basin has to be able to change what biome grows there and where the
      coast runs, which is exactly what the Western Interior Seaway was. */
   if(uFore>0.5 && gFore!=0.0) z -= gFore*smoothstep(1500.0,700.0,z);
-  float rugw = z<wl ? rug*0.25 : rug;
+  // On the steepest submarine slopes the ridged creases alias into the dark
+  // margin stipple; real slopes are smooth-swelled. Quench there, keep the
+  // quarter-strength character on mid-slopes and shelves.
+  float rugw = z<wl ? rug*0.25*(1.0-smoothstep(0.38,0.80,rug)) : rug;
   /* ANISOTROPIC FOLD FABRIC (H4). detail3 makes rough ground at every
      orientation at once, and real orogens are stripes -- the Valley-and-Ridge
      Appalachians, the Zagros, the Jura. Parallel ridges running along strike
@@ -2564,6 +2567,14 @@ void main(){
     if(z<wl){
       gE=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
       gN=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
+      /* Submarine MACRO relief (fidelity round iter 4): the continental slope,
+         a trench wall or a ridge flank is a 100-300 km form, and it is what a
+         Google-style bathymetry framing is made of. Same ~137 km second
+         difference as land, at lower weight because submarine forms are
+         steeper than anything on land and blow out otherwise. */
+      float daMo=14.0/2048.0*PI;
+      gE+=(baseElev(uvFromDir(normalize(sdir+Eax*daMo)))-baseElev(uvFromDir(normalize(sdir-Eax*daMo))))*0.22*(1.0-pw);
+      gN+=(baseElev(uvFromDir(normalize(sdir+Nax*daMo)))-baseElev(uvFromDir(normalize(sdir-Nax*daMo))))*0.22*(1.0-pw);
     }else{
       gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
       gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
@@ -3574,7 +3585,7 @@ void main(){
        because young crust IS shallower -- this term was adding a second,
        independent age band on top of it, and two broad tonal fields over the
        same basin is exactly the >250 km excess the spectrum showed. */
-    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.06*deepw;
+    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.11*deepw;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
     if(aniso*deepw > 0.003){
@@ -4092,7 +4103,7 @@ void main(){
          A quiet lineament is the whole of it -- the trough itself is already
          baked into the elevation by seafloor.py, and drawing it twice would
          just make a dark line. What the fabric has to do is stop. */
-      float amp = 1.55 * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
+      float amp = 1.90 * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
                 * mix(0.50, 1.30, bakedRough)
                 * (1.0 - 0.80*fzone);
       /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
@@ -4118,7 +4129,7 @@ void main(){
       gT *= inversesqrt(1.0 + (gm*gm)/(K*K));
       nrm = normalize(nrm + vec3(gT, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.30*rough*aniso*deepw;
+      col *= 1.0 + sAcross*0.38*rough*aniso*deepw;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,
