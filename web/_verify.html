@@ -80,12 +80,47 @@ const W = () => document.getElementById('app').contentWindow;
       const m = W().__MEM ? W().__MEM() : {};
       m.t = Math.round((Date.now() - t1) / 1000);
       m.heapMB = W().performance.memory ? Math.round(W().performance.memory.usedJSHeapSize / 1048576) : null;
+      m.scale = +A.gl.renderer.getPixelRatio().toFixed(2);
       samples.push(m);
       if (m.t % 20 < 5) { A.state.age = jumps[j++ % jumps.length]; }
       if (m.t % 60 < 5) { A.state.view = (A.state.view === 'globe' ? 'map' : 'globe'); }
     }
     await fetch('http://127.0.0.1:8901/' + q.get('soak') + '.json',
                 {method: 'POST', body: btoa(JSON.stringify({mins, errors: (W().__ERRORS || []).slice(0, 5), samples}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('coherence')) {
+    /* PLAYBACK BIND COHERENCE. At 18 Myr/s a keyframe crossing arrives every
+       ~0.28 s; if the new interval's displacement (_v) or material (_p)
+       textures are not bound the moment the pair advances, uWarp/uMat drop
+       and the world falls back to the plain cross-fade mid-playback -- the
+       "jagged, jumpy evolution" report. Samples the gates every frame during
+       a fast playback run; reports the fraction of frames fully coherent. */
+    const secs = +q.get('secs') || 45;
+    A.state.age = 400; 
+    await sleep(4000);                       // let the window seed
+    A.state.playing = true; A.state.dir = 1; // deep-past-ward, steady crossings
+    const u = A.gl.mat.uniforms;
+    let frames = 0, warpOn = 0, matOn = 0, bothOn = 0, elevPairs = new Set();
+    const t1 = Date.now();
+    const orf = W().requestAnimationFrame.bind(W());
+    const sample = () => {
+      frames++;
+      const w = u.uWarp.value > 0.5, m = u.uMat.value > 0.5;
+      if (w) warpOn++; if (m) matOn++; if (w && m) bothOn++;
+      if (Date.now() - t1 < secs * 1000) orf(sample);
+    };
+    orf(sample);
+    await sleep(secs * 1000 + 1500);
+    A.state.playing = false;
+    const out = {frames, fps: +(frames / secs).toFixed(1),
+                 warpPct: +(warpOn / frames * 100).toFixed(1),
+                 matPct: +(matOn / frames * 100).toFixed(1),
+                 bothPct: +(bothOn / frames * 100).toFixed(1),
+                 span: [400, +A.state.age.toFixed(0)]};
+    await fetch('http://127.0.0.1:8901/' + q.get('coherence') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify(out))});
     document.title = 'VERIFY-DONE'; return;
   }
 

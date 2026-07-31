@@ -171,6 +171,8 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
    than let it collide with the step buttons. */
 @media (max-width:1180px){#contact{display:none}}
 .pbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
+.qbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);height:30px;padding:0 12px;border-radius:15px;cursor:pointer;font:600 11px/1 var(--font);flex:none;transition:.15s}
+.qbtn:hover{border-color:var(--accent);color:var(--accent)}
 .pbtn:hover{border-color:var(--accent);color:var(--accent)}
 .pbtn svg{width:15px;height:15px;fill:currentColor}
 /* The rotate icon is line art, not a filled glyph, so it has to opt out of the
@@ -924,6 +926,11 @@ body.ambient .mtab{display:none}
       <svg id="dirIcon" viewBox="0 0 24 24"><path d="M4 12h13l-5-5 1.4-1.4L21.8 12l-8.4 6.4L12 17l5-5H4z"/></svg>
     </button>
     <div id="speedwrap"><span>Speed</span><input type="range" id="speed" class="mini" min="1" max="60" value="18"><span id="speedVal">18 Myr/s</span></div>
+    <!-- Render quality. Auto adapts terrain resolution to the GPU so an M1
+         is not locked at 3 fps; text and overlays are DOM and stay sharp
+         regardless. Sits with speed because both answer "how does it run",
+         not "what is shown". -->
+    <button id="qualBtn" class="qbtn" title="Render quality — Auto adapts terrain resolution to your GPU (labels always stay sharp); click to cycle Auto / Full / Balanced / Perf">Auto</button>
     <!-- Spin speed sits beside time speed because they are the same KIND of
          control -- how fast something moves -- and separating them would make
          the user hunt for the second one. It only appears when auto-rotate is
@@ -1028,6 +1035,13 @@ const $=s=>document.querySelector(s);
    a specialist overlay and they crowd the first look at the globe. */
 const state={
   age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:18,
+  /* Render quality. 'auto' keeps native resolution until the measured frame
+     interval says the GPU cannot -- an M1 driving a 5K display runs this
+     terrain shader at 3 fps, and a slideshow is also not the model at its
+     best. Auto steps the RENDER scale (terrain only -- labels, panels and
+     lines are DOM/overlay and stay native-sharp) and steps back up when
+     there is headroom. 'full' pins native; 'balanced'/'perf' pin lower. */
+  quality:(function(){try{return localStorage.getItem('te_quality')||'auto';}catch(e){return 'auto';}})(),
   layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false},
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null,
   // rot/tilt are the LONGITUDE and LATITUDE of the point the camera looks at.
@@ -1067,7 +1081,14 @@ const TEXCACHE=new Map(); let texClock=0, _texBytes=0;
 /* The floor matters: a bound PAIR accounts ~300 MB at 8 bytes/px, and a
    budget below that would evict the very textures being drawn -- permanent
    thrash. 360 keeps one pair plus a little headroom on small devices. */
-const TEX_BUDGET=((navigator.deviceMemory||8)<8?360:700)*1048576;
+const TEX_BUDGET=((navigator.deviceMemory||8)<8?360:950)*1048576;
+/* Decode-ahead order is by VISUAL IMPORTANCE, not array order: elevation and
+   rainfall define the frame, displacement and material coordinates define
+   how time LOOKS between frames (uWarp/uMat), and the rest refine. The
+   FIELD_KINDS order put m/w/d/o ahead of v/p, so at playback speed the
+   decode budget was spent before the motion model ever got a slot --
+   measured 33-48% of playback frames with uWarp or uMat dark. */
+const KIND_PRIORITY=['e','r','v','p','w','d','o','m','t','f'];
 const _bmPending=new Map();   // kind+i -> in-flight decode promise
 const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
 function _cacheTouch(e){e.u=++texClock;}
@@ -1204,7 +1225,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-0120';
+const DATA_V='20260731-0210';
 const FIELD_V='20260727-surf';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1411,13 +1432,14 @@ function queueUploads(f){
      and the interval kinds (v/p/t/f/m) of the B-frame are NOT among them --
      yet they are exactly what the next crossing binds. Warming "the pair" is
      really warming those. */
+  const deep=TEX_BUDGET>500*1048576;   // small windows cannot hold a deep lookahead
   const want=[f.i,f.j];
-  if(dir<=0){want.push(f.i-1);if(dir<0)want.push(f.i-2);}
-  if(dir>=0){want.push(f.j+1);if(dir>0)want.push(f.j+2);}
+  if(dir<=0){want.push(f.i-1);if(dir<0&&deep){want.push(f.i-2);want.push(f.i-3);}}
+  if(dir>=0){want.push(f.j+1);if(dir>0&&deep){want.push(f.j+2);want.push(f.j+3);}}
   let decodesKicked=0;
   for(const w of want){
     if(w<0||w>=n)continue;
-    for(const[k]of FIELD_KINDS){
+    for(const k of KIND_PRIORITY){
       const key=k+w;
       if(_bmMissing.has(key))continue;
       if(!_fieldTried.has(key))continue;            // not even fetched yet
@@ -1425,8 +1447,10 @@ function queueUploads(f){
       if(e&&e.t)continue;                           // fully resident
       if(_BITMAPS&&(!e||!e.bm)){
         // Stage 1, DECODE: off-thread, so a few can run concurrently without
-        // touching the frame. ensureBitmap is idempotent.
-        if(decodesKicked<3&&_bmPending.size<4){ensureBitmap(k,w);decodesKicked++;}
+        // touching the frame. ensureBitmap is idempotent. Playback burns
+        // through keyframes, so it gets a deeper decode pipeline.
+        const kick=state.playing?5:3, inflight=state.playing?7:4;
+        if(decodesKicked<kick&&_bmPending.size<inflight){ensureBitmap(k,w);decodesKicked++;}
         continue;
       }
       // Stage 2, UPLOAD: decoded and waiting for its GPU copy.
@@ -1446,15 +1470,15 @@ function queueUploads(f){
     if(typeof elevField==='function'){elevField(Math.max(0,f.i-1));elevField(Math.min(DATA.timeline.length-1,f.j+1));}
     return;
   }
-  while(_upQ.length){
+  let drains=state.playing?2:1;                     // playback burns keyframes faster
+  while(_upQ.length&&drains>0){
     const q=_upQ.shift();
-    if(Math.abs(q.i-f.i)>3)continue;                // stale after a far jump
+    if(Math.abs(q.i-f.i)>4)continue;                // stale after a far jump
     const e=TEXCACHE.get(q.k+q.i);
     if(!e||!e.t){
       const t=getTex(q.k,q.i);                      // null until decoded
-      if(t)renderer.initTexture(t);
+      if(t){renderer.initTexture(t);drains--;}
     }
-    break;                                          // at most one per frame
   }
 }
 
@@ -4198,7 +4222,7 @@ function initGL(){
      MSAA stays: the globe interior is shaded per-pixel either way, but the
      silhouette against the stars and the overlay LINES visibly need it. */
   renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:false});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setPixelRatio(renderScale());
   scene=new THREE.Scene();
   cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
   orthoCam=new THREE.OrthographicCamera(-1,1,1,-1,-10,10);
@@ -6302,13 +6326,19 @@ function bindTextures(){
      would read as black -- which decodes to a full-scale displacement to the
      south-west rather than to none. Falls back to the old cross-fade, which is
      exactly what those intervals did before. */
-  const va=(f.i!==f.j)?bindTex('v',f.i):null;
+  /* ESSENTIAL, like elevation (coherence fix, 2026-07-31): without _v the
+     interval renders as the plain cross-fade H1 replaced, and without _p the
+     terrain texture stops riding its plate -- measured 33% / 45% of playback
+     frames in that degraded state at 8 fps with these trickled. A late lake
+     or surface field is an invisible 0.1-0.4 s; a late motion model is the
+     whole look of time passing. */
+  const va=(f.i!==f.j)?bindTex('v',f.i,true):null;
   if(va)mat.uniforms.dispA.value=va;
   mat.uniforms.uWarp.value=va?1.0:0.0;
   /* Material coordinates. The slot raster and the rotation table must come
      from the SAME keyframe or the texture rides crust it does not belong to,
      so both are taken from f.i and uMat is off unless both are present. */
-  const pa=bindTex('p',f.i), prot=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[f.i].age)];
+  const pa=bindTex('p',f.i,true), prot=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[f.i].age)];
   if(pa&&prot){
     mat.uniforms.plateA.value=pa;
     const Q=mat.uniforms.uPlateQ.value;
@@ -6363,6 +6393,57 @@ function bindTextures(){
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
   return f;
 }
+/* Quality scale: what setPixelRatio actually gets. Auto starts at full and
+   is stepped by the governor in loop(); a pinned choice bypasses it. */
+let _autoScale='full';
+const QSCALE={full:()=>Math.min(devicePixelRatio||1,2),
+              balanced:()=>Math.min(devicePixelRatio||1,1.5),
+              perf:()=>1};
+function renderScale(){
+  const q=state.quality==='auto'?_autoScale:state.quality;
+  return (QSCALE[q]||QSCALE.full)();
+}
+function applyQuality(){
+  if(!renderer)return;
+  renderer.setPixelRatio(renderScale());
+  renderer.setSize(innerWidth,innerHeight);
+  const b=$('#qualBtn');
+  if(b){const q=state.quality;
+    b.textContent = q==='auto' ? ('Auto'+(_autoScale==='full'?'':' \u2193'))
+      : q==='full' ? 'Full' : q==='balanced' ? 'Balanced' : 'Perf';}
+}
+function cycleQuality(){
+  const order=['auto','full','balanced','perf'];
+  state.quality=order[(order.indexOf(state.quality)+1)%order.length];
+  if(state.quality==='auto')_autoScale='full';   // re-measure from the top
+  try{localStorage.setItem('te_quality',state.quality);}catch(e){}
+  applyQuality();
+}
+/* The governor: a real-interval EMA (pre-clamp, so a 300 ms frame reads as
+   300), stepped with hysteresis so it never flaps. Only ever active in
+   'auto'; a pinned quality is exactly what it says. */
+let _fEMA=16,_fBad=0,_fGood=0,_fSince=0;
+function qualityGovernor(rawMs){
+  // Time-based warm-up, NOT frame-based: at 3 fps a 180-frame warm-up is a
+  // full minute of slideshow before the governor is even allowed to help.
+  if(!_fSince)_fSince=performance.now();
+  if(performance.now()-_fSince<8000)return;
+  _fEMA=_fEMA*0.95+rawMs*0.05;
+  if(state.quality!=='auto')return;
+  if(_fEMA>95){_fGood=0;_fBad++;}
+  else if(_fEMA<28){_fBad=0;_fGood++;}
+  else{_fBad=0;_fGood=0;}
+  if(_fBad>25){
+    _fBad=0;
+    if(_autoScale==='full'){_autoScale='balanced';applyQuality();_fEMA=60;}
+    else if(_autoScale==='balanced'){_autoScale='perf';applyQuality();_fEMA=60;}
+  }
+  if(_fGood>420){
+    _fGood=0;
+    if(_autoScale==='perf'){_autoScale='balanced';applyQuality();_fEMA=45;}
+    else if(_autoScale==='balanced'){_autoScale='full';applyQuality();_fEMA=45;}
+  }
+}
 /* ?perf=1 -- a tiny live meter (perf audit P9). Frame interval measured from
    the loop's own timestamps, so a stall shows as itself rather than being
    clamped away like dt is; upload-queue depth and texture-cache occupancy are
@@ -6379,7 +6460,9 @@ function perfHud(now){
     document.body.appendChild(_phEl);}
   const ms=_phSum/_phN;
   const txt='frame '+ms.toFixed(1)+' ms ('+(1000/ms).toFixed(0)+' fps)  worst '+_phMax.toFixed(0)+' ms'+
-    String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB';
+    String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB'+
+    String.fromCharCode(10)+'scale '+renderScale().toFixed(2)+' ('+(state.quality==='auto'?'auto:'+_autoScale:state.quality)+')'+
+    '   warp '+(mat.uniforms.uWarp.value>0.5?'on':'OFF')+'  mat '+(mat.uniforms.uMat.value>0.5?'on':'OFF');
   if(txt!==_phLast){_phEl.textContent=txt;_phLast=txt;}
   _phN=0;_phSum=0;_phMax=0;
 }
@@ -6387,7 +6470,9 @@ let last=performance.now();
 const _camC=new THREE.Vector3(),_camUp=new THREE.Vector3(),_camN=new THREE.Vector3(),
       _camE=new THREE.Vector3(),_camH=new THREE.Vector3();
 function loop(now){
-  const dt=Math.min(.05,(now-last)/1000);last=now;
+  const rawMs=now-last;
+  const dt=Math.min(.05,rawMs/1000);last=now;
+  qualityGovernor(rawMs);
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   if(state.playing){
     state.age+=state.dir*state.speed*dt;
@@ -6822,6 +6907,7 @@ function buildMarkers(){
 }
 
 function resize(){
+  renderer.setPixelRatio(renderScale());
   renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
   const dpr=Math.min(devicePixelRatio,2);mcv.width=innerWidth*dpr;mcv.height=innerHeight*dpr;mcv.style.width=innerWidth+'px';mcv.style.height=innerHeight+'px';
   positionExtinct();
@@ -7002,6 +7088,7 @@ function buildLegend(){
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
   syncSlider();updateReadout();syncPlay();syncDir();
+  const qb=$('#qualBtn'); if(qb){qb.addEventListener('click',cycleQuality);applyQuality();}
   setInterval(updateReadout,120);
   $('#load').classList.add('done');
   // When the globe first became usable, measured inside the page. The number

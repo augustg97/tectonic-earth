@@ -668,3 +668,37 @@ gradient) and ocean-clean by screenshot.
 **Standing lesson for the register:** decoded-image residency is a BUDGET, never an
 archive; and on macOS, decoded-image memory must be measured in-page (`window.__MEM()`),
 not by RSS.
+
+## P — THIRD ROUND: coherence and the pixel wall, 2026-07-31
+
+**The lost smoothness-of-time was a real regression with a number on it.** Progressive
+binding trickled the interval's displacement (`_v`) and material (`_p`) textures in behind
+elevation, and at low frame rates the trickle never caught up: measured during 45 s of
+default-speed playback, **uWarp was live on 67% of frames and uMat on 54%** — a third to a
+half of playback ran in the pre-H1 cross-fade with texture sliding, which is exactly
+"jagged and jumpy... worse at higher speeds". Three fixes took it to **100/100/100%**:
+`v`/`p` are ESSENTIAL binds like elevation (a late lake field is invisible; a late motion
+model is the whole look of time passing); the decode-ahead runs in a VISUAL-IMPORTANCE
+order (`e,r,v,p,w,d,o,m,t,f` — array order had m/w/d/o starving v/p); and the residency
+budget rose to 950 MB because a pair plus a three-keyframe lookahead needs ~870 MB and a
+window smaller than the want-list is permanent eviction churn. Soaks stay flat and
+error-free at the new budget.
+
+**Also found: playback pace is fps-dependent.** `dt` clamps at 50 ms, so at 3 fps the
+"18 Myr/s" slider actually advances ~2.7 Myr/s, erratically. Not separately fixed — pace
+correctness returns as frame rate does.
+
+**The pixel wall, stated plainly.** The user's M1 shows 335 ms/frame (3 fps) at native
+resolution; the measured zero-noise floor (28.7 ms at 3.7 MP) scales to ~110 ms at a 5K
+display's 14.7 MP — **even a shader with every octave deleted cannot exceed ~9 fps there.**
+No output-identical optimisation reaches "smooth" on that hardware at native scale; the
+honest levers are resolution or architecture (the split-bake in the previous round's
+notes). Hence the **quality control** (`#qualBtn`, cycles Auto/Full/Balanced/Perf,
+persisted): Full pins native; Auto keeps Full unless the measured real frame interval
+(pre-clamp EMA) sustains >95 ms, then steps the RENDER scale 2.0→1.5→1.0 with hysteresis
+and steps back up when there is headroom. Only the terrain canvas scales — labels, panels,
+lines are DOM/overlay and stay native-sharp. Time-based warm-up (8 s), because a
+frame-based warm-up at 3 fps was a minute of slideshow before help arrived. Verified
+headless under forced dpr=2: steps at ~20-25 s under load, holds without flapping, zero
+errors. The user tabled resolution changes earlier; Auto's default-on is justified by their
+follow-up ask to "run smoothly on both M1 and M5" — and Full remains one click away.
