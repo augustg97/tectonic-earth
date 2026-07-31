@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-2213';
+const DATA_V='20260731-2241';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1793,6 +1793,7 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
+float gZSm=-9999.0;   // 5-tap smoothed depth, set in main; -9999 = not computed
 uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
@@ -2288,11 +2289,19 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      a bright floor as well as a shallow one, and that means a carbonate bank or
      a sand flat, tens of metres down -- not a volcanic peak. */
   vec3 shallow = mix(vec3(0.300,0.612,0.545), vec3(0.260,0.400,0.600), uSeaTint);
-  float botRet = exp(z/70.0);                        // two-way attenuation
-  float shelfLift = smoothstep(-260.0,-60.0,z);      // the shelf break itself
+  /* The bottom-return exponential swings seventeenfold per 70 m -- over the
+     shelf band's +/-150 m of texel noise that is a per-pixel coin flip
+     between bright bottom and dark water, and it is the margin lace that
+     survived every gradient-side fix (fidelity round iter 7: the canary
+     proved the lace lives in the PALETTE). Same H8 remedy as the gate:
+     threshold the smoothed depth, with a 15% share of the raw value so a
+     genuinely sharp reef edge keeps a crisp rim. */
+  float zsb = (gZSm>-9000.0) ? mix(z, gZSm, 0.85) : z;
+  float botRet = exp(zsb/70.0);                      // two-way attenuation
+  float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
   c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
   // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
-  float shelf=smoothstep(-700.0,-40.0,z);
+  float shelf=smoothstep(-700.0,-40.0,zsb);
   float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
   /* Toned right down against the reference. This mottle runs at a ~60 degree
      scale, so it was painting broad green-blue patches across whole basins --
@@ -2331,7 +2340,7 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      gets back off it. Without that gate the sequence fires on any peak that
      happens to reach the right depth, wherever it is. */
   c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,z)*0.26);
-  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,z)*0.60*sqrt(botRet));
+  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet));
   c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
   c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
 
@@ -2695,12 +2704,12 @@ void main(){
     float qw=0.0;
     if(z<wl+300.0){
       float daQ=6.0/2048.0*PI;
-      float zSm=(baseElev(uv)
+      gZSm=(baseElev(uv)
                 +baseElev(uvFromDir(normalize(sdir+Eax*daQ)))
                 +baseElev(uvFromDir(normalize(sdir-Eax*daQ)))
                 +baseElev(uvFromDir(normalize(sdir+Nax*daQ)))
                 +baseElev(uvFromDir(normalize(sdir-Nax*daQ))))*0.2;
-      qw=smoothstep(-30.0,-140.0,zSm);
+      qw=smoothstep(-30.0,-140.0,gZSm);
     }
     if(qw>0.01 && uDbg.w>0.5){
       float db=16.0/2048.0*PI, ds=da/db;
@@ -3406,7 +3415,13 @@ void main(){
        on the pole and read as a starburst; the cause is the threshold, not the
        projection. Held to a real grounding depth, ridges keep their pack ice
        and Antarctica's below-sea-level bedrock still grounds as intended. */
-    float shelf=smoothstep(-1000.0,-120.0,z);
+    /* Grounding depth from the SMOOTHED field (fidelity round iter 7, third
+       application of the H8 remedy this round). This raw-z threshold picked
+       the ICE REGIME per pixel over the shelf band's texel noise: pale
+       grounded-ice cells against dark floating-water gaps, per pixel -- the
+       margin lace that survived every gradient, palette and exaggeration fix
+       because it was never any of them. */
+    float shelf=smoothstep(-1000.0,-120.0,(gZSm>-9000.0)?gZSm:z);
     float thr=mix(uSeaT, uIceT, shelf);
     float dS=thr-T;
     float nearS=exp(-(dS*dS)/(2.0*3.2*3.2));
@@ -3495,7 +3510,16 @@ void main(){
      meaningful together with da, and they are unchanged because da is. See the
      note there for why the gradient baseline keeps its ANGLE through the
      resolution change instead of following the grid. */
-  float vex = z<wl ? mix(520.0, 780.0, smoothstep(-20.0,-400.0,z)) : 300.0;
+  /* Continued down its own author's road (fidelity round iter 7). The note
+     above already proved the margin hatch is mostly GENUINE one-texel shelf
+     structure that the shrinkage rightly preserves -- the knob that governs
+     how loudly the grid's confession is shaded is this one. 520 left the
+     shelf-slope band at ~30-degree facets for a +/-300 m real step; the
+     references shade those same shelves soft. 760-920 takes the band to
+     11-21 degrees: the lace recedes into slope texture, trench walls at four
+     kilometres are still ~77 degrees, and the abyssal fabric is untouched
+     because it is added after this as an explicit slope. */
+  float vex = z<wl ? mix(760.0, 920.0, smoothstep(-20.0,-600.0,z)) : 300.0;
   vec3 nrm=normalize(vec3(-gE, gN, vex));
 
   if(z>=wl){

@@ -857,3 +857,20 @@ smooth gate alone did not remove it, so the raw magnitude enters somewhere the g
 not govern. Next wake, in order: early-return viz of vex, of the post-everything
 |gE,gN|, and of the shade term itself; then the fix at whichever stage the magnitude
 appears. Every eliminated hypothesis above is real elimination — do not re-walk them.
+
+## Q — ITERATION 7, 2026-07-31: three H8 fixes ship; the lace closes its dossier
+
+Shipped (each verified no-harm at the reference framings): the dequantisation gate, the
+bottom-return exponential + shelf-lift + biology shelf band, and the pack-ice grounding
+depth ALL now threshold a five-tap smoothed depth instead of raw z — three separate
+raw-threshold-over-texel-noise instances of the H8 class in one block radius. Submarine
+exaggeration continued down its own author's road (760–920 from 520–780).
+
+**The lace dossier, final form.** The elevation DATA over the band is clean (Laplacian
+46 m mean; the slope spans 2–4 texels). The rendered lace is wide on screen — sub-texel in
+field terms — static, survives: fabric/faults/FZ/shrinkage switches, sdet=0, palette
+z-smoothing ×3, gate smoothing, vex 520→760 (proving it does not pass through the shared
+normal), gUV scaling, additive canary (purple-through → in-branch, pre-tail). Sea branch
+confirmed by branch canary. Remaining move: brute-force bisection of the sea branch by
+halves with variant switches — reasoning is exhausted, enumeration is not. Three
+iterations was the budget; the loop moves on and returns armed.
