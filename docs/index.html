@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-1604';
+const DATA_V='20260731-1637';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2812,6 +2812,18 @@ void main(){
             + vec2(vnoise3(sdir*820.0+5.0)-0.5,  vnoise3(sdir*820.0+37.0)-0.5)*1.05)*uTexel;
   vec3 SP=mix(texture2D(surfA,wA(uv+rwarp)).rgb, texture2D(surfB,wB(uv+rwarp)).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
+  /* TRUNK DRAINAGE (fidelity round iter 2). The per-texel channel network is
+     invisible at continental zoom -- one texel wide however large the river.
+     What reads from orbit is the CORRIDOR: the Ob, Lena and Amazon are broad
+     dark-green ribbons tens of kilometres wide. Average the drainage over a
+     wider ring to get "how much river is near here", which drives a corridor
+     tint and a broader valley dip that survive any zoom. Two extra taps. */
+  float trunk=(texture2D(surfA,wA(uv+rwarp+vec2(uTexel.x*3.0,uTexel.y*1.5))).r
+              +texture2D(surfA,wA(uv+rwarp-vec2(uTexel.x*3.0,uTexel.y*1.5))).r)*0.5;
+  trunk=max(trunk,drain)*smoothstep(0.30,0.85,max(trunk,drain));
+  // main-scope moisture for the passes below: the humidity variable proper
+  // lives inside the biome block and is out of scope past its brace
+  float moistw=clamp(Rf*1.15,0.0,1.0);
 
   vec3 col;
   if(z<wl){
@@ -3057,6 +3069,25 @@ void main(){
        UNGATED and an outcrop-scale grain of its own. */
     vec3 mdc=matDir(sdir);
     float duri=vnoise3(mdc*230.0+41.0)-0.5;
+    /* MESOSCALE GEOLOGY TONE (fidelity round iter 2) -- the missing energy at
+       continental zoom. Google-scale imagery varies in TONE at 50-500 km:
+       erosion provinces, sediment basins, old flood plains. All our texture
+       so far lives finer than that (and most of it was vegetation-gated), so
+       wide framings read as airbrush. Two crust-locked octaves, shaped by the
+       substrate-hardness field so the pattern follows geology rather than
+       floating over it, darkening slightly with hardness -- applied to ALL
+       land, vegetated or barren. */
+    float meso=(fbm3(mdc*6.5+83.0)-0.5)+(fbm3(mdc*16.0+29.0)-0.5)*0.55;
+    float mesoAmp=0.085+0.05*(1.0-moistw);
+    col*=1.0+meso*mesoAmp;
+    col*=1.0-smoothstep(0.55,0.95,hardness)*0.06;
+    /* Trunk-river corridors: the broad valley ribbon, darker and greener where
+       the land is at all wet, dark drainage tracery (wadis) where it is arid.
+       This is what makes the Ob or a Cretaceous trunk river read from orbit. */
+    float wetp=moistw;
+    vec3 corridorWet=mix(col, vec3(0.318,0.416,0.282), 0.5);
+    vec3 corridorDry=col*0.90;
+    col=mix(col, mix(corridorDry,corridorWet,wetp), trunk*0.55);
     float core=clamp((0.30-h)/0.30,0.0,1.0)*clamp((w-0.45)*2.2,0.0,1.0);
     vec3 coreCol=mix(vec3(0.722,0.608,0.400), vec3(0.706,0.502,0.353),
                      smoothstep(0.38,0.68,lith));
@@ -3457,8 +3488,10 @@ void main(){
                  texture2D(surfB,wB(uv+rwarp+vec2(uTexel.x*dstep,0.0))).r,mixf)-drain;
     float dN=mix(texture2D(surfA,wA(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,
                  texture2D(surfB,wB(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,mixf)-drain;
-    float carve=smoothstep(0.18,0.62,drain)*(1.0-smoothstep(2400.0,3400.0,zp));
-    nx+=dE*carve*2.6; ny+=dN*carve*2.6;
+    float aridg=1.0-clamp(moistw*1.4,0.0,1.0);
+    float carve=smoothstep(mix(0.18,0.10,aridg),mix(0.62,0.46,aridg),drain)
+               *(1.0-smoothstep(2400.0,3400.0,zp));
+    nx+=dE*(carve*2.6+trunk*1.4); ny+=dN*(carve*2.6+trunk*1.4);
     nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.

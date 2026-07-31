@@ -775,3 +775,25 @@ shelf-break sharpening, margin-stipple softening); the rectangular fabric seam (
 reproduced this session — likely a scrub-transient; watch); Hudson Bay renders annual-mean
 pack ice at the present day (pre-existing climate-model statement — user ruling wanted);
 richer close-zoom land grain; cloud interplay at mid-zoom.
+
+## Q — ITERATION 2, 2026-07-31: the mesoscale
+
+The user's 122 Ma screenshot showed the remaining gap precisely: continental INTERIORS
+still read as airbrush at globe zoom, and the drainage carve was invisible there — it lives
+at texel scale, and a river is one texel wide however large it is. What reads from orbit is
+structure at 50–500 km, which nothing in the shader owned. Shipped: **trunk drainage**
+(a wider-ring average of the drainage field drives a broad corridor tint — green ribbon
+where wet, dark wadi tracery where arid — plus a wider valley dip, the thing that makes an
+Ob read from orbit); **mesoscale geology tone** (two crust-locked octaves at ~6.5/16 shaped
+by the substrate-hardness field, applied to ALL land — the older mottles were vegetation-
+gated, which is why barren interiors had nothing); **arid carve gate** lowered so fossil
+drainage shows in deserts. Verified at the user's exact framing: interior provinces,
+moisture gradients and belt texture where there was blank card. Scope trap for the record:
+`h` (humidity) lives inside the biome block — passes outside it need the main-scope
+`moistw` proxy off `Rf`; and a black globe with a passing source-checker means a COMPILE
+error — `renderer.info.programs[].diagnostics` in the pane gives the exact line in seconds,
+faster than any headless dump. Also: singleton Chrome profile locks from a backgrounded
+run silently kill every subsequent headless shot — 0/N with a healthy app means check the
+harness first. Ice kept per user ruling (annual-mean, not summer imagery). Next
+iterations: trunk-corridor threshold tuning per-age, the ocean-floor pass vs Hawaii/Scotia
+references, close-zoom land grain, the unreproduced fabric seam.
