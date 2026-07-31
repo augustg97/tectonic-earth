@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-2142';
+const DATA_V='20260731-2213';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1792,6 +1792,7 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    and none of them was where inspection said it would be. Four multiplies by
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
+float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
 uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
@@ -2093,7 +2094,7 @@ float elevDetail(float z, vec3 d, float rug){
   // On the steepest submarine slopes the ridged creases alias into the dark
   // margin stipple; real slopes are smooth-swelled. Quench there, keep the
   // quarter-strength character on mid-slopes and shelves.
-  float rugw = z<wl ? rug*0.25*(1.0-smoothstep(0.38,0.80,rug)) : rug;
+  float rugw = z<wl ? rug*0.25*(1.0-smoothstep(0.22,0.58,rug))*gFineFade : rug;
   /* ANISOTROPIC FOLD FABRIC (H4). detail3 makes rough ground at every
      orientation at once, and real orogens are stripes -- the Valley-and-Ridge
      Appalachians, the Zagros, the Jura. Parallel ridges running along strike
@@ -2152,7 +2153,14 @@ float elevDetail(float z, vec3 d, float rug){
        the shelf break itself. What remains is the 91 km octave, which is
        basin-scale swell and does not compete with anything. */
     float owned=smoothstep(-300.0,-1200.0,z);      // 1 below the shelf break
-    float sdet=(n*150.0*(1.0-0.94*owned) + n2*95.0*(1.0-0.35*owned))
+    /* ...and the SLOPE is nobody's texture band (fidelity round iter 5). The
+       n2 generator's fine octaves, standing at ~75 m on the upper slope and
+       differenced at this normal's 59x vertical exaggeration, drew a bright
+       ridged lace over every continental margin -- the crackle band the
+       Google references show as smooth-swelled slope. Fade n2 by the local
+       slope itself: plains keep their basin-scale swell, slopes go quiet. */
+    float slopeq=1.0-smoothstep(0.16,0.52,rug)*0.88;
+    float sdet=(n*150.0*(1.0-0.94*owned) + n2*95.0*(1.0-0.35*owned)*slopeq)
                *(1.0-shelf*0.7)*uDetail;
     /* AND IT MAY NOT LIFT THE SEA FLOOR INTO LAND. On a shelf at -20 m this
        term is worth tens of metres, so it was flipping scattered cells to land
@@ -2478,6 +2486,15 @@ void main(){
      30-plus degrees there is no edge left to see. */
   float pwL=smoothstep(0.780,0.9860,abs(sdir.y));
   float pw=smoothstep(0.890,0.9990,abs(sdir.y));
+  /* PIXEL FOOTPRINT on the sphere (fidelity round iter 5). Fine sea-floor
+     texture -- 2-5 km abyssal hills, ridged creases -- undersamples into
+     blotch when a pixel spans more ground than the feature: the "speckle"
+     bands at wide zoom were exactly that. fwidth of the DIRECTION is seam-
+     safe (uv wraps at the antimeridian; sdir does not). ~1 at close zoom,
+     grows as the camera pulls out; each fine system fades by it, which is a
+     mip in spirit for texture that never had mips. */
+  float sfoot=length(fwidth(sdir))*2048.0;
+  gFineFade=1.0-smoothstep(3.2,8.5,sfoot)*0.85;
   /* World-fixed tangent frame for the cap. Built from the X axis, NOT from east:
      a frame that spins around the pole would make neighbouring pixels sample
      different points and re-introduce the very jitter this removes. */
@@ -2740,8 +2757,21 @@ void main(){
       shelfHi = regional + 900.0;
       /* The wide gradient stays on the two CARDINAL pairs: a central difference
          is already a smooth linear operator, so it never had this problem. */
-      float wN=(t1-t2)*ds;
-      float wE=(t3-t4)*ds;
+      /* THE WIDE GRADIENT GETS THE SAME ROBUSTNESS AS THE MEAN (fidelity
+         round iter 5, and the mechanism was measured, not guessed: rendering
+         |wide| directly showed the margin lace INSIDE it). The shelf band
+         carries ~300 m rms of texel-scale content, and a raw two-tap
+         difference inherits every spike -- the residual shrinkage cannot
+         help, because it trusts the wide side. The IRLS weights computed
+         above already say which taps are outliers; pull those toward the
+         robust regional before differencing. A clean slope (all taps
+         consistent, q near 1) is untouched; a noise spike keeps a sixteenth
+         of its vote, and the bright ridged lace that outlined every
+         continental margin goes out with it. */
+      float ct1=mix(regional,t1,max(q1,0.30)), ct2=mix(regional,t2,max(q2,0.30));
+      float ct3=mix(regional,t3,max(q3,0.30)), ct4=mix(regional,t4,max(q4,0.30));
+      float wN=(ct1-ct2)*ds;
+      float wE=(ct3-ct4)*ds;
       /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
          texels, so two of them can be up to about 1.4 levels apart on ground
          that is genuinely flat. Under-shrinking leaves a visible residue and
@@ -2796,8 +2826,16 @@ void main(){
          precisely the structure the reference has and we lacked. The quantum
          threshold is the part that is exactly justified; this factor never was,
          and the steep-slope guard below is the targeted version of it. */
+      /* Guard tuned against the measured band (fidelity round iter 5): the
+         upper continental slope carries ~300 m rms of texel content but its
+         WIDE gradient at this scaling is only ~300-450 -- under the old
+         200-900 ramp it kept ~45% of the residual and rendered as the bright
+         ridged lace outlining every margin (the crackle survives a FLAT
+         palette: it is lighting, not colour). Engage earlier and floor
+         deeper; open flat floor (wide < 120) is untouched, so fracture zones
+         and trench edges keep full strength exactly as documented. */
       float keep=max(rl-QE,0.0)/max(rl,1e-4)*0.55
-               * mix(1.0, 0.22, smoothstep(200.0,900.0,length(vec2(wE,wN))));
+               * mix(1.0, 0.10, smoothstep(120.0,520.0,length(vec2(wE,wN))));
       gE=mix(gE, wE+res.x*keep, qw);
       gN=mix(gN, wN+res.y*keep, qw);
     }
@@ -3727,7 +3765,7 @@ void main(){
          contributes grit rather than grain, which is where our excess below
          12 km was coming from. licGrad carries that band now, so the fractal is
          demoted to a roughening of it. */
-      vec2 gUV = (sUV*sAcross + rUV*sAlong)*0.5*uDbg.x;
+      vec2 gUV = (sUV*sAcross + rUV*sAlong)*0.30*uDbg.x*gFineFade;
 
       /* FAULT-CONTROLLED FABRIC -- the mechanism, not an imitation of it.
          Abyssal hills are not noise. They are TILTED FAULT BLOCKS: parallel
@@ -4103,7 +4141,7 @@ void main(){
          A quiet lineament is the whole of it -- the trough itself is already
          baked into the elevation by seafloor.py, and drawing it twice would
          just make a dark line. What the fabric has to do is stop. */
-      float amp = 1.90 * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
+      float amp = 1.55 * gFineFade * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
                 * mix(0.50, 1.30, bakedRough)
                 * (1.0 - 0.80*fzone);
       /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
@@ -4129,7 +4167,7 @@ void main(){
       gT *= inversesqrt(1.0 + (gm*gm)/(K*K));
       nrm = normalize(nrm + vec3(gT, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
-      col *= 1.0 + sAcross*0.38*rough*aniso*deepw;
+      col *= 1.0 + sAcross*0.30*gFineFade*rough*aniso*deepw;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,

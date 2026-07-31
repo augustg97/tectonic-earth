@@ -825,3 +825,21 @@ Sea shelf/basin, Atlantic margin; 122 Ma land framings unchanged. Residual: a gr
 dark field on the Argentine shelf edge persists (not the ridged creases — needs a zoomed
 diagnosis next round); Hawaii wants denser small-seamount pepper and sharper fracture
 lineations. Gates green, ice at baseline.
+
+## Q — ITERATION 5, 2026-07-31: the margin lace resists, and what is now known
+
+Shipped (verified harmless-to-positive at Argentine/Hawaii/mid-Atlantic/land framings):
+slope-quiet fine submarine swell (n2 fades by local rug — plains keep basin swell);
+calibrated fabric contrast restored (1.55/0.30, iter-4's raises read as blotch); pixel-
+footprint far-fade on the fabric's normal and tone (fwidth of sdir — seam-safe — gentle,
+far-only); steep-slope residual floor 0.10; IRLS-robust wide-gradient taps.
+
+**The margin "lace" is still standing, and the elimination matrix is the deliverable:**
+it survives uDbg.x/y/z off, sdet=0, a FLAT palette at branch end (so it is applied in the
+shared tail), residual keep floored, and robust wide taps. The one false lead to not
+re-walk: colouring `col` at branch end to visualise |wide| proves nothing — the shared
+hillshade multiplies it, so the lace appears in ANY such viz. Next probes, in order:
+(1) early-return `gl_FragColor` visualisations (bypass the tail) of |wide|, |res|, and the
+final shade term; (2) the sea-surface sheen's static component; (3) the shade formula's
+inputs beyond nrm. The crackle sits at z −850…−3000 on old-crust margins, is static in
+time, lighting-borne, and band-limited to the slope — whatever draws it satisfies all four.
