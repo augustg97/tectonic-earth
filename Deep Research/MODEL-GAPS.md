@@ -890,3 +890,16 @@ sampling-warp effect on the base taps themselves. The staircase-of-a-two-texel-s
 theory remains the best mechanism but the soft-cap test argues the saturation is not in
 |g|. Next visit: bisect INSIDE the narrow-tap sampling chain (wA/wB, uvFromDir, matDir)
 with early returns; three iterations spent, artifact bounded, queue resumes first.
+
+## Q — ITERATION 9, 2026-07-31: corridors and close grain
+
+Trunk corridors: four-tap ring (was two), threshold 0.26–0.75 (was 0.30–0.85), corridor mix
+to 0.72 capped 0.62 — the big-valley ribbons now read at the user's 122 Ma framing. Close
+grain: the finest band strengthened (0.34→0.48) plus a ~2.4 km octave that exists only
+near the ground, faded in by the same pixel-footprint measure the ocean fades out by — a
+close pass over a barren craton reads rock, not wash, and whole-globe views never pay for
+it. Verified at Laurentia-450 close, prairie, 122 Ma, Sahel. Gates green, ice at baseline.
+Queue state after nine iterations: interiors ✓, ocean architecture ✓ (lace open, dossier
+complete), corridors ✓, close grain ✓, seam unreproduced. The remaining distance to the
+reference is the lace, hue-balance subjectivities, and the data's own 10 km floor — the
+user's eyes are the next instrument.
