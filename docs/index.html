@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-1637';
+const DATA_V='20260731-2128';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2567,6 +2567,16 @@ void main(){
     }else{
       gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
       gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+      /* MACRO RELIEF (fidelity round iter 3). At whole-globe zoom the 23.5 km
+         gradient reads gentle interior swells as nothing, and interiors came
+         out airbrushed however much fine detail they carried -- the user's
+         two screenshots. A second central difference at ~137 km catches the
+         basin-and-swell band the first one is too short to feel; folded into
+         the SAME normal so all lighting stays consistent. Two extra base
+         taps; land only, faded across the polar-branch handoff. */
+      float daM=14.0/2048.0*PI;
+      gE+=(baseElev(uvFromDir(normalize(sdir+Eax*daM)))-baseElev(uvFromDir(normalize(sdir-Eax*daM))))*0.40*(1.0-pw);
+      gN+=(baseElev(uvFromDir(normalize(sdir+Nax*daM)))-baseElev(uvFromDir(normalize(sdir-Nax*daM))))*0.40*(1.0-pw);
     }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
@@ -3078,8 +3088,18 @@ void main(){
        floating over it, darkening slightly with hardness -- applied to ALL
        land, vegetated or barren. */
     float meso=(fbm3(mdc*6.5+83.0)-0.5)+(fbm3(mdc*16.0+29.0)-0.5)*0.55;
-    float mesoAmp=0.085+0.05*(1.0-moistw);
+    float mesoAmp=0.15+0.08*(1.0-moistw);
     col*=1.0+meso*mesoAmp;
+    /* ...and HUE, not just brightness. Real provinces differ in colour family
+       -- iron-warm rises against cool pale basins -- and a grey modulation of
+       one tan can never read as geology. A second low-frequency field swings
+       the colour between a warm-red and a cool-pale cast, strongest where
+       vegetation is thin so forests stay forests. */
+    float prov=fbm3(mdc*4.2+7.0)-0.5;
+    vec3 warmT=vec3(1.075,0.985,0.90);
+    vec3 coolT=vec3(0.935,1.000,1.065);
+    col*=mix(coolT, warmT, clamp(0.5+prov*1.6,0.0,1.0))*(1.0-moistw*0.55)
+        +vec3(1.0)*(moistw*0.55);
     col*=1.0-smoothstep(0.55,0.95,hardness)*0.06;
     /* Trunk-river corridors: the broad valley ribbon, darker and greener where
        the land is at all wet, dark drainage tracery (wadis) where it is arid.

@@ -797,3 +797,16 @@ run silently kill every subsequent headless shot — 0/N with a healthy app mean
 harness first. Ice kept per user ruling (annual-mean, not summer imagery). Next
 iterations: trunk-corridor threshold tuning per-age, the ocean-floor pass vs Hawaii/Scotia
 references, close-zoom land grain, the unreproduced fabric seam.
+
+## Q — ITERATION 3, 2026-07-31: unmistakable at whole-globe zoom
+
+The user re-sent both framings: iteration 2's mesoscale was directionally right and an
+order of magnitude too timid. Shipped: **macro relief** — a second central difference at
+~137 km folded into the same shading normal (land, non-polar, faded across the polar
+handoff), which is the band whole-globe zoom actually reads and the 23.5 km gradient is too
+short to feel; **mesoscale amplitude roughly doubled** (0.085→0.15 base); **hue provinces**
+— a low-frequency crust-locked field swings barren land between an iron-warm and a
+cool-pale cast (vegetation-gated so forests stay forests): a grey modulation of one tan can
+never read as geology, colour family can. Verified at the user's two exact framings and
+Australia/Sahara: interiors now carry basin-and-swell shading, province colour, belt
+texture. ice_audit at baseline; gates green. The /loop continues: ocean-floor pass next.
