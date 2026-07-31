@@ -874,3 +874,19 @@ normal), gUV scaling, additive canary (purple-through → in-branch, pre-tail). 
 confirmed by branch canary. Remaining move: brute-force bisection of the sea branch by
 halves with variant switches — reasoning is exhausted, enumeration is not. Three
 iterations was the budget; the loop moves on and returns armed.
+
+## Q — ITERATION 8, 2026-07-31: the lace's dossier, second closing
+
+Six more eliminations, each by kill-switch screenshot at the same framing: the river
+plume/delta/mouth colour terms; the pack-ice colour mix; the floatIce normal-flattening;
+the ENTIRE abyssal-fabric block combined with a flat sea palette (the decisive combo — the
+plain went perfectly clean, the lace stood alone); a soft-cap on the final submarine
+gradient magnitude (reverted after missing — unverified risk to real trench walls); and
+the sea-surface sheen, which turns out to no longer exist (uTime has no consumer).
+Confirmed carriers of the blobs: the fabric block (now twice proven). The lace's surviving
+suspects after two full rounds: something inside the shade path that is not nrm-magnitude
+(the shade floor is 0.70 so the cells are consistent with hs=0 at the floor), or a
+sampling-warp effect on the base taps themselves. The staircase-of-a-two-texel-slope
+theory remains the best mechanism but the soft-cap test argues the saturation is not in
+|g|. Next visit: bisect INSIDE the narrow-tap sampling chain (wA/wB, uvFromDir, matDir)
+with early returns; three iterations spent, artifact bounded, queue resumes first.
