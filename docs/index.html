@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0511';
+const DATA_V='20260801-0548';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4352,7 +4352,12 @@ void main(){
        which seamounts.py already models). The test is therefore whether there
        is a shelf above this slope, and the four wide taps answer it directly.
        prom guards the rest: an isolated rise is not a margin however tilted. */
-    float slopeBand = smoothstep(-200.0,-700.0,z) * (1.0-smoothstep(-3000.0,-4200.0,z));
+    /* gZSm, not z (iteration 15): band membership is a DEPTH-BAND question,
+       and the raw field's +/-300 m texel noise made it a per-pixel coin flip
+       on every shallow bank. Ineffective while the shear hash below existed
+       (measured, iteration 13); with the hash redesigned away it closes the
+       remaining gate flicker. */
+    float slopeBand = smoothstep(-200.0,-700.0,gZSm) * (1.0-smoothstep(-3000.0,-4200.0,gZSm));
     float tilt = clamp(length(vec2(gE,gN))/60.0, 0.0, 1.0);
     /* -1800/-700, tightened from -2600/-900 once shelfHi became robust (see the
        wide-tap block). The old range was set against max-of-four, which needed
@@ -4390,16 +4395,29 @@ void main(){
 
          Step a fixed fraction of a CELL instead, so each order is probed at its
          own scale, and bound the shadow so it can darken but never black out. */
+      /* THE CANYON'S REAL DEFECT WAS VISIBILITY, NOT THE DOMAIN (iteration
+         15). A gradient-aligned redesign was implemented and measured a
+         no-op -- a per-fragment tangent transform cannot anchor a world
+         coherent stretch (dot(sdir,dh)=0), and with it gone the speck count
+         did not move, which re-frames the whole dossier: even a HEALTHY
+         gully field at x9 normal gain and 0.42 shadow prints near-black
+         blotches at the noise's own 2-5 px cell scale, and a cany viz reads
+         0.95 on the bank edges -- in-band by the system's own rules. The
+         references show those banks smooth. So the depth-potential domain
+         (whose deep-margin combing has been accepted for many rounds)
+         RETURNS, sheared by the smoothed depth, and the system's PUNCH is
+         graded by depth instead: full drama only below the shelf-edge zone,
+         a bounded gully, and a gentler shadow. */
       float CF=260.0, cstep=0.32;
       vec3 CAX=vec3(0.0,0.0,1.0);            // fixed axis, same reason as SAX
-      vec3 c0=sdir*CF - CAX*(z*(CF/78000.0));
-      vec3 c1=(sdir+Eax*(cstep/CF))*CF - CAX*(z*(CF/78000.0));
+      vec3 c0=sdir*CF - CAX*(gZSm*(CF/78000.0));
+      vec3 c1=(sdir+Eax*(cstep/CF))*CF - CAX*(gZSm*(CF/78000.0));
       float k0=vnoise3(c0)+0.5*vnoise3(c0*2.6+17.0);
       float k1=vnoise3(c1)+0.5*vnoise3(c1*2.6+17.0);
       float gully=(k1-k0);
       float TF=CF*2.9;                       // tributaries
-      vec3 d0=sdir*TF - CAX*(z*(TF/78000.0));
-      vec3 d1=(sdir+Eax*(cstep/TF))*TF - CAX*(z*(TF/78000.0));
+      vec3 d0=sdir*TF - CAX*(gZSm*(TF/78000.0));
+      vec3 d1=(sdir+Eax*(cstep/TF))*TF - CAX*(gZSm*(TF/78000.0));
       float t0=vnoise3(d0)+0.5*vnoise3(d0*2.6+41.0);
       float t1=vnoise3(d1)+0.5*vnoise3(d1*2.6+41.0);
       // the fine set is throttled where the coarse one already has a canyon,
@@ -4407,8 +4425,20 @@ void main(){
       // than as a second independent comb laid over the first
       float trib=(t1-t0)*0.55*(1.0-clamp(abs(gully)*2.2,0.0,1.0));
       gully += trib;
-      nrm=normalize(nrm+vec3(gully*9.0*cany, 0.0, 0.0));
-      col *= 1.0 - clamp(abs(gully)*3.0*cany, 0.0, 0.42);   // shadowed incisions
+      gully = clamp(gully, -0.5, 0.5);
+      /* Depth-graded punch: the shelf-edge zone keeps a whisper of incision,
+         the true slope below ~1.1 km keeps everything it had. */
+      /* ...and canyons live BELOW the regional surface, on the descending
+         wall (iteration 15's closing lever). A bank-edge pixel sits ABOVE
+         its own robust regional (prom > 0) however steep its neighbourhood
+         reads -- the reference shows those banks smooth -- while a true
+         slope wall runs hundreds of metres below it. prom is the IRLS
+         regional's own residual, global and robust, and it separates the
+         two populations cleanly. */
+      float canyG = cany * smoothstep(-350.0, -1100.0, gZSm)
+                         * smoothstep(-150.0, -750.0, prom);
+      nrm=normalize(nrm+vec3(gully*9.0*canyG, 0.0, 0.0));
+      col *= 1.0 - clamp(abs(gully)*2.4*canyG, 0.0, 0.34);   // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide

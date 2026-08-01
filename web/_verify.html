@@ -198,9 +198,23 @@ const W = () => document.getElementById('app').contentWindow;
     if (s.zoom != null) o.zoom = s.zoom;
     const aim = A.lookAt(s.lon, s.lat, o);
     await sleep(+q.get('settle') || 2600);
+    /* WAIT FOR THE CAMERA TO ACTUALLY STOP (2026-07-31). lookAt tweens, the
+       tween outlasts any fixed settle when the zoom changes a lot, and the
+       app BOOTS far out -- so every first-slot shot all day was a mid-tween
+       frame that happened to look like a plausible wide view. Poll the
+       camera until it is still; the fixed settle above remains the floor
+       (fields need it to decode). */
+    const cam = A.gl.cam;
+    let still = 0;
+    for (let t = 0; t < 100 && still < 3; t++) {
+      const p0 = cam.position.clone();
+      await sleep(150);
+      A.step();
+      still = cam.position.distanceTo(p0) < 1e-5 ? still + 1 : 0;
+    }
     A.step(); A.step();
     const r = await A.shoot(s.name, 760);
-    console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, saved: !!r.saved, err: r.error || null}));
+    console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, still, saved: !!r.saved, err: r.error || null}));
   }
   document.title = 'VERIFY-DONE';
 })();
