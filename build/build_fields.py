@@ -528,7 +528,16 @@ SUTURE_SEED_DEG = 0.35
 # valleys) goes fast, while a regionally high PLATEAU is isostatically supported
 # and goes slowly. Calibrated on the Appalachian analogue -- above 4 km at 300 Ma,
 # 1-2 km today -- which these constants reproduce at about 1.8 km.
-EROSION_TAU_RELIEF = 150.0    # Myr, local excess above the regional mean
+# RAISED 150 -> 340 (user round, 2026-08-01: "the landscape seems flat and
+# homogeneous by 250 Ma, we've lost all of our detail"). The Appalachian
+# calibration was sound for ONE range left alone, and wrong as a global law:
+# at tau 150 a quarter-billion years leaves 19% of every slope on Earth, so
+# the whole future world became a peneplain. Real continents are rejuvenated
+# continuously -- epeirogeny, rifting, isostatic rebound, drainage capture --
+# and no basin stays untouched for 250 Myr. 340 leaves 48% at +250, which
+# reads as worn-down rather than erased, and the Appalachian analogue still
+# lands in range because the belt uplift now tops it up.
+EROSION_TAU_RELIEF = 340.0    # Myr, local excess above the regional mean
 EROSION_TAU_REGION = 400.0    # Myr, the regional mean itself
 EROSION_FLOOR = 300.0         # m, the peneplain a worn craton tends toward
 EROSION_REGION_DEG = 8.0      # radius defining "regional"
@@ -570,12 +579,13 @@ WELD = True             # module flag so a preview can A/B the weld off
 # regionally smoothed surface, by an amount that grows with frac, softens
 # every margin progressively -- the passive flanks mildly, and it also eats
 # the rigid-warp crenulation the future coasts inherited.
-COASTGEN = 0.34         # blend fraction at frac=1 in the heart of the band
+COASTGEN = 0.46         # blend fraction at frac=1 in the heart of the band
 COASTGEN_DEG = 1.2      # half-width of the coastal band
 COASTGEN_REG_DEG = 2.0  # smoothing radius of the target surface
 SPRING = 0.55     # pull back toward the authored arrangement each pass
 RELAX = 0.35      # step size; small enough that the two forces find a balance
 _PACK_CACHE = {}
+LAST_BELT = {}      # filled by future_grid; read by rebuild_future for the _t bake
 
 
 def _packed_targets(gid, Zsrc=None):
@@ -928,8 +938,13 @@ def future_grid(frac, gid, Zsrc, h, w):
             out = out + (np.maximum(region2, 150.0) - out) * closew
             # Newly closed cells join the belt for the uplift below.
             land = out >= 0.0
-        out = out + frac * np.maximum(SUTURE_UPLIFT_C * beltC,
-                                      SUTURE_UPLIFT_A * beltA) * land
+        upl = np.maximum(SUTURE_UPLIFT_C * beltC, SUTURE_UPLIFT_A * beltA)
+        out = out + frac * upl * land
+        # The fold fabric bake needs this frame's belt (see rebuild_future):
+        # shortening is the belt's own strength and the fold axis is the
+        # tangent to its iso-contours, which is what an orogen's ridges are.
+        LAST_BELT["belt"] = (upl / max(SUTURE_UPLIFT_C, 1.0)) * land
+        LAST_BELT["shape"] = (h, w)
 
         # ---- S5: SUBSIDE THE RIFTED MARGINS ----
         # Ocean that no group claims is ocean that OPENED during the warp, so

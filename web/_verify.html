@@ -199,6 +199,17 @@ const W = () => document.getElementById('app').contentWindow;
     document.title = 'VERIFY-DONE'; return;
   }
 
+  if (q.get('evalq')) {
+    // Generic in-app probe: ?evalq=NAME&expr=<js>&age=<Ma>. Reports whatever
+    // the expression returns, after the fields for that age have landed.
+    if (q.get('age') != null) { A.lookAt(0, 20, {age: +q.get('age'), w: 1280, h: 960}); }
+    await sleep(+q.get('wait') || 12000);
+    for (let k = 0; k < 8; k++) { A.step(); await sleep(200); }
+    const out = (0, W().eval)(q.get('expr'));
+    await fetch('http://127.0.0.1:8901/' + q.get('evalq') + '.json',
+                {method: 'POST', body: btoa(String(out))});
+    document.title = 'VERIFY-DONE'; return;
+  }
   if (q.get('rivdbg')) {
     if (q.get('rivage') != null) {
       A.lookAt(-100, 44, {age: +q.get('rivage'), zoom: 1.9, w: 1280, h: 960});

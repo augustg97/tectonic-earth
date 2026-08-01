@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-1610';
+const DATA_V='20260801-1732';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3096,7 +3096,16 @@ void main(){
     float nA=fbm3(bd*2.0+11.3)-0.5;                  // large, wandering
     float nB=fbm3(bd*6.4+41.9)-0.5;                  // patchy detail
     float nC=vnoise3(bd*17.0+5.0)-0.5;               // fine fraying
-    ari*=1.0+nA*0.60+nB*0.30+nC*0.15;
+    /* JITTER THE BOUNDARY, NOT THE FIELD. Perturbing the index everywhere
+       pushed the Congo and Amazon cores below the canopy threshold and the
+       rainforest broke into patches -- the opposite defect from the straight
+       bands. A boundary needs wander only where it IS a boundary, so the
+       perturbation is weighted by 4h(1-h), which peaks exactly at the
+       transition and vanishes wherever the biome is already committed. Cores
+       stay solid BY CONSTRUCTION, edges wander hard. */
+    float h0=smoothstep(0.10,0.80,ari);
+    float edge=4.0*h0*(1.0-h0);
+    ari*=1.0+(nA*0.62+nB*0.32+nC*0.16)*edge;
     /* ...and real terms, not only noise: uplands wring rain out of the air
        they lift, basins and valley floors hold what falls on them, and a
        river corridor is green through a desert (the Nile is the argument). */
@@ -3109,7 +3118,7 @@ void main(){
        wander: they follow terrain, drainage and local exposure. Perturb both
        axes of the biome lookup with noise at two scales, and let low ground
        hold water, so forest and grassland interlock instead of striping. */
-    w=clamp(w+nA*0.15+nB*0.07+nC*0.04,0.0,1.0);
+    w=clamp(w+(nA*0.15+nB*0.07+nC*0.04),0.0,1.0);
     /* Named biomes, not a two-stop green ramp.
 
        This used to interpolate three colours -- one dry, one middling, one wet
@@ -5038,13 +5047,16 @@ let _rivWant=-1;
 function riverPaths(i){
   if(RIVDATA.has(i))return RIVDATA.get(i);
   const img=fieldImage('d',i); if(!img){ensureBitmap('d',i);return null;}
-  const RW=1024,RH=512;
+  const RW=2048,RH=1024;                       // native: half-res fattens channels
   const c=document.createElement('canvas');c.width=RW;c.height=RH;
   const cx=c.getContext('2d',{willReadFrequently:true});
   drawFieldImage(cx,img,RW,RH);
   const px=cx.getImageData(0,0,RW,RH).data;
-  const N=RW*RH, drain=new Uint8Array(N);
+  const N=RW*RH, drain=new Uint8Array(N), on=new Uint8Array(N);
   for(let k=0;k<N;k++)drain[k]=px[k*4];
+  /* Components by hysteresis: strong seeds grown across the weak network,
+     because log-accumulation decays upstream and one threshold cannot hold
+     a river together. */
   const lab=new Int32Array(N), stack=new Int32Array(N);
   let nl=0; const comp=[];
   for(let s=0;s<N;s++){
@@ -5062,54 +5074,71 @@ function riverPaths(i){
         }
       }
     }
-    if(cells.length>=10)comp.push(cells);   // floor 10: the Mississippi seeds at half-res (calibrated)
+    if(cells.length>=40)comp.push(cells);   // ~300 km of channel, at native res
   }
-  /* ONE EDGE PER CELL, DOWNSTREAM -- A TREE, NOT A MESH (iteration 26,
-     user-reported regression). Emitting a segment for every adjacent PAIR
-     turns a channel two cells wide into a lattice of criss-crossed
-     quads, which is exactly the "unnatural grid pattern" that appeared
-     over land. A river is a tree: each cell drains to ONE neighbour, and
-     flow accumulation increases downstream, so the neighbour with the
-     highest drainage IS the downstream one. One segment per cell, no
-     closed loops, no diagonals crossing orthogonals. */
-  /* ...AND THEN PRUNE TO THE SPINE. One edge per cell is a tree, but in a
-     network several cells wide every fringe cell points at the same trunk
-     cell and the result is a herringbone of barbs. A cell that nothing
-     drains into is a headwater tip; strip two generations of them and what
-     remains is the channel itself -- which is also the honest answer, since
-     a river begins where enough flow has gathered, not at every hillslope
-     pixel. */
-  const best=new Int32Array(N).fill(-1), indeg=new Uint16Array(N), alive=new Uint8Array(N);
-  for(const cells of comp){
-    for(const q of cells){
-      alive[q]=1;
-      const qx=q%RW, qy=(q/RW)|0;
-      let bk=-1,bv=drain[q];
-      for(let dy=-1;dy<=1;dy++){
-        const ny=qy+dy; if(ny<0||ny>=RH)continue;
-        for(let dx=-1;dx<=1;dx++){
-          if(!dx&&!dy)continue;
-          const nk=ny*RW+((qx+dx+RW)%RW);
-          if(lab[nk]&&drain[nk]>bv){bv=drain[nk];bk=nk;}
-        }
+  /* THIN THE NETWORK TO ONE CELL (iteration 26). The drainage field's
+     channels are several cells wide at EVERY resolution -- it is a smoothed,
+     meander-warped log-accumulation, not a crisp D8 network -- so drawing
+     its cells directly gives combs and ladders whatever the threshold
+     (measured: 88-90% of channel cells have three or more channel
+     neighbours). Zhang-Suen thinning erodes the blob to its medial axis
+     while preserving connectivity: what remains is one cell wide, which is
+     what a river is. Iterating over the network's own cells rather than the
+     grid keeps this at a few milliseconds. */
+  let live=[];
+  for(const cells of comp)for(const q of cells){on[q]=1;live.push(q);}
+  const at=(x,y)=>(y<0||y>=RH)?0:on[y*RW+((x%RW)+RW)%RW];
+  for(let pass=0;pass<14;pass++){
+    let removed=0;
+    for(let step=0;step<2;step++){
+      const kill=[];
+      for(const q of live){
+        if(!on[q])continue;
+        const x=q%RW, y=(q/RW)|0;
+        const p2=at(x,y-1),p3=at(x+1,y-1),p4=at(x+1,y),p5=at(x+1,y+1),
+              p6=at(x,y+1),p7=at(x-1,y+1),p8=at(x-1,y),p9=at(x-1,y-1);
+        const B=p2+p3+p4+p5+p6+p7+p8+p9;
+        if(B<2||B>6)continue;
+        const seq=[p2,p3,p4,p5,p6,p7,p8,p9,p2];
+        let A=0; for(let k=0;k<8;k++)if(!seq[k]&&seq[k+1])A++;
+        if(A!==1)continue;
+        if(step===0){ if(p2*p4*p6||p4*p6*p8)continue; }
+        else        { if(p2*p4*p8||p2*p6*p8)continue; }
+        kill.push(q);
       }
-      best[q]=bk;
+      for(const q of kill){on[q]=0;removed++;}
     }
+    live=live.filter(q=>on[q]);
+    if(!removed)break;
   }
-  for(const cells of comp)for(const q of cells)if(best[q]>=0)indeg[best[q]]++;
-  for(let pass=0;pass<2;pass++){
-    const dead=[];
-    for(const cells of comp)for(const q of cells)if(alive[q]&&!indeg[q])dead.push(q);
-    for(const q of dead){alive[q]=0;if(best[q]>=0)indeg[best[q]]--;}
+  /* ONE EDGE PER CELL, DOWNSTREAM: flow accumulation grows downstream, so
+     the highest-drainage neighbour is the one this cell drains into. A tree,
+     never a mesh. Then strip headwater tips, since a river begins where flow
+     has gathered rather than at every hillslope pixel. */
+  const best=new Int32Array(N).fill(-1), indeg=new Uint16Array(N);
+  for(const q of live){
+    const qx=q%RW, qy=(q/RW)|0;
+    let bk=-1,bv=drain[q];
+    for(let dy=-1;dy<=1;dy++){
+      const ny=qy+dy; if(ny<0||ny>=RH)continue;
+      for(let dx=-1;dx<=1;dx++){
+        if(!dx&&!dy)continue;
+        const nk=ny*RW+((qx+dx+RW)%RW);
+        if(on[nk]&&drain[nk]>bv){bv=drain[nk];bk=nk;}
+      }
+    }
+    best[q]=bk;
   }
+  for(const q of live)if(best[q]>=0)indeg[best[q]]++;
+  const dead=[];
+  for(const q of live)if(!indeg[q])dead.push(q);
+  for(const q of dead){on[q]=0;if(best[q]>=0)indeg[best[q]]--;}
   const segs=[];
   const lonf=x=>(x+0.5)/RW*360-180, latf=y=>90-(y+0.5)/RH*180;
-  for(const cells of comp){
-    for(const q of cells){
-      const b=best[q];
-      if(!alive[q]||b<0||!alive[b])continue;
-      segs.push([lonf(q%RW),latf((q/RW)|0),lonf(b%RW),latf((b/RW)|0)]);
-    }
+  for(const q of live){
+    const b=best[q];
+    if(!on[q]||b<0||!on[b])continue;
+    segs.push([lonf(q%RW),latf((q/RW)|0),lonf(b%RW),latf((b/RW)|0)]);
   }
   RIVDATA.set(i,segs);
   if(RIVDATA.size>12){for(const k of RIVDATA.keys()){if(k!==i){RIVDATA.delete(k);break;}}}
