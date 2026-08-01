@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-1052';
+const DATA_V='20260801-1127';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5031,7 +5031,7 @@ function riverPaths(i){
   const lab=new Int32Array(N), stack=new Int32Array(N);
   let nl=0; const comp=[];
   for(let s=0;s<N;s++){
-    if(drain[s]<=122||lab[s])continue;
+    if(drain[s]<=109||lab[s])continue;
     nl++; let top=0; stack[top++]=s; lab[s]=nl; const cells=[];
     while(top){
       const q=stack[--top]; cells.push(q);
@@ -5041,11 +5041,11 @@ function riverPaths(i){
         for(let dx=-1;dx<=1;dx++){
           if(!dx&&!dy)continue;
           const nk=ny*RW+((qx+dx+RW)%RW);
-          if(!lab[nk]&&drain[nk]>61){lab[nk]=nl;stack[top++]=nk;}
+          if(!lab[nk]&&drain[nk]>55){lab[nk]=nl;stack[top++]=nk;}
         }
       }
     }
-    if(cells.length>=15)comp.push(cells);
+    if(cells.length>=10)comp.push(cells);   // floor 10: the Mississippi seeds at half-res (calibrated)
   }
   const segs=[];
   const lonf=x=>(x+0.5)/RW*360-180, latf=y=>90-(y+0.5)/RH*180;
