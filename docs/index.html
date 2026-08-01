@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0708';
+const DATA_V='20260801-0717';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -6271,9 +6271,21 @@ function layoutLabels(){
   }
 
   cands.sort((a,b)=>b.pri-a.pri);
+  /* DECLUTTER BY ZOOM (2026-08-01). At whole-globe distance every label fits
+     -- the globe is large on screen and the type is small -- so the reference
+     comparison frame carried dozens of overlapping names where Google Earth
+     shows a handful of continents and oceans. Farther out, only the higher
+     tiers survive and fewer names total; by regional zoom nothing changes.
+     zf is 0 at zoom<=2.4 (regional and closer, exactly as before) and 1 at
+     the far clamp. */
+  const zf=Math.max(0,Math.min(1,(state.zoom-2.4)/2.2));
+  const minPri=zf*62;                    // far: continents/oceans/seas/regions only
+  const cap=Math.round(60-zf*44);       // far: ~16 names; near: unchanged in practice
   const panels=uiRects(), placed=[], leaders=[];
   const GAP=3;
+  let nplaced=0;
   for(const c of cands){
+    if(c.pri<minPri||nplaced>=cap){c.e.classList.remove('show');continue;}
     const e=c.e; measureEl(e);
     const w=e._mw+GAP*2, h=e._mh+GAP*2;
     let put=null;
@@ -6289,6 +6301,7 @@ function layoutLabels(){
     }
     if(!put){e.classList.remove('show');continue;}
     placed.push({x:put.x,y:put.y,w,h});
+    nplaced++;
     e.style.left=put.x+'px'; e.style.top=put.y+'px'; e.classList.add('show');
     if(Math.hypot(put.x-c.x,put.y-c.y)>17)leaders.push([c.x,c.y,put.x,put.y]);
   }
@@ -7600,7 +7613,21 @@ function buildLegend(){
                   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                   ctx.lineJoin = 'round';
                   let drawn = 0;
+                  /* Mirror layoutLabels' zoom declutter (2026-08-01): this
+                     capture path projects labels itself, so without the same
+                     tiering every verification frame carried dozens of names
+                     the LIVE page no longer shows -- the instrument must
+                     match the instrumented. */
+                  const zfS=Math.max(0,Math.min(1,(state.zoom-2.4)/2.2));
+                  const minPriS=zfS*62, capS=Math.round(60-zfS*44);
+                  const cand=[];
                   for (const L of (DATA.labels || [])) {
+                    if ((PRI[L.t]||40)+(L.w||0) < minPriS) continue;
+                    cand.push(L);
+                  }
+                  cand.sort((a,b)=>((PRI[b.t]||40)+(b.w||0))-((PRI[a.t]||40)+(a.w||0)));
+                  for (const L of cand) {
+                    if (drawn >= capS) break;
                     if (!labelVisible(L)) continue;
                     const sp = snapLabel(L, fi); if (!sp) continue;
                     /* OCCLUSION IS A NORMAL TEST, NOT A DEPTH TEST. z < 1 only
