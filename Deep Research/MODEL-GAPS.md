@@ -1157,3 +1157,27 @@ the h curve/bare gate (dry the Sahara core fully, extend canopy where Rf is
 already high), verified against the same framings; then G2 shelf water.
 Gates green, ice at baseline. DATA_V 20260801-0633, commit "The Earth gets
 its colours back".
+
+## Q — ITERATION 18, 2026-08-01: G1r2 + G2 + G4 in one pass; G3 closes honest
+
+G1 ROUND 2 (climate reach): h = smoothstep(0.10, 0.72, Rf/(0.46·pet)) — the
+aridity index kept, its response S-curved. Amazon canopy now spans the basin
+as one dark sharply-bounded carpet; Sahara core cleans to orange erg (green
+confined to Sahel + highlands); veget mottle floor 0.18→0.06; 122 Ma checked
+(rich Cretaceous forest vs dry interior — the same curve serves deep time
+correctly). G2 RE-SCOPED BY THE CODE'S OWN MEASUREMENTS: oceanColour was
+calibrated against the reference frames by chromaticity/luminance binning in
+an earlier round — "vivid turquoise" in the reassessment was wrong, and the
+real defect was the smoothing plateaus' lobed edges printing through the
+palette. Fix: zsb raw share graded by smoothed depth (0.55 above −40 m →
+0.85 by −160 m) — crisp bank/lagoon rims, lace-band smoothing intact. G4:
+cloud dens = pow(smoothstep(0.58,1.10,·),1.25), shade floor 0.80, core alpha
+0.68 — the grey skirt over Sahul thins to a veil, cores whiten. G3 CLOSES AS
+A NO-OP on principle: abyss tone and fabric contrast were measured against
+the reference previously; re-judging calibrated values by memory is
+regression by taste. First true whole-globe verification frame (zoom 4.6):
+dark Amazon/Congo, orange Sahara, white broken cloud fields — the globe
+reads near-reference at planet scale. NOTED for a future round: label
+pile-up at whole-globe zoom is heavy (many overlapping labels — a
+declutter-by-zoom pass is UX, not fidelity). Gates green, ice at baseline.
+DATA_V 20260801-0708, commit "Rain decides, rims sharpen, clouds whiten".
