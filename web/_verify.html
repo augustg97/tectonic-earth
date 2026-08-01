@@ -14,7 +14,9 @@
 <script>
 const q = new URLSearchParams(location.search);
 const passthrough = ['oldnoise','zeronoise'].filter(k => q.get(k)).map(k => '&' + k + '=1').join('');
-document.getElementById('app').src = 'index.html?run=verify&cb=' + Date.now() + passthrough;
+// ?app=_lace1.html points the driver at a variant build (bisection probes);
+// default is the real app. Variants never deploy: build_site copies a whitelist.
+document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
   const [name, lon, lat, age, zoom] = s.split(',');
   return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null};

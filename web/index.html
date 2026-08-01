@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260731-2300';
+const DATA_V='20260801-0006';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2711,7 +2711,15 @@ void main(){
                 +baseElev(uvFromDir(normalize(sdir-Nax*daQ))))*0.2;
       qw=smoothstep(-30.0,-140.0,gZSm);
     }
-    if(qw>0.01 && uDbg.w>0.5){
+    /* THE GATE OPENS ON THE PIXEL'S OWN DEPTH TOO (iteration 10, third
+       leak): gZSm is land-contaminated near every coast and island -- a
+       pixel truly at -800 m beside a +500 m shoreline averages above -30
+       and skipped this block entirely, keeping the fully raw staircase.
+       The hs viz showed those exact pixels as the surviving pepper: the
+       coast-hugging strips off Chile and Brazil and the island-adjacent
+       Falkland field. Any pixel genuinely deeper than 60 m now enters;
+       qw keeps its H8 job of choosing the raw/shrunk CHARACTER blend. */
+    if((qw>0.01 || z<wl-60.0) && uDbg.w>0.5){
       float db=16.0/2048.0*PI, ds=da/db;
 
       /* baseElev, not elevAt: the wide taps are here to measure the REGIONAL
@@ -2769,14 +2777,27 @@ void main(){
          meant; the equal radius was the bug. */
       vec3 dNE=(Nax+Eax)*0.70710678, dNW=(Nax-Eax)*0.70710678;
       float dd=db*1.41421356;
-      float t1=baseElev(uvFromDir(normalize(sdir+Nax*db)));
-      float t2=baseElev(uvFromDir(normalize(sdir-Nax*db)));
-      float t3=baseElev(uvFromDir(normalize(sdir+Eax*db)));
-      float t4=baseElev(uvFromDir(normalize(sdir-Eax*db)));
-      float t5=baseElev(uvFromDir(normalize(sdir+dNE*dd)));
-      float t6=baseElev(uvFromDir(normalize(sdir-dNE*dd)));
-      float t7=baseElev(uvFromDir(normalize(sdir+dNW*dd)));
-      float t8=baseElev(uvFromDir(normalize(sdir-dNW*dd)));
+      /* EVERY WIDE TAP IS CLAMPED TO SEA LEVEL (iteration 10, the carrier
+         at last). The surviving pepper clusters all sat within the wide
+         stencil's reach of a coastline -- Chile and Brazil strips, the
+         island-adjacent Falkland field -- and were immune to every cap on
+         the RESIDUAL, because they ride the WIDE gradient itself: a tap
+         on land reads +500..+2000 m, rwt sees only a far outlier, and the
+         max(q,0.30) floor keeps 30% of a ~2500 m departure, whose SIGN
+         flips as the bilinear tap positions slide along a jagged coast.
+         Direction flips at constant magnitude are also why the iter-8
+         magnitude soft-cap missed. A regional gradient that means
+         "submarine slope" must not read subaerial heights: min(t, wl)
+         makes a land tap say "depth zero at the coast", which is what
+         real bathymetry shading does, and it is smooth in the tap value. */
+      float t1=min(baseElev(uvFromDir(normalize(sdir+Nax*db))),wl);
+      float t2=min(baseElev(uvFromDir(normalize(sdir-Nax*db))),wl);
+      float t3=min(baseElev(uvFromDir(normalize(sdir+Eax*db))),wl);
+      float t4=min(baseElev(uvFromDir(normalize(sdir-Eax*db))),wl);
+      float t5=min(baseElev(uvFromDir(normalize(sdir+dNE*dd))),wl);
+      float t6=min(baseElev(uvFromDir(normalize(sdir-dNE*dd))),wl);
+      float t7=min(baseElev(uvFromDir(normalize(sdir+dNW*dd))),wl);
+      float t8=min(baseElev(uvFromDir(normalize(sdir-dNW*dd))),wl);
       float mAll=(t1+t2+t3+t4+t5+t6+t7+t8)*0.125;
       float q1=rwt(t1,mAll),q2=rwt(t2,mAll),q3=rwt(t3,mAll),q4=rwt(t4,mAll);
       float q5=rwt(t5,mAll),q6=rwt(t6,mAll),q7=rwt(t7,mAll),q8=rwt(t8,mAll);
@@ -2869,9 +2890,56 @@ void main(){
          keep at ~0.44 exactly where the lace lives. Onset 60, saturated by
          220; fracture zones on open floor sit under 40 and keep everything. */
       float keep=max(rl-QE,0.0)/max(rl,1e-4)*0.55
-               * mix(1.0, 0.10, smoothstep(60.0,220.0,length(vec2(wE,wN))));
-      gE=mix(gE, wE+res.x*keep, qw);
-      gN=mix(gN, wN+res.y*keep, qw);
+               * mix(1.0, 0.0, smoothstep(60.0,220.0,length(vec2(wE,wN))));
+      /* THE LACE, MEASURED AT LAST (iteration 10). An early-return hs viz
+         shows per-pixel black/white pepper on every margin band -- normals
+         flipping past the sun -- and the staged |g| vizzes bracket the
+         entry: the narrow gradient is a SOLID saturated cliff there (the
+         field drops 3-5 km across 2-4 texels), and what survives the
+         shrinkage is not the coherent slope but the staircase's per-pixel
+         spikes -- the old 0.10 guard floor kept 5.5% of the residual, and
+         5.5% of 3000-5000 m is still a 300-500 m facet at this vertical
+         exaggeration, randomly aimed. Both changes come from that
+         measurement, not taste: the steep-band guard now floors at ZERO
+         (its dribble was for fracture zones, which live on open floor
+         where the guard never engages; on the band it only leaked spikes),
+         and what the guard's TRANSITION still passes is CAPPED in
+         magnitude -- atan(240/vex) is a ~17 degree facet, so genuine
+         texel-scale character keeps its full shading while no spike can
+         flip a normal past grazing. A fracture zone's documented ~160 m
+         surviving residual is under the cap and untouched; open flat
+         floor keeps guard 1.0 exactly as before. */
+      vec2 resK=res*keep;
+      float rkl=length(resK);
+      if(rkl>240.0) resK*=240.0/rkl;
+      /* THE qw RAMP WAS THE SECOND LEAK, and the second hs viz showed it:
+         after the cap above, the surviving pepper sat in clusters -- thin
+         strips at sharp shelf breaks and a broad field across the interior
+         of the Falkland plateau -- exactly where gZSm sits mid-ramp, because
+         mix(raw, shrunk, qw) passes (1-qw) of the RAW staircase there. The
+         mix is algebraically wide + mix(res, resK, qw), so the SHALLOW
+         endpoint gets a cap of its own: 520 m is a ~34 degree facet at this
+         exaggeration, which leaves a reef front or a fjord wall all of its
+         drama while a 3000 m staircase spike still cannot flip the normal
+         past the sun. */
+      /* The shallow cap grades by the pixel's OWN depth, not gZSm: what the
+         surf-zone exemption was ever protecting is fine relief that is
+         genuinely shallow. THE BOUND IS AN ANGLE, and the arithmetic was
+         measured off the screen (iteration 10): the surviving speck
+         clusters on the shallow banks were pixels alternating between the
+         shade clamp's two ends -- the darks are EXACTLY 0.70/1.34 of their
+         neighbours -- and a first cap of 695 m at -150 m depth still
+         allows atan(695/795) = 41 degrees of facet against a 39-degree
+         sun, which flips hs to zero. 240 m at the deep vex is a 15-degree
+         facet and that band came clean; 420 m at the shallow vex is 28
+         degrees, still generous for a genuine reef front, while the WIDE
+         gradient (which a 16-texel window resolves fine) keeps carrying
+         every real steep form at full strength. */
+      float capS=mix(420.0, 240.0, smoothstep(-40.0,-400.0,z));
+      float rrl=length(res);
+      vec2 resS = rrl>capS ? res*(capS/rrl) : res;
+      gE=wE + mix(resS.x, resK.x, qw);
+      gN=wN + mix(resS.y, resK.y, qw);
     }
   }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
