@@ -1181,3 +1181,21 @@ reads near-reference at planet scale. NOTED for a future round: label
 pile-up at whole-globe zoom is heavy (many overlapping labels — a
 declutter-by-zoom pass is UX, not fidelity). Gates green, ice at baseline.
 DATA_V 20260801-0708, commit "Rain decides, rims sharpen, clouds whiten".
+
+## Q — ITERATION 19, 2026-08-01: few names from far away
+
+Label declutter by zoom: zf=(state.zoom−2.4)/2.2 clamps 0..1; minPri=zf·62,
+cap=60−zf·44 — regional and closer unchanged, whole-globe ~15 well-spaced
+majors (measured live: 4 shown at 4.6 in the pane's DOM, ~15 in the richer
+headless framing). THE HARNESS TELL: the first verification frame showed NO
+change because snap()'s capture path projects labels ITSELF (the DOM path is
+dead in a hidden pane) — the pane's live DOM proved the code worked while the
+instrument photographed the old behavior. snap now mirrors the same tiering:
+the instrument must match the instrumented. Gates green. DATA_V
+20260801-0730, commit "Few names from far away".
+
+Register state after nineteen iterations: G1 rounds 1-2, G2, G4 shipped; G3
+closed honest; declutter shipped; both user-feedback future rounds and all
+armed ocean artefacts closed. Open: fabric-seam watch (#23, unreproduced),
+Hawaii pepper wish, future coastal blockiness at young fracs, per-biome
+palette fine-tuning pending user verdict.
