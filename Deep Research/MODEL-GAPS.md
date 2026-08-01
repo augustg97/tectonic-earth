@@ -1259,3 +1259,31 @@ verification method for any line layer is the pane or pixel-diff-on-live,
 and the harness limitation gets its own register note; (2) only then re-land
 the rivers layer (the trace itself is proven and cheap). Iteration 21 stands
 as this wake's shipped work.
+
+## Q — ITERATION 24, 2026-08-01: rivers land; the harness confesses twice more
+
+THE RIVERS LAYER SHIPS (DATA_V 20260801-era, commit "Rivers, traced from the
+world's own drainage"): runtime hysteresis trace from the resident drainage
+bitmap at each keyframe (~10 ms, zero data shipped), line geometry at 1.0035,
+0x27556b @ 0.55, loop retry for late decodes. The Amazon basin reads as the
+reference's dark winding thread network in composited verification frames.
+TWO HARNESS FACTS, now permanent instrumentation: (1) GL LINE PRIMITIVES DO
+NOT RASTERIZE in --headless=new ANGLE Metal — the boundaries-only control
+(new granular ?layers=boundaries flag) frames 42 px over the Mid-Atlantic
+Ridge vs 5,282 for hotspot markers; every past "lines render headless" belief
+traced to markers. snap() therefore COMPOSITES line layers itself with the
+render camera (the instrument draws what the scene provably holds; real
+rasterization is a real browser's to confirm — the user's next look is the
+GL-side verification). (2) The compositor's first horizon test (normal-based,
+copied from the label path) rejected ALL segments (census 3539 occl / 0 pass)
+while the depth-off magenta probe had already painted exactly the Amazon-box
+count (867=867) at correct pixels — a near-side test is a DISTANCE
+comparison (|wp−cam| < |cam|), not a normal test; why labels pass the normal
+form remains unresolved and does not matter to the fix. Iteration 23's
+"depth occlusion" mystery dissolves: there was never depth occlusion — lines
+never rasterized at all, and depthTest:false "painting" was ANGLE's one
+line-drawing path. Residuals: prairie-scale networks sit below the 15-cell
+component floor (Mississippi absent at half-res — lower the floor or full-res
+trace in a tuning round); thread lattice texture at close zoom; map view
+skipped. Census instrumentation (?rivdbg: build state, N/S and lon-box
+censuses, per-segment outcome counts) stays in the driver.
