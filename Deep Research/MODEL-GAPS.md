@@ -1383,3 +1383,26 @@ uMat=1 with uWarp=1 and uTect=1 -- the future now carries the complete
 motion model (advection, material frame, fold fabric) -- and the collision
 zone renders with no slot seams. The future-branch gap list from iteration
 26 is now empty. DATA_V 20260801-1946.
+
+## Q — ITERATION 30, 2026-08-01: canyons stop combing enclosed seas
+
+A fresh close-zoom pass (the reference's own strongest ground) found the
+Mediterranean covered in fingerprint whorls. Kill-switch bisection: fabric
+normal off — whorls remain; dequantisation block off — whorls GO; canyons off
+— basin texture energy halves (5.56 -> 2.87). The carrier is the CANYON
+system, and the mechanism is iteration 10's own fix turned against it:
+shelfHi = regional + 900, and the 160 km stencil CLAMPED its land taps to sea
+level, so an enclosed sea reported a shelf directly above every basin cell.
+Fix (three parts, each measured): land taps are EXCLUDED from the robust
+regional rather than clamped (weight zero = "carries no information"; falls
+back to the smoothed depth where nothing submarine is in reach); the
+shrinkage stands down where the stencil is mostly land (scov gate); and
+canyons require a sustained regional downslope (gWide 40-110), because depth
+and local relief cannot separate a basin floor from a continental slope
+(measured cany 0.56 / tilt 0.81 across the basin) while a 160 km descent
+can -- and turbidity currents need precisely that. Result 5.56 -> 4.12
+against the 2.87 floor, combing now confined to the margins where
+Mediterranean canyons actually are; Argentine pixel-identical, Hawaii 0.4%.
+Open from this pass: land relief at close zoom still reads soft against the
+reference (the Alps as a brown smear) -- the next round's target.
+DATA_V 20260801-2043.
