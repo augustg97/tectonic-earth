@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-1855';
+const DATA_V='20260801-1937';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1786,7 +1786,16 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
-float gZSm=-9999.0;   // 5-tap smoothed depth, set in main; -9999 = not computed
+float gZSm=-9999.0;
+/* How much of the wide submarine stencil is actually sea (iteration 30).
+   Set where that stencil is taken; 1.0 means open ocean. Consumers that
+   describe CONTINENTAL-MARGIN processes must fade with it, because in an
+   enclosed sea the stencil measures the coastline instead of the floor. */
+float gScov=1.0;
+/* Magnitude of the REGIONAL (160 km) submarine gradient, set with it.
+   A continental slope sustains one downslope direction across that whole
+   window; a basin floor does not, whatever its local relief. */
+float gWide=0.0;   // 5-tap smoothed depth, set in main; -9999 = not computed
 uniform float uSnowball;  // 0 ordinary world .. 1 ice line at the equator (Cryogenian)
 uniform float uTime;      // seconds, drives the sea-surface sheen only
 uniform vec2 uTexel;
@@ -2813,19 +2822,53 @@ void main(){
          "submarine slope" must not read subaerial heights: min(t, wl)
          makes a land tap say "depth zero at the coast", which is what
          real bathymetry shading does, and it is smooth in the tap value. */
-      float t1=min(baseElev(uvFromDir(normalize(sdir+gAx2*db))),wl);
-      float t2=min(baseElev(uvFromDir(normalize(sdir-gAx2*db))),wl);
-      float t3=min(baseElev(uvFromDir(normalize(sdir+gAx1*db))),wl);
-      float t4=min(baseElev(uvFromDir(normalize(sdir-gAx1*db))),wl);
-      float t5=min(baseElev(uvFromDir(normalize(sdir+dNE*dd))),wl);
-      float t6=min(baseElev(uvFromDir(normalize(sdir-dNE*dd))),wl);
-      float t7=min(baseElev(uvFromDir(normalize(sdir+dNW*dd))),wl);
-      float t8=min(baseElev(uvFromDir(normalize(sdir-dNW*dd))),wl);
-      float mAll=(t1+t2+t3+t4+t5+t6+t7+t8)*0.125;
-      float q1=rwt(t1,mAll),q2=rwt(t2,mAll),q3=rwt(t3,mAll),q4=rwt(t4,mAll);
-      float q5=rwt(t5,mAll),q6=rwt(t6,mAll),q7=rwt(t7,mAll),q8=rwt(t8,mAll);
-      float regional=(t1*q1+t2*q2+t3*q3+t4*q4+t5*q5+t6*q6+t7*q7+t8*q8)
-                    /(q1+q2+q3+q4+q5+q6+q7+q8);
+      float r1=baseElev(uvFromDir(normalize(sdir+gAx2*db)));
+      float r2=baseElev(uvFromDir(normalize(sdir-gAx2*db)));
+      float r3=baseElev(uvFromDir(normalize(sdir+gAx1*db)));
+      float r4=baseElev(uvFromDir(normalize(sdir-gAx1*db)));
+      float r5=baseElev(uvFromDir(normalize(sdir+dNE*dd)));
+      float r6=baseElev(uvFromDir(normalize(sdir-dNE*dd)));
+      float r7=baseElev(uvFromDir(normalize(sdir+dNW*dd)));
+      float r8=baseElev(uvFromDir(normalize(sdir-dNW*dd)));
+      float t1=min(r1,wl), t2=min(r2,wl), t3=min(r3,wl), t4=min(r4,wl);
+      float t5=min(r5,wl), t6=min(r6,wl), t7=min(r7,wl), t8=min(r8,wl);
+      /* HOW MUCH OF THIS NEIGHBOURHOOD IS EVEN SEA (iteration 30 -- a defect
+         iteration 10's own fix created). The stencil is 160 km across, so in
+         an enclosed sea -- the Mediterranean, the Red Sea, the Japan Sea --
+         most taps land ashore, are clamped to sea level, and the "regional"
+         slope becomes a measurement of the COASTLINE rather than of the sea
+         floor. The shrinkage then trusts that invention completely: the
+         steep-slope guard sees a huge wide gradient and discards the honest
+         narrow one, and the contours of the invention drew the fingerprint
+         whorls that covered the whole Mediterranean at close zoom (proven by
+         kill-switch: the block off, the whorls go). Where the neighbourhood
+         is mostly land there IS no regional submarine slope to measure, so
+         the correction stands down. */
+      float scov=(step(r1,wl)+step(r2,wl)+step(r3,wl)+step(r4,wl)
+                 +step(r5,wl)+step(r6,wl)+step(r7,wl)+step(r8,wl))*0.125;
+      qw*=smoothstep(0.30,0.70,scov);
+      gScov=scov;
+      /* LAND TAPS ARE EXCLUDED, NOT CLAMPED (iteration 30). Clamping them to
+         sea level made the regional mean of an enclosed sea read far shallower
+         than its floor -- shelfHi is regional + 900 m, so the Mediterranean
+         reported a shelf directly above every basin cell and the canyon comb
+         ran across the open floor. A weight of zero says the honest thing:
+         that tap carries no information about the submarine surface. Where
+         nothing submarine is in reach the smoothed depth stands in, so the
+         estimate degrades to "this pixel's own neighbourhood" rather than to
+         "sea level". */
+      float m1=step(r1,wl), m2=step(r2,wl), m3=step(r3,wl), m4=step(r4,wl);
+      float m5=step(r5,wl), m6=step(r6,wl), m7=step(r7,wl), m8=step(r8,wl);
+      float msum=m1+m2+m3+m4+m5+m6+m7+m8;
+      float zref=(gZSm>-9000.0)?gZSm:z;
+      float mAll=msum>0.5 ? (t1*m1+t2*m2+t3*m3+t4*m4+t5*m5+t6*m6+t7*m7+t8*m8)/msum
+                          : zref;
+      float q1=rwt(t1,mAll)*m1,q2=rwt(t2,mAll)*m2,q3=rwt(t3,mAll)*m3,q4=rwt(t4,mAll)*m4;
+      float q5=rwt(t5,mAll)*m5,q6=rwt(t6,mAll)*m6,q7=rwt(t7,mAll)*m7,q8=rwt(t8,mAll)*m8;
+      float qsum=q1+q2+q3+q4+q5+q6+q7+q8;
+      float regional=qsum>1e-4
+        ? (t1*q1+t2*q2+t3*q3+t4*q4+t5*q5+t6*q6+t7*q7+t8*q8)/qsum
+        : zref;
       prom = z - regional;
       shelfHi = regional + 900.0;
       /* The wide gradient stays on the two CARDINAL pairs: a central difference
@@ -2845,6 +2888,7 @@ void main(){
       float ct3=mix(regional,t3,max(q3,0.30)), ct4=mix(regional,t4,max(q4,0.30));
       float wN=(ct1-ct2)*ds;
       float wE=(ct3-ct4)*ds;
+      gWide=length(vec2(wE,wN));
       /* 1.25 levels, not 1.0: the samples are bilinear taps rather than raw
          texels, so two of them can be up to about 1.4 levels apart on ground
          that is genuinely flat. Under-shrinking leaves a visible residue and
@@ -4438,9 +4482,27 @@ void main(){
        And -2600 m was never a shelf in the first place: the shelf break sits at
        130-200 m worldwide, so a "shelf above this slope" two and a half
        kilometres down was always a ridge crest or a seamount. */
+    /* ...and NOT in an enclosed sea. shelfHi asks "is there a shelf above
+       this slope", and in the Mediterranean the wide stencil's land taps
+       answer yes for the whole basin -- so the canyon comb ran across open
+       basin floor and drew the fingerprint whorls the close zoom showed
+       (measured: turning canyons off halves that basin's texture energy).
+       A submarine canyon is cut by turbidity currents running off a real
+       continental shelf into open water; where the neighbourhood is mostly
+       land there is no such system. */
     float cany = slopeBand*tilt
                * smoothstep(-1800.0,-700.0,shelfHi)
-               * (1.0-smoothstep(200.0,800.0,prom));
+               * (1.0-smoothstep(200.0,800.0,prom))
+               * smoothstep(0.25,0.65,gScov)
+    /* THE DISCRIMINATOR IS THE REGIONAL SLOPE, not the local one. Measured
+       over the Mediterranean basin: cany averaged 0.56 with tilt 0.81,
+       because depth and local relief cannot tell a basin floor from a
+       continental slope -- both are deep and both are bumpy. What separates
+       them is that a slope sustains ONE downslope direction across 160 km
+       (measured earlier at 100-200 on margins, under 40 on open floor) and a
+       basin floor does not. Turbidity currents need exactly that sustained
+       descent, so this is the physics as well as the fix. */
+               * smoothstep(40.0,110.0,gWide);
     if(cany > 0.004){
       /* TWO ORDERS, because a real slope is DENDRITIC. The reference diagram
          for a continental margin shows the slope combed from the shelf break
