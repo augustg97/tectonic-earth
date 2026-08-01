@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-1937';
+const DATA_V='20260801-2008';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3791,8 +3791,21 @@ void main(){
        wash, and a whole-globe view never pays for or aliases on it. */
     float closeG=clamp((gFineFade-0.55)*2.2,0.0,1.0);
     if(closeG>0.01){
-      nx+=(vnoise3(msd*2400.0+41.0)-0.5)*0.42*closeG;
-      ny+=(vnoise3(msd*2400.0+57.0)-0.5)*0.42*closeG;
+      nx+=(vnoise3(msd*2400.0+41.0)-0.5)*0.52*closeG;
+      ny+=(vnoise3(msd*2400.0+57.0)-0.5)*0.52*closeG;
+      /* AND A BAND BELOW THAT ONE (iteration 31). Close zoom was the
+         reference's strongest ground and ours read as a smear: the hillshade
+         differences the field over a FIXED 35 km baseline however far in the
+         camera comes, so the shape you see up close is a 35 km slope, and
+         the only relief finer than that is what these octaves add. One more
+         at ~1.1 km, gated harder than the 2.4 km band so it exists only when
+         a pixel is genuinely small, restores the scale a valley wall reads
+         at. Two taps, on land, at the closest zooms only. */
+      float closeH=clamp((gFineFade-0.80)*5.0,0.0,1.0);
+      if(closeH>0.01){
+        nx+=(vnoise3(msd*5200.0+11.0)-0.5)*0.40*closeH;
+        ny+=(vnoise3(msd*5200.0+29.0)-0.5)*0.40*closeH;
+      }
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
        been in the surface field all along and was used only to tint -- "the
@@ -3811,7 +3824,12 @@ void main(){
     float carve=smoothstep(mix(0.18,0.10,aridg),mix(0.62,0.46,aridg),drain)
                *(1.0-smoothstep(2400.0,3400.0,zp));
     nx+=dE*(carve*2.6+trunk*1.4); ny+=dN*(carve*2.6+trunk*1.4);
-    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug));
+    /* ...and the perturbation itself grows as the camera closes. The amplitude
+       was tuned at continental zoom, where it is a texture; up close it is
+       the TERRAIN, competing with a 35 km base slope that has none of its own
+       detail. Scaling by the pixel footprint keeps every wide framing exactly
+       as verified while letting a close pass read as dissected ground. */
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0+0.55*closeG));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
        Real ocean floor is corrugated: long, low hills 2-5 km across, elongated
