@@ -651,7 +651,7 @@ body.ambient .mtab{display:none}
 
 <div id="leftrail">
   <div id="legend"></div>
-  <div class="panel open" id="eraPanel">
+  <div class="panel" id="eraPanel">
     <div class="ph"><span>Geological intervals</span><span class="chev">▾</span></div>
     <div class="pb" id="eraList"></div>
   </div>
@@ -683,13 +683,6 @@ body.ambient .mtab{display:none}
     <div class="seg" id="viewSeg">
       <button data-v="globe" class="on">Globe</button>
       <button data-v="map">Map</button>
-    </div>
-  </div>
-  <div class="grp">
-    <div class="grp-h">Shading</div>
-    <div class="seg" id="shadeSeg">
-      <button data-s="sat" class="on">Satellite</button>
-      <button data-s="schem">Schematic</button>
     </div>
   </div>
   <div class="grp">
@@ -1271,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0548';
+const DATA_V='20260801-0610';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -7231,8 +7224,6 @@ document.querySelectorAll('#viewSeg button').forEach(b=>b.onclick=()=>{
   $('#hint').textContent=map?'Click a plate or landmass for details':'Drag to rotate · scroll to zoom · click a plate for details';
   resize();
 });
-document.querySelectorAll('#shadeSeg button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('#shadeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.shade=b.dataset.s;});
 document.querySelectorAll('.tog').forEach(t=>t.onclick=()=>{
   const k=t.dataset.layer;state.layers[k]=!state.layers[k];t.classList.toggle('on',state.layers[k]);
 });
