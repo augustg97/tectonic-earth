@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0610';
+const DATA_V='20260801-0623';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4847,8 +4847,18 @@ function initGL(){
        the latitude term, not lower it. Verified at 0 (identity) and 90. */
     const wx= dx*ch - dy*sh;      // screen -> world longitude component
     const wy= dx*sh + dy*ch;      // screen -> world latitude component
-    state.rot+=wx*.006;
-    state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+wy*.006));
+    /* ZOOM-PROPORTIONAL DRAG (user round, 2026-07-31). The rad-per-pixel
+       factor was constant while the visible ground span shrinks like
+       (zoom - surface): camera distance is LINEAR in state.zoom (see the
+       aim block) and the surface sits just under the 1.35 clamp, so at the
+       closest zoom the span is ~5x smaller than at boot and the same wrist
+       motion crossed most of the screen -- "difficult to navigate
+       precisely", as reported. Scale by height above the surface,
+       normalised at the boot zoom (3.05) so the default view feels exactly
+       as before; at the 1.35 clamp the drag is ~5x finer. */
+    const zs=.006*Math.max(.06,(state.zoom-.95)/2.10);
+    state.rot+=wx*zs;
+    state.tilt=Math.max(-1.3,Math.min(1.3,state.tilt+wy*zs));
     lastX=e.clientX;lastY=e.clientY;});
   cv.addEventListener('pointerup',e=>{const solo=ptrs.size<=1;endPtr(e);
     if(solo){dragging=false;if(!state.dragMoved)pickGlobe(e);}});
@@ -4856,7 +4866,11 @@ function initGL(){
   // what scale the page on iOS. Refuse them explicitly.
   for(const g of ['gesturestart','gesturechange','gestureend'])
     cv.addEventListener(g,e=>e.preventDefault(),{passive:false});
-  cv.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(1.35,Math.min(5,state.zoom+e.deltaY*.0016));},{passive:false});
+  // The wheel step scales the same way: a fixed step near the surface used
+  // to leap past whole zoom levels of visible span.
+  cv.addEventListener('wheel',e=>{e.preventDefault();
+    const ws=.0016*Math.max(.12,(state.zoom-.95)/2.10);
+    state.zoom=Math.max(1.35,Math.min(5,state.zoom+e.deltaY*ws));},{passive:false});
 }
 
 function lineSeg(list,color,width,rBase){
