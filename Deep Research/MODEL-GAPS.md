@@ -1219,3 +1219,19 @@ reference cuts valley shadow. Shipped: land shade floor 0.70→0.63, gain
 forensics); land macro second-difference 0.40→0.50. Measured +8% land-frame
 luminance std at both framings; Cordillera visibly carved; Sahara stayed clean.
 Gates green. Commit "Land carves harder".
+
+## Q — ITERATION 22, 2026-08-01: far rivers refuse the shader (measured, reverted)
+
+Three thread configurations over the trunk field were each INVISIBLE at the
+Ob/Amazon framings; a trunk viz then measured the truth: at zoom 2.2 the
+field's p99 is 0.112 (p95 0.100, mean 0.102) — the corridor signal at
+regional footprints is ~0.1 over a 0.1 background, and no threshold exists
+that draws a thread from a flat field. All thread edits REVERTED (zero
+visible change = dead weight). THE ARCHITECTURAL BRIEF for a future round:
+GE-style far-zoom rivers need a dilution-proof source — (a) bake-time traced
+river POLYLINES per keyframe (flow-accumulation ridge tracing → rivers.json)
+drawn as geometry like the boundaries layer, resolution-independent, the
+right shape; or (b) a max-pooled trunk mipmap texture (max-downsample
+resists averaging by construction) sampled at far footprints. (a) is
+GE-equivalent and preferred; it is a bake+overlay round, not a shader
+constant. Iteration 21's carve shipped earlier this wake and stands.
