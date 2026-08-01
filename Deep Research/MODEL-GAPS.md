@@ -979,3 +979,33 @@ convergence is deleted; H-section: overlap at a convergent margin IS the shorten
 signal. Next round: research the fut_* bake pipeline, design margin
 indentation/suture building from the computed convergence, re-bake, verify at
 +150/+250. Bank specks (iteration 10 matrix) remain armed behind it.
+
+## Q — ITERATION 12, 2026-07-31: the weld (user feedback — Australia's shape)
+
+S1-S5 built belts from the collision overlap but max() preserved every land cell
+of both plates: an indenter crossed a whole collision with its outline readable.
+S6, THE WELD, shipped after three measured calibration cycles: where collision
+stands, the surface blends toward its own regional mean BEFORE the calibrated
+uplift is re-added (so the S2/S4 +250 hypsometry moved <0.2 Mkm² at every
+threshold — measured OFF/ON at matched resolution), and interleaved gulfs are
+squeezed shut while deep gaps survive as remnant seas. The decisive design fact,
+measured not assumed: the weld must drive off the BOTH-LAND OVERLAP (an area,
+which survives wide smoothing) — a thin adjacency-line seed dilutes below its own
+gates at welding width, which is why configurations 1-2 read identical on screen
+(0.45% → 1.20% → corridor 4.45% |Δ|>50 m; sea→land closures 145 → 1,434 → 1,910
+cells ≈ 465,000 km²). The weld carries its own wide low-power belt (WELD_SIGMA_X
+2.2, WELD_POW 1.2, GAIN 1.6, MAX 0.85, SEA_LAG 0.25); the uplift keeps its sharp
+calibrated one. Verified in-app: +250 interior reads as ONE welded orogenic
+continent (no superimposed outlines, remnant seas); present-day control frame
+untouched; coast-edge cells DOWN ~1% both at −125 and −250 (the pre-existing
+coastal crenulation is inherited rigid-warp speckle, visible in the user's own
+pre-weld screenshot — a future queue item, not a weld regression). Pipeline:
+rebuild_future.py (50 frames, 67.6 min, e/r/o + climate solve), then per-frame
+build_surface + bake_lakes + refresh_manifest. TWO HARNESS TRAPS for the log:
+zsh does NOT word-split an unquoted $VAR — both sibling scripts received one
+50-name string as a single argument, and build_surface.py exits 0 SILENTLY on a
+missing basename (flagged for a loud-failure fix); and `{...} | tee` reports
+tee's exit status, so the chain "succeeded" while dying — the absent CHAIN-DONE
+marker was the truth. Verify batch work by output-file mtime census, never by a
+piped exit code. Gates green, ice at baseline, storm 0 uploads.
+DATA_V 20260801-0232, commit "A continent pays for its mountains in coastline".
