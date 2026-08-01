@@ -291,7 +291,21 @@ def build_one(base, verbose=False):
 
 def main():
     if len(sys.argv) > 1 and not sys.argv[1].startswith("-"):
-        build_one(sys.argv[1], verbose=True)
+        # Single-base mode is used by batch drivers, so it must be honest:
+        # a basename with no elevation field used to exit 0 SILENTLY (a zsh
+        # word-split bug once fed fifty names as one argument and the whole
+        # batch "succeeded" while doing nothing -- see MODEL-GAPS Q iter 12).
+        base = sys.argv[1]
+        epath = os.path.join(FIELDS, base + "_e.avif")
+        if not os.path.exists(epath):
+            print(f"build_surface: no elevation field for {base!r} "
+                  f"(expected {epath})", file=sys.stderr)
+            raise SystemExit(1)
+        if build_one(base, verbose=True) is None:
+            print(f"build_surface: {base!r} produced no field (all sea?)",
+                  file=sys.stderr)
+            raise SystemExit(1)
+        print(f"build_surface: wrote {os.path.join(FIELDS, base + '_d.webp')}")
         return
     bases = sorted({os.path.basename(p)[:-len("_e.avif")]
                     for p in glob.glob(os.path.join(FIELDS, "*_e.avif"))})
