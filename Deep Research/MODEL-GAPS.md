@@ -1108,3 +1108,35 @@ Verified by full-DOM screenshot in the pane (app boots clean, right panel
 goes View → Present-day layers, intervals collapsed). Gates green.
 DATA_V 20260801-0605, commit "One way to see the world, and a quieter
 sidebar".
+
+## Q — REASSESSMENT, 2026-08-01: the road to Google Earth is now made of colour
+
+First stabilized-camera sweep (ga_* set, ten framings, drag fix shipped the same
+turn: zoom-proportional drag verified 0.1905 ratio at the clamp, exactly the
+geometry's prediction). Zoom semantics settled for good: state.zoom IS camera
+distance (smaller = closer); whole-globe needs ~4.5-5; APP.lookAt BYPASSES the
+1.35 clamp (the "globe" shot at 0.62 landed under the surface clamp on abyssal
+fabric — harness footnote).
+
+STRUCTURE IS LARGELY THERE; COLOUR IS NOT. At every present-day framing the
+distance to the reference is now dominated by palette truth, not relief:
+- G1 LAND PALETTE (headline): our land is uniformly low-chroma olive/tan. The
+  reference Earth's icons are missing: Amazon/Congo/SE Asia should be deep
+  saturated rainforest green (ours a pale wash), taiga dark boreal green,
+  Sahara warm orange-tan (ours olive), Australia's center RED, Ganges/N China
+  plains agricultural green. Biome colour curves + chroma, possibly a baked
+  vegetation-index field (rain+temp exist) if shader curves cannot carry it.
+- G2 SHELF WATER: our shelves are pale washed halos with blobby edges; the
+  reference shows narrow vivid turquoise bands with crisp seaward gradients.
+  Depth-keyed chroma ramp retune.
+- G3 OPEN-OCEAN TONE: ours is very dark navy with strong fabric at wide zoom;
+  the reference is a calmer deep blue with subtle structure. Global brightness
+  and fabric-contrast rebalance by pixel footprint.
+- G4 CLOUDS AT CONTINENT ZOOM: grey haze smudges (e.g. over Sahul) rather than
+  crisp cumulus fields; lighten/sharpen or thin at these zooms.
+- Carry-overs: fabric seam watch (#23), Hawaii small-seamount pepper, future
+  coastal blockiness at young fracs.
+Round order: G1 first (several rounds, verified per-biome at Amazon/Sahara/
+Australia/Siberia/India framings vs reference), then G2, G3, G4 as single
+rounds. Drag fix DATA_V 20260801-0611-era, commit "The ground stays under
+the hand".
