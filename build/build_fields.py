@@ -500,7 +500,18 @@ SUTURE_DEG = 3.0        # half-width of a collisional belt, degrees (~330 km)
 # supercontinent is assembling, less moderate upland because 250 Myr of weather
 # has taken the old ranges down. Pow 2.5 rather than 3.0 broadens the belt a
 # little, which it needs now that there is no inherited high ground helping it.
-SUTURE_UPLIFT = 9000.0  # m of crustal thickening at the contact by +250 Myr
+# SPLIT INTO COLLISION AND CONTACT SCALES (user round 2, 2026-07-31). One
+# amplitude for every contact built a Himalaya along every margin of the
+# assembly, and the +250 map carried 30% more land above 2 km and 53% more
+# above 3 km than today's Earth -- denser, more extreme ranges than anything
+# in the real timeline, which is exactly what the user flagged. The OVERLAP
+# (measured convergence) earns the Himalayan scale; mere adjacency earns a
+# coastal-range scale. Calibrated so the +250 hypsometry lands NEAR TODAY'S
+# (a supercontinent may run a little higher, not half again higher).
+SUTURE_UPLIFT_C = 9500.0  # m at a genuinely converging (overlapping) contact
+SUTURE_POW_C = 2.0        # broader-shouldered than the contact belt: the overlap
+                          # source is patchy areas, and 2.5 crushed them to hills
+SUTURE_UPLIFT_A = 2900.0  # m at an adjacency-only contact -- foothills, not walls
 SUTURE_POW = 2.5        # sharpens the belt; see the note where it is applied
 # THE SEED WIDENING IS IN DEGREES, NOT CELLS. It used to be maximum_filter(size=3),
 # and a size in cells is a claim about the raster rather than about the world: the
@@ -547,12 +558,21 @@ RIFT_DEG = 2.5          # how far inboard the flexural moat reaches
 # (Caspian, Black Sea). Applied BEFORE the uplift so the S2/S4 hypsometry
 # calibration (measured post-uplift) is preserved; verified by re-measuring
 # the +250 Myr table.
-WELD_GAIN = 1.6         # how fast the blend saturates as the weld belt strengthens
-WELD_MAX = 0.85         # never fully erase -- a suture keeps some inherited grain
+WELD_GAIN = 1.9         # how fast the blend saturates as the weld belt strengthens
+WELD_MAX = 0.90         # nearly full erasure in the collision core (user round 2)
 WELD_SEA_LAG = 0.25     # gulfs need a stronger belt than land to close
 WELD_SIGMA_X = 2.2      # the weld belt's width, in multiples of the uplift's
 WELD_POW = 1.2          # ...and its power: broad-shouldered where uplift is sharp
 WELD = True             # module flag so a preview can A/B the weld off
+# COASTAL EVOLUTION (S7, user round 2). A quarter of a billion years of
+# transgression, regression and sediment transport generalises a coastline:
+# capes blunt, gulfs fill, deltas smear. Blending the coastal band toward a
+# regionally smoothed surface, by an amount that grows with frac, softens
+# every margin progressively -- the passive flanks mildly, and it also eats
+# the rigid-warp crenulation the future coasts inherited.
+COASTGEN = 0.34         # blend fraction at frac=1 in the heart of the band
+COASTGEN_DEG = 1.2      # half-width of the coastal band
+COASTGEN_REG_DEG = 2.0  # smoothing radius of the target surface
 SPRING = 0.55     # pull back toward the authored arrangement each pass
 RELAX = 0.35      # step size; small enough that the two forces find a balance
 _PACK_CACHE = {}
@@ -861,10 +881,13 @@ def future_grid(frac, gid, Zsrc, h, w):
         # with it as well as with mere adjacency. Adjacency only knows that two
         # groups are NEAR each other; overlap knows how hard they are converging.
         shorten = np.clip(nland / OVERLAP_CAP, 0.0, 1.0) * land
-        seed = np.maximum(seed, shorten)
+        seedA = seed                        # adjacency-only, for the foothill belt
+        seed = np.maximum(seed, shorten)    # union, for the weld's own source
         # ---- S2: the widening is in DEGREES (see SUTURE_SEED_DEG) ----
         n = int(round(SUTURE_SEED_DEG / (180.0 / h))) * 2 + 1
-        belt = gaussian_filter(maximum_filter(seed, size=max(3, n)), sigma) ** SUTURE_POW
+        beltC = gaussian_filter(maximum_filter(np.clip(shorten * 1.15, 0.0, 1.0),
+                                               size=max(3, n)), sigma) ** SUTURE_POW_C
+        beltA = gaussian_filter(maximum_filter(seedA, size=max(3, n)), sigma) ** SUTURE_POW
         if WELD:
             # ---- S6: weld the collision zone before raising it ----
             # THE WELD GETS ITS OWN BELT, wider and lower-powered than the
@@ -905,7 +928,8 @@ def future_grid(frac, gid, Zsrc, h, w):
             out = out + (np.maximum(region2, 150.0) - out) * closew
             # Newly closed cells join the belt for the uplift below.
             land = out >= 0.0
-        out = out + SUTURE_UPLIFT * frac * belt * land
+        out = out + frac * np.maximum(SUTURE_UPLIFT_C * beltC,
+                                      SUTURE_UPLIFT_A * beltA) * land
 
         # ---- S5: SUBSIDE THE RIFTED MARGINS ----
         # Ocean that no group claims is ocean that OPENED during the warp, so
@@ -917,6 +941,16 @@ def future_grid(frac, gid, Zsrc, h, w):
                                mode=("nearest", "wrap"))
         near = np.clip(near / max(near.max(), 1e-6), 0.0, 1.0)
         out = out - RIFT_SUBSIDE * frac * near * land
+
+        # ---- S7: COASTAL EVOLUTION (see the constants' note) ----
+        landf = (out >= 0.0).astype(np.float32)
+        cgs = gaussian_filter(landf, max(1.0, COASTGEN_DEG / (180.0 / h)),
+                              mode=("nearest", "wrap"))
+        coastw = np.clip((1.0 - np.abs(cgs * 2.0 - 1.0)) * 1.4 - 0.08, 0.0, 1.0)
+        regC = gaussian_filter(out.astype(np.float32),
+                               COASTGEN_REG_DEG / (180.0 / h),
+                               mode=("nearest", "wrap"))
+        out = out + (regC - out) * (COASTGEN * frac * coastw)
     return out
 
 
