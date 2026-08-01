@@ -1271,7 +1271,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0006';
+const DATA_V='20260801-0035';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2511,6 +2511,7 @@ void main(){
   t1 = _tl>1e-4 ? t1/_tl : vec3(0.0,0.0,1.0);
   vec3 t2=cross(sdir,t1);
   float rug, gE, gN, z;
+  vec3 gAx1, gAx2; float g1, g2, gMacroW;
   /* How far this point stands above its own surroundings. Free: the four wide
      taps the dequantisation already needs are exactly the ring to measure it
      against. Used to keep ridge-parallel fabric off volcanoes -- see the note
@@ -2535,10 +2536,16 @@ void main(){
     rug=clamp(length(gv)*1.78/460.0,0.0,1.0);
     float zb=mix(baseElev(uv), sum/6.0, pw);
     z=elevDetail(zb, matDir(sdir), rug);
-    // rotate the gradient back into east/north so BOTH branches speak the same
-    // basis and nothing steps as pw crosses its threshold
-    vec3 g3=t1*gv.x+t2*gv.y;
-    gE=dot(g3,Eax); gN=dot(g3,Nax);
+    // The gradient stays in ring-frame COMPONENTS here; the shared
+    // submarine machinery below runs in whatever frame the branch hands
+    // it (gAx1/gAx2), and east/north conversion happens once at the end,
+    // so nothing steps as pw crosses its threshold.
+    /* Macro at full weight above 63 -- that is the point of the shared
+       block -- EXCEPT the last degree around the grid singularity, where all
+       4096 columns of the equirect bake converge and a 14-texel second
+       difference reads the data's own azimuthal smear as radial spokes. */
+    gAx1=t1; gAx2=t2; gMacroW=1.0-smoothstep(0.99985,0.99999,abs(sdir.y));
+    g1=gv.x; g2=gv.y;
     /* DETAIL REACHES THE POLAR GRADIENT TOO (fidelity round, 2026-07-31).
        The ring average above is the anti-starburst cure for the BASE field --
        but it also silently deleted the procedural detail from the hillshade
@@ -2556,8 +2563,7 @@ void main(){
                -elevDetail(zb, matDir(normalize(sdir-t1*ddc)), rug);
       float dT2=elevDetail(zb, matDir(normalize(sdir+t2*ddc)), rug)
                -elevDetail(zb, matDir(normalize(sdir-t2*ddc)), rug);
-      vec3 gD=t1*(dT1*0.5)+t2*(dT2*0.5);
-      gE+=dot(gD,Eax); gN+=dot(gD,Nax);
+      g1+=dT1*0.5; g2+=dT2*0.5;
     }
   } else {
     float rda=3.2/2048.0*PI;
@@ -2590,31 +2596,46 @@ void main(){
        better. Ocean covers most pixels in most framings, so this sheds four
        ten-octave walks from the majority of fragments while land shading
        stays bit-identical. */
+    gAx1=Eax; gAx2=Nax; gMacroW=1.0-pw;
     if(z<wl){
-      gE=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
-      gN=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
-      /* Submarine MACRO relief (fidelity round iter 4): the continental slope,
-         a trench wall or a ridge flank is a 100-300 km form, and it is what a
-         Google-style bathymetry framing is made of. Same ~137 km second
-         difference as land, at lower weight because submarine forms are
-         steeper than anything on land and blow out otherwise. */
-      float daMo=14.0/2048.0*PI;
-      gE+=(baseElev(uvFromDir(normalize(sdir+Eax*daMo)))-baseElev(uvFromDir(normalize(sdir-Eax*daMo))))*0.22*(1.0-pw);
-      gN+=(baseElev(uvFromDir(normalize(sdir+Nax*daMo)))-baseElev(uvFromDir(normalize(sdir-Nax*daMo))))*0.22*(1.0-pw);
+      g1=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
+      g2=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
     }else{
-      gE=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
-      gN=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
-      /* MACRO RELIEF (fidelity round iter 3). At whole-globe zoom the 23.5 km
-         gradient reads gentle interior swells as nothing, and interiors came
-         out airbrushed however much fine detail they carried -- the user's
-         two screenshots. A second central difference at ~137 km catches the
-         basin-and-swell band the first one is too short to feel; folded into
-         the SAME normal so all lighting stays consistent. Two extra base
-         taps; land only, faded across the polar-branch handoff. */
-      float daM=14.0/2048.0*PI;
-      gE+=(baseElev(uvFromDir(normalize(sdir+Eax*daM)))-baseElev(uvFromDir(normalize(sdir-Eax*daM))))*0.40*(1.0-pw);
-      gN+=(baseElev(uvFromDir(normalize(sdir+Nax*daM)))-baseElev(uvFromDir(normalize(sdir-Nax*daM))))*0.40*(1.0-pw);
+      g1=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
+      g2=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
     }
+
+  }
+
+  /* SHARED SUBMARINE/LAND MACHINERY -- BOTH LATITUDE BRANCHES (user
+     round, 2026-07-31). Everything from the macro relief through the
+     shrinkage below used to live only in the sub-63-degree branch: the
+     polar ocean rendered as a flat disc with a faint ring where the
+     systems cut out, and every low-latitude improvement made the disc
+     MORE conspicuous, which is exactly what the user reported. All taps
+     step in the branch's tangent frame (gAx1/gAx2 -- east/north below
+     63 degrees, the world-fixed ring frame above) and read the field at
+     the result, so every sample is pole-safe by construction; the
+     east/north conversion happens once at the end. gMacroW replaces the
+     old (1.0-pw) macro fade, which lived in a branch where pw<=0.004 --
+     a fade that never faded; the polar side runs macro at full weight,
+     which is the point. */
+  float da=2.4/2048.0*PI;
+  if(z<wl){
+    /* Submarine MACRO relief (iter 4): a continental slope, trench wall
+       or ridge flank is a 100-300 km form -- what a bathymetric framing
+       is made of. ~137 km second difference at lower weight because
+       submarine forms are steeper than anything on land. */
+    float daMo=14.0/2048.0*PI;
+    g1+=(baseElev(uvFromDir(normalize(sdir+gAx1*daMo)))-baseElev(uvFromDir(normalize(sdir-gAx1*daMo))))*0.22*gMacroW;
+    g2+=(baseElev(uvFromDir(normalize(sdir+gAx2*daMo)))-baseElev(uvFromDir(normalize(sdir-gAx2*daMo))))*0.22*gMacroW;
+  }else{
+    /* MACRO RELIEF (iter 3): the basin-and-swell band the 23.5 km
+       gradient is too short to feel, folded into the same normal. */
+    float daM=14.0/2048.0*PI;
+    g1+=(baseElev(uvFromDir(normalize(sdir+gAx1*daM)))-baseElev(uvFromDir(normalize(sdir-gAx1*daM))))*0.40*gMacroW;
+    g2+=(baseElev(uvFromDir(normalize(sdir+gAx2*daM)))-baseElev(uvFromDir(normalize(sdir-gAx2*daM))))*0.40*gMacroW;
+  }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
        range, so at abyssal depth ONE quantisation level is 105 m -- and this
@@ -2705,10 +2726,10 @@ void main(){
     if(z<wl+300.0){
       float daQ=6.0/2048.0*PI;
       gZSm=(baseElev(uv)
-                +baseElev(uvFromDir(normalize(sdir+Eax*daQ)))
-                +baseElev(uvFromDir(normalize(sdir-Eax*daQ)))
-                +baseElev(uvFromDir(normalize(sdir+Nax*daQ)))
-                +baseElev(uvFromDir(normalize(sdir-Nax*daQ))))*0.2;
+                +baseElev(uvFromDir(normalize(sdir+gAx1*daQ)))
+                +baseElev(uvFromDir(normalize(sdir-gAx1*daQ)))
+                +baseElev(uvFromDir(normalize(sdir+gAx2*daQ)))
+                +baseElev(uvFromDir(normalize(sdir-gAx2*daQ))))*0.2;
       qw=smoothstep(-30.0,-140.0,gZSm);
     }
     /* THE GATE OPENS ON THE PIXEL'S OWN DEPTH TOO (iteration 10, third
@@ -2775,7 +2796,7 @@ void main(){
          makes the stencil a true 3x3 square neighbourhood, which is separable
          and monotonic and cannot ring. This is what "eight neighbours" always
          meant; the equal radius was the bug. */
-      vec3 dNE=(Nax+Eax)*0.70710678, dNW=(Nax-Eax)*0.70710678;
+      vec3 dNE=(gAx2+gAx1)*0.70710678, dNW=(gAx2-gAx1)*0.70710678;
       float dd=db*1.41421356;
       /* EVERY WIDE TAP IS CLAMPED TO SEA LEVEL (iteration 10, the carrier
          at last). The surviving pepper clusters all sat within the wide
@@ -2790,10 +2811,10 @@ void main(){
          "submarine slope" must not read subaerial heights: min(t, wl)
          makes a land tap say "depth zero at the coast", which is what
          real bathymetry shading does, and it is smooth in the tap value. */
-      float t1=min(baseElev(uvFromDir(normalize(sdir+Nax*db))),wl);
-      float t2=min(baseElev(uvFromDir(normalize(sdir-Nax*db))),wl);
-      float t3=min(baseElev(uvFromDir(normalize(sdir+Eax*db))),wl);
-      float t4=min(baseElev(uvFromDir(normalize(sdir-Eax*db))),wl);
+      float t1=min(baseElev(uvFromDir(normalize(sdir+gAx2*db))),wl);
+      float t2=min(baseElev(uvFromDir(normalize(sdir-gAx2*db))),wl);
+      float t3=min(baseElev(uvFromDir(normalize(sdir+gAx1*db))),wl);
+      float t4=min(baseElev(uvFromDir(normalize(sdir-gAx1*db))),wl);
       float t5=min(baseElev(uvFromDir(normalize(sdir+dNE*dd))),wl);
       float t6=min(baseElev(uvFromDir(normalize(sdir-dNE*dd))),wl);
       float t7=min(baseElev(uvFromDir(normalize(sdir+dNW*dd))),wl);
@@ -2828,8 +2849,8 @@ void main(){
          costs more than the little extra relief this gives up. */
       float QE=1.25*0.0156863*sqrt(Z_RANGE*abs(z));   // one 8-bit level, in metres
       /* AND THEN HALVE WHAT IS LEFT OF IT, because of the exaggeration this
-         gradient is about to be rendered at. The normal is (-gE, gN, 300) with
-         gE in metres over a 1.8-texel baseline -- roughly 17.6 km at the equator
+         gradient is about to be rendered at. The normal is (-g1, g2, 300) with
+         g1 in metres over a 1.8-texel baseline -- roughly 17.6 km at the equator
          -- so the vertical scale is exaggerated about 59 times. On land that is
          a deliberate and good choice: it is what gives a mountain belt its
          relief at global zoom. Under water it is far too much. Measured on the
@@ -2849,7 +2870,7 @@ void main(){
          vacates is the same one the anisotropic fabric fills, which is the
          whole point. A fracture zone still comes through hard: 430 m over two
          texels arrives as roughly 160 m of residual, a 47 degree feature. */
-      vec2 res=vec2(gE-wE, gN-wN);
+      vec2 res=vec2(g1-wE, g2-wN);
       float rl=length(res);
       /* ...and trust the residual LESS the steeper the regional slope is. On a
          continental slope the ground drops two or three kilometres across one
@@ -2938,10 +2959,15 @@ void main(){
       float capS=mix(420.0, 240.0, smoothstep(-40.0,-400.0,z));
       float rrl=length(res);
       vec2 resS = rrl>capS ? res*(capS/rrl) : res;
-      gE=wE + mix(resS.x, resK.x, qw);
-      gN=wN + mix(resS.y, resK.y, qw);
+      g1=wE + mix(resS.x, resK.x, qw);
+      g2=wN + mix(resS.y, resK.y, qw);
     }
-  }
+  /* Back to the shared east/north basis. The non-polar frame IS
+     east/north, and assigning directly keeps that branch float-identical
+     to before this refactor (pixel-diff verified); the polar ring frame
+     rotates, exactly as its gradient always did. */
+  if(pw>0.004){ vec3 gF3=gAx1*g1+gAx2*g2; gE=dot(gF3,Eax); gN=dot(gF3,Nax); }
+  else { gE=g1; gN=g2; }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
      t1 written in east/north coordinates, so blending toward (-0.55,0.55)
      expressed through c rotates the sun out of the spinning local frame into
