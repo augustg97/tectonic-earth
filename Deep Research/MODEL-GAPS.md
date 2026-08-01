@@ -1296,3 +1296,38 @@ Mississippi TRUE; shipped as 109/55/10 in bytes). Composited prairie frame
 shows the thread to the Gulf; 569 px changed vs pre-rivers baseline. Gates
 green. Commit "The Mississippi seeds". Remaining river residuals: close-zoom
 lattice texture; map view; GL-side look awaits the user's browser.
+
+## Q — ITERATION 26, 2026-08-01: three user-reported regressions, all closed
+
+(1) THE GRID PATTERNS ON LAND were the iteration-24 river layer: an edge
+between every adjacent pair of network cells draws a multi-cell channel as a
+lattice. Three measured steps: one edge per cell to its highest-drainage
+(= downstream) neighbour killed the lattice but left herringbone barbs;
+pruning headwater tips helped; and the decisive measurement was that the
+drainage field's channels are SEVERAL CELLS WIDE AT EVERY RESOLUTION (88-90%
+of channel cells have >=3 channel neighbours, native 2048x1024 included), so
+no threshold can thin them. Zhang-Suen thinning now runs over the network's
+own cells (milliseconds) before the tree is built: single-cell threads.
+(2) THE STRAIGHT BIOME BANDS returned because the jitter was applied AFTER
+the humidity S-curve -- once saturated, noise on 0 or 1 does nothing, so all
+wander collapsed onto a thin band. The perturbation now enters the aridity
+INDEX, weighted by 4h(1-h) (peaks at the boundary, vanishes where the biome
+is committed: cores solid BY CONSTRUCTION), plus real terms -- orographic
+uplands, water-holding basins, green river corridors. First attempt (flat
++/-60% on the index) broke the Congo/Amazon canopy into patches and was
+replaced by the edge weighting.
+(3) THE FLAT FUTURE had two causes. EROSION_TAU_RELIEF 150 -> 340 Myr (at
+150, a quarter-billion years leaves 19% of every slope -- a global peneplain;
+at 340, 48%. +250 hypsometry 27.2/12.3/3.7 vs today's 29.9/8.8/4.3). And the
+future frames shipped NO _t FIELD AT ALL, so orogens rendered as isotropic
+hummocks -- "the mountains look weird". The belt raster is now baked into
+fut_XXXX_t.webp per frame: shortening = belt strength, fold axis = the belt's
+iso-contour tangent (a fold axis runs ALONG a belt), build_tectonic's own
+encoding so the shader needed no change. Verified binding in-app: uTect=1 at
++250, fabric over 1.5% of the globe. COASTGEN 0.34 -> 0.46 takes Australia's
+coastline persistence 0.346 -> 0.275 at 96% interior survival. Note for a
+future round: future frames still ship no _p or _v (uMat=uWarp=0), so future
+crust neither carries material coordinates nor advects between keyframes.
+New driver mode ?evalq= (arbitrary in-app expression -> POST) is how the
+uniform binding was proven. Gates green, ice at baseline. DATA_V
+20260801-1732.
