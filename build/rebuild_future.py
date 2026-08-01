@@ -22,6 +22,78 @@ STEP = BF.STEP
 TW, TH = BT.TW, BT.TH
 
 
+def bake_future_disp(age, frac, gid, Zsrc):
+    """Write fut_XXXX_v.webp: how far the crust moves to the next keyframe.
+
+    The future frames shipped no displacement field, so the app cross-faded
+    them -- the very double-exposure H1 was built to end, still happening in
+    the future era. It is derivable exactly: every group turns about ONE axis
+    by an angle proportional to frac, so the rotation carrying the crust from
+    one keyframe to the next is a rotation about that same axis by the angle
+    difference. Same convention as build_displacement (apply the interval
+    rotation to this grid's own directions, store east/north in the tangent
+    frame), so the shader needs no new code. B is the tear channel, which
+    only the tectonic bake consumes; it stays neutral here because the
+    future fabric is derived from the belt instead.
+    """
+    import numpy as np
+    from PIL import Image
+    import build_displacement as BD
+    owner = BF.LAST_BELT.get("owner")
+    if owner is None:
+        return None
+    VW, VH = BD.VW, BD.VH
+    # this grid's own directions
+    lon = (np.arange(VW) + 0.5) / VW * 360 - 180
+    lat = 90 - (np.arange(VH) + 0.5) / VH * 180
+    LON, LAT = np.meshgrid(lon, lat)
+    V0 = BF.BS.unit(LON.ravel(), LAT.ravel())
+    # owner map came back at the last future_grid resolution; sample it here
+    oh, ow = owner.shape
+    oy = np.clip(((90 - LAT) / 180 * oh).astype(int), 0, oh - 1)
+    ox = (((LON + 180) / 360 * ow).astype(int)) % ow
+    own = owner[oy, ox].ravel()
+    packed = BF._packed_targets(gid, Zsrc)
+    gh, gw = gid.shape
+    glon = (np.arange(gw) + 0.5) / gw * 360 - 180
+    glat = 90 - (np.arange(gh) + 0.5) / gh * 180
+    GLON, GLAT = np.meshgrid(glon, glat)
+    dfrac = float(STEP) / 250.0
+    V1 = V0.copy()
+    for i, g in enumerate(BF.GROUPS):
+        m = own == i
+        if not m.any():
+            continue
+        gm = gid == i
+        if not gm.any():
+            continue
+        s = BF.BS.unit(GLON[gm], GLAT[gm]).mean(axis=1); s /= np.linalg.norm(s)
+        tl, tb, spin = packed[g]
+        t = BF.BS.unit(tl, tb)
+        Rfull = BF.BS.rodrigues(t, spin) @ BF.BS.rot_from_to(s, t)
+        # axis and total angle of the group's whole journey
+        ang = float(np.arccos(np.clip((np.trace(Rfull) - 1.0) / 2.0, -1.0, 1.0)))
+        if ang < 1e-9:
+            continue
+        ax = np.array([Rfull[2, 1] - Rfull[1, 2],
+                       Rfull[0, 2] - Rfull[2, 0],
+                       Rfull[1, 0] - Rfull[0, 1]]) / (2.0 * np.sin(ang))
+        V1[:, m] = BD.PF.rodrigues(V0[:, m].T, ax, ang * dfrac).T
+    dot = np.clip((V0 * V1).sum(0), -1.0, 1.0)
+    gc = np.degrees(np.arccos(dot))
+    tang = V1 - dot * V0
+    nrm = np.maximum(np.linalg.norm(tang, axis=0), 1e-15)
+    dirn = tang / nrm
+    e, n = BD._tangent_basis(LON.ravel(), LAT.ravel())
+    dE = (gc * (dirn.T * e).sum(-1)).reshape(VH, VW)
+    dN = (gc * (dirn.T * n).sum(-1)).reshape(VH, VW)
+    arr = BD._encode(dE, dN, np.zeros_like(dE))
+    Image.fromarray(arr).save(
+        os.path.join(BF.OUT, "fut_%04d_v.webp" % abs(age)), "WEBP",
+        lossless=True, method=6)
+    return float(np.abs(np.stack([dE, dN])).max())
+
+
 def bake_future_fabric(age, frac):
     """Write fut_XXXX_t.webp: the fold fabric of the future's own orogens.
 
@@ -80,10 +152,12 @@ def main():
         gl = gl - sl
         BF.export(age, gh, gl[::-1], "fut")
         act = bake_future_fabric(age, frac)
+        dmax = bake_future_disp(age, frac, gid, Zsrc)
         n += 1
         land = float((gh > 0).sum()) / gh.size * 100.0
         print(f"  {age:+5d} Myr  land {land:5.2f}%  max {gh.max():6.0f} m  "
               f"fabric {act if act is not None else -1:.1f}%  "
+              f"disp {dmax if dmax is not None else -1:.2f}deg  "
               f"[{time.time()-ts:.0f}s]  ({n}/50)", flush=True)
 
     print(f"future: {n} keyframes rebuilt in {(time.time()-t0)/60:.1f} min", flush=True)

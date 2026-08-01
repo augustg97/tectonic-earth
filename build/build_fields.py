@@ -945,6 +945,9 @@ def future_grid(frac, gid, Zsrc, h, w):
         # tangent to its iso-contours, which is what an orogen's ridges are.
         LAST_BELT["belt"] = (upl / max(SUTURE_UPLIFT_C, 1.0)) * land
         LAST_BELT["shape"] = (h, w)
+        # ...and the owner map, for the displacement bake: which group's
+        # rigid rotation carries the crust under each cell.
+        LAST_BELT["owner"] = owner
 
         # ---- S5: SUBSIDE THE RIFTED MARGINS ----
         # Ocean that no group claims is ocean that OPENED during the warp, so
