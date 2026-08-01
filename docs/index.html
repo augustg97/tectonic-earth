@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0717';
+const DATA_V='20260801-0753';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4341,6 +4341,21 @@ void main(){
       nrm = normalize(nrm + vec3(gT, 0.0));
       // the same grain in tone, so it reads face-on and not only where it is lit
       col *= 1.0 + sAcross*0.30*gFineFade*rough*aniso*deepw;
+      /* KNOLL PEPPER (iteration 20). The reference Pacific floor is dusted
+         with small shaded seamounts -- dense dot fields around the Hawaiian
+         chain and across old crust -- and ours had none below the baked
+         census. A sparse crust-fixed spot field, sun-embossed by a shifted
+         second tap (lit side bright, far side dark), clustered into
+         provinces so it reads as knoll fields rather than uniform noise.
+         Deep floor only, and it fades with the same footprint the fabric
+         does. */
+      vec3 kd=matDir(sdir);
+      vec3 Lh3=normalize(Eax*Lh.x+Nax*Lh.y);
+      float kn1=vnoise3(kd*310.0+7.0);
+      float knL=vnoise3(kd*310.0+Lh3*0.38+7.0);
+      float knm=smoothstep(0.34,0.66,vnoise3(kd*23.0+29.0));
+      float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade;
+      col *= 1.0 + clamp((knL-kn1)*5.5,-1.0,1.0)*spotm*0.24;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,
