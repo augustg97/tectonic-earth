@@ -1208,3 +1208,14 @@ light-shifted 0.38 cells for the emboss — provinces at kd*23, threshold
 fine shaded speck field, chain/halos untouched. Queue residual "small-
 seamount pepper" closes; remaining open items are all user-verdict or
 watch-list. Gates green. Commit "The floor gets its knolls".
+
+## Q — ITERATION 21, 2026-08-01: land carves harder (loop resumed)
+
+User resumed the loop: "more to go to Google Earth equivalence." Fresh pass at
+the under-examined framings (39 Ma North America's first post-colour look, the
+present prairie): the consistent gap is HILLSHADE PUNCH — soft wash where the
+reference cuts valley shadow. Shipped: land shade floor 0.70→0.63, gain
+0.62→0.74, cap 1.18→1.24 (sea unchanged at 0.70 — load-bearing in the lace
+forensics); land macro second-difference 0.40→0.50. Measured +8% land-frame
+luminance std at both framings; Cordillera visibly carved; Sahara stayed clean.
+Gates green. Commit "Land carves harder".
