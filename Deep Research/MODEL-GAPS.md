@@ -1140,3 +1140,20 @@ Round order: G1 first (several rounds, verified per-biome at Amazon/Sahara/
 Australia/Siberia/India framings vs reference), then G2, G3, G4 as single
 rounds. Drag fix DATA_V 20260801-0611-era, commit "The ground stays under
 the hand".
+
+## Q — ITERATION 17, 2026-08-01: G1 round 1 — the colours
+
+All three biome-lattice axes re-anchored (wet end to true closed-canopy dark
+green 0.075/0.235/0.098; taiga conifer green; hot sand warm orange 0.855/
+0.678/0.447; olive cast cut from the dry/mid stops), wet-end grip pow 0.85 on
+the humid half, savanna stipple deepened, red-bed warmed, and a LATERITE term:
+arid hard ground on old shields iron-stains (bare × hardness × dryness ×
+low-freq noise, 0.44 max) — central Australia reads red from orbit. Verified
+at Amazon (dark carpet ✓), Australia (red interior ✓), Sahara (warmer, though
+a green tinge still bleeds mid-desert), Siberia. THE REMAINING DISTANCE AT
+THESE FRAMINGS IS THE CLIMATE FIELD'S REACH, not colour: the southern Amazon
+and mid-Sahara sit at h values the palette can only obey. G1 ROUND 2 LEVER:
+the h curve/bare gate (dry the Sahara core fully, extend canopy where Rf is
+already high), verified against the same framings; then G2 shelf water.
+Gates green, ice at baseline. DATA_V 20260801-0633, commit "The Earth gets
+its colours back".
