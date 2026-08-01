@@ -1035,3 +1035,29 @@ of a depth-potential shear; keep the seamount/prom guards; re-tune the shadow
 bound; verify at Argentine wide (band character), bank close (specks=0 floor),
 Hawaii (bit-identical expected), Scotia. Probe kit: _verify.html?app= variants;
 nocany kill-switch reproduces the 0-floor.
+
+## Q — ITERATION 14, 2026-07-31: real-scale mountains, coastlines that remember less
+
+User round 2 for the future branch, both rulings shipped in one rebuild
+(DATA_V 20260801-0511, commits "Mountains earn their height..." + fields).
+THE BELT SPLITS: measured convergence (the both-land overlap) earns 9500 m at
+its own power 2.0; adjacency-only contact earns 2900 m of foothills; combined
+by max, never sum. S7 COASTAL EVOLUTION: the coastal band blends toward a
+2-degree surface by COASTGEN 0.34 × frac × band weight — capes blunt, gulfs
+fill, and the rigid-warp crenulation dissolves progressively with time. Weld
+core deepened to 0.90/1.9. Calibrated across FOUR measured configurations on
+the 1024-row preview (v1 overshot flat: collision power 2.5 crushes a patchy
+overlap source to 0.2 Mkm² above 3 km; v2 overshot high: a 3n coalesce made
+19.5 Mkm² above 2 km; v3/v4 bracketed): final +250 hypsometry 25.4 / 9.3 /
+3.5 Mkm² above 1/2/3 km against today's 29.9 / 8.8 / 4.3 — a modest
+supercontinent premium at 2 km, fewer extreme peaks, max 4.75 km base before
+shader detail. AUSTRALIA: new coastline-persistence metric (fraction of the
+rigidly-rotated present outline within 2 px of a final coast) drops 0.581 →
+0.346 with interior survival 0.982 — two thirds of the outline genuinely
+evolved, the continent intact. In-app verification: +250 interior reads as
+arid orogenic upland with belts tracing sutures, clearly subordinate to the
+present-day Himalaya control framing; −125 coasts softened; present-day
+control untouched. Gates green, ice at baseline, storm 0 uploads. Remaining
+future-branch items: residual blocky shelf steps at young fracs (S7 is
+frac-weak there by design — revisit only if the user flags it), and the
+canyon-domain redesign (iteration 13 brief) which is next.
