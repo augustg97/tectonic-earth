@@ -1199,3 +1199,12 @@ closed honest; declutter shipped; both user-feedback future rounds and all
 armed ocean artefacts closed. Open: fabric-seam watch (#23, unreproduced),
 Hawaii pepper wish, future coastal blockiness at young fracs, per-biome
 palette fine-tuning pending user verdict.
+
+## Q — ITERATION 20, 2026-08-01: knoll pepper
+
+Sparse sun-embossed knoll field on the deep floor (two taps at kd*310 — one
+light-shifted 0.38 cells for the emboss — provinces at kd*23, threshold
+0.775-0.85 on the max, ±0.24 tone, deepw- and footprint-gated). Hawaii frame:
+fine shaded speck field, chain/halos untouched. Queue residual "small-
+seamount pepper" closes; remaining open items are all user-verdict or
+watch-list. Gates green. Commit "The floor gets its knolls".
