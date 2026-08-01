@@ -1406,3 +1406,18 @@ Mediterranean canyons actually are; Argentine pixel-identical, Hawaii 0.4%.
 Open from this pass: land relief at close zoom still reads soft against the
 reference (the Alps as a brown smear) -- the next round's target.
 DATA_V 20260801-2043.
+
+## Q — ITERATION 31, 2026-08-01: ground you can stand on
+
+Queue item 4 (close-zoom land grain), and the cause is structural rather than
+a constant: the hillshade differences the field over a FIXED 35 km baseline at
+every zoom, so a close pass sees a 35 km slope and nothing finer except what
+the procedural octaves supply. Added a ~1.1 km band gated at gFineFade>0.80
+(harder than the 2.4 km band's 0.55) so it exists only when a pixel is
+genuinely small, raised the 2.4 km band 0.42->0.52, and scaled the whole
+normal perturbation by (1+0.55*closeG). Measured: local contrast +19% Alps,
++29% Himalaya; the Himalaya reads as dissected snow and rock. HONEST CAVEAT
+recorded rather than claimed away: the footprint fade reaches regional zoom,
+so the 122 Ma reference framing gains texture too (32% of pixels move) --
+inspected and judged an improvement (the Urals read as a range), but it is a
+look change at a verified framing, not a no-op. DATA_V 20260801-2118.
