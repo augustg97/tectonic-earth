@@ -1365,3 +1365,21 @@ at +200 Myr; a mid-interval frame renders clean at 97% of a keyframe's edge
 energy. Remaining future gap: _p (material coordinates) -- uMat=0, so future
 detail is world-fixed rather than travelling with its crust. DATA_V
 20260801-1918.
+
+## Q — ITERATION 29, 2026-08-01: future crust carries its own texture
+
+The last missing future motion field. Without _p, uMat stayed 0 past the
+present and every ridge was evaluated at a pure function of POSITION -- the
+H2 defect (a continent sliding out from under its own texture) alive in the
+future era. Exact derivation again: build_platefield stores "the plate's
+rotation from 0 Ma to this age", and for a group turning about one axis by
+an angle proportional to frac that is (axis, frac x angle) -- consistency
+with the Phanerozoic DEFINITION is what makes matDir() mean the same thing
+on both sides of the present, so no sign guessing was needed. New
+`build/bake_future_p.py`: ten groups into 48 slots, unclaimed cells take the
+nearest claimed slot (as the Phanerozoic bake handles its microplate tail),
+50 rasters + 50 platerot entries in 36 s. VERIFIED IN-APP at +200 Myr:
+uMat=1 with uWarp=1 and uTect=1 -- the future now carries the complete
+motion model (advection, material frame, fold fabric) -- and the collision
+zone renders with no slot seams. The future-branch gap list from iteration
+26 is now empty. DATA_V 20260801-1946.
