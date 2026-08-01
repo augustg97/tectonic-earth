@@ -1331,3 +1331,18 @@ crust neither carries material coordinates nor advects between keyframes.
 New driver mode ?evalq= (arbitrary in-app expression -> POST) is how the
 uniform binding was proven. Gates green, ice at baseline. DATA_V
 20260801-1732.
+
+## Q — ITERATION 27, 2026-08-01: the canopy threshold no continent could reach
+
+Measured the aridity index over the shipped fields (not guessed): Amazon 0.55,
+Congo 0.36, Siberia 0.24, Sahara 0.11 — against a curve that only closed the
+canopy at 0.80, so the Congo rendered 3% forested and the Amazon 37% where the
+reference shows solid carpets. Canopy saturation 0.80 -> 0.62: wet cores close,
+margins stay woodland, dry end unmoved (verified at Sahara and Siberia). Also
+verified this wake: the rebuilt future terrain reads as a textured
+supercontinent with an inland sea, and the derived fold fabric draws the
+Neo-Himalaya as LINEAR PARALLEL RIDGES rather than hummocks — the round-26
+bake works in the rendered world, not only in the uniform. The Congo remains
+the model's own dry spot (its rainfall runs ~35% under the Amazon's where
+reality is comparable) — a climate-solve question, logged, not papered over.
+Gates green. DATA_V 20260801-1839.
