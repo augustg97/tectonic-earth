@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0753';
+const DATA_V='20260801-0845';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2635,8 +2635,8 @@ void main(){
     /* MACRO RELIEF (iter 3): the basin-and-swell band the 23.5 km
        gradient is too short to feel, folded into the same normal. */
     float daM=14.0/2048.0*PI;
-    g1+=(baseElev(uvFromDir(normalize(sdir+gAx1*daM)))-baseElev(uvFromDir(normalize(sdir-gAx1*daM))))*0.40*gMacroW;
-    g2+=(baseElev(uvFromDir(normalize(sdir+gAx2*daM)))-baseElev(uvFromDir(normalize(sdir-gAx2*daM))))*0.40*gMacroW;
+    g1+=(baseElev(uvFromDir(normalize(sdir+gAx1*daM)))-baseElev(uvFromDir(normalize(sdir-gAx1*daM))))*0.50*gMacroW;
+    g2+=(baseElev(uvFromDir(normalize(sdir+gAx2*daM)))-baseElev(uvFromDir(normalize(sdir-gAx2*daM))))*0.50*gMacroW;
   }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
@@ -4508,7 +4508,13 @@ void main(){
      Only at sea. The ceiling is a blow-out guard and it is still needed on
      land, where base colours run to 0.85 and 1.34 would clip them; the ocean's
      are dark enough that the extra headroom costs nothing. */
-  float shade=clamp(0.70+0.62*hs, 0.0, z<wl ? 1.34 : 1.18);
+  /* LAND CARVES HARDER (iteration 21). At regional zoom the reference cuts
+     deep valley shadow where ours washed soft -- composition and colour are
+     near-reference, the shade span was not. Land floor drops and gain rises
+     (~25% more contrast); the SEA keeps the 0.70 floor the lace forensics
+     were built on -- that constant is load-bearing evidence. */
+  float shade = z<wl ? clamp(0.70+0.62*hs, 0.0, 1.34)
+                     : clamp(0.63+0.74*hs, 0.0, 1.24);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead
