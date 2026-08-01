@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0633';
+const DATA_V='20260801-0708';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2289,7 +2289,16 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      proved the lace lives in the PALETTE). Same H8 remedy as the gate:
      threshold the smoothed depth, with a 15% share of the raw value so a
      genuinely sharp reef edge keeps a crisp rim. */
-  float zsb = (gZSm>-9000.0) ? mix(z, gZSm, 0.85) : z;
+  /* G2, re-scoped (2026-08-01): the reference's shallow hue is already
+     matched (the measurements above stand); the remaining defect was the
+     HALOS' BLOBBY EDGES -- the 60 km smoothing window's lobed plateaus
+     printed through the palette. The raw share is now graded by depth:
+     genuinely shallow water (banks, lagoons, reef flats above ~40 m, where
+     the field is the best description available) trusts the raw value
+     almost half, so rims go crisp; the shelf band keeps the 0.85 smoothing
+     the palette-lace fix requires. Graded by the SMOOTHED depth, so the
+     grader itself cannot flicker. */
+  float zsb = (gZSm>-9000.0) ? mix(z, gZSm, mix(0.55, 0.85, smoothstep(-40.0,-160.0,gZSm))) : z;
   float botRet = exp(zsb/70.0);                      // two-way attenuation
   float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
   c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
@@ -3066,7 +3075,14 @@ void main(){
   }else{
     float w=clamp((T+6.0)/30.0,0.0,1.0);
     float pet=clamp((T+12.0)/34.0,0.16,1.35);
-    float h=clamp(Rf/(0.46*pet),0.0,1.0);
+    /* G1 round 2 (2026-08-01): the aridity INDEX was right and its linear
+       RESPONSE was wrong at both ends -- the desert core kept ~16% humidity
+       (the green tinge over the erg) while a wet-tropics index of 0.6 never
+       reached canopy (the southern Amazon rendered as woodland). The
+       response is now an S-curve: nothing grows below index 0.10, and the
+       canopy saturates by 0.72 -- which also dries Pangaea's interior
+       harder, exactly as a megamonsoon interior should be. */
+    float h=smoothstep(0.10,0.72,Rf/(0.46*pet));
     /* Warmth is a smooth function of latitude, so biome edges derived from it
        alone run dead straight across the map. Real vegetation boundaries
        wander: they follow terrain, drainage and local exposure. Perturb both
@@ -3244,7 +3260,7 @@ void main(){
        vegetation, and it is per-pixel so it holds up at any zoom. */
     float fine=fbm3(sdir*23.0+7.0)-0.5;
     float fine2=fbm3(sdir*58.0+29.0)-0.5;
-    float veget=clamp(h*1.3,0.18,1.0);
+    float veget=clamp(h*1.3,0.06,1.0);
     // No polar fade on these: they are isotropic 3D noise sampled on the sphere,
     // so they never had a pole problem -- fading them was pure loss of detail,
     // and it is why the caps read blank next to the rest of the map.
@@ -4779,13 +4795,17 @@ function initGL(){
       float cl=cos(radians(lat));
       vec3 d=vec3(cl*cos(radians(lon)), sin(radians(lat)), cl*sin(radians(lon)));
       float tex=cfb(d*3.2)*0.5+cfb(d*7.5+5.0)*0.32+cfb(d*17.0+13.0)*0.18;
-      float dens=smoothstep(0.5,1.14, base*0.5+tex*0.9);
+      /* G4 (2026-08-01): the broad low-density skirt rendered as grey haze
+         smudges over land at continent zoom (the Sahul frame). A later onset
+         and a contrast power thin the skirt to nothing while the cores keep
+         their footprint. */
+      float dens=pow(smoothstep(0.58,1.10, base*0.5+tex*0.9),1.25);
       // Self-shadow: an offset noise darkens parts of the deck so the cloud has
       // relief and volume instead of reading as a flat glowing sheet.
-      float shade=0.72+0.28*smoothstep(0.25,0.85, cfb(d*10.0+30.0));
+      float shade=0.80+0.20*smoothstep(0.25,0.85, cfb(d*10.0+30.0));
       // soften at the limb so the shell has no hard silhouette ring
       float face=smoothstep(0.12,0.5,vN.z);
-      gl_FragColor=vec4(vec3(0.90,0.92,0.95)*shade, clamp(dens,0.0,1.0)*0.62*face);
+      gl_FragColor=vec4(vec3(0.90,0.92,0.95)*shade, clamp(dens,0.0,1.0)*0.68*face);
     }`;
   const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
     side:THREE.FrontSide, uniforms:{
