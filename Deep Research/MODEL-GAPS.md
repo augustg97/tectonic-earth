@@ -1346,3 +1346,22 @@ bake works in the rendered world, not only in the uniform. The Congo remains
 the model's own dry spot (its rainfall runs ~35% under the Amazon's where
 reality is comparable) — a climate-solve question, logged, not papered over.
 Gates green. DATA_V 20260801-1839.
+
+## Q — ITERATION 28, 2026-08-01: the future stops dissolving
+
+The future frames shipped no _v, so the app CROSS-FADED them -- the double
+exposure H1 exists to prevent, still happening past the present. Derived
+exactly rather than fitted: each group turns about ONE axis by an angle
+proportional to frac, so the keyframe-to-keyframe rotation is a rotation
+about that same axis by the angle difference (no raster differencing, no
+plate model needed). New `build/bake_future_v.py` bakes all 50 in 1.9 min --
+ownership is the only thing it needed from the elevation pipeline, so a full
+future_grid per frame was unnecessary. Convention identical to
+build_displacement (interval rotation applied to the grid's own directions,
+east/north in the tangent frame), and Laplace-filled across unclaimed new
+ocean because a hard zero against 2 deg of plate motion tears the texture
+along every margin. Max 2.05 deg/step (range 12). VERIFIED IN-APP: uWarp=1
+at +200 Myr; a mid-interval frame renders clean at 97% of a keyframe's edge
+energy. Remaining future gap: _p (material coordinates) -- uMat=0, so future
+detail is world-fixed rather than travelling with its crust. DATA_V
+20260801-1918.
