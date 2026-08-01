@@ -946,3 +946,36 @@ at the bank framing — one variant, decisive; (2) if confirmed, gate the fabric
 ocean-structure VALIDITY (crust age/spreading coverage or shelf proximity), not
 by rug, which cannot distinguish steep from noisy. Probe files _lace_*.html and
 the runner scripts remain in web/ (gitignored) and the scratchpad.
+
+## Q — ITERATION 11, 2026-07-31: the pole joins the same ocean (user feedback)
+
+The user reported the polar distortion "immune from our other improvements" — and
+that immunity was the diagnosis: macro relief, the smoothed-depth gate, the robust
+wide gradient, the shrinkage and its caps all lived inside the sub-63° branch, so
+the polar ocean stayed a flat disc with a ring at exactly 63° where the systems cut
+out, and every low-latitude improvement made it starker. Shipped: the submarine/land
+machinery moved to a SHARED block parameterized by the branch's tangent frame
+(Eax/Nax below 63°, the world-fixed ring frame t1/t2 above; all taps step-and-read,
+pole-safe by construction), with basis conversion once at the end — direct assign
+non-polar so that branch is float-identical (pixel-diff: 0 changed pixels at
+Argentine and Hawaii; Scotia's changes confined to its in-frame polar band, 0 above
+y=456). The vestigial (1.0-pw) macro fade — a no-op in a branch where pw≤0.004 —
+became a branch-set weight: full at the pole, zero only inside ~89° where the
+equirect columns converge (the bowtie the first after-shot showed at the exact
+pole point; the fade dissolved it, verified by crop). prom/shelfHi now exist above
+63° too, so shelf-band systems engage on Arctic shelves. Verified: 63° handoff ring
+invisible (Fennoscandia framing); 80 Ma polar ocean carries shelf break + basin
+swell; present pack ice shows margin structure with a smooth multi-year core;
+39 Ma Antarctica has relief to the pole. Harness note: pb_sco white-frame was a
+capture transient (redo clean) — a solid-white frame after multi-age shot runs is
+the capture racing the decode, not a render bug. Gates green, ice at baseline,
+storm 0 uploads. DATA_V 20260801-0035, commit "The pole joins the same ocean as
+everywhere else".
+
+**User feedback item 2, QUEUED (task #29): future-branch collision rigidity.** By
++250 Myr Australia scrapes through East Africa/SE Asia and exits shape-identical —
+rigid-rotation future frames by construction. WP-07: 12.8 Mkm² of computed future
+convergence is deleted; H-section: overlap at a convergent margin IS the shortening
+signal. Next round: research the fut_* bake pipeline, design margin
+indentation/suture building from the computed convergence, re-bake, verify at
++150/+250. Bank specks (iteration 10 matrix) remain armed behind it.
