@@ -1009,3 +1009,29 @@ tee's exit status, so the chain "succeeded" while dying — the absent CHAIN-DON
 marker was the truth. Verify batch work by output-file mtime census, never by a
 piped exit code. Gates green, ice at baseline, storm 0 uploads.
 DATA_V 20260801-0232, commit "A continent pays for its mountains in coastline".
+
+## Q — ITERATION 13, 2026-07-31: the bank specks' carrier, proven and briefed
+
+The iteration-10 suspect (fabric on fill-garbage shelf texels) died by direct
+probe: the specks survive the sea-fabric normal-add zeroed, and an aniso viz
+reads a solid 1.0 on the banks (the validity gate at ~3762 already works). The
+TRUE carrier, proven by the first kill-switch this artefact has ever answered:
+THE SUBMARINE CANYON SYSTEM — canyons off takes the cluster-box dark count from
+~212-222 to EXACTLY 0. Mechanism, from its own code: the canyon noise domain is
+sheared by a depth potential (CAX*(z*CF/78000)), and on bank edges the field's
+±300 m texel noise shears adjacent pixels a full noise cell apart — k1-k0
+becomes full-amplitude hash, ×9 into the normal plus the ×0.42 shadow —
+re-entering through the z-shear the exact decorrelation the block's own comment
+fixed for the angular step. Compounding it, cany's slopeBand thresholds RAW z.
+Two H8 patches were implemented and MEASURED INSUFFICIENT (shear→gZSm,
+slopeBand→gZSm: dark count 212→222, unchanged — the smoothed depth still
+carries ~±134 m against a 260/78000 amplifier), and the slopeBand patch showed
+a SIDE-EFFECT at wide zoom: a coherent band CONCENTRATES canyon coverage into a
+heavy saturated stripe where noisy membership used to dither it soft. Both
+patches REVERTED — nothing shipped this round. NEXT-ROUND BRIEF (one designed
+change, A/B at wide+close): reformulate canyon elongation to follow the CLEAN
+capped-gradient downslope direction (the way fold fabric follows gFold) instead
+of a depth-potential shear; keep the seamount/prom guards; re-tune the shadow
+bound; verify at Argentine wide (band character), bank close (specks=0 floor),
+Hawaii (bit-identical expected), Scotia. Probe kit: _verify.html?app= variants;
+nocany kill-switch reproduces the 0-floor.
