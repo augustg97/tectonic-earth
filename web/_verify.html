@@ -35,7 +35,13 @@ const W = () => document.getElementById('app').contentWindow;
     const orf = W().requestAnimationFrame.bind(W());
     W().requestAnimationFrame = cb => orf(() => cb(777000));
   }
-  if (q.get('layers')) { A.state.layers.hotspots = true; A.state.layers.vectors = true; A.state.layers.boundaries = true; }
+  if (q.get('layers')) {
+    // '1' keeps the old everything-on behavior; a comma list enables only
+    // the named layers -- the iteration-23 control needs boundaries ALONE.
+    const lv = q.get('layers');
+    if (lv === '1') { A.state.layers.hotspots = true; A.state.layers.vectors = true; A.state.layers.boundaries = true; }
+    else for (const k of lv.split(',')) if (k in A.state.layers) A.state.layers[k] = true;
+  }
 
   if (q.get('timing')) {
     const R = A.gl.renderer, gl = R.getContext();
@@ -212,7 +218,26 @@ const W = () => document.getElementById('app').contentWindow;
       ` let found=0; APP.gl.scene.traverse(function(o){if(ch&&o===overlay.rivers.children[0])found=1;});` +
       ` const sg=RIVDATA.get(curFrame().i)||[]; let nn=0, ss=0;` +
       ` for(const g of sg){ if(g[1]>0)nn++; else ss++; }` +
-      ` return JSON.stringify({ch, n, nan, ndc, found, north:nn, south:ss, want:_rivWant, fi:curFrame().i,` +
+      ` const c2=APP.gl.renderer.domElement; let pass=0,occl=0,horiz=0,off=0;` +
+      ` for(const g of sg){ let on=true; const pts=[];` +
+      `  for(const pr of [[g[0],g[1]],[g[2],g[3]]]){` +
+      `   const lp=ll2v(pr[0],pr[1],1.004);` +
+      `   const wp=lp.clone().applyMatrix4(globe.matrixWorld);` +
+      `   const nr=lp.clone().applyQuaternion(globe.quaternion).normalize();` +
+      `   if(nr.dot(cam.position.clone().sub(wp).normalize())<0.10){on=false;break;}` +
+      `   const v=wp.project(cam);` +
+      `   pts.push([(v.x*0.5+0.5)*c2.width,(1-(v.y*0.5+0.5))*c2.height]); }` +
+      `  if(!on){occl++;continue;}` +
+      `  if(Math.abs(pts[0][0]-pts[1][0])>=60){horiz++;continue;}` +
+      `  const X=pts[0][0],Y=pts[0][1];` +
+      `  if(X<0||Y<0||X>c2.width||Y>c2.height){off++;continue;}` +
+      `  pass++; }` +
+      ` let amzOK=0, amzShift=0, amzMirror=0;` +
+      ` for(const g of sg){ if(Math.abs(g[1])<10){` +
+      `  if(g[0]>-80&&g[0]<-40)amzOK++;` +
+      `  if(g[0]>100&&g[0]<140)amzShift++;` +
+      `  if(g[0]>40&&g[0]<80)amzMirror++; } }` +
+      ` return JSON.stringify({ch, n, nan, ndc, found, north:nn, south:ss, pass, occl, horiz, off, amzOK, amzShift, amzMirror, want:_rivWant, fi:curFrame().i,` +
       `  vis:overlay.rivers.visible, gvis:globe.visible});})()`);
     await fetch('http://127.0.0.1:8901/' + q.get('rivdbg') + '.json',
                 {method: 'POST', body: btoa(info)});

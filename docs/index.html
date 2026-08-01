@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-0845';
+const DATA_V='20260801-1052';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1545,7 +1545,7 @@ function frameAt(age){
 
 /* ================= three.js globe ================= */
 let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds;
-const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group()};
+const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group(),rivers:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
 let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null,lastBndOn=null;
 
@@ -4844,7 +4844,7 @@ function initGL(){
   sg.setAttribute('position',new THREE.BufferAttribute(pos,3));
   starfield=new THREE.Points(sg,new THREE.PointsMaterial({color:0x9fb0c8,size:.09,sizeAttenuation:true,transparent:true,opacity:.55}));
   scene.add(starfield);
-  globe.add(overlay.boundaries);globe.add(overlay.derived);globe.add(overlay.vectors);globe.add(overlay.hotspots);
+  globe.add(overlay.boundaries);globe.add(overlay.derived);globe.add(overlay.vectors);globe.add(overlay.hotspots);globe.add(overlay.rivers);
   resize();
   /* PINCH. The old code tracked one pointer, so a second finger was invisible
      to the app and the browser handled the gesture instead. Every active
@@ -5002,6 +5002,77 @@ function buildDerivedBounds(){
     }
     flush();
   }
+}
+/* RIVERS AS GEOMETRY (iterations 22-24). The reference draws major rivers
+   as fine dark threads at every zoom; per-pixel texture sampling cannot (the
+   corridor field's p99 is 0.11 at regional footprints -- measured), so the
+   threads are LINE GEOMETRY traced at each keyframe from the drainage bitmap
+   the cache already holds: hysteresis (strong seeds grown across the weak
+   network, because log-accumulation decays upstream), components under
+   ~300 km dropped, each adjacent pair of network cells one segment. Zero
+   new data shipped; ~10 ms per crossing.
+   VERIFICATION NOTE (iteration 24): GL line primitives do NOT rasterize in
+   the --headless=new ANGLE Metal pipeline (boundaries-only control: 42 px
+   over the Mid-Atlantic Ridge), so this layer -- like every line layer --
+   verifies headlessly by the snap() compositor and by data diagnostics,
+   and visually only in a real browser. */
+const RIVDATA=new Map();
+let _rivWant=-1;
+function riverPaths(i){
+  if(RIVDATA.has(i))return RIVDATA.get(i);
+  const img=fieldImage('d',i); if(!img){ensureBitmap('d',i);return null;}
+  const RW=1024,RH=512;
+  const c=document.createElement('canvas');c.width=RW;c.height=RH;
+  const cx=c.getContext('2d',{willReadFrequently:true});
+  drawFieldImage(cx,img,RW,RH);
+  const px=cx.getImageData(0,0,RW,RH).data;
+  const N=RW*RH, drain=new Uint8Array(N);
+  for(let k=0;k<N;k++)drain[k]=px[k*4];
+  const lab=new Int32Array(N), stack=new Int32Array(N);
+  let nl=0; const comp=[];
+  for(let s=0;s<N;s++){
+    if(drain[s]<=122||lab[s])continue;
+    nl++; let top=0; stack[top++]=s; lab[s]=nl; const cells=[];
+    while(top){
+      const q=stack[--top]; cells.push(q);
+      const qx=q%RW, qy=(q/RW)|0;
+      for(let dy=-1;dy<=1;dy++){
+        const ny=qy+dy; if(ny<0||ny>=RH)continue;
+        for(let dx=-1;dx<=1;dx++){
+          if(!dx&&!dy)continue;
+          const nk=ny*RW+((qx+dx+RW)%RW);
+          if(!lab[nk]&&drain[nk]>61){lab[nk]=nl;stack[top++]=nk;}
+        }
+      }
+    }
+    if(cells.length>=15)comp.push(cells);
+  }
+  const segs=[];
+  const lonf=x=>(x+0.5)/RW*360-180, latf=y=>90-(y+0.5)/RH*180;
+  for(const cells of comp){
+    for(const q of cells){
+      const qx=q%RW, qy=(q/RW)|0;
+      for(const[dx,dy]of[[1,0],[0,1],[1,1],[1,-1]]){
+        const ny=qy+dy; if(ny<0||ny>=RH)continue;
+        const nx=(qx+dx+RW)%RW, nk=ny*RW+nx;
+        if(lab[nk])segs.push([lonf(qx),latf(qy),lonf(nx),latf(ny)]);
+      }
+    }
+  }
+  RIVDATA.set(i,segs);
+  if(RIVDATA.size>12){for(const k of RIVDATA.keys()){if(k!==i){RIVDATA.delete(k);break;}}}
+  return segs;
+}
+function buildRivers(){
+  clearGroup(overlay.rivers);
+  const fi=curFrame().i;
+  const segs=riverPaths(fi);
+  if(!segs){_rivWant=fi;return;}
+  _rivWant=-1;
+  if(!segs.length)return;
+  const ln=lineSeg(segs,0x27556b,1,1.0035);
+  ln.material.opacity=0.55;
+  overlay.rivers.add(ln);
 }
 function buildBoundaries(){
   clearGroup(overlay.boundaries);
@@ -6061,7 +6132,7 @@ function openInfo(o){
 function jumpTo(age){
   state.age=Math.max(-250,Math.min(1000,age));
   state.playing=false;syncPlay();syncSlider();
-  bindTextures();buildBoundaries();buildHotspots();buildVectors();updateReadout();
+  bindTextures();buildBoundaries();buildRivers();buildHotspots();buildVectors();updateReadout();
   markSidebarCurrent();markGlaciationList();markClimateEventList();markInterchangeList();
 }
 function showInterval(i){
@@ -7082,6 +7153,7 @@ function loop(now){
   // pace on purpose: it is a display mode with a composed rhythm, and having it
   // inherit whatever the slider was left on would make the same mode look
   // different every time it is entered.
+  if(_rivWant>=0&&fieldImage('d',_rivWant))buildRivers();
   if((state.layers.rotate&&!dragging)||state.ambient){
     state.rot+=dt*(state.ambient?0.12:0.05*state.spin);}
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
@@ -7526,7 +7598,7 @@ function buildLegend(){
 (async function(){
   initGL();
   await loadAll();
-  ensureLabels();buildBoundaries();buildHotspots();buildVectors();buildMarkers();buildLegend();
+  ensureLabels();buildBoundaries();buildRivers();buildHotspots();buildVectors();buildMarkers();buildLegend();
   buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();buildInterchangeList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
@@ -7630,6 +7702,39 @@ function buildLegend(){
                 if (opts && opts.labels) {
                   const topY = c.height - y0 - h;
                   const fi = curFrame().i;
+                  /* LINE-LAYER COMPOSITOR (iteration 24): GL lines never
+                     rasterize in the headless pipeline, so the capture
+                     strokes the river segments itself with the same camera
+                     -- placement and density verify headlessly; the real
+                     rasterization is a real browser's job. */
+                  const rsegs = RIVDATA.get(fi);
+                  if (rsegs && rsegs.length) {
+                    ctx.strokeStyle = 'rgba(31,74,94,0.62)'; ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    for (const sg of rsegs) {
+                      let on = true; const pts = [];
+                      for (const [lo, la] of [[sg[0], sg[1]], [sg[2], sg[3]]]) {
+                        const lp = ll2v(lo, la, 1.004);
+                        const wp = lp.clone().applyMatrix4(globe.matrixWorld);
+                        /* Near-side test by DISTANCE, not by normal: the
+                           normal-based horizon test rejected every segment
+                           (census: 3539 occl, 0 pass) while the same
+                           positions provably paint at the right pixels --
+                           a point on the near hemisphere is simply closer
+                           to the camera than the globe's centre is. */
+                        if (wp.distanceTo(cam.position) > cam.position.length()) { on = false; break; }
+                        const v = wp.project(cam);
+                        pts.push([(v.x * 0.5 + 0.5) * c.width - x0,
+                                  (1 - (v.y * 0.5 + 0.5)) * c.height - topY]);
+                      }
+                      if (on && pts.length === 2 &&
+                          Math.abs(pts[0][0] - pts[1][0]) < 60) {
+                        ctx.moveTo(pts[0][0], pts[0][1]);
+                        ctx.lineTo(pts[1][0], pts[1][1]);
+                      }
+                    }
+                    ctx.stroke();
+                  }
                   ctx.font = '600 13px system-ui, sans-serif';
                   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                   ctx.lineJoin = 'round';
