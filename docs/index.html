@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260801-1127';
+const DATA_V='20260801-1610';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3082,17 +3082,34 @@ void main(){
        response is now an S-curve: nothing grows below index 0.10, and the
        canopy saturates by 0.72 -- which also dries Pangaea's interior
        harder, exactly as a megamonsoon interior should be. */
-    float h=smoothstep(0.10,0.72,Rf/(0.46*pet));
+    /* THE JITTER BELONGS TO THE INDEX, NOT TO THE ANSWER (iteration 26,
+       user-reported regression). The perturbation below used to be added
+       AFTER this curve: once the S-curve saturates, noise on a value that
+       is already 0 or 1 changes nothing, so all the wander collapsed onto
+       a thin transition band and the biomes came back as straight
+       latitude stripes. Perturbing the aridity index INSTEAD lets terrain
+       decide where the boundary runs, everywhere, at every strength.
+       Crust-fixed (matDir) so a forest edge travels with its continent
+       rather than with the compass. */
+    float ari=Rf/(0.46*pet);
+    vec3 bd=matDir(sdir);
+    float nA=fbm3(bd*2.0+11.3)-0.5;                  // large, wandering
+    float nB=fbm3(bd*6.4+41.9)-0.5;                  // patchy detail
+    float nC=vnoise3(bd*17.0+5.0)-0.5;               // fine fraying
+    ari*=1.0+nA*0.60+nB*0.30+nC*0.15;
+    /* ...and real terms, not only noise: uplands wring rain out of the air
+       they lift, basins and valley floors hold what falls on them, and a
+       river corridor is green through a desert (the Nile is the argument). */
+    ari*=1.0+clamp(zp/2400.0,0.0,1.0)*0.30;
+    ari+=clamp((420.0-zp)/900.0,0.0,1.0)*0.06
+        +smoothstep(0.25,0.62,drain)*0.20+clamp(trunk,0.0,0.5)*0.34;
+    float h=smoothstep(0.10,0.80,ari);
     /* Warmth is a smooth function of latitude, so biome edges derived from it
        alone run dead straight across the map. Real vegetation boundaries
        wander: they follow terrain, drainage and local exposure. Perturb both
        axes of the biome lookup with noise at two scales, and let low ground
        hold water, so forest and grassland interlock instead of striping. */
-    float nA=fbm3(sdir*2.0+11.3)-0.5;                  // large, wandering
-    float nB=fbm3(sdir*6.4+41.9)-0.5;                  // patchy detail
-    float valley=clamp((320.0-zp)/700.0,0.0,1.0);      // lowlands stay wetter
-    w=clamp(w+nA*0.13+nB*0.06,0.0,1.0);
-    h=clamp(h+nA*0.30+nB*0.13+valley*0.12,0.0,1.0);
+    w=clamp(w+nA*0.15+nB*0.07+nC*0.04,0.0,1.0);
     /* Named biomes, not a two-stop green ramp.
 
        This used to interpolate three colours -- one dry, one middling, one wet
@@ -5047,16 +5064,51 @@ function riverPaths(i){
     }
     if(cells.length>=10)comp.push(cells);   // floor 10: the Mississippi seeds at half-res (calibrated)
   }
+  /* ONE EDGE PER CELL, DOWNSTREAM -- A TREE, NOT A MESH (iteration 26,
+     user-reported regression). Emitting a segment for every adjacent PAIR
+     turns a channel two cells wide into a lattice of criss-crossed
+     quads, which is exactly the "unnatural grid pattern" that appeared
+     over land. A river is a tree: each cell drains to ONE neighbour, and
+     flow accumulation increases downstream, so the neighbour with the
+     highest drainage IS the downstream one. One segment per cell, no
+     closed loops, no diagonals crossing orthogonals. */
+  /* ...AND THEN PRUNE TO THE SPINE. One edge per cell is a tree, but in a
+     network several cells wide every fringe cell points at the same trunk
+     cell and the result is a herringbone of barbs. A cell that nothing
+     drains into is a headwater tip; strip two generations of them and what
+     remains is the channel itself -- which is also the honest answer, since
+     a river begins where enough flow has gathered, not at every hillslope
+     pixel. */
+  const best=new Int32Array(N).fill(-1), indeg=new Uint16Array(N), alive=new Uint8Array(N);
+  for(const cells of comp){
+    for(const q of cells){
+      alive[q]=1;
+      const qx=q%RW, qy=(q/RW)|0;
+      let bk=-1,bv=drain[q];
+      for(let dy=-1;dy<=1;dy++){
+        const ny=qy+dy; if(ny<0||ny>=RH)continue;
+        for(let dx=-1;dx<=1;dx++){
+          if(!dx&&!dy)continue;
+          const nk=ny*RW+((qx+dx+RW)%RW);
+          if(lab[nk]&&drain[nk]>bv){bv=drain[nk];bk=nk;}
+        }
+      }
+      best[q]=bk;
+    }
+  }
+  for(const cells of comp)for(const q of cells)if(best[q]>=0)indeg[best[q]]++;
+  for(let pass=0;pass<2;pass++){
+    const dead=[];
+    for(const cells of comp)for(const q of cells)if(alive[q]&&!indeg[q])dead.push(q);
+    for(const q of dead){alive[q]=0;if(best[q]>=0)indeg[best[q]]--;}
+  }
   const segs=[];
   const lonf=x=>(x+0.5)/RW*360-180, latf=y=>90-(y+0.5)/RH*180;
   for(const cells of comp){
     for(const q of cells){
-      const qx=q%RW, qy=(q/RW)|0;
-      for(const[dx,dy]of[[1,0],[0,1],[1,1],[1,-1]]){
-        const ny=qy+dy; if(ny<0||ny>=RH)continue;
-        const nx=(qx+dx+RW)%RW, nk=ny*RW+nx;
-        if(lab[nk])segs.push([lonf(qx),latf(qy),lonf(nx),latf(ny)]);
-      }
+      const b=best[q];
+      if(!alive[q]||b<0||!alive[b])continue;
+      segs.push([lonf(q%RW),latf((q/RW)|0),lonf(b%RW),latf((b/RW)|0)]);
     }
   }
   RIVDATA.set(i,segs);
