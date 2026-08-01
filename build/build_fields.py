@@ -533,6 +533,26 @@ OVERLAP_CAP = 2.0
 # same snakey outline for 250 Myr.
 RIFT_SUBSIDE = 700.0    # m at the margin by +250 Myr
 RIFT_DEG = 2.5          # how far inboard the flexural moat reaches
+# THE WELD (S6, user round 2026-07-31). S4 raises a belt where footprints
+# overlap, but max() still preserves every land cell of BOTH plates, so an
+# indenter crossed a whole collision with its coastline intact and readable --
+# "emerges on the other side in the exact same shape after forming mountain
+# ranges", as the user put it about Australia. Where the belt stands, the
+# inherited coast-scale identity has to DISSOLVE into the orogen: the surface
+# blends toward its own regional mean before the calibrated uplift is added,
+# so the two sides weld into one edifice instead of superimposing, and ocean
+# interleaved inside a strong collision zone -- the crenellated gulfs where two
+# coastlines overlay -- is squeezed toward closure. A deep gap where the belt
+# is weak survives as a remnant sea, which is what real sutures leave behind
+# (Caspian, Black Sea). Applied BEFORE the uplift so the S2/S4 hypsometry
+# calibration (measured post-uplift) is preserved; verified by re-measuring
+# the +250 Myr table.
+WELD_GAIN = 1.6         # how fast the blend saturates as the weld belt strengthens
+WELD_MAX = 0.85         # never fully erase -- a suture keeps some inherited grain
+WELD_SEA_LAG = 0.25     # gulfs need a stronger belt than land to close
+WELD_SIGMA_X = 2.2      # the weld belt's width, in multiples of the uplift's
+WELD_POW = 1.2          # ...and its power: broad-shouldered where uplift is sharp
+WELD = True             # module flag so a preview can A/B the weld off
 SPRING = 0.55     # pull back toward the authored arrangement each pass
 RELAX = 0.35      # step size; small enough that the two forces find a balance
 _PACK_CACHE = {}
@@ -845,6 +865,46 @@ def future_grid(frac, gid, Zsrc, h, w):
         # ---- S2: the widening is in DEGREES (see SUTURE_SEED_DEG) ----
         n = int(round(SUTURE_SEED_DEG / (180.0 / h))) * 2 + 1
         belt = gaussian_filter(maximum_filter(seed, size=max(3, n)), sigma) ** SUTURE_POW
+        if WELD:
+            # ---- S6: weld the collision zone before raising it ----
+            # THE WELD GETS ITS OWN BELT, wider and lower-powered than the
+            # uplift's. belt**2.5 is deliberately contact-sharp -- that is the
+            # S2/S4 hypsometry calibration -- but a dissolve confined to the
+            # contact LINE leaves the indenter's outline readable a hundred
+            # kilometres away (measured: 0.45% of the globe changed, 145 sea
+            # cells closed, and the A/B crops read identical). Shortening
+            # reworks the leading few hundred kilometres of both sides, so
+            # the weld reaches that far, grading out; the uplift below keeps
+            # its own sharp calibrated shape on top.
+            # The weld drives off the OVERLAP first and adjacency second: the
+            # both-land overlap is the map of exactly where crust is being
+            # spent -- the indenter's leading margin coexisting with the plate
+            # it is entering -- and it is an AREA, so a wide gaussian keeps its
+            # strength where a thin adjacency line dilutes to nothing (the
+            # first weld's gates measured unreachable for that reason).
+            weldSrc = np.maximum(seed, shorten * 1.3)
+            weldBelt = gaussian_filter(maximum_filter(weldSrc, size=max(3, n)),
+                                       sigma * WELD_SIGMA_X) ** WELD_POW
+            # Regional land surface of the CURRENT (eroded) field; S3's
+            # `region` predates the erosion it drove, so it is recomputed here
+            # at the same radius.
+            num2 = gaussian_filter(np.where(land, out, 0.0).astype(np.float32), rs,
+                                   mode=("nearest", "wrap"))
+            den2 = gaussian_filter(land.astype(np.float32), rs, mode=("nearest", "wrap"))
+            region2 = np.where(den2 > 1e-3, num2 / np.maximum(den2, 1e-3), 0.0)
+            weld = np.clip(weldBelt * WELD_GAIN, 0.0, WELD_MAX) * land
+            out = out + (region2 - out) * weld
+            # Squeeze the interleaved gulfs shut where the collision is real.
+            # Gated on the smoothed DIFFERENT-OWNER contact seed, not both-land
+            # overlap: a gulf whose two shores belong to different groups has
+            # no both-land cells at all -- that gate missed exactly the water
+            # it existed to close.
+            csm = gaussian_filter(weldSrc, sigma * WELD_SIGMA_X, mode=("nearest", "wrap"))
+            closew = np.clip(weldBelt * WELD_GAIN - WELD_SEA_LAG, 0.0, WELD_MAX) \
+                     * (~land).astype(np.float32) * (csm > 0.02)
+            out = out + (np.maximum(region2, 150.0) - out) * closew
+            # Newly closed cells join the belt for the uplift below.
+            land = out >= 0.0
         out = out + SUTURE_UPLIFT * frac * belt * land
 
         # ---- S5: SUBSIDE THE RIFTED MARGINS ----
