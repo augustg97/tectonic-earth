@@ -193,6 +193,32 @@ const W = () => document.getElementById('app').contentWindow;
     document.title = 'VERIFY-DONE'; return;
   }
 
+  if (q.get('rivdbg')) {
+    if (q.get('rivage') != null) {
+      A.lookAt(-100, 44, {age: +q.get('rivage'), zoom: 1.9, w: 1280, h: 960});
+      await sleep(12000);
+      for (let k = 0; k < 8; k++) { A.step(); await sleep(200); }
+    } else await sleep(7000);
+    A.step(); A.step();
+    const info = (0, W().eval)(
+      `(function(){` +
+      ` const ch=overlay.rivers.children.length;` +
+      ` let nan=0, ndc=null, n=0;` +
+      ` if(ch){ const p=overlay.rivers.children[0].geometry.attributes.position; n=p.count;` +
+      `  for(let i=0;i<p.count*3;i++) if(!isFinite(p.array[i])) nan++;` +
+      `  const v=new THREE.Vector3(p.getX(0),p.getY(0),p.getZ(0))` +
+      `    .applyMatrix4(globe.matrixWorld).project(APP.gl.cam);` +
+      `  ndc=[+v.x.toFixed(2),+v.y.toFixed(2),+v.z.toFixed(3)]; }` +
+      ` let found=0; APP.gl.scene.traverse(function(o){if(ch&&o===overlay.rivers.children[0])found=1;});` +
+      ` const sg=RIVDATA.get(curFrame().i)||[]; let nn=0, ss=0;` +
+      ` for(const g of sg){ if(g[1]>0)nn++; else ss++; }` +
+      ` return JSON.stringify({ch, n, nan, ndc, found, north:nn, south:ss, want:_rivWant, fi:curFrame().i,` +
+      `  vis:overlay.rivers.visible, gvis:globe.visible});})()`);
+    await fetch('http://127.0.0.1:8901/' + q.get('rivdbg') + '.json',
+                {method: 'POST', body: btoa(info)});
+    await A.shoot(q.get('rivdbg') + '_shot', 960);
+    document.title = 'VERIFY-DONE'; return;
+  }
   for (const s of shots) {
     const o = {age: s.age, w: 1280, h: 960};
     if (s.zoom != null) o.zoom = s.zoom;

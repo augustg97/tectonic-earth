@@ -1235,3 +1235,27 @@ right shape; or (b) a max-pooled trunk mipmap texture (max-downsample
 resists averaging by construction) sampled at far footprints. (a) is
 GE-equivalent and preferred; it is a bake+overlay round, not a shader
 constant. Iteration 21's carve shipped earlier this wake and stands.
+
+## Q — ITERATION 23, 2026-08-01: the river layer meets a false control (reverted)
+
+The geometry-rivers round (iteration 22's brief) was implemented in full —
+runtime hysteresis trace from the resident drainage bitmap (3,708 segments at
+age 0, ~10 ms, zero new data), lineSeg geometry, crossing rebuild + loop
+retry — and proved UNPAINTABLE in the headless pipeline through an eleven-way
+elimination: object built/visible/parented/in-traversal (new ?rivdbg driver
+mode), coordinates verified (53/47 N/S segment census — plausible for cell
+counts), no NaN, frustumCulled off, radius ladder to 1.05, group swap into
+overlay.boundaries, and an INIT-TIME STATIC LINE built exactly as boundaries
+are — all zero pixels with depth test on; depthTest:false paints (867 px).
+THE CONTROL WAS FALSE: the "990 red boundary pixels" that established 'lines
+render headless' match HOTSPOT MARKERS (?layers=1 enables both); GL lines
+plausibly never render in --headless=new ANGLE Metal shots at all, and the
+depth-off paint is the one path the pipeline allows. All app edits REVERTED;
+?rivdbg (build-state POST + same-session shot) and ?rivage stay in the
+driver. NEXT ROUND, IN ORDER: (1) re-establish the control — boundaries-only
+headless shot (extend layers param to individual flags) vs the PANE's real
+render of the same state; if lines truly never rasterize headless, the
+verification method for any line layer is the pane or pixel-diff-on-live,
+and the harness limitation gets its own register note; (2) only then re-land
+the rivers layer (the trace itself is proven and cheap). Iteration 21 stands
+as this wake's shipped work.
