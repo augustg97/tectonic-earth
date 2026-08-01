@@ -903,3 +903,46 @@ Queue state after nine iterations: interiors ✓, ocean architecture ✓ (lace o
 complete), corridors ✓, close grain ✓, seam unreproduced. The remaining distance to the
 reference is the lace, hue-balance subjectivities, and the data's own 10 km floor — the
 user's eyes are the next instrument.
+
+## Q — ITERATION 10, 2026-07-31: the lace bisected; one artefact becomes two
+
+The dossier's "bisect with early returns" plan ran to ground truth. Staged vizzes
+(narrow |g|, |g|+macro, post-shrinkage |g|, and hs itself, driven through a new
+`_verify.html?app=` variant hook) showed: the narrow gradient is a SOLID saturated
+cliff on every margin band — the field drops 3-5 km across 2-4 texels — and what
+survived the shrinkage was the staircase's per-pixel spikes: the old 0.10 guard
+floor kept 5.5% of the residual, and 5.5% of 3000-5000 m is a randomly-aimed facet
+that flips hs to its 0.70 floor. THE DEEP-BAND LACE WAS EXACTLY THAT, and four
+shipped changes kill it, each measured: guard floors at ZERO on the steep band
+(the 0.10 dribble only ever served fracture zones, which live on open floor where
+the guard never engages); the surviving residual is capped as an ANGLE — 240 m at
+the deep vex is a 15-degree facet, mathematically unable to flip against the
+39-degree sun, and the band came clean; the cap grades to 420 m at true shallow
+depth; the shrinkage gate opens on the pixel's OWN depth (qw>0.01 || z<wl-60) so
+a land-contaminated gZSm cannot exempt a truly deep pixel; and all EIGHT wide taps
+clamp to sea level (min(t,wl)) — near any coast the taps read +500..+2000 m land,
+rwt sees a mere outlier, max(q,0.30) keeps 30% of it, and its SIGN flips as
+bilinear tap positions slide along the coast. Land: bit-identical, measured 0
+land-coloured pixels changed at the pinned framing. Hawaii chain, Scotia arc,
+fracture floor: verified no-harm. Gates green, ice at baseline, storm 0 uploads.
+DATA_V 20260801-0006, commit "No spike may flip a normal past the sun".
+
+**THE SECOND ARTEFACT — the shallow-bank specks — is not the lace and survives it.**
+Dark angular texel-scale chunks clustered on shallow banks (Burdwood, Falkland
+shelf, Brazil/Chile coast strips), darks EXACTLY 0.70/1.34 of their neighbours on
+all three channels. Elimination matrix, each by direct measurement at the same
+pinned framing: residual caps x3 (byte-identical rows through every cap change);
+NaN (magenta detector: zero hits); mesh displacement (uDisp*0: byte-identical);
+polar branch (pw=0 at -52); data land-specks (decoded phan_0000: Falklands blob
+only, Burdwood clean); raw-rug razor thresholds (rug viz: SMOOTH 0.61 at speck
+pixels). What that last probe taught anyway: rug SATURATES (~0.6) on flat banks —
+the field's 300 m rms shelf texel noise — so bakedRough=1 and the abyssal FABRIC
+runs full-strength on continental banks where the ocean-structure field's
+spreading-direction texels are FILL, i.e. garbage direction per texel. The specks
+appear in a pure vec3(hs) viz — and that probe sits AFTER the sea-fabric normal
+perturbation, which iteration 8 eliminated only at the DEEP band, never on banks.
+ARMED FOR NEXT VISIT: (1) hs viz with the sea-branch fabric perturbation zeroed,
+at the bank framing — one variant, decisive; (2) if confirmed, gate the fabric by
+ocean-structure VALIDITY (crust age/spreading coverage or shelf proximity), not
+by rug, which cannot distinguish steep from noisy. Probe files _lace_*.html and
+the runner scripts remain in web/ (gitignored) and the scratchpad.
