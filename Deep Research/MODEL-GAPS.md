@@ -1061,3 +1061,39 @@ control untouched. Gates green, ice at baseline, storm 0 uploads. Remaining
 future-branch items: residual blocky shelf steps at young fracs (S7 is
 frac-weak there by design — revisit only if the user flags it), and the
 canyon-domain redesign (iteration 13 brief) which is next.
+
+## Q — ITERATION 15, 2026-07-31: the specks close; the camera confesses
+
+THE BANK SPECKS ARE CLOSED (dark count 212 → 25, the survivors tracing genuine
+slope walls). The road there rewrote the diagnosis twice: (1) the gradient-
+aligned canyon-domain redesign from iteration 13's brief was implemented and
+measured a NO-OP — a per-fragment tangent transform cannot anchor a
+world-coherent stretch (dot(sdir,dh)=0 identically), which is worth keeping:
+anisotropy needs a WORLD frame (the fabric's construction), not a local one.
+(2) With the domain exonerated, the defect reframed as VISIBILITY: even a
+healthy gully at ×9 normal gain and 0.42 shadow prints near-black blotches at
+the noise's own 2-5 px cell scale, and a cany viz read 0.95 on the bank edges
+the references show smooth — in-band by the system's own rules. Three levers
+shipped: the depth-potential shear returns reading gZSm; punch grades by depth
+(smoothstep(-350,-1100,gZSm) — full drama only below the shelf-edge zone);
+and the closer, canyons require prom WELL BELOW the robust regional
+(smoothstep(-150,-750,prom)) — a bank edge sits ABOVE its own regional however
+steep its neighbourhood, a descending wall runs hundreds of metres under it.
+Gully clamped ±0.5, shadow 2.4/0.34. slopeBand now thresholds gZSm. Hawaii
+bit-identical at matched camera; the wide-frame canyon field reads as a
+localized combed patch on the mid-slope, smooth above the break.
+
+THE HARNESS CONFESSION, for every future framing: APP.lookAt TWEENS, the app
+BOOTS FAR OUT, and the tween outlasts any fixed settle when zoom changes a
+lot — so every FIRST-SLOT "wide" reference frame in this register (l10base_w,
+f10_w, pb_*, the "zoom 1.25 whole-globe" shots) was a MID-TWEEN photograph
+that happened to look like a plausible wide view. Every A/B stayed valid
+because pin + identical slot order froze the same wrong camera on both sides
+— which is also why the l13 "heavy band" read and the l13/l14 8.69% diffs
+were artefacts of comparing a settled frame against a mid-tween one. The
+driver now polls cam.position until still (3 consecutive 150 ms windows)
+after the settle floor; the s0_* set is the first stabilized baseline. True
+zoom semantics: 1.25 is a REGIONAL view, not whole-globe; whole-globe needs
+zoom well under 1. Gates green, ice at baseline, storm 0 uploads.
+DATA_V 20260801-0548, commit "Canyons on the walls, not on the banks; a
+camera that has stopped".
