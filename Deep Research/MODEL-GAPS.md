@@ -1097,3 +1097,14 @@ zoom semantics: 1.25 is a REGIONAL view, not whole-globe; whole-globe needs
 zoom well under 1. Gates green, ice at baseline, storm 0 uploads.
 DATA_V 20260801-0548, commit "Canyons on the walls, not on the banks; a
 camera that has stopped".
+
+## Q — ITERATION 16, 2026-07-31: UI round (user rulings)
+
+Schematic shading and its toggle removed — Satellite is the default and only
+view (state.shade stays 'sat'; the shader keeps uSchem at zero, so nothing
+recompiled and the schematic path remains restorable in one line if ever
+wanted). Geological Intervals panel now starts closed like its siblings.
+Verified by full-DOM screenshot in the pane (app boots clean, right panel
+goes View → Present-day layers, intervals collapsed). Gates green.
+DATA_V 20260801-0605, commit "One way to see the world, and a quieter
+sidebar".
