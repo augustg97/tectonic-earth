@@ -1287,3 +1287,12 @@ component floor (Mississippi absent at half-res — lower the floor or full-res
 trace in a tuning round); thread lattice texture at close zoom; map view
 skipped. Census instrumentation (?rivdbg: build state, N/S and lon-box
 censuses, per-segment outcome counts) stays in the driver.
+
+## Q — ITERATION 25, 2026-08-01: the Mississippi seeds
+
+River-trace constants calibrated by an inclusion census (python prototype:
+strong 0.43 / weak 0.22 / floor 10 at half-res → 18 networks, 1,329 cells,
+Mississippi TRUE; shipped as 109/55/10 in bytes). Composited prairie frame
+shows the thread to the Gulf; 569 px changed vs pre-rivers baseline. Gates
+green. Commit "The Mississippi seeds". Remaining river residuals: close-zoom
+lattice texture; map view; GL-side look awaits the user's browser.
