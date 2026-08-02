@@ -2108,3 +2108,49 @@ dilutes every bank on the planet toward open-ocean blue.
 The failed edit removed a block that carried a brace with it; `check_shader`
 caught the 27/26 imbalance before anything shipped. Reverted to the deployed
 iteration-46 state, which remains live.
+
+## Q — ITERATION 48, 2026-08-02: G9 carbonate banks land, and hit a resolution
+## floor
+
+Shipped, small, and worth being precise about how small.
+
+**The placement iteration 47 worked out is the right one.** Modifying `shallow`
+BEFORE the bottom-return blend, rather than mixing over the finished water,
+finally makes the term do something: on the pixels it touches, R/B 0.61 -> 0.59
+and G/B 0.78 -> 0.81, against a reference at 0.54 and 0.98. The Scotia polar
+control sits at 0.65 before and after, so nothing leaked out of the tropics.
+
+**Two corrections along the way.** The near-binary bank mask, added in 47 to
+stop three soft gates multiplying to nothing, turned out to trade dilution for a
+COVERAGE LOTTERY: at a 78-degree wavelength the Bahamas either fall inside a
+blob or they do not, by the phase of the noise, and they did not — 0.68% of the
+frame changed. Removed; warm shallow shelves are carbonate-dominated anyway,
+except where a big river buries them, so latitude and depth carry it alone. And
+the first target colour (0.325,0.755,0.740) rendered the banks white-blue: too
+much red for turquoise, against a reference whose red is barely half its blue.
+
+**AND THE HONEST LIMIT.** The turquoise cannot get much further, and the reason
+is the field rather than the palette. Measured on the shipped elevation:
+
+| box | water | of that, above -165 m | above -64 m | median depth |
+|---|---|---|---|---|
+| Bahamas/Florida | 77% | 14.3% | 9.1% | -1,984 m |
+| Caribbean | 87% | 5.6% | 4.0% | -3,768 m |
+| Great Barrier Reef | 70% | 10.6% | 8.8% | -1,255 m |
+| Persian Gulf | 26% | 99.9% | 94.8% | -44 m |
+
+The bottom-return term is `exp(z/70)`, so `shallow` — and therefore any floor
+colour riding it — only matters above roughly -70 m. In the Bahamas box that is
+9% of the water. The Persian Gulf, which the field DOES resolve, is the case to
+look at to see the feature working properly. Closing the rest would need either
+finer bathymetry or a wider shallow band, and the latter is exactly what the G2
+comments warn against ("smoothstep from 850 m put pale shelf colour on anything
+that was not abyss") — so it is a data limit, not a tuning one, and should not
+be papered over by widening the band.
+
+**Recorded twice now, so it goes in the file: NEVER PUT A BACKTICK IN A FRAG
+COMMENT.** I wrote `shallow` in backticks in the very comment explaining this
+feature, which closed the shader's template literal — the FRAG extraction fell
+from 213,486 characters to 37,306. Iteration 45 hit the identical trap and
+recorded it, and I repeated it one round later. `check_shader` caught it both
+times, which is the only reason neither shipped.
