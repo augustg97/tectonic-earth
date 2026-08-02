@@ -1498,3 +1498,37 @@ SCREEN LIMITS, recorded so a later reader does not trust it blindly: craton
 meaningless for them; a range that is still rising may honestly claim to
 stand today (Zagros, Laurentide rebound), which the refined screen now
 allows. DATA_V 20260801-2306.
+
+## Q — ITERATION 35, 2026-08-02: reading the articles, and what we did not have
+
+The user's correction: the iteration-34 screen (infobox + lead + dating line)
+is not reading an article. Two changes to the method, both kept:
+(1) `scratchpad/lit_sections.py` pulls WHOLE geology / tectonics / formation /
+palaeogeography / glaciation sections -- a 250 kB page is mostly climate and
+economy, and the part that can teach this model something is a few thousand
+words that want reading in full; (2) the review now runs against CATALOGUES
+rather than only against our own list, which is the only way a gap can be
+found at all.
+
+CATALOGUE DIFF (Wikipedia: List of orogenies -- 91 named events against our 63
+labels). The gaps were systematic, not random: Australia's INTERIOR orogens
+and New Zealand were absent entirely. FIVE ADDED, each read in full first:
+Southern Alps / Kaikoura (0-25 Ma; the model had NO New Zealand feature),
+Delamerian (514-490, Flinders + Mount Lofty stumps, Ross Orogeny correlative,
+faults active again since the Miocene), Petermann (630-520) and Alice Springs
+(450-300) -- central Australia squeezed from within, twice, a thousand km from
+any margin, the second tilting Uluru's beds to vertical -- and Hunter-Bowen
+(265-230, arc accretion along 2,500 km of margin). 334 -> 339 labels.
+HARD LIMIT FOUND BY READING: the three largest orogens in the catalogue
+(Trans-Hudson 2.0-1.8 Ga, Svecofennian 2.0-1.8, Eburnean ~2.1) are older than
+this model's 1000 Ma horizon and cannot be represented here at all -- worth
+recording so a later reader does not "fix" their absence.
+DETAIL HARVESTED, not yet applied: the Paratethys sections carry a great deal
+we do not say (Oxfordian rift origin as an arm of the Central Atlantic system;
+descent from Peri-Tethys; the Molasse / Vienna / Carpathian / Pannonian basin
+chain; a Middle Miocene "Paratethyan biodiversity hotspot" of coral reefs and
+deep-water endemics that lasted only ~3 Myr before cooling and anoxia ended
+it). NEXT ROUNDS: work the section-reader across the remaining ~60 scraped
+articles and the other catalogues (large igneous provinces, ancient lakes,
+inland seas, cratons), enriching cards from full text and adding what is
+missing and in range.
