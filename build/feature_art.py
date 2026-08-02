@@ -758,7 +758,7 @@ NAME_ART = {}
 for _n in ("Andes", "Cordillera", "Sierra Nevada Arc", "Sevier-Laramide",
            "Famatinian Belt", "Antler Belt", "Sonoma Orogeny"):
     NAME_ART[_n] = "orogen_arc"
-for _n in ("Iapetus Ocean", "Rheic Ocean", "Paleo-Tethys", "Ural Ocean",
+for _n in ("Iapetus Ocean", "Rheic Ocean", "Palaeo-Tethys", "Ural Ocean",
            "Adamastor Ocean", "Mozambique Ocean", "Tethys Ocean", "Neotethys"):
     NAME_ART[_n] = "ocean_closing"
 for _n in ("Euramerican Coal Forests", "Cathaysian Coal Forests",

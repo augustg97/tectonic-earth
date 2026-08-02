@@ -210,7 +210,7 @@ LABELS = [
     ("orogen", "Sevier-Laramide",  -108,  42,   55,  95),
     # ---------- Pangaea ----------
     ("continent", "Pangaea",         10,   5,  130, 340),
-    ("ocean", "Paleo-Tethys",       100,   0,  200, 420),
+    ("ocean", "Palaeo-Tethys",       100,   0,  200, 420),
     ("sea", "Zechstein Sea",         12,  25,  252, 262),
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
     ("orogen", "Ural Mountains",     58,  55,  0, 320),
@@ -881,7 +881,7 @@ COMPOSITE_WATER = {
         # north Gondwana against Avalonia and Laurussia
         "modern": [(-7, 32), (-12, 20), (5, 12), (-3, 52), (-63, 45), (2, 50)],
         "target": "sea"},
-    "Paleo-Tethys": {
+    "Palaeo-Tethys": {
         # north Gondwana / Cimmeria against Laurasia
         "modern": [(33, 39), (55, 32), (88, 32), (68, 48), (95, 58), (78, 45)],
         "target": "sea"},
@@ -1032,9 +1032,9 @@ COMPOSITE_LABELS = {
 DESCRIPTIONS = {
 
  "Mozambique Ocean": "The ocean between eastern and western Gondwana, closing in stages between about 600 and 550 Ma. Its closure welded the two halves together along the East African Orogeny, one of the great mountain-building events of the Precambrian.",
- "Adamastor Ocean": "The water that separated the Congo and Rio de la Plata cratons before Gondwana assembled -- how much of it was true oceanic crust rather than a wide continental rift is still argued. It closed along what is now the Brazil-Namibia suture -- and hundreds of millions of years later the South Atlantic reopened along almost the same line.",
+ "Adamastor Ocean": "The water that separated the Congo and Rio de la Plata cratons before Gondwana assembled \u2014 how much of it was true oceanic crust rather than a wide continental rift is still argued. It closed along what is now the Brazil-Namibia suture \u2014 and hundreds of millions of years later the South Atlantic reopened along almost the same line.",
  "Tornquist Sea": "The narrow sea between Baltica and Avalonia. Its closure was the first stage of the Caledonian collision, before Iapetus itself shut.",
- "Ural Ocean": "The ocean between Siberia and the western continents, and it closed in two stages rather than one. For its first half it separated Siberia from BALTICA; after about 423 Ma Baltica was itself part of Laurussia, so the same ocean then lay between Siberia and Laurussia. The Urals rose in the second stage -- Siberia had already welded to Kazakhstania by around 324 Ma, and that combined mass then collided with Laurussia through the Permian, raising the range and closing the last major ocean inside Pangaea by about 250 Ma.",
+ "Ural Ocean": "The ocean between Siberia and the western continents, and it closed in two stages rather than one. For its first half it separated Siberia from Baltica; after about 423 Ma Baltica was itself part of Laurussia, so the same ocean then lay between Siberia and Laurussia. The Urals rose in the second stage \u2014 Siberia had already welded to Kazakhstania by around 324 Ma, and that combined mass then collided with Laurussia through the Permian, raising the range and closing the last major ocean inside Pangaea by about 250 Ma.",
  "Sundance Sea": "A Jurassic arm of the Arctic reaching south into western North America, leaving the marine shales that underlie the Rocky Mountain foreland.",
  "Trans-Saharan Sea": "A shallow seaway flooding across West Africa during the Cretaceous high-stand, briefly separating the Sahara into islands.",
  "Central American Sea": "The open gap between North and South America, and the "
@@ -1043,7 +1043,7 @@ DESCRIPTIONS = {
    "this map loses it; a narrow, shallow and probably intermittent connection "
    "survived until final closure around 2.8 Ma. Shutting it rerouted the Gulf "
    "Stream, and the land bridge that replaced it let the two continents swap their "
-   "mammals -- the Great American Biotic Interchange.",
+   "mammals \u2014 the Great American Biotic Interchange.",
  "Hudson Seaway": "A Cretaceous arm of the sea across what is now Hudson Bay, splitting the eastern remnant of North America off from the rest and linking the Western Interior Seaway toward the opening Labrador Sea.",
  "Alleghanian Belt": "The final Appalachian collision, as Gondwana drove into Laurussia to close Pangaea. At its peak this chain rivalled the Himalaya; what remains is its worn-down root.",
  "Ouachita Belt": "The south-western continuation of the Alleghanian collision, now largely buried beneath the Gulf coastal plain.",
@@ -1052,7 +1052,7 @@ DESCRIPTIONS = {
  "Verkhoyansk Belt": "Raised where the Kolyma block collided with Siberia in the Mesozoic, closing the ocean between them; the fold belt has since worn to 2,409 m and its ridges now stand as the cold spine of eastern Siberia.",
  "Cadomian Belt": "An arc along the northern margin of Gondwana. Its fragments were later rifted away as Avalonia and carried across Iapetus.",
  "Timanian Belt": "A collision along the north-eastern edge of Baltica, predating the Uralian orogeny along nearly the same margin.",
- "Cimmerian Belt": "Raised as the Cimmerian terranes -- rifted off Gondwana -- collided with Asia, closing Palaeo-Tethys and opening Neotethys behind them.",
+ "Cimmerian Belt": "Raised as the Cimmerian terranes \u2014 rifted off Gondwana \u2014 collided with Asia, closing Palaeo-Tethys and opening Neotethys behind them.",
  "Innuitian Belt": "A Devonian mountain chain across the Canadian Arctic islands, formed as northern terranes collided with Laurentia.",
  "Amazonia": "One of the great cratons of Gondwana, and among the oldest continuously stable crust on Earth. Its shield still forms the highlands of northern South America.",
  "Congo Craton": "An ancient block at the heart of Africa, rimmed by Pan-African mountain belts where other cratons collided with it.",
@@ -1069,7 +1069,7 @@ DESCRIPTIONS = {
  "Panthalassic Ocean": "The vast single ocean facing Pangaea's outer shore, floored by crust that has since been almost entirely subducted.",
  "Panthalassic (proto)": "The early world-ocean surrounding the assembling southern continents, ancestor of Panthalassa.",
  "Tethys Ocean": "A warm tropical gulf biting into the eastern flank of Pangaea. Its shallow shelves built the limestone that became the Alps and the Middle East's oil.",
- "Paleo-Tethys": "The older Tethyan ocean, closing as the Cimmerian terranes rifted off Gondwana and drifted north to collide with Asia.",
+ "Palaeo-Tethys": "The older Tethyan ocean, closing as the Cimmerian terranes rifted off Gondwana and drifted north to collide with Asia.",
  "Iapetus Ocean": "The ocean between Laurentia and Baltica whose closure raised the Caledonian and Appalachian mountains — a mountain belt now split across the Atlantic.",
  "Rheic Ocean": "Opened behind Avalonia as it rifted from Gondwana, then closed as Gondwana and Laurussia converged to finish Pangaea.",
  "Mirovia": "The ocean encircling Rodinia. Its name means 'global' — beyond the supercontinent there was little else.",
@@ -1090,7 +1090,7 @@ DESCRIPTIONS = {
  "Pangaea Proxima": "A projected future supercontinent, assembled as the Atlantic closes "
   "and the continents crowd back together around Africa.\n\n"
   "This is one of four published futures, not a forecast. It follows C. R. Scotese's "
-  "Pangaea Ultima reconstruction, in which the Atlantic closes again -- introversion -- "
+  "Pangaea Ultima reconstruction, in which the Atlantic closes again \u2014 introversion \u2014 "
   "and it is the one drawn here because Farnsworth et al. (2024) modelled the climate on "
   "exactly this geometry, so the map and the temperature readout agree with each other. "
   "The alternatives are Novopangaea (the Pacific closes instead), Aurica (both close) and "
@@ -1099,7 +1099,7 @@ DESCRIPTIONS = {
   "One honest limit on the drawing: this series rotates today's topography and has no "
   "mechanism to raise a mountain range, so the collisional belt Scotese draws between "
   "Africa and Eurasia cannot appear here. Land above 2 km is flat across the whole "
-  "future series -- 8.7 to 8.6 million km2 -- where a real assembly would be building "
+  "future series \u2014 8.7 to 8.6 million km\u00b2 \u2014 where a real assembly would be building "
   "a Himalaya.",
  "Rodinia": "A Precambrian supercontinent of the Neoproterozoic world, assembled around a Laurentian core roughly a billion years ago. Its breakup may have helped trigger the Cryogenian glaciations.",
  "Pannotia": "A short-lived latest-Precambrian supercontinent, already coming apart as the Cambrian explosion began.",
@@ -1160,31 +1160,31 @@ DESCRIPTIONS = {
  "Amazon Rainforest": "The largest rainforest on Earth, established once the Andes rose high enough to turn "
   "the Amazon's drainage eastward and drain the old Pebas wetland.",
  "Amundsen Basin": "A broad epicratonic sea on Rodinia's northwestern margin, whose Shaler Supergroup "
-  "carbonates -- over a kilometre thick -- record shallow, stromatolite-building water "
+  "carbonates \u2014 over a kilometre thick \u2014 record shallow, stromatolite-building water "
   "intermittently mixed with the open ocean.",
  "Angaran Flora Belt": "Cool-temperate forest across Siberia, dominated by the seed plant Cordaites and "
-  "dropping leaves seasonally -- the first clearly deciduous vegetation, adapted to a "
+  "dropping leaves seasonally \u2014 the first clearly deciduous vegetation, adapted to a "
   "polar light regime.",
  "Antarctic Ice Sheet": "The largest body of ice on Earth, and the reason global sea level sits where it does. "
   "In warming projections it is the one feature on this map with a clock running.",
  "Antarctic Nothofagus Forest": "Southern beech forest with a fern understorey grew across Antarctica while the "
-  "continent already sat over the pole -- proof that polar darkness alone does not make "
+  "continent already sat over the pole \u2014 proof that polar darkness alone does not make "
   "ice. Only the circumpolar current and falling CO2 did that.",
  "Arctic Azolla Bloom": "For roughly 800,000 years a freshwater fern covered a nearly enclosed Arctic Ocean, "
   "capped by river runoff. As it died and sank it locked away enough carbon to help tip "
   "the planet out of its Eocene hothouse.",
- "Armorica": "A terrane of Gondwanan origin -- Brittany, the Massif Central, Iberia and parts of "
-  "Germany -- that crossed the Rheic Ocean and was caught up in the Variscan collision.",
+ "Armorica": "A terrane of Gondwanan origin \u2014 Brittany, the Massif Central, Iberia and parts of "
+  "Germany \u2014 that crossed the Rheic Ocean and was caught up in the Variscan collision.",
  "Australasian Belt": "Australia's northward sprint ends in collision with Southeast Asia, crushing the "
   "islands of Indonesia and raising a mountain chain where the Coral Triangle is now.",
  "Australia-East Antarctica": "A single combined block through the Neoproterozoic, sitting next to Laurentia in most "
   "Rodinia reconstructions. Australia and Antarctica stayed joined until 45 million years "
-  "ago -- one of the longest-lived continental partnerships on record.",
+  "ago \u2014 one of the longest-lived continental partnerships on record.",
  "Avalon Deep-Water Realm": "Deep, dark seafloor off a volcanic arc, where the oldest large complex organisms known "
-  "-- fractal, fern-like rangeomorphs -- were buried in place by ash falls at Mistaken "
+  "\u2014 fractal, fern-like rangeomorphs \u2014 were buried in place by ash falls at Mistaken "
   "Point.",
  "Baikal Rift": "A continental rift that has been pulling apart for 25 million years, holding the "
-  "world's deepest and oldest lake -- and a fifth of its unfrozen fresh water.",
+  "world's deepest and oldest lake \u2014 and a fifth of its unfrozen fresh water.",
  "Baja Island": "Baja California and coastal California are already riding north on the Pacific plate "
   "along the San Andreas system. Run the motion forward and they detach as a long, narrow "
   "island off the North American coast.",
@@ -1202,14 +1202,14 @@ DESCRIPTIONS = {
   "Its distinctive cold-water faunas are how stratigraphers tell northern rocks from "
   "Tethyan ones.",
  "Botucatu Erg": "The largest desert known in Earth's history: a sand sea of well over a million square "
-  "kilometres across what is now Brazil, Uruguay, Paraguay and Namibia. The Parana- "
-  "Etendeka basalts poured over its dunes and froze them in place.",
+  "kilometres across what is now Brazil, Uruguay, Paraguay and Namibia. The "
+  "Parana-Etendeka basalts poured over its dunes and froze them in place.",
  "Brasiliano Belt": "The South American half of the Pan-African collision network, welding the Amazon, Sao "
   "Francisco and Rio de la Plata cratons into western Gondwana.",
  "Cannonball Sea": "The final Paleocene remnant of the Western Interior Seaway, a shrinking gulf in the "
-  "Dakotas -- the last time salt water reached the middle of North America.",
+  "Dakotas \u2014 the last time salt water reached the middle of North America.",
  "Cape Fold Belt": "A mountain chain raised along Gondwana's southern edge, its folded quartzites now the "
-  "ranges behind Cape Town. Matching folds appear in Argentina and the Falklands -- one "
+  "ranges behind Cape Town. Matching folds appear in Argentina and the Falklands \u2014 one "
   "belt, torn apart.",
  "Carolina Terrane": "A volcanic arc terrane that rifted from Gondwana and later docked with Laurentia, "
   "carrying its own distinctive trilobites. It now underlies the Carolina Piedmont.",
@@ -1241,19 +1241,19 @@ DESCRIPTIONS = {
   "and volcanic basins, and the hominin fossil record was preserved almost entirely in "
   "its sediment traps.",
  "East Antarctic Ice Sheet": "Established around 34 Ma when the circumpolar current cut Antarctica off from warm "
-  "water. It has been more or less continuously present ever since -- the longest-lived "
+  "water. It has been more or less continuously present ever since \u2014 the longest-lived "
   "ice on Earth.",
  "Euramerican Coal Forests": "Equatorial swamp forest of thirty-metre lycopod trees, running from Appalachia through "
   "Britain into Poland. Its buried peat became the coal that powered the Industrial "
-  "Revolution -- and its burial drew down enough CO2 to help freeze Gondwana.",
+  "Revolution \u2014 and its burial drew down enough CO2 to help freeze Gondwana.",
  "Arctic Tundra": "Treeless ground ringing the Arctic Ocean, on permafrost that "
-   "thaws only at the surface each summer. Nothing woody can hold on -- the growing "
-   "season is too short and the frozen layer beneath blocks roots and drainage alike -- "
+   "thaws only at the surface each summer. Nothing woody can hold on \u2014 the growing "
+   "season is too short and the frozen layer beneath blocks roots and drainage alike \u2014 "
    "so it is moss, sedge, lichen and dwarf willow over waterlogged, patterned ground.",
  "Nearctic Tundra": "The North American arm of the circumpolar tundra, across the "
    "Canadian Shield and the Arctic islands. It sits on ground the Laurentide ice sheet "
    "scraped to bedrock and left barely drained, which is why so much of it is lake.",
- "Beringian Steppe-Tundra": "The mammoth steppe: a cold, DRY grassland-tundra "
+ "Beringian Steppe-Tundra": "The mammoth steppe: a cold, dry grassland-tundra "
    "stretching from Iberia to Yukon during the glacials, with no modern counterpart. "
    "Low sea level joined Siberia to Alaska across a plain of grass and herbs that "
    "supported mammoth, horse and bison at densities no living tundra approaches. It "
@@ -1264,8 +1264,8 @@ DESCRIPTIONS = {
    "cold, thin, arid air supports alpine steppe and cushion plants across an area the "
    "size of Western Europe.",
  "Antarctic Tundra": "What came between the forest and the ice. As Antarctica cooled "
-   "after the Eocene, its southern beech woodland thinned to tundra -- mosses, cushion "
-   "plants and dwarf shrubs -- before the ice sheet finally overran it in the Miocene.",
+   "after the Eocene, its southern beech woodland thinned to tundra \u2014 mosses, cushion "
+   "plants and dwarf shrubs \u2014 before the ice sheet finally overran it in the Miocene.",
  "Gondwanan Polar Tundra": "The periglacial fringe of the Karoo ice sheet, poleward of "
    "the Glossopteris forests. Cold, seasonal, and marked in the rock by frost-shattered "
    "debris, permafrost wedges and growth rings on stumps that had to survive a dark "
@@ -1287,7 +1287,7 @@ DESCRIPTIONS = {
  # exactly this evidence in 1885 to argue for a single southern landmass and gave
  # it the name this map puts on every Palaeozoic frame.
  "Glossopteris Flora": "The tongue-leaved seed fern that carpeted high-latitude Gondwana "
-  "-- a real tree, up to about 30 m, with leaves 2-30 cm long carrying a distinctive net "
+  "\u2014 a real tree, up to about 30 m, with leaves 2-30 cm long carrying a distinctive net "
   "of veins. It grew in waterlogged ground like a modern bald cypress and built the "
   "southern coal. In Antarctic wood its growth rings are broad and then stop abruptly, in "
   "as little as a month: these were polar forests, running flat out through a summer of "
@@ -1297,16 +1297,16 @@ DESCRIPTIONS = {
   "argue for a single southern landmass, and gave it the name this map still uses: "
   "Gondwana. Wegener took the same evidence further, into continental drift.",
  "Gobi Erg": "The dune fields and playas of the Late Cretaceous Gobi, where sudden sand collapses "
-  "buried animals alive -- including the fighting Velociraptor and Protoceratops, locked "
+  "buried animals alive \u2014 including the fighting Velociraptor and Protoceratops, locked "
   "together mid-fight.",
  "Great Plains": "Grassland that spread across the North American interior as the Rockies cast a rain "
   "shadow and the Miocene climate dried. Grazing mammals evolved high-crowned teeth to "
   "cope with its silica-rich grasses.",
- "Greater Adria": "A Greenland-sized block of continental crust that pulled away from North Africa in the Triassic and drifted into Tethys, before being shoved beneath southern Europe. Its carbonate cover was scraped off to build the Alps, Apennines and Dinarides; the rest went down the subduction zone.\n\nIt is drawn as coast and shallow platform rather than as an island, and that is the honest reading: for most of its life Greater Adria was a drowned carbonate bank -- a Bahamas the size of Greenland -- not emergent land. It shows on the map as the shelf reaching north from Africa into Tethys, which is what a reconstruction can actually place.",
+ "Greater Adria": "A Greenland-sized block of continental crust that pulled away from North Africa in the Triassic and drifted into Tethys, before being shoved beneath southern Europe. Its carbonate cover was scraped off to build the Alps, Apennines and Dinarides; the rest went down the subduction zone.\n\nIt is drawn as coast and shallow platform rather than as an island, and that is the honest reading: for most of its life Greater Adria was a drowned carbonate bank \u2014 a Bahamas the size of Greenland \u2014 not emergent land. It shows on the map as the shelf reaching north from Africa into Tethys, which is what a reconstruction can actually place.",
  "Greater India": "India plus a large northern extension of continental crust, now missing. Whether it "
   "was thrust under Tibet or subducted outright is one of the standing arguments about "
   "the Himalayan collision.",
- "Green River Lakes": "Three great lakes -- Gosiute, Uinta and Fossil Lake -- filled the basins between the "
+ "Green River Lakes": "Three great lakes \u2014 Gosiute, Uinta and Fossil Lake \u2014 filled the basins between the "
   "young Rocky Mountains for five million years. Their varved bottom muds preserve fish, "
   "birds, bats and insects in extraordinary detail.",
  "Hirnantian Ice Sheet": "A short, brutal glaciation centred on what is now the Sahara, then sitting over the "
@@ -1326,28 +1326,28 @@ DESCRIPTIONS = {
  "Karoo Basin": "A foreland basin in southern Gondwana that filled continuously for a hundred million "
   "years, from glacial tillite through coal swamps to desert. Its strata contain the best "
   "record anywhere of the end-Permian extinction on land.",
- "Cretaceous Polar Ice (disputed)": "The most contested ice on this map. Glendonites -- a mineral that only forms near freezing -- and scattered dropstones in what is now southeastern Australia and the Arctic point to ice at high latitudes during the Early Cretaceous cool intervals. No continental ice sheet is accepted for the Cretaceous, and the world either side of this was among the hottest of the last 200 million years. Shown as small polar ice because the field evidence is real even where its interpretation is not agreed.",
+ "Cretaceous Polar Ice (disputed)": "The most contested ice on this map. Glendonites \u2014 a mineral that only forms near freezing \u2014 and scattered dropstones in what is now southeastern Australia and the Arctic point to ice at high latitudes during the Early Cretaceous cool intervals. No continental ice sheet is accepted for the Cretaceous, and the world either side of this was among the hottest of the last 200 million years. Shown as small polar ice because the field evidence is real even where its interpretation is not agreed.",
  "Late Devonian Ice Sheet": "Ice on high-latitude Gondwana at the end of the Devonian, recorded by diamictites and striated pavements now exposed across Bolivia, Peru and Brazil. Shorter and smaller than the ice ages either side of it, and probably a consequence of the forests: deep-rooted trees weather rock far faster than anything before them, and burying their carbon pulled CO2 down hard. The greening that made the land habitable also made the world cold.",
  "Karoo Ice Sheet": "The ice of the Late Palaeozoic Ice Age, spread across southern Gondwana for some "
   "eighty million years. Its striated pavements and tillites turn up in South Africa, "
-  "Brazil, India, Australia and Antarctica -- once continuous, now scattered across five "
+  "Brazil, India, Australia and Antarctica \u2014 once continuous, now scattered across five "
   "continents.",
  "Kaskaskia Sea": "The Devonian-Mississippian flooding of North America, laying down black shale and then "
   "the crinoid limestone that underlies much of the Midwest.",
  "Mauritia": "A sliver of continental crust stranded between India and Madagascar as they parted, and drowned as the Indian Ocean widened over it. Zircon grains up to three billion years old, dredged from the young basalt of Mauritius that now sits on top of it, are what gave it away.",
  "Jan Mayen Microcontinent": "A ribbon of continental crust rifted from Greenland as the North Atlantic opened, then left behind on the wrong side of the ridge and submerged. The volcanic island of Jan Mayen sits at its northern tip.",
- "Seychelles Microcontinent": "A block of ancient granite that rode between India and Madagascar and was cut loose when India tore away over the Reunion plume. The granite islands of the Seychelles are the only part still above water -- continental rock alone in the middle of an ocean.",
- "Argoland": "A continental ribbon that rifted off northwestern Australia in the Jurassic -- the deep Argo Abyssal Plain is the gap it left -- and drifted north to break apart and scatter beneath Southeast Asia. Its fragments are now threaded through Myanmar, Sumatra and Borneo.",
+ "Seychelles Microcontinent": "A block of ancient granite that rode between India and Madagascar and was cut loose when India tore away over the Reunion plume. The granite islands of the Seychelles are the only part still above water \u2014 continental rock alone in the middle of an ocean.",
+ "Argoland": "A continental ribbon that rifted off northwestern Australia in the Jurassic \u2014 the deep Argo Abyssal Plain is the gap it left \u2014 and drifted north to break apart and scatter beneath Southeast Asia. Its fragments are now threaded through Myanmar, Sumatra and Borneo.",
  "Broken Ridge": "A drowned volcanic plateau in the Indian Ocean, once continuous with the Kerguelen Plateau until the Southeast Indian Ridge split the two apart and carried them a thousand kilometres from each other.",
  "East Tasman Plateau": "A submerged continental block southeast of Tasmania, a fragment left in the Tasman Sea when Australia and Zealandia went their separate ways.",
- "Ontong Java Plateau": "The largest volcanic edifice on Earth, erupted around 120 million years ago in one of the greatest outpourings of magma the planet has seen -- so much, so fast that it may have driven a Cretaceous ocean-anoxia event. It never fully surfaced and now sits a couple of kilometres down in the southwest Pacific, a plateau the size of Alaska.",
+ "Ontong Java Plateau": "The largest volcanic edifice on Earth, erupted around 120 million years ago in one of the greatest outpourings of magma the planet has seen \u2014 so much, so fast that it may have driven a Cretaceous ocean-anoxia event. It never fully surfaced and now sits a couple of kilometres down in the southwest Pacific, a plateau the size of Alaska.",
  "Manihiki Plateau": "A fragment of the same giant Cretaceous eruption that built Ontong Java, rifted away and stranded in the central Pacific.",
- "Shatsky Rise": "A Jurassic-Cretaceous oceanic plateau in the northwest Pacific, built at a triple junction of three spreading ridges -- one of the few whose birth at a ridge rather than over a plume is clear.",
+ "Shatsky Rise": "A Jurassic-Cretaceous oceanic plateau in the northwest Pacific, built at a triple junction of three spreading ridges \u2014 one of the few whose birth at a ridge rather than over a plume is clear.",
  "Agulhas Plateau": "A submarine plateau off the southern tip of Africa, thickened volcanic crust left in the widening gap as Africa and Antarctica parted.",
- "Mascarene Plateau": "A curving submarine bank in the western Indian Ocean, the trail the Reunion plume left after building the Deccan -- the Seychelles sit on its northern end.",
- "Rio Grande Rise": "A submarine plateau in the South Atlantic, twin to the Walvis Ridge across the ocean -- both are the Tristan plume's trail, split when the ridge that made them drifted off the hotspot.",
+ "Mascarene Plateau": "A curving submarine bank in the western Indian Ocean, the trail the Reunion plume left after building the Deccan \u2014 the Seychelles sit on its northern end.",
+ "Rio Grande Rise": "A submarine plateau in the South Atlantic, twin to the Walvis Ridge across the ocean \u2014 both are the Tristan plume's trail, split when the ridge that made them drifted off the hotspot.",
  "Walvis Ridge": "A volcanic ridge from the African coast out into the South Atlantic, the track of the Tristan hotspot that also erupted the Parana-Etendeka flood basalts as the ocean opened.",
- "Guiana Shield": "One of the oldest landscapes on Earth, a Precambrian core of the South American craton whose sandstone table mountains -- the tepuis -- are the eroded remnants of a once-continuous cover, each an island of endemic life.",
+ "Guiana Shield": "One of the oldest landscapes on Earth, a Precambrian core of the South American craton whose sandstone table mountains \u2014 the tepuis \u2014 are the eroded remnants of a once-continuous cover, each an island of endemic life.",
  "Brazilian Shield": "The vast Precambrian basement of eastern and central Brazil, planed flat over hundreds of millions of years and now the stable heart of the continent.",
  "Parana Basin": "A great sag basin of southern Brazil filled with Palaeozoic-Mesozoic sediment and capped by the Parana flood basalts that erupted as the South Atlantic opened.",
  "Solimoes Basin": "The western Amazon foreland, which held the Pebas wetland in the Miocene and now channels the upper Amazon.",
@@ -1356,41 +1356,41 @@ DESCRIPTIONS = {
  "Patagonian Batholith": "A belt of granite forming the spine of the southern Andes, welded together over a hundred million years of subduction beneath the Pacific margin.",
  "Congo Basin": "A vast, near-circular sag in the middle of Africa, subsiding gently since the Precambrian and holding one of the largest rainforests and river systems on Earth.",
  "Taoudeni Basin": "One of the largest and least-deformed sedimentary basins in the world, floored on the West African craton and holding a near-complete record of Neoproterozoic and Palaeozoic time.",
- "Hoggar Massif": "A Precambrian basement dome in the central Sahara, uplifted by hot mantle and topped with young volcanoes -- a piece of the Pan-African belt exposed in the desert.",
+ "Hoggar Massif": "A Precambrian basement dome in the central Sahara, uplifted by hot mantle and topped with young volcanoes \u2014 a piece of the Pan-African belt exposed in the desert.",
  "Ethiopian Highlands": "The roof of Africa, a plateau built by the flood basalts of the Afar plume around 30 million years ago and now being torn apart by the three-way rift that meets beneath it.",
- "Okavango Rift": "The youngest tip of the East African Rift, propagating into southern Africa -- the Okavango's inland delta sits in the first fault-bounded trough.",
- "Cameroon Line": "A chain of volcanoes running from the Atlantic islands onto the African continent along an old line of weakness -- one of the few hotspot tracks that crosses from ocean to land.",
+ "Okavango Rift": "The youngest tip of the East African Rift, propagating into southern Africa \u2014 the Okavango's inland delta sits in the first fault-bounded trough.",
+ "Cameroon Line": "A chain of volcanoes running from the Atlantic islands onto the African continent along an old line of weakness \u2014 one of the few hotspot tracks that crosses from ocean to land.",
  "Yilgarn Craton": "An Archaean core of Western Australia, some of the oldest crust on the planet, holding zircon grains that date back nearly to the Earth's formation.",
- "Canadian Shield": "The exposed Precambrian heart of North America, scoured to bedrock by ice sheets and dotted with the lakes they left -- the largest area of ancient crust at the surface anywhere.",
+ "Canadian Shield": "The exposed Precambrian heart of North America, scoured to bedrock by ice sheets and dotted with the lakes they left \u2014 the largest area of ancient crust at the surface anywhere.",
  "Deccan Plateau (basement)": "The Precambrian basement of peninsular India beneath the Deccan lavas, a fragment of the Gondwanan craton that carried its own dinosaurs north to Asia.",
  "Southwest Indian Ridge": "One of the slowest-spreading ridges on Earth, opening the ocean between Africa and Antarctica so gently that mantle rock is exposed on the sea floor.",
  "Pacific-Antarctic Ridge": "The southern boundary of the Pacific plate, a fast-spreading ridge feeding new floor into the largest ocean.",
  "Carlsberg Ridge": "The spreading centre of the northwest Indian Ocean, separating the African and Indian plates and running up toward the Gulf of Aden.",
  "Ninetyeast Ridge": "The longest straight line on Earth, a 5,000-kilometre volcanic ridge marking the track of the Kerguelen plume as the Indian plate raced north over it.",
  "Emperor Seamounts": "The older, drowned half of the Hawaiian chain, bent sharply away "
-  "from it -- the kink at about 47 million years ago is now more often interpreted as the PLUME "
+  "from it \u2014 the kink at about 47 million years ago is now more often interpreted as the plume "
   "wandering south than as the Pacific plate changing direction.\n\n"
   "This chain is also the clearest illustration anywhere of Darwin's subsidence sequence, "
   "which he worked out in 1842 from the shapes of reefs alone, before anyone knew the sea "
   "floor moved. Every volcanic island is temporary: it stands on ocean floor that cools, "
   "contracts and sinks as it ages, so the island rides slowly downward. Where the water is "
-  "warm enough, coral grows upward as fast as the island sinks -- a FRINGING REEF hugging "
-  "the shore becomes a BARRIER REEF with a lagoon behind it, and finally an ATOLL, a ring "
+  "warm enough, coral grows upward as fast as the island sinks \u2014 a fringing reef hugging "
+  "the shore becomes a barrier reef with a lagoon behind it, and finally an atoll, a ring "
   "of reef around open water where a mountain used to be. Where the water is too cold or "
   "the subsidence too fast, the island simply drowns and its wave-planed top survives as a "
-  "flat-topped seamount: a GUYOT.\n\n"
+  "flat-topped seamount: a guyot.\n\n"
   "Read the chain from Hawaii north-west and you read the sequence in order. The Big "
   "Island is still being built; Midway at about 28 million years is an atoll; the Emperor "
   "seamounts are guyots a kilometre or two down; and Meiji at the far end, roughly 85 "
   "million years old and two kilometres deep, is about to be subducted into the Kuril "
-  "trench. The app draws it from that arithmetic rather than from a texture -- an "
+  "trench. The app draws it from that arithmetic rather than from a texture \u2014 an "
   "edifice's summit subsides by 350 metres per square root of a million years, the same "
   "half-space cooling law the sea floor itself uses, so islands drown at about 16 million "
   "years and everything older is flat-topped.",
  "Reykjanes Ridge": "The stretch of the Mid-Atlantic Ridge south of Iceland, riding so high on the Iceland plume that it nearly breaks the surface.",
  "Gakkel Ridge": "The slowest spreading ridge in the world, opening the Arctic Ocean basin beneath the sea ice at barely a centimetre a year.",
  "Nazca Ridge": "A submarine volcanic ridge sliding into the trench beneath Peru, whose buoyancy flattens the subducting slab and broadens the Andes above it.",
- "Kerguelen Microcontinent": "A continent-sized volcanic plateau in the southern Indian Ocean, built by the Kerguelen plume as India tore away from Antarctica. Parts of it stood above sea level for tens of millions of years -- drill cores have brought up wood, spores and coal from a Late Cretaceous conifer forest growing on it -- before it subsided.\n\nIt is drawn here as the shallow bank it is: an island in the Late Cretaceous, then a pale plateau on the sea floor as it drowned. Watch it sink across the Cenozoic.",
+ "Kerguelen Microcontinent": "A continent-sized volcanic plateau in the southern Indian Ocean, built by the Kerguelen plume as India tore away from Antarctica. Parts of it stood above sea level for tens of millions of years \u2014 drill cores have brought up wood, spores and coal from a Late Cretaceous conifer forest growing on it \u2014 before it subsided.\n\nIt is drawn here as the shallow bank it is: an island in the Late Cretaceous, then a pale plateau on the sea floor as it drowned. Watch it sink across the Cenozoic.",
  "Kuunga Orogen": "The last suture of Gondwana, closing between India-Antarctica and Australia. It "
   "finished welding the southern supercontinent together only as the Cambrian explosion "
   "was underway.",
@@ -1405,8 +1405,8 @@ DESCRIPTIONS = {
   "southern Tibet.",
  "Mackenzie Mountains Basin": "A second great Tonian carbonate basin on Laurentia's western margin, its strata "
   "recording the carbon-isotope swings that punctuate the run-up to Snowball Earth.",
- "Marinoan Snowball Earth": "The second Snowball, ending abruptly at 635 Ma. Its cap carbonates -- laid down "
-  "worldwide in the extreme greenhouse that followed deglaciation -- sit directly on "
+ "Marinoan Snowball Earth": "The second Snowball, ending abruptly at 635 Ma. Its cap carbonates \u2014 laid down "
+  "worldwide in the extreme greenhouse that followed deglaciation \u2014 sit directly on "
   "glacial debris, recording a swing from freezing to scorching in geological moments.",
  "Messinian Salt Basin": "For roughly 600,000 years the Mediterranean was cut off at Gibraltar and evaporated "
   "almost dry, leaving a kilometre-deep salt desert three kilometres below sea level. It "
@@ -1423,7 +1423,7 @@ DESCRIPTIONS = {
  "Muschelkalk Sea": "A shallow, hypersaline sea that flooded central Europe through narrow gates from "
   "Tethys. Its limestones and salt beds record repeated cycles of connection and "
   "evaporation.",
- "Nama Sea": "A shallow shelf sea in southern Gondwana holding the last Ediacaran communities -- and "
+ "Nama Sea": "A shallow shelf sea in southern Gondwana holding the last Ediacaran communities \u2014 and "
   "the first animals to build mineralised skeletons, just before the Cambrian began.",
  "Namib": "Arid since the Eocene and hyperarid for much of the Neogene, kept dry by the cold "
   "Benguela current offshore. Its dunes are among the tallest in the world.",
@@ -1446,20 +1446,20 @@ DESCRIPTIONS = {
  "Oslo Rift": "A Permian rift through southern Norway, filled with lava and coarse alkaline "
   "intrusions. It is the type locality for a whole family of igneous rocks.",
  "Pan-Asian Rift": "A projected rift reopening the old suture that joined Europe to Asia. In the Aurica "
-  "model it becomes an ocean and Asia splits in two -- one of several competing futures, "
+  "model it becomes an ocean and Asia splits in two \u2014 one of several competing futures, "
   "and far from certain.",
- "Pangaea Proxima Inland Sea": "A remnant sea trapped inside the next supercontinent as the Indian Ocean closes -- the "
+ "Pangaea Proxima Inland Sea": "A remnant sea trapped inside the next supercontinent as the Indian Ocean closes \u2014 the "
   "deepest scar in an otherwise fused landmass, and the only water for thousands of "
   "kilometres.",
  "Pebas Mega-Wetland": "Before the Amazon ran east, western Amazonia was the Pebas system: around a million square kilometres of shallow lake, swamp and slow river, fed by the rising Andes and draining north to the Caribbean, with tides reaching far inland and the sea flooding in from time to time. It lasted through the Miocene, roughly 21 to 8 million years ago, until Andean uplift finally tipped the continent the other way and set the modern east-flowing Amazon.\n\nIt was the richest freshwater ecosystem South America has known. Its endemic snails and mussels radiated into hundreds of species found nowhere else, and its water held giants: Purussaurus, a caiman twelve metres long, the shovel-jawed Mourasuchus, slender fish-eating gharials, and Stupendemys, the largest freshwater turtle that ever lived, its shell more than three metres across.",
  "Permian Basin": "A tropical sea that slowly strangled. Through the Permian a deep basin "
   "on Pangaea's western margin was progressively cut off from the open ocean by its own "
-  "reefs -- the Capitan reef complex, built not by corals but by sponges, algae and "
+  "reefs \u2014 the Capitan reef complex, built not by corals but by sponges, algae and "
   "bryozoans, and now exhumed as the Guadalupe Mountains, one of the best-exposed fossil "
   "reefs on Earth.\n\n"
-  "The fill reads as a sequence: WOLFCAMP deep-water shales, then LEONARD as the shelf "
-  "builds out, then the GUADALUPIAN reef at its greatest height, and finally -- once the "
-  "connection to the ocean had narrowed enough -- the OCHOAN, when evaporation won. The "
+  "The fill reads as a sequence: Wolfcamp deep-water shales, then Leonard as the shelf "
+  "builds out, then the Guadalupian reef at its greatest height, and finally \u2014 once the "
+  "connection to the ocean had narrowed enough \u2014 the Ochoan, when evaporation won. The "
   "Castile Formation is hundreds of metres of gypsum and halite laid down in varve-like "
   "annual couplets that can be counted one by one.\n\n"
   "A restricted basin under a subtropical high is the standard recipe for salt, and "
@@ -1468,10 +1468,10 @@ DESCRIPTIONS = {
  "Perunica": "A small terrane carrying the classic Barrandian fossil sequence of Bohemia, drifting "
   "in the Rheic Ocean off Gondwana's northern margin.",
  "Proxima Interior Desert": "The dead heart of the next supercontinent. So far from any coast that no weather "
-  "system reaches it, with modelled interior temperatures above 50 degrees Celsius -- a "
+  "system reaches it, with modelled interior temperatures above 50 degrees Celsius \u2014 a "
   "repeat of what Pangaea's interior was like.",
  "Qinling-Dabie Belt": "The suture where North and South China finally collided in the Triassic. It exhumed "
-  "rocks from 100 kilometres deep, carrying diamonds and coesite -- the first proof that "
+  "rocks from 100 kilometres deep, carrying diamonds and coesite \u2014 the first proof that "
   "continental crust can be subducted that far.",
  "Red Sea Rift": "A rift that has already become an ocean: seafloor spreading began along its axis "
   "within the last five million years, prising Arabia away from Africa.",
@@ -1487,7 +1487,7 @@ DESCRIPTIONS = {
  "Sao Francisco Craton": "An ancient block in eastern Brazil, joined to the Congo craton until the South "
   "Atlantic split them. Its cover carries Neoproterozoic glacial deposits and cap "
   "carbonates.",
- "Sibumasu": "A Cimmerian terrane -- Sumatra, Malaya, Burma, western Thailand -- carrying Gondwanan "
+ "Sibumasu": "A Cimmerian terrane \u2014 Sumatra, Malaya, Burma, western Thailand \u2014 carrying Gondwanan "
   "glacial deposits north into the tropics, a mismatch that helped prove it had "
   "travelled.",
  "Sierra Nevada Arc": "A volcanic arc built where the Farallon plate dived beneath North America. The "
@@ -1495,9 +1495,9 @@ DESCRIPTIONS = {
   "as Yosemite.",
  "Solnhofen Lagoon": "A set of stagnant, hypersaline lagoons behind a reef in the Tethyan archipelago. "
   "Nothing lived on their airless floors, so anything that sank in was preserved "
-  "perfectly -- including Archaeopteryx.",
+  "perfectly \u2014 including Archaeopteryx.",
  "Somalia": "The eastern horn of Africa, projected as an island continent after the rift floods "
-  "behind it -- a Madagascar-scale fragment drifting into the Indian Ocean.",
+  "behind it \u2014 a Madagascar-scale fragment drifting into the Indian Ocean.",
  "Songliao Basin": "A huge rift basin in northeast China holding one of the largest lakes of the "
   "Cretaceous. Its cored sediments give an almost annual record of greenhouse-world "
   "climate.",
@@ -1505,10 +1505,10 @@ DESCRIPTIONS = {
   "Ma, with glaciers reaching sea level at the equator. Weathering of the fresh Franklin "
   "flood basalts in the tropics is the leading trigger.",
  "Sundaland": "The exposed continental shelf joining Borneo, Sumatra and Java to mainland Asia at low "
-  "sea levels -- an area larger than India, alternately land and sea through the ice "
+  "sea levels \u2014 an area larger than India, alternately land and sea through the ice "
   "ages.",
  "Sunsas Belt": "The South American segment of the Grenville-age collisions, along the southwestern "
-  "edge of the Amazon craton -- a key tie-point for placing Amazonia inside Rodinia.",
+  "edge of the Amazon craton \u2014 a key tie-point for placing Amazonia inside Rodinia.",
  "Sveconorwegian Belt": "The Baltic counterpart of the Grenville orogeny, and evidence that Baltica and "
   "Laurentia were joined in Rodinia. Its deformed gneisses run through southern Norway "
   "and Sweden.",
@@ -1517,7 +1517,7 @@ DESCRIPTIONS = {
   "Himalayan uplift.",
  "Tibetan Plateau": "Five kilometres high and over a thousand kilometres wide, raised by India's collision "
   "with Asia \u2014 big enough to steer the jet stream and drive the Asian monsoon. It did not simply rise: "
-  "in the Palaeogene it was a deep valley between ranges, its suture zones stayed tropical LOWLANDS until the "
+  "in the Palaeogene it was a deep valley between ranges, its suture zones stayed tropical lowlands until the "
   "late Oligocene, and its surface fell some 900 m between 25.5 and 21.6 Ma before climbing again. It reached "
   "roughly today's height by 14-8 Ma and still rises about 5 mm a year.",
  "Tippecanoe Sea": "The Ordovician-Silurian flooding of Laurentia, which buried the continent in tropical "
@@ -1527,7 +1527,7 @@ DESCRIPTIONS = {
  "Wallacea": "The belt of islands between the Asian and Australian shelves that was never joined to "
   "either. Its permanent water gaps are Wallace's Line, the sharpest biogeographic "
   "boundary on Earth.",
- "West Africa Craton": "One of the oldest stable blocks on Earth, its Archean core exposed in the Reguibat and "
+ "West Africa Craton": "One of the oldest stable blocks on Earth, its Archaean core exposed in the Reguibat and "
   "Man shields. It has drifted through every supercontinent since without deforming "
   "internally.",
  "White Sea Realm": "Shallow shelf and delta settings holding the richest Ediacaran communities: "
@@ -1550,19 +1550,19 @@ DESCRIPTIONS = {
   "North America. Death Valley sat at the end of a chain of overflowing pluvial lakes, "
   "and filled whenever the chain upstream ran full.",
  "Glacial Lake Missoula": "Meltwater held back by a finger of the Cordilleran ice "
-   "sheet that blocked the Clark Fork. The dam floated and failed again and again -- "
+   "sheet that blocked the Clark Fork. The dam floated and failed again and again \u2014 "
    "each time releasing some 2,000 cubic kilometres of water in a couple of days, at a "
    "flow greater than every river on Earth combined, which is what carved the "
    "Channeled Scablands of eastern Washington.",
  "Glacial Lake Ojibway": "The last great lake against the dying Laurentide sheet, "
    "merged with Agassiz behind an ice dam over Hudson Bay. When that dam failed around "
    "8,200 years ago the whole volume drained to the North Atlantic at once, freshening "
-   "the surface enough to slow the overturning circulation -- the 8.2 ka cold event, "
+   "the surface enough to slow the overturning circulation \u2014 the 8.2 ka cold event, "
    "the sharpest climate lurch of the Holocene.",
  "Lake Algonquin": "The ancestral upper Great Lakes as one body of water, ponded "
    "between the retreating ice front and the height of land. As the ice uncovered "
    "lower outlets it drained in stages, and the crust it had been pressing down has "
-   "been rebounding ever since -- tilting its old shorelines, which now run uphill to "
+   "been rebounding ever since \u2014 tilting its old shorelines, which now run uphill to "
    "the north.",
  "Baltic Ice Lake": "Fresh meltwater trapped in the Baltic depression between the "
    "Fennoscandian ice margin and the land to the south. It drained catastrophically "
@@ -1573,10 +1573,10 @@ DESCRIPTIONS = {
    "glacials the Barents-Kara ice sheet blocked every one of their mouths at once. The "
    "Ob and Yenisei backed up over the West Siberian Plain into a lake of continental "
    "size, which overflowed south and drained across Eurasia to the Caspian and Black "
-   "Sea instead -- reversing the drainage of a third of a continent.",
+   "Sea instead \u2014 reversing the drainage of a third of a continent.",
  "Karoo Proglacial Lakes": "Meltwater lakes along the margin of the Gondwana ice "
-   "sheet, in the basin that became the Karoo. Their floors preserve varves -- paired "
-   "light and dark layers, one couplet a year -- with dropstones punched into them "
+   "sheet, in the basin that became the Karoo. Their floors preserve varves \u2014 paired "
+   "light and dark layers, one couplet a year \u2014 with dropstones punched into them "
    "where icebergs floated over and melted. It is some of the best direct evidence "
    "that the Late Palaeozoic Ice Age was seasonal, and how long it lasted.",
  "Lake Agassiz": "Meltwater ponded against the southern edge of the Laurentide ice sheet, larger than "
@@ -1584,7 +1584,7 @@ DESCRIPTIONS = {
   "around 8,200 years ago it released some 163,000 cubic kilometres of fresh water into "
   "the North Atlantic and cooled the northern hemisphere for a century.",
  "West Siberian Glacial Lake": "The Ob and Yenisei drain north to the Arctic. Block their mouths with an ice sheet and "
-  "the whole of western Siberia ponds up behind it -- possibly the largest lake that has "
+  "the whole of western Siberia ponds up behind it \u2014 possibly the largest lake that has "
   "ever existed, draining south and west across Eurasia instead of into the Arctic Ocean.",
  "Lake Lisan": "The Dead Sea's Ice Age ancestor, filling the Jordan Rift some 200 metres above the "
   "modern shore. Its finely laminated marls record each wet and dry year of the last "
@@ -1604,18 +1604,18 @@ DESCRIPTIONS = {
   "why the continent's interior is ringed with the bones of giant marsupials.",
  "Lake Baikal": "The oldest and deepest lake on Earth, 1,642 metres down in a rift that is still "
   "opening at about two centimetres a year. It holds a fifth of the planet's unfrozen "
-  "surface fresh water and a fauna -- including a freshwater seal -- found nowhere else.",
+  "surface fresh water and a fauna \u2014 including a freshwater seal \u2014 found nowhere else.",
  "Lake Malawi": "The southern deep of the East African Rift, filling a basin that has held water for some eight million years. Isolation that long turns a lake into an evolutionary laboratory: it carries more species of fish than any other lake on Earth, almost all of them cichlids and almost all found nowhere else.",
  "Aral Sea": "The easternmost survivor of the Paratethys, a shallow remnant stranded in the deserts of Central Asia when that inland ocean broke apart. It has no outlet, so it lives or dies by the two rivers that reach it.",
  "Lake Tanganyika": "The second deepest lake in the world, filling a segment of the East African Rift. Its "
   "lower waters have not mixed with the surface in over a thousand years, and its cichlid "
   "fishes are a textbook case of explosive evolution in isolation.",
- "Lake Victoria": "Africa's largest lake is not a rift lake at all -- it is rainwater ponded in a shallow "
+ "Lake Victoria": "Africa's largest lake is not a rift lake at all \u2014 it is rainwater ponded in a shallow "
   "sag between the two arms of the rift, after uplift reversed the rivers that used to "
   "drain west. It dried out completely as recently as 17,000 years ago, which makes the "
   "hundreds of cichlid species now living in it a startlingly fast radiation.",
  "East African Rift soda lakes": "Where the rift floor has no outlet and volcanic rock supplies the chemistry, the lakes "
-  "turn caustic -- brine so alkaline it preserves the carcasses of birds that land on it. "
+  "turn caustic \u2014 brine so alkaline it preserves the carcasses of birds that land on it. "
   "They are also where much of the early hominin record was buried.",
  "Lake Pannon": "A vast brackish lake filling the Carpathian Basin after the Alps and Carpathians "
   "sealed it off from the sea. Isolated for millions of years, its molluscs radiated into "
@@ -1626,16 +1626,16 @@ DESCRIPTIONS = {
   "ancestors.",
  "Black Sea (Paratethys remnant)": "A basin that has flipped between lake and sea again and again, depending on whether "
   "global sea level stood above or below the shallow sill at the Bosphorus. Below 150 "
-  "metres its water is anoxic and sulphidic -- and preserves whatever sinks into it.",
+  "metres its water is anoxic and sulphidic \u2014 and preserves whatever sinks into it.",
  "Lago Mare (Messinian Mediterranean)": "In the last act of the Messinian Salinity Crisis the desiccated Mediterranean refilled "
-  "-- not from the Atlantic, but with brackish water spilling in from the rivers and from "
+  "\u2014 not from the Atlantic, but with brackish water spilling in from the rivers and from "
   "Paratethys to the northeast. For a few hundred thousand years the Mediterranean was a "
   "lake, kilometres below the ocean outside it.",
  "Lake Gosiute": "The largest of the three Green River lakes, filling the Greater Green River Basin "
   "between the young Rocky Mountains. In its closed, evaporating phases it precipitated "
-  "trona -- the world's largest deposit of soda ash lies under Wyoming.",
+  "trona \u2014 the world's largest deposit of soda ash lies under Wyoming.",
  "Lake Uinta": "Gosiute's southern neighbour, spilling across the Uinta and Piceance basins. Its "
-  "bottom muds are the richest oil shale on Earth -- algal organic matter that never "
+  "bottom muds are the richest oil shale on Earth \u2014 algal organic matter that never "
   "decayed because the deep water had no oxygen in it.",
  "Fossil Lake": "The smallest of the three Green River lakes and by far the most productive fossil "
   "site. Its laminated limestone preserves fish, birds, bats, insects and flowers in such "
@@ -1645,7 +1645,7 @@ DESCRIPTIONS = {
   "through Hells Canyon and drained it.",
  "Lake Tauca": "A lake 600 kilometres long on the Bolivian Altiplano at four kilometres' altitude, at "
   "the same time as the northern ice sheets stood at their maximum. When it evaporated it "
-  "left the Salar de Uyuni -- the largest salt flat in the world.",
+  "left the Salar de Uyuni \u2014 the largest salt flat in the world.",
  "Lake Titicaca": "The highest large lake on Earth, held in a basin between two arms of the Andes as the "
   "range rose around it. It is the deepest surviving piece of a series of far larger Ice "
   "Age lakes that once covered the Altiplano.",
@@ -1653,7 +1653,7 @@ DESCRIPTIONS = {
   "kept liquid by the pressure and the heat of the rock beneath. It is one of roughly "
   "four hundred subglacial lakes, and it has been cut off from the sky for millions of "
   "years.",
- "Messel Lake": "A maar -- a lake in a volcanic explosion pit, less than a kilometre across and "
+ "Messel Lake": "A maar \u2014 a lake in a volcanic explosion pit, less than a kilometre across and "
   "hundreds of metres deep. Its anoxic bottom preserved Eocene horses, bats and birds "
   "complete with stomach contents, fur and the colour of their feathers.",
  "Songliao Palaeolake": "One of the largest lakes of the Mesozoic, filling a rift-and-sag basin in northeast "
@@ -1661,7 +1661,7 @@ DESCRIPTIONS = {
   "in seawater, and its black anoxic muds became China's biggest oil field.",
  "Jehol Lakes": "Dozens of small lakes among active volcanoes in northeastern China, buried again and "
   "again under ash and pyroclastic flows. The result is the finest window anywhere on "
-  "feathered dinosaurs, early birds and mammals, and the first flowers -- preserved down "
+  "feathered dinosaurs, early birds and mammals, and the first flowers \u2014 preserved down "
   "to the melanin in individual feathers.",
  "Crato Lake": "A lake in the rift that was tearing South America away from Africa, its bottom waters "
   "so salty and still that insects, fish and pterosaurs sank into them intact. A rare "
@@ -1669,7 +1669,7 @@ DESCRIPTIONS = {
  "Newark Rift Lakes": "As Pangaea began to tear along the line of the future Atlantic, a chain of deep, "
   "narrow lakes formed in the rift valleys. They rose and fell with the wobble of Earth's "
   "orbit so regularly that their layered beds are used to calibrate the Triassic "
-  "timescale itself -- and they record the end-Triassic extinction and the flood basalts "
+  "timescale itself \u2014 and they record the end-Triassic extinction and the flood basalts "
   "that caused it.",
  "Palaeo-Lake Junggar": "One of the largest lakes of the entire Phanerozoic, in a basin caught between the "
   "growing mountain belts of central Asia. Its floor holds the thickest organic-rich lake "
@@ -1677,7 +1677,7 @@ DESCRIPTIONS = {
   "sharply.",
  "Lake Orcadie": "A great lake in the collapsing wreckage of the Caledonian mountains, rising and "
   "falling to the beat of Earth's orbit for ten million years. Each time it deepened it "
-  "laid down a bed of dark laminated mudstone packed with fish -- the flagstones of "
+  "laid down a bed of dark laminated mudstone packed with fish \u2014 the flagstones of "
   "Caithness and Orkney, quarried for pavements and full of Devonian armoured fish.",
  "Torridonian Lakes": "River and lake beds a billion years old in northwest Scotland, laid down on a barren "
   "continent long before anything lived on land. Their muds hold some of the oldest known "
@@ -1690,7 +1690,7 @@ DESCRIPTIONS = {
  "Pyrenees": "Raised as the small Iberian plate collided with Europe through the Late Cretaceous and Palaeogene. A textbook doubly-vergent belt, its ancient core was pushed up and exhumed by Eocene shortening.",
  "Carpathians": "An arc of thrust sheets swept into place during the Miocene as continental fragments rolled into the European margin, curving around the subsiding Pannonian Basin behind them.",
  "Apennines": "The spine of Italy, built through the Neogene as the Adriatic plate sank and its sedimentary cover peeled off into a migrating thrust belt, while back-arc extension opened the Tyrrhenian Sea behind it.",
- "Sonoma Orogeny": "A collision along the western edge of North America near the Permian-Triassic boundary, as the Sonomia island-arc terrane docked against the continent -- the successor to the earlier Antler event along the same margin.",
+ "Sonoma Orogeny": "A collision along the western edge of North America near the Permian-Triassic boundary, as the Sonomia island-arc terrane docked against the continent \u2014 the successor to the earlier Antler event along the same margin.",
  "Delamerian Belt": "Middle Cambrian, 514\u2013490 Ma: the eastern edge of cratonic Australia was inverted and became a subduction zone facing the palaeo-Pacific. Its eroded stumps are the Flinders and Mount Lofty Ranges, and those same reverse faults have been running again since the Miocene, so the range is rising still. Antarctica's Ross Orogeny is its correlative across the Gondwana margin.",
  "Petermann Ranges": "An intracontinental collision with no plate margin anywhere near it, 630\u2013520 Ma, which exhumed the Musgrave Block from deep in the crust and split one great basin into the Amadeus and the Officer. Central Australia has been squeezed from within twice; this was the first.",
  "Alice Springs Belt": "The second squeeze, 450\u2013300 Ma, and the reason Uluru stands: it tilted that sandstone from flat-lying to vertical. A hundred and fifty million years of mountain building a thousand kilometres from any plate boundary, for less than 100 km of shortening in total.",
@@ -1708,55 +1708,55 @@ DESCRIPTIONS = {
  "Mid-Atlantic Ridge": "The slow-spreading ridge along which the Atlantic has been widening since the Jurassic, adding sea floor to either side a few centimetres a year and tracing the line the continents rifted apart along.",
  "East Pacific Rise": "The fastest-spreading ridge on Earth, making Pacific sea floor at more than ten centimetres a year. It is the living successor to the ancestral Pacific-Farallon spreading system.",
  "Atacama Desert": "The driest place on Earth, held arid for millions of years between the Andean rain shadow and the cold, upwelling Humboldt Current. Parts of it may not have seen real rain in centuries.",
- "Arabian Desert": "The great sand sea of Arabia, including the Rub' al Khali or Empty Quarter, the largest unbroken body of sand on the planet -- arid since the peninsula drifted into the subtropical high after splitting from Africa.",
+ "Arabian Desert": "The great sand sea of Arabia, including the Rub' al Khali or Empty Quarter, the largest unbroken body of sand on the planet \u2014 arid since the peninsula drifted into the subtropical high after splitting from Africa.",
  "Greenland": "The world's largest island, a Precambrian shard of the Laurentian craton set free when the Labrador Sea and then the North Atlantic rifted around it in the Paleogene. Its interior basin, pressed below sea level under the weight of the ice, holds one of the two great ice sheets left on Earth.",
  "Kalahari Desert": "A huge semi-arid sand basin across southern Africa, its dunes and dry pans spread over the interior plateau through the Cenozoic.",
  "Australian Desert": "The arid heart of Australia, its long parallel dunefields and stony plains spreading as the continent drifted north into the subtropics and dried through the late Cenozoic.",
  "Patagonian Desert": "A cold, wind-scoured steppe in the rain shadow east of the Andes, dry ever since the mountains rose high enough in the Miocene to wring the moisture from the Pacific westerlies.",
  "Cordilleran Ice Sheet": "The ice cap that repeatedly buried the mountains of western North America during the Pleistocene, meeting the Laurentide sheet along its eastern edge before both melted away.",
  "Greenland Ice Sheet": "The last great ice sheet of the Northern Hemisphere, in place since the late-Cenozoic cooling and holding enough ice to raise sea level about seven metres were it to melt.",
- "Patagonian Ice Sheet": "The ice sheet that mantled the southern Andes through the Pleistocene -- the largest ice mass in the Southern Hemisphere outside Antarctica -- its outlet glaciers carving the Patagonian fjords.",
+ "Patagonian Ice Sheet": "The ice sheet that mantled the southern Andes through the Pleistocene \u2014 the largest ice mass in the Southern Hemisphere outside Antarctica \u2014 its outlet glaciers carving the Patagonian fjords.",
  "Kazakhstania": "A Palaeozoic continent in its own right, assembled from island arcs between Siberia, Baltica and Tarim, and finally caught between them as Pangaea closed. Its crust underlies most of Kazakhstan and the Tien Shan.",
  "Mongol-Okhotsk Ocean": "The last piece of Palaeo-Asian ocean, closing like a zip from west to east through the Jurassic as Siberia rotated against the Amurian block. Its suture runs for three thousand kilometres across Mongolia and Transbaikalia.",
- "Tarim Block": "An old, rigid block of continental crust that has resisted deformation while everything around it crumpled -- which is why the Tarim Basin sits flat and undeformed between the Tien Shan and the Kunlun.",
+ "Tarim Block": "An old, rigid block of continental crust that has resisted deformation while everything around it crumpled \u2014 which is why the Tarim Basin sits flat and undeformed between the Tien Shan and the Kunlun.",
  "Amuria": "A composite of arcs and microcontinents that welded onto Siberia as the Mongol-Okhotsk Ocean closed, carrying much of Mongolia and northeast China.",
  "Annamia": "The Indochina block: a fragment that rifted from Gondwana, crossed Palaeo-Tethys with Cimmeria and docked with South China in the Triassic.",
  "Junggar Basin": "A basin floored by trapped oceanic crust, sealed in when the Palaeo-Asian ocean closed around it and filled ever since.",
  "Ordos Basin": "A stable block within the North China Craton, subsiding gently for 250 million years and collecting the loess that now blankets it.",
  "Sichuan Basin": "A fault-bounded basin in the lee of the Tibetan Plateau, filled with red beds and famously fog-bound because the surrounding ranges trap the air in it.",
- "Qaidam Basin": "A high, closed basin inside the Tibetan Plateau, three kilometres up and utterly arid -- its floor is salt because nothing that falls there ever leaves.",
+ "Qaidam Basin": "A high, closed basin inside the Tibetan Plateau, three kilometres up and utterly arid \u2014 its floor is salt because nothing that falls there ever leaves.",
  "West Siberian Basin": "One of the largest sedimentary basins on Earth, floored by the failed Siberian rift and flooded repeatedly by shallow seas since.",
- "Tien Shan": "A Palaeozoic belt that was worn flat and then RE-RAISED by the India collision a thousand kilometres away -- an old suture reactivated, which is why it stands so high so far from any plate margin.",
+ "Tien Shan": "A Palaeozoic belt that was worn flat and then re-raised by the India collision a thousand kilometres away \u2014 an old suture reactivated, which is why it stands so high so far from any plate margin.",
  "Altai Belt": "Part of the accretionary collage between Siberia and Kazakhstania, rebuilt by the same far-field stresses that revived the Tien Shan.",
  "Kunlun Belt": "The northern edge of the Tibetan Plateau, a suture where successive Gondwanan fragments docked with Asia through the Mesozoic.",
  "Qilian Belt": "An early Palaeozoic suture on the north side of Tibet, marking where a small ocean closed long before India arrived.",
  "Alborz Belt": "The range along the southern Caspian, raised where Arabia's push into Iran is taken up hundreds of kilometres north of the collision front.",
  "Pontide Arc": "The Black Sea's southern rim: a volcanic arc built above the subducting Tethys, later shoved against Anatolia.",
- "Bohemian Massif": "A block of Variscan basement in central Europe, exposed where later cover has been stripped away -- the eroded heart of the mountain belt that ran through Pangaea.",
- "Iberian Massif": "The Variscan basement of Iberia, folded into a great arc -- the Ibero-Armorican orocline -- as the belt was bent after it formed.",
+ "Bohemian Massif": "A block of Variscan basement in central Europe, exposed where later cover has been stripped away \u2014 the eroded heart of the mountain belt that ran through Pangaea.",
+ "Iberian Massif": "The Variscan basement of Iberia, folded into a great arc \u2014 the Ibero-Armorican orocline \u2014 as the belt was bent after it formed.",
  "Massif Central": "Variscan basement in France, worn from a Himalayan-scale belt to 1,886 m, then domed and split by young volcanoes as the Alpine collision stretched the crust behind it \u2014 the cones of the Chaine des Puys stand on a root 300 million years old.",
  "Rhodope Massif": "A stack of metamorphic sheets in the southern Balkans, exhumed from deep in the Alpine collision as the Aegean pulled apart above it; erosion has since left a rounded massif reaching 2,191 m rather than an alpine crest.",
- "Ellesmerian Belt": "A Devonian collision along the northern edge of Laurentia, now in the Canadian Arctic islands -- the same event that raised the Old Red Sandstone mountains.",
+ "Ellesmerian Belt": "A Devonian collision along the northern edge of Laurentia, now in the Canadian Arctic islands \u2014 the same event that raised the Old Red Sandstone mountains.",
  "Fennoscandian Shield": "Baltica's ancient core: two billion years of crust planed flat by repeated glaciation, and still rising a centimetre a year now the ice has gone.",
  "Anatolide-Tauride Block": "A Gondwanan fragment that crossed Tethys and now forms most of Turkey, caught between the Pontides to the north and the Arabian collision to the south.",
  "Kolyma-Omolon Terrane": "A composite terrane that closed the Anyui Ocean against Siberia in the Cretaceous, welding on what is now far northeastern Russia.",
- "Piedmont-Ligurian Ocean": "The narrow Alpine branch of Tethys, opened as Africa and Europe drifted apart in the Jurassic and consumed again as they closed -- its sea floor is now in the Alps as ophiolite.",
+ "Piedmont-Ligurian Ocean": "The narrow Alpine branch of Tethys, opened as Africa and Europe drifted apart in the Jurassic and consumed again as they closed \u2014 its sea floor is now in the Alps as ophiolite.",
  "Okhotsk Sea": "A back-arc basin behind the Kuril arc, opened as the Pacific plate rolled back beneath Asia.",
  "Sea of Japan": "Opened in the Miocene when the Japanese arc rifted away from Asia and "
-  "rotated -- the whole archipelago swung out like a door.\n\n"
-  "It is a BACK-ARC BASIN, and the mechanism is worth having because it explains a whole "
-  "province of the modern Earth. Behind a subduction zone the ocean floor can pull APART: "
+  "rotated \u2014 the whole archipelago swung out like a door.\n\n"
+  "It is a back-arc basin, and the mechanism is worth having because it explains a whole "
+  "province of the modern Earth. Behind a subduction zone the ocean floor can pull apart: "
   "as an old, dense slab sinks it also rolls backward, dragging the trench oceanward and "
   "stretching the plate behind it until that plate rifts and a new spreading centre opens "
-  "-- a small ocean basin forming INSIDE a convergent margin. The Mariana Trough, the Lau "
+  "\u2014 a small ocean basin forming inside a convergent margin. The Mariana Trough, the Lau "
   "Basin, the Andaman Sea and the Tyrrhenian are all this. It is why the western Pacific "
   "is a scatter of small seas and island arcs rather than one clean margin.",
- "Tethyan Himalaya": "The stack of shallow-marine rock that lay on India's northern shelf, scraped off and piled up when India hit Asia -- the summit of Everest is made of it.",
+ "Tethyan Himalaya": "The stack of shallow-marine rock that lay on India's northern shelf, scraped off and piled up when India hit Asia \u2014 the summit of Everest is made of it.",
  "Morrison Floodplain": "A broad seasonal floodplain east of the rising Cordillera, and the richest dinosaur-bearing formation in North America.",
- "Yakutat Terrane": "A fragment of thickened ocean floor riding north on the Pacific plate and jamming into southern Alaska -- which is why the St Elias Mountains are the highest coastal range on Earth.",
+ "Yakutat Terrane": "A fragment of thickened ocean floor riding north on the Pacific plate and jamming into southern Alaska \u2014 which is why the St Elias Mountains are the highest coastal range on Earth.",
  "Baikalian Belt": "A Neoproterozoic belt along the southern edge of the Siberian craton, named for the lake that now sits in its reactivated grain.",
- "Hangai Uplift": "A broad dome in central Mongolia, lifted by hot mantle rather than by collision -- there is no suture under it.",
- "Deccan Traps": "The basalt tableland of peninsular India and one of the largest volcanic outpourings in Earth history: something like a million cubic kilometres of lava, erupted in pulses as the subcontinent passed over the Reunion plume across the Cretaceous-Palaeogene boundary. The gas that came with it is one of the two things -- with Chicxulub -- argued over as the cause of the extinction. What is left is a step-sided tableland, worn into the terraces the Swedish word trappa gave their name to.",
+ "Hangai Uplift": "A broad dome in central Mongolia, lifted by hot mantle rather than by collision \u2014 there is no suture under it.",
+ "Deccan Traps": "The basalt tableland of peninsular India and one of the largest volcanic outpourings in Earth history: something like a million cubic kilometres of lava, erupted in pulses as the subcontinent passed over the Reunion plume across the Cretaceous-Palaeogene boundary. The gas that came with it is one of the two things \u2014 with Chicxulub \u2014 argued over as the cause of the extinction. What is left is a step-sided tableland, worn into the terraces the Swedish word trappa gave their name to.",
  "Ethiopian Highlands": "The roof of Africa: a domed plateau of flood basalts erupted over the Afar plume in the Oligocene and lifted as the East African and Red Sea rifts began to tear the region apart.",
  "East African Plateau": "A broad Cenozoic upwarp of the African interior, raised over hot mantle and split by the East African Rift, its high cool surface holding the great lakes and the headwaters of the Nile.",
  "Williston Basin": "A long-lived, gently sinking bowl on the North American craton that gathered sediment through most of the Phanerozoic, from Palaeozoic carbonates and evaporites to later oil-rich shales.",
@@ -1873,21 +1873,21 @@ EVENT_NOTES = {
     "Siberian Traps": "The largest continental flood basalt known: perhaps four million cubic kilometres of lava across Siberia in under a million years, and — as it burned through coal and evaporite — enough carbon and sulphur to acidify the oceans and drive the end-Permian extinction, the worst in Earth's history.",
     "Deccan Traps": "Vast basalt flows across western India, erupting as the subcontinent drove north over the Reunion plume. Their peak brackets the Chicxulub impact, and the two together ended the Cretaceous.",
     "Central Atlantic (CAMP)": "Magmatism spread across four continents as Pangaea began to split, opening the crack that became the Atlantic. It coincides with the end-Triassic extinction.",
-    "Ontong Java Plateau": "The largest oceanic plateau on Earth: 1.86 million square kilometres of sea floor, erupted in a few million years. It is the leading trigger for OCEANIC ANOXIC EVENT 1a (Selli, ~120.5-119.3 Ma) -- the carbon-isotope record swings hard at exactly its eruption, and calcareous nannoplankton went through a sharp crisis. See the climate-events panel.",
+    "Ontong Java Plateau": "The largest oceanic plateau on Earth: 1.86 million square kilometres of sea floor, erupted in a few million years. It is the leading trigger for OCEANIC ANOXIC EVENT 1a (Selli, ~120.5-119.3 Ma) \u2014 the carbon-isotope record swings hard at exactly its eruption, and calcareous nannoplankton went through a sharp crisis. See the climate-events panel.",
     "Ethiopian Traps": "Flood basalts over the Afar plume that domed up East Africa and began tearing it open — the rifting still going on today.",
     "North Atlantic Igneous": "Eruptions as Greenland and Europe parted. Carbon released here is a leading suspect for the Paleocene-Eocene Thermal Maximum, the sharpest warming of the Cenozoic.",
-    "Karoo-Ferrar": "Basalts stretched from southern Africa to Antarctica as Gondwana started to break apart. They coincide with the TOARCIAN ocean anoxic event (~183 Ma) and are its leading trigger -- the same LIP-to-anoxia cascade as Ontong Java to OAE 1a and the Caribbean plateau to OAE 2.",
+    "Karoo-Ferrar": "Basalts stretched from southern Africa to Antarctica as Gondwana started to break apart. They coincide with the TOARCIAN ocean anoxic event (~183 Ma) and are its leading trigger \u2014 the same LIP-to-anoxia cascade as Ontong Java to OAE 1a and the Caribbean plateau to OAE 2.",
     "Parana-Etendeka": "One province split in two: its halves now sit in Brazil and Namibia, torn apart by the opening South Atlantic.",
     "Emeishan Traps": "Flood basalts in South China, associated with the end-Guadalupian extinction some eight million years before the far larger end-Permian crisis.",
     "Columbia River Basalts": "The youngest continental flood basalt province, laid down across the Pacific Northwest as the Yellowstone plume arrived beneath the continent.",
-    "Caribbean LIP": "Built by the Galapagos plume on the floor of the Pacific and then rammed into the gap between the Americas, where it survives as the thick, buoyant crust under the Caribbean Sea -- one of the few oceanic plateaus that escaped subduction by being too light to sink. Its eruption is the leading trigger for OCEANIC ANOXIC EVENT 2 (Bonarelli, ~94.3-93.5 Ma), when the deep ocean ran out of oxygen at the hottest moment of the last 200 million years. See the climate-events panel.",
+    "Caribbean LIP": "Built by the Galapagos plume on the floor of the Pacific and then rammed into the gap between the Americas, where it survives as the thick, buoyant crust under the Caribbean Sea \u2014 one of the few oceanic plateaus that escaped subduction by being too light to sink. Its eruption is the leading trigger for OCEANIC ANOXIC EVENT 2 (Bonarelli, ~94.3-93.5 Ma), when the deep ocean ran out of oxygen at the hottest moment of the last 200 million years. See the climate-events panel.",
     "Madagascar Traps": "Eruptions as Madagascar separated from India, leaving the island isolated — and its life to evolve alone.",
     "Kalkarindji": "Australia's Cambrian flood basalts, linked to an early-Cambrian extinction pulse not long after animals first diversified.",
     "Franklin LIP": "Enormous eruptions across what is now Arctic Canada at the threshold of the Sturtian glaciation. Weathering of fresh basalt in the tropics is thought to have drawn down enough CO2 to help freeze the planet.",
     "Central Iapetus": "Rift volcanism as Rodinia's fragments finally separated and the Iapetus Ocean opened between them.",
     "Rajmahal Traps": "The Kerguelen plume's first arrival under eastern India, before the plate carried the continent onward.",
     # --- plumes ---
-    "Hawaii": "A plume in the mantle while the Pacific plate slides over it, printing a chain of volcanoes that gets older to the north-west — the clearest ruler we have for plate motion.\n\nWith one caveat that this map has to state, because it draws the chain: hotspots are NOT fixed. Inter-hotspot motion is demonstrable before about 90 Ma, and the 47 Ma bend between the Hawaiian Ridge and the Emperor Seamounts is now widely interpreted as the PLUME moving south rather than as the Pacific plate changing direction. Any track drawn before ~90 Ma is a model output, not a measurement.",
+    "Hawaii": "A plume in the mantle while the Pacific plate slides over it, printing a chain of volcanoes that gets older to the north-west — the clearest ruler we have for plate motion.\n\nWith one caveat that this map has to state, because it draws the chain: hotspots are NOT fixed. Inter-hotspot motion is demonstrable before about 90 Ma, and the 47 Ma bend between the Hawaiian Ridge and the Emperor Seamounts is now widely interpreted as the plume moving south rather than as the Pacific plate changing direction. Any track drawn before ~90 Ma is a model output, not a measurement.",
     "Iceland": "The only place a mid-ocean ridge rises above sea level, held up by a plume beneath the spreading Atlantic.",
     "Yellowstone": "The North American plate riding south-west over a plume, leaving a track of calderas across the Snake River Plain. It is the ONLY hotspot on Earth consistently imaged from the deep mantle to the surface, which is the calibration for how confident any other plume card here should sound.",
     "Afar": "Three rifts meet over a plume here; two are opening the Red Sea and Gulf of Aden, the third is splitting Africa itself.",
@@ -1908,7 +1908,7 @@ EVENT_NOTES = {
     "Hiawatha": "Buried under a kilometre of the Greenland ice sheet and found by radar. It is far older than the ice: when it formed, the target was rainforest.",
     "Manson": "An Iowa crater once proposed as the killer of the dinosaurs, until redating placed it about ten million years too early.",
     "Puchezh-Katunki": "A large Early Jurassic structure on the Russian platform, now almost entirely buried.",
-    "Clearwater West": "The larger of the two Clearwater lakes. The pair look like a classic double impact, but their ages differ by nearly 200 million years -- they are unrelated.",
+    "Clearwater West": "The larger of the two Clearwater lakes. The pair look like a classic double impact, but their ages differ by nearly 200 million years \u2014 they are unrelated.",
     "Clearwater East": "The smaller Clearwater lake, and the older by far. Its Ordovician age is what disproved the twin-impact story its shape suggests.",
     "Tunnunik": "An Arctic crater recognised only in 2010, its rim visible from the air as a ring of disturbed strata.",
     "Slate Islands": "An archipelago in Lake Superior that is the central uplift of an Ordovician crater, its rocks full of shatter cones.",
@@ -1916,8 +1916,8 @@ EVENT_NOTES = {
     "Mjolnir": "A crater on the floor of the Barents Sea, which triggered a tsunami across the shallow Jurassic seaway.",
     "Beaverhead": "One of the oldest large craters in North America, its structure dismembered and scattered by later mountain building.",
     "Woodleigh": "A crater buried under the Carnarvon Basin east of Shark Bay, known only from "
-     "drilling into its central uplift. Its age is genuinely unknown -- the only "
-     "radiometric date is on authigenic clay and was formally disputed -- so the "
+     "drilling into its central uplift. Its age is genuinely unknown \u2014 the only "
+     "radiometric date is on authigenic clay and was formally disputed \u2014 so the "
      "stratigraphy allows anything from the Devonian to the Proterozoic.",
     "Tookoonooka": "An Early Cretaceous impact into a shallow Australian sea, now buried under the Eromanga Basin.",
     "Sierra Madre Occidental": "The largest silicic volcanic province on Earth: ignimbrite sheets across northern Mexico, erupted as the subducting Farallon slab rolled back and the crust above it began to tear open into the Gulf of California.",
@@ -1944,7 +1944,7 @@ EVENT_NOTES = {
     "Azores": "A plume sitting on the Mid-Atlantic Ridge, thickening the crust and lifting the islands above the sea.",
     "Canary": "A slow-moving plume off north-west Africa; because the African plate barely moves over it, the islands stay volcanically active far longer than Hawaii's.",
     "Cape Verde": "A plume beneath one of the largest swells on the ocean floor, raising the seabed more than two kilometres.",
-    "Cameroon Line": "A chain of volcanoes running from the Atlantic onto the African continent -- unusually, it crosses the ocean-continent boundary without a break.",
+    "Cameroon Line": "A chain of volcanoes running from the Atlantic onto the African continent \u2014 unusually, it crosses the ocean-continent boundary without a break.",
     "Tibesti": "Volcanism in the central Sahara that built mountains rising from the desert to over three kilometres.",
     "Erebus": "The southernmost active volcano on Earth, holding a permanent lake of molten lava through the Antarctic winter.",
     "Bouvet": "A plume near a triple junction in the South Atlantic, and the most remote island on the planet.",
@@ -1971,7 +1971,7 @@ EVENT_NOTES = {
     "Alborz LIP": "Ordovician volcanism along the northern edge of Gondwana, and one of very few "
      "candidates in a stretch of time otherwise almost empty of large igneous provinces.",
     "Arago (Rurutu)": "A South Pacific plume whose track can be followed back through the Cook-Austral chain "
-     "into the Tuvalu, Gilbert and Marshall islands -- possibly the oldest hotspot still "
+     "into the Tuvalu, Gilbert and Marshall islands \u2014 possibly the oldest hotspot still "
      "erupting in the Pacific.",
     "Bermuda": "A plume that never built a chain but lifted a broad swell of seafloor. Bermuda itself "
      "is a single drowned volcano capped by limestone.",
@@ -1988,17 +1988,17 @@ EVENT_NOTES = {
     "Cobb": "A north-east Pacific plume whose seamount chain runs into the Juan de Fuca Ridge, "
      "where plume and ridge have been interacting for tens of millions of years.",
     "Comei LIP": "The Kerguelen plume's opening act on the Gondwanan side, now folded into southern "
-     "Tibet -- carried half the world from the province it was erupted with.",
+     "Tibet \u2014 carried half the world from the province it was erupted with.",
     "Comores": "A plume between Africa and Madagascar; its newest volcano grew from the seafloor off "
      "Mayotte within the last decade, and was detected by the earthquakes it made on the way "
      "up.",
     "Dashigou (N. China)": "A dyke swarm across the North China craton, and the likely conjugate of the Bahia- "
-     "Gangila dykes in South America and Africa -- evidence for how those blocks were joined "
+     "Gangila dykes in South America and Africa \u2014 evidence for how those blocks were joined "
      "a billion years ago.",
     "Discovery": "A South Atlantic plume near the ridge, one of a cluster whose chemistry samples the "
      "edge of the African deep-mantle pile.",
     "East Australia": "A hotspot Australia has been sliding over for thirty million years, leaving the "
-     "longest continental volcanic track on Earth -- a line of dead volcanoes from "
+     "longest continental volcanic track on Earth \u2014 a line of dead volcanoes from "
      "Queensland to Victoria.",
     "Fernando de Noronha": "A small Atlantic plume off north-east Brazil, its islands the eroded necks of "
      "volcanoes that never grew large.",
@@ -2009,13 +2009,13 @@ EVENT_NOTES = {
     "Gannakouriep": "A dyke swarm in southern Africa of the same age as the Franklin eruptions in Arctic "
      "Canada, on the other side of a world about to freeze over.",
     "Gough": "The southern twin of the Tristan plume. The two built the Walvis Ridge together and "
-     "then separated into distinct chemical lineages -- evidence that a single plume can be "
+     "then separated into distinct chemical lineages \u2014 evidence that a single plume can be "
      "striped.",
     "Great Meteor": "One of the longest hotspot tracks on Earth, running from the Monteregian Hills of "
      "Quebec through the White Mountains and the New England Seamounts to a drowned volcano "
      "in the mid-Atlantic. North America slid clean over it.",
     "Hess Rise": "A mid-Cretaceous plateau on the Pacific floor, built while the ocean was making new "
-     "crust faster than at any time since. Its lavas erupted into air, not water -- it stood "
+     "crust faster than at any time since. Its lavas erupted into air, not water \u2014 it stood "
      "above the sea before it sank.",
     "Irkutsk LIP": "Magmatism on the southern edge of the Siberian craton, proposed as a continuation of "
      "the Franklin event and so as part of what tipped Earth into the Sturtian glaciation.",
@@ -2050,7 +2050,7 @@ EVENT_NOTES = {
     "Pitcairn": "A young Pacific plume whose islands are so isolated they were the last refuge of the "
      "Bounty mutineers.",
     "S. Kerguelen Plateau": "The main body of a drowned volcanic continent a third the size of Australia. Cores "
-     "drilled from it contain wood and coal -- it had forests before it sank.",
+     "drilled from it contain wood and coal \u2014 it had forests before it sank.",
     "Samoa": "A Pacific plume with an unusual twist: it sits beside the tearing corner of the Tonga "
      "trench, which pulls its magma sideways.",
     "Seiland Igneous Province": "A deep-crustal magmatic province in Arctic Norway, emplaced as the Iapetus Ocean began "
@@ -2067,7 +2067,7 @@ EVENT_NOTES = {
      "bearing kimberlites across Brazil before the continent carried on west and left it "
      "offshore.",
     "Volyn Flood Basalts": "Ediacaran flood basalts across what is now Ukraine, erupted as Baltica pulled away "
-     "from the rest of Rodinia -- and close in time to the first large, soft-bodied animals.",
+     "from the rest of Rodinia \u2014 and close in time to the first large, soft-bodied animals.",
     "Wichita / S. Oklahoma": "Cambrian rift volcanism and layered intrusions along a failed arm of the opening "
      "Iapetus. Buried for 300 million years, then shoved back into daylight as the Wichita "
      "Mountains when Pangaea assembled.",
@@ -2078,7 +2078,7 @@ EVENT_NOTES = {
     # ---- notes for the craters added by the audit ----
     "Alhama de Almeria": "Confirmed only in 2023, and buried: a small Miocene crater in southern Spain whose "
      "22 km footprint is mostly collapsed ground around a true crater a quarter that size.",
-    "Amelia Creek": "A crater in the Northern Territory with no crater shape left -- it is recognised "
+    "Amelia Creek": "A crater in the Northern Territory with no crater shape left \u2014 it is recognised "
      "entirely from shatter cones and sheared rock. Its age could be anywhere in a "
      "billion-year window.",
     "Ames": "Buried nearly three kilometres deep in Oklahoma, and productive: oil accumulated in "
@@ -2094,12 +2094,12 @@ EVENT_NOTES = {
      "Glaciation cleaned it out rather than erasing it, leaving one of the sharpest crater "
      "outlines visible from orbit.",
     "Dellen": "Two lakes in Sweden filling a Cretaceous crater. Long thought to be 89 million years "
-     "old, it was redated to 141 -- one of the larger single-crater corrections in the "
+     "old, it was redated to 141 \u2014 one of the larger single-crater corrections in the "
      "catalogue.",
     "Eagle Butte": "A crater buried without trace under southern Alberta, mapped only by seismic surveys "
      "and drilling.",
     "El'gygytgyn": "An almost perfectly circular lake in Chukotka. Because it has never been glaciated, "
-     "its sediments hold an unbroken 3.6-million-year record of Arctic climate -- the "
+     "its sediments hold an unbroken 3.6-million-year record of Arctic climate \u2014 the "
      "longest that exists on land.",
     "Glikson": "A crater in the Little Sandy Desert defined mostly by a ring-shaped magnetic "
      "anomaly. Named for Andrew Glikson, who spent a career arguing that Australia was "
@@ -2107,14 +2107,14 @@ EVENT_NOTES = {
     "Gweni-Fada": "A ring of hills on Chad's Ennedi Plateau. The Sahara's hyperaridity has kept a "
      "crater of roughly Devonian age legible as surface topography, which almost nowhere "
      "else on Earth manages.",
-    "Janisjarvi": "A Karelian lake filling a crater 687 million years old -- the oldest impact "
+    "Janisjarvi": "A Karelian lake filling a crater 687 million years old \u2014 the oldest impact "
      "structure on Earth that still holds a lake.",
     "Kaluga": "A Devonian crater buried under central Russia, known only from boreholes.",
     "Karla": "A small, buried crater on the Russian platform, a few million years old.",
     "Lawn Hill": "A ring of dolomite hills in Queensland marking a mid-Ordovician impact. The crater "
      "is gone; the shatter cones and impact diamonds are not.",
     "Lockne": "A Swedish crater formed on a shallow Ordovician sea floor, which is why its resurge "
-     "deposits -- the sediment that washed back in -- are the best preserved anywhere. It "
+     "deposits \u2014 the sediment that washed back in \u2014 are the best preserved anywhere. It "
      "belongs to the Ordovician meteorite shower that followed the break-up of the "
      "L-chondrite parent body.",
     "Logancha": "A Siberian crater punched through the Siberian Traps themselves, so its target rock "
@@ -2144,17 +2144,17 @@ EVENT_NOTES = {
      "central uplift ring is about as clean a textbook example as exists.",
     "Shoemaker": "Concentric rings of salt lakes in the Western Australian desert, named for Gene "
      "Shoemaker, who did more than anyone to establish that craters like this exist. Its "
-     "age is bracketed only between 1300 and 568 million years -- it may not even belong "
+     "age is bracketed only between 1300 and 568 million years \u2014 it may not even belong "
      "in this timeline.",
     "Sierra Madera": "The central uplift of a West Texas crater, standing as a cluster of hills on "
      "otherwise flat plains. Erosion has cut so deep that the crater floor is gone and the "
      "plumbing beneath it is exposed.",
     "Spider": "Named for the radiating ridges of shatter-coned sandstone that spread from its "
-     "centre across the Kimberley -- the legs are visible from the air after something "
+     "centre across the Kimberley \u2014 the legs are visible from the air after something "
      "like 700 million years.",
     "Talundilly": "A buried structure in Queensland, 84 km across, sitting 300 km from Tookoonooka and "
      "apparently the same age. If both are impacts they are the largest known doublet on "
-     "Earth -- but Talundilly has only ever been seen in seismic data, never drilled, so "
+     "Earth \u2014 but Talundilly has only ever been seen in seismic data, never drilled, so "
      "it remains unproven.",
     "Ternovka": "A Permian crater in Ukraine visible only inside the Krivoy Rog iron-ore pits, where "
      "mining has cut through the buried structure.",
@@ -2168,13 +2168,13 @@ EVENT_NOTES = {
      "used as a field-teaching site. Its age is bracketed only between 323 and 100 million "
      "years.",
     "Woodleigh": "A crater buried under the Carnarvon Basin east of Shark Bay, known only from "
-     "drilling into its central uplift. Its age is genuinely unknown -- the only "
-     "radiometric date is on authigenic clay and was formally disputed -- so the "
+     "drilling into its central uplift. Its age is genuinely unknown \u2014 the only "
+     "radiometric date is on authigenic clay and was formally disputed \u2014 so the "
      "stratigraphy permits anything from the Devonian to the Proterozoic.",
     "Yallalie": "Australia's first confirmed Late Cretaceous impact, buried under the Perth Basin and "
      "betrayed only by shocked quartz in its breccia.",
     "Zhamanshin": "The youngest crater of its size on Earth, in Kazakhstan, and the source of "
-     "irghizites -- glass droplets thrown from the impact and still lying loose on the "
+     "irghizites \u2014 glass droplets thrown from the impact and still lying loose on the "
      "surface.",
 }
 
@@ -2206,7 +2206,7 @@ PHASES = {
              "interior lies thousands of kilometres from any coast: no rain reaches it, and the "
              "heart of the continent becomes one of the driest landscapes Earth has known."),
   (230, 260, "Past the great dying. The end-Permian extinction has stripped the supercontinent of "
-             "its forests -- there is no coal anywhere on Earth for the next ten million years -- "
+             "its forests \u2014 there is no coal anywhere on Earth for the next ten million years \u2014 "
              "and a megamonsoon drives violent seasonal rain against a still-desert interior."),
   (175, 230, "Beginning to fail. Rift valleys are tearing along the line where North America meets "
              "Africa, filling with lakes and flood basalt, and the Atlantic is about to open along "
@@ -2229,12 +2229,12 @@ PHASES = {
  ],
 
  "Rodinia": [
-  (900, 1000, "Assembling around a Laurentian core along the Grenville belts -- a mountain chain of "
+  (900, 1000, "Assembling around a Laurentian core along the Grenville belts \u2014 a mountain chain of "
               "Himalayan scale running through what is now eastern Canada and Scandinavia."),
   (800, 900, "Fully assembled and geologically quiet. Life is entirely microbial; stromatolite "
              "reefs line the shelves and the land is bare rock."),
   (700, 800, "Rifting apart. Dyke swarms are tearing the interior open, and the weathering of all "
-             "that fresh basalt in the tropics is drawing carbon out of the air -- one of the "
+             "that fresh basalt in the tropics is drawing carbon out of the air \u2014 one of the "
              "leading explanations for the Snowball Earth that follows."),
  ],
 
@@ -2247,7 +2247,7 @@ PHASES = {
   (260, 330, "The Alleghanian climax. Gondwana is driving into Laurussia and this chain rivals the "
              "modern Himalaya, standing at the centre of Pangaea with rivers draining off it into "
              "coal swamps on both flanks."),
-  (150, 260, "Dying back. The collision is over and the range is unloading -- erosion strips it "
+  (150, 260, "Dying back. The collision is over and the range is unloading \u2014 erosion strips it "
              "kilometres deep and the crust rebounds beneath, exposing the metamorphic roots that "
              "form the modern crest."),
   (0, 150, "A worn root, not a mountain range. What stands today is the eroded core of a chain that "
@@ -2256,14 +2256,14 @@ PHASES = {
  ],
 
  "Atlantic Ocean": [
-  (140, 175, "Not yet an ocean -- a chain of rift valleys and lakes along the failing seam of "
+  (140, 175, "Not yet an ocean \u2014 a chain of rift valleys and lakes along the failing seam of "
              "Pangaea, flooded episodically by seawater and repeatedly evaporating to salt."),
   (90, 140, "Opening in two halves. The central Atlantic is a narrow seaway while the South "
             "Atlantic is still a lake-filled rift between Brazil and Namibia; they will not link "
             "into one ocean until the mid-Cretaceous."),
   (30, 90, "A true ocean, widening steadily, with the Mid-Atlantic Ridge running its full length "
            "and no subduction zone anywhere to consume it."),
-  (0, 30, "Still widening a few centimetres a year -- but the first subduction zones have appeared "
+  (0, 30, "Still widening a few centimetres a year \u2014 but the first subduction zones have appeared "
           "at its margins, in the Lesser Antilles and the Scotia arc, which is how ocean basins "
           "begin to die."),
  ],
@@ -2271,8 +2271,8 @@ PHASES = {
  "Pacific Ocean": [
   (100, 160, "The vast remnant of Panthalassa, floored by crust that is being consumed at every "
              "margin faster than its ridges can replace it."),
-  (40, 100, "Shrinking. Subduction rings the entire basin, and the plateaus riding on its floor -- "
-            "Ontong Java, Shatsky, Hess -- are too buoyant to sink and are jamming the trenches."),
+  (40, 100, "Shrinking. Subduction rings the entire basin, and the plateaus riding on its floor \u2014 "
+            "Ontong Java, Shatsky, Hess \u2014 are too buoyant to sink and are jamming the trenches."),
   (0, 40, "The oldest and largest surviving ocean, and the only one that is closing. Almost none of "
           "its original Panthalassic floor is left; the oldest crust in it is Jurassic."),
  ],
@@ -2281,10 +2281,10 @@ PHASES = {
   (90, 130, "Still attached to Gondwana's eastern flank, with Madagascar alongside and the "
             "Kerguelen plume erupting the Rajmahal basalts along its edge."),
   (66, 90, "An island continent alone in the Tethys, drifting north faster than any landmass known "
-           "-- its flora and fauna evolving in isolation for tens of millions of years."),
+           "\u2014 its flora and fauna evolving in isolation for tens of millions of years."),
   (50, 66, "Passing over the Reunion plume. The Deccan Traps erupt across the subcontinent within "
            "a few hundred thousand years of the Chicxulub impact."),
-  (0, 50, "Colliding with Asia and refusing to subduct -- continental crust is too buoyant, so it "
+  (0, 50, "Colliding with Asia and refusing to subduct \u2014 continental crust is too buoyant, so it "
           "crumples instead, raising the Himalaya and the Tibetan Plateau and slowing from a sprint "
           "to a crawl."),
  ],
@@ -2292,7 +2292,7 @@ PHASES = {
  "Iapetus Ocean": [
   (520, 600, "Newly opened, as Rodinia's fragments separate and rift volcanism floods the margins "
              "of Laurentia and Baltica."),
-  (460, 520, "At its widest -- thousands of kilometres of open ocean, with distinct faunas on either "
+  (460, 520, "At its widest \u2014 thousands of kilometres of open ocean, with distinct faunas on either "
              "shore that would later be the evidence the ocean had ever existed."),
   (420, 460, "Closing fast. Island arcs are colliding with both margins, and the trilobite faunas "
              "of the two shores are beginning to mix."),
@@ -2313,14 +2313,14 @@ PHASES = {
  "Panthalassa": [
   (250, 320, "The world-ocean, wrapped around Pangaea and covering more of the planet than all "
              "modern oceans combined. Its interior is so far from any shore that almost nothing is "
-             "known of it -- the crust that floored it has been entirely subducted."),
+             "known of it \u2014 the crust that floored it has been entirely subducted."),
   (160, 250, "Still the dominant ocean, but Pangaea is splitting and new basins are opening inside "
              "the land it once surrounded. The Pacific is what will be left of it."),
  ],
 
  "Himalaya": [
   (35, 55, "The first contact. India's leading edge has met the Asian margin and the Tethys is "
-           "shutting, but the range is still low -- marine sediments are only beginning to be "
+           "shutting, but the range is still low \u2014 marine sediments are only beginning to be "
            "thrust up."),
   (10, 35, "Rising hard. The crust doubles in thickness, the Tibetan Plateau lifts behind the "
            "front, and the monsoon strengthens as the barrier grows."),
@@ -2330,7 +2330,7 @@ PHASES = {
 
  "Antarctica": [
   (100, 160, "Attached to Australia and South America, forested and ice-free despite sitting near "
-             "the pole -- southern beech and conifers grow through months of winter darkness."),
+             "the pole \u2014 southern beech and conifers grow through months of winter darkness."),
   (35, 100, "Isolating. South America and Australia are pulling clear, and the gaps that open "
             "between them will let a current circle the continent for the first time."),
   (0, 35, "Refrigerated. The Antarctic Circumpolar Current has thermally sealed the continent off "
@@ -2343,7 +2343,7 @@ PHASES = {
              "and India and Madagascar to the east."),
   (30, 100, "Drifting north and nearly ringed by spreading ridges, so it moves slowly. Its northern "
             "margin is beginning to close the Tethys against Europe."),
-  (0, 30, "Colliding with Europe -- the Alps and Atlas are the result -- while the East African Rift "
+  (0, 30, "Colliding with Europe \u2014 the Alps and Atlas are the result \u2014 while the East African Rift "
           "tears the continent's own eastern flank away along a line of volcanoes and lakes."),
  ],
 
@@ -2363,14 +2363,14 @@ PHASES = {
   (50, 150, "Assembling by collision. The Cimmerian terranes dock, the Turgai Strait floods the "
             "join between Europe and Asia, and the Verkhoyansk belt rises in the far east."),
   (0, 50, "The largest continental plate, still being built along its southern rim as India, "
-          "Arabia and Africa drive into it -- the Himalaya, Zagros and Alps are all one collision "
+          "Arabia and Africa drive into it \u2014 the Himalaya, Zagros and Alps are all one collision "
           "front."),
  ],
 
  "Western Interior Seaway": [
   (90, 95, "Opening. Arctic and Gulf waters have met across the continent for the first time, "
            "flooding the foreland basin behind the rising Sevier mountains."),
-  (82, 90, "At its widest -- a thousand kilometres of shallow sea splitting North America in two, "
+  (82, 90, "At its widest \u2014 a thousand kilometres of shallow sea splitting North America in two, "
            "warm, oxygen-poor at depth, and full of mosasaurs, plesiosaurs and giant fish."),
   (78, 82, "Withdrawing. Sea level is falling and the Laramide uplifts are rising through the "
            "seaway floor, breaking one ocean-to-ocean strait into shrinking embayments; the "
@@ -2380,7 +2380,7 @@ PHASES = {
 
  "Mediterranean": [
   (15, 28, "The last open remnant of Tethys, still connected to the Indian Ocean at its eastern "
-           "end -- but Arabia is closing that gate."),
+           "end \u2014 but Arabia is closing that gate."),
   (6, 15, "Cut off from Tethys and fed only through narrowing Atlantic gateways, with the "
           "Paratethys stranded behind the rising Alps."),
   (0, 6, "A basin that very nearly ceased to exist: when the Atlantic connection closed around six "
@@ -2389,7 +2389,7 @@ PHASES = {
  ],
 
  "Andes": [
-  (30, 60, "A volcanic arc along South America's western edge, but not yet high -- subduction is "
+  (30, 60, "A volcanic arc along South America's western edge, but not yet high \u2014 subduction is "
            "building magma, not much topography."),
   (0, 30, "Rising fast as the Nazca plate shallows beneath the continent, thickening the crust into "
           "the Altiplano and lifting a barrier high enough to redirect the Amazon eastward."),
@@ -2397,7 +2397,7 @@ PHASES = {
 
  "Rocky Mountains": [
   (40, 60, "Being built far inland from any plate margin, as the shallowly subducting Farallon slab "
-           "transmits compression hundreds of kilometres into the continent -- a mountain range "
+           "transmits compression hundreds of kilometres into the continent \u2014 a mountain range "
            "with no ocean beside it."),
   (0, 40, "Uplifted again by regional doming and then carved by Pleistocene glaciers into the "
           "cirques and horns that give the range its modern profile."),
@@ -2411,7 +2411,7 @@ PHASES = {
  ],
 
  "East Antarctic Ice Sheet": [
-  (14, 34, "Present but unstable -- the ice waxes and wanes with orbital cycles, and there are "
+  (14, 34, "Present but unstable \u2014 the ice waxes and wanes with orbital cycles, and there are "
            "still southern beech forests in the coastal valleys between glaciations."),
   (0, 14, "Permanent and thick. The ice sheet reaches its modern configuration, locking up enough "
           "water to hold global sea level roughly sixty metres below an ice-free world."),
@@ -2477,7 +2477,7 @@ VISIBLE_UNTIL = {
      "fill. Still thickened crust; no longer bathymetric relief. LOW CONFIDENCE on "
      "the date."),
  "Central Atlantic (CAMP)": (195,
-     "The key negative result, and the largest province by area (~11 million km2) "
+     "The key negative result, and the largest province by area (~11 million km\u00b2) "
      "with almost no topographic legacy at all. It was never a plateau: Newark Basin "
      "flows are sandwiched between lacustrine formations, buried by rift-basin "
      "subsidence within ~100,000 years of eruption; the Amazonian sills were "
@@ -2504,7 +2504,7 @@ VISIBLE_UNTIL = {
  "Dashigou (N. China)": (850,
      "A dyke swarm on the North China craton with no extrusive remnant."),
  "Deccan Traps": (0,
-     "About 500,000 km2 of the original ~1.5 million km2 survives - roughly a third "
+     "About 500,000 km2 of the original ~1.5 million km\u00b2 survives - roughly a third "
      "- still over 2 km thick, and its western edge IS the Western Ghats escarpment: "
      "900-1,500 m of relief running ~1,600 km, rising to Anamudi at 2,695 m."),
  "Emeishan Traps": (0,
@@ -2582,7 +2582,7 @@ VISIBLE_UNTIL = {
      "770,000 km2 with a crest at 2,500-3,000 m and crust 21-25 km thick; rifted "
      "from Ontong Java Nui."),
  "Maud Rise": (0,
-     "The Antarctic third of the same 1.2 million km2 plateau, whose relief still "
+     "The Antarctic third of the same 1.2 million km\u00b2 plateau, whose relief still "
      "steers the Weddell Gyre and opens the recurring Weddell Polynya."),
  "Mid-Pacific Mountains": (0,
      "A broad guyot-capped rise; the flat tops record subsidence from sea level, so "
@@ -2599,7 +2599,7 @@ VISIBLE_UNTIL = {
      "882 m, and Antrim ~3,086 km2. Iceland is new crust, not preserved 62 Ma "
      "plateau."),
  "Ontong Java Plateau": (0,
-     "Still the largest and thickest oceanic plateau on Earth: 1.5-1.86 million km2, "
+     "Still the largest and thickest oceanic plateau on Earth: 1.5-1.86 million km\u00b2, "
      "crust 33 km, crest ~1,700 m against a 4,500-5,000 m abyssal floor. Draw it "
      "WHOLE - over 90 percent is intact. It did not subduct; it jammed the Vitiaz "
      "trench and forced a subduction polarity reversal, with only the SW margin "
@@ -2619,7 +2619,7 @@ VISIBLE_UNTIL = {
      "- about 2 percent visible. Killed by burial, not erosion: the rock is fine, "
      "the landform is gone."),
  "S. Kerguelen Plateau": (0,
-     "The main body of a 1.23 million km2 edifice rising 2,000 m above the "
+     "The main body of a 1.23 million km\u00b2 edifice rising 2,000 m above the "
      "surrounding basins. Note it was LAND: ODP recovered fossil wood, charcoal- "
      "bearing soils and river-transported clasts, and at its peak this was an island "
      "of ~500,000 km2 with peaks 1,000-2,000 m above sea level. Final drowning ~20 "
@@ -2756,20 +2756,20 @@ SCAR_LIFE = {
  "Aorounga": (345, "STILL. Concentric rings striped by wind-carved yardangs in the Sahara; a classic "
   "Landsat and SIR-C image. Hyperaridity has preserved a Devonian crater as surface "
   "topography."),
- "Araguainha": (150, "STILL, in fact -- a well-exposed granite central uplift with concentric ring "
+ "Araguainha": (150, "STILL, in fact \u2014 a well-exposed granite central uplift with concentric ring "
   "valleys, obvious from orbit after 255 Myr. South America's largest."),
  "Beaverhead": (30, "TOPOGRAPHY ENTIRELY GONE. Tectonically dismembered by Cordilleran thrusting; there "
   "is no crater form left anywhere. It is known almost solely from a huge shatter-cone "
-  "field smeared across thrust sheets, and even its centre is inferred -- published "
+  "field smeared across thrust sheets, and even its centre is inferred \u2014 published "
   "positions disagree by over a degree."),
- "Boltysh": (5, "Buried under sediment -- which is precisely why its crater-lake record survived "
+ "Boltysh": (5, "Buried under sediment \u2014 which is precisely why its crater-lake record survived "
   "intact enough to log a hyperthermal."),
  "Carswell": (150, "Survives as an exposed ring of Carswell Formation dolomite. Notable for a practical "
   "reason: impact-remobilised uranium ore hosts the Cluff Lake mine."),
- "Cerro do Jarau": (125, "STILL. A central elevated core rising out of the flat Pampas -- highly legible from "
+ "Cerro do Jarau": (125, "STILL. A central elevated core rising out of the flat Pampas \u2014 highly legible from "
   "orbit."),
  "Charlevoix": (200, "Partially survives as the semicircular St Lawrence embayment, with Mont des "
-  "Eboulements as the central uplift. Still a seismically active zone -- the weakened "
+  "Eboulements as the central uplift. Still a seismically active zone \u2014 the weakened "
   "rock localises modern earthquakes 450 Myr later."),
  "Chesapeake Bay": (5, "Buried under 300-500 m of Coastal Plain sediment. But it never stopped MATTERING: it "
   "still steers the modern bay, drives a groundwater salinity anomaly and causes "
@@ -2777,11 +2777,11 @@ SCAR_LIFE = {
  "Chicxulub": (2, "BURIED ALMOST IMMEDIATELY. A submarine crater on the Yucatan carbonate shelf, "
   "blanketed within a couple of million years and now under ~1 km of carbonate. It is "
   "traced only by a gravity anomaly and the ring of cenotes. Rendering it as a visible "
-  "scar for 90 Myr is the layer's biggest persistence error -- although its GLOBAL "
+  "scar for 90 Myr is the layer's biggest persistence error \u2014 although its GLOBAL "
   "signature (see GLOBAL_EFFECT) is permanent, which is the opposite lesson."),
  "Cleanskin": (30, "~15 km apparent structure with a 6 km central uplift; confirmed on PDFs, planar "
   "fractures and feather features in quartz rather than on any surviving landform."),
- "Clearwater East": (465, "STILL. Lake-filled after 465 Myr -- remarkable persistence, again thanks to glacial "
+ "Clearwater East": (465, "STILL. Lake-filled after 465 Myr \u2014 remarkable persistence, again thanks to glacial "
   "excavation of the weakened rock."),
  "Clearwater West": (286, "STILL. A lake with a central ring of melt-rock islands. Glacial scour sharpened "
   "rather than erased it."),
@@ -2796,12 +2796,12 @@ SCAR_LIFE = {
   "orbital image after 142 Myr."),
  "Gweni-Fada": (345, "STILL. A clear annular ridge on the Ennedi Plateau, preserved by Saharan "
   "hyperaridity."),
- "Haughton": (31, "STILL. Superbly preserved in polar desert on Devon Island -- so well preserved that "
+ "Haughton": (31, "STILL. Superbly preserved in polar desert on Devon Island \u2014 so well preserved that "
   "NASA runs the Haughton-Mars Project and the Flashline Mars station inside it."),
  "Hiawatha": (58, "A special case: superbly preserved BENEATH ~930 m of the Greenland Ice Sheet. It was "
   "a surface feature in a rainforest landscape for tens of Myr, then sealed by ice "
   "rather than eroded. The only known subglacial crater."),
- "Janisjarvi": (687, "STILL. A lake-filled basin in Karelia after 687 Myr -- the oldest crater on Earth "
+ "Janisjarvi": (687, "STILL. A lake-filled basin in Karelia after 687 Myr \u2014 the oldest crater on Earth "
   "still holding a lake."),
  "Kaluga": (10, "Buried under Devonian-Carboniferous cover; known from boreholes."),
  "Kamensk": (10, "Buried under Neogene cover."),
@@ -2817,9 +2817,9 @@ SCAR_LIFE = {
   "are exceptionally well preserved."),
  "Logancha": (20, "Exposed but heavily eroded on the Siberian Traps."),
  "Logoisk": (5, "Entirely buried in Belarus; found by drilling in the 1970s."),
- "Luizi": (550, "STILL. The rim stands 300-350 m above the interior on the Kundelungu Plateau -- "
+ "Luizi": (550, "STILL. The rim stands 300-350 m above the interior on the Kundelungu Plateau \u2014 "
   "clearly visible in satellite imagery."),
- "Manicouagan": (215, "STILL. The 'Eye of Quebec' -- an annular reservoir ring around Ile Rene-Levasseur. "
+ "Manicouagan": (215, "STILL. The 'Eye of Quebec' \u2014 an annular reservoir ring around Ile Rene-Levasseur. "
   "215 Myr old and the most recognisable crater on Earth from orbit. Proof that a large "
   "crater in stable Grenvillian basement can outlast the fade window by a factor of "
   "two."),
@@ -2832,10 +2832,10 @@ SCAR_LIFE = {
   "seismic and drilling."),
  "Montagnais": (3, "Submarine on the Scotian Shelf; buried beneath the seafloor and found only by "
   "petroleum drilling."),
- "Morokweng": (15, "Completely buried beneath Kalahari sand. Found by its magnetic signature -- "
+ "Morokweng": (15, "Completely buried beneath Kalahari sand. Found by its magnetic signature \u2014 "
   "literally invisible."),
  "Neugrund": (30, "Submarine in the Gulf of Finland; the ejecta layer is better known than the crater."),
- "Nicholson": (50, "An island-studded lake in the NWT, but heavily glacially scoured -- the crater form "
+ "Nicholson": (50, "An island-studded lake in the NWT, but heavily glacially scoured \u2014 the crater form "
   "is largely gone."),
  "Oasis": (120, "STILL. An ~11.5 km central ring of hills in the Libyan desert."),
  "Obolon": (10, "Buried beneath Dnieper-Donets sediments; no surface expression."),
@@ -2855,12 +2855,12 @@ SCAR_LIFE = {
  "Serra da Cangalha": (250, "STILL. Excellent exposure and a prominent central uplift ring in near-undeformed "
   "Parnaiba Basin sediments."),
  "Shoemaker": (200, "STILL, oddly. Concentric ring synclines with salt lakes, strikingly visible from "
-  "orbit despite an age that may exceed a billion years -- Australian cratonic aridity "
+  "orbit despite an age that may exceed a billion years \u2014 Australian cratonic aridity "
   "at its most extreme."),
  "Sierra Madera": (100, "STILL. The central uplift stands out as hills on the West Texas plains, though the "
   "crater is deeply eroded."),
  "Siljan": (380.9, "STILL, partially. Sweden's ring of lakes traces the rim depression around the "
-  "central uplift after 380 Myr -- the crater floor was eroded away but the ring of "
+  "central uplift after 380 Myr \u2014 the crater floor was eroded away but the ring of "
   "softer downfaulted sediment survives as topography."),
  "Slate Islands": (100, "Only the central uplift survives, emerging as an archipelago in Lake Superior. The "
   "rest is drowned and eroded. The islands' rocks are full of shatter cones."),
@@ -2872,7 +2872,7 @@ SCAR_LIFE = {
  "Talundilly": (10, "Same burial history as its neighbour Tookoonooka; seismic-only, never drilled."),
  "Ternovka": (5, "Buried; exposed only inside the Krivoy Rog iron-ore open pits and mine workings."),
  "Tookoonooka": (10, "Buried under ~900 m of Eromanga Basin sediment. Known from seismic plus 31 petroleum "
-  "wells -- there is no surface expression at all."),
+  "wells \u2014 there is no surface expression at all."),
  "Tunnunik": (50, "Deeply eroded on Victoria Island with no topographic rim; recognised in 2010 only "
   "from shatter-coned bedrock and ring-disturbed strata visible from the air."),
  "Uhackatik": (150, "The reason it was found at all: a ring-shaped basin with 200-300 m rim-to-floor "
@@ -2902,7 +2902,7 @@ GLOBAL_EFFECT = {
   "EVENT_NOTES entry already states this correctly and should be kept.",
  "Boltysh": "Not a cause but a RECORDER, and a valuable one. It struck ~0.65 Myr AFTER the K-Pg "
   "extinction, and its crater-lake sediments log the Lower C29n (Dan-C2) hyperthermal "
-  "in fine detail -- a direct archive of how the post-extinction world was recovering, "
+  "in fine detail \u2014 a direct archive of how the post-extinction world was recovering, "
   "and of a climate excursion that had nothing to do with the impact that made the "
   "lake. Pickersgill et al. (2021) raise the possibility that even a 24 km impact could "
   "perturb an already-stressed recovery.",
@@ -2910,7 +2910,7 @@ GLOBAL_EFFECT = {
   "horizon. Separately and unusually, it still exerts a physical influence today: it "
   "controls the shape of the modern Chesapeake Bay, drives a deep groundwater salinity "
   "anomaly across the lower Delmarva Peninsula, and causes measurable ongoing land "
-  "subsidence -- 35 Myr after the fact.",
+  "subsidence \u2014 35 Myr after the fact.",
  "Chicxulub": "The only unambiguous impact-driven mass extinction in the record. A worldwide ejecta "
   "and iridium layer at 66.052 +/- 0.043 Ma, sulphate aerosol loading from the "
   "anhydrite-rich target, an impact winter lasting years, and the end of the non-avian "
@@ -2918,40 +2918,40 @@ GLOBAL_EFFECT = {
   "found on every continent. If the app renders one thing that outlives its crater, it "
   "is this.",
  "El'gygytgyn": "No ejecta layer, but a globally important scientific consequence: the ICDP core "
-  "through its lake sediments yields a continuous 3.6 Myr record of Arctic climate -- "
+  "through its lake sediments yields a continuous 3.6 Myr record of Arctic climate \u2014 "
   "the longest terrestrial Arctic palaeoclimate archive that exists.",
  "Lockne": "One of the craters of the mid-Ordovician meteorite shower, the ~470 Ma spike in "
   "impact flux following the L-chondrite parent-body breakup. That event is recorded "
   "worldwide as fossil meteorites in Swedish and Chinese limestones and is the clearest "
   "evidence of a sustained, non-random change in Earth's impact rate. Ames, Clearwater "
   "East, Carswell, Tunnunik, Slate Islands and possibly Charlevoix all fall in or near "
-  "this window -- if the app can cluster events, this Ordovician spike is the one worth "
+  "this window \u2014 if the app can cluster events, this Ordovician spike is the one worth "
   "showing.",
  "Manicouagan": "A candidate source for a Late Triassic (Rhaetian/Norian) distal spherule bed "
   "reported from the Bristol Channel, UK (Walkden et al. 2002). The correlation is "
   "reasonable but not as tight as the Chicxulub or Popigai cases, and Manicouagan is "
-  "NOT a mass-extinction trigger -- it predates the end-Triassic event by ~14 Myr.",
+  "NOT a mass-extinction trigger \u2014 it predates the end-Triassic event by ~14 Myr.",
  "Mjolnir": "Impact into the shallow Jurassic-Cretaceous Barents seaway generated a documented "
   "resurge and tsunami signature in the surrounding basin, and an iridium anomaly is "
   "reported in the Volgian nearby. A claimed correlative tsunami deposit in Sweden is "
-  "speculative. Regional, not global -- the existing EVENT_NOTES wording ('triggered a "
+  "speculative. Regional, not global \u2014 the existing EVENT_NOTES wording ('triggered a "
   "tsunami across the shallow Jurassic seaway') is appropriately scoped.",
  "Neugrund": "Its ejecta layer, sitting in the pre-trilobite Platysolenites antiquissimus biozone "
-  "of the Baltic Early Cambrian, is better known and more useful than the crater -- it "
+  "of the Baltic Early Cambrian, is better known and more useful than the crater \u2014 it "
   "is the sole basis for the ~535 Ma age.",
  "Pantasma": "Probable source of the Belize impact glass (0.769 +/- 0.016 Ma). Schmieder & Kring "
   "list the source crater as unknown with Pantasma as the candidate, so state this as "
   "likely rather than established.",
  "Popigai": "Source of the older late Eocene clinopyroxene-bearing spherule layer, geochemically "
   "tied to the crater (Whitehead et al. 2000, EPSL). A global stratigraphic marker. "
-  "Note this is a DIFFERENT layer from the North American tektites -- Popigai and "
+  "Note this is a DIFFERENT layer from the North American tektites \u2014 Popigai and "
   "Chesapeake Bay are separated by at least ~0.5 and possibly ~3 Myr, so the late "
   "Eocene 'cluster' is a sequence, not a pair.",
- "Ries": "Threw moldavite tektites across central Europe -- a regional strewn field several "
-  "hundred km east of the crater -- at 14.808 +/- 0.038 Ma.",
+ "Ries": "Threw moldavite tektites across central Europe \u2014 a regional strewn field several "
+  "hundred km east of the crater \u2014 at 14.808 +/- 0.038 Ma.",
  "Tookoonooka": "A distal ejecta blanket across roughly 400,000 km2 of the Eromanga Basin, pinned to "
   "the Barremian/Aptian boundary. The ejecta is the only reason the age is known at all "
-  "-- the crater itself is undated. Impact into a shallow epicontinental sea, so there "
+  "\u2014 the crater itself is undated. Impact into a shallow epicontinental sea, so there "
   "is a resurge and tsunami signature too.",
 }
 
@@ -2962,7 +2962,7 @@ GLOBAL_EFFECT = {
 # formally disputed -- so the app can show those differently rather than
 # presenting them with the same authority as a U-Pb age.
 IMPACT_CONFIDENCE = {
- "Acraman": ("moderate", "~580 Ma; Impact Earth brackets 541-635 Ma. Age is INDIRECT -- from the Bunyeroo Fm "
+ "Acraman": ("moderate", "~580 Ma; Impact Earth brackets 541-635 Ma. Age is INDIRECT \u2014 from the Bunyeroo Fm "
   "ejecta horizon, not the crater"),
  "Alhama de Almeria": ("moderate", "~8 Ma, Late Tortonian. Confirmed only in 2023 on a single paper (Sanchez Gomez et "
   "al.); the 22 km is exterior collapse terrain, the true crater is ~5 km"),
@@ -2992,7 +2992,7 @@ IMPACT_CONFIDENCE = {
  "Glikson": ("poor", "<513 Ma maximum age only, from Neoproterozoic-Cambrian cover"),
  "Gosses Bluff": ("precise", "142.5 +/- 0.8 Ma (Ar-Ar, Milton & Sutter 1987), corroborated by U-Pb zircon 139 +/- "
   "4 Ma. NOTE: the '165-383 Ma' on Wikipedia's global list is a TARGET-ROCK bracket "
-  "that leaked into the age column -- it is an error"),
+  "that leaked into the age column \u2014 it is an error"),
  "Gweni-Fada": ("poor", "<=383 Ma maximum age only (Devonian-Carboniferous target)"),
  "Haughton": ("precise", "31.04 +/- 0.37 Ma (Ar-Ar shocked K-feldspar, Erickson et al. 2021)"),
  "Hiawatha": ("precise", "57.99 +/- 0.54 Ma (Ar-Ar + U-Pb, Kenny et al. 2022)"),
@@ -3012,14 +3012,14 @@ IMPACT_CONFIDENCE = {
  "Logoisk": ("precise", "29.71 +/- 0.48 Ma (Ar-Ar, Sherlock et al. 2009). The 42.3 +/- 1.1 Ma still on "
   "Wikipedia is the superseded pre-2006 EID value"),
  "Luizi": ("poor", "<=573 Ma maximum age only (post-Neoproterozoic Kundelungu Group)"),
- "Manicouagan": ("precise", "215.56 +/- 0.05 Ma (U-Pb zircon) -- among the best-dated craters on Earth"),
- "Manson": ("precise", "75.9 +/- 0.1 Ma (Ar-Ar) -- one of the tightest in the catalogue"),
+ "Manicouagan": ("precise", "215.56 +/- 0.05 Ma (U-Pb zircon) \u2014 among the best-dated craters on Earth"),
+ "Manson": ("precise", "75.9 +/- 0.1 Ma (Ar-Ar) \u2014 one of the tightest in the catalogue"),
  "Marquez": ("moderate", "58.3 +/- 3.1 Ma (~5%)"),
  "Mistastin": ("precise", "37.91 +/- 0.05 Ma (Ar-Ar)"),
  "Mjolnir": ("moderate", "142 +/- 2.6 Ma; Impact Earth brackets 141-145 Ma"),
  "Montagnais": ("moderate", "51.1 +/- 1.6 Ma (~3%)"),
  "Morokweng": ("precise", "146.06 +/- 0.16 Ma (U-Pb); sits on the Jurassic-Cretaceous boundary"),
- "Neugrund": ("moderate", "~535 Ma, Early Cambrian, BIOSTRATIGRAPHIC only -- ejecta sits in the pre-trilobite "
+ "Neugrund": ("moderate", "~535 Ma, Early Cambrian, BIOSTRATIGRAPHIC only \u2014 ejecta sits in the pre-trilobite "
   "Platysolenites antiquissimus biozone. No radiometric date. An older ~470 Ma estimate "
   "is superseded"),
  "Nicholson": ("precise", "387 +/- 5 Ma (~1.3%)"),
@@ -3028,7 +3028,7 @@ IMPACT_CONFIDENCE = {
  "Pantasma": ("precise", "0.804 +/- 0.009 Ma (Ar-Ar)"),
  "Popigai": ("precise", "35.7 +/- 0.2 Ma (Bottomley et al. 1997); 36.63 +/- 0.92 Ma recalculated by S&K 2020"),
  "Puchezh-Katunki": ("precise", "195.9 +/- 1.0 Ma (Holm-Alwmark et al. 2019)"),
- "Ries": ("precise", "14.808 +/- 0.038 Ma -- the single most precisely dated impact structure on Earth"),
+ "Ries": ("precise", "14.808 +/- 0.038 Ma \u2014 the single most precisely dated impact structure on Earth"),
  "Rochechouart": ("precise", "206.92 +/- 0.32 Ma (Ar-Ar)"),
  "Saint Martin": ("precise", "227.8 +/- 0.9 Ma (Ar-Ar)"),
  "Saqqar": ("poor", "70-410 Ma stratigraphic bracket only. A 340 Myr window"),
@@ -3045,7 +3045,7 @@ IMPACT_CONFIDENCE = {
  "Steen River": ("poor", "Three live candidates: ~91, ~132 +/- 1.3, ~141 Ma. S&K bracket ~383-108 Ma. Impact "
   "Earth: 108-383 Ma"),
  "Strangways": ("poor", "657 +/- 43 Ma (~6.5%)"),
- "Talundilly": ("poor", "~125 Ma inferred by correlation with Tookoonooka. STRUCTURE ITSELF IS UNCONFIRMED -- "
+ "Talundilly": ("poor", "~125 Ma inferred by correlation with Tookoonooka. STRUCTURE ITSELF IS UNCONFIRMED \u2014 "
   "seismic only, never drilled"),
  "Ternovka": ("moderate", "280 +/- 10 Ma (~3.5%)"),
  "Tookoonooka": ("moderate", "125 +/- 1 Ma, but a STRATIGRAPHIC tie to the Barremian/Aptian boundary, not a "

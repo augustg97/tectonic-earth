@@ -497,7 +497,7 @@ def sparse():
 # worth naming.
 MARINE_REGIONS = {
     "Panthalassa", "Panthalassic Ocean", "Panthalassic (proto)", "Iapetus Ocean",
-    "Rheic Ocean", "Tethys Ocean", "Paleo-Tethys", "Mirovia", "Pacific Ocean",
+    "Rheic Ocean", "Tethys Ocean", "Palaeo-Tethys", "Mirovia", "Pacific Ocean",
     "Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Arctic Ocean",
     "Mediterranean", "Mediterranean (closing)", "Western Interior Seaway",
     "Sauk Sea", "Zechstein Sea", "Turgai Strait", "Eromanga Sea", "Paratethys",
