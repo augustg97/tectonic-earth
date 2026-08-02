@@ -1444,3 +1444,22 @@ STANDING WORK for coming rounds: continue the per-formation literature review
 correcting cards AND, where the source describes present-day expression
 (plateau remnants, fjord coasts, peneplains), checking that the rendered ground
 agrees. DATA_V 20260801-2211.
+
+## Q — ITERATION 33, 2026-08-01: the literature review begins (batch 1)
+
+Ten orogen articles read against our own cards, with a reusable extractor
+(`scratchpad/lit_extract.py`: infobox rows + lead + the dating sentence, so a
+round can cover a dozen features without reading a dozen articles).
+CORRECTED: Transantarctic Mts (Ross-orogeny ROCK, but the range is a ~65 Ma
+rift-flank uplift), Urals (worn to 1,894 m; Laurussia met Siberia AND
+Kazakhstania), Atlas (only the High Atlas is Alpine; the Anti-Atlas is a
+re-lifted Palaeozoic belt), Variscan window 360 -> 380 Ma.
+CLEAN: Appalachians, Alps, Andes, Zagros, Tien Shan, Verkhoyansk.
+THE PATTERN WORTH NAMING, and the thing to hunt in later batches: three of
+four corrections are the same error -- a card that gives only the OROGENY
+implies the peaks have stood ever since, when a range's rocks and its relief
+routinely differ in age by hundreds of millions of years (the Caledonides
+correction in iteration 32 was the same shape). Next batches: the remaining
+~53 orogens, then cratons/shields, then seas and basins; and for features
+whose sources describe present-day expression, check the RENDER agrees, not
+only the prose. DATA_V 20260801-2245.
