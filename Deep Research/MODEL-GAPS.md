@@ -1463,3 +1463,38 @@ correction in iteration 32 was the same shape). Next batches: the remaining
 ~53 orogens, then cratons/shields, then seas and basins; and for features
 whose sources describe present-day expression, check the RENDER agrees, not
 only the prose. DATA_V 20260801-2245.
+
+## Q — ITERATION 34, 2026-08-01: the literature review, completed
+
+Sixty-seven features checked against their own sources across seven batches,
+screened by `scratchpad/lit_check.py` rather than read one by one: every age
+the article states is compared with the label's window, the summit elevation
+is pulled from the infobox, and a flag is raised where a card claims a range
+stands "today" without saying it has been worn. Only flagged lines were read.
+
+COVERAGE: 43 orogens; cratons and shields (Canadian, Fennoscandian, Guiana,
+Yilgarn, Kalahari, Brazilian); oceans and seas (Tethys, Paratethys,
+Panthalassa, Iapetus, Rheic, Western Interior Seaway); desert, rift, ice
+sheet, plateaus, basins, rainforests.
+
+CORRECTED (8 total, this iteration and 32-33): Caledonides, Transantarctic
+Mts, Urals, Atlas, Variscan window, Verkhoyansk, Massif Central, Rhodope,
+East African Orogen window. SEVEN of nine are the SAME error -- a card that
+names an orogeny implies its peaks still stand, when rocks and relief
+routinely differ in age by hundreds of millions of years. That pattern is now
+the review's first question, and it is worth carrying to any future feature
+text.
+
+CLEAN AND WORTH SAYING SO: all eight North American Palaeozoic belts, all
+eight Precambrian belts, every craton, every ocean and sea, the Sahara, the
+East African Rift, the Laurentide sheet, Deccan, Tibet, Colorado Plateau,
+Great Plains, Amazon, Congo. Verified non-gaps: the Siberian Traps are absent
+from labels.json BY DESIGN -- they are a large igneous province and live in
+the volcanism layer with peak 252 Ma (Deccan appears in both because it is
+also a plateau today).
+
+SCREEN LIMITS, recorded so a later reader does not trust it blindly: craton
+"windows" are DISPLAY ranges, not formation ages, so age comparison is
+meaningless for them; a range that is still rising may honestly claim to
+stand today (Zagros, Laurentide rebound), which the refined screen now
+allows. DATA_V 20260801-2306.
