@@ -716,9 +716,9 @@ LAKE_R = {
     "West Siberian Ice-Dammed Lake": 4.2, "Karoo Proglacial Lakes": 2.4,
     "Lake Lahontan": 1.2, "Lake Mega-Chad": 2.6, "Lake Pannon": 2.6,
     "Pebas Mega-Wetland": 3.2, "Songliao Palaeolake": 2.0, "Jehol Lakes": 1.6,
-    "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Malawi": "The southern deep of the East African Rift, filling a basin that has held water for some eight million years. Isolation that long turns a lake into an evolutionary laboratory: it carries more species of fish than any other lake on Earth, almost all of them cichlids and almost all found nowhere else.",
- "Aral Sea": "The easternmost survivor of the Paratethys, a shallow remnant stranded in the deserts of Central Asia when that inland ocean broke apart. It has no outlet, so it lives or dies by the two rivers that reach it.",
- "Lake Tanganyika": 0.9,
+    "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Malawi": 1.1,
+    "Aral Sea": 1.3,
+    "Lake Tanganyika": 0.9,
     "Lake Titicaca": 0.5, "Lake Vostok": 0.6, "Lake Gosiute": 1.0,
     "Lake Uinta": 0.9, "Fossil Lake": 0.4, "Messel Lake": 0.3,
     "Lago Mare (Messinian Mediterranean)": 3.5, "East African Rift soda lakes": 1.3,
@@ -1605,6 +1605,8 @@ DESCRIPTIONS = {
  "Lake Baikal": "The oldest and deepest lake on Earth, 1,642 metres down in a rift that is still "
   "opening at about two centimetres a year. It holds a fifth of the planet's unfrozen "
   "surface fresh water and a fauna -- including a freshwater seal -- found nowhere else.",
+ "Lake Malawi": "The southern deep of the East African Rift, filling a basin that has held water for some eight million years. Isolation that long turns a lake into an evolutionary laboratory: it carries more species of fish than any other lake on Earth, almost all of them cichlids and almost all found nowhere else.",
+ "Aral Sea": "The easternmost survivor of the Paratethys, a shallow remnant stranded in the deserts of Central Asia when that inland ocean broke apart. It has no outlet, so it lives or dies by the two rivers that reach it.",
  "Lake Tanganyika": "The second deepest lake in the world, filling a segment of the East African Rift. Its "
   "lower waters have not mixed with the surface in over a thousand years, and its cichlid "
   "fishes are a textbook case of explosive evolution in isolation.",
