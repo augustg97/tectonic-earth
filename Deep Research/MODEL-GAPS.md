@@ -1876,3 +1876,46 @@ Next: the mottling is worth suspecting first. The `edge = 4h(1-h)` jitter added
 to break the straight biome bands peaks exactly at h = 0.5, and much of the
 basin sits near that value — so the very term that fixed the bands may be what
 is dissolving the canopy.
+
+## Q — ITERATION 43, 2026-08-02: a wet interior recycles — and a correction to
+## iteration 42's headline number
+
+**CORRECTION FIRST. Iteration 42 reported the Congo's humidity index at a median
+of 0.184 against a forest requirement of ~0.5, and concluded the basin was being
+drawn from the dry branch. That number was wrong.** The greyscale probe writes
+`col = vec3(h)`, and everything written to `col` is then MULTIPLIED BY SHADE
+before it reaches the frame — so the probe was reading `h × shade`, not `h`. Over
+this frame shade is about 0.39, which is most of the apparent shortfall.
+
+The fix is to write a KNOWN CONSTANT into a spare channel and divide by it:
+`col = vec3(h0*0.9, h*0.9, 0.9)`, then `h = G/B` per pixel. With shade divided
+out, the true figures are **Congo median 0.64 (68% of pixels above the forest
+threshold), Amazon median 0.47 (48%)** — not a basin drawn from the dry branch
+at all. A probe that goes through the same pipeline as the picture inherits the
+pipeline's transforms; carry a reference through with it.
+
+**The named suspect was innocent.** Iteration 42 pointed at the `edge = 4h(1-h)`
+boundary jitter as the thing dissolving the canopy. Measured either side of it,
+the jitter RAISES the Congo's index (h0 median 0.48 -> h 0.64). It is not the
+problem. Recorded so the suspicion is not inherited by a later round.
+
+**What was real: the two wettest continental interiors on Earth were each being
+docked 12% for being continental.** Probed in the render, the Amazon and Congo
+both come out at continentality ~1.0, so both took the full `mix(1.10,0.88)`
+penalty. That term is right for central Asia and backwards here: what waters the
+far side of the Amazon is the near side's evapotranspiration, which is why the
+basin is still rainforest three thousand kilometres from the Atlantic. The
+penalty now fades out with local rainfall, the best available proxy for whether
+there is anything to recycle. Dry interiors keep it in full.
+
+Measured: forest fraction Congo 68% -> 74%, Amazon 48% -> 51%; rendered colour
+Congo (97,112,73) -> (86,105,68) with green-over-red +15.0 -> +19.1, Amazon
++3.7 -> +5.8. Central Asian steppe control unmoved. Small, but measured, in the
+right direction, and physically the correct statement.
+
+**Still open, and now clearly a FIELD problem rather than a shader one:** the
+Amazon's rainfall comes out at 0.194, the same as the Congo's 0.193, when the
+Amazon is in reality the wetter of the two (roughly 2,000-3,000 mm against
+1,600). Until the field says so, no amount of shader work will make that basin
+read as the solid dark block the reference shows. That is the next round, and it
+belongs with the G5 climate solve.
