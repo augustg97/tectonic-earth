@@ -1738,3 +1738,50 @@ interior deepened, which is the right direction for a megamonsoon supercontinent
 Still open on this front, for later rounds: the Congo does not read as the solid
 dark carpet GE shows, and the Rub al Khali, Taklamakan and Kazakh steppe are
 each one class too wet.
+
+## Q — ITERATION 40, 2026-08-02: G7, a treeline is an isotherm, and a band you
+## cannot see is not a band
+
+The bare-rock band was `clamp((zp-1700.0)/1500.0)` — **one absolute altitude for
+the whole planet**, ramped over 1.5 km. 1,700 m is alpine desert in Lapland and
+cloud forest in Ecuador, which is why every range read as one broad brown smear.
+
+**A treeline is not an altitude, it is an isotherm** — the same physics the ELA
+solve three lines below already models, with a different threshold. So it is
+derived the same way, from `T0` and the same 5.8 °C/km lapse. The threshold
+itself has to move with latitude: treeline sits near +3.5 °C mean-annual at the
+equator but BELOW freezing in the Alps, because a seasonal climate grows trees
+through a warm summer that a cold annual mean hides. `s2` (sin² lat), already in
+`T0`, is the seasonality proxy. Calibrated against real treelines: ~3,900 m
+equatorial Andes, ~1,750 m Alps, floor 600 m in Lapland.
+
+**Then the honest part: moving it changed almost nothing.** 3.1% of Himalayan
+pixels, 0.6% of Andean. A red-paint diagnostic proved the code ran and covered
+the whole range — so the band was in the right place and had always been. What
+was wrong was that **my rock colour sat almost exactly where the old one did**.
+A correctly-placed band drawn in the same grey as the wash it replaced is not a
+band. The reference does not show a range because the rock is grey; it shows it
+because pale scree and benches sit against near-black shadowed cliffs, and it is
+that SPREAD that reads from orbit.
+
+So the round became an appearance problem: ruggedness picks between scree and
+cliff, and bare rock takes light harder than anything with a canopy over it (no
+foliage to scatter between the faces), widened ONLY inside the band.
+
+**Overshot once, measured, pulled back.** At `0.40+1.22*hs`, weight 0.80, Tibet
+rendered as a black-and-white photocopy — image contrast 43.5 → 51.2. And a
+neutral grey turned the Tibetan Plateau grey, which it is not: it is warm tan,
+because the rock under it is. The bands now supply BRIGHTNESS structure only;
+the hue is divided out of the pixel's existing lithology and province colour and
+tinted back in, or every range on the planet ends up carved from the same stone.
+Final: contrast 43.5 → 46.0 with warmth (R−B) 12.4 → 12.9, i.e. more ridge
+definition at the original colour temperature.
+
+**Registered honestly: the Alps and Andes barely moved (3.3% and 4.8%).** Not
+because the zonation is wrong there but because in this model their terrain
+rarely clears the new treeline — at 46°N the treeline lands at ~1,745 m, within
+50 m of the old fixed 1,700, so the Alps were always going to be a null result.
+The Andes case is different and worth a later round: their treeline correctly
+ROSE to ~2,960 m, which should have un-greyed a kilometre of slope, and it moved
+almost nothing. That points at the elevation field, not the shader — the ranges
+themselves may be too low once smoothed to 10 km.

@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-1427';
+const DATA_V='20260802-1507';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -1903,6 +1903,7 @@ vec3 gMatAxis=vec3(0.0,0.0,1.0); float gMatAng=0.0;
    or the shading would report the fabric's own variation as terrain slope. */
 vec3 gFold=vec3(0.0); float gShort=0.0; float gHard=0.5;
 float gFore=0.0;   // metres of flexural deflection, positive = down
+float gAlp=0.0;    // bare-rock fraction above the treeline, set in the land colour block
 vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
   float c=cos(gMatAng), sn=sin(gMatAng);
@@ -3422,8 +3423,10 @@ void main(){
       float bf=pow(1.0-uVeg,0.5)*clamp(0.92+0.08*(1.0-h)+zp/9000.0,0.0,1.0);
       col=mix(col,barren,clamp(bf,0.0,1.0));
     }
-    float rock=clamp((zp-1700.0)/1500.0,0.0,1.0);
-    col=mix(col, mix(vec3(0.545,0.502,0.451), vec3(0.427,0.392,0.345), clamp((zp-2600.0)/1800.0,0.0,1.0)), rock*0.85);
+    /* (The bare-rock band used to live here, as clamp((zp-1700)/1500) -- one
+       absolute altitude for the whole planet, ramped over 1.5 km. It moved
+       below the ELA solve and became a TREELINE, because 1,700 m means alpine
+       desert in Norway and cloud forest in Ecuador. See ALPINE ZONATION. */
     /* Mountain glaciers from an equilibrium-line altitude, not a bare snowline.
        Temperature alone does not glaciate a range: a glacier needs snow to
        accumulate, so a cold DRY massif can stand ice-free while a warmer wet
@@ -3518,6 +3521,65 @@ void main(){
        smothered the arctic in the wide views. Zero-mean, edge-confined. */
     float snEdge=snow*(1.0-snow)*4.0;
     snow=clamp(snow+((fbm3(sdir*90.0+7.0)-0.5)*0.55+(vnoise3(sdir*260.0+3.0)-0.5)*0.35)*snEdge,0.0,1.0);
+    /* ALPINE ZONATION (G7). The references show every major range as three
+       narrow bands that follow the ridge: white, then bare grey rock, then dark
+       conifer, then ordinary forest. Ours had a single grey ramp keyed to an
+       ABSOLUTE altitude, so the same 1,700 m line ran through the Andes and
+       through Scandinavia and every range read as one broad brown smear.
+
+       A treeline is not an altitude, it is an ISOTHERM -- trees stop where the
+       growing season stops warming -- which is the same physics the ELA above
+       already solves, with a different threshold. So it is derived the same
+       way, off T0 and the same 5.8 C/km lapse.
+
+       The threshold itself moves with latitude, and it has to: treeline sits at
+       roughly +3.5 C mean-annual at the equator but BELOW freezing in the Alps,
+       because a seasonal climate can grow a tree through a warm summer that a
+       cold annual mean hides. s2 (sin^2 lat) is the seasonality proxy already
+       in T0 above. Calibrated against real treelines: ~3,900 m in the equatorial
+       Andes, ~2,000 m in the Alps, a few hundred metres in Lapland. */
+    float Ttree=3.5-7.0*s2;
+    float tline=clamp((T0-Ttree)/0.0058, 600.0, 5000.0);
+    /* Dry ranges push it DOWN (no moisture to grow trees at altitude), and
+       aspect, wind and avalanche move it a couple of hundred metres at a scale
+       no field here resolves -- the same argument, and the same remedy, as the
+       ELA's elaSub above. Without this the band is a drawn contour line. */
+    tline-=(1.0-clamp(Rf*2.4,0.0,1.0))*300.0;
+    tline+=(vnoise3(sdir*150.0+19.0)-0.5)*260.0+(fbm3(sdir*34.0+61.0)-0.5)*220.0;
+    /* SUBALPINE CONIFER: a dark, blue-green belt in the few hundred metres
+       below the treeline, and the reason a range reads as forested rather than
+       as a green wash running into grey. Gated on moisture so an arid massif
+       does not grow a forest it has no water for. */
+    float sub=clamp((zp-(tline-1100.0))/700.0,0.0,1.0)
+             *(1.0-clamp((zp-tline)/240.0,0.0,1.0));
+    col=mix(col, vec3(0.161,0.231,0.169)*(1.0+(fine*0.22+fine2*0.13)),
+            sub*0.72*clamp(moistw*2.2,0.0,1.0));
+    /* BARE ROCK from the treeline to the snow. Narrow ramp (300 m, against the
+       old 1,500) so the band has an edge to read. */
+    float alp=clamp((zp-tline)/300.0,0.0,1.0);
+    /* Bare rock is not one grey. The reference shows pale scree and snow-dusted
+       benches against near-black shadowed cliffs, and it is that SPREAD, not the
+       average tone, that makes a range read from orbit. The old band was a flat
+       wash whose colour happened to sit almost exactly where this one's mean
+       does -- which is why moving the treeline changed the picture by 3% of
+       pixels and nothing else. Ruggedness picks between the two: broken ground
+       is cliff and shadow, smooth high ground is scree, till and bench. */
+    vec3 scree=vec3(0.596,0.567,0.532);
+    vec3 cliff=vec3(0.427,0.400,0.376);
+    vec3 alpRock=mix(scree, cliff, smoothstep(0.18,0.62,rug));
+    alpRock*=1.0-smoothstep(0.0,2200.0,zp-tline)*0.10;
+    alpRock*=1.0+(fine*0.22+fine2*0.15+duri*0.12);
+    /* KEEP THE GEOLOGY'S HUE. A neutral grey turned the Tibetan Plateau grey,
+       and Tibet is not grey -- it is warm tan, because the rock under it is.
+       The bands above give bare ground its BRIGHTNESS structure (scree pale,
+       cliff dark); the colour still has to come from the lithology and province
+       fields that already coloured this pixel, or every range on the planet
+       ends up the same stone. Divide out the local luminance to get its hue,
+       then tint the rock with it. */
+    vec3 hue=col/max(dot(col, vec3(0.299,0.587,0.114)),0.04);
+    alpRock*=mix(vec3(1.0), hue, 0.55);
+    col=mix(col, alpRock, alp*0.82);
+    gAlp=alp;
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
@@ -4653,6 +4715,13 @@ void main(){
      were built on -- that constant is load-bearing evidence. */
   float shade = z<wl ? clamp(0.70+0.62*hs, 0.0, 1.34)
                      : clamp(0.63+0.74*hs, 0.0, 1.24);
+  /* Bare rock has no canopy to scatter light between the faces, so an alpine
+     slope is lit hard and shadowed hard where a forested one is not. Widening
+     the response ONLY inside the band is what turns a grey wash into ridges. */
+  /* Tuned DOWN from 0.40+1.22 at gAlp*0.80, which was measured and looked it:
+     Tibet rendered as a black-and-white photocopy, image contrast 43.5 -> 51.2.
+     Bare rock takes light harder than forest, but it is still rock, not enamel. */
+  shade = mix(shade, clamp(0.56+0.96*hs, 0.0, 1.44), gAlp*0.55);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead
