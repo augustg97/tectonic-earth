@@ -2154,3 +2154,48 @@ feature, which closed the shader's template literal — the FRAG extraction fell
 from 213,486 characters to 37,306. Iteration 45 hit the identical trap and
 recorded it, and I repeated it one round later. `check_shader` caught it both
 times, which is the only reason neither shipped.
+
+## Q — ITERATION 49, 2026-08-02: three user reports — a regression I shipped, an
+## artefact I shipped, and a log that stopped
+
+**1. THE GREAT LAKES, ERASED BY MY OWN REBUILD CHAIN.** Present-day lakes do not
+come from the water-balance solver at all: they are REAL OUTLINES stamped by a
+SEPARATE script, `bake_present_lakes.py`. My field-rebuild chain ran
+`bake_lakes.py` and stopped, so the solver's own guess overwrote the outlines
+every time. Measured: Great Lakes depth cells fell from 4,385 to 23, and Baikal,
+Victoria, Titicaca and Chad went to exactly zero. It shipped for nine commits.
+
+Two things hid it. The chain ran `bake_lakes.py >/dev/null 2>&1`, so nothing it
+said was visible; and my first check read the field with `convert("L")` when it
+is RGB (R = depth, G = a dry-basin mask), which made a working field look empty
+and nearly sent me diagnosing the wrong thing. `bake_present_lakes.py` is now a
+permanent step in the chain script, after `bake_lakes.py`, with a comment saying
+why. Restored: 1,117 real lakes, Great Lakes back to 4,385 cells.
+
+**2. THE MAGENTA BLOBS WERE MINE, FROM ITERATION 48.** Saturated (250,128,254)
+patches in shallow water in valleys and rift lakes — 181 pixels on one 35 Ma
+frame. Bisected by flattening the colour at successive stages: land colour, the
+tundra blend, the desert block and the ice block were all ruled OUT, and the
+user's own guess (water shading) was right. Disabling the G9 carbonate mix takes
+the count from 181 to 0.
+
+**The mechanism is still unexplained, and that is recorded rather than glossed.**
+Every operation in the chain looks bounded — `carb` is a product of two ramps
+clamped to [0,1], the mix factor is clamped, and the only consumer is one more
+clamped mix. Rewriting both gates as explicit clamped linear ramps, on the
+theory that `smoothstep(33,25,x)` with edge0 > edge1 is undefined in the GLSL
+spec, did NOT fix it. So the feature is REVERTED: it bought G/B 0.78 -> 0.81 on
+the Bahamas against a 0.98 target, and a marginal colour gain is not worth a
+visible artefact. It can come back when the cause is understood.
+
+Note for whoever picks this up: a bisect that flattens `col` inside `if(z>=wl)`
+tests LAND ONLY. Two of my bisect steps were inside that branch and "proved" the
+artefact was downstream when it was simply on the other side of the branch.
+
+**3. The update log had stopped at 1.9 (28 July).** Everything since — the
+climate fix, alpine zonation, desert structure, the label and card work, the
+future-terrain round — was unlogged. Added release 2.0 covering it in the
+reader's language, and the log is part of the round from here.
+
+Still open from this round: the sea floor reads as generic and pixelated at
+close zoom (user report), which is the next round.

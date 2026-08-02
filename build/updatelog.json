@@ -2,6 +2,48 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
  "releases": [
   {
+   "version": "2.0",
+   "date": "2 August 2026",
+   "title": "Rain that reaches the far side of a continent",
+   "summary": "The climate model had a fault that quietly mis-coloured every continent: it moved moisture only east and west, so the eastern United States came out drier than the Sahara. Fixing it turned the eastern seaboard green, gave the Amazon and the Congo the solid dark canopy they should have, and left the real deserts dry. Mountains now carry a proper treeline, deserts have sand seas and rock massifs instead of one flat tan, and the Great Lakes are back.",
+   "sections": [
+    {
+     "name": "Climate and vegetation",
+     "items": [
+      "Moisture now travels north and south as well as east and west. Without that, the Atlantic and the Gulf sat downwind of nothing and eastern North America was fed by air that had already crossed the continent — it rendered drier than the Sahara. It now reads as forest, with the plains gold and the western interior brown, and the dry line where it belongs near the hundredth meridian.",
+      "Monsoon deserts sit in the right places. The model was casting the Indian monsoon's dry shadow eastward onto southeast Asia instead of westward onto Arabia, so the two were effectively swapped: the Rub al Khali rendered wetter than the Congo. Arabia is now sand and monsoon China is now forest.",
+      "Wet interiors keep their own water. The Amazon and the Congo were being dried for being far inland, when in fact a rainforest waters its own far side by evaporating what already fell on it. The Amazon had been drying westward — driest under the Andes, which is exactly backwards — and now holds its canopy across the basin.",
+      "Central Siberia reads as taiga rather than steppe, and the Sahel, the Chaco and the Kazakh steppe stayed where they were."
+     ]
+    },
+    {
+     "name": "Mountains",
+     "items": [
+      "A treeline is a temperature, not an altitude. Bare rock used to begin at the same height everywhere on Earth — 1,700 m, which is alpine desert in Lapland and cloud forest in Ecuador. It now follows the climate, so ranges carry snow, then bare rock, then conifer, in bands that follow the ridge.",
+      "Dry ranges go bare much lower, because a treeline needs water as well as warmth. The arid Andes and the Tibetan Plateau read as rock and salt rather than scrub.",
+      "Bare rock takes light harder than forest does — no canopy to scatter it between the faces — so ridges stand out. The rock keeps the colour of the geology underneath it, so ranges are not all cut from the same grey stone."
+     ]
+    },
+    {
+     "name": "Deserts",
+     "items": [
+      "A desert is not one tan. Sand seas the size of countries, orange dune fields, and dark rocky massifs now separate out, sorted by where sand can actually collect — flat ground with nothing to carry it away. The Grand Erg reads as a smooth sheet and the Hoggar stands out of it."
+     ]
+    },
+    {
+     "name": "Fixes",
+     "items": [
+      "The Great Lakes are back, along with Baikal, Victoria, Titicaca and around eleven hundred other real lakes. A field rebuild had been overwriting their true outlines with the water-balance solver's own guess.",
+      "The bright magenta spots that appeared in valleys and rift lakes are gone.",
+      "Labels no longer disappear when zoomed out, no feature is labelled twice, and the Tethys, Palaeo-Tethys and Neotethys no longer all point at the same water.",
+      "Every feature card has been read for typographical errors, and sixty-seven of them checked against the published literature — several described a mountain range as though its peaks were as old as its rocks, which is usually wrong by hundreds of millions of years.",
+      "The camera moves in proportion to how far you are zoomed in, so close views are steerable.",
+      "The Schematic view has been retired; Satellite is now the only view, and the Geological Intervals panel starts closed."
+     ]
+    }
+   ]
+  },
+  {
    "version": "1.9",
    "date": "28 July 2026",
    "title": "Tilt the Earth, and a globe that fits your phone",

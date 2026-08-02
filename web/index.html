@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-2011';
+const DATA_V='20260802-2245';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2309,44 +2309,16 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      the palette-lace fix requires. Graded by the SMOOTHED depth, so the
      grader itself cannot flicker. */
   float zsb = (gZSm>-9000.0) ? mix(z, gZSm, mix(0.55, 0.85, smoothstep(-40.0,-160.0,gZSm))) : z;
-  /* CARBONATE BANKS (G9), ON THE SHALLOW COLOUR ITSELF. The paragraph above
-     already says bright shallow water needs a bright FLOOR and not merely a
-     shallow one -- but nothing ever acted on it, so every tropical shelf on the
-     planet got the same pale blue. Measured on the Bahamas frame: R/B 0.59 and
-     G/B 0.74, against a reference near (110,200,205) where R/B is 0.54 and
-     green stands as high as blue at 0.98. That difference IS the floor.
-     Turquoise is carbonate sand reflecting back through a few tens of metres of
-     clear water; a dark clastic or basalt floor returns the water column's blue
-     alone, which is what we were drawing everywhere.
-
-     It modifies shallow instead of mixing over the finished colour, and that
-     placement is the whole trick: iteration 47 tried the latter three times and
-     moved G/B by 0.01 each time, because the machinery below already blends
-     shallow in at up to 0.92 -- anything added afterwards competes with it
-     rather than riding it.
-
-     Two concessions to the field, both deliberate. The depth window is the
-     SHELF, not the bank top: a real Bahama bank stands in under ten metres and
-     this bathymetry is a 10 km grid that never gets that shallow over any area,
-     so a -64 m gate fired on 0.3% of the frame. And the mask is near-binary,
-     because a carbonate platform either is one or is not -- three soft gates
-     multiplied down to an effective 0.1, which is the arithmetic behind those
-     three failed attempts. */
-  /* NO NOISE MASK. A near-binary mask was meant to stop three soft gates
-     multiplying down to nothing -- but it traded dilution for a coverage
-     lottery: at a 78-degree wavelength the Bahamas either fall inside a blob or
-     they do not, by the phase of the noise, and measured they did not. Only
-     0.68% of the frame changed. There is no need to guess where platforms are:
-     warm shallow shelves ARE carbonate-dominated, everywhere except where a
-     big river buries them in mud, so latitude and depth carry it alone. */
-  float carb = smoothstep(33.0, 25.0, abs(latd))
-             * smoothstep(-165.0, -25.0, zsb);
-  /* The target is SATURATED, not pale. A first pass used (0.325,0.755,0.740)
-     and the banks came out white-blue: too much red for turquoise. The
-     reference's (110,200,205) has red at barely half of blue, which is what
-     carbonate sand under clear water actually returns once the column has taken
-     the red out of it. */
-  shallow = mix(shallow, vec3(0.185,0.660,0.645), clamp(carb, 0.0, 0.92));
+  /* CARBONATE BANKS: REVERTED (iteration 49). The G9 tint shipped in iteration
+     48 put saturated magenta blobs -- (250,128,254), 181 pixels on one frame --
+     into shallow water in valleys and rift lakes, and a user reported them.
+     Bisected to this exact line: with the mix disabled the count goes to 0.
+     Every operation involved looks bounded, and rewriting the two gates as
+     clamped linear ramps (in case a decreasing smoothstep was the culprit) did
+     NOT fix it, so the mechanism is still unexplained. The feature bought G/B
+     0.78 -> 0.81 on the Bahamas against a 0.98 target -- a marginal gain that is
+     not worth a visible artefact, so it comes out until the cause is understood.
+     See MODEL-GAPS iteration 49 for what was ruled out. */
   float botRet = exp(zsb/70.0);                      // two-way attenuation
   float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
   c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
