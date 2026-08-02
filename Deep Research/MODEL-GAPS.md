@@ -1919,3 +1919,60 @@ Amazon is in reality the wetter of the two (roughly 2,000-3,000 mm against
 1,600). Until the field says so, no amount of shader work will make that basin
 read as the solid dark block the reference shows. That is the next round, and it
 belongs with the G5 climate solve.
+
+## Q — ITERATION 44, 2026-08-02: rain that falls twice
+
+Iteration 43 handed over a field problem: the model gave the Amazon a rainfall of
+0.194 against the Congo's 0.193 when the Amazon is in reality the wetter of the
+two. Measuring the basin west-to-east showed something worse than parity — a
+**backwards gradient**: 0.706 at the mouth, 0.287 in the centre, **0.141 under
+the Andes**, when the Andean foreland is the wettest part of the whole basin.
+
+The cause is the same one iteration 43 found in the shader, one level down.
+`_advect` decayed its recycling floor with raw distance from open water, so
+crossing three thousand kilometres of rainforest cost the same as crossing three
+thousand kilometres of sand. It does not: roughly a third of the Amazon's rain
+is water that already fell in the basin.
+
+Two changes, both to how recycling is modelled:
+
+1. **Wet land rewinds the clock.** The recycling distance now advances more
+   slowly where rain is already falling, so the floor stays high across a wet
+   basin and collapses normally across a dry one.
+2. **And wet land raises what the air decays TOWARD**, not merely how fast it
+   gets there — evapotranspiration over closed canopy returns a large fraction
+   of what fell.
+
+Both read the PREVIOUS pass's rainfall, so this is a two-pass fixed-point
+iteration rather than a circular definition. One iteration is enough: it moves
+the Amazon and leaves the deserts alone.
+
+| | before | after |
+|---|---|---|
+| Amazon west (Andes) | 0.141 | **0.305** |
+| Amazon centre | 0.287 | 0.416 |
+| Congo | 0.193 | 0.258 |
+| Sahara | 0.004 | 0.007 |
+| Atacama | 0.003 | 0.004 |
+| Rub al Khali | 0.107 | 0.117 |
+
+**The eighteen-biome check holds at severity 3, 15/18 exact — the iteration 39
+baseline — and C SIBERIA NOW READS TREE (0.428).** That was the taiga miss
+iterations 41 and 43 kept running into, and it fell out of this without being
+targeted. Kazakh steppe crossed the other way (0.387 against a 0.32 threshold);
+raising the bar for what counts as recycling was tried at 0.35 and 0.45 and cost
+the Amazon and Siberia without recovering Kazakh, so the marginal miss stands.
+
+Rendered, after re-baking all 251 frames plus surface and lakes: Congo
+(97,112,73) -> **(61,91,56)** with green-over-red +15.0 -> **+29.9**; Amazon
+(120,123,82) -> **(84,106,72)**, +3.7 -> **+22.3**. The basin that was a khaki
+wash with a green wisp is now the solid dark block the reference shows.
+
+**One artefact, logged not fixed.** The western Amazon's new forest has a
+dead-straight horizontal edge top and bottom. Smoothing the recycling seed
+across latitude was the obvious suspect and was measured: row-banding 0.0464 ->
+0.0423, real but negligible, and not worth re-baking 251 frames. So the straight
+edge has a different cause — a threshold applied to a field whose gradient is
+mostly latitudinal draws a latitude line, which is the shader's jitter to fix,
+not the climate solve's. The source was left matching the baked fields exactly
+rather than carrying an improvement the artefact on disk does not have.

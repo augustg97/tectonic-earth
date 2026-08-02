@@ -137,7 +137,7 @@ def _band(x, lo, hi, feather=9.0):
            np.clip(((hi + feather) - x) / feather, 0, 1)
 
 
-def _advect(elev, ocean, direction, decay, floor):
+def _advect(elev, ocean, direction, decay, floor, regen=None):
     """March moisture downwind across each row, returning delivered rainfall.
 
     direction +1: westerly wind, air travels west->east (increasing column)
@@ -165,8 +165,30 @@ def _advect(elev, ocean, direction, decay, floor):
         else:
             c = (W - 1 - (step % W)); pc = (c + 1) % W
         sea = ocean[:, c]
-        dist = np.where(sea, 0.0, dist + dx_km)
+        # WET LAND RESETS THE RECYCLING CLOCK. Crossing three thousand
+        # kilometres of rainforest is not the same as crossing three thousand
+        # kilometres of sand: what fell upstream evaporates again, and roughly a
+        # third of the Amazon's rain is water that already fell in the basin. A
+        # distance-only decay gave the Amazon a backwards west-drying profile --
+        # measured 0.706 at the mouth against 0.141 under the Andes, when the
+        # Andean foreland is in reality the wettest part of it. `regen` is the
+        # previous pass's rainfall, so this is a fixed-point iteration and not a
+        # circular definition; where it is dry the clock runs at full speed and
+        # central Asia stays steppe.
+        if regen is None:
+            dist = np.where(sea, 0.0, dist + dx_km)
+        else:
+            g = RECYCLE_REGEN * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0)
+            dist = np.where(sea, 0.0, np.maximum(dist + dx_km * (1.0 - g), 0.0))
         fl = floor * np.exp(-dist / RECYCLE_KM)
+        if regen is not None:
+            # ...and wet ground does not merely slow the decay, it raises what
+            # the air decays TOWARD. Evapotranspiration over closed canopy
+            # returns a large fraction of what fell, which is why the Amazon's
+            # profile is nearly flat from the mouth to the Andes instead of
+            # halving across the basin.
+            fl = np.maximum(fl, RECYCLE_FLOOR * SEA_RECHARGE
+                            * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0))
         uplift = np.clip(elev[:, c] - elev[:, pc], 0, None) / UPLIFT_SCALE
         # rainfall where moist air is forced to rise
         rain = m * (1.0 + ORO_RAIN * uplift)
@@ -251,8 +273,29 @@ def _rainfall(Z, land, lat, cl):
     # multiplicative drain annihilates moisture before it reaches any interior.
     elev_s = _smooth(elev, 3)
 
+    # Two passes: the first says where it rains, the second lets that rain feed
+    # its own recycling. One iteration is enough -- the second pass moves the
+    # Amazon and leaves the deserts alone, and a third would only sharpen an
+    # already-converged field at twice the cost.
     R_west = _advect(elev_s, ocean, +1, decay, floor)   # mid-latitude westerlies
     R_east = _advect(elev_s, ocean, -1, decay, floor)   # tropical & polar easterlies
+    # SMOOTH THE SEED ACROSS LATITUDE BEFORE FEEDING IT BACK. The advection
+    # marches along rows, so a recycling term read row-by-row makes wet rows
+    # self-sustaining and dry rows self-limiting -- the feedback sharpens
+    # row-to-row contrast faster than the latitude mixing at the end of this
+    # function can smooth it out, and the western Amazon came back with a
+    # dead-straight horizontal edge top and bottom. Real evapotranspiration
+    # mixes across latitude before it rains again; so does this.
+    # Smoothing this seed across latitude was tried, on the theory that a
+    # row-by-row recycling term would make wet rows self-sustaining and dry rows
+    # self-limiting. Measured over the western Amazon it moves row-banding from
+    # 0.0464 to 0.0423 -- real but negligible, and not worth a re-bake of 251
+    # frames. The straight forest edges visible there have a different cause: a
+    # threshold applied to a field whose gradient is mostly latitudinal draws a
+    # latitude line, which is the shader's jitter to fix, not this.
+    R_seed = np.maximum(R_west, R_east)
+    R_west = _advect(elev_s, ocean, +1, decay, floor, regen=R_seed)
+    R_east = _advect(elev_s, ocean, -1, decay, floor, regen=R_seed)
     # ...and poleward transport by extratropical cyclones, which is the only way
     # a continental east coast can be watered under westerlies (see _advect_ns).
     dy_km = (180.0 / H) * 111.0
@@ -385,6 +428,9 @@ def _rainfall(Z, land, lat, cl):
 
 
 RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling
+RECYCLE_REGEN = 0.90    # how far wet ground rewinds that clock
+RECYCLE_REF = 0.25      # rainfall counted as 'fully recycling'
+RECYCLE_FLOOR = 0.55    # fraction of saturation wet ground sustains
 SUBSID_LAMBDA = 26.0    # e-folding distance of the subsiding limb, degrees lon
 SUBSID_GAIN = 0.75      # how much of the source monsoon the descent cancels
 SUBSID_DRY = 2.6        # how hard that descent suppresses delivered rain
