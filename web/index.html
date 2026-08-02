@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-1150';
+const DATA_V='20260802-1427';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3147,14 +3147,22 @@ void main(){
        perturbation is weighted by 4h(1-h), which peaks exactly at the
        transition and vanishes wherever the biome is already committed. Cores
        stay solid BY CONSTRUCTION, edges wander hard. */
-    /* CANOPY SATURATES AT 0.62, NOT 0.80 (iteration 27, measured against the
-       shipped fields rather than guessed): the aridity index averages 0.55
-       over the Amazon and 0.36 over the Congo, so a curve that only closes
-       the canopy at 0.80 left the Congo 3% forested and the Amazon 37% --
-       the reference shows both as solid dark carpets. At 0.62 the wet cores
-       close and the margins stay woodland, while the dry end is untouched:
-       Sahara 0.11 and Siberia 0.24 do not move. */
-    float h0=smoothstep(0.10,0.62,ari);
+    /* CANOPY CURVE 0.03 -> 0.61, RE-DERIVED AGAINST THE REPAIRED RAIN FIELD
+       (iteration 39). The upper end barely moved from the 0.62 of iteration 27,
+       and that is the finding: the curve was never what was wrong. The FIELD
+       was. Measured on the old fields, the Rub al Khali indexed 0.404 while the
+       Congo indexed 0.321 -- the driest sand on Earth reading wetter than
+       rainforest -- so no threshold placed anywhere could separate forest from
+       desert, and every attempt to tune this line traded one continent for
+       another. With the climate solve fixed (meridional transport, the
+       subsidence shadow cast west instead of east, recycling that thins
+       inland), the same eighteen reference biomes now sort: rainforest 0.41-0.56,
+       temperate forest 0.33-0.40, steppe 0.08-0.32, true desert 0.01-0.02.
+       The lower end moves 0.10 -> 0.03 because the deserts are finally dry
+       enough to need it. Chosen by minimising misclassification SEVERITY, not
+       count: nothing is off by more than one class, so no desert draws as
+       forest. See MODEL-GAPS section Q iteration 39. */
+    float h0=smoothstep(0.03,0.61,ari);
     float edge=4.0*h0*(1.0-h0);
     ari*=1.0+(nA*0.62+nB*0.32+nC*0.16)*edge;
     /* ...and real terms, not only noise: uplands wring rain out of the air
@@ -3177,7 +3185,7 @@ void main(){
     ari*=mix(1.10,0.88,contl);
     ari+=clamp((420.0-zp)/900.0,0.0,1.0)*0.06
         +smoothstep(0.25,0.62,drain)*0.20+clamp(trunk,0.0,0.5)*0.34;
-    float h=smoothstep(0.10,0.62,ari);
+    float h=smoothstep(0.03,0.61,ari);
     /* Warmth is a smooth function of latitude, so biome edges derived from it
        alone run dead straight across the map. Real vegetation boundaries
        wander: they follow terrain, drainage and local exposure. Perturb both

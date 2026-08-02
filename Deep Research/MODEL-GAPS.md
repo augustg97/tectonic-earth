@@ -1667,3 +1667,74 @@ GE's coast stays sharp because its data does not run out.
 Order of work: G5 (bake, multi-round), then G7 and G6 (shader, visible
 everywhere), then G9, G8, G10, G11. Each round: implement, verify headlessly at
 the matching reference framing, gates, deploy, register.
+
+## Q — ITERATION 39, 2026-08-02: G5, the rainfall field — a sign, a geometry,
+## and moisture with no upstream source
+
+Iteration 38 measured the thing that made every previous biome round fail:
+**eastern North America was drier than the Sahara** in our own field (0.048 vs
+0.043). This round fixed the climate solve rather than the palette. Four
+defects, each found by measurement, each structural:
+
+**1. No meridional transport.** `_rainfall` advected moisture only east-west,
+so the Atlantic and the Gulf sat downwind of nothing and North America's east
+coast was fed by air that had crossed the entire continent. Added `_advect_ns`,
+a poleward march per hemisphere, gated to the cyclone belt (32-62°) and damped
+by subtropical descent. Eastern North America ×2.6.
+
+**2. The subsidence shadow was cast the wrong way.** The Rodwell-Hoskins block
+had a careful paragraph explaining that monsoon heating drives descent to its
+WEST — and then `np.roll(ms, +shift)`, which moves a field EAST. So India's
+descending limb was landing on southeast Asia. Measured consequence: **the Rub
+al Khali indexed 0.33 while monsoon China indexed 0.20** — the model had the
+desert and the forest swapped. One character.
+
+**3. Descent delivered in 40° jumps, over ocean.** Three discrete lags meant
+Arabia's shadow was sourced from exactly 40/80/120° east — the Bay of Bengal,
+which is ocean, where `monsoon × land` is zero. Replaced with a continuous
+westward-decaying limb, and weighted to the subtropical ridge (26°): one
+uniform gain could not both dry the Rub al Khali and spare the Sahel, because
+they sit on the same belt and differ in LATITUDE, not longitude. After: Sahel
+0.103, Sahara 0.010.
+
+**4. Recycled moisture with no upstream source.** The evapotranspiration floor
+was a constant, so 3,000 km into Asia the air was still being handed water that
+had never fallen anywhere. Made the floor decay with distance since the air
+last crossed open water (`RECYCLE_KM = 1800`). Kazakhstan and the Taklamakan
+had been indexing as temperate forest.
+
+**AND ONE THE FIX ITSELF INTRODUCED.** Each column of the meridional march is
+an independent 1-D atmosphere, so neighbouring columns drift apart and the
+field carries vertical stripes — the exact mirror of the horizontal streaks the
+zonal pass leaves, which the code already fixed years ago three lines below.
+Mixed the moisture laterally INSIDE the march (eddies, not a post-hoc blur):
+field streak energy −16 to −39%.
+
+**The threshold was never the problem.** Re-derived against the repaired field,
+the canopy curve lands at `smoothstep(0.03, 0.61)` — the top essentially
+unchanged from the 0.62 chosen in iteration 27. Every past attempt to tune this
+line traded one continent for another because the field made it impossible:
+with the Rub al Khali at 0.404 and the Congo at 0.321, **no threshold placed
+anywhere separates forest from desert**. Chosen by minimising misclassification
+SEVERITY over 18 reference biomes, not count: 15/18 exact and nothing off by
+more than one class, so no desert draws as forest.
+
+Rainforest 0.41-0.56 · temperate forest 0.33-0.40 · steppe 0.08-0.32 · desert
+0.01-0.02.
+
+**Verified visually, A/B, by re-baking the pre-change field from `HEAD`'s
+`render.py`** — the fields are gitignored, so the baseline had to be
+regenerated rather than checked out. Before: the whole eastern United States
+tan, indistinguishable from the Great Plains. After: green forest → gold plains
+→ brown west, with the hundredth-meridian dry line where it belongs. The same
+A/B settled a false alarm: the soft north-south bands in the eastern US are in
+the BEFORE frame too — drainage corridors, not something this round introduced.
+
+Cost: 251 rainfall fields (15 min), 251 surface fields (21 min), lakes, manifest
+— `_d` and `_w` both derive from rain. Gates all at baseline (ice 1 finding at
+570 Ma, label dupes 0, storm gate 0 synchronous uploads). Pangaea's arid
+interior deepened, which is the right direction for a megamonsoon supercontinent.
+
+Still open on this front, for later rounds: the Congo does not read as the solid
+dark carpet GE shows, and the Rub al Khali, Taklamakan and Kazakh steppe are
+each one class too wet.

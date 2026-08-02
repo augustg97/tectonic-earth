@@ -151,12 +151,22 @@ def _advect(elev, ocean, direction, decay, floor):
     H, W = elev.shape
     m = np.full(H, 0.6)
     R = np.zeros((H, W))
+    # Distance since the air last crossed open water. The recycling floor is not
+    # a constant: it is water that fell upstream and evaporated again, so three
+    # thousand kilometres into a continent there is less of it to recycle. With
+    # a flat floor, Kazakhstan and the Taklamakan came out as wet as temperate
+    # forest (measured index 0.42 and 0.28 against a 0.20 canopy threshold) --
+    # deep interiors were being fed moisture that had no upstream source.
+    dist = np.zeros(H)
+    dx_km = (360.0 / W) * 111.0 * np.cos(np.radians(np.linspace(90.0, -90.0, H)))
     for step in range(2 * W):
         if direction > 0:
             c = step % W; pc = (c - 1) % W
         else:
             c = (W - 1 - (step % W)); pc = (c + 1) % W
         sea = ocean[:, c]
+        dist = np.where(sea, 0.0, dist + dx_km)
+        fl = floor * np.exp(-dist / RECYCLE_KM)
         uplift = np.clip(elev[:, c] - elev[:, pc], 0, None) / UPLIFT_SCALE
         # rainfall where moist air is forced to rise
         rain = m * (1.0 + ORO_RAIN * uplift)
@@ -164,9 +174,59 @@ def _advect(elev, ocean, direction, decay, floor):
             R[:, c] = np.where(sea, 0.0, rain)
         # moisture budget: saturate over sea; inland decay toward the recycling
         # floor, with extra loss where air is forced over high ground
-        inland = floor + (m - floor) * decay
+        inland = fl + (m - fl) * decay
         inland = np.clip(inland - ORO_DRAIN * uplift * m, 0.0, 1.0)
         m = np.where(sea, SEA_RECHARGE, inland)
+    return R
+
+
+def _advect_ns(elev, ocean, toward_north, decay, floor):
+    """March moisture along COLUMNS, from the equator toward one pole.
+
+    WHY THIS EXISTS. The zonal solve above carries moisture east-west only, so a
+    continent's east coast can only be watered by air that has already crossed
+    the whole landmass. Under westerlies that is fatal: eastern North America
+    came out at 0.048 against the Sahara's 0.043 -- the Atlantic and the Gulf
+    sit DOWNWIND of it and were never allowed to supply it at all.
+
+    Real mid-latitude weather is not zonal. Extratropical cyclones pull
+    subtropical-ocean air poleward along continental east coasts, and that
+    meridional transport is what waters the eastern United States, eastern
+    China and eastern Australia. One extra pass per hemisphere buys it.
+
+    Row 0 is north, so travelling north means walking the row index DOWN.
+    Latitude does not wrap -- a pole is a real boundary, not a seam -- so each
+    column starts saturated at the equator and marches once.
+    """
+    H, W = elev.shape
+    R = np.zeros((H, W))
+    eq = H // 2
+    rows = range(eq, -1, -1) if toward_north else range(eq, H)
+    m = np.full(W, SEA_RECHARGE)
+    prev = None
+    dist = np.zeros(W)
+    dy_km = (180.0 / H) * 111.0
+    for r in rows:
+        sea = ocean[r]
+        dist = np.where(sea, 0.0, dist + dy_km)
+        fl = floor[r] * np.exp(-dist / RECYCLE_KM)
+        uplift = np.zeros(W) if prev is None else \
+            np.clip(elev[r] - elev[prev], 0, None) / UPLIFT_SCALE
+        rain = m * (1.0 + ORO_RAIN * uplift)
+        R[r] = np.where(sea, 0.0, rain)
+        inland = fl + (m - fl) * decay
+        inland = np.clip(inland - ORO_DRAIN * uplift * m, 0.0, 1.0)
+        m = np.where(sea, SEA_RECHARGE, inland)
+        # LATERAL MIXING INSIDE THE MARCH, not smoothing afterwards. Each column
+        # is otherwise an isolated one-dimensional atmosphere, and isolated
+        # neighbours drift apart row by row until the field carries vertical
+        # stripes -- visible in the first build as light bands down the West
+        # Siberian Basin. Blurring the finished field only hides that; mixing the
+        # moisture as it travels stops the divergence accumulating, which is also
+        # what eddies actually do. Longitude wraps, so np.roll is the right
+        # neighbour operator here.
+        m = 0.25 * np.roll(m, 1) + 0.5 * m + 0.25 * np.roll(m, -1)
+        prev = r
     return R
 
 
@@ -193,6 +253,23 @@ def _rainfall(Z, land, lat, cl):
 
     R_west = _advect(elev_s, ocean, +1, decay, floor)   # mid-latitude westerlies
     R_east = _advect(elev_s, ocean, -1, decay, floor)   # tropical & polar easterlies
+    # ...and poleward transport by extratropical cyclones, which is the only way
+    # a continental east coast can be watered under westerlies (see _advect_ns).
+    dy_km = (180.0 / H) * 111.0
+    decay_ns = np.exp(-dy_km / FETCH_KM)
+    floor_col = floor[:, None] * np.ones((1, W))
+    R_ns = _advect_ns(elev_s, ocean, True, decay_ns, floor_col) \
+         + _advect_ns(elev_s, ocean, False, decay_ns, floor_col)
+    # MIX ACROSS LONGITUDE. Every column in the meridional pass is an
+    # independent one-dimensional march, so neighbouring columns diverge and the
+    # result carries vertical streaks -- the exact mirror of the horizontal
+    # streaks the zonal pass leaves, which the rows below already fix. Verified
+    # in the render: the first build with meridional transport put light vertical
+    # stripes down the West Siberian Basin and through the eastern US forest.
+    # The real subsiding and ascending limbs are broad, so smoothing here costs
+    # nothing physical. It is applied to R_ns ALONE: the zonal field must keep
+    # its sharp east-west gradients (the hundredth-meridian dry line is one).
+    R_ns = _smooth(R_ns, 2)
 
     # Near the equator the ITCZ pulls air in from both hemispheres and the flow
     # reverses seasonally, so whichever ocean is closer supplies the basin.
@@ -205,6 +282,12 @@ def _rainfall(Z, land, lat, cl):
     # China, SE Brazil) while west coasts at those latitudes stay in the lee.
     westerly = _band(absl, 40, 65, feather=8.0)
     R = np.clip(R_trop * (1 - westerly) + R_west * westerly, 0, 1.6)
+    # Moisture CONVERGES: a place is as wet as the wettest flow reaching it, not
+    # as dry as the driest. The cyclone band runs 25-60 degrees, which is where
+    # poleward transport actually dominates the moisture budget.
+    cyc = _band(absl, 32, 62, feather=10.0)
+    descend = np.exp(-((absl - 24.0) ** 2) / (2 * 11.0 ** 2))
+    R = np.clip(np.maximum(R, R_ns * cyc * 1.45 * (1.0 - 0.85 * descend)), 0, 1.6)
 
     # Atmospheric rain belts. These MODULATE the delivered moisture rather than
     # gating it: the belt never clamps to zero, so whether a subtropical region
@@ -246,18 +329,52 @@ def _rainfall(Z, land, lat, cl):
     # source keeps its rain and dries the land behind it, which is exactly the
     # observed pattern -- Kerala green, the Rub al Khali the driest sand on
     # Earth, at the same latitude a couple of thousand kilometres apart.
+    # NEGATIVE rolls. Column index increases eastward, so np.roll(+n) moves the
+    # field EAST -- the opposite of what the paragraph above describes, and the
+    # reason the shadow was landing on southeast Asia instead of Arabia.
+    # Measured with the sign wrong: the Rub al Khali indexed 0.33 while monsoon
+    # China indexed 0.20, i.e. the model had the two deserts and forests swapped.
+    #
+    # And a CONTINUOUS westward decay, not three discrete 40-degree lags. With
+    # lags, the air over any given desert is sourced from exactly 40, 80 and 120
+    # degrees east of it -- for Arabia that is the Bay of Bengal, which is ocean,
+    # so `monsoon * land` there is zero and Arabia got no shadow at all. Descent
+    # is not delivered in discrete jumps; it is a broad subsiding limb whose
+    # strength falls off with distance from the heat source.
     ms = _smooth(monsoon, max(2, int(W / 90)))
-    shift = max(1, int(W * 0.11))          # ~40 degrees of longitude
+    step = max(1, int(W / 120))            # sample every ~3 degrees
     induced = np.zeros_like(ms)
-    for k in range(1, 4):                  # a few lags, so the shadow has depth
-        induced += np.roll(ms, shift * k, axis=1) / k
-    induced *= 0.42 / (1.0 + 1 / 2 + 1 / 3)
+    wsum = 0.0
+    d = step
+    while d * 360.0 / W <= 96.0:           # out to ~96 degrees west of source
+        w = np.exp(-(d * 360.0 / W) / SUBSID_LAMBDA)
+        induced += np.roll(ms, -d, axis=1) * w
+        wsum += w
+        d += step
+    # Weight the descent to the SUBTROPICAL RIDGE. One uniform gain cannot both
+    # dry the Rub al Khali and spare the Sahel: they sit on the same belt, and
+    # every gain strong enough to make Arabia sand turned the Sahel to sand too.
+    # They differ in latitude, not in longitude -- the descending limb maximises
+    # over the ridge near 26 degrees, while the Sahel and the Chaco lie on its
+    # equatorward flank where the summer ITCZ still reaches them.
+    ridge = np.exp(-((absl - 26.0) ** 2) / (2.0 * 9.5 ** 2))
+    induced *= (SUBSID_GAIN / wsum) * ridge
     monsoon = np.clip(monsoon - induced, 0.0, None)
 
     # a warmer world evaporates more; `arid` already shapes the belts above so
     # it is deliberately not applied twice here
     glob = np.clip(1.02 + 0.22 * cl["temp"], 0.78, 1.30)
     Rf = (B + monsoon) * R * glob
+    # ...AND THE SAME DESCENT SUPPRESSES WHAT THE ZONAL FLOW DELIVERS.
+    # Subtracting `induced` from the monsoon bonus alone cannot dry Arabia,
+    # because Arabia's moisture is not a bonus: it is a peninsula with ocean on
+    # three sides, so the advection arrives with a short fetch and full load.
+    # Measured on the shipped field, that left the Rub al Khali at a humidity
+    # index of 0.404 against the Congo rainforest's 0.321 -- the driest sand on
+    # Earth reading wetter than a rainforest, which no biome threshold can
+    # survive. Air that is sinking does not rain whatever reaches it, so the
+    # descent has to scale the delivered field, not just one term of it.
+    Rf *= np.clip(1.0 - SUBSID_DRY * induced, 0.12, 1.0)
     # The advection runs along rows, so without meridional mixing the field
     # keeps row-to-row streaks that surface later as straight horizontal bands
     # of vegetation. Real atmosphere mixes across latitude; so does this.
@@ -265,6 +382,12 @@ def _rainfall(Z, land, lat, cl):
     Rf = 0.5 * Rf + 0.25 * np.roll(Rf, 1, axis=0) + 0.25 * np.roll(Rf, -1, axis=0)
     Rf = _smooth(Rf, 1)
     return np.clip(Rf, 0, 1.3)
+
+
+RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling
+SUBSID_LAMBDA = 26.0    # e-folding distance of the subsiding limb, degrees lon
+SUBSID_GAIN = 0.75      # how much of the source monsoon the descent cancels
+SUBSID_DRY = 2.6        # how hard that descent suppresses delivered rain
 
 
 def _b3(col, H, W):
