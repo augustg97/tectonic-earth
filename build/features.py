@@ -562,6 +562,8 @@ LABELS = [
     ("lake", "Pebas Mega-Wetland", -70.0, -5.0, 8.0, 21.0),
     ("lake", "Lake Vostok", 106.0, -77.0, 0.0, 15.0),
     ("lake", "Lake Tanganyika", 29.5, -6.0, 0.0, 12.0),
+    ("lake", "Lake Malawi", 34.5, -12.0, 0.0, 8.6),
+    ("lake", "Aral Sea", 59.5, 45.0, 0.0, 5.5),
     ("lake", "Lake Pannon", 19.0, 46.0, 4.5, 11.6),
     ("lake", "East African Rift soda lakes", 36.0, 0.5, 0.0, 7.0),
     ("lake", "Lago Mare (Messinian Mediterranean)", 16.0, 37.0, 5.33, 5.6),
@@ -714,7 +716,9 @@ LAKE_R = {
     "West Siberian Ice-Dammed Lake": 4.2, "Karoo Proglacial Lakes": 2.4,
     "Lake Lahontan": 1.2, "Lake Mega-Chad": 2.6, "Lake Pannon": 2.6,
     "Pebas Mega-Wetland": 3.2, "Songliao Palaeolake": 2.0, "Jehol Lakes": 1.6,
-    "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Tanganyika": 0.9,
+    "Lake Baikal": 0.9, "Lake Victoria": 1.2, "Lake Malawi": "The southern deep of the East African Rift, filling a basin that has held water for some eight million years. Isolation that long turns a lake into an evolutionary laboratory: it carries more species of fish than any other lake on Earth, almost all of them cichlids and almost all found nowhere else.",
+ "Aral Sea": "The easternmost survivor of the Paratethys, a shallow remnant stranded in the deserts of Central Asia when that inland ocean broke apart. It has no outlet, so it lives or dies by the two rivers that reach it.",
+ "Lake Tanganyika": 0.9,
     "Lake Titicaca": 0.5, "Lake Vostok": 0.6, "Lake Gosiute": 1.0,
     "Lake Uinta": 0.9, "Fossil Lake": 0.4, "Messel Lake": 0.3,
     "Lago Mare (Messinian Mediterranean)": 3.5, "East African Rift soda lakes": 1.3,
@@ -1073,7 +1077,7 @@ DESCRIPTIONS = {
  # seas
  "Mediterranean": "The last surviving scrap of Tethys, squeezed between Africa and Europe and slowly being closed by their convergence.",
  "Mediterranean (closing)": "Africa's northward push is shutting this basin. In the projection it becomes a suture with mountains, not a sea.",
- "Paratethys": "A brackish inland sea left behind as the Alps rose and cut it off from Tethys; the Black and Caspian seas are its last remnants.",
+ "Paratethys": "A brackish inland sea cut off from Tethys as the Alpide mountains rose \u2014 descended from the Peri-Tethys, and at its greatest reaching from the Molasse basin north of the Alps through Vienna, the Carpathians and the Pannonian Basin to the Black, Caspian and Aral seas, its last remnants. Its connections to the ocean were narrow and shallow, so it fell repeatedly into long spells without oxygen; during the Middle Miocene warm peak it grew coral reefs and a fauna found nowhere else, a hotspot that lasted barely three million years before cooling and anoxia ended it.",
  "Western Interior Seaway": "A shallow sea that split North America in two from the Arctic to the Gulf, drowning the continental interior at the Cretaceous sea-level peak.",
  "Turgai Strait": "A north-south seaway flooding western Siberia, separating Europe from Asia for much of the Mesozoic and early Cenozoic.",
  "Eromanga Sea": "An epeiric sea flooding central Australia during the Cretaceous highstand.",
@@ -1512,7 +1516,10 @@ DESCRIPTIONS = {
   "Plateau, the Pamirs and the Tian Shan. Its dryness is a direct consequence of "
   "Himalayan uplift.",
  "Tibetan Plateau": "Five kilometres high and over a thousand kilometres wide, raised by India's collision "
-  "with Asia. It is big enough to steer the jet stream and generate the Asian monsoon.",
+  "with Asia \u2014 big enough to steer the jet stream and drive the Asian monsoon. It did not simply rise: "
+  "in the Palaeogene it was a deep valley between ranges, its suture zones stayed tropical LOWLANDS until the "
+  "late Oligocene, and its surface fell some 900 m between 25.5 and 21.6 Ma before climbing again. It reached "
+  "roughly today's height by 14-8 Ma and still rises about 5 mm a year.",
  "Tippecanoe Sea": "The Ordovician-Silurian flooding of Laurentia, which buried the continent in tropical "
   "carbonate and built reef belts across what is now the Great Lakes.",
  "Viking Corridor": "The gap between Greenland and Scandinavia that let the cold Boreal ocean mix with warm "
@@ -2359,13 +2366,14 @@ PHASES = {
  ],
 
  "Western Interior Seaway": [
-  (90, 100, "Opening. Arctic and Gulf waters have met across the continent for the first time, "
-            "flooding the foreland basin behind the rising Sevier mountains."),
-  (75, 90, "At its widest -- a thousand kilometres of shallow sea splitting North America in two, "
+  (90, 95, "Opening. Arctic and Gulf waters have met across the continent for the first time, "
+           "flooding the foreland basin behind the rising Sevier mountains."),
+  (82, 90, "At its widest -- a thousand kilometres of shallow sea splitting North America in two, "
            "warm, oxygen-poor at depth, and full of mosasaurs, plesiosaurs and giant fish."),
-  (72, 75, "Draining away as sea level falls and the Laramide uplifts rise through its floor. "
-           "The Bearpaw flooding is its last, and by about 70 Ma the through-going connection "
-           "from Arctic to Gulf is gone, leaving the chalk and shale under the Great Plains."),
+  (78, 82, "Withdrawing. Sea level is falling and the Laramide uplifts are rising through the "
+           "seaway floor, breaking one ocean-to-ocean strait into shrinking embayments; the "
+           "Bearpaw flooding that follows is its last, and the chalk and shale left behind "
+           "become the bedrock of the Great Plains."),
  ],
 
  "Mediterranean": [
