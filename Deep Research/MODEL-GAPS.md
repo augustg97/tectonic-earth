@@ -1421,3 +1421,26 @@ recorded rather than claimed away: the footprint fade reaches regional zoom,
 so the 122 Ma reference framing gains texture too (32% of pixels move) --
 inspected and judged an improvement (the Urals read as a range), but it is a
 look change at a verified framing, not a no-op. DATA_V 20260801-2118.
+
+## Q — ITERATION 32, 2026-08-01: one feature, one label (user report)
+
+TWO LAKE PANNONS at 9 Ma, one in the western Mediterranean. Cause: features.py
+carried the lake TWICE -- ("sea", 4-11) from before lakes were modelled and
+("lake", 4.5-11.6) as what it is -- and each type has its own snapping rule, so
+the sea-typed copy was pulled to the nearest open water and walked 1,500 km out
+of its basin. Ethiopian Highlands was doubled the same way (region 0-30 +
+plateau 0-31). Both stale entries removed; 336 -> 334 labels. NEW GATE
+`audit_label_dupes.py` (registered in audit_all): same name AND overlapping
+windows fails the build, while the legitimate case passes untouched -- a
+drifting craton SHOULD be described at different positions in different windows
+(North China 120-420 and 420-900), and flagging those would train the reader to
+ignore the check. LITERATURE PASS (user's link): the Scandinavian Caledonides
+article's own correction is that today's Scandes are NOT the Caledonian peaks --
+the orogen was eroded and the modern range is a much later uplift of its roots,
+glacially cut. Our card implied the range still stands; rewritten with the
+430 Ma Baltica-Laurentia collision and the erosion/uplift distinction.
+STANDING WORK for coming rounds: continue the per-formation literature review
+(orogens first -- they are the most visible and the most often mythologised),
+correcting cards AND, where the source describes present-day expression
+(plateau remnants, fjord coasts, peneplains), checking that the rendered ground
+agrees. DATA_V 20260801-2211.
