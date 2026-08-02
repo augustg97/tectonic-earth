@@ -1564,3 +1564,26 @@ site kept serving the previous file. The deploy check reported "339 labels,
 no Malawi" and was believed only because it was checked. VERIFY THE BUILT
 ARTEFACT, NOT THE SOURCE EDIT: a successful string replacement is not a
 successful build. 341 labels live. DATA_V 20260802-0058.
+
+## Q — ITERATION 37, 2026-08-02: a copy-edit of all 341 cards
+
+Every card read in full, substance untouched. MECHANICAL (applied only to
+string literals, via Python's tokenizer, so no code or comment moved): 183
+spaced double hyphens -> em dashes, matching the style the other cards already
+used; 20 shouted words back to normal case (BALTICA, WOLFCAMP, LEONARD,
+GUADALUPIAN, OCHOAN, DRY, PLUME, FRINGING REEF, BARRIER REEF, ATOLL, GUYOT,
+LOWLANDS, RE-RAISED, BACK-ARC BASIN, APART, INSIDE -- LOWLANDS was mine, from
+iteration 36); "million km2" -> km². Six further dashes sat across line
+continuations where " -- " was never contiguous inside one literal, so the
+first pass could not see them.
+FOUND ONLY BY READING: "Parana- Etendeka" carried a space inside the compound
+name because the string broke after the hyphen (the Walvis card spells it
+correctly, which is how it stood out); "Archean" in the West Africa card
+against "Archaean" in the Yilgarn one; and the label "Paleo-Tethys" against
+"Palaeo-Tethys" used everywhere else in the prose. That last is a DICT KEY in
+features.py, life.py and feature_art.py -- five uses had to move together or
+the life and art lookups would have silently stopped matching, which is the
+kind of rename that looks cosmetic and is not.
+Verified in the built artefact rather than the source (iteration 36's lesson):
+341 cards, zero mechanical issues, Palaeo-Tethys present, old spelling gone.
+DATA_V 20260802-0210.
