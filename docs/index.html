@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-1132';
+const DATA_V='20260802-1150';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3161,6 +3161,20 @@ void main(){
        they lift, basins and valley floors hold what falls on them, and a
        river corridor is green through a desert (the Nile is the argument). */
     ari*=1.0+clamp(zp/2400.0,0.0,1.0)*0.30;
+    /* CONTINENTALITY -- the structural fix for the straight bands (user round,
+       2026-08-02). Everything driving the biome lookup so far was ultimately a
+       function of LATITUDE: rainfall is zonal, and warmth is latitude minus a
+       lapse rate. Jittering such a field only wobbles a line that is still a
+       line. The surface field already carries the one variable with real
+       continental SHAPE in it -- fetch, how far the prevailing wind has run
+       over land to reach this pixel (measured: 0.42-0.44 on the maritime
+       margins of Europe and western North America, 0.99-1.00 in central
+       Siberia and the American interior). A coast at 55 N and a continental
+       interior at 55 N are not the same climate, and now they are not the same
+       biome: the interior dries, and its winters bite, so the boreal band bends
+       south into the heart of a continent exactly as it does on Earth. */
+    float contl=clamp(fetchv,0.0,1.0);
+    ari*=mix(1.10,0.88,contl);
     ari+=clamp((420.0-zp)/900.0,0.0,1.0)*0.06
         +smoothstep(0.25,0.62,drain)*0.20+clamp(trunk,0.0,0.5)*0.34;
     float h=smoothstep(0.10,0.62,ari);
@@ -3169,7 +3183,10 @@ void main(){
        wander: they follow terrain, drainage and local exposure. Perturb both
        axes of the biome lookup with noise at two scales, and let low ground
        hold water, so forest and grassland interlock instead of striping. */
-    w=clamp(w+(nA*0.15+nB*0.07+nC*0.04),0.0,1.0);
+    // ...and the warmth axis too: a continental interior runs colder than a
+    // maritime margin at the same latitude, which is the other half of why the
+    // taiga reaches so much further south in Siberia than in Norway.
+    w=clamp(w+(nA*0.15+nB*0.07+nC*0.04)-contl*0.05,0.0,1.0);
     /* Named biomes, not a two-stop green ramp.
 
        This used to interpolate three colours -- one dry, one middling, one wet
@@ -6531,16 +6548,14 @@ function layoutLabels(){
   }
 
   cands.sort((a,b)=>b.pri-a.pri);
-  /* DECLUTTER BY ZOOM (2026-08-01). At whole-globe distance every label fits
-     -- the globe is large on screen and the type is small -- so the reference
-     comparison frame carried dozens of overlapping names where Google Earth
-     shows a handful of continents and oceans. Farther out, only the higher
-     tiers survive and fewer names total; by regional zoom nothing changes.
-     zf is 0 at zoom<=2.4 (regional and closer, exactly as before) and 1 at
-     the far clamp. */
-  const zf=Math.max(0,Math.min(1,(state.zoom-2.4)/2.2));
-  const minPri=zf*62;                    // far: continents/oceans/seas/regions only
-  const cap=Math.round(60-zf*44);       // far: ~16 names; near: unchanged in practice
+  /* NO ZOOM DECLUTTER (user round, 2026-08-02). A tiering by zoom shipped on
+     2026-08-01 -- only high-priority names survived far out -- and it made the
+     map unreadable in a different way: a name that is present at one distance
+     and gone at another cannot be checked for, so it became impossible to tell
+     a label the model LACKS from one the view is withholding. Everything that
+     can be placed is now placed at every zoom, and collision avoidance below is
+     the only thing that ever hides a name. */
+  const minPri=0, cap=Infinity;
   const panels=uiRects(), placed=[], leaders=[];
   const GAP=3;
   let nplaced=0;
@@ -7912,8 +7927,7 @@ function buildLegend(){
                      tiering every verification frame carried dozens of names
                      the LIVE page no longer shows -- the instrument must
                      match the instrumented. */
-                  const zfS=Math.max(0,Math.min(1,(state.zoom-2.4)/2.2));
-                  const minPriS=zfS*62, capS=Math.round(60-zfS*44);
+                  const minPriS=0, capS=Infinity;
                   const cand=[];
                   for (const L of (DATA.labels || [])) {
                     if ((PRI[L.t]||40)+(L.w||0) < minPriS) continue;

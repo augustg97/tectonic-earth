@@ -188,7 +188,10 @@ LABELS = [
     # ---------- Mesozoic ----------
     ("continent", "Laurasia",        40,  50,  150, 250),
     ("continent", "Gondwana",        30, -40,  120, 650),
-    ("ocean", "Tethys Ocean",        90,   5,  120, 260),
+    # SOUTH of the Cimmerian ribbon and carrying the whole Neotethys life:
+    # "Tethys" and "Neotethys" name the same ocean, so only one of them labels
+    # it, and the separate Neotethys entry is gone.
+    ("ocean", "Tethys Ocean",        72, -10,   45, 260),
     ("ocean", "Panthalassa",       -150,   0,  160, 320),
     # Ends at 95, not 100, because the Mowry Sea (95-103) IS its first pulse --
     # the Mowry card says so in as many words. Overlapping them made two names
@@ -210,7 +213,10 @@ LABELS = [
     ("orogen", "Sevier-Laramide",  -108,  42,   55,  95),
     # ---------- Pangaea ----------
     ("continent", "Pangaea",         10,   5,  130, 340),
-    ("ocean", "Palaeo-Tethys",       100,   0,  200, 420),
+    # ...and Palaeo-Tethys NORTH of it, which is where it lay: the older ocean
+    # closing between Gondwana-derived terranes and Asia while Neotethys opened
+    # behind them. Forty degrees of separation, so the two never label one sea.
+    ("ocean", "Palaeo-Tethys",       102,  24,  200, 420),
     ("sea", "Zechstein Sea",         12,  25,  252, 262),
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
     ("orogen", "Ural Mountains",     58,  55,  0, 320),
@@ -462,7 +468,6 @@ LABELS = [
     ("island", "Baja Island", -118, 34, -40, -5),
     ("island", "Somalia", 48, 0, -100, -15),
     # -- ocean --
-    ("ocean", "Neotethys", 62, 0, 45, 270),
     ("ocean", "East African Ocean", 42, -3, -130, -25),
     # -- orogen --
     ("orogen", "Sveconorwegian Belt", 8, 59, 900, 1000),   # southern Norway, not Algeria
