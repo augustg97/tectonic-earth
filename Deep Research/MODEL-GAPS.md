@@ -1832,3 +1832,47 @@ cast is PRE-EXISTING, not something these two rounds introduced. It belongs with
 the open note from iteration 39 that the Congo does not read as a solid dark
 carpet: the wet-forest palette is not dark or green enough, which is now the
 clearest remaining land-colour gap.
+
+## Q — ITERATION 42, 2026-08-02: the palette is written in a space nobody was
+## reading it in — a measurement round, NOTHING SHIPPED
+
+Went after the wet-forest gap (Congo and taiga too pale). Four changes were
+tried, measured, and **all four reverted**. The round's product is the
+measurement, and it is worth more than the changes would have been.
+
+**1. The stops were never the problem.** Equatorial rain forest was already
+(0.075,0.235,0.098) — on paper (19,60,25), nearly as dark as the ocean beside
+it, exactly as the reference demands.
+
+**2. THE CONSTANTS ARE LINEAR AND THE RENDERER sRGB-ENCODES THEM.** Forcing that
+darkest stop over all land and measuring the actual frame: it arrives on screen
+as **(68,94,62)**, not (19,60,25). A dark linear value comes out of the sRGB
+transfer far lighter than it reads in source. **Every palette judgement made by
+looking at these numbers rather than at measured output has been working in the
+wrong space**, which is why round after round of "make the forest darker" moved
+the render so little. Any future palette work must set constants by measuring
+the frame and inverting the transfer, never by reading the source.
+
+**3. And in that space, a bright colour swamps a dark one.** The mid stop at
+equatorial warmth is savanna tan (0.678,0.594,0.345) against rain forest
+(0.029,0.089,0.037) — twenty times brighter in red. At 79% wet the remaining
+fifth of tan still supplied 0.142 of the 0.165 red in the result. "Mostly
+forest" renders as khaki. A closed canopy has to arrive closed.
+
+**4. But none of that is the binding constraint.** Rendering the humidity index
+itself as greyscale and inverting the transfer gives, over the Congo frame: p25
+0.120, **p50 0.184**, p95 0.723. Forest needs h ≈ 0.5. So the basin is mostly
+being drawn out of the DRY-to-MID branch, and the picture agrees — the Congo is
+a thin mottled ribbon in a field of pale khaki where the reference shows a solid
+dark block. **The forest problem is extent and density, not colour**, and it
+lives upstream in the index, one level below where this round was digging.
+
+Measured effect of the reverted changes, for the record: Congo (112,122,83) ->
+(101,108,75) against a target near (32,58,30), and the Amazon's green-over-red
+went the WRONG way, +0.9 -> -3.7, because darkening the wet stop lowered green
+while the untouched tan kept supplying red. Not shippable, so not shipped.
+
+Next: the mottling is worth suspecting first. The `edge = 4h(1-h)` jitter added
+to break the straight biome bands peaks exactly at h = 0.5, and much of the
+basin sits near that value — so the very term that fixed the bands may be what
+is dissolving the canopy.
