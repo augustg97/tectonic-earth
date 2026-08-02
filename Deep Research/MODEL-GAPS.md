@@ -2018,3 +2018,53 @@ GLSL in backticks -- and FRAG is a JavaScript template literal, so a backtick
 inside it closes the shader. `check_shader.py` caught it as an unclosed block
 comment and a 47/45 brace imbalance. It would have shipped a blank globe. Never
 put a backtick in a FRAG comment.
+
+## Q — ITERATION 46, 2026-08-02: G6 desert structure, and a defect that was not
+## there
+
+**FIRST, A RETRACTION.** Iterations 44 and 45 chased a "dead-straight horizontal
+edge" on the western Amazon's forest. This round measured it properly — segment
+the forest mask, follow its southern boundary column by column — and **the
+boundary is not straight**. Its excursion is 17.3 px standard deviation over 300
+columns; it wanders. What actually changed when iteration 44 made the canopy
+solid is that the boundary lost its RAGGEDNESS: mean step from one column to the
+next fell from 3.17 px to 1.28 px. A smooth wandering edge, not a latitude line.
+
+Adding two finer octaves to the boundary jitter moved that from 1.28 to 1.37 and
+was reverted with the rest. Three rounds of image-gradient proxies pointed at a
+defect whose own geometry, once measured directly, was a much smaller thing than
+the screenshot suggested. **Measure the feature, not a proxy for it** — and when
+two independent fixes both fail to move a metric, suspect the diagnosis before
+reaching for a third fix.
+
+**THEN G6, WHICH SHIPPED.** The Sahara's interior measured a HUE standard
+deviation of 3.2: its brightness varied, its colour did not, which is what made
+it read as an airbrushed sheet against a reference showing cream sand sheets,
+orange dune fields and dark stony massifs.
+
+The first gate sorted these by the substrate-hardness channel, and that failed
+for a reason worth recording: **hardness is nearly uniform**. Measured on the
+shipped `_d` field, its median is 0.55 in the Sahara, 0.53 in the Rub al Khali,
+0.57 in the Taklamakan and 0.48 in the Amazon, with the whole Saharan p10-p90
+spanning 0.53 to 0.59. A field that constant cannot discriminate anything; the
+erg term evaluated to 0.10 everywhere and the render did not move. Re-gated on
+RELIEF, which does vary and is also the honest discriminator — sand collects
+where the ground is flat and cannot rest where it is broken, which is why the
+Grand Erg is a smooth sheet and the Hoggar stands out of it.
+
+Two more corrections on the way: gating on relief alone scattered sand as
+speckle, so a low-frequency crust-locked mask now decides WHERE a sand sea is
+while relief and drainage decide how far it reaches (an erg is a body the size
+of a country, not noise). And that mask did nothing at first because `fbm3`
+here is centred on 0.5, not 0 — the `+0.5` put it above its own threshold
+everywhere. Caught by the numbers being identical to the digit, twice.
+
+Measured: Sahara saturation 11.7 -> 18.6, 50 km tone spread 30.7 -> 31.8;
+Arabia 21.1 -> 22.7. Amazon control byte-identical, so nothing leaked into the
+vegetated palette.
+
+**Two gate saves this round.** `check_shader` caught `flat` used as a variable
+name — it is a GLSL reserved word — and the render confirmed it: the Amazon
+control went (84,106,72) to (27,45,62) because the shader had not compiled at
+all. A control region that must not change is worth carrying in every
+measurement.

@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-1759';
+const DATA_V='20260802-1903';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3412,6 +3412,52 @@ void main(){
     col*=mix(coolT, warmT, clamp(0.5+prov*1.6,0.0,1.0))*(1.0-moistw*0.55)
         +vec3(1.0)*(moistw*0.55);
     col*=1.0-smoothstep(0.55,0.95,hardness)*0.06;
+    /* DESERT IS NOT ONE TAN (G6). Measured on the frame, the Sahara's interior
+       carries a HUE standard deviation of 3.2 -- its brightness varies, its
+       colour does not, which is exactly what makes it read as an airbrushed
+       sheet. The reference shows four materials at continental scale: pale
+       cream sand sheets, ORANGE dune fields, dark stony hamada, and white pans.
+       Three of them fall out of fields already shipped, because what sorts them
+       is where sand can collect -- soft substrate to supply it, no drainage to
+       carry it away, and low relief to trap it. Hamada is the complement: hard
+       rock that keeps its relief and never buries. */
+    float desert=clamp(1.0-h/0.24,0.0,1.0);
+    if(desert>0.002){
+      /* GATED ON RELIEF, NOT ON SUBSTRATE. The first attempt sorted these by
+         the hardness channel, which turns out to be nearly uniform: measured on
+         the shipped field, its median is 0.55 in the Sahara, 0.53 in the Rub al
+         Khali, 0.57 in the Taklamakan and 0.48 in the Amazon, with the whole
+         Saharan p10-p90 spanning 0.53 to 0.59. A field that constant cannot
+         discriminate anything, and the erg term evaluated to 0.10 everywhere.
+         Relief does vary, and it is also the honest discriminator: sand
+         collects where the ground is flat and cannot rest where it is broken,
+         which is why the Grand Erg and the Tanezrouft are smooth sheets while
+         the Hoggar and Tibesti stand out of them as dark massifs. */
+      float still=1.0-smoothstep(0.06,0.26,drain);
+      float lowrel=1.0-smoothstep(0.05,0.19,rug);   // 'flat' is a GLSL reserved word
+      /* AN ERG IS A BODY, NOT A SPECKLE. Gating on relief alone scattered sand
+         wherever the ground happened to be locally smooth, and the first render
+         came back mottled. Real sand seas are a few named things the size of
+         countries -- the Grand Erg Oriental, the Ténéré, the Rub al Khali --
+         because sand needs a basin to collect in over millions of years. A
+         low-frequency crust-locked mask supplies that: it decides WHERE a sand
+         sea is, while relief and drainage decide how far it reaches. */
+      float ergBody=smoothstep(0.40,0.66, fbm3(mdc*3.4+53.0));
+      float erg=desert*still*lowrel*ergBody;
+      float ham=desert*smoothstep(0.16,0.40,rug);
+      /* DUNE LINEATION. A sand sea is not a wash of colour, it is a corduroy of
+         ridges tens of kilometres apart, and that anisotropy is the single most
+         recognisable thing about an erg from orbit. Stretching the sample
+         coordinate along one axis is what turns noise into ridges. */
+      float dune=(vnoise3(mdc*vec3(150.0,26.0,150.0)+7.0)-0.5)
+                +(vnoise3(mdc*vec3(430.0,72.0,430.0)+19.0)-0.5)*0.45;
+      vec3 ergCol=mix(vec3(0.884,0.800,0.616), vec3(0.867,0.592,0.310),
+                      clamp(0.30+erg*0.95,0.0,1.0));
+      ergCol*=1.0+dune*0.20;
+      vec3 hamCol=vec3(0.404,0.369,0.318)*(1.0+(fine*0.22+duri*0.15));
+      col=mix(col, ergCol, clamp(erg*0.82,0.0,0.82));
+      col=mix(col, hamCol, clamp(ham*0.58,0.0,0.58));
+    }
     /* Trunk-river corridors: the broad valley ribbon, darker and greener where
        the land is at all wet, dark drainage tracery (wadis) where it is arid.
        This is what makes the Ob or a Cretaceous trunk river read from orbit. */
