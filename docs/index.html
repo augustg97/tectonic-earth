@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-1507';
+const DATA_V='20260802-1537';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3539,13 +3539,30 @@ void main(){
        in T0 above. Calibrated against real treelines: ~3,900 m in the equatorial
        Andes, ~2,000 m in the Alps, a few hundred metres in Lapland. */
     float Ttree=3.5-7.0*s2;
-    float tline=clamp((T0-Ttree)/0.0058, 600.0, 5000.0);
+    float tline=(T0-Ttree)/0.0058;
     /* Dry ranges push it DOWN (no moisture to grow trees at altitude), and
        aspect, wind and avalanche move it a couple of hundred metres at a scale
        no field here resolves -- the same argument, and the same remedy, as the
        ELA's elaSub above. Without this the band is a drawn contour line. */
-    tline-=(1.0-clamp(Rf*2.4,0.0,1.0))*300.0;
+    /* ARIDITY DOMINATES THE DRY RANGES, and 300 m of depression was nowhere
+       near enough. A treeline is only an isotherm where there is water to grow
+       a tree; in a hyperarid cordillera there is no forest at ANY altitude, and
+       the range reads as bare rock and salt from orbit however warm its lower
+       slopes are. Measured at 32 S: the temperature treeline lands at ~2,960 m
+       against an Andean median of 2,731, so the model drew most of the visible
+       cordillera as arid scrub -- 11.9% of the strip's pixels changed and its
+       contrast did not move at all (34.0 -> 34.1), i.e. still the brown smear
+       this whole gap is about. Against the Himalaya's 43.5 -> 46.0, that is the
+       tell: the band never reached the ground there. */
+    tline-=(1.0-clamp(Rf*2.4,0.0,1.0))*1350.0;
     tline+=(vnoise3(sdir*150.0+19.0)-0.5)*260.0+(fbm3(sdir*34.0+61.0)-0.5)*220.0;
+    /* Clamp AFTER the aridity term, not before. Clamping first and subtracting
+       second drives the line NEGATIVE wherever the ground is both cold and dry,
+       and central Siberia is both: the treeline floored at 600 m, lost 1,190 m
+       to aridity, and every pixel from the Yenisei to the Pacific came out
+       above its own treeline. The render showed the taiga replaced by bare tan.
+       Order of operations, caught only because the frame was shot. */
+    tline=clamp(tline, 350.0, 5200.0);
     /* SUBALPINE CONIFER: a dark, blue-green belt in the few hundred metres
        below the treeline, and the reason a range reads as forested rather than
        as a green wash running into grey. Gated on moisture so an arid massif
@@ -3557,6 +3574,12 @@ void main(){
     /* BARE ROCK from the treeline to the snow. Narrow ramp (300 m, against the
        old 1,500) so the band has an edge to read. */
     float alp=clamp((zp-tline)/300.0,0.0,1.0);
+    /* Bare rock needs BROKEN GROUND, not merely height. Above a treeline a flat
+       surface is tundra, steppe or till plain, and it is vegetated -- what
+       strips ground to stone is relief. The exception is genuinely high ground,
+       where a plateau is bare however smooth it is, which is why Tibet has to
+       survive this gate and the Siberian plateau must not. */
+    alp*=max(smoothstep(0.10,0.34,rug), smoothstep(3200.0,4200.0,zp));
     /* Bare rock is not one grey. The reference shows pale scree and snow-dusted
        benches against near-black shadowed cliffs, and it is that SPREAD, not the
        average tone, that makes a range read from orbit. The old band was a flat

@@ -1785,3 +1785,50 @@ The Andes case is different and worth a later round: their treeline correctly
 ROSE to ~2,960 m, which should have un-greyed a kilometre of slope, and it moved
 almost nothing. That points at the elevation field, not the shader — the ranges
 themselves may be too low once smoothed to 10 km.
+
+## Q — ITERATION 41, 2026-08-02: the treeline finished, and iteration 40's
+## closing hypothesis was wrong
+
+**CORRECTION TO ITERATION 40.** That entry closed by suspecting the elevation
+field — that narrow ranges might be too low once smoothed to 10 km, which would
+make alpine zonation, snow and the ELA all under-trigger. **Measured, and it is
+not true.** The shipped field against real hypsometry:
+
+| range | model p50 / max | reality |
+|---|---|---|
+| Andes 30-35 S | 2,731 / 5,170 | crest 4,000-6,000 |
+| Alps | 1,409 / 3,349 | mean ~1,500 |
+| Himalaya | 4,583 / 6,679 | crest >6,000 |
+| Tibet | 4,872 / 5,687 | plateau 4,500-5,000 |
+
+The elevation is right. What was wrong was **the metric**: "4.8% of pixels
+changed" was measured over the whole frame, and in that framing the Andes
+cordillera is about a tenth of it. Restricted to the strip, the same change is
+11.9%. A percentage is meaningless without saying what the denominator is, and
+that one bought a false hypothesis into the register.
+
+**The real reason the Andes did not move: aridity.** A treeline is only an
+isotherm where there is water to grow a tree. In a hyperarid cordillera there is
+no forest at ANY altitude and the range reads as bare rock and salt however warm
+its lower slopes are. The depression term was 300 m; at 32 S the temperature
+treeline lands at ~2,960 m against an Andean median of 2,731, so the model drew
+most of the visible cordillera as arid scrub. Raised to 1,350 m. Alps 29.6 ->
+30.7, Himalaya 43.5 -> 46.2 image contrast.
+
+**AND IT BROKE SIBERIA, in a way only a screenshot could show.** The line was
+`clamp(...)` FIRST and `-= aridity` SECOND. Where ground is both cold and dry —
+central Siberia is both — the treeline floored at 600 m, then lost 1,190 m to
+aridity, and went NEGATIVE: every pixel from the Yenisei to the Pacific stood
+above its own treeline and the taiga rendered as bare tan. Order of operations.
+Two fixes: clamp AFTER the subtraction, and gate bare rock on RELIEF, because
+above a treeline a flat surface is tundra or till plain and it is vegetated —
+what strips ground to stone is broken ground. Tibet survives the gate through a
+high-ground exception, since a plateau at 4,800 m is bare however smooth.
+
+Verified against the pre-G7 commit rather than assumed: central Siberia's
+greenness (G-R) baseline -10.9, with the bug -12.3, after the fix -11.0. **Back
+to baseline exactly** — and that comparison also settled that Siberia's brown
+cast is PRE-EXISTING, not something these two rounds introduced. It belongs with
+the open note from iteration 39 that the Congo does not read as a solid dark
+carpet: the wet-forest palette is not dark or green enough, which is now the
+clearest remaining land-colour gap.
