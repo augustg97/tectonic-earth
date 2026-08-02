@@ -601,6 +601,15 @@ LABELS = [
     ("orogen", "Apennines", 13, 43, 0, 23),
     ("orogen", "Sonoma Orogeny", -117, 41, 240, 260),
     ("orogen", "Lachlan Orogen", 148, -35, 0, 485),
+    # ---- added 2026-08-02 from the literature sweep: Australia's interior
+    # orogens and New Zealand were absent entirely, and the catalogue of named
+    # orogenies (Wikipedia: List of orogenies) shows how much of Gondwana's
+    # own mountain-building the model was silent about.
+    ("orogen", "Delamerian Belt", 139, -33, 490, 514),
+    ("orogen", "Petermann Ranges", 129, -25, 520, 630),
+    ("orogen", "Alice Springs Belt", 133, -23, 300, 450),
+    ("orogen", "Hunter-Bowen Belt", 150, -25, 230, 265),
+    ("orogen", "Southern Alps", 170.5, -43.5, 0, 25),
     # -- rifts / extensional provinces --
     ("rift", "Rio Grande Rift", -106, 34, 0, 36),
     ("rift", "Basin and Range", -117, 39, 0, 36),
@@ -1673,6 +1682,11 @@ DESCRIPTIONS = {
  "Carpathians": "An arc of thrust sheets swept into place during the Miocene as continental fragments rolled into the European margin, curving around the subsiding Pannonian Basin behind them.",
  "Apennines": "The spine of Italy, built through the Neogene as the Adriatic plate sank and its sedimentary cover peeled off into a migrating thrust belt, while back-arc extension opened the Tyrrhenian Sea behind it.",
  "Sonoma Orogeny": "A collision along the western edge of North America near the Permian-Triassic boundary, as the Sonomia island-arc terrane docked against the continent -- the successor to the earlier Antler event along the same margin.",
+ "Delamerian Belt": "Middle Cambrian, 514\u2013490 Ma: the eastern edge of cratonic Australia was inverted and became a subduction zone facing the palaeo-Pacific. Its eroded stumps are the Flinders and Mount Lofty Ranges, and those same reverse faults have been running again since the Miocene, so the range is rising still. Antarctica's Ross Orogeny is its correlative across the Gondwana margin.",
+ "Petermann Ranges": "An intracontinental collision with no plate margin anywhere near it, 630\u2013520 Ma, which exhumed the Musgrave Block from deep in the crust and split one great basin into the Amadeus and the Officer. Central Australia has been squeezed from within twice; this was the first.",
+ "Alice Springs Belt": "The second squeeze, 450\u2013300 Ma, and the reason Uluru stands: it tilted that sandstone from flat-lying to vertical. A hundred and fifty million years of mountain building a thousand kilometres from any plate boundary, for less than 100 km of shortening in total.",
+ "Hunter-Bowen Belt": "Arc accretion along some 2,500 km of the Australian margin in the Permian and Triassic \u2014 first old passive-margin sediments crumpled and then rifted behind, then volcanic arcs welded on as subduction continued. It built the basement beneath the coalfields of eastern Australia.",
+ "Southern Alps": "Born 25 million years ago along the Alpine Fault, where the Pacific and Australian plates grind past each other obliquely and a little of that motion is taken up as collision. The crust thickens and floats upward, so the range is young, fast and still rising \u2014 among the most rapidly uplifting mountains on Earth.",
  "Lachlan Orogen": "A vast accretionary belt of eastern Gondwana, assembled from the Ordovician to the Carboniferous as slice after slice of ocean floor and volcanic arc was plastered onto the Australian margin. It forms the basement of southeastern Australia.",
  "Rio Grande Rift": "A continental rift tearing the southwestern United States open since the late Palaeogene, as the crust behind the Cordillera stretched and dropped a chain of basins from Colorado into Mexico.",
  "Basin and Range": "The type example of wide continental extension: the crust of the western United States pulled apart into dozens of tilted mountain blocks and intervening valleys, stretching to nearly twice its original width since the mid-Cenozoic.",
