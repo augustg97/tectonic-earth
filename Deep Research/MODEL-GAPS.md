@@ -1587,3 +1587,39 @@ kind of rename that looks cosmetic and is not.
 Verified in the built artefact rather than the source (iteration 36's lesson):
 341 cards, zero mechanical issues, Palaeo-Tethys present, old spelling gone.
 DATA_V 20260802-0210.
+
+## Q — ITERATION 38, 2026-08-02: three user reports, and the measurement that
+## reframes the biome problem
+
+LABELS AT EVERY ZOOM. The 2026-08-01 zoom tiering is removed from both the live
+layout and the capture path. The user's reason is better than the one it was
+built for: a name present at one distance and gone at another cannot be checked
+for, so tiering defeats INSPECTION -- it hides the difference between a label
+the model lacks and one the view is withholding. Collision avoidance is now the
+only thing that hides a name.
+
+TETHYS x3 ON ONE SEA. "Tethys" and "Neotethys" are two names for the same
+Mesozoic ocean, so the model labelled one basin twice, with Palaeo-Tethys on the
+same water wherever the windows overlapped. Duplicate Neotethys entry deleted;
+Tethys Ocean takes the whole 45-260 Ma life and moves SOUTH of the Cimmerian
+ribbon; Palaeo-Tethys moves NORTH (102, 24) to where it lay. 341 -> 340 labels.
+
+BIOME BANDS: STRUCTURAL FIX, THEN THE REAL ROOT CAUSE.
+Fix shipped: everything driving the biome lookup was ultimately LATITUDE
+(zonal rainfall; warmth = latitude minus lapse), so jitter only wobbled a line
+that stayed a line. Fetch -- how far the wind has run over land, already baked
+in the surface field -- is the one available variable with continental SHAPE
+(measured 0.42-0.46 maritime, 0.96-1.00 interior), and now modulates both biome
+axes. The boreal band bends into the interior as on Earth. Coupling halved after
+the first strength dried the entire Atlantic seaboard to steppe: fetch is UPWIND
+distance over land, not distance to the sea, so on east coasts it double-counts
+against rainfall.
+THE ROOT CAUSE, MEASURED (new task #37, G5): the baked RAINFALL FIELD is far
+too dry over eastern continents. E North America Rf 0.04 against NW Europe 0.24
+-- a sixfold gap reality does not have, both being roughly 700-1200 mm/yr --
+with C Siberia 0.03 and the southern Great Plains 0.08, and the Congo already
+measured ~35% under the Amazon. Converted to the humidity index those read
+0.12, 0.14 and 0.18: steppe or desert. THE BIOME SHADER IS FAITHFULLY RENDERING
+A BROKEN FIELD. Every "biomes look wrong" report in this session traces here,
+and no amount of shader tuning can fix it -- the next round belongs in
+climate.py's moisture advection, not in the palette.
