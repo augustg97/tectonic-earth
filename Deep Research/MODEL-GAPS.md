@@ -2068,3 +2068,43 @@ name — it is a GLSL reserved word — and the render confirmed it: the Amazon
 control went (84,106,72) to (27,45,62) because the shader had not compiled at
 all. A control region that must not change is worth carrying in every
 measurement.
+
+## Q — ITERATION 47, 2026-08-02: G9 carbonate banks — measured, four attempts,
+## NOTHING SHIPPED
+
+**The gap is confirmed and quantified.** On the Bahamas frame our shallow water
+sits at R/B 0.59, G/B 0.74; the reference's banks are near (110,200,205), R/B
+0.54 and **G/B 0.98** — green standing as high as blue. That difference is the
+FLOOR: turquoise is carbonate sand reflecting back through clear water, while a
+dark clastic or basalt floor returns the column's blue alone. The code has said
+so in a comment since the sea-floor round — "bright shallow water needs a bright
+floor as well as a shallow one, and that means a carbonate bank" — but nothing
+ever acted on it, so every tropical shelf on the planet gets the same pale blue.
+
+Four attempts, each measured:
+
+| attempt | G/B |
+|---|---|
+| baseline | 0.74 |
+| mix a bank colour over the finished water, depth gate -64..-9 m | 0.74 (0.3% of pixels touched) |
+| widen the depth window to the tropical shelf, -165..-25 m | 0.75 |
+| near-binary bank mask, weight 0.85 | 0.76 |
+| apply to `shallow` BEFORE the blend | broke the braces; nothing rendered |
+
+**What the arithmetic says, and it is the finding.** `carb` is a product of three
+smoothsteps; soft gates multiply down to an effective 0.1, which is why a 0.72
+weight moved the colour by 0.01. And the last attempt is the right shape: the
+`shallow` colour is already blended in at up to 0.92 by the existing bottom-
+return machinery, so a term added AFTERWARDS competes with it instead of riding
+it. Modify `shallow` itself, before `botRet` and `shelfLift` carry it.
+
+Two concessions the next attempt should keep. The depth window has to be the
+SHELF and not the bank top -- a real Bahama bank stands in under ten metres and
+this bathymetry is a 10 km grid that never gets that shallow over any area, so a
+-64 m gate fired on 0.3% of the frame. And the bank mask should be near-binary:
+a carbonate platform either is one or is not, and softening its existence just
+dilutes every bank on the planet toward open-ocean blue.
+
+The failed edit removed a block that carried a brace with it; `check_shader`
+caught the 27/26 imbalance before anything shipped. Reverted to the deployed
+iteration-46 state, which remains live.
