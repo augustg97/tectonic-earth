@@ -410,7 +410,8 @@ LABELS = [
     ("basin", "Congo Basin", 22, -2, 0, 540),
     ("basin", "Taoudeni Basin", -5, 21, 0, 600),
     ("region", "Hoggar Massif", 6, 23, 0, 600),
-    ("region", "Ethiopian Highlands", 39, 9, 0, 30),
+    # Ethiopian Highlands is carried as a PLATEAU below, with the same
+    # position and an overlapping window -- two labels for one feature.
     ("rift", "Okavango Rift", 23, -19, 0, 3),
     ("orogen", "Cameroon Line", 11, 6, 0, 65),
     ("region", "Yilgarn Craton", 120, -28, 0, 700),
@@ -539,7 +540,11 @@ LABELS = [
     ("sea", "Mowry Sea", -91, 53, 95, 103),
     ("sea", "Bearpaw Sea", -104, 50, 72, 78),
     ("sea", "Cannonball Sea", -100, 47, 58, 62),
-    ("sea", "Lake Pannon", 19, 46, 4, 11),
+    # Lake Pannon is a LAKE and is listed as one below. It was also carried
+    # here as a "sea", and a sea-typed label snaps to the nearest open
+    # water -- which put a second Lake Pannon in the western Mediterranean
+    # at 9 Ma (user report, 2026-08-01). One feature, one entry, and the
+    # type has to be the one whose snapping rule is right for it.
     ("sea", "Messinian Salt Basin", 16, 37, 5, 6),
     ("sea", "Afar Seaway", 41, 13, -35, -3),
     ("sea", "Pangaea Proxima Inland Sea", 28, 8, -250, -140),
@@ -1111,7 +1116,7 @@ DESCRIPTIONS = {
  "Ural Mountains": "The suture where Siberia met Laurussia, closing the last ocean inside Pangaea. Erosion has since worn it low.",
  "Appalachians": "Built in several collisions culminating in Pangaea's assembly; once alpine, now deeply eroded roots.",
  "Variscan Belt": "The European half of the Pangaean collision zone, its worn stumps preserved across France, Iberia and central Europe.",
- "Caledonides": "Raised by the closure of Iapetus; the same range now stands split between Scotland, Scandinavia and eastern Greenland.",
+ "Caledonides": "Raised around 430 Ma when Baltica drove into Laurentia and the Iapetus Ocean closed; the belt is now split between Scotland, Scandinavia and eastern Greenland. Its peaks are long gone \u2014 the mountains standing in Norway today are a much later uplift of the worn-down roots, cut into fjords by ice, not the Caledonian summits themselves.",
  "Acadian Belt": "A mid-Palaeozoic collision along Laurussia's margin, shedding sand into vast river plains.",
  "Taconic Belt": "An early Palaeozoic arc collision along Laurentia's eastern edge, the first step toward the Appalachians.",
  "Pan-African Belt": "The web of sutures created as Gondwana welded together, running through Africa, Arabia and Brazil.",

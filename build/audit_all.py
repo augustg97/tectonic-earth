@@ -69,6 +69,12 @@ CHECKS = [
           "drawn ice area against the literature range, per keyframe. The one "
           "allowed finding is 570 Ma, and it is a KNOWN LIMIT of choosing one "
           "reference frame, not a defect: see README section 9"),
+    Check("label duplicates", os.path.join(HERE, "audit_label_dupes.py"),
+          r"overlapping windows\): (\d+) of", "gt", 0,
+          "two labels for one feature at one moment. features.py grows by "
+          "accretion, and a feature re-added as the kind it really is leaves "
+          "the older entry shipping too -- which put a sea-typed Lake Pannon "
+          "in the western Mediterranean, 1,500 km from its own basin"),
     Check("label plate vs text", os.path.join(HERE, "audit_label_plate.py"),
           r"^(\d+) findings", "gt", 0,
           "a label whose coordinate is a PALAEO position that happens to be land "
