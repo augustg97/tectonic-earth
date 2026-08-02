@@ -1623,3 +1623,47 @@ measured ~35% under the Amazon. Converted to the humidity index those read
 A BROKEN FIELD. Every "biomes look wrong" report in this session traces here,
 and no amount of shader tuning can fix it -- the next round belongs in
 climate.py's moisture advection, not in the palette.
+
+## Q — THE GOOGLE EARTH PLAN, 2026-08-02 (five new reference frames)
+
+Reference set: continental USA, Fennoscandia/Baltic, China/Japan, Americas from
+orbit, Africa/Europe from orbit. Read against our own captures of the same
+ground, the differences sort into seven items, in value order. G5 is first
+because every biome complaint in this session traces to it.
+
+G5 RAINFALL (root cause, task #37). Measured: E North America Rf 0.04 vs NW
+Europe 0.24; C Siberia 0.03; S Great Plains 0.08; Congo ~35% under Amazon.
+Reality has no such gaps. The biome shader renders this faithfully, so no
+palette work can fix it. Belongs in climate.py's moisture advection: interiors
+lose water too fast and there is no non-westerly moisture source (Gulf and
+Atlantic inflow to eastern North America, monsoon inflow to Asia). Rebuild
+rainfall -> surface -> lakes; gate on Rf ratios at six control boxes.
+
+G6 DESERT INTERNAL STRUCTURE. GE's Sahara is not one tan: pale cream sand seas,
+ORANGE dune fields, dark rocky massifs and hamada, white salt pans, all at
+continental scale. Ours is close to uniform. Buildable from fields we already
+ship (aridity, substrate hardness, drainage, the erg labels).
+
+G7 ALPINE ZONATION. Every major range in the references is white on top, bare
+grey-brown rock below the snow, dark conifer below that, in narrow bands that
+follow the ridge. Ours reads as a broad brown smear with snow only at the
+highest ground. Elevation + temperature banding, per pixel.
+
+G8 GLACIATED-SHIELD LAKE STIPPLE. Fennoscandia and the Canadian Shield in GE
+are dark green stippled with THOUSANDS of small blue lakes -- the single most
+recognisable texture of deglaciated crust. We ship 1,117 present-day lakes but
+they do not read at this density.
+
+G9 CARBONATE PLATFORMS. The Bahamas and the Caribbean banks are the brightest
+thing on the Americas frame: vivid turquoise over shallow carbonate. Our shelf
+palette is uniform pale blue and misses them entirely.
+
+G10 FOREST PATCHINESS at 10-50 km. GE's forests vary continuously (clearings,
+burns, ridges, agriculture); ours are smooth washes at that scale.
+
+G11 COASTLINE CRISPNESS. Ours pixelates at the 10 km field near close zoom;
+GE's coast stays sharp because its data does not run out.
+
+Order of work: G5 (bake, multi-round), then G7 and G6 (shader, visible
+everywhere), then G9, G8, G10, G11. Each round: implement, verify headlessly at
+the matching reference framing, gates, deploy, register.
