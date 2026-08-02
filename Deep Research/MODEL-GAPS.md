@@ -1976,3 +1976,45 @@ edge has a different cause — a threshold applied to a field whose gradient is
 mostly latitudinal draws a latitude line, which is the shader's jitter to fix,
 not the climate solve's. The source was left matching the baked fields exactly
 rather than carrying an improvement the artefact on disk does not have.
+
+## Q — ITERATION 45, 2026-08-02: two hypotheses about one straight edge, both
+## wrong — NOTHING SHIPPED
+
+The western Amazon's new forest block has a dead-straight horizontal edge. Two
+candidate causes were implemented, measured against a metric, and both reverted.
+
+**The metric.** A straight horizontal boundary concentrates vertical-gradient
+energy into a few rows, so the peakiness of the per-row edge profile measures it
+directly: max/mean of `|dI/dy|` averaged along rows. Pre-iteration-44 5.56,
+after 44 **7.38** — confirming the edge is a regression from making the canopy
+solid, not something that was always there.
+
+**Hypothesis 1: the rainfall sample's domain warp is too low in frequency.**
+Genuinely true as a description — `rainAt` warps at `fbm3(wd*1.7)`, a wavelength
+of most of the globe, and a warp that low in frequency TRANSLATES a contour
+without bending it. Two shorter octaves were added. Peakiness 7.38 -> **7.38**,
+identical to two decimals. Reverted: four extra noise taps per pixel for nothing.
+
+**Hypothesis 2: it is the river corridor, not a biome contour.** Rendering
+`drain` and `trunk` directly showed a broad east-west band along the Amazon main
+stem exactly where the edge is, and `smoothstep(0.25,0.62,drain)` is a steep cut
+across a 10 km field -- the coarse-field-under-a-steep-threshold pattern this
+project already has a rule about. Frayed both inputs before thresholding, and
+carried the frayed trunk through to the corridor PAINT as well so the two agree.
+Peakiness 7.38 -> **7.42**. Reverted.
+
+**Where the evidence actually points, for whoever takes this next.** Reading the
+render at the peak row, `drain` halves between adjacent screen rows (0.411 ->
+0.202) -- but the BAKED `_d` field over the same box has its largest row-to-row
+jump at 0.0385, a 15% gradual rise at lat -1.58, not a cliff. So the single-row
+screen reading was noise amplified by dividing through a shade reference, and it
+should not be trusted as evidence of a step. **The cause is still unlocated.**
+Next attempt should segment the forest mask and measure the boundary's own
+geometry rather than image-gradient proxies, and should check the ITCZ band edge
+in `_rainfall` (`_band(absl, ...)`) as a third candidate.
+
+**One near-miss worth recording.** The comments written for hypothesis 2 quoted
+GLSL in backticks -- and FRAG is a JavaScript template literal, so a backtick
+inside it closes the shader. `check_shader.py` caught it as an unclosed block
+comment and a 47/45 brace imbalance. It would have shipped a blank globe. Never
+put a backtick in a FRAG comment.
