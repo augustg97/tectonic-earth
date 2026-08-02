@@ -215,7 +215,8 @@ LABELS = [
     ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
     ("orogen", "Ural Mountains",     58,  55,  0, 320),
     ("orogen", "Appalachians",      -80,  38,  0, 470),
-    ("orogen", "Variscan Belt",       3,  46,  280, 360),   # Massif Central, not the Sahara
+    ("orogen", "Variscan Belt",       3,  46,  280, 380),   # Massif Central, not the Sahara;
+                                                        # 380-280 Ma per the Variscan orogeny literature
     # ---------- Paleozoic ----------
     # Ends at 300, not 175. Laurussia is the continent Laurentia and Baltica
     # made; once Pangaea closes around it there is no separate landmass for
@@ -1033,7 +1034,7 @@ DESCRIPTIONS = {
  "Alleghanian Belt": "The final Appalachian collision, as Gondwana drove into Laurussia to close Pangaea. At its peak this chain rivalled the Himalaya; what remains is its worn-down root.",
  "Ouachita Belt": "The south-western continuation of the Alleghanian collision, now largely buried beneath the Gulf coastal plain.",
  "Antler Belt": "A collision along the western margin of Laurentia as an island arc docked, thrusting deep-water rocks over the continental shelf.",
- "Transantarctic Mts": "Raised along the Pacific margin of Gondwana during the Ross Orogeny, and still today the range that divides East from West Antarctica.",
+ "Transantarctic Mts": "Built of rock deformed along Gondwana's Pacific margin in the Ross Orogeny, but lifted into the range you see only from about 65 Ma, as the shoulder of the West Antarctic Rift \u2014 old rocks, young mountains. It divides East from West Antarctica and reaches 4,528 m at Mount Kirkpatrick.",
  "Verkhoyansk Belt": "Raised where the Kolyma block collided with Siberia, closing the ocean between them.",
  "Cadomian Belt": "An arc along the northern margin of Gondwana. Its fragments were later rifted away as Avalonia and carried across Iapetus.",
  "Timanian Belt": "A collision along the north-eastern edge of Baltica, predating the Uralian orogeny along nearly the same margin.",
@@ -1109,11 +1110,11 @@ DESCRIPTIONS = {
  "Andes": "Raised by the subduction of oceanic crust beneath South America's western edge; a volcanic spine running the length of the continent.",
  "Rocky Mountains": "Built far inland from the plate margin, when a shallowly subducting slab transmitted stress deep into the continent.",
  "Alps": "Thrown up by Africa's collision with Europe as Tethys closed, stacking former seafloor high above sea level.",
- "Atlas": "The northwest African expression of the same Africa-Europe convergence that raised the Alps.",
+ "Atlas": "The northwest African expression of the same Africa\u2013Europe convergence that raised the Alps \u2014 though only the High Atlas is that young: the Anti-Atlas to its south was already a mountain belt in the Palaeozoic, and was re-lifted rather than built. Toubkal reaches 4,167 m.",
  "Cordillera": "The long belt of ranges along western North America, assembled from terranes swept in and welded onto the continental margin.",
  "Sevier-Laramide": "The mountain-building episode that thickened western North America and shed sediment east into the Western Interior Seaway.",
  "Central Pangaean Mts": "A Himalayan-scale range along Pangaea's suture, running from what is now Appalachia through Iberia into central Europe.",
- "Ural Mountains": "The suture where Siberia met Laurussia, closing the last ocean inside Pangaea. Erosion has since worn it low.",
+ "Ural Mountains": "The suture where Siberia and Kazakhstania met Laurussia, closing the last ocean inside Pangaea about 300\u2013250 Ma. A quarter of a billion years of erosion has worn it to 1,894 m at its highest \u2014 a Himalayan belt reduced to hills.",
  "Appalachians": "Built in several collisions culminating in Pangaea's assembly; once alpine, now deeply eroded roots.",
  "Variscan Belt": "The European half of the Pangaean collision zone, its worn stumps preserved across France, Iberia and central Europe.",
  "Caledonides": "Raised around 430 Ma when Baltica drove into Laurentia and the Iapetus Ocean closed; the belt is now split between Scotland, Scandinavia and eastern Greenland. Its peaks are long gone \u2014 the mountains standing in Norway today are a much later uplift of the worn-down roots, cut into fjords by ice, not the Caledonian summits themselves.",
