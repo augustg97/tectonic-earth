@@ -1532,3 +1532,35 @@ it). NEXT ROUNDS: work the section-reader across the remaining ~60 scraped
 articles and the other catalogues (large igneous provinces, ancient lakes,
 inland seas, cratons), enriching cards from full text and adding what is
 missing and in range.
+
+## Q — ITERATION 36, 2026-08-02: reading in full, and a deploy that lied
+
+FULL-TEXT ENRICHMENT (geology sections read whole, not sampled):
+- TIBETAN PLATEAU. Our card said "raised by India's collision" and stopped.
+  The article's history is far better: a deep valley between ranges in the
+  Palaeogene; suture zones that stayed tropical LOWLANDS until the late
+  Oligocene, letting biota cross; a surface that FELL ~900 m between 25.5 and
+  21.6 Ma before climbing again; near-modern height by 14-8 Ma; still rising
+  ~5 mm/yr; and a genuinely open debate about whether its low relief is an
+  uplifted peneplain or infilled basins at altitude.
+- PARATETHYS. Descent from the Peri-Tethys, the Molasse-Vienna-Carpathian-
+  Pannonian-Black-Caspian-Aral chain, narrow shallow gateways causing
+  repeated anoxia, and a Middle Miocene coral-reef biodiversity hotspot that
+  lasted ~3 Myr before cooling and anoxia ended it.
+CATALOGUE DIFFS COMPLETED: large igneous provinces -- our 62 LIPs already
+cover the catalogue, no gaps; ancient lakes -- added Lake Malawi (8.6 Myr,
+more fish species than any lake on Earth) and the Aral Sea (Paratethys's
+easternmost survivor); inland seas -- our 35 sea labels already include the
+Sloss sequences and every catalogue entry in range.
+A DEFECT THE BUILD ITSELF REPORTED, once its output was actually read: all
+three Western Interior Seaway phases lay partly or wholly outside its own
+78-95 Ma label window, so none could ever display. Clipped to the window
+(90-95 opening, 82-90 widest, 78-82 withdrawing); Mowry and Bearpaw own the
+ends by design.
+AND A PROCESS LESSON, paid for in a false deploy: two cards were inserted
+into the lake RADIUS table -- a dict of numbers keyed by the same names --
+so lake_shape() multiplied a sentence by 0.72, build_labels died, and the
+site kept serving the previous file. The deploy check reported "339 labels,
+no Malawi" and was believed only because it was checked. VERIFY THE BUILT
+ARTEFACT, NOT THE SOURCE EDIT: a successful string replacement is not a
+successful build. 341 labels live. DATA_V 20260802-0058.
