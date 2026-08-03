@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260802-2245';
+const DATA_V='20260803-0706';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4627,6 +4627,51 @@ void main(){
       float knm=smoothstep(0.34,0.66,vnoise3(kd*23.0+29.0));
       float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade;
       col *= 1.0 + clamp((knL-kn1)*5.5,-1.0,1.0)*spotm*0.24;
+    }
+
+    /* VOLCANIC APRON -- the texture that was MISSING where the fabric is
+       switched off. The abyssal-hill machinery above is deliberately gated out
+       wherever the ground has prominence (flatw), so spreading fabric does not
+       get combed across a guyot or a plateau, and that gate is right. What was
+       wrong is that nothing replaced it: around the Hawaiian swell, which has
+       prominence over an area far larger than the islands, the sea floor
+       rendered as a smooth blue blank several hundred kilometres across, while
+       the fabric resumed in the corners of the frame. That blank is what reads
+       as "generic and flat".
+
+       A real volcanic apron is not smooth. It is hummocky: the Hawaiian flanks
+       are buried in giant landslide debris -- the Nuuanu and Wailau fields are
+       hundreds of blocks, some of them kilometres across -- over rubble and
+       flow lobes. So the region the fabric vacates gets a hummocky grain rather
+       than nothing, gated on exactly the term that suppressed the fabric, so
+       the two hand over instead of leaving a hole between them. Isotropic, not
+       lineated: debris fields have no grain direction, which is precisely what
+       distinguishes them from the combed crust around them. */
+    /* KEYED TO EXACTLY WHAT THE FABRIC GIVES UP, and NOT to deepw. The first
+       version used prominence and deepw, and barely touched the blank: deepw
+       fades everything out above about 2,400 m, and the Hawaiian swell -- the
+       broad rise the islands sit on -- is shallower than that, so the same gate
+       that silences the fabric there silenced its replacement too. The blank is
+       precisely the complement of flatw, so that is what fills it, and the
+       hand-over is exact by construction. Held off the coastal shelf by depth
+       alone, so beaches and banks keep their own treatment. */
+    float apFlat = (1.0-smoothstep(90.0,320.0,length(vec2(gE,gN))))
+                 * (1.0-smoothstep(120.0,520.0,prom));
+    float apr = (1.0-apFlat) * gFineFade * smoothstep(-60.0,-300.0,z);
+    if(apr > 0.004){
+      vec3 apd = matDir(sdir);
+      vec2 aT = vec2(vnoise3(apd*470.0+11.0)-0.5, vnoise3(apd*470.0+77.0)-0.5)*1.45
+              + vec2(vnoise3(apd*1150.0+31.0)-0.5, vnoise3(apd*1150.0+91.0)-0.5)*0.80
+              + vec2(fbm3(apd*230.0+53.0)-0.5, fbm3(apd*230.0+137.0)-0.5)*0.55;
+      nrm = normalize(nrm + vec3(aT*apr*0.72, 0.0));
+      /* The TONE term carries most of the work here, and deliberately. The swell
+         around a big edifice is shallow, and shallow water is drawn pale and
+         nearly face-on, so a perturbed normal barely changes its shade -- the
+         probe showed both gates fully open across the pale zone while it still
+         read flat. A grain that does not depend on the lighting angle is what
+         makes that surface legible. */
+      col *= 1.0 + ((vnoise3(apd*470.0+11.0)-0.5)*0.72
+                   +(vnoise3(apd*1150.0+31.0)-0.5)*0.38)*0.30*apr;
     }
 
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,

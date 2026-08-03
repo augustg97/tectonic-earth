@@ -2,6 +2,22 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
  "releases": [
   {
+   "version": "2.1",
+   "date": "3 August 2026",
+   "title": "The sea floor around a volcano is not smooth",
+   "summary": "Around big volcanic rises like the Hawaiian chain, the ocean floor rendered as a large blank of smooth blue. The abyssal-hill texture is deliberately switched off over a volcano so it does not get combed across the edifice — but nothing was drawn in its place. It now gets the hummocky landslide-debris terrain such flanks really have.",
+   "sections": [
+    {
+     "name": "The ocean floor",
+     "items": [
+      "Volcanic aprons have their own texture. The floor around a seamount or an island chain is buried in giant landslide debris — the fields off Hawaii contain blocks kilometres across — and it now reads that way instead of as a smooth halo hundreds of kilometres wide.",
+      "The new terrain is keyed to exactly the region the abyssal fabric gives up, so the two hand over to each other with no gap between them.",
+      "Detail measured on the frame rose by about half around the Scotia arc and by a sixth around Hawaii, with the land untouched."
+     ]
+    }
+   ]
+  },
+  {
    "version": "2.0",
    "date": "2 August 2026",
    "title": "Rain that reaches the far side of a continent",

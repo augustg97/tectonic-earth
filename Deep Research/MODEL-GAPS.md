@@ -2199,3 +2199,44 @@ reader's language, and the log is part of the round from here.
 
 Still open from this round: the sea floor reads as generic and pixelated at
 close zoom (user report), which is the next round.
+
+## Q — ITERATION 50, 2026-08-03: the floor a volcano vacates
+
+User report: the sea floor still reads generic, flat and pixelated. The frame
+answered it before any code did. At Hawaii, zoom 1.15, the abyssal fabric is
+present in the CORNERS and absent in a smooth blue blank several hundred
+kilometres across centred on the island chain.
+
+**The blank is deliberate, and half-right.** `flatw` switches the abyssal-hill
+fabric off wherever the ground has slope or prominence, so spreading fabric does
+not get combed across a guyot or a plateau. That gate is correct. What was wrong
+is that **nothing replaced it** — the machinery vacates the region and leaves
+bare palette behind.
+
+A real volcanic apron is not smooth. Hawaii's flanks are buried in giant
+landslide debris: the Nuuanu and Wailau fields are hundreds of blocks, some
+kilometres across, over rubble and flow lobes. So the vacated region now gets a
+hummocky grain, isotropic rather than lineated — debris has no grain direction,
+which is exactly what separates it from the combed crust around it.
+
+**Two measured corrections.** The first version gated on prominence AND `deepw`,
+and barely moved the blank: `deepw` fades everything out above about 2,400 m,
+and the Hawaiian swell the islands sit on is shallower than that, so the same
+depth gate that silenced the fabric silenced its replacement. Re-keyed to
+`1 - flatw` exactly, so the hand-over is exact by construction, with only a
+shelf-depth guard.
+
+Then a probe (R = deepw, G = flatw, B = reference) showed both gates FULLY OPEN
+across the pale zone that still read flat — 0.86 and 0.03. The texture was being
+applied and could not be seen: shallow water is drawn pale and nearly face-on, so
+a perturbed normal barely changes its shade. The fix was to put most of the
+apron's strength into the TONE term, which does not depend on the lighting angle.
+
+Measured detail energy over water, before -> after: Scotia arc 1 px 2.05 ->
+3.05 (+49%), 4 px +30%; Hawaii close 1 px 0.88 -> 1.01 (+15%) at every scale.
+Land control byte-comparable (0.26 mean absolute difference, coastline
+antialiasing only).
+
+Still open: the broad shallow swells remain the flattest water on the map. Both
+gates are open there, so it is a palette-contrast question rather than a missing
+texture, and it belongs with whatever revisits the shallow-water ramp.
