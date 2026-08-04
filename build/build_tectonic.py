@@ -126,6 +126,52 @@ def strain(dE, dN, w, h):
     return shortening, dxy / denom, (2.0 * exy) / denom
 
 
+TOPO_SHORT = 0.34   # shortening a full-height range claims from its own relief
+
+
+def topo_fabric(age):
+    """Strike from the range's OWN TOPOGRAPHY, for every orogen the plate
+    reconstruction cannot see.
+
+    Measured on the shipped field, the strain fabric is excellent where rigid
+    plates collide head-on -- the Himalaya reads shortening 0.365 with an axis
+    strength of 0.998 -- and absent everywhere else that matters: the Andes
+    0.055, the Zagros 0.000, the Alps 0.090, against 0.082 over the open
+    Pacific. Those are noise-level. The reason is honest: Andean-type shortening
+    happens INSIDE the overriding plate, and a rigid-plate reconstruction has no
+    way to express it, so no amount of differentiating the displacement field
+    will find it.
+
+    But a range states its own strike. A fold axis runs ALONG a belt, which is
+    the tangent to its elevation contours -- the identical construction
+    rebuild_future.py already uses on the belt raster, applied here to the
+    topography itself. It costs no new data, works at every age including the
+    Precambrian, and it cannot invent a range where there is no relief.
+    """
+    from scipy.ndimage import gaussian_filter, zoom as ndzoom
+    from fieldpack import dec_elev
+    name = ("phan_%04d_e.avif" if age <= 540 else "pre_%04d_e.avif") % age
+    p = os.path.join(OUT, name)
+    if not os.path.exists(p):
+        return None, None, None
+    z = dec_elev(np.asarray(Image.open(p).convert("L")).astype(np.float32) / 255.0)
+    h, w = z.shape
+    zs = ndzoom(z, (float(TH) / h, float(TW) / w), order=1)
+    zs = gaussian_filter(zs, 1.1, mode=("nearest", "wrap"))
+    gy, gx = np.gradient(zs)
+    gN, gE = -gy, gx
+    mag = np.hypot(gE, gN) + 1e-9
+    tE, tN = -gN / mag, gE / mag                 # contour tangent == strike
+    c2, s2 = tE * tE - tN * tN, 2.0 * tE * tN
+    # A belt is high AND has relief. Either alone is wrong: a plateau is high
+    # and unstriped, a dissected lowland has relief and no strike worth drawing.
+    relief = gaussian_filter(mag, 1.4, mode=("nearest", "wrap"))
+    ref = np.percentile(relief[zs > 500.0], 90) if (zs > 500.0).any() else 1.0
+    st = (np.clip((zs - 650.0) / 1700.0, 0.0, 1.0)
+          * np.clip(relief / (ref + 1e-9), 0.0, 1.0))
+    return st * TOPO_SHORT, c2, s2
+
+
 def _encode(shortening, c2, s2):
     r = np.sqrt(np.clip(shortening / SHORT_REF, 0.0, 1.0))
     g = np.clip(c2, -1, 1) * 0.5 + 0.5
@@ -157,6 +203,15 @@ def bake(age, rot, quiet=False):
     # fabric to draw) and it is also what made this texture 273 kB: random
     # high-frequency data does not compress. Fading the axis out with the
     # magnitude fixes both, and takes the file to a fraction of the size.
+    # TOPOGRAPHIC FABRIC where the plate solution has nothing to say. Strain
+    # wins wherever it is real; topography fills the rest, so the Himalaya keeps
+    # its measured collision fabric and the Andes finally gets a strike at all.
+    tst, tc2, ts2 = topo_fabric(age)
+    if tst is not None:
+        take = tst > sh
+        c2 = np.where(take, tc2, c2)
+        s2 = np.where(take, ts2, s2)
+        sh = np.maximum(sh, tst)
     fade = np.clip(sh / (0.10 * SHORT_REF), 0.0, 1.0)
     c2 = c2 * fade
     s2 = s2 * fade

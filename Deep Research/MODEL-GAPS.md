@@ -2289,3 +2289,66 @@ in Phanerozoic orogens, no amount of shader work will make a range read as
 combed. That is the next round: find what bakes `_t` for the Phanerozoic
 (`rebuild_future.py` does it for the future branch from the belt raster), check
 what it writes over the Andes and the Himalaya, and fix it there.
+
+## Q — ITERATION 52, 2026-08-03: the fabric field is fixed; the crests are not
+
+**FIRST, A CORRECTION TO ITERATION 51.** That entry reported gShort at 0.18 in
+both the Himalaya and the Andes and concluded the fabric was uniformly dead. The
+0.18 was a BOX AVERAGE over a frame containing far more than the range. Read off
+the field itself, per orogen, the truth is more interesting: the strain fabric
+is excellent where rigid plates collide head-on and absent everywhere else.
+
+| region | shortening (R) | axis strength |
+|---|---|---|
+| Himalaya | 0.365 | 0.998 |
+| Andes | 0.055 | 0.030 |
+| Zagros | 0.000 | 0.006 |
+| Alps | 0.090 | 0.082 |
+| open Pacific | 0.082 | 0.067 |
+
+The Andes, Zagros and Alps are at NOISE LEVEL — the open Pacific scores as high.
+The reason is honest and not a bug: Andean-type shortening happens inside the
+overriding plate, and a rigid-plate reconstruction cannot express it, so no
+amount of differentiating the displacement field will ever find it.
+
+**THE FIX: A RANGE STATES ITS OWN STRIKE.** A fold axis runs along a belt, which
+is the tangent to its elevation contours — the identical construction
+`rebuild_future.py` already uses on the belt raster, applied to the topography
+itself. Costs no new data, works at every age, and cannot invent a range where
+there is no relief. `build_tectonic.topo_fabric()`, strain winning wherever it
+is real:
+
+| region | before | after |
+|---|---|---|
+| Himalaya | 0.365 / 0.998 | 0.543 / 0.999 |
+| Andes | 0.055 / 0.030 | **0.527 / 0.997** |
+| Zagros | 0.000 / 0.006 | **0.431 / 0.998** |
+| Alps | 0.090 / 0.082 | 0.329 / 0.997 |
+| open Pacific | 0.082 / 0.067 | 0.082 / 0.067 |
+| Amazon plain | — | 0.022 / 0.006 |
+
+And the shader gate, which demanded 0.30 when even the best orogen read 0.365,
+is recalibrated to 0.15-0.45 — the range that now separates orogen from ocean.
+200 keyframes re-baked in 2.4 minutes.
+
+**AND IT CHANGES THE PICTURE NOT AT ALL, which is the honest headline.** The
+fold compression only stretches the octaves that exist, and those sample at 150
+and 550 km. Basin-scale stripes are not ridges. Rendered before and after: mean
+absolute difference 0.01.
+
+**THREE WAYS TO DRAW CRESTS, ALL MEASURED, ALL REVERTED.** The metric is
+structure-tensor coherence, (l1-l2)/(l1+l2), which is orientation-invariant —
+the dx/dy ratio used earlier cannot see a diagonal range and reported 1.0 for
+everything.
+
+| attempt | detail | coherence |
+|---|---|---|
+| ridged octave in the ELEVATION | +39% | picture destroyed (thresholds trip per pixel) |
+| two independent noises as the normal's components | +46% | **-21%** |
+| true GRADIENT of a ridged field | +200% | **-30%**, and it leaked onto the plains |
+
+Every one added texture and REDUCED lineation. So the remaining problem is the
+rendering of crests, not the data underneath them — and "more texture" is not
+the same thing as "more landform", which is what the coherence metric is for.
+
+Shipped: the field and the gate. Not shipped: any crest drawing.

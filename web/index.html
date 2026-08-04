@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260803-0706';
+const DATA_V='20260804-0747';
 const FIELD_V='20260731-lakes';
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2057,6 +2057,12 @@ float baseElev(vec2 uv){
    Ridged noise (1-|2n-1|, squared, with each octave gated by the one above)
    produces exactly that. Blend the two by how steep the shipped field already
    is, so the Himalaya grow crests while the Amazon basin stays flat. */
+/* One ridged octave, as a scalar field. Ridge crests need the GRADIENT of a
+   field, not two independent noises used as the two perturbation components --
+   that second construction is isotropic however much the sampling domain is
+   compressed, which is why the first attempt at combed mountains measured a
+   21% DROP in structure-tensor coherence. */
+float ridgeK(vec3 p){ float n=vnoise3(p); float r=1.0-abs(n*2.0-1.0); return r*r; }
 float detail3(vec3 p, float rug){
   float sm=0.0, rg=0.0, a=0.5, w=1.0;
   for(int i=0;i<5;i++){
@@ -2120,7 +2126,16 @@ float elevDetail(float z, vec3 d, float rug){
      is an orogen, and leaves cratons isotropic where they belong. */
   vec3 dF=d;
   if(z>=wl && uTect>0.5 && gShort>0.30){
-    float S=1.0+1.9*smoothstep(0.30,0.78,gShort);
+    /* GATE RECALIBRATED TO THE FIELD'S ACTUAL RANGE (2026-08-03). This demanded
+       gShort above 0.30 before it compressed anything, and the field never went
+       there: measured, the HIMALAYA read 0.365 and the ANDES 0.055, so the
+       smoothstep returned ~0 and the anisotropy that makes a range read as
+       combed had never once run in a real orogen. That is why our mountains
+       looked like extruded prisms. The field now carries a topographic fabric
+       as well as a strain one (build_tectonic.topo_fabric), so orogens read
+       0.33 to 0.54 while open ocean stays at 0.08 and the Amazon plain at 0.02
+       -- and the gate is set to separate exactly those. */
+    float S=1.0+2.2*smoothstep(0.15,0.45,gShort);
     dF=d-gFold*(dot(d,gFold)*(1.0-1.0/S));
   }
   float n=detail3(dF*260.0,rugw), n2=detail3(dF*70.0+13.7,rugw);
@@ -3895,6 +3910,20 @@ void main(){
        rock, so mountains gain rocky flanks with vegetation in the valleys --
        one of the strongest photoreal cues on a global view. Slope comes from
        the TRUE relief normal (before the grain below perturbs it). */
+    /* Ridge-and-valley crests are NOT drawn here yet, and the attempts are
+       recorded so they are not repeated. The relief octaves in elevDetail sample
+       at 150 and 550 km -- basin scale -- so a belt reads as one extruded prism
+       where the reference shows dozens of parallel crests. Three constructions
+       were tried and measured against structure-tensor coherence, which is
+       orientation-invariant and therefore the only honest metric here:
+       a ridged octave in the ELEVATION (relief +39%, picture destroyed -- a
+       crease is a gradient discontinuity and every elevation-derived threshold
+       trips on it); two independent noises as the normal's two components
+       (coherence -21%, isotropic by construction); and the true GRADIENT of a
+       ridged field (coherence -30%, and it leaked onto the plains). All three
+       added texture and REDUCED lineation. The fabric field underneath them is
+       now correct -- see build_tectonic.topo_fabric -- so the remaining problem
+       is the rendering of the crests, not the data. MODEL-GAPS iteration 52. */
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
