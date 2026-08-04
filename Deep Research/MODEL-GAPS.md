@@ -2352,3 +2352,47 @@ rendering of crests, not the data underneath them — and "more texture" is not
 the same thing as "more landform", which is what the coherence metric is for.
 
 Shipped: the field and the gate. Not shipped: any crest drawing.
+
+## Q — ITERATION 53, 2026-08-04: five ways not to draw a mountain crest
+
+Continuing the mountain round. The fabric data was fixed and shipped in
+iteration 52; this round attacked the rendering of crests and did not land it.
+Recorded in full so the ground already covered is not covered again.
+
+**THE METRIC MATTERS AND TOOK TWO TRIES TO GET RIGHT.** A dx/dy gradient ratio
+reads 1.00 for a diagonal range and called every attempt neutral. Structure-
+tensor coherence, (l1-l2)/(l1+l2), is orientation-invariant. And it has to be
+measured on a HIGH-PASS of the image: whole-frame coherence is dominated by the
+existing large-scale shading, so adding any fine detail lowers it even when the
+detail is itself lineated. Baselines, high-pass band, weighted by where detail
+actually is: Andes 0.212, Himalaya 0.232.
+
+**THE FIVE ATTEMPTS**
+
+| # | construction | band coherence |
+|---|---|---|
+| 1 | ridged octave in the ELEVATION | picture destroyed — creases trip every elevation threshold |
+| 2 | two independent ridged noises as the normal's x/y | -21% |
+| 3 | finite-difference gradient of a RIDGED field | -30%, leaked onto the plains |
+| 4 | smooth field + smooth sin^2 ridge transform | -6% Andes, -17% Himalaya |
+| 5 | as 4, but sampling the SURFACE then compressing, differenced along east/north | **-2% Andes**, -15% Himalaya |
+
+Attempt 5 fixed two real errors — offsetting from the already-compressed vector,
+and expressing the result in axes the normal does not use — and moved the Andes
+from -30% to -2%. It is the closest, and still not positive.
+
+**WHAT IS NOW ESTABLISHED, so the next attempt starts from fact.**
+The domain compression WORKS: replicated outside the shader on a patch of
+sphere, the gradient ratio across:along goes 0.52 -> 2.13 at S=4.4, i.e.
+features elongate about fourfold along strike. The fabric field carries a real
+axis in every orogen (Andes 0.527 shortening, 0.997 axis strength). So neither
+the data nor the mathematics is the problem: it is how this shader consumes the
+axis.
+
+**THE NEXT PROBE, AND ITS TRAP.** Painting the decoded strike as colour returned
+|E| 0.19, |N| 0.19 -- magnitude 0.27 for a vector the field stores at 0.997, and
+an angle of 41+/-10 degrees where the Andes trend 70-80. That probe runs through
+the per-channel province tint, which corrupts channel RATIOS, so the numbers
+cannot be trusted and were not acted on. Read gFold back through a channel-safe
+path first -- one quantity per render, greyscale, with a known constant for
+shade -- and confirm what the shader is actually holding before building on it.

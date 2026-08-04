@@ -3910,20 +3910,17 @@ void main(){
        rock, so mountains gain rocky flanks with vegetation in the valleys --
        one of the strongest photoreal cues on a global view. Slope comes from
        the TRUE relief normal (before the grain below perturbs it). */
-    /* Ridge-and-valley crests are NOT drawn here yet, and the attempts are
-       recorded so they are not repeated. The relief octaves in elevDetail sample
-       at 150 and 550 km -- basin scale -- so a belt reads as one extruded prism
-       where the reference shows dozens of parallel crests. Three constructions
-       were tried and measured against structure-tensor coherence, which is
-       orientation-invariant and therefore the only honest metric here:
-       a ridged octave in the ELEVATION (relief +39%, picture destroyed -- a
-       crease is a gradient discontinuity and every elevation-derived threshold
-       trips on it); two independent noises as the normal's two components
-       (coherence -21%, isotropic by construction); and the true GRADIENT of a
-       ridged field (coherence -30%, and it leaked onto the plains). All three
-       added texture and REDUCED lineation. The fabric field underneath them is
-       now correct -- see build_tectonic.topo_fabric -- so the remaining problem
-       is the rendering of the crests, not the data. MODEL-GAPS iteration 52. */
+    /* Crests are still not drawn here. FIVE constructions have been tried and
+       measured against high-pass structure-tensor coherence; every one added
+       texture and none added lineation. See MODEL-GAPS iterations 51-53 for the
+       full list so none of them is repeated. What IS established: the fabric
+       field now carries a real strike in every orogen (iteration 52), and the
+       domain compression provably elongates features -- verified numerically
+       outside the shader, gradient ratio across:along 0.52 -> 2.13 at S=4.4.
+       So the fault is in how this shader consumes the axis, not in the data or
+       the maths. Next probe must read gFold through a channel-safe path: the
+       obvious one is corrupted by the per-channel province tint, which is why
+       its magnitude came back at 0.27 for a vector the field stores at 0.997. */
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
