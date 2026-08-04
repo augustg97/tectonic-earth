@@ -2434,3 +2434,47 @@ next round starts, and it is a JS-side question now, not a shader one.
 Nothing shipped. The working tree is identical to the deployed state; the FLIP90
 experiment in build_tectonic.py was removed and phan_0000_t.webp re-baked
 without it.
+
+## Q — ITERATION 55, 2026-08-04: the fabric was switched off by ONE MISSING FILE
+
+Round four, and the mountains finally comb. The cause of iterations 51-54 was
+not geometry, not the metric, and not the shader mathematics.
+
+**THE HUNT.** Reading uniforms out of the running page (the in-app browser, not
+the headless probes that kept crashing): `uTect = 0`, `tectA = false` — the
+fabric texture was never bound, so the whole block was skipped and `gFold` stayed
+at its declared default of `vec3(0.0)`. The network log showed `_t` files being
+fetched and returning 200, so the files were fine.
+
+**AND THEN THE ACTUAL FAULT.** The present day interpolates keyframes **i=49 and
+j=50**. Index 49 is age -5, which is `fut_0005` — and `fut_0005` was one of
+exactly TWO keyframes out of 251 that had no `_t` file at all (the other being
+`pre_1000`). The shader binds the fabric from frame `i` alone, so a single
+missing file at one end of the pair switched the entire fold fabric off — at the
+present day, and at every age whose pair touched that frame.
+
+That is why five crest constructions across three rounds all produced isotropic
+mottle: **every one of them was compressing its sampling domain along a zero
+vector.** It is also why iteration 52's field fix, which is correct, moved the
+render by 0.01.
+
+**THE FIX, in three parts.**
+1. Both missing `_t` files baked, from the topographic fabric alone (it needs
+   only elevation, which is exactly the case it was written for). 251 of 251.
+2. The binding falls back to the pair's other keyframe, so one gap can never
+   silence the feature again. Same for the foreland field, same reason.
+3. `FIELD_V` bumped, or clients would reuse the cached 404s.
+
+**AND THE CONSTANTS HAD NEVER BEEN SEEN.** With the fabric live, the shipped
+strength of 2.2 combed the Himalaya like brushed metal — unsurprising, since it
+was chosen while the effect was invisible. Moderated to 1.45.
+
+Measured, high-pass structure-tensor coherence, the metric that took two rounds
+to get right: **Andes 0.212 -> 0.256 (+21%), Himalaya 0.232 -> 0.281 (+21%).**
+The first positive numbers in four rounds; every previous attempt was negative.
+Render difference against the pre-fix state: Andes 2.19, Himalaya 14.53, where
+the same field change previously moved it 0.01.
+
+Still short of the reference — the relief octaves remain at 150 and 550 km, so
+these are combed swells rather than ridge-and-valley at 10-30 km. But the
+mechanism is live now, which is the precondition for everything else.

@@ -1264,8 +1264,8 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260804-0747';
-const FIELD_V='20260731-lakes';
+const DATA_V='20260804-1946';
+const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
   if(window.INLINE_JSON){files.forEach(f=>DATA[f]=window.INLINE_JSON[f]);}
@@ -2135,7 +2135,11 @@ float elevDetail(float z, vec3 d, float rug){
        as well as a strain one (build_tectonic.topo_fabric), so orogens read
        0.33 to 0.54 while open ocean stays at 0.08 and the Amazon plain at 0.02
        -- and the gate is set to separate exactly those. */
-    float S=1.0+2.2*smoothstep(0.15,0.45,gShort);
+    /* STRENGTH 1.45, NOT 2.2, and the number could only be chosen once the
+       fabric actually arrived. Every constant here was set while gFold was the
+       zero vector, so none of them had ever been seen: at 2.2 the Himalaya came
+       back combed like brushed metal, which is too much anisotropy for rock. */
+    float S=1.0+1.45*smoothstep(0.15,0.45,gShort);
     dF=d-gFold*(dot(d,gFold)*(1.0-1.0/S));
   }
   float n=detail3(dF*260.0,rugw), n2=detail3(dF*70.0+13.7,rugw);
@@ -7419,12 +7423,22 @@ function bindTextures(){
     for(let k=0;k<Q.length;k++){const q=prot[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
     mat.uniforms.uMat.value=1.0;
   } else mat.uniforms.uMat.value=0.0;
-  // Tectonic state: shortening + fold axis, from the same keyframe as the warp.
-  const ta=bindTex('t',f.i);
+  /* Tectonic state: shortening + fold axis, from the same keyframe as the warp.
+
+     FALL BACK TO THE OTHER KEYFRAME OF THE PAIR. Binding from f.i alone means
+     one missing file switches the whole fold fabric off, and that is exactly
+     what happened at the PRESENT DAY: age 0 interpolates frames 49 and 50, and
+     frame 49 is fut_0005, one of only two keyframes in the series that had no
+     _t at all. So uTect was 0, gFold was the zero vector, and every attempt to
+     comb a mountain range in iterations 51-53 was steering by a direction that
+     did not exist. The files are baked now; this makes the binding robust so a
+     single gap can never silence the feature again. The fabric changes slowly,
+     so the neighbour is a good answer rather than a fudge. */
+  const ta=bindTex('t',f.i)||bindTex('t',f.j);
   if(ta)mat.uniforms.tectA.value=ta;
   mat.uniforms.uTect.value=ta?1.0:0.0;
   // Foreland flexure: the moat in front of a mountain belt.
-  const fa=bindTex('f',f.i);
+  const fa=bindTex('f',f.i)||bindTex('f',f.j);   // same fallback, same reason
   if(fa)mat.uniforms.foreA.value=fa;
   mat.uniforms.uFore.value=fa?1.0:0.0;
   // Linear in t: the shader interpolates the height field, so this drives the

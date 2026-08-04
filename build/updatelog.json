@@ -2,6 +2,21 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
  "releases": [
   {
+   "version": "2.2",
+   "date": "4 August 2026",
+   "title": "Mountain ranges start to comb",
+   "summary": "A mountain belt is dozens of parallel ridges running along its length, and ours rendered as smooth swells. The machinery to draw that has existed for a long time and had never once run: it steers off a fold-direction field that was silently switching off at the present day, so it was being pointed by a direction of zero.",
+   "sections": [
+    {
+     "name": "Mountains",
+     "items": [
+      "Ranges now show ridges running along strike rather than a single smooth swell. The Andes, the Zagros and the Alps get this for the first time — the plate reconstruction cannot see shortening inside an overriding plate, so the fabric now also reads a range's strike from the tangent to its own contours.",
+      "The fold fabric was switching off at the present day. The two keyframes either side of today are used together, and one of them was among only two in the whole series that shipped without a tectonic field — which silenced the feature for every age it touched. Both files are now built, and a missing one can no longer switch the system off."
+     ]
+    }
+   ]
+  },
+  {
    "version": "2.1",
    "date": "3 August 2026",
    "title": "The sea floor around a volcano is not smooth",
