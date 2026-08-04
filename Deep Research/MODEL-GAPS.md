@@ -2240,3 +2240,52 @@ antialiasing only).
 Still open: the broad shallow swells remain the flattest water on the map. Both
 gates are open there, so it is a palette-contrast question rather than a missing
 texture, and it belongs with whatever revisits the shallow-water ramp.
+
+## Q — ITERATION 51, 2026-08-03: why mountains are extruded prisms — measured,
+## NOTHING SHIPPED
+
+User report, with Google Earth frames alongside ours: our ranges read as single
+triangular prisms where the reference shows dozens of parallel crests, incised
+valleys and intermontane basins. Three things were tried and measured; all three
+are reverted, and between them they locate the cause precisely.
+
+**1. THE RELIEF OCTAVES ARE AT BASIN SCALE.** `elevDetail` samples at `dF*260`
+and `dF*70` -- wavelengths of roughly 150 km and 550 km. Real ridges in the
+Andes, the Zagros or the Himalaya repeat every 10 to 30 km. So a mountain belt
+gets a broad swell with a couple of rises on it, which is exactly what a prism
+looks like. Nothing in the pipeline puts relief at ridge spacing.
+
+**2. RIDGED NOISE CANNOT GO IN THE ELEVATION.** Adding a ridged octave at 26 km
+raised relief energy 39% and wrecked the picture: a ridged crease is a gradient
+discontinuity, every elevation-derived threshold downstream (snow, bare rock,
+treeline) tripped on it per pixel, and the Himalaya came back as black-and-white
+speckle. The function's own opening comment warns about exactly this for the sea
+floor; it applies on land too, because of the thresholds rather than aliasing.
+
+**3. IN THE SHADING IT IS SAFE BUT ISOTROPIC.** Moved to a normal perturbation:
+no speckle, relief energy up 30% in the Andes and 23% in the Himalaya -- and the
+across/along gradient ratio stayed at 1.02 and 0.99. Mottle, not crests. More
+texture without more landform is not an improvement, so it is reverted.
+
+**AND HERE IS WHY IT CANNOT COMB.** Probed in the render (R = gShort,
+G = |gFold|, B = reference):
+
+| range | gShort | \|gFold\| | resulting strike compression |
+|---|---|---|---|
+| Himalaya | 0.18 | 0.18 | **1.00** |
+| Andes | 0.18 | 0.18 | **1.00** |
+
+The anisotropic fold fabric (H4) gates on `smoothstep(0.30, 0.78, gShort)`. The
+shipped field reads 0.18 in the two type examples of shortened crust on Earth,
+so that smoothstep returns exactly zero: **the fold fabric has never once
+switched on in a real orogen.** Recalibrating the gate to the field's actual
+range was tried and did NOT produce lineation either, and the second column says
+why -- `|gFold|` is 0.18, so the fold DIRECTION is itself weak or undefined
+there. There is no strike to comb along.
+
+**So the fix is upstream, in the `_t` tectonic-fabric field, not in the shader.**
+Until that field carries a real strike direction and a real shortening magnitude
+in Phanerozoic orogens, no amount of shader work will make a range read as
+combed. That is the next round: find what bakes `_t` for the Phanerozoic
+(`rebuild_future.py` does it for the future branch from the belt raster), check
+what it writes over the Andes and the Himalaya, and fix it there.
