@@ -2396,3 +2396,41 @@ the per-channel province tint, which corrupts channel RATIOS, so the numbers
 cannot be trusted and were not acted on. Read gFold back through a channel-safe
 path first -- one quantity per render, greyscale, with a known constant for
 shade -- and confirm what the shader is actually holding before building on it.
+
+## Q — ITERATION 54, 2026-08-04: the fold fabric does not reach the shader
+
+Round three of the mountain work. It did not draw a crest either, but it moved
+the fault a long way and rules out everything the last two rounds were trying.
+
+**THE CLEAN PROBE, AND WHAT IT SAYS.** Reading a quantity at `gl_FragColor` --
+past the province tint, the shade, the terminator and the haze -- the decoded
+fold axis over the Andes comes back at **14 degrees from east with an
+interquartile range of ONE degree**. The Andes trend 70-80. A field that varies
+across a continent cannot have an IQR of one degree: that is a CONSTANT, and the
+constant is exactly what `normalize(gFold + vec3(1e-9))` returns when gFold is
+the zero vector. **gFold is (0,0,0) in the render.**
+
+**CONFIRMED BY A CONTROLLED FLIP.** Re-baking the topographic fabric with the
+strike rotated 90 degrees and re-probing returned the same 14 degrees, to the
+digit. If the shader were reading the field at all, rotating the field would
+have moved the reading. It is not reading it.
+
+So the five crest constructions of iterations 51-53 were all being steered by a
+zero vector. Every one of them was compressing its sampling domain along a
+direction that did not exist, which is why each produced isotropic mottle no
+matter how the maths was arranged -- and why iteration 52's field fix, which is
+real and correct, changed the picture by 0.01.
+
+**WHAT IS STILL UNKNOWN: WHY.** The fabric block runs under `if(uTect>0.5)`, and
+`uTect` is set from whether the `_t` texture bound this frame. The file exists
+(104 kB), the server returns 200 for it, and the loader derives its name by
+convention rather than from the manifest, so a missing manifest key is not the
+cause. Distinguishing "uniform never set" from "texture bound but sampling zero"
+needs one reading of `uTect` itself, and BOTH probe paths became unreliable in
+this session -- the GLSL probe stopped rendering (the Chrome log shows GPU
+process crashes) and the harness's `evalq` returned nothing. That is where the
+next round starts, and it is a JS-side question now, not a shader one.
+
+Nothing shipped. The working tree is identical to the deployed state; the FLIP90
+experiment in build_tectonic.py was removed and phan_0000_t.webp re-baked
+without it.
