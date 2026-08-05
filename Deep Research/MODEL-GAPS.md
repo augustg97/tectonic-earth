@@ -2625,3 +2625,49 @@ with the tan-block metric above, not with an image-gradient count. Also worth
 testing directly: `vnoise3` is lattice noise, and any near-binary threshold on it
 prints axis-aligned cells at the lattice scale — `sdir*46` is a 7.8 degree cell,
 which is the right order for this block.
+
+## Q — ITERATION 59, 2026-08-05: the vegetation banding reproduced and measured,
+## and two measurement traps that invalidated earlier rounds
+
+**REPRODUCED.** Not at 300 Ma, where I had been looking, but at **280 Ma at the
+Congo Basin's own tracked position (2,-45), zoom 1.5**: green vegetation in
+straight horizontal bands with a hard vertical stripe, unmistakably a grid.
+
+**TRAP 1: THE METRIC WAS MEASURING THE SCENERY.** Two successive metrics failed.
+An image-gradient count reads the lake shore and the coastline, which are
+legitimately sharp. A colour-mask boundary count fails differently: the bands are
+SOFT gradients, so a threshold cuts through them and scatters the boundary
+instead of finding a rim. Calibrated against frames known to be correct, both
+metrics scored the present-day 100th-meridian dry line HIGHER (0.17 / 1.53) than
+the reported frame (0.16 / 1.44) — i.e. they were not detecting the artefact at
+all, and iteration 58's whole elimination list was read through them.
+
+The signature is PERIODICITY, so the metric is spectral: greenness (G-R),
+collapsed to a row profile, high-passed, FFT, peak over median.
+
+| frame | peak/median | period |
+|---|---|---|
+| present N America (good) | 29.0 | 28 px |
+| present Congo (good) | 40.7 | 42 px |
+| present Sahara (good) | 31.5 | 27 px |
+| **280 Ma Congo (reported)** | **133.4** | **84 px** |
+
+Three to four times any correct frame. 84 px at this framing is about 4.4
+degrees of latitude.
+
+**TRAP 2: THE PROBE WAS SERVING A CACHED PAGE.** Probes of `h` and `w` returned
+BYTE-IDENTICAL statistics — impossible for two different quantities. Forcing
+`gl_FragColor` to solid red in a FRESH browser profile rendered red, proving the
+mechanism works; the same probe in the reused profile had been showing the
+unmodified page. **Every probe must use a fresh profile.** Re-run cleanly, the
+three inputs are genuinely smooth: h 8.4, w 8.2, Rf 7.7, against the artefact's
+133.4.
+
+So the inputs are clean and the banding is made in the colour stage — the same
+conclusion as iteration 58, but this time reached with a metric that can see the
+artefact and a probe that is actually running.
+
+**NEXT.** Bisect the colour stage against the spectral metric, fresh profile per
+render, reproducing at 280 Ma / (2,-45) / zoom 1.5. A 4.4-degree latitude period
+is the thing to explain: no shipped field has that spacing, so look for a term
+whose argument is latitude or `s2` and which is thresholded or quantised.
