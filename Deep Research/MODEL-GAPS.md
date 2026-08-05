@@ -2896,3 +2896,25 @@ harness POSTs. The images were being written, just into the probe directory --
 so "no matches found" looked like a rendering failure and was a receiver
 mix-up. **One port, one owner: check who holds 8901 before reading a missing
 screenshot as a broken frame.**
+
+**Iteration 63c -- the Andes regression was noise, and iteration 62 overstated
+its own gain.** Structure-tensor coherence over a whole crop measures ONE
+dominant orientation, so a belt that curves through the frame is penalised for
+curving and a belt that fills the frame with a single strike is rewarded twice.
+Re-measured as the mean of per-tile coherence, which cannot see large-scale
+curvature:
+
+| framing | global | tiled local |
+|---|---|---|
+| Andes zoom 3.0 | -3% | **-1%** |
+| Himalaya zoom 3.0 | +1% | -1% |
+| Himalaya zoom 1.6 | +21% | **+3%** |
+
+So there was nothing wrong with the Andes -- the flag was metric noise. And the
+fold corrugation's wide-zoom gain is **+3%**, not the +14/+21% the global figure
+reported: at wide zoom the range fills the crop with one strike, which is
+exactly the condition that inflates a single-orientation measure. The change is
+still worth having (the combing is visible in an A/B) but the register's
+iteration 62 number was flattering itself. **Report the tiled figure for
+anything anisotropic; keep the global one only for whether a scene has a
+dominant grain at all.**
