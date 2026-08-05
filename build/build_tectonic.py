@@ -166,8 +166,21 @@ def topo_fabric(age):
     # A belt is high AND has relief. Either alone is wrong: a plateau is high
     # and unstriped, a dissected lowland has relief and no strike worth drawing.
     relief = gaussian_filter(mag, 1.4, mode=("nearest", "wrap"))
-    ref = np.percentile(relief[zs > 500.0], 90) if (zs > 500.0).any() else 1.0
-    st = (np.clip((zs - 650.0) / 1700.0, 0.0, 1.0)
+    # HEIGHT RELATIVE TO THIS AGE'S OWN LAND, not an absolute 650 m. The fixed
+    # threshold was calibrated on modern topography and silently switched the
+    # fabric off in deep time: measured, phan_0300_t came out with a median
+    # shortening of 0.000 against the present day's 0.141, because a 300 Ma
+    # Pangaean belt in this DEM is a broad low swell and almost nothing cleared
+    # the bar. An orogen is high RELATIVE TO THE CONTINENT IT SITS ON, at every
+    # age, so the bar is now the land's own 70th and 97th percentiles.
+    land = zs > 50.0
+    if land.any():
+        lo = float(np.percentile(zs[land], 70.0))
+        hi = max(float(np.percentile(zs[land], 97.0)), lo + 350.0)
+    else:
+        lo, hi = 650.0, 2350.0
+    ref = np.percentile(relief[zs > lo], 90) if (zs > lo).any() else 1.0
+    st = (np.clip((zs - lo) / (hi - lo), 0.0, 1.0)
           * np.clip(relief / (ref + 1e-9), 0.0, 1.0))
     return st * TOPO_SHORT, c2, s2
 

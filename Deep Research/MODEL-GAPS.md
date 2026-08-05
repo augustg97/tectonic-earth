@@ -2478,3 +2478,52 @@ the same field change previously moved it 0.01.
 Still short of the reference — the relief octaves remain at 150 and 550 km, so
 these are combed swells rather than ridge-and-valley at 10-30 km. But the
 mechanism is live now, which is the precondition for everything else.
+
+## Q — ITERATION 56, 2026-08-04: the fabric reaches deep time, the picture does
+## not — user reports prisms are still there at wide zoom
+
+The user compared two wide deep-time frames (bad) against one close-up (good).
+The comparison is itself the measurement, and it was right.
+
+**COMBING IS STRONGLY ZOOM-DEPENDENT.** One belt, one age, three zooms:
+
+| zoom | coherence |
+|---|---|
+| 1.15 close | **0.480** |
+| 1.70 mid | 0.223 |
+| 2.60 wide | 0.269 |
+
+Detail energy RISES with zoom (1.99 -> 5.87), so nothing is fading out. Fine
+combed relief averages into the pixel while coarse isotropic texture keeps its
+contrast. That is exactly "improved close up, still prisms from further away".
+
+**TWO REAL BUGS FOUND AND FIXED IN THE BAKE.** The topographic fabric keyed on
+an ABSOLUTE 650 m, calibrated on modern topography, and deep time is lower:
+`phan_0300_t` had a land median shortening of 0.000. An orogen is high relative
+to the continent it sits on, so the bar is now that age's own 70th and 97th
+land percentiles. After: land median 0.184, 58% above the shader's gate, axis
+strength 0.338. All 200 past keyframes re-baked.
+
+**AND THREE SHADER ATTEMPTS THAT DID NOT WORK, all reverted.** Compressing the
+coarse octave harder: no change at any zoom. Swapping which octave takes the
+strong figure (dF*260 is ~154 km and reads at continental zoom; dF*70 is ~570
+km and is already a basin-wide swell): no change. Rotating gFold into the crust
+frame with matDir — a genuine frame bug, since d is crust-fixed and gFold was
+world-fixed, which is why age 0 responded to the fabric and 300 Ma did not —
+render moved 0.17 to 0.38, and opening the hard gate from 0.30 to 0.15 alongside
+it moved the PLAINS control by 2.38 and cost the Himalaya a third of its gain.
+Not shippable as a set.
+
+Shipped: the bake fix only. Andes and Himalaya hold at +21%, plains control
+0.11, and **the wide deep-time framing is unchanged at 0.268 — the user's actual
+complaint is not yet addressed.**
+
+**WHY, stated plainly.** The fold compression can only stretch octaves that
+exist, and the two that exist are at 154 and 570 km. Stretching a 154 km blob
+gives a longer 154 km blob, not ridges. Nothing in the pipeline puts relief at
+10-30 km, which is the band a mountain range is actually made of, and no amount
+of anisotropy on the wrong wavelength substitutes for it. That is the whole
+remaining gap and it is task #48.
+
+Recorded for the third time because it happened for the third time: a backtick
+in a FRAG comment closes the shader's template literal. check_shader caught it.
