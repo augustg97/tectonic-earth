@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260805-0401';
+const DATA_V='20260805-0632';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3925,6 +3925,48 @@ void main(){
        the maths. Next probe must read gFold through a channel-safe path: the
        obvious one is corrupted by the per-channel province tint, which is why
        its magnitude came back at 0.27 for a vector the field stores at 0.997. */
+    /* RIDGE AND VALLEY, AS TONE. Six rounds of trying to draw crests by
+       perturbing the NORMAL all failed, and the zoom sweep says why: one belt
+       measured coherence 0.480 close, 0.223 mid, 0.269 wide, with detail energy
+       RISING as it zoomed out. A normal perturbation is a lighting effect, and
+       lighting detail averages into the pixel the moment a ridge is narrower
+       than one. Tone does not -- which is exactly why the ocean's abyssal fabric
+       reads at whole-basin zoom while these mountains did not.
+
+       So the crests are drawn as ALBEDO, in two bands: one near 25 km, which is
+       the real spacing of ridges in the Zagros or the Valley-and-Ridge, and one
+       near 80 km, which is what still resolves when a whole orogen is on screen.
+       Both sampled in the fold-compressed domain so they run along strike, and
+       the axis is rotated by matDir into the same crust-fixed frame as the
+       sample point -- without that they are in two different frames and the
+       compression points somewhere arbitrary at every age except the present.
+
+       Smooth noise under a smooth sin^2 ridge transform: no creases, so nothing
+       downstream can trip on them, and no elevation is touched. */
+    /* THE HEIGHT BAR IS LOW AND THE FABRIC CARRIES THE GATE. An absolute
+       1,100-2,500 m ramp silently excluded deep time: measured, 3.4% of modern
+       land stands above 2,500 m against 0.7% at 300 Ma and 0.3% at 150 Ma, so
+       Pangaean belts sat at the very bottom of that ramp and got nothing. The
+       shortening field is already normalised to each age's own hypsometry
+       (build_tectonic.topo_fabric), so IT is the right relative gate, and the
+       height term only has to exclude genuine lowland. */
+    /* The height bar stays high, and the reason is measured. Lowering it to
+       350-1,250 m to reach the lower belts of deep time moved the PLAINS
+       control by 5.46 and bought the 300 Ma wide framing nothing (0.269 ->
+       0.268). Deep-time belts are genuinely low -- 0.7% of land above 2,500 m
+       at 300 Ma against 3.4% today -- and a gate loose enough to include them
+       is loose enough to comb Kansas. */
+    float mtnT=smoothstep(1100.0,2500.0,zp)*smoothstep(0.13,0.38,rug)
+              *smoothstep(0.15,0.45,gShort);
+    if(mtnT>0.004){
+      float St=1.0+2.8*smoothstep(0.15,0.45,gShort);
+      vec3 gFt=matDir(gFold);
+      vec3 pt=matDir(sdir);
+      pt=pt-gFt*(dot(pt,gFt)*(1.0-1.0/St));
+      float rA=sin(3.1416*fbm3(pt*1520.0+5.0)); rA*=rA;   // ~26 km
+      float rB=sin(3.1416*fbm3(pt*480.0+61.0)); rB*=rB;   // ~83 km
+      col*=1.0 + ((rA-0.5)*0.30 + (rB-0.5)*0.26)*mtnT;
+    }
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
