@@ -681,7 +681,13 @@ LABELS = [
     # EITHER frame, which is a block smaller than the 20 km grid in the most
     # tectonically shredded region on Earth. See README section 9.
     ("orogen", "Rhodope Massif", 24.7, 41.6, 0, 120),
-    ("orogen", "Ellesmerian Belt", -85, 79, 0, 360),
+    # (-85, 79) sat in a channel between the Arctic islands and read as WATER in
+    # the 10 km DEM, which failed build_webdata's on-land test -- so the label was
+    # never plate-tracked and stood frozen over the north pole for its whole
+    # 360 Myr window while Laurentia drifted out from under it (user report).
+    # Northern Ellesmere, on the deformation front itself, is solid land at
+    # 1,800 m and tracks correctly.
+    ("orogen", "Ellesmerian Belt", -77, 80, 0, 360),
     ("region", "Fennoscandian Shield", 25, 64, 0, 540),
     ("continent", "Anatolide-Tauride Block", 32, 38, 0, 250),
     ("island", "Kolyma-Omolon Terrane", 155, 65, 0, 250),

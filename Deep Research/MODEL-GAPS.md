@@ -2527,3 +2527,51 @@ remaining gap and it is task #48.
 
 Recorded for the third time because it happened for the third time: a backtick
 in a FRAG comment closes the shader's template literal. check_shader caught it.
+
+## Q — ITERATION 57, 2026-08-05: crests as albedo, and a label frozen over the
+## pole for 360 Myr
+
+**RIDGES DRAWN AS TONE, AND THAT IS THE POINT.** Six rounds of drawing crests by
+perturbing the NORMAL all failed. The zoom sweep of iteration 56 says why: one
+belt measured coherence 0.480 close, 0.223 mid, 0.269 wide, with detail energy
+RISING as it zoomed out. A normal perturbation is a lighting effect, and lighting
+detail averages into the pixel as soon as a ridge is narrower than one. Albedo
+does not — which is exactly why the ocean's abyssal fabric reads at basin zoom
+and these mountains never did.
+
+Two bands, both in the fold-compressed domain so they run along strike, with the
+axis rotated into the same crust-fixed frame as the sample point: **26 km**, the
+real spacing of ridges in the Zagros or the Valley-and-Ridge, and **83 km**,
+which still resolves with a whole orogen on screen. Smooth noise under a smooth
+sin^2 transform, so no creases and no elevation touched.
+
+Measured: **Andes 0.212 -> 0.275 (+29%), Himalaya 0.232 -> 0.283 (+22%)**,
+plains control 0.57.
+
+**AND ONE THING THAT DID NOT WORK, measured and reverted.** Lowering the height
+gate from 1,100-2,500 m to 350-1,250 m, to reach deep time's lower belts, moved
+the PLAINS control by 5.46 and bought the 300 Ma wide framing nothing (0.269 ->
+0.268). Deep-time ranges are genuinely low — 0.7% of land above 2,500 m at
+300 Ma against 3.4% today, 0.3% at 150 Ma — and a gate loose enough to include
+them is loose enough to comb Kansas. The deep-time wide view remains unfixed.
+
+**THE ELLESMERIAN BELT, FROZEN OVER THE NORTH POLE (user report).** Its authored
+coordinate (-85, 79) sits in a channel between the Arctic islands and reads as
+**-1 m** in the 10 km DEM. `build_webdata` only plate-tracks a label whose
+coordinate passes an on-land test — a deliberate guard, because back-advecting a
+paleo-authored coordinate is meaningless — so this one silently failed it, was
+left untracked, and stood at the pole for its whole 360 Myr window while
+Laurentia drifted out from under it. Moved to northern Ellesmere on the
+deformation front itself, 1,800 m of solid land: it now carries 73 track samples
+and runs from (-77, 80) today to **(-14, 6.3) at 360 Ma** — equatorial in the
+Devonian, which is where Laurentia was.
+
+**Worth a gate:** any label that fails the on-land test is silently frozen. That
+is invisible unless someone scrubs the timeline and watches it. A validator
+should list them.
+
+**VEGETATION RECTANGLES (user report), narrowed but not fixed.** Sharp
+axis-aligned tan blocks in the Congo at deep time. Scanned every shipped field
+for straight-line discontinuities — `_r`, `_d`, `_w`, `_t`, `_o`, `_v`, `_p` —
+and the worst column edge in any of them covers 6-17% of rows, i.e. no rectangle
+is in the DATA. So it is generated in the shader. Next round.
