@@ -2575,3 +2575,53 @@ axis-aligned tan blocks in the Congo at deep time. Scanned every shipped field
 for straight-line discontinuities — `_r`, `_d`, `_w`, `_t`, `_o`, `_v`, `_p` —
 and the worst column edge in any of them covers 6-17% of rows, i.e. no rectangle
 is in the DATA. So it is generated in the shader. Next round.
+
+## Q — ITERATION 58, 2026-08-05: the vegetation rectangle — six suspects
+## eliminated, not yet caught
+
+Hunting the axis-aligned tan blocks the user reported. Nothing shipped; the
+value of the round is the elimination list, so the next attempt does not repeat
+it.
+
+**REPRODUCED** at the Congo Basin's own tracked position, (-3,-53) at 300 Ma,
+zoom 1.5 — a large tan block with a vertical rim near x=490 and a horizontal one
+near y=95.
+
+**A METRIC THAT MEASURES THE BLOCK, not the coastline.** A plain image-gradient
+count reads the lake shore and the coast, which are legitimately sharp, and it
+called every experiment unchanged at 53%. Segmenting the TAN region by colour
+(red-dominant, not blue, bright) and counting how many rows its boundary flips
+at each column separates the artefact from the scenery: the block's rim flips
+0.16 of rows at column 492, with columns 492-502 all at 0.14-0.16, i.e. one
+coherent edge spread over ten columns. Top-ten-columns summed = 1.44 is the
+number to beat; the rainfall field's own dry-region boundary scores 0.48.
+
+**ELIMINATED, each by measurement:**
+
+| suspect | result |
+|---|---|
+| every shipped field, ALL THREE CHANNELS (`_e _r _d _w _t _o _v _p`) | no straight run anywhere; worst column edge 6-17% of rows, medians ~0.00-0.01 |
+| the humidity index `h` | smooth — worst column edge 4% |
+| the warmth axis `w` | smooth — worst column edge 4% |
+| rainfall `Rf` read at the shader output | smooth — dry-region rim flips 0.07, top-ten 0.48 |
+| the G6 desert / erg block | disabled: tan cover and rim unchanged |
+| the province hue tint (the `clamp(0.5+prov*1.6)` plateau) | disabled: 1.44 -> 1.47, unchanged |
+
+So the inputs are smooth and the artefact is made in the colour stage, but not
+by the two colour terms most likely to make it.
+
+**A TRAP THIS ROUND FELL INTO, worth writing down.** "Flatten col after the
+biome ramp and see if the edge survives" reported 53% -> 57% and looked like
+proof the artefact came later. It was proof of nothing: with the land colour
+flattened the only edges left ARE the lake and the coast, which is what the
+metric was counting all along. A bisect is only as good as the metric it is
+read with, and the metric has to be specific to the artefact.
+
+**WHERE TO GO NEXT.** Remaining colour-stage terms that can paint tan over green
+at this scale: the core/craton tone (`coreCol` is tan and gated on `(0.30-h)`),
+the lithology `bare` term, laterite, alluvium, and the tundra blend (`tund` is
+tan-grey, gated on a temperature ramp). Each should be disabled in turn and read
+with the tan-block metric above, not with an image-gradient count. Also worth
+testing directly: `vnoise3` is lattice noise, and any near-binary threshold on it
+prints axis-aligned cells at the lattice scale — `sdir*46` is a 7.8 degree cell,
+which is the right order for this block.
