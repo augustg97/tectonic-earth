@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260805-0855';
+const DATA_V='20260805-0923';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4068,6 +4068,45 @@ void main(){
       if(closeH>0.01){
         nx+=(vnoise3(msd*5200.0+11.0)-0.5)*0.40*closeH;
         ny+=(vnoise3(msd*5200.0+29.0)-0.5)*0.40*closeH;
+      }
+    }
+    /* FOLD-PARALLEL RIDGE AND VALLEY, HANDED TO THE NORMAL. This is H7's own
+       remedy applied to the tectonic fabric, and it is the only place it can
+       work. elevAt is differenced over da = +/-23.5 km, so as a filter on the
+       shipped field that stencil PEAKS at 94 km wavelength and is identically
+       BLIND at 47 km -- sin(2*pi*h/L) is zero there. Ridge-and-valley lives at
+       10-30 km, which is far inside the null, so no amount of baking can light
+       it: measured, a 900 m corrugation at 55 km baked straight into the
+       elevation field moved the Himalaya by a mean of 1.7/255, and 900 m is
+       already the top of the real range. The height field cannot carry this
+       band and the shader has been drawing it as TONE instead, which is why a
+       range still reads as one smooth prism however hard the tone is pushed --
+       tone does not turn to face the light.
+
+       Perturbing the NORMAL skips the stencil entirely, so the wavelength is
+       free. gFold is the fold axis as a tangent vector, so the corrugation
+       advances ACROSS it and the ridges come out running along strike, which
+       is what a fold belt does. The phase wanders on its own noise: a pure
+       sine is a ruled grating, and the sea floor already learnt that lesson
+       three hundred lines below. */
+    if(gShort>0.15){
+      float mtnN=smoothstep(900.0,2400.0,zp)*smoothstep(0.15,0.45,gShort);
+      vec3 fx=matDir(gFold);
+      vec2 fen=vec2(dot(fx,Eax),dot(fx,Nax));
+      float fl=length(fen);
+      if(mtnN>0.004 && fl>0.02){
+        fen/=fl;
+        vec2 acr=vec2(-fen.y,fen.x);              // across strike
+        vec3 acr3=Eax*acr.x+Nax*acr.y;
+        float sC=dot(msd,acr3);
+        /* K*L is ~6400 km in this domain -- the three octaves above read 145,
+           400 and 1100 for 44, 16 and 6 km. So 246 is ~26 km and 470 ~13.6 km,
+           which brackets the band the reference shows between parallel ridges. */
+        float w1=sin(sC*246.0+(vnoise3(msd*62.0+31.0)-0.5)*5.0);
+        float w2=sin(sC*470.0+(vnoise3(msd*128.0+7.0)-0.5)*4.0);
+        float corr=w1*0.64+w2*0.36;
+        float ampF=mtnN*(0.55+0.45*rug)*2.10;
+        nx+=corr*acr.x*ampF; ny+=corr*acr.y*ampF;
       }
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has

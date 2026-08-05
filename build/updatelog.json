@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.4",
+      "date": "5 August 2026",
+      "title": "Mountains get their ridges into the light",
+      "summary": "A real mountain belt is dozens of parallel ridges, and ours kept rendering as a smooth swell with the ridges painted on as shading. The reason turned out to be arithmetic: the surface is lit by comparing heights about 23 km apart, and that comparison is exactly blind to detail spaced around 47 km -- which is the scale ridges and valleys actually occupy. No amount of putting the ridges into the height data could light them; a test at the largest realistic size moved the Himalaya by well under one part in a hundred. So the ridges now go straight into the surface's orientation instead, steered along each belt's own fold direction. They catch light and cast shade like the terrain they are, and the difference shows most when you are looking at a whole range."
+    },
+    {
       "version": "2.3",
       "date": "5 August 2026",
       "title": "River corridors stop drawing the rain belts",

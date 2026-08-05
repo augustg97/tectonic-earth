@@ -2783,3 +2783,58 @@ every land number. Ocean pixels between two variants shot the same afternoon
 differ by 0.207; against the stale shot, 5.008. **Shoot the baseline from HEAD
 in the same session, or the comparison silently includes everything shipped in
 between.**
+
+### Iteration 62 -- the hillshade stencil is blind at 47 km, which is where ridge-and-valley lives
+
+The user's instruction was 10-30 km relief, and offline baking if that failed.
+Both were tried this round. The baking failed, and measuring WHY it failed is
+what produced the fix.
+
+**THE STENCIL IS THE CONSTRAINT.** `elevAt` is differenced over
+`da = 2.4/2048*PI`, which is +/-23.5 km. As a filter on the shipped field a
+central difference over +/-h responds as `sin(2*pi*h/L)`: it PEAKS at
+`L = 4h = 94 km` and is identically **ZERO at `L = 2h = 47 km`**. Ridge-and-valley
+lives at 10-30 km, far inside that null, so the height field cannot light it at
+any amplitude. Measured rather than argued: a 900 m corrugation at 55 km, baked
+straight into `phan_0000_e.avif` and oriented off the `_t` fold axis, moved the
+Himalaya at zoom 3.0 by a mean of **1.7/255** -- and 900 m is already the top of
+real ridge-and-valley relief. The elevation grid is 4096x2048, 9.77 km per texel,
+so 10-30 km is also below its own Nyquist. Two independent reasons the answer
+was never going to be in the field.
+
+The H7 note had already found this for the procedural octaves -- "of their ten
+octaves only THREE are coarser than that half-step... aliased away by the very
+gradient meant to reveal them" -- and its remedy was to hand the missing band
+straight to the normal. Nobody had applied that to the TECTONIC FABRIC, which is
+why every previous attempt at fold structure went in as tone, and tone does not
+turn to face the light. That is the whole of "our mountains read as triangular
+prisms": the fabric was drawn as brightness on a surface whose shading normal
+never knew about it.
+
+**SHIPPED: fold-parallel corrugation in the normal.** `gFold` projected onto the
+local east/north axes, the corrugation advancing ACROSS strike so ridges run
+along it, at ~26 km and ~13.6 km (K*L is ~6400 km in this domain; the existing
+octaves read 145/400/1100 for 44/16/6 km). Phase wanders on its own noise so it
+is not a ruled grating -- the lesson the abyssal fabric already carries three
+hundred lines below. Gated on `gShort > 0.15` and 900-2400 m.
+
+| framing | coherence | mean diff |
+|---|---|---|
+| Himalaya zoom 1.6 | 0.043 -> 0.048 (**+14%**) | 6.58 |
+| Himalaya zoom 3.0 | 0.051 -> 0.052 (+2%) | 1.77 |
+| Andes zoom 3.0 | 0.072 -> 0.069 (-5%) | 1.05 |
+| Amazon (no shortening) | control | 0.21 |
+
+The gain is at WIDE zoom, which is where the complaint was: at zoom 3.0 the fine
+procedural octaves already dominate the picture. The Andes lose 5% of coherence
+and that is unexplained -- its fabric there is weaker (shortening 0.043 against
+the Himalaya's 0.240) so the corrugation may be fighting structure rather than
+reinforcing it. Worth a look next round.
+
+**AND A MEASUREMENT TRAP THAT NEARLY ENDED THE ROUND EARLY.** The first A/B of
+the baked field reported coherence and relief sigma IDENTICAL to three decimals,
+which reads exactly like "the field never loaded" -- and three things were
+checked on that assumption (the write, the manifest, the bytes on the wire, all
+fine). The images differed the whole time: max 192, mean 0.97. The metric was
+simply blind to the change. **A metric that does not move is not evidence that
+nothing moved -- diff the pixels before diagnosing the pipeline.**
