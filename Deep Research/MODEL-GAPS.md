@@ -2710,3 +2710,76 @@ fix is the excess: 91.7 against a present-day 39.7, and the overlay group that
 adds another 50 points on top of it. The overlays are the cheaper target and
 have not been touched yet -- the hydrology terms are driven by `drain` and
 `trunk`, which is where the next round should look.
+
+### Iteration 61 -- the corridors were painting the bands, and four fixes that cost more than they bought
+
+Following the previous round's pointer to `drain` and `trunk`. The corridor
+overlays threshold the drainage field, so they paint green ALONG the rain
+belts -- the belt supplies the water, the corridor draws it, and the two
+signals add. Real corridors are far narrower than the ones we drew.
+
+**SHIPPED: corridor widths.** `rvalley` 0.14-0.44 -> 0.36-0.60 at weight 0.60
+-> 0.26, `ripcore` 0.34-0.58 -> 0.56-0.74 at 0.65 -> 0.30, the trunk corridor
+0.72/0.62 -> 0.34/0.30, alluvium 0.42 -> 0.30. Measured against a HEAD baseline
+shot the same afternoon:
+
+| framing | banding | land-greenness |
+|---|---|---|
+| 280 Ma Pangaea | **132.3 -> 90.7** | 3.61 -> -7.77 |
+| N America plains | 28.6 -> 28.6 | 2.98 -> 2.75 |
+| Amazon | 40.4 -> 41.1 | 20.86 -> 20.21 |
+| Congo | 33.3 -> 30.2 | 26.88 -> 23.98 |
+
+A 31% cut at 280 Ma; present-day framings are visually indistinguishable in an
+A/B (the Congo's forest core is untouched -- what came off is thin corridor
+greening, which is the intent).
+
+**THE RAIN FIELD IS NOT THE PROBLEM, AND THE FIRST THREE HOURS SAY OTHERWISE.**
+Rendering the 280 Ma field as greyscale showed hard-edged rectangles, and a
+plausible mechanism for each: the zonal march treats every ROW as an isolated
+1-D atmosphere (the mirror of the isolated COLUMNS `_advect_ns` already fixes in
+its own axis), and the recycling feedback amplifies the drift rather than
+damping it. A meridional eddy-mixing term was written, calibrated and measured.
+Then the same field rendered RANK-EQUALISED came out smooth and organic: every
+straight edge was my display clipping at both ends of a /0.45 scale. The
+mechanism was real, the artefact was not, and the fix was reverted rather than
+force a 251-frame re-bake on no evidence. **Never diagnose a field through a
+clipped greyscale -- rank-equalise, where no straight edge can be manufactured.**
+
+**FOUR REJECTED FIXES, ALL MEASURED.** The ecotone jitter is gated by `edge`, a
+parabola computed from `h0` -- the humidity BEFORE the relief, continentality,
+drainage and trunk terms shift `ari` by up to 0.43 on a 0.58-wide window. So
+wherever those terms carry a committed core across the threshold, the boundary
+is drawn with no jitter at all. That is a genuine proxy-divergence defect, and
+re-gating on the final value works: 90.0 -> 79.6. It was still reverted.
+
+| variant | 280 Ma | N America greenness |
+|---|---|---|
+| corridors only (shipped) | 90.7 | 2.75 |
+| + re-gate, eased | 87.7 | 2.28 |
+| + re-gate, full | 79.6 | 1.41 |
+| + continental wander | 72.0 | **-0.58** |
+| + wander, dry-side gate | 73.1 | -0.20 |
+| + additive in h | 84.8 | 0.89 |
+
+The prairie stops being green at all. The cause is the palette, not the gate: a
+symmetric jitter at a grassland margin trades dark green for bright tan, and tan
+is far brighter, so half-and-half reads as tan -- the same asymmetry recorded in
+iteration 42. Additive-in-h was built to fix the other half of it (a symmetric
+multiplicative jitter through a saturating smoothstep is not mean-preserving)
+and clipped symmetrically as designed, but scored worse. **A defect being real
+is not an argument for shipping its fix.** The finding is recorded in the shader
+at the site, so the next reader does not re-derive it.
+
+**METRIC FAILURES THIS ROUND, BOTH CAUGHT BY A CONTROL.** A kx-energy metric
+scored known-good present-day patches 83.5 against the artefact frame's 23.1 --
+measuring the scenery again. And whole-frame mean G-R called the Amazon a 64%
+collapse where a land-masked patch says 3%: the frame is mostly ocean and haze.
+Greenness must be measured on land only.
+
+**AND THE BASELINES ON DISK WERE STALE.** `f5_congo` predates several ocean
+rounds, so an A/B against it showed a wildly different ocean and contaminated
+every land number. Ocean pixels between two variants shot the same afternoon
+differ by 0.207; against the stale shot, 5.008. **Shoot the baseline from HEAD
+in the same session, or the comparison silently includes everything shipped in
+between.**
