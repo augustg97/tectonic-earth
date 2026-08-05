@@ -2671,3 +2671,42 @@ artefact and a probe that is actually running.
 render, reproducing at 280 Ma / (2,-45) / zoom 1.5. A 4.4-degree latitude period
 is the thing to explain: no shipped field has that spacing, so look for a term
 whose argument is latitude or `s2` and which is thresholded or quantised.
+
+## Q — ITERATION 60, 2026-08-05: the vegetation bands are mostly REAL, and the
+## model is twice as zonal in deep time as it is today
+
+Following the reproduction and the spectral metric from iteration 59.
+
+**WHERE THE BANDING COMES FROM.** Turning off every green-painting overlay in the
+colour stage -- alluvium, valley, riparian core, river, marsh, delta, savanna
+stipple and the trunk corridors -- takes the 280 Ma frame from **133.4 to 80.3**
+against a 29-41 baseline. The hydrology group alone accounts for most of that
+(133.4 -> 79.3). But the remaining 80 is the BASE BIOME RAMP, with the humidity
+index and warmth axis both measured clean (8.4 and 8.2). So roughly forty per
+cent of the banding is overlay and sixty per cent is the underlying climate.
+
+**AND THE CLIMATE IS GENUINELY THAT ZONAL.** Measured on the land-only rainfall
+profile, the same spectral score: **280 Ma = 91.7, present day = 39.7.** The
+deep-time world is more than twice as banded, and that is not a rendering
+artefact -- a supercontinent spanning a zonal circulation really does stripe.
+Earth's does not stripe this hard because monsoon reach, lee-side shadows and
+continental geometry break it up, and our solve carries weaker versions of those.
+
+**TWO ATTEMPTS, BOTH REVERTED.**
+
+A continental-scale wander added to the biome boundary jitter: 133.4 -> 129.7,
+because the jitter is weighted by `edge` and therefore frays boundaries rather
+than moving bands. It also cost the Amazon greenness (G-R 22.3 -> 17.8) and
+moved the plains control 1.91.
+
+A megamonsoon scaled by continent size and inland reach -- the textbook driver
+of Pangaea's monsoon, and honestly non-zonal because it depends on geometry:
+zonality 91.7 -> **92.9**, i.e. no improvement, while the present-day biome
+check fell from 15/18 exact to 8/14 on the same sites. Wrong on both counts.
+
+**WHAT THIS MEANS FOR THE COMPLAINT.** Part of what was reported as an artefact
+is the model correctly drawing a zonal supercontinent. The part that is ours to
+fix is the excess: 91.7 against a present-day 39.7, and the overlay group that
+adds another 50 points on top of it. The overlays are the cheaper target and
+have not been touched yet -- the hydrology terms are driven by `drain` and
+`trunk`, which is where the next round should look.
