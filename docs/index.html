@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260805-0923';
+const DATA_V='20260805-2345';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -8274,6 +8274,17 @@ function buildLegend(){
                      tiering every verification frame carried dozens of names
                      the LIVE page no longer shows -- the instrument must
                      match the instrumented. */
+                  /* ...AND MIRROR ITS PLACEMENT TOO, which for a long time this
+                     did not. The sort above was carried across from
+                     layoutLabels; the greedy ring placement and the collision
+                     test below it were not, so this path drew every name onto
+                     its bare anchor and stacked whatever landed together. It
+                     produced "TibTibetan Plateaudra" in a Himalaya shot and got
+                     reported as a label bug, when the live page at the same
+                     framing draws 63 names with zero overlapping pairs (probed
+                     via evalq). An instrument that reimplements half a rule
+                     reports the half it left out as a defect in the subject. */
+                  const placedS=[], leadS=[];
                   const minPriS=0, capS=Infinity;
                   const cand=[];
                   for (const L of (DATA.labels || [])) {
@@ -8302,12 +8313,38 @@ function buildLegend(){
                     const px = (v.x * 0.5 + 0.5) * c.width - x0;
                     const py = (1 - (v.y * 0.5 + 0.5)) * c.height - topY;
                     if (px < -60 || py < -20 || px > w + 60 || py > h + 20) continue;
+                    /* Same RINGS, same test, same give-up-and-drop as the live
+                       placer. Widths come from measureText rather than a DOM
+                       rect, which is the whole reason this path exists. */
+                    const tw = ctx.measureText(L.n).width + 6, th = 15;
+                    let put = null;
+                    for (const [ox, oy] of RINGS) {
+                      const x = px + ox, y = py + oy;
+                      if (x - tw/2 < 2 || x + tw/2 > w - 2 ||
+                          y - th/2 < 2 || y + th/2 > h - 2) continue;
+                      let hit = false;
+                      for (const r of placedS)
+                        if (Math.abs(x - r.x) < (tw + r.w)/2 + 2 &&
+                            Math.abs(y - r.y) < (th + r.h)/2 + 2) { hit = true; break; }
+                      if (!hit) { put = {x: x, y: y}; break; }
+                    }
+                    if (!put) continue;              // no room: drop it, as the app does
+                    placedS.push({x: put.x, y: put.y, w: tw, h: th});
+                    if (Math.hypot(put.x - px, put.y - py) > 17)
+                      leadS.push([px, py, put.x, put.y]);
                     ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.lineWidth = 3.5;
-                    ctx.strokeText(L.n, px, py);
+                    ctx.strokeText(L.n, put.x, put.y);
                     ctx.fillStyle = (L.t === 'ocean' || L.t === 'sea')
                                     ? '#bcd8ee' : '#ffffff';
-                    ctx.fillText(L.n, px, py);
+                    ctx.fillText(L.n, put.x, put.y);
                     drawn++;
+                  }
+                  /* A pushed name points at the wrong ground without one. */
+                  if (leadS.length) {
+                    ctx.strokeStyle = 'rgba(255,255,255,0.38)'; ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    for (const ld of leadS) { ctx.moveTo(ld[0], ld[1]); ctx.lineTo(ld[2], ld[3]); }
+                    ctx.stroke();
                   }
                   return {png: cv.toDataURL('image/png').slice(22), w: w, h: h,
                           labelsDrawn: drawn};

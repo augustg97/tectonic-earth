@@ -2880,3 +2880,19 @@ that something is listening. See [[silent-no-run-traps]].
 Still open: the compositor should run the same greedy placement as
 `layoutLabels`, so a screenshot shows the labels the app would draw. Until it
 does, label placement can only be checked with `?evalq`.
+
+**Iteration 63b -- the compositor now places labels the way the app does.**
+`APP.snap` carries the greedy RINGS walk, the collision test against everything
+already placed, the drop-if-it-will-not-fit, and leader lines for any name
+pushed more than 17 px. Widths come from `measureText` rather than a DOM rect,
+which is the reason this path exists at all. Verified at the framing that
+started it: "TibTibetan Plateaudra" resolves into "Tibetan Alpine Tundra" on its
+own line, Tarim Block and Taklamakan separate, and Tibetan Plateau fans out with
+a leader. Screenshots can be trusted for label placement again.
+
+One more trap worth the line: shots stopped landing in `build/verify` because a
+probe receiver of mine was still bound to port 8901, which is where the shot
+harness POSTs. The images were being written, just into the probe directory --
+so "no matches found" looked like a rendering failure and was a receiver
+mix-up. **One port, one owner: check who holds 8901 before reading a missing
+screenshot as a broken frame.**
