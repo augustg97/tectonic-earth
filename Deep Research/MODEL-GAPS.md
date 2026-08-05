@@ -2838,3 +2838,45 @@ checked on that assumption (the write, the manifest, the bytes on the wire, all
 fine). The images differed the whole time: max 192, mean 0.97. The metric was
 simply blind to the change. **A metric that does not move is not evidence that
 nothing moved -- diff the pixels before diagnosing the pipeline.**
+
+### Iteration 63 -- the label pile-up is in the screenshot compositor, not the app
+
+Chasing "TibTibetan Plateaudra" -- three names stacked into one illegible line
+in iteration 62's own Himalaya shot. It is not a shipped defect, and finding
+that out invalidates a class of past observations.
+
+`layoutLabels` sorts by priority and places greedily against RINGS, testing each
+candidate against every rect already placed and dropping any name that cannot
+fit. Probed in a real viewport at the exact framing: **63 labels shown, 0
+overlapping pairs.** The app has never drawn that pile.
+
+`APP.snap` does not use it. The compositor re-projects every label itself, with
+the comment explaining exactly why -- "The DOM positions are no use either:
+layoutLabels sizes from innerWidth, which is 0 in a hidden pane, so every
+element reports a rect at the origin. So project them here instead... No DOM,
+no viewport, works headless." That was the right call for the problem it solved
+(see [[verify-what-you-are-looking-at]]), and the greedy placement and collision
+test were simply never carried across with it. So the capture draws each name
+straight onto its anchor, and anywhere the app would have fanned names apart or
+dropped one, the screenshot stacks them.
+
+**EVERY LABEL JUDGEMENT MADE FROM A VERIFICATION SHOT IS SUSPECT**, including
+the one that opened this round. A second, independent implementation of a
+placement rule will diverge from the first, and the divergence shows up as a
+defect in whichever one you happen to be looking at.
+
+**Harness fixes shipped:** `?evalq` now honours `lon`, `lat`, `zoom`, `w` and
+`h`. It previously hard-coded `A.lookAt(0, 20, ...)`, so an in-app probe could
+only ever report about one point in the mid-Atlantic -- which is why this took
+a detour through the elevation field before it could be asked directly.
+
+**Two harness traps, both costing a full cycle each.** A receiver started with
+`nohup ... &` inside a Bash cell dies with the cell, and the next cell's `lsof`
+happily showed a DIFFERENT stale listener holding the port and writing to a cwd
+it no longer had -- so the port looked healthy and nothing was ever written.
+Verify a receiver by POSTing to it and reading the file back, never by checking
+that something is listening. See [[silent-no-run-traps]].
+
+Still open: the compositor should run the same greedy placement as
+`layoutLabels`, so a screenshot shows the labels the app would draw. Until it
+does, label placement can only be checked with `?evalq`.

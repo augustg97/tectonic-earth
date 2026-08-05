@@ -202,7 +202,13 @@ const W = () => document.getElementById('app').contentWindow;
   if (q.get('evalq')) {
     // Generic in-app probe: ?evalq=NAME&expr=<js>&age=<Ma>. Reports whatever
     // the expression returns, after the fields for that age have landed.
-    if (q.get('age') != null) { A.lookAt(0, 20, {age: +q.get('age'), w: 1280, h: 960}); }
+    if (q.get('age') != null) {
+      // Honour a framing when one is given -- a probe that cannot aim can only
+      // ever report about lon 0, lat 20, which is open ocean for most ages.
+      A.lookAt(+(q.get('lon') || 0), +(q.get('lat') || 20),
+               {age: +q.get('age'), zoom: +(q.get('zoom') || 1),
+                w: +(q.get('w') || 1280), h: +(q.get('h') || 960)});
+    }
     await sleep(+q.get('wait') || 12000);
     for (let k = 0; k < 8; k++) { A.step(); await sleep(200); }
     const out = (0, W().eval)(q.get('expr'));
