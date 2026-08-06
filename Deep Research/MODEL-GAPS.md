@@ -3089,3 +3089,63 @@ The field work here is still correct and is kept: it is what a synthesiser would
 steer by, and the shader gate is fixed to match. The 251-frame `_d` re-bake is
 deliberately NOT run yet -- it should land together with the shader synthesis
 that will use it, rather than churn every field for 0.29 of 255.
+
+### Iteration 67 -- every high mountain range on Earth is bone dry, and that is under everything
+
+The close-zoom thread ran to ground and found a field defect that explains a
+string of earlier failures.
+
+**FIRST, THE SCALE ERROR THAT FRAMED THE WHOLE CHASE.** The app's closest
+reachable camera (zoom 1.35) spans about 2600 km at 3.42 km per screen pixel.
+The Google Earth framing being compared against spans about 400 km at 0.25 --
+**fourteen times closer than this app can ever go.** Dendritic valleys at a few
+km were never displayable here, and three rounds of work on ridge-and-valley,
+the drainage field and slope-stretched octaves were aiming at a target outside
+the instrument's range. Captured at a MATCHED span, the reference shows no
+dissection at all: a pale tan plateau, a narrow continuous white crest, muted
+olive plains. **Compare like for like before deciding what is missing.**
+
+At matched scale the real gaps are tone and snow:
+
+| zone | ours | Google, same span |
+|---|---|---|
+| Tibet plateau | lum 114.8, grey-brown | lum ~157, warm tan |
+| Himalayan crest | **lum 87.8 -- DARKER than the plateau** | narrow continuous white |
+| Ganges plain | lum 101.4, neutral | lum ~110, olive |
+
+A snow-covered crest rendering darker than the plateau it stands above is a
+plain defect, and chasing it found the cause.
+
+**THE RAINFALL FIELD IS ZERO OVER ALL HIGH GROUND.** Measured on the shipped
+field: land above 2500 m has mean rainfall **0.0027**, with **97.7% of it below
+0.02**; land below 500 m averages 0.1494, fifty-five times more. A transect at
+lon 87 reads 0.168 at 22 N and 0.000 from 27 N to 34 N. The monsoon-facing
+Himalayan front -- among the wettest ground on the planet -- is modelled as
+desert.
+
+This is under a great deal:
+* `snow` is multiplied by `snowfall`, which floors at 0.30 when Rf is 0, so NO
+  crest anywhere can exceed 30% snow however far above its snowline it stands.
+  That is exactly why our Himalaya reads darker than Tibet.
+* `flow_accumulation` weights by RAINFALL, so the empty drainage of iteration 66
+  had this underneath it -- mountains were starved twice over.
+* every alpine biome, treeline and rock/vegetation split at altitude.
+
+**TWO MECHANISMS, BOTH MEASURED.** `ORO_DRAIN = 0.85` strips 85% of the moisture
+per unit forced ascent: at 0.20 the dry fraction above 2500 m falls from 96.9%
+to 38.6%, at 0.05 to zero. But a blanket reduction floods the lowlands too
+(0.150 -> 0.328) and would break the rain shadows the biome calibration rests
+on, so that is not the fix on its own. And the transect shows the collapse
+happens BEFORE the climb -- 0.168 at 22 N to 0.005 at 24 N over ground at 77 m.
+The reason is that the meridional pass is admitted only through
+`cyc = _band(absl, 32, 62)`, the extratropical cyclone band, so **poleward
+moisture transport is switched off across the entire subtropics** -- which is
+precisely where monsoons live. The zonal march cannot help: it carries air
+east-west, and the Indian monsoon is a south-north flow.
+
+Next round is the fix, and it is a climate-solve change plus the full re-bake
+chain: admit meridional transport in the subtropics over land (monsoon
+geometry, not cyclone geometry), and make the orographic drain conserve rather
+than annihilate -- what is stripped from the air should be falling on the
+windward slope, not vanishing. Re-verify against the 18 reference biomes, which
+is the gate that protects the rain shadows.
