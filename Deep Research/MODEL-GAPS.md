@@ -3046,3 +3046,46 @@ re-derived against the new distribution. That is a 251-frame `_d` re-bake.
 Also this round: Google Earth's WASM build will not initialise in the review
 browser; Maps satellite at `@28.2,86.9,9z` with `!3m1!1e3` serves the same
 imagery and is the reference framing used above.
+
+**Iteration 66b -- the drainage field now carries headwaters, and the carve still
+cannot use them.** Three constructions, each blocked by the next thing down.
+
+`build_surface.py` gains a locally-normalised headwater component: deviation of
+log accumulation from a 420 km background, divided by the LOCAL rms of that
+deviation (a global percentile repeats the original mistake one level down),
+gated on relief measured over 110 km. Every threshold measured rather than
+guessed -- a first cut at 55 km and 260 m read the Himalaya at 197 m and gated
+itself to zero. Result, present-day frame:
+
+| site | drain p90 | carve-band coverage | local gradient |
+|---|---|---|---|
+| Himalaya | 0.065 -> 0.098 | 0.05 -> 0.12 | +26% |
+| Andes | 0.059 -> 0.109 | 0.04 -> 0.14 | +64% |
+| Alps | 0.124 -> 0.218 | 0.14 -> 0.29 | -- |
+| Tibet flat top | 0.098 -> 0.098 | 0.10 -> 0.10 | -1% |
+| Sahara / plains / Congo | unchanged | unchanged | unchanged |
+
+Selectivity is exactly right and the trunk band never moves. **The render still
+does not change: 0.29 of 255.** The reason is the last one in the chain -- the
+carve reads `dE`, the drainage GRADIENT, not its level. Raising a smooth field
+raises the level and leaves the gradient alone, and clipping the z-score at 1
+inside a channel flattens the very sharpness the gradient needs (which is why
+Z had to go from 1.0 to 3.0 to recover any gradient at all).
+
+**FOUR MASKING GATES, FOUND ONE AT A TIME**, each of which made the previous fix
+measure as worthless: the shader's 3400 m height cutoff, the field's global
+percentile normalisation, the global spread inside the local term, and finally
+the gradient-vs-level mismatch. Two of them were tested in isolation and each
+read 0.17-0.18 of 255 -- indistinguishable from doing nothing -- because the
+other was still zeroing the result.
+
+**THE HONEST CONCLUSION.** `_d` is 2048x1024, 19.5 km per texel. The reference's
+dissection is dendritic valleys at 1-5 km spacing, below that Nyquist just as
+surely as ridge-and-valley is below the elevation field's. **No amount of work
+on this field can put few-km dissection on screen.** It has to be SYNTHESISED
+per pixel from the drainage direction, exactly as abyssal hills are synthesised
+from the spreading direction -- the pattern the sea floor has used since July.
+The field work here is still correct and is kept: it is what a synthesiser would
+steer by, and the shader gate is fixed to match. The 251-frame `_d` re-bake is
+deliberately NOT run yet -- it should land together with the shader synthesis
+that will use it, rather than churn every field for 0.29 of 255.

@@ -50,6 +50,22 @@ RF_MAX = 1.3
 H, W = 1024, 2048
 
 
+HEADWATER_MAX = 0.80      # ceiling for the locally-normalised component
+HEADWATER_Z   = 3.0       # local z-score at which a headwater reads as full channel
+
+
+def _box_mean(a, k):
+    """Separable box mean, k odd. Longitude WRAPS, latitude does not."""
+    k = int(k) | 1
+    pad = k // 2
+    p = np.concatenate([a[:, -pad:], a, a[:, :pad]], axis=1)
+    c = np.cumsum(np.concatenate([np.zeros((a.shape[0], 1)), p], axis=1), axis=1)
+    out = (c[:, k:] - c[:, :-k]) / k
+    p = np.concatenate([out[:pad][::-1], out, out[-pad:][::-1]], axis=0)
+    c = np.cumsum(np.concatenate([np.zeros((1, out.shape[1])), p], axis=0), axis=0)
+    return (c[k:] - c[:-k]) / k
+
+
 def _read(path, size=None):
     im = Image.open(path).convert("L")
     if size:
@@ -254,6 +270,65 @@ def build_one(base, verbose=False):
     drain = np.clip((np.log1p(acc) - np.log1p(lo)) / (np.log1p(hi) - np.log1p(lo)), 0, 1)
     drain = drain * 0.55 + 0.30 * (drain > 0.001)      # channels land near 0.85
     drain = np.clip(drain, 0, 1)
+    # HEADWATERS, NORMALISED AGAINST THEIR OWN NEIGHBOURHOOD.
+    #
+    # Everything above anchors on a GLOBAL percentile of accumulation, and that
+    # is right for trunk rivers -- the top fraction of a percent of land is
+    # channel at every age. But accumulation measures UPSTREAM AREA, so the big
+    # lowland rivers own those percentiles outright and every mountain heads
+    # below the p90 floor and clips to exactly zero. Measured off the shipped
+    # field: drainage p90 was 0.065 at the Himalaya and 0.059 in the Andes,
+    # against 0.543 in the Congo -- and the shader does not start carving a
+    # valley until 0.10. So the most dissected ground on Earth was being handed
+    # a blank field, and the carve, the gully and the corridors all sat inert
+    # there (measured in the render: 0.18 of 255 between on and off).
+    #
+    # Dissection is drainage DENSITY, not accumulation magnitude. A headwater
+    # valley is still a valley. Comparing each cell against a few-hundred-km
+    # background of its own says exactly that: a channel is where flow beats
+    # its surroundings, which is true in a Himalayan gorge and in the Amazon
+    # alike, at their own scales.
+    #
+    # Deliberately capped well below the trunk band. The shader draws open
+    # water from about 0.66 and carves from about 0.10, so headwaters land in
+    # between: a range comes out DISSECTED, not painted with blue rivers.
+    Lg = np.log1p(acc)
+    k = max(int(round(420.0 / (180.0 / H * 111.0))), 3)   # ~420 km background
+    Lb = _box_mean(Lg, k)
+    dev = Lg - Lb
+    # ...and the SPREAD has to be local too. Dividing by a global percentile of
+    # the deviation repeats the original mistake one level down: the lowland
+    # trunks dominate that statistic as surely as they dominate accumulation
+    # itself, so a Himalayan gorge is measured against an Amazonian yardstick
+    # and comes back at nothing (measured: p90 0.065 -> 0.071, no use at all).
+    # A local z-score is scale-free -- a valley registers against the
+    # variability of its own neighbourhood, which is what "dendritic" means.
+    sd = np.sqrt(np.maximum(_box_mean(dev * dev, k), 1e-9))
+    dens = np.clip(dev / (sd * HEADWATER_Z), 0.0, 1.0) * HEADWATER_MAX
+    # GATED ON RELIEF, because a z-score alone cannot tell a gorge from a
+    # rounding error. Where the field is nearly flat the local deviation is
+    # nearly zero too, so the ratio blows up and manufactures a drainage
+    # network out of nothing: the first cut handed the FLAT TOP of Tibet more
+    # gain than the Himalaya beside it (p90 0.098 -> 0.169 against 0.065 ->
+    # 0.086) and put channels through the Sahara. Valley dissection needs
+    # relief -- that is what a valley is cut into -- so weight by how much
+    # relief there actually is within a few tens of kilometres. This is also
+    # what separates a dissected range from the plateau it stands on, which
+    # the height cutoff downstream in the shader was failing to do.
+    # Window and thresholds MEASURED, not guessed -- a first cut at 55 km and
+    # 260 m read the Himalaya at 197 m and gated the whole thing back to zero.
+    # Over 110 km the field separates cleanly: ranges 307-1500 m, the flat top
+    # of Tibet 128-184, Sahara 141, the plains and the Congo under 60.
+    kr = max(int(round(110.0 / (180.0 / H * 111.0))), 3)
+    relief = np.sqrt(np.maximum(_box_mean(z * z, kr) - _box_mean(z, kr) ** 2, 0.0))
+    # A GATE, not a scale. Multiplied in linearly this reached only ~0.46 in the
+    # Himalaya and, stacked on the 0.46 cap and a sub-1 z-ratio, left the field
+    # at p90 0.086 -- still under the shader's 0.10 carve start, so the whole
+    # chain stayed inert. Saturating by 420 m puts every real range at full
+    # weight while Tibet's flat top (184 m) and the Sahara (141 m) stay near zero.
+    t = np.clip((relief - 170.0) / 250.0, 0.0, 1.0)
+    dens *= t * t * (3.0 - 2.0 * t)
+    drain = np.clip(np.maximum(drain, dens), 0, 1)
     drain[sea] = 0.0
     # BAND-LIMIT THE POLEWARD ROWS, like every other shipped field. This one
     # was missed, and it is the loudest possible field to miss it in: D8 flow
