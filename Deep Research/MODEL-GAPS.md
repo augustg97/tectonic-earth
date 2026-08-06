@@ -2997,3 +2997,52 @@ now -- explicitly a reference point, NOT a target to revert to.
 compositor and the ocean capture-size claim). The pattern is the same every
 time: the verification path and the app disagree, and the disagreement reads as
 a defect in the app. Check the instrument first.
+
+### Iteration 66 -- mountains cannot be carved, because the field the carve reads is empty there
+
+Chasing the close-zoom gap against the Google reference. At the Everest framing
+at zoom 1.35 -- the closest the UI allows -- our Himalaya is dark, blocky and
+smeared where the reference is dense dendritic valleys at a few-km spacing.
+
+**BISECTED, AND THE ANSWER WAS THE THING DOING NOTHING.** Disabling the
+iteration-62 fold corrugation changed the frame by 5.25/255 (its normal
+contribution, artefact unaffected); disabling the close-zoom detail octaves,
+2.96; disabling the drainage carve AND the gully term together, **0.18**. The
+valley-carving machinery -- the one feature that would produce what the
+reference is made of -- is inert at the Himalaya.
+
+**WHY: `_d` CARRIES FLOW ACCUMULATION, WHICH IS NEAR ZERO IN EVERY RANGE.**
+Measured off the shipped field:
+
+| site | drain p50 | p90 |
+|---|---|---|
+| Himalaya | 0.008 | 0.065 |
+| Andes | 0.000 | 0.059 |
+| Tibet | 0.008 | 0.098 |
+| N American plains | 0.008 | 0.135 |
+| Congo basin | 0.400 | 0.543 |
+| Amazon | 0.282 | 0.535 |
+
+The carve starts at 0.10-0.18, which is above the **p90 of every mountain
+range**. Accumulation measures UPSTREAM AREA, so a headwater has almost none --
+and a mountain range is nothing but headwaters. It correctly marks trunk rivers
+in big lowland basins and can never mark the dissected texture of an orogen,
+because dissection is drainage DENSITY, not accumulation magnitude. A headwater
+valley is still a deep valley.
+
+**A FIX WAS BUILT AND REVERTED.** The carve is also gated by
+`1.0-smoothstep(2400,3400,zp)`, a height cutoff standing in for "do not carve
+across the flat top of Tibet" -- which fails on the Himalaya, Karakoram, Andes
+and Alps, all of which stand above that line. Re-branching it on flatness
+(`rug`) rather than height is the more correct rule and it is recorded here, but
+it changed the Everest frame by 0.17/255 because `drain` is the binding
+constraint, not the gate. Reverted rather than shipped on principle.
+
+**THE REAL FIX IS IN THE BAKE**, and it is the next round: `build_surface.py`
+should ship a companded accumulation (log, or normalised against a local
+maximum) so headwater networks register at all, then the carve threshold gets
+re-derived against the new distribution. That is a 251-frame `_d` re-bake.
+
+Also this round: Google Earth's WASM build will not initialise in the review
+browser; Maps satellite at `@28.2,86.9,9z` with `!3m1!1e3` serves the same
+imagery and is the reference framing used above.
