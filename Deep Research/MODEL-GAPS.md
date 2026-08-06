@@ -2918,3 +2918,38 @@ still worth having (the combing is visible in an A/B) but the register's
 iteration 62 number was flattering itself. **Report the tiled figure for
 anything anisotropic; keep the global one only for whether a scene has a
 dominant grain at all.**
+
+### Iteration 64 -- the ocean round found no defect, and one claim had to be withdrawn mid-round
+
+Shot the Hawaii chain and the Scotia arc at zoom 2.4 against the Google Earth
+references. The chain, its swell, the Emperor Seamounts, Shatsky Rise and the
+Patagonian shelf all read well. What looked wrong was the abyss: relative
+contrast (high-pass sigma over mean luminance) of **0.051** against land's
+**0.362** at the same framing, i.e. water that reads as flat colour.
+
+**A CLAIM MADE AND WITHDRAWN INSIDE ONE ROUND.** The fabric orders are
+anti-aliased against `radpx*HF`, so the obvious explanation was that a 760 px
+capture fades out orders a real browser still draws -- the same shape as
+iteration 63's label finding, and it measured beautifully: re-shot at 1900 px
+the abyss came back at 0.179, 3.5x more texture. That comparison is invalid.
+`A.shoot(name, size)` does not resample a fixed field of view; it changes the
+framing AND the pixel density together, so the two boxes covered different
+geography -- the 1900 frame had pulled in Shatsky Rise, Ontong Java and the
+globe's limb. Checked properly: the centre 760 of the 1900 shot does not match
+the 760 shot (mean abs diff 37.1), a downscale of it does not either (37.0), and
+on a fixed box the LARGER capture reads **lower** relative contrast (0.036 vs
+0.053) -- the opposite of the claim. **Two captures at different sizes are not
+an A/B of anything.**
+
+So no ocean defect is confirmed and nothing was changed in the shader. Part of
+the low number is simply that the abyss is dark (mean luminance 45 against
+land's 115) and sRGB compresses contrast down there, which is also true of the
+reference.
+
+**Shipped: `?shotsize` on the verify harness**, defaulting to 760 so every
+earlier shot stays comparable -- with the caveat above recorded at the call
+site, because a size parameter invites exactly the comparison that just failed.
+
+Open, and the honest next step: this needs a real Google Earth capture at a
+matched framing to compare against. Eyeballing "does that look like enough
+texture" is what produced the withdrawn claim.

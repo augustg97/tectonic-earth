@@ -281,7 +281,14 @@ const W = () => document.getElementById('app').contentWindow;
       still = cam.position.distanceTo(p0) < 1e-5 ? still + 1 : 0;
     }
     A.step(); A.step();
-    const r = await A.shoot(s.name, 760);
+    /* SIZE IS A PARAMETER, and it changes what the frame contains. The ocean
+       fabric and the land detail octaves are anti-aliased against radians per
+       pixel, so a 760 px capture fades out orders a real browser at 1280-2560
+       still draws: measured at the Hawaii framing, the abyss came back with a
+       high-pass sigma of 2.3 against land's 41.8 and read as featureless water,
+       which is the capture under-sampling and not the sea floor. Default stays
+       760 so every earlier shot remains comparable. */
+    const r = await A.shoot(s.name, +(q.get('shotsize') || 760));
     console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, still, saved: !!r.saved, err: r.error || null}));
   }
   document.title = 'VERIFY-DONE';
