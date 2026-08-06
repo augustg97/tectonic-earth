@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260806-0114';
+const DATA_V='20260806-0649';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -8168,7 +8168,15 @@ function buildLegend(){
                 // exact inverse of ll2v's XZ angle; no assumption involved
                 state.rot = -((lon + 90) * DEG);
                 state.tilt = lat * DEG;
-                if (o.zoom != null) state.zoom = o.zoom;
+                /* CLAMP TO WHAT THE UI CAN REACH. The wheel and pinch handlers
+                   both clamp to [1.35, 5]; this path wrote state.zoom raw, so a
+                   verification shot could render a camera no user can get to.
+                   Below about 1.35 the terrain smears into long radial spikes,
+                   and a whole round was spent measuring "whole-globe interiors"
+                   from shots taken at zoom 1.0 -- which were not globes at all
+                   but streaked close-ups. An instrument that can reach states
+                   the app cannot will keep reporting defects that do not exist. */
+                if (o.zoom != null) state.zoom = Math.max(1.35, Math.min(5, o.zoom));
                 if (o.gtilt != null) state.gtilt = o.gtilt;
                 if (o.head != null) state.head = o.head;
                 if (o.age != null) jumpTo(o.age);

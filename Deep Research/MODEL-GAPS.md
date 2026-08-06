@@ -2953,3 +2953,47 @@ site, because a size parameter invites exactly the comparison that just failed.
 Open, and the honest next step: this needs a real Google Earth capture at a
 matched framing to compare against. Eyeballing "does that look like enough
 texture" is what produced the withdrawn claim.
+
+### Iteration 65 -- the zoom parameter runs the other way, and three rounds of framings were mislabelled
+
+Opened on queue item 1 (interiors at whole-globe zoom) and found the premise
+inverted, along with the reason several earlier numbers cannot be trusted.
+
+**ZOOM IS A DISTANCE, NOT A MAGNIFICATION. Larger is FURTHER OUT.** 0.4 is a
+close pass, 2.0 is regional, 6-16 shows the whole globe shrinking in frame.
+Every register entry that called zoom 1.6 "wide" and 3.0 "close" has it
+backwards -- including iteration 62, whose fold-corrugation gain was measured at
+the CLOSER of its two views, not the wider one.
+
+**AND lookAt COULD REACH CAMERAS THE APP CANNOT.** The wheel and pinch handlers
+both clamp to `[1.35, 5]`; `A.lookAt` wrote `state.zoom` raw. Below about 1.35
+the terrain smears into long radial spikes -- so this round opened by measuring
+"whole-globe interiors" from shots taken at zoom 1.0, which were not globes at
+all but streaked close-ups, and reported relative contrast of 0.034-0.043 for
+them. Re-measured inside the reachable range:
+
+| framing | relative contrast |
+|---|---|
+| globe, zoom 5, Asia | 0.295 |
+| globe, zoom 5, N America | 0.280 |
+| close, zoom 1.35, Himalaya | **0.165** |
+
+So interiors read BETTER at globe zoom than close up, and queue item 1 as
+written was chasing a number produced by an unreachable camera. `lookAt` now
+clamps to the UI's own range.
+
+**THE REAL TARGET, FROM A GOOGLE REFERENCE.** Google Earth's WASM build will not
+initialise in the review browser (stuck on its splash past 55 s); Maps satellite
+serves the same imagery and does. At the Everest framing the reference shows
+dense DENDRITIC VALLEY DISSECTION at a few-km scale over every slope, very high
+local luminance contrast (bright crests against deep shadowed valleys), and low
+chroma -- the structure is carried by luminance, not colour. Ours at the closest
+reachable zoom measures 0.165 against that. **The gap is at CLOSE zoom, and it is
+drainage dissection, not amplitude.** That agrees with the user's own July 23-24
+screenshots, which are close/regional framings carrying more grain than we draw
+now -- explicitly a reference point, NOT a target to revert to.
+
+**Third instrument-manufactured defect this session** (after the label
+compositor and the ocean capture-size claim). The pattern is the same every
+time: the verification path and the app disagree, and the disagreement reads as
+a defect in the app. Check the instrument first.
