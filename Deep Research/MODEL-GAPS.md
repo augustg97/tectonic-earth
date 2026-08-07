@@ -3149,3 +3149,50 @@ geometry, not cyclone geometry), and make the orographic drain conserve rather
 than annihilate -- what is stripped from the air should be falling on the
 windward slope, not vanishing. Re-verify against the 18 reference biomes, which
 is the gate that protects the rain shadows.
+
+### Iteration 68 -- the monsoon shipped, and 251 keyframes with it
+
+The fix for iteration 67, baked and deployed. `R_ns` -- the only south-north
+transport in the solve -- is now admitted through monsoon geometry as well as
+the extratropical cyclone band, placed AFTER the Rodwell-Hoskins descent and
+suppressed by it. And the orographic drain can no longer strip more moisture
+than the parcel is carrying.
+
+Shipped field, all 251 keyframes re-baked (rain -> 251 surface -> lakes ->
+present-day real lake outlines -> manifest):
+
+| | before | after |
+|---|---|---|
+| land >2500 m, mean rain | 0.0027 | **0.0071** |
+| ...fraction under 0.02 | 97.7% | 95.8% |
+| land <500 m | 0.1494 | 0.1719 |
+| Himalaya drainage p90 | 0.065 | 0.084 |
+| Andes drainage p90 | 0.059 | 0.102 |
+| Congo / Amazon rainfall | 0.224 / 0.480 | 0.548 / 0.711 |
+
+**The Congo-to-Amazon rainfall ratio is now 0.77 against a real 0.75** -- the
+first time those two have stood in the right relation to each other. In the
+render the Congo stops being a thin mottled ribbon and becomes a contiguous
+forest block (land-greenness 23.6 -> 36.6, Amazon 19.8 -> 36.7), which is the
+complaint recorded as task 41 and closed prematurely.
+
+**And 280 Ma banding falls 90.7 -> 69.7**, a further 23% off the artefact the
+user originally reported -- from repairing the climate, not from touching the
+shader. The overlays were only ever half of it.
+
+**One change built and reverted.** `snow` is scaled by `snowfall`, which is
+derived from current rainfall and floors at 0.30 -- so above the ELA the same
+aridity is counted twice and no crest anywhere can exceed 30% snow. Releasing
+that gate well above the line is physically right and the Atacama control holds,
+but it moved the Himalayan crest by 0.5 of 255. Not the binding constraint, so
+not shipped.
+
+**The crest defect is still open**: our Himalaya renders at luminance 87.8,
+DARKER than the Tibetan plateau above it at 114.7, where the reference at
+matched scale shows a continuous white crest over a tan plateau. Rainfall there
+is still ~0.002 and the ELA has no aridity term, so nothing yet separates a wet
+crest from an arid plateau at the same height. That is the next thread.
+
+`audit_biomes.py` still reports 3 overlapping class boundaries. The worst,
+seasonal-vs-grass at -0.354, is the Pontic steppe reading wetter than the
+Congo -- untouched by this round and now measurable for the first time.

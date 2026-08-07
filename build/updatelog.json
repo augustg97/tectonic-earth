@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.5",
+      "date": "7 August 2026",
+      "title": "The monsoon finally arrives",
+      "summary": "Every high mountain range in the model was a desert. Air was allowed to travel east and west freely, but the only path that carries moisture from the ocean towards a pole was open solely in the mid-latitudes -- so the monsoon, which is that same movement happening much nearer the equator, had nowhere to go. The Himalayan front, one of the wettest places on Earth, was modelled as dry as the Sahara. Opening that path where monsoons actually occur, and stopping air from losing more water than it is carrying when it climbs, changes a great deal downstream: rainforests reach their real extent, the Congo and the Amazon finally stand in the right proportion to one another, rivers grow where mountains make them, and the banded look across the deep-time supercontinents eases further. The deserts are untouched -- the Sahara, the Gobi and the Atacama are as dry as they were."
+    },
+    {
       "version": "2.4",
       "date": "5 August 2026",
       "title": "Mountains get their ridges into the light",
