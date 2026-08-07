@@ -3238,3 +3238,45 @@ pixel it was actually read from -- rather than another guessed window.
 
 Task 39 ("ranges too low once smoothed") is the standing entry for this and it
 is still open.
+
+### Iteration 70 -- the crest defect never existed, and the probe was lying about everything
+
+**THE DECODE WAS WRONG, AND IT INVENTED A GEOLOGY.** Every probe reading in
+iterations 69 and 70 went through an sRGB linearisation that should not have been
+applied. The tell was in the data the whole time: the white reference channel
+comes back as a CONSTANT 0.898 at p10, p50 and p90 alike -- the capture path
+applies neither shade nor an sRGB encode to `gl_FragColor`, so the raw bytes ARE
+the shader's values. Corrected:
+
+| | with the bogus decode | raw | field |
+|---|---|---|---|
+| baseElev p50 | 2595 | **4576** | 4775 |
+| p90 | 3160 | **5170** | 5477 |
+| ela p50 | 3491 | **5520** | -- |
+
+So there is **no elevation compression**: the shader reads the field faithfully,
+`zp` tracks `baseElev` to +5 m at p50 with correlation 0.98, and the "ranges
+render 1800 m too low" of iteration 69 was my own arithmetic. An ELA of 5520 m
+with a snowline at 5140 m is right for the Himalaya and Tibet.
+
+**AND THE DEFECT ITSELF WAS A MEASUREMENT ARTEFACT.** "Our Himalaya renders at
+luminance 87.8, darker than the Tibetan plateau at 114.7" came from GEOMETRIC
+boxes -- fractions of the frame chosen by eye -- which did not contain the crest.
+Masked by TERRAIN instead (pixels more than 300 m above their own snowline, from
+the probe, pixel-aligned with the colour frame), the crest reads **149.8**,
+brighter than the plateau and the plain, with 19% of it snow-bright. There was
+nothing to fix.
+
+**The lesson, and it is the recurring one of this whole run:** a geometric box is
+a guess about where a feature is, and it has now produced three false defects
+(the label pile-up, the ocean capture-size claim, this). Mask by the QUANTITY --
+elevation, snowline, land -- not by a rectangle, and pixel-align the mask with
+the frame it measures.
+
+**SHIPPED, small and real.** `snow` was scaled by `snowfall`, which floors at
+0.30 where Rf is 0, so a crest 694 m above its snowline scored a full 1.0 on the
+height term and was then multiplied down to 0.30 -- the ELA already carries the
+climate, so that counted aridity twice. Released above the line: crest-pixel
+luminance 149.8 -> 151.3, snow-bright fraction 0.191 -> 0.204, Atacama control
+unmoved at 99.1 / 0.014. Worth having because it stops being small the moment
+the rainfall field changes again, which it just did.

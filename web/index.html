@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260807-0846';
+const DATA_V='20260807-0921';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3610,6 +3610,19 @@ void main(){
        that would hang snow on Andean peaks that are bare all year. */
     float snowline=ela-380.0;
     float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
+    /* ...BUT ABOVE THE LINE THAT GATE HAS ALREADY BEEN PASSED. The ELA is where
+       accumulation balances ablation, and it already carries the climate --
+       scaling snow by CURRENT rainfall on top of it counts the same aridity
+       twice. Where Rf is 0 the floor pins snowfall at 0.30, so no crest
+       anywhere can be more than thirty per cent snow however far above its
+       snowline it stands. Probed at the Everest framing: the crest reaches
+       zp 5834 against a snowline of 5140, clears it by 694 m, scores a full
+       1.0 on the height term -- and is then multiplied down to 0.30. That is
+       why our Himalaya rendered DARKER than the Tibetan plateau below it.
+       Faded in over a kilometre of excess height, so an arid massif sitting
+       near its own line still comes out brown; the Atacama's six-kilometre
+       volcanoes are the control and they stay bare. */
+    snowfall=mix(snowfall,1.0,clamp((zp-snowline)/1100.0,0.0,1.0)*0.80);
     // Same story as the glacier above: the polar temperature-only substitution
     // that used to sit here was a disc, so it is gone. Snow is the ELA band
     // everywhere, and the filtered elevation keeps it clean at the pole.
