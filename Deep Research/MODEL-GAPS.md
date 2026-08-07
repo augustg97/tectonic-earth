@@ -3196,3 +3196,45 @@ crest from an arid plateau at the same height. That is the next thread.
 `audit_biomes.py` still reports 3 overlapping class boundaries. The worst,
 seasonal-vs-grass at -0.354, is the Pontic steppe reading wetter than the
 Congo -- untouched by this round and now measurable for the first time.
+
+### Iteration 69 -- the crest is still dark, and both explanations for it are wrong
+
+Chasing the one defect the matched-scale Google comparison left: our Himalaya
+renders at luminance 87.8, DARKER than the Tibetan plateau above it at 114.7,
+where the reference shows a continuous white crest over a tan plateau. That much
+is not in doubt -- it is a direct measurement of the picture.
+
+**RULED OUT, BOTH MEASURED:**
+
+*The snowfall gate.* `snow` is scaled by `snowfall`, which floors at 0.30 where
+Rf is 0, so above the ELA the same aridity is counted twice and no crest can
+exceed 30% snow. Releasing it well above the line is physically correct and the
+Atacama control holds -- and it moves the crest by **0.5 of 255**. Not it.
+
+*Companded bilinear.* Elevation ships sqrt-companded and the GPU filters the
+COMPANDED values before the shader decodes, so decoding the average of a square
+root under-reads the average by Jensen's inequality -- a systematic deficit,
+worst in steep relief, and it would have explained everything. Computed against
+the real field over the Himalaya: **7 m mean, 62 m maximum.** Negligible. Not it
+either. A clean mechanism is not evidence that it is the mechanism.
+
+**A PROBE TECHNIQUE, AND ITS TRAP.** Writing `zp` at `gl_FragColor` returns a
+CONSTANT -- the variable is out of scope there and holds whatever was last
+assigned, which reads as a plausible number and is not one. Capture at the site
+instead, through a global set beside the quantity. And a single reference channel
+cannot clean the readback: shade MULTIPLIES but haze ADDS, so carry a black
+reference as well as a white one and recover `(R-G)/(B-G)`. (Here the two agreed,
+so haze was negligible at this framing -- but the ratio-only form cannot know
+that.)
+
+**WHAT THE PROBE SAYS, AND WHY IT IS NOT YET TRUSTWORTHY.** Shader `zp` over the
+Everest massif reads p50 2979 / p90 4051 / max 5831 against the field's
+4775 / 5477 / 6679 in a 200 km box -- 1800 m low at the median, 13% at the peak.
+But the frame is a perspective view of a sphere and the "same box" is a guess, so
+the MAGNITUDE is not established; three separate comparisons this session have
+already fallen to exactly this. The next step is a co-registered probe -- shoot
+`zp` and the sampled uv as separate frames so the field can be looked up at the
+pixel it was actually read from -- rather than another guessed window.
+
+Task 39 ("ranges too low once smoothed") is the standing entry for this and it
+is still open.
