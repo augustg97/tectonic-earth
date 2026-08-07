@@ -29,6 +29,7 @@ from climate import climate_at
 FETCH_KM     = 3200.0  # e-folding distance for moisture drying inland
 ORO_RAIN     = 1.9     # orographic rainfall gain per unit upslope
 ORO_DRAIN    = 0.85    # moisture stripped by forced ascent
+ORO_STRIP_MAX= 0.75    # ...but never more than this fraction of what the air holds
 UPLIFT_SCALE = 300.0   # metres of rise (large-scale) that counts as full uplift
 SEA_RECHARGE = 1.0
 TEMP_REF     = -0.55   # climate.py's present-day `temp`; anomalies are relative
@@ -197,7 +198,23 @@ def _advect(elev, ocean, direction, decay, floor, regen=None):
         # moisture budget: saturate over sea; inland decay toward the recycling
         # floor, with extra loss where air is forced over high ground
         inland = fl + (m - fl) * decay
-        inland = np.clip(inland - ORO_DRAIN * uplift * m, 0.0, 1.0)
+        # AIR CANNOT LOSE MORE WATER THAN IT IS CARRYING. Unbounded, this term
+        # is ORO_DRAIN * uplift * m with uplift measured in units of 300 m, so a
+        # single column climbing the Himalayan front asks for roughly seventeen
+        # times the moisture present, the result clips to zero, and every column
+        # beyond it is dry for ever. Measured on the shipped field: land above
+        # 2500 m came out at mean rainfall 0.0027 with 97.7% of it under 0.02,
+        # against 0.1494 for land below 500 m -- every high range on Earth a
+        # desert, including the monsoon-facing Himalayan front. That fed the
+        # snow (capped at 30% wherever Rf is 0), the flow accumulation that
+        # weights by rainfall, and every alpine biome.
+        #
+        # Capping the strip at a FRACTION of what the parcel holds keeps the
+        # rain shadow -- three columns of climbing still leave under 2% -- while
+        # letting the windward slope and the crest take the water on the way up,
+        # which is where it actually falls.
+        inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
+                                             ORO_STRIP_MAX * m), 0.0, 1.0)
         m = np.where(sea, SEA_RECHARGE, inland)
     return R
 
@@ -237,7 +254,23 @@ def _advect_ns(elev, ocean, toward_north, decay, floor):
         rain = m * (1.0 + ORO_RAIN * uplift)
         R[r] = np.where(sea, 0.0, rain)
         inland = fl + (m - fl) * decay
-        inland = np.clip(inland - ORO_DRAIN * uplift * m, 0.0, 1.0)
+        # AIR CANNOT LOSE MORE WATER THAN IT IS CARRYING. Unbounded, this term
+        # is ORO_DRAIN * uplift * m with uplift measured in units of 300 m, so a
+        # single column climbing the Himalayan front asks for roughly seventeen
+        # times the moisture present, the result clips to zero, and every column
+        # beyond it is dry for ever. Measured on the shipped field: land above
+        # 2500 m came out at mean rainfall 0.0027 with 97.7% of it under 0.02,
+        # against 0.1494 for land below 500 m -- every high range on Earth a
+        # desert, including the monsoon-facing Himalayan front. That fed the
+        # snow (capped at 30% wherever Rf is 0), the flow accumulation that
+        # weights by rainfall, and every alpine biome.
+        #
+        # Capping the strip at a FRACTION of what the parcel holds keeps the
+        # rain shadow -- three columns of climbing still leave under 2% -- while
+        # letting the windward slope and the crest take the water on the way up,
+        # which is where it actually falls.
+        inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
+                                             ORO_STRIP_MAX * m), 0.0, 1.0)
         m = np.where(sea, SEA_RECHARGE, inland)
         # LATERAL MIXING INSIDE THE MARCH, not smoothing afterwards. Each column
         # is otherwise an isolated one-dimensional atmosphere, and isolated
@@ -330,6 +363,27 @@ def _rainfall(Z, land, lat, cl):
     # poleward transport actually dominates the moisture budget.
     cyc = _band(absl, 32, 62, feather=10.0)
     descend = np.exp(-((absl - 24.0) ** 2) / (2 * 11.0 ** 2))
+    # ...AND THROUGH THE MONSOON, which is the other meridional flow and the one
+    # that waters the subtropics. R_ns is the only south-north transport in the
+    # solve and it was admitted through `cyc` alone -- the extratropical cyclone
+    # band, 32 to 62 degrees -- so between the equator and the horse latitudes
+    # nothing could move poleward at all. The Indian monsoon is exactly that
+    # flow, and the Himalayan front is what it runs into.
+    #
+    # The existing `monsoon` term below cannot fix this: it enters as
+    # `Rf = (B + monsoon) * R`, a MULTIPLIER on moisture already delivered, so
+    # where R is zero for want of transport the bonus multiplies zero and stays
+    # zero. A monsoon is a delivery mechanism, not a gain.
+    #
+    # Deliberately NOT gated by `descend`. The subtropical-high suppression is
+    # what makes the deserts, and applying it here would cancel the monsoon at
+    # precisely the latitudes it exists; the desert asymmetry is already carried
+    # properly by the Rodwell-Hoskins `induced` term, which dries the ground
+    # WEST of the monsoon source rather than the source itself.
+    # The admission itself is applied further down, once the Rodwell-Hoskins
+    # descent is known -- see MONSOON ADMISSION below. Delivering moisture here
+    # and drying it there is the wrong order: it wet the Rub al Khali to 0.142,
+    # which is the failure this solve has already been through once.
     R = np.clip(np.maximum(R, R_ns * cyc * 1.45 * (1.0 - 0.85 * descend)), 0, 1.6)
 
     # Atmospheric rain belts. These MODULATE the delivered moisture rather than
@@ -404,6 +458,27 @@ def _rainfall(Z, land, lat, cl):
     induced *= (SUBSID_GAIN / wsum) * ridge
     monsoon = np.clip(monsoon - induced, 0.0, None)
 
+    # MONSOON ADMISSION. R_ns is the only south-north transport in the solve and
+    # it was admitted through `cyc` alone -- the extratropical cyclone band, 32
+    # to 62 degrees -- so nothing could move poleward anywhere between the
+    # equator and the horse latitudes. The Indian monsoon is exactly that flow
+    # and the Himalayan front is what it runs into, which is why land above
+    # 2500 m came out at mean rainfall 0.0027 with 97.7% of it under 0.02.
+    #
+    # The `monsoon` term above cannot do this job: it enters as
+    # `Rf = (B + monsoon) * R`, a MULTIPLIER on moisture already delivered, so
+    # where R is zero for want of transport the bonus multiplies zero.
+    # A monsoon is a delivery mechanism, not a gain.
+    #
+    # Admitted HERE, after `induced`, and suppressed by it -- the same descent
+    # that dries Arabia in the multiplier has to dry it in the delivery, or the
+    # Rub al Khali floods (measured at 0.142 with the admission applied before
+    # this point, against 0.013 for the Sahara beside it).
+    subs = np.clip(induced / max(float(induced.max()), 1e-6), 0.0, 1.0)
+    mons_adm = (_band(absl, 5.0, 32.0, feather=9.0) * _smooth(land.astype(float), 2)
+                * np.clip(1.0 - MONSOON_SUBS * subs, 0.0, 1.0))
+    R = np.clip(np.maximum(R, R_ns * mons_adm * MONSOON_ADM), 0, 1.6)
+
     # a warmer world evaporates more; `arid` already shapes the belts above so
     # it is deliberately not applied twice here
     glob = np.clip(1.02 + 0.22 * cl["temp"], 0.78, 1.30)
@@ -433,6 +508,8 @@ RECYCLE_REF = 0.25      # rainfall counted as 'fully recycling'
 RECYCLE_FLOOR = 0.55    # fraction of saturation wet ground sustains
 SUBSID_LAMBDA = 26.0    # e-folding distance of the subsiding limb, degrees lon
 SUBSID_GAIN = 0.75      # how much of the source monsoon the descent cancels
+MONSOON_ADM = 1.00      # admission of poleward transport through monsoon geometry
+MONSOON_SUBS= 0.95      # how completely the induced descent closes that admission
 SUBSID_DRY = 2.6        # how hard that descent suppresses delivered rain
 
 
