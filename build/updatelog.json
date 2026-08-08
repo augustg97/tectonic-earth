@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.6",
+      "date": "8 August 2026",
+      "title": "A shallow sea is not an ocean",
+      "summary": "Air passing over water picked up as much moisture from the Black Sea or the Caspian as it would from the open Atlantic, which is not how evaporation works: a small enclosed sea has only so much water surface to give. The effect was easy to miss at present day -- it made the steppes north of the Black Sea come out wetter than the Congo -- and much larger in deep time, where shallow seas spread across the middle of the continents and every one of them was quietly watering the land around it. Weighting the supply by how much open water is actually upwind dries Pangaea's interior the way a supercontinent should be dry, and eases the banded look further, while the rainforests, which draw on real oceans, do not move at all."
+    },
+    {
       "version": "2.5",
       "date": "7 August 2026",
       "title": "The monsoon finally arrives",
