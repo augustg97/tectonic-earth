@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.7",
+      "date": "8 August 2026",
+      "title": "Arabia learns to be a desert",
+      "summary": "A monsoon does not just draw air in; it also pushes air down somewhere else, and that sinking is what keeps the great subtropical deserts dry. The model worked out where the sinking should fall, but it decided where the monsoons themselves were purely from latitude and the presence of land -- so the Deccan, which is drenched every summer, and the Rub al Khali, the driest sand on Earth, came out identical. Both sit at the same latitude and both are land. Deciding instead by where rain is actually falling makes India a strong source that dries Arabia downstream, while Arabia, having no storms of its own, pushes almost nothing back. Arabia and inland Australia now read as the deserts they are, and the deep-time supercontinents lose more of their banded look."
+    },
+    {
       "version": "2.6",
       "date": "8 August 2026",
       "title": "A shallow sea is not an ocean",
