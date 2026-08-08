@@ -32,6 +32,7 @@ ORO_DRAIN    = 0.85    # moisture stripped by forced ascent
 ORO_STRIP_MAX= 0.75    # ...but never more than this fraction of what the air holds
 UPLIFT_SCALE = 300.0   # metres of rise (large-scale) that counts as full uplift
 SEA_RECHARGE = 1.0
+SEA_MIN      = 0.25    # what an ENCLOSED sea supplies, against open ocean's 1.0
 TEMP_REF     = -0.55   # climate.py's present-day `temp`; anomalies are relative
                        # to it so the modern frame reproduces the real profile
 
@@ -138,7 +139,28 @@ def _band(x, lo, hi, feather=9.0):
            np.clip(((hi + feather) - x) / feather, 0, 1)
 
 
-def _advect(elev, ocean, direction, decay, floor, regen=None):
+def _sea_recharge(ocean, W):
+    """How much moisture a water body can actually hand to the air over it.
+
+    Both marches saturated to SEA_RECHARGE over ANY water, so the Black Sea, the
+    Caspian and the Mediterranean resupplied an air mass exactly as the open
+    Atlantic does. Measured at present day, the meridional march arrived at the
+    Pontic steppe carrying 0.547 against the Kazakh steppe's 0.013 at the same
+    latitude -- and the difference is not continentality, it is that one column
+    happened to cross an inland sea on the way and had its clock reset to full.
+    The steppe came out at 0.411, wetter than the Congo, which is the largest
+    class inversion audit_biomes.py reports.
+
+    Evaporative supply scales with the fetch of open water upwind, so weight the
+    recharge by how much water lies within a few hundred kilometres. An enclosed
+    sea supplies a real but limited amount; an ocean supplies all of it.
+    """
+    k = max(int(round(W / 72.0)), 3)          # ~500 km at CLIM resolution
+    openness = _smooth(ocean.astype(float), k)
+    return SEA_RECHARGE * (SEA_MIN + (1.0 - SEA_MIN) * np.clip(openness / 0.55, 0.0, 1.0))
+
+
+def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None):
     """March moisture downwind across each row, returning delivered rainfall.
 
     direction +1: westerly wind, air travels west->east (increasing column)
@@ -215,11 +237,11 @@ def _advect(elev, ocean, direction, decay, floor, regen=None):
         # which is where it actually falls.
         inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
                                              ORO_STRIP_MAX * m), 0.0, 1.0)
-        m = np.where(sea, SEA_RECHARGE, inland)
+        m = np.where(sea, SEA_RECHARGE if recharge is None else recharge[:, c], inland)
     return R
 
 
-def _advect_ns(elev, ocean, toward_north, decay, floor):
+def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None):
     """March moisture along COLUMNS, from the equator toward one pole.
 
     WHY THIS EXISTS. The zonal solve above carries moisture east-west only, so a
@@ -271,7 +293,7 @@ def _advect_ns(elev, ocean, toward_north, decay, floor):
         # which is where it actually falls.
         inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
                                              ORO_STRIP_MAX * m), 0.0, 1.0)
-        m = np.where(sea, SEA_RECHARGE, inland)
+        m = np.where(sea, SEA_RECHARGE if recharge is None else recharge[r], inland)
         # LATERAL MIXING INSIDE THE MARCH, not smoothing afterwards. Each column
         # is otherwise an isolated one-dimensional atmosphere, and isolated
         # neighbours drift apart row by row until the field carries vertical
@@ -310,8 +332,9 @@ def _rainfall(Z, land, lat, cl):
     # its own recycling. One iteration is enough -- the second pass moves the
     # Amazon and leaves the deserts alone, and a third would only sharpen an
     # already-converged field at twice the cost.
-    R_west = _advect(elev_s, ocean, +1, decay, floor)   # mid-latitude westerlies
-    R_east = _advect(elev_s, ocean, -1, decay, floor)   # tropical & polar easterlies
+    rech = _sea_recharge(ocean, W)
+    R_west = _advect(elev_s, ocean, +1, decay, floor, recharge=rech)   # mid-latitude westerlies
+    R_east = _advect(elev_s, ocean, -1, decay, floor, recharge=rech)   # tropical & polar easterlies
     # SMOOTH THE SEED ACROSS LATITUDE BEFORE FEEDING IT BACK. The advection
     # marches along rows, so a recycling term read row-by-row makes wet rows
     # self-sustaining and dry rows self-limiting -- the feedback sharpens
@@ -327,15 +350,15 @@ def _rainfall(Z, land, lat, cl):
     # threshold applied to a field whose gradient is mostly latitudinal draws a
     # latitude line, which is the shader's jitter to fix, not this.
     R_seed = np.maximum(R_west, R_east)
-    R_west = _advect(elev_s, ocean, +1, decay, floor, regen=R_seed)
-    R_east = _advect(elev_s, ocean, -1, decay, floor, regen=R_seed)
+    R_west = _advect(elev_s, ocean, +1, decay, floor, regen=R_seed, recharge=rech)
+    R_east = _advect(elev_s, ocean, -1, decay, floor, regen=R_seed, recharge=rech)
     # ...and poleward transport by extratropical cyclones, which is the only way
     # a continental east coast can be watered under westerlies (see _advect_ns).
     dy_km = (180.0 / H) * 111.0
     decay_ns = np.exp(-dy_km / FETCH_KM)
     floor_col = floor[:, None] * np.ones((1, W))
-    R_ns = _advect_ns(elev_s, ocean, True, decay_ns, floor_col) \
-         + _advect_ns(elev_s, ocean, False, decay_ns, floor_col)
+    R_ns = _advect_ns(elev_s, ocean, True, decay_ns, floor_col, recharge=rech) \
+         + _advect_ns(elev_s, ocean, False, decay_ns, floor_col, recharge=rech)
     # MIX ACROSS LONGITUDE. Every column in the meridional pass is an
     # independent one-dimensional march, so neighbouring columns diverge and the
     # result carries vertical streaks -- the exact mirror of the horizontal

@@ -3280,3 +3280,48 @@ climate, so that counted aridity twice. Released above the line: crest-pixel
 luminance 149.8 -> 151.3, snow-bright fraction 0.191 -> 0.204, Atacama control
 unmoved at 99.1 / 0.014. Worth having because it stops being small the moment
 the rainfall field changes again, which it just did.
+
+### Iteration 71 -- an inland sea was recharging air like an ocean
+
+`audit_biomes.py`, built two rounds ago, reports its worst class inversion at
+seasonal-vs-grass: the **Pontic steppe read 0.411, wetter than the Congo**.
+Decomposing the solve there rather than guessing:
+
+| site | R_ns arriving | final Rf |
+|---|---|---|
+| Pontic steppe | **0.547** | 0.411 |
+| Kazakh steppe, same latitude | 0.013 | 0.018 |
+
+Both sit at 48-49 N with `cyc` at 1.0, so the admission is identical and the
+difference is entirely what the meridional march was carrying when it got there.
+The cause: **both marches saturate to SEA_RECHARGE over ANY water.** The Black
+Sea, the Caspian and the Mediterranean reset an air mass's moisture to full,
+exactly as the open Atlantic does -- so a column that happens to cross an inland
+sea arrives at the steppe fresh, and one that does not arrives spent.
+
+Evaporative supply scales with the fetch of open water upwind, so recharge is
+now weighted by how much water lies within ~500 km. An enclosed sea supplies a
+real but limited share (SEA_MIN 0.25); an ocean supplies all of it.
+
+| | before | after |
+|---|---|---|
+| Pontic steppe | 0.411 | **0.263** |
+| seasonal / grass margin | -0.354 | **-0.213** |
+| wet / seasonal margin | -0.051 | -0.035 |
+| Amazon / Congo / Choco | 0.711 / 0.548 / 0.306 | 0.711 / 0.548 / 0.303 |
+| Sahara / Gobi / Atacama | 0.013 / 0.013 / 0.007 | 0.009 / 0.010 / 0.007 |
+
+The open-ocean-fed sites do not move, which is the check that this is selective
+and not a global drying.
+
+**And it matters more in deep time than at present**, which was not obvious
+before measuring: epicontinental seas are everywhere in the Phanerozoic, and
+every one of them has been recharging air to saturation. 280 Ma zonal banding
+**140.1 -> 126.1**, 122 Ma 129.0 -> 123.9, and Pangaea's land rain falls 10% --
+a supercontinent interior SHOULD be arid, and part of why ours was not is that
+its own shelf seas were feeding it.
+
+Swept: SEA_MIN 0.34 / 0.25 / 0.18 / 0.12 gives Pontic 0.281 / 0.263 / 0.249 /
+0.237. Settled at 0.25 -- the returns flatten and the Mediterranean is a genuine
+moisture source for European rainfall, so suppressing it further would trade one
+error for another.
