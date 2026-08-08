@@ -3325,3 +3325,59 @@ Swept: SEA_MIN 0.34 / 0.25 / 0.18 / 0.12 gives Pontic 0.281 / 0.263 / 0.249 /
 0.237. Settled at 0.25 -- the returns flatten and the Mediterranean is a genuine
 moisture source for European rainfall, so suppressing it further would trade one
 error for another.
+
+### Iteration 72 -- the descent was forced by a latitude band, not by convection
+
+`audit_biomes.py` again, on the two boundaries the last round left. Decomposing
+the monsoon machinery at the failing sites found a class inversion in the INPUTS:
+
+| site | monsoon | induced descent | admission |
+|---|---|---|---|
+| Deccan (monsoon core) | 0.565 | 0.2096 | 0.437 |
+| Rub al Khali (driest sand on Earth) | 0.565 | 0.1983 | 0.467 |
+
+**Identical monsoon strength, near-identical descent** -- the model could not
+tell the wettest seasonal land in Asia from the driest desert on the planet, and
+the descent came out slightly STRONGER over the Deccan, backwards from the
+mechanism being modelled. The reason is that `monsoon` is
+`0.60 * f(latitude) * land`, so any land at 21 N gets the same value.
+
+Ocean proximity was the obvious discriminator and it is not one: measured, the
+Deccan has 0.184 ocean fraction within 800 km against Arabia's 0.198. Tested
+before building on it.
+
+**Rodwell-Hoskins descent is forced by deep CONVECTION, and convection needs
+moisture.** The solve has already delivered `R` by the time `induced` is built,
+so the heat source is now weighted by the rain actually falling on it. India
+then drives Arabia's descent hard, and Arabia -- having no convection of its own
+-- drives almost nothing back.
+
+**Applied raw it made things worse, and the register should say why.** The
+weight is below 1 nearly everywhere, so the total descent budget shrank and every
+desert got wetter: Rub al Khali 0.122 -> 0.197, Sahara 0.009 -> 0.035, while the
+Deccan improved 0.050 -> 0.102. Two margins better and one much worse. Normalised
+to unit mean over the monsoon band -- redistributing the budget rather than
+reducing it -- it lands properly:
+
+| boundary | HEAD | shipped |
+|---|---|---|
+| wet / seasonal | -0.035 | **-0.001** |
+| seasonal / grass | -0.213 | -0.211 |
+| grass / desert | -0.108 | **-0.046** |
+
+| site | HEAD | shipped |
+|---|---|---|
+| Rub al Khali | 0.122 | **0.060** |
+| Australian interior | 0.044 | 0.012 |
+| Amazon / Congo | 0.711 / 0.548 | 0.690 / 0.549 |
+
+Total gap across the three boundaries closes 28%, Arabia halves, and the
+wet/seasonal boundary is now 0.001 from separating cleanly. Deep time is neutral
+(280 Ma banding 126.1 -> 126.0, 122 Ma 123.9 -> 127.0), which is the cost taken
+for it.
+
+Note the shape of the last three rounds: each fixed a term that branched on a
+PROXY -- transport admitted by a latitude band, recharge by whether a pixel was
+water, descent by where land happened to sit -- and each was repaired by
+branching on the quantity actually meant. The proxies all looked physical, which
+is why they survived so long.

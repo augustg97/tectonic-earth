@@ -461,7 +461,27 @@ def _rainfall(Z, land, lat, cl):
     # so `monsoon * land` there is zero and Arabia got no shadow at all. Descent
     # is not delivered in discrete jumps; it is a broad subsiding limb whose
     # strength falls off with distance from the heat source.
-    ms = _smooth(monsoon, max(2, int(W / 90)))
+    # THE HEAT SOURCE IS WHERE IT ACTUALLY RAINS, not where the latitude band
+    # says it might. `monsoon` is 0.60 * f(latitude) * land, so it hands the same
+    # 0.565 to the Deccan and to the Rub al Khali -- a monsoon core and the
+    # driest sand on Earth, at the same latitude with the same land fraction --
+    # and the descent built from it then came out slightly STRONGER over the
+    # Deccan (0.2096) than over Arabia (0.1983), which is backwards from the
+    # mechanism it is modelling. Rodwell-Hoskins descent is forced by deep
+    # CONVECTION, and convection needs moisture: weight the source by the rain
+    # actually delivered there, which the solve has already worked out by this
+    # point. India then drives Arabia's descent strongly, and Arabia -- having
+    # no convection of its own -- drives almost nothing back.
+    # NORMALISED TO UNIT MEAN over the monsoon band, because the point is to
+    # REDISTRIBUTE the descent toward genuinely convecting sources, not to
+    # reduce it. Applied raw, the weight is below 1 nearly everywhere, so the
+    # total descent budget shrank and every desert got wetter with it -- the
+    # Rub al Khali went 0.122 to 0.197 and the Sahara 0.009 to 0.035 while the
+    # Deccan improved. Two margins better and one much worse is not a fix.
+    wgt = np.clip(R / MONSOON_WET, 0.0, 1.0)
+    src = monsoon > 0.20
+    wgt = wgt / max(float(wgt[src].mean()) if src.any() else 1.0, 1e-3)
+    ms = _smooth(monsoon * wgt, max(2, int(W / 90)))
     step = max(1, int(W / 120))            # sample every ~3 degrees
     induced = np.zeros_like(ms)
     wsum = 0.0
@@ -533,6 +553,7 @@ SUBSID_LAMBDA = 26.0    # e-folding distance of the subsiding limb, degrees lon
 SUBSID_GAIN = 0.75      # how much of the source monsoon the descent cancels
 MONSOON_ADM = 1.00      # admission of poleward transport through monsoon geometry
 MONSOON_SUBS= 0.95      # how completely the induced descent closes that admission
+MONSOON_WET = 0.35      # delivered rain at which a monsoon source convects at full strength
 SUBSID_DRY = 2.6        # how hard that descent suppresses delivered rain
 
 
