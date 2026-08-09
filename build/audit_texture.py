@@ -82,6 +82,36 @@ def stats(g, tile=32):
     return float(hp.std()), (float(np.mean(vals)) if vals else float("nan"))
 
 
+def chroma_spread(im):
+    """90th-10th percentile of greenness over land: how much colour WANDERS.
+
+    Distinct from the biome-to-biome separation iteration 84 widened the palette
+    stops for. This is the spread INSIDE one region, and it is the half of task
+    32 that is still open. Measured at close zoom, with our crop box-downsampled
+    to Blue Marble's 7.4 km/px first -- without that step the comparison reads
+    our 1-7 km detail against a reference that cannot carry that band, which is
+    the error that cost iterations 96-98:
+
+        box                  ours raw   ours @7.4km   Blue Marble
+        N American plain           60            60            10
+        Alps                       37            36            10
+        Andes                      22            22            19
+
+    Downsampling changes nothing, so the excess is real and at scales the
+    reference resolves. It is also REGION-DEPENDENT -- 6x in the prairie, 1.2x
+    in the bare Andes -- which rules out the global scalar iteration 81 tried and
+    83 reverted. Whatever is too steep is in the vegetated response, not in the
+    bare-ground palette.
+    """
+    lum = im.mean(axis=2)
+    land = ~((im[:, :, 2] > im[:, :, 1] + 6) & (im[:, :, 2] > im[:, :, 0] + 18)) \
+        & (lum > 18) & (lum < 245)
+    if land.sum() < 150:
+        return None
+    g = (im[:, :, 1] - im[:, :, 0])[land]
+    return float(np.percentile(g, 90) - np.percentile(g, 10))
+
+
 def main():
     if not os.path.exists(BM):
         print("  audit_texture: no data/bluemarble.jpg to compare against")

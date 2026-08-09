@@ -4596,3 +4596,54 @@ a band the field does claim to carry.
 Cost of the detour: three rounds, one stopped bake. The rule that would have
 prevented all of it is the one from 97, applied one level earlier -- **read the
 module that owns the quantity before measuring it, not just before changing it.**
+
+### Iteration 99 -- queue item 4, and this time the control was run first
+
+Queue items 1, 2, 3 and 5 are all closed by measurement. Item 4, close-zoom land
+grain, is the last one open, and it is shader-side -- so it can be worked while
+the Mariana bake runs.
+
+Shot the Alps, the Great Plains and the Andes at zoom 0.4 and looked. The Alps
+read as a tan smudge with dark-green speckle: no snow, no legible ridges.
+
+**Two things checked before believing any of it, and one of them killed a
+plausible defect.** The missing snow is RESOLUTION, not a bug: at 9.8 km cells
+the shipped Alps peak at 3,349 m with a p95 of 2,446, and the Alpine snowline is
+2,800-3,000. The pipeline is not losing the mountains either -- source 6-min
+3,900 m, source on our grid 3,353, shipped 3,349, so the loss is the 0.1 -> 0.088
+degree resample and nothing downstream of it.
+
+The speckle is real. It is not a threshold flipping between two states -- the
+Pearson bimodality coefficient is 0.40-0.50 against the 0.555 that indicates two
+modes. It is AMPLITUDE:
+
+| box | ours | Blue Marble | ratio |
+|---|---|---|---|
+| N American plain | 60 | 10 | **6.0x** |
+| Alps | 36 | 10 | **3.6x** |
+| Andes | 22 | 19 | 1.2x |
+
+(90th minus 10th percentile of greenness over land.)
+
+**The control that iterations 96-98 taught me to run first.** Our shot is
+0.8 km/px and Blue Marble is 7.4, so the raw comparison reads our 1-7 km detail
+against a reference that cannot carry that band -- exactly the invalid
+comparison that cost three rounds. Box-downsampled to 7.4 km/px first: Alps
+37 -> 36, plains 60 -> 60, Andes 22 -> 22. **Nothing changes**, so the excess
+lives at scales the reference resolves and the finding survives.
+
+Two things follow that iteration 81 did not know when it tried a global chroma
+compression (reverted in 83 because the same knob wrecked the between-biome
+separation):
+
+  * the excess is REGION-DEPENDENT -- 6x in the prairie, 1.2x in the bare Andes.
+    A global scalar cannot fit that and would flatten the Andes to fix the
+    plains.
+  * so whatever is too steep lives in the VEGETATED response, not in the
+    bare-ground palette or in any term applied to all land.
+
+That is where the next round starts: find the specific term, not another
+multiplier. Recorded in `audit_texture.chroma_spread` with the resolution-match
+step written into the docstring, because the whole finding depends on it.
+
+No change this round, and the bake is at 17 of 251.
