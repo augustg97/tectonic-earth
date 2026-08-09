@@ -5254,3 +5254,50 @@ That is a judgement about which error matters more, not a defect with a fix, and
 it is the first thing this queue has reached that genuinely needs deciding rather
 than measuring. The estimate is an extrapolation from two anchors; the render
 check on the next bake confirms or refutes it before anything is chosen.
+
+### Iteration 113 -- task 23 was not closed, it was measured with the wrong instrument
+
+Queue item 2's last untouched sub-item is the shelf break, so I shot three of
+them and looked. Newfoundland and the Grand Banks read well. What does not:
+**three dark, hard-edged patches of dense scribble sitting in deep water**, quite
+unlike the smooth plain around them -- and the same signature off Patagonia at
+55W 44S, two oceans apart. Systematic, not geographic.
+
+**This is task 23, "find and fix the ocean-fabric rectangular seam", which I
+recorded as closed earlier this session** on the grounds that `audit_seam.py`
+flagged nothing across eight framings and four ages. That detector looks for a
+single COLUMN or ROW whose gradient stands above its neighbours. These are
+PATCHES with curved boundaries. The instrument could not see the artefact it was
+built to find, and "nothing flags" was read as "nothing is there".
+
+**The mechanism, and it is arithmetic rather than a guess.** The ocean-structure
+field ships its across-ridge coordinate log-companded, `R = log1p(d/2.5)/3.0819`,
+and the shader inverts it, `d = 2.5*(exp(R*3.0819)-1)`. In 8 bits, one level of R
+therefore buys wildly different distance depending on where you are:
+
+| site | 8-bit levels in the box | R | decoded distance | degrees per level |
+|---|---|---|---|---|
+| plain control, mid Atlantic | 99 | 0.449 | 7.5 | **0.121** |
+| near-ridge control | 36 | 0.707 | 19.6 | 0.267 |
+| patch off Patagonia | **17** | 0.867 | 33.7 | 0.437 |
+| patch NE of the Banks | **17** | 0.984 | 49.4 | **0.627** |
+
+The clean plain resolves its box in 99 levels; the patches get 17. A fabric whose
+phase rides `d` jumps 0.6 degrees between adjacent texels there -- so the strokes
+decorrelate from one level to the next, and the level boundaries are the hard
+edges. **The patches ARE the quantisation bands.**
+
+And the companding note in `seafloor.py` predicted exactly this without following
+it through: it says the 256 levels are deliberately "spent near the axis, where
+the fabric actually is, instead of being spread evenly across a basin whose far
+half is sediment-mantled and has nothing fine left to resolve". The premise is
+right and the consequence was missed -- the shader still draws fabric out there,
+on a coordinate too coarse to carry it.
+
+The fix is shader-side and needs no re-bake: fade the fabric as the decoded
+quantisation step grows, which is the same region the companding already assumes
+has nothing to draw. `CO_K*(CO_D0+distDeg)/255` is the step in degrees and is
+already computable in the shader from values it has. Next round implements and
+A/Bs it.
+
+Task 23 reopened, with a reproduction, two sites, and a measured cause.
