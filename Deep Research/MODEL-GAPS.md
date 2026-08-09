@@ -3932,3 +3932,31 @@ got there. Closing the rest means the zonal march delivering more across a
 continent, which is a larger change than one constant. The direction is now
 measured and the constant is honest; the shortfall is recorded rather than
 tuned away.
+
+**Iteration 85b -- the banding "regression" was two-thirds metric.** The 280 Ma
+render banding read 58.4 -> 94.9 after this re-bake, which looked like undoing
+half the session's work on the user's original complaint. Isolated by shooting
+the new fields under the OLD palette, then decomposed into the ratio's parts:
+
+| state | PEAK | background | ratio |
+|---|---|---|---|
+| old palette + old fields | 98.62 | 1.690 | 58.4 |
+| old palette + new fields | 105.04 | **1.384** | 75.9 |
+| new palette + new fields | **132.93** | 1.401 | 94.9 |
+
+The climate change moved the peak 7% and dropped the background 18% -- the
+field got QUIETER, and peak/median rises when the denominator falls. That half
+is an artefact, and it is the same relative-versus-absolute trap as iteration 80,
+hit again with a different statistic. **Report the peak, not the ratio.**
+
+The palette's +35% is real and is the mechanical price of iteration 84: deserts
+oranger and forests greener amplifies every green-red difference, and the
+banding is measured in green-red. Since Pangaea's zonal structure is largely
+genuine -- land-rain zonality 91.7 against a present-day 39.7, iteration 60 --
+drawing it more distinctly is accuracy rather than a defect. Kept, with the
+mechanism recorded so the number is not misread later.
+
+**And a process miss worth owning:** iteration 84 shipped the palette after
+checking it against chroma targets and never re-checked deep-time banding. A
+change to the colour axis needs re-running the metric that is defined on that
+axis.

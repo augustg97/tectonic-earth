@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.9",
+      "date": "9 August 2026",
+      "title": "Siberia stops being a desert",
+      "summary": "Central Siberia was modelled as dry as the Sahara -- the same number for 400 millimetres of rain a year as for fifteen. Water that falls on land evaporates and falls again further inland, and the model let that recycling fade over a fixed distance regardless of climate. But cold air holds what it carries far longer than hot air does, which is why boreal forest stretches thousands of kilometres from any ocean while a hot continental interior at the same distance is sand. Letting the recycling reach further where it is cold lifts the whole cold interior -- Siberia, the Canadian north, central Europe -- and leaves every desert exactly where it was."
+    },
+    {
       "version": "2.8",
       "date": "9 August 2026",
       "title": "Deserts that look like sand",
