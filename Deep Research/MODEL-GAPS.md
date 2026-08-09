@@ -4986,3 +4986,59 @@ ships on the proxy alone.
 Sequence from here: the Mariana re-bake finishes (115 of 251) and deploys with
 the wet-stop palette fix; then ORO_DRAIN=0.55 goes in and gets its own bake with
 audit_deeptime on the render as the gate.
+
+### Iteration 107 -- the repair works, and it missed a second fill family
+
+The Phanerozoic series finished rebaking, so the repair could finally be checked
+where it matters. Frames carrying a cell that steps more than 5 km between
+neighbours: **62 before, 46 now** -- and every one of the 46 is `fut_0055` or
+later, which the bake has not reached. Series by series:
+
+| series | rebaked | frames still over 5 km |
+|---|---|---|
+| phan | 109 of 109 | **6** |
+| fut | 10 of 50 | 1 of the 10 done (a borderline 5,122 m on the BC coast) |
+| pre | 0 of 92 | 0 |
+
+**But six rebaked Phanerozoic frames still carry spikes**, and looking at them
+found a second fill family the excursion test cannot reach:
+
+    phan_0050 at 146.7E 1.8S    118  692  [6452]  889  -118
+    phan_0020 at 67.4W 13.5S   6910 3942  [8000] 3514  2176
+
+A 6.5 km cell between neighbours of 692 and 889, in the west Pacific. Their
+excursion from a 9-cell median is 5,900-7,000 m, which sits UNDER the 8,000 m
+threshold -- and that threshold cannot be lowered, because real island-arc
+margins reach 5,760 m and flattening every steep coast to catch these would cost
+far more than it fixes. (The 8,000 in the second row is the Z_RANGE clamp, which
+is its own tell: nothing real reaches the ceiling of the encoding.)
+
+**Shape separates them where size cannot.** A fill is a NEEDLE -- high in the
+middle, falling away on all four sides. A margin is MONOTONE -- land one side,
+water the other, never a local maximum. The new test requires a cell to exceed
+all four neighbours by 3 km, which no coast does at any threshold and no ridge
+crest does either at 10 km per cell, since a real crest has a neighbour within a
+few hundred metres of it along strike.
+
+Verified cell by cell:
+
+| case | kind | before | after |
+|---|---|---|---|
+| 50 Ma needle in ocean | fill | +7,500 | **+240** |
+| 70 Ma needle | fill | +10,200 | +7,500 |
+| Sulawesi margin | real | +1,160 | +1,160 |
+| 425 Ma range | real | +8,400 | +8,400 |
+| 30 Ma Himalaya | real | +9,600 | +9,600 |
+| Everest / Hawaii | real | unchanged | unchanged |
+
+Five real cases untouched, the ocean needles gone. Remainder, named: 4 of 109
+source ages still contain a needle after repair, and the 20 Ma case at 67W 13.5S
+is the Altiplano, where the source's own neighbours are high enough that it is
+not a four-sided needle at 0.1 degrees even though it decodes to the clamp on
+our finer grid. Unresolved.
+
+**Operationally this means one more bake, not two.** The running bake will not
+carry the needle rule -- it loaded `build_frames` before the change -- so the
+gate would still fail on those six frames. The next bake takes the needle rule
+and `ORO_DRAIN=0.55` together, with `audit_deeptime` on the render as the gate
+that decides whether the climate change stays.

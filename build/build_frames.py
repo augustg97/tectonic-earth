@@ -195,11 +195,39 @@ def repair_spikes(z, jump=SPIKE_JUMP):
     # centre. Ages with nothing wrong exit on the first test.
     for _ in range(8):
         bg = median_filter(out, size=9, mode="nearest")
-        bad = np.abs(out - bg) > jump
+        bad = (np.abs(out - bg) > jump) | _needles(out)
         if not bad.any():
             return out
         out = _fill_holes(out, bad)
     return out
+
+
+NEEDLE_DROP = 3000.0     # metres a cell must fall on BOTH sides to be a needle
+
+
+def _needles(z, drop=NEEDLE_DROP):
+    """Cells that are a local maximum with a big drop on EVERY side.
+
+    THE SECOND FILL FAMILY, and magnitude alone cannot reach it. Six rebaked
+    Phanerozoic frames still carried spikes after the excursion test: a 6,452 m
+    cell between neighbours of 692 and 889 in the west Pacific at 50 Ma, an
+    8,000 m one (the Z_RANGE clamp, which is itself a tell) between 3,942 and
+    3,514 at 20 Ma. Their excursion from a 9-cell median is 5,900-7,000 m, which
+    sits UNDER the 8,000 m threshold -- and that threshold cannot be lowered,
+    because real island-arc margins reach 5,760 m and flattening every steep
+    coast to catch these would cost far more than it fixes.
+
+    Shape separates them where size cannot. A fill is a NEEDLE: high in the
+    middle, falling away on all four sides. A margin is MONOTONE: land on one
+    side, water on the other, and never a local maximum. So require the cell to
+    exceed all four neighbours by `drop`, which Sulawesi's coast does not do at
+    any threshold, and no ridge crest does either at 10 km per cell -- a real
+    crest has a neighbour within a few hundred metres of it along strike.
+    """
+    n = np.roll(z, 1, 0); s = np.roll(z, -1, 0)
+    e = np.roll(z, 1, 1); w = np.roll(z, -1, 1)
+    return ((z - n > drop) & (z - s > drop)
+            & (z - e > drop) & (z - w > drop))
 
 
 def _fill_holes(out, bad):
