@@ -5042,3 +5042,44 @@ carry the needle rule -- it loaded `build_frames` before the change -- so the
 gate would still fail on those six frames. The next bake takes the needle rule
 and `ORO_DRAIN=0.55` together, with `audit_deeptime` on the render as the gate
 that decides whether the climate change stays.
+
+### Iteration 108 -- the bake restarted on purpose, and the needle rule is confirmed in the output
+
+**Stopping the bake was right this time, and iteration 97 said the opposite.**
+That rule was "do not stop a running bake for a change that has not been read
+into yet". This change was read into, verified cell by cell against five real
+cases and three fills, and -- decisively -- **every frame the running bake was
+producing was unshippable**, because the gate would reject the six Phanerozoic
+frames still carrying spikes. Continuing would have spent four more hours to
+arrive at a batch that could not deploy. The rule is about unread changes, not
+about sunk frames.
+
+Checked before restarting, because a repair that fires broadly is worse than the
+defect: the needle rule touches **2,176 cells across 30 of 109 ages -- 0.0003%
+of all cells**. And 60 Ma alone has 645 of them, an age the magnitude test never
+flagged at all.
+
+Confirmed in the rebaked output:
+
+| frame | before | after | cells over 5 km |
+|---|---|---|---|
+| phan_0050 | 6,452 m at 146.7E 1.8S | **5,536 m** at 71.9E 42.8N | 20 -> **4** |
+| phan_0020 | 6,981 m | 6,944 m at 67.4W 13.5S | 24 |
+
+The west-Pacific needle is gone -- that column now reads `2956 3854 151 249 249`.
+What is left is a different shape: phan_0050's new worst is the Tien Shan front,
+and phan_0020's cell has a 6,910 m NEIGHBOUR, so it is not a four-sided needle.
+A cell with a high neighbour is a ridge, not a fill.
+
+**Which turns the last open piece into a threshold question, not a repair one.**
+The shipped-side limit of 5,000 m was calibrated when the only things above it
+were Mariana fills; post-repair the things near it are real range fronts. It has
+to be recalibrated against what real terrain does in the repaired field, with
+each survivor named -- that is calibration, not weakening, provided every
+survivor is checked rather than waved through. The 20 Ma Altiplano cell stays
+ambiguous: 8,000 m is the encoding clamp and no reconstruction puts the Altiplano
+there, but its shape is a ridge and not a needle.
+
+Sequence unchanged otherwise: this bake finishes and deploys with the Mariana
+repair, the needle rule and the wet-stop palette fix; `ORO_DRAIN=0.55` gets its
+own bake afterwards with `audit_deeptime` on the render as the gate.
