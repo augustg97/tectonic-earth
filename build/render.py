@@ -558,7 +558,7 @@ def _rainfall(Z, land, lat, cl):
     # Rub al Khali floods (measured at 0.142 with the admission applied before
     # this point, against 0.013 for the Sahara beside it).
     subs = np.clip(induced / max(float(induced.max()), 1e-6), 0.0, 1.0)
-    mons_adm = (_band(absl, 5.0, 32.0, feather=9.0) * _smooth(land.astype(float), 2)
+    mons_adm = (_band(absl, 5.0, MONSOON_LAT_HI, feather=9.0) * _smooth(land.astype(float), 2)
                 * np.clip(1.0 - MONSOON_SUBS * subs, 0.0, 1.0))
     R = np.clip(np.maximum(R, R_ns * mons_adm * MONSOON_ADM), 0, 1.6)
 
@@ -595,6 +595,15 @@ RECYCLE_FLOOR = 0.55    # fraction of saturation wet ground sustains
 SUBSID_LAMBDA = 26.0    # e-folding distance of the subsiding limb, degrees lon
 SUBSID_GAIN = 0.75      # how much of the source monsoon the descent cancels
 MONSOON_ADM = 1.00      # admission of poleward transport through monsoon geometry
+# Poleward limit of the meridional (monsoon) admission band, degrees.
+#
+# NAMED so it can be swept, and it needs sweeping: at 32 degrees the band stops
+# short of the entire eastern United States, which is watered by southerly flow
+# off the Gulf of Mexico and in this solve therefore receives nothing but what
+# the westerlies carry across the Rockies and 4,000 km of land. Measured
+# (iteration 116) our field gives that subcontinent 0.06-0.34 where the real
+# thing carries 1,000-1,400 mm a year -- drawn as steppe.
+MONSOON_LAT_HI = 32.0
 MONSOON_SUBS= 0.95      # how completely the induced descent closes that admission
 MONSOON_WET = 0.35      # delivered rain at which a monsoon source convects at full strength
 SUBSID_DRY = 2.6        # how hard that descent suppresses delivered rain

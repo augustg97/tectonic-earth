@@ -101,7 +101,9 @@ def metrics(RP, z, sites):
         amp[cls] = (vv.max() / max(vv.min(), 1e-9)) / (mm.max() / max(mm.min(), 1e-9))
     from scipy.stats import spearmanr
     rho = float(spearmanr(allm, allv).correlation)
-    return amp, rho
+    east = {n: at(Rf, lo, la) for lo, la, n, c, mm in sites
+            if n in ("Appalachians", "Chesapeake")}
+    return amp, rho, east
 
 
 def pangaea_green(RP, dem_for):
@@ -129,26 +131,34 @@ def main():
         z0 = dem_for(0.0)
 
         VARIANTS = [("baseline", {})]
-        for v in (0.75, 0.65, 0.55, 0.45, 0.35, 0.25):
+        for v in (40.0, 48.0, 56.0):
+            VARIANTS.append(("LAT_HI=%.0f" % v, {"MONSOON_LAT_HI": v}))
+        for v in (0.65, 0.55):
             VARIANTS.append(("ORO_DRAIN=%.2f" % v, {"ORO_DRAIN": v}))
+        for lh in (48.0,):
+            for od in (0.65, 0.55):
+                VARIANTS.append(("LAT_HI=%.0f ORO=%.2f" % (lh, od),
+                                 {"MONSOON_LAT_HI": lh, "ORO_DRAIN": od}))
 
-        print("  %-18s %-32s %8s %8s" %
-              ("variant", "amplification wet/seas/grass/des", "Spearman", "Pangaea"))
+        print("  %-18s %-24s %8s %8s %14s" %
+              ("variant", "amp wet/seas/grass/des", "Spearman", "Pangaea",
+               "Appal/Chesa"))
         base = {k: getattr(RP, k) for k in
-                ("RECYCLE_KM", "FLOOR_BARE", "ORO_DRAIN")}
+                ("RECYCLE_KM", "FLOOR_BARE", "ORO_DRAIN", "MONSOON_LAT_HI")}
         for label, over in VARIANTS:
             for k, v in base.items():
                 setattr(RP, k, v)
             for k, v in over.items():
                 setattr(RP, k, v)
-            amp, rho = metrics(RP, z0, AB.SITES)
+            amp, rho, east = metrics(RP, z0, AB.SITES)
             pg = pangaea_green(RP, dem_for)
             order = ["wet", "seasonal", "grass", "desert"]
-            print("    %-16s %-32s %8.3f %8.2f%s"
+            print("    %-16s %-24s %8.3f %8.2f %6.3f %6.3f%s"
                   % (label,
                      " ".join("%.1f" % amp.get(c, float("nan")) for c in order),
-                     rho, pg,
-                     "   <-- Spearman regressed" if rho < 0.855 else ""))
+                     rho, pg, east.get("Appalachians", float("nan")),
+                     east.get("Chesapeake", float("nan")),
+                     "  <-- Spearman down" if rho < 0.855 else ""))
     finally:
         pass
     return 0

@@ -5453,3 +5453,41 @@ The file is restored from HEAD and the harness now snapshots **whatever is on
 disk when the sweep begins**, so its restore puts back exactly what it found. A
 tool that "restores" from a fixed baseline is a tool that overwrites your work
 the moment the baseline goes stale.
+
+### Iteration 117 -- the band was not the constraint, and neither lever reaches
+
+Iteration 116 proposed that the eastern United States is dry because the
+meridional admission band stops at 32 degrees, switching the Gulf of Mexico off
+exactly where it matters. The band's limit was named `MONSOON_LAT_HI` so it
+could be swept. It is not the constraint:
+
+| variant | Spearman | Pangaea | Appalachians / Chesapeake |
+|---|---|---|---|
+| baseline | 0.871 | 0.63 | 0.080 / 0.282 |
+| LAT_HI=40 | 0.868 | 0.63 | 0.101 / 0.297 |
+| LAT_HI=48 | 0.868 | 0.63 | **0.101 / 0.297** |
+| LAT_HI=56 | 0.868 | 0.63 | **0.101 / 0.297** |
+| ORO_DRAIN=0.65 | 0.877 | 0.68 | 0.107 / 0.308 |
+| ORO_DRAIN=0.55 | 0.898 | 0.71 | 0.123 / 0.322 |
+| LAT_HI=48, ORO=0.55 | 0.895 | 0.71 | 0.158 / 0.341 |
+
+**40, 48 and 56 give byte-identical results.** Widening the gate changes nothing
+past 40 degrees, which means the meridional march is not delivering moisture that
+the band was blocking -- it is not delivering it at all. The hypothesis was
+reasonable and is wrong, and the saturation is what says so; a lever that stops
+responding is a lever that was never in the path.
+
+`ORO_DRAIN` does more, and both together reach 0.158 at the Appalachians. For
+scale, the Congo carries 1,700 mm at 0.549, so a 1,400 mm site should sit near
+0.45. **The best combination of the two known levers reaches a third of where
+that site belongs.**
+
+So the eastern US is not a constant that needs tuning. Something upstream in the
+meridional path -- the march itself, or the `_smooth(land,2)` and subsidence
+factors in `mons_adm`, or the `np.maximum(R, R_ns*mons_adm)` which discards the
+meridional contribution whenever the zonal one is larger -- is why Gulf moisture
+never arrives. That is where the next round looks, by instrumenting `R_ns`
+against `R` over North America rather than sweeping another constant.
+
+`MONSOON_LAT_HI` stays named at its shipped value of 32.0. Naming it cost
+nothing and the next attempt will want it.
