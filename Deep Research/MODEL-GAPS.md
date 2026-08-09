@@ -3679,3 +3679,49 @@ not the lever -- it would have to come from the drainage field.
 
 Also this round: `shoot.py --nolabels` used throughout, since iteration 78
 established that label text dominates any pixel statistic on these frames.
+
+### Iteration 80 -- queue item 1 answered, and our driest places are not our deserts
+
+"Mesoscale strength + hillshade macro-contrast until interiors unmistakably read
+at whole-globe zoom" has sat at the head of the queue since the beginning. It
+had never been measured, only asserted. Band-passed at the regional scale
+(~200-1500 km) over land, against Blue Marble at the same framing:
+
+| region | Blue Marble | ours at globe zoom |
+|---|---|---|
+| Asia | 18.82 | 21.66 (115%) |
+| **Africa** | **8.89** | **20.49 (231%)** |
+| N America | 24.67 | 22.22 (90%) |
+
+**Interiors do not lack macro contrast.** Asia and North America sit at the
+reference; Africa carries more than twice it. The queue item's premise is false
+and it is closed. (Iteration 65 already found its other half inverted -- interiors
+read BETTER at globe zoom than close up.)
+
+Africa is the real finding: Blue Marble's Africa is uniform because the Sahara
+is the most featureless large surface on the continent, and ours gives it the
+same regional variation as Asia. Decomposing the drivers over a 30-degree Sahara
+box, normalised by their own means: **drainage 1.089**, rainfall 0.763,
+elevation 0.337, fetch 0.211, hardness 0.082. Drainage varies by more than its
+own mean in terrain that in reality has no network at all -- the iteration 66
+local z-score renormalising near-zero accumulation back up.
+
+**The obvious fix is counterproductive, and why is the useful part.** Gating the
+headwater term on absolute rainfall measured, against a correctly rebuilt
+baseline: Sahara 0.0528 -> 0.0525 (nothing), while Asia fell 15% and the
+Himalaya 9%. **In our field the driest places are the high mountains, not the
+deserts** -- the Himalayan crest reads 0.002 against the Sahara's 0.073 -- so a
+rain gate suppresses precisely the mountain headwaters iteration 66 was built to
+create. Reverted.
+
+That inversion is worth keeping in view on its own: any rule keyed to "is this
+dry" will hit our orogens before it hits our deserts, for as long as high ground
+reads drier than desert. Iteration 67 improved that (97.7% -> 95.8% of land above
+2500 m under 0.02) and did not fix it.
+
+**A measurement trap, twice in one round.** The first pass compared against
+`d0_backup.webp`, saved before iteration 66b, so it showed the cumulative effect
+of three rounds and reported the Sahara getting 74% WORSE. And relative-to-mean
+variation is the wrong statistic when a change collapses the mean -- it rose
+while the absolute variation fell. Rebuild the baseline with the code you are
+actually A/B-ing, and measure in the units the consumer uses.
