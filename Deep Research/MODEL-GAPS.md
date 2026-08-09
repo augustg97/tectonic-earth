@@ -3853,3 +3853,41 @@ brighter, the rainforest darker and greener, and quieten the drift in between --
 not in any single multiplier applied afterward. That is the same shape as
 [[one-control-two-quantities]] and it is why three rounds of scalar tuning have
 gone nowhere.
+
+### Iteration 84 -- the palette stops, at last, and Siberia is a climate bug wearing a colour costume
+
+Acting on iteration 83's restatement: widen the spread BETWEEN biome stops
+rather than scale everything afterward. Dry stops warmer and brighter, wet stops
+darker and greener, measured against Blue Marble each pass.
+
+| region | before | after | reference |
+|---|---|---|---|
+| Sahara | -10.8 | **-19.2** | -31.1 |
+| Congo | +12.5 | **+7.8** | +3.7 |
+| N American prairie | -2.0 | **-7.5** | -8.8 |
+| Siberia | -3.3 | -5.2 | **+7.4** |
+
+**Biome spread 23.4 -> 27.0, i.e. 0.67x -> 0.78x of the real Earth's.** The
+prairie is now essentially at the reference. The Sahara reads as sand rather
+than pale khaki, verified visually with the Sahel boundary intact.
+
+**Two limits found on the way, both worth recording.**
+
+*Luminance cannot be matched and should stop being a target.* Reaching Blue
+Marble's Saharan 143 needs the palette above 1.0 before shading, because we
+multiply by shade and a true-colour composite does not. Iteration 82 established
+the comparison is invalid; this is the practical consequence -- the dry stop is
+now at R = 1.000 and clamped, and chroma is the only axis left with headroom.
+
+*Siberia is not a palette problem.* It moved AWAY from the reference (-3.3 ->
+-5.2 against +7.4) because our Siberia classifies as cold-DRY and draws the tan
+stops, when the real thing is boreal forest at 300-500 mm. Making the dry end
+warmer necessarily took it with them. **The fix is upstream in the rainfall
+field, not in any colour** -- the same conclusion this session has reached from
+the snow line, the drainage network and the alpine biomes. Recorded as a climate
+gap rather than a palette one so nobody tunes a green stop to chase it.
+
+Remaining chroma gap is 0.78x of reference and the honest read is that closing
+it further needs the wet end darker than the sRGB floor comfortably allows plus
+a desert brighter than shading permits -- so this is close to the end of what
+palette work alone can do.

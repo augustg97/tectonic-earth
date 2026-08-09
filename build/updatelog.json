@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "2.8",
+      "date": "9 August 2026",
+      "title": "Deserts that look like sand",
+      "summary": "Measured against a true-colour photograph of the Earth, our biomes sat too close together in colour: the deserts not warm enough, the forests not deep enough, everything drifting toward the same middling tan. Widening the palette itself -- rather than turning a single saturation knob, which pulls both ends the same way and was tried and undone -- moves the Sahara, the Congo and the North American plains substantially closer to what a satellite sees. The Sahara in particular now reads as sand rather than pale khaki. One region moves the wrong way, and it is honest about why: Siberia comes out as cold DRY ground rather than the boreal forest it is, which is the rainfall model's problem and not the palette's."
+    },
+    {
       "version": "2.7",
       "date": "8 August 2026",
       "title": "Arabia learns to be a desert",
