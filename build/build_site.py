@@ -52,10 +52,18 @@ if os.environ.get("SKIP_AUDIT") != "1":
     # blocking a deploy on a missing screenshot, and the round that changes the
     # climate is the round that owes it fresh ones.
     _here = os.path.dirname(os.path.abspath(__file__))
+    # audit_dem_spikes reads every shipped elevation field, so it is the one
+    # that catches a source-DEM fill value reaching the screen -- which it did:
+    # +10500 m in the Challenger Deep rendered as a tan desert island in the
+    # Mariana Trench, and no gate in the suite objected because they all test
+    # ranges and distributions and a 10 km spike is inside any range that admits
+    # Everest. 22 s over 251 frames.
     for _name, _why in (("audit_biomes.py",
                          "the rainfall field no longer separates the biome classes"),
                         ("audit_deeptime.py",
-                         "the deep-time map lost the character it is known for")):
+                         "the deep-time map lost the character it is known for"),
+                        ("audit_dem_spikes.py",
+                         "a source-DEM fill value is being drawn as terrain")):
         _q = subprocess.run([sys.executable, os.path.join(_here, _name)])
         if _q.returncode != 0:
             raise SystemExit("build_site: %s failed -- %s (above). SKIP_AUDIT=1 "

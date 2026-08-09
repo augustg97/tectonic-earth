@@ -4404,3 +4404,15 @@ flattening real margins. Named with numbers so the next attempt starts somewhere
 
 The field re-bake is running. Nothing deploys until it finishes and the shipped
 side of the validator reads zero.
+
+**Iteration 94b -- the repair stalled the bake, and the fix is a bounding box.**
+The first re-bake ran 25 minutes without writing a frame. `_fill_holes` grew one
+ring per iteration across the WHOLE 1801x3601 array, nan-medianing a 9 x 6.5M
+stack each time: ~100 s per repair pass, 8 passes, 21 affected ages. Four and a
+half hours of bake to repair 2,219 cells. Now labelled per patch and filled
+inside each patch's own padded bounding box -- 22 minutes for a 109-age pass,
+and every age converges under the 8,000 m threshold (worst 7,800). The patches
+are tiny and local; the arithmetic should have been too.
+
+`audit_dem_spikes.py` is wired into `build_site.py` alongside the biome and
+deep-time ratchets, so a fill value reaching the screen now blocks a deploy.

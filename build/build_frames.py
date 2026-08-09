@@ -203,26 +203,48 @@ def repair_spikes(z, jump=SPIKE_JUMP):
 
 
 def _fill_holes(out, bad):
-    """Replace `bad` cells with the median of their valid neighbours."""
+    """Replace `bad` cells with the median of their valid neighbours.
+
+    PER PATCH, INSIDE ITS OWN BOUNDING BOX, and that is not a micro-optimisation
+    -- the whole-array version stalled a full re-bake. Filling grows one ring
+    per iteration, so a 20-cell patch needs ~10 iterations, and each one
+    nan-medianed a 9 x 6.5M stack: about 100 s per repair pass, times 8 passes,
+    times 21 affected ages. Four and a half hours of the bake would have gone to
+    repairing 2,219 cells. The patches are tiny and local; the arithmetic should
+    be too.
+    """
+    from scipy.ndimage import find_objects, label
     out = out.copy()
-    out[bad] = np.nan
-    # Grow-fill: each pass takes the median of whatever valid neighbours a hole
-    # has. A 300-cell blob needs several passes, so loop until nothing is left.
-    for _ in range(24):
-        holes = np.isnan(out)
-        if not holes.any():
-            break
-        filled = np.where(holes, np.nan, out)
-        stack = np.stack([np.roll(np.roll(filled, dr, 0), dc, 1)
-                          for dr in (-1, 0, 1) for dc in (-1, 0, 1)])
-        # An interior cell of a large blob has no valid neighbour yet, so its
-        # slice is all-NaN on this pass and gets filled on a later one. That is
-        # the algorithm working, not a problem -- but nanmedian warns about it
-        # every pass, which buries real warnings from the rest of the build.
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            m = np.nanmedian(stack, axis=0)
-        out = np.where(holes & np.isfinite(m), m, out)
+    lab, n = label(bad)
+    if not n:
+        return out
+    for sl in find_objects(lab):
+        # Pad by the fill radius so every hole has valid neighbours to draw on,
+        # clipped to the array. Longitude wrap is not handled: a patch straddling
+        # the antimeridian just fills from the side it can see, which is a
+        # neighbour median either way.
+        r0 = max(0, sl[0].start - 12); r1 = min(out.shape[0], sl[0].stop + 12)
+        c0 = max(0, sl[1].start - 12); c1 = min(out.shape[1], sl[1].stop + 12)
+        sub = out[r0:r1, c0:c1].astype(np.float64)
+        hole0 = bad[r0:r1, c0:c1]
+        sub[hole0] = np.nan
+        for _ in range(40):
+            holes = np.isnan(sub)
+            if not holes.any():
+                break
+            stack = np.stack([np.roll(np.roll(sub, dr, 0), dc, 1)
+                              for dr in (-1, 0, 1) for dc in (-1, 0, 1)])
+            # An interior cell of a large patch has no valid neighbour yet, so
+            # its slice is all-NaN on this pass and fills on a later one. That
+            # is the algorithm working, but nanmedian warns every time and the
+            # noise buries real warnings from the rest of the build.
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                m = np.nanmedian(stack, axis=0)
+            if not np.isfinite(m[holes]).any():
+                break
+            sub = np.where(holes & np.isfinite(m), m, sub)
+        out[r0:r1, c0:c1] = np.where(np.isnan(sub), out[r0:r1, c0:c1], sub)
     if np.isnan(out).any():
         good = out[np.isfinite(out)]
         out[np.isnan(out)] = float(np.median(good)) if good.size else 0.0
