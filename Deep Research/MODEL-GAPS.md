@@ -4894,3 +4894,47 @@ being watched before it earns a baseline.
 
 The fix is in the climate solve and costs a re-bake, so it queues behind the
 Mariana one now at 109 of 251 -- the whole Phanerozoic series is through.
+
+### Iteration 105 -- it is the transport term, and the assembly multiplies its spread
+
+Iteration 104 located the close-zoom colour defect in the rain field's
+over-contrasted middle. This round finds which part of the field.
+
+**Not the monsoon.** `Rf = (B + monsoon) * R * glob`, and `R` contains a hard
+`np.maximum(R, R_ns * mons_adm)` -- a switch, and switches are how two similar
+places end up far apart. Disabling the monsoon admission entirely moves the
+seasonal amplification 3.2x to 3.1x. Cerrado and Indochina stay 3.8x apart with
+it off. (Miombo does depend on it heavily, 0.209 -> 0.054, but it is not what
+separates the class.)
+
+**It is `R`, the transport term, and the product compounds it.** Within-class
+variation of each factor, over each class's own reference sites:
+
+| class | B+monsoon | **R** | glob | product | real |
+|---|---|---|---|---|---|
+| seasonal | 1.86x | **3.61x** | 1.00x | 5.21x | 1.7x |
+| grass | 1.41x | **5.41x** | 1.00x | 5.36x | 3.0x |
+| wet | 1.03x | 2.31x | 1.00x | 2.35x | 3.5x |
+
+Two things at once. First, `R` is the dominant varying factor everywhere, and it
+varies MOST in the two classes we over-contrast and LEAST in the one we
+compress -- the same rank order as the defect. Second, the assembly is a PRODUCT,
+so a factor spreading 1.86x against another spreading 3.61x produces something
+near their product; real precipitation's controls do not compound like that. In
+the grass class `R` alone spans 5.41x against a real rainfall spread of 3.0x --
+the transport term by itself already exceeds the whole thing it is meant to
+explain.
+
+Combined with the monsoon result -- the meridional branch is not what varies --
+the target is the **zonal march's land depletion**: how fast moisture is drawn
+down crossing a continent, and how much the recycling floor puts back. That is
+one function, `_advect`, and it is where the next round goes.
+
+Not attempted this round, deliberately. The register's own history is that
+climate changes trade one continent for another (iterations 39, 85, 86, 87), and
+the last one shipped a regression that every metric in the suite missed. A change
+here needs the amplification table above as its guard, and a re-bake to verify --
+and the Mariana re-bake still holds the machine at 111 of 251.
+
+The probe used a throwaway copy of `render.py` that exposes the factors, written
+and deleted inside the round; the tree is unchanged.
