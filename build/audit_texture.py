@@ -15,6 +15,24 @@ Real terrain is organised: ridges run in lines, dunes comb, drainage is
 dendritic. Isotropic noise has coherence near zero however much of it there is,
 and that is the difference between texture and landform.
 
+WHAT THIS REFERENCE IS AND IS NOT, because it was over-read once already.
+Blue Marble is a TRUE-COLOUR COMPOSITE and it carries essentially no hillshade:
+measured, the correlation between its luminance structure and the actual relief
+in the same box is +0.29, and the Andes -- second-highest relief of five test
+boxes -- show the second-LOWEST luminance variation. Our render is albedo TIMES
+shading. So:
+
+  * CHROMA is a fair comparison. Both sides are albedo colour, and the finding
+    that our biome chroma ran twice the Earth's (iteration 81) stands.
+  * LUMINANCE AMPLITUDE is NOT. Comparing a shaded render against an unshaded
+    photograph will always show us carrying more, most obviously where the real
+    albedo is uniform -- which is exactly the "Africa at 231% of reference"
+    claim of iteration 80, and it is withdrawn.
+  * COHERENCE, which is what this script reports, sits in between and should be
+    read as indicative. It is scale-free and both images do show
+    terrain-organised pattern, but one organises albedo and the other organises
+    shading, so the 60% figure is a useful direction and not a calibrated debt.
+
 Measured at the time of writing:
 
     region              Blue Marble        ours

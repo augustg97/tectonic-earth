@@ -3763,3 +3763,50 @@ still outstanding.
 
 Gates: organisation holds at 60%, Spearman +0.849, ice audit 1 of 23, storm gate
 0 uploads. Shader only, no re-bake.
+
+### Iteration 82 -- Blue Marble has no hillshade, and one earlier headline is withdrawn
+
+Hunting Africa's luminance excess. Forcing a FLAT land colour, so only shading
+and relief remain: Africa 20.72 -> 16.09, Asia 21.72 -> 18.91, N America
+21.86 -> 20.20, against Blue Marble's 8.89 / 18.82 / 24.67. Asia and North
+America land on the reference with no palette at all -- and Africa is still 1.8x
+it. Which prompted the question that should have come first.
+
+**Does Blue Marble contain hillshade?** Its luminance structure against the
+actual relief in the same box:
+
+| region | BM luminance macro | elevation macro |
+|---|---|---|
+| Tibet | 20.24 | 470 m |
+| Andes | **9.29** | **415 m** |
+| Great Plains | **19.17** | **132 m** |
+| Sahara | 11.16 | 156 m |
+| Congo | 6.80 | 124 m |
+
+Correlation **+0.29**. The Andes have the second-highest relief of the five and
+the second-lowest luminance variation; the Great Plains have the least relief
+and among the most. **Blue Marble is a true-colour composite carrying albedo,
+not shaded relief.** Our render is albedo TIMES shading.
+
+**So iteration 80's headline is withdrawn.** "Africa carries 231% of the
+reference's regional contrast" was a shaded render measured against an unshaded
+photograph, and the excess shows up hardest exactly where real albedo is most
+uniform -- the Sahara. It is not a defect; it is the two images being different
+kinds of thing. The queue-item-1 conclusion survives on its own terms (Asia and
+North America match, so interiors plainly do not lack macro structure), but the
+Africa number that came with it does not.
+
+**What survives, and this matters more than the withdrawal:** the CHROMA
+comparison is sound, because both sides are albedo colour there. Iteration 81's
+finding -- our biome chroma at twice the Earth's, and the fix shipped for it --
+stands unaffected. And the coherence figure sits in between: scale-free, both
+images showing terrain-organised pattern, but one organising albedo and the
+other shading, so 60% is a direction rather than a calibrated debt. The caveat
+is now written into `audit_texture.py` itself so the next reader cannot
+over-read it the way I did.
+
+**The pattern, five rounds running: the instrument, not the model.** Labels
+dominating gradients, a reference site on a mountain, relative-vs-absolute
+variation, a baseline predating three rounds, and now a reference image that
+does not contain the quantity being compared. Every one produced a plausible
+defect. On this project the measurement deserves the first suspicion.
