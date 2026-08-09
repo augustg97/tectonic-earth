@@ -5169,3 +5169,39 @@ a third restart trades a certain two hours for another maybe. This bake finishes
 and produces a batch whose only remaining spikes are the named ones; the final
 bake then carries the blob rule and `ORO_DRAIN=0.55` together, which was already
 the plan.
+
+### Iteration 111 -- last round's premise was wrong, so the bake restarted after all
+
+Iteration 110 ended "the bake is NOT restarted a third time... this bake finishes
+and produces a batch whose only remaining spikes are the named ones". **That
+premise was false and checking it took one command.** The bake carries the needle
+rule, not the blob rule, so the two-cell Tasman family survives it:
+
+    phan_0070, baked in that run:  worst 6,897 m, 30 cells over 5,000
+
+Those are exactly what the blob rule fixes, and `audit_dem_spikes` is wired into
+`build_site` -- so that batch could not have passed its own gate. Finishing it
+would have cost 2.5 hours and still required the final bake: 5.5 hours to a
+deploy against 3 for a restart.
+
+So it restarted, with the blob rule and **without** `ORO_DRAIN=0.55`. The climate
+change is still unverified on the render, and pairing an unverified change with a
+verified one means a failure forces both to be baked again.
+
+Confirmed in the new output within ten minutes:
+
+| frame | needle bake | blob bake | cells over 5 km |
+|---|---|---|---|
+| phan_0020 | 6,944 m | **5,581 m** | 24 -> **12** |
+| phan_0050 | 5,536 m | 5,536 m | 4 -> 4 (already clean; its worst is the Tien Shan front) |
+
+The Altiplano run is gone from phan_0020 -- its worst is now at 139.5E 17.1S and
+1.4 km lower. What survives at 5.5 km is the same magnitude as real range fronts,
+which is the threshold question iteration 108 named and which the completed bake
+will settle with every survivor listed.
+
+**The rule this cost twice over: a decision not to redo work has to be checked
+against the artefact, not against the reasoning that produced it.** "This batch
+is shippable" was an assumption; one audit run on one frame refuted it. The
+earlier version of the same mistake was assuming a bake had stalled from a
+wall-clock I never read.
