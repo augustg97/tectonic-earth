@@ -5205,3 +5205,52 @@ against the artefact, not against the reasoning that produced it.** "This batch
 is shippable" was an assumption; one audit run on one frame refuted it. The
 earlier version of the same mistake was assuming a bake had stalled from a
 wall-clock I never read.
+
+### Iteration 112 -- the proxy is calibrated, and it prices the climate change
+
+The bake is healthy (45 s a frame, measured from consecutive writes) but wall
+time advances slowly against loop firings, so waiting on it is not a plan. This
+round did the work that unblocks the decision the bake was going to arbitrate.
+
+**The field proxy, measured against the render at three eras, globe zoom:**
+
+| age | render | proxy h>0.28 | proxy h>0.45 |
+|---|---|---|---|
+| 0 Ma | 0.42 | 0.65 | 0.59 |
+| 122 Ma | 0.53 | 0.73 | 0.66 |
+| 280 Ma | 0.35 | 0.63 | 0.56 |
+
+Correlation **+0.978** and **+0.993**, and the ordering greenhouse > now >
+Pangaea holds on both. The absolute level is offset by about 0.2, so it is a
+RELATIVE instrument -- and on that footing it is exactly what iteration 87's
+statistic was not. That one moved the wrong way while the render doubled; this
+one tracks at +0.99.
+
+**Which lets ORO_DRAIN be priced without a bake:**
+
+| ORO_DRAIN | proxy 122 / 0 / 280 | ordering | Spearman | seasonal / grass amp |
+|---|---|---|---|---|
+| 0.85 (shipped) | 0.660 / 0.586 / 0.556 | HOLDS | 0.866 | 3.2 / 1.1 |
+| 0.65 | 0.731 / 0.642 / 0.629 | HOLDS | 0.874 | 2.9 / 1.1 |
+| 0.55 | 0.775 / 0.676 / 0.662 | HOLDS | 0.903 | 2.8 / 1.0 |
+| 0.45 | 0.817 / 0.716 / 0.698 | HOLDS | 0.905 | 2.6 / 0.8 |
+
+**The ordering never breaks**, so iteration 87's specific failure -- the eras
+losing their relative character -- does not occur at any value. But the levels
+move together, and that is the cost the ordering hides. At the local slope of
+0.67 render per unit proxy, Pangaea's rendered green fraction goes:
+
+    0.85 -> 0.35   (shipped)
+    0.65 -> ~0.40
+    0.55 -> ~0.42
+
+**At 0.55, Permian Pangaea renders about as green as the present-day Earth.**
+That is inside the 0.20-0.50 band iteration 109 set, so no gate would stop it --
+and it is still the wrong picture for the era this map is most known for. The
+trade is now explicit: seasonal over-contrast 3.2x -> 2.8x and Spearman 0.866 ->
+0.903, against a desert supercontinent losing a fifth of its aridity signature.
+
+That is a judgement about which error matters more, not a defect with a fix, and
+it is the first thing this queue has reached that genuinely needs deciding rather
+than measuring. The estimate is an extrapolation from two anchors; the render
+check on the next bake confirms or refutes it before anything is chosen.

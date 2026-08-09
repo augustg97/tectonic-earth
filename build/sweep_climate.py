@@ -25,12 +25,25 @@ THE GUARDS, and each one exists because something got past its predecessor:
                   axis has given way to mid. A field-side guard is only worth
                   having if it evaluates the same expression the renderer does.
 
-                  IT IS NOT YET CALIBRATED. It reads 0.63 on the shipped 280 Ma
-                  field where audit_deeptime reads 0.29 on the RENDER, so its
-                  absolute level means nothing and only its direction can be
-                  trusted -- and even that is unproven. **Nothing may ship on
-                  this number alone.** It narrows a sweep from hours of baking
-                  to seconds; the render check still decides.
+                  NOW CALIBRATED (iteration 112), against the render at three
+                  eras measured at globe zoom:
+
+                      age     render   proxy h>0.28   proxy h>0.45
+                      0 Ma      0.42       0.65           0.59
+                      122 Ma    0.53       0.73           0.66
+                      280 Ma    0.35       0.63           0.56
+
+                  Correlation with the render: +0.978 and +0.993. The ORDERING
+                  greenhouse > now > Pangaea holds on both. The absolute level
+                  is offset -- the proxy sits ~0.2 high -- so it must be read as
+                  a RELATIVE instrument, and on that footing it is exactly what
+                  iteration 87's statistic was not: that one moved the wrong
+                  way, this one tracks at +0.99.
+
+                  Local slope for extrapolating to the render, from the 0 Ma and
+                  280 Ma anchors: d(render)/d(proxy) about 0.67. Three points
+                  fit two parameters, so treat it as an estimate that the render
+                  check confirms, not replaces.
 
 Measured on the shipped constants (ORO_DRAIN sweep, iteration 106):
 
