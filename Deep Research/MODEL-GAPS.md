@@ -4241,3 +4241,90 @@ real defect with a real fix available, now named.
 The check lives in `audit_label_motion.py` beside the JUMP and UNTRACKED
 reports, so the three failure modes of a moving name -- moves too far, does not
 move at all, has nothing to move by -- are measured in one place.
+
+### Iteration 93 -- the labels ride the future, and the clamp that hid it
+
+Iteration 92 named the defect: the continents freeze in the future, where the
+app synthesises motion they could ride. This fixes it, and the fix turned out to
+be in a place the diagnosis did not predict.
+
+**The rotation is not approximated, it is the same object the terrain uses.**
+`build_fields.future_grid` warps today's DEM by a per-group rotation built from
+authored targets that `_packed_targets` relaxes until the groups' LAND stops
+interpenetrating -- and that relaxation depends on the present DEM. A label has
+to stay on its own crust, so recomputing the packing coarsely, or without the
+DEM, is not good enough: a degree of target error at the far end of a 250 Myr
+rotation is a name standing offshore. `future_motion.py` calls the same
+`rasterise_groups()` and the same `_packed_targets(gid, Zsrc)` on the same
+900x1800 present DEM, and caches the result against a fingerprint of everything
+that would change it.
+
+    R_full(g) = rodrigues(t, spin) @ rot_from_to(cent[g], t)
+    p(myr)    = axis_angle_scale(R_full, myr/250) @ p(0)
+
+`future_grid` applies the INVERSE per pixel -- it asks where a cell came from --
+and a label is a point carried forward, so it takes the forward form. **Both
+directions produce a smooth, plausible track**, so the direction is settled
+empirically rather than by reading: advance six continent centroids, ask the
+baked +250 Myr elevation whether that place is land, and report the two controls
+beside it.
+
+| +250 Myr | on their own continent |
+|---|---|
+| forward (this fix) | 6 / 6 |
+| reversed | 2 / 6 |
+| **frozen (what shipped)** | **2 / 6** |
+
+Without those controls "6/6 on land" proves nothing -- Africa barely leaves its
+own outline. With them the check cannot pass while doing nothing.
+
+**AND THEN IT STILL DID NOTHING, because the app clamps the age.** `trackPos`
+opened with `const a = Math.max(0, state.age)`. Every future age read the age-0
+position no matter what the track contained. It was invisible for the same
+reason it was harmless: while no track went past the present, the clamp and the
+`a <= tr[0][0]` branch two lines below returned exactly the same thing, so the
+clamp looked like defensive tidiness rather than the thing enforcing the bug.
+The data fix alone would have shipped, measured clean in every offline check,
+and changed not one pixel. **A build-side fix needs a render-side check.**
+
+**One post-pass, not four branches.** Tracks are built four different ways --
+plate tracking, craton composites, plateau anchors, water snapping -- and the
+future extension is the same operation for all of them: take the youngest point
+of whatever track was built and carry that forward. Doing it per branch is four
+chances to add the third and forget the fourth, which is exactly how the water
+branch came to be the only one that handled negative ages at all.
+
+**Seas ride crust; oceans do not.** The first version advanced the anchor for
+every water label, and the +130 Myr shot showed why that is wrong: the East
+African Ocean's anchor departed east with Somalia while the ocean it names
+stayed behind in the gap between Somalia and Africa. A sea is epicontinental and
+goes where its crust goes; an ocean is the gap BETWEEN crusts. The file already
+said so twelve lines above, about the backward direction, and the rule was
+re-derived from a screenshot instead of read.
+
+Measured, on each label's own shipped track, at future keyframes inside its own
+visible window:
+
+| | frozen | riding |
+|---|---|---|
+| terrain contradicts the label | 4 / 142 | **0 / 142** |
+| labels freezing 20+ Myr in the future | 6 | **0** |
+
+All four were Antarctica, over open ocean for half its future window. Eleven
+labels moved, median 6.4 degrees, worst 32.7 (East African Ocean, which had been
+pinned to the African coast while its basin opened 30 degrees away).
+
+One label window changed as a consequence. **Mediterranean (closing)** now rides
+its own crust, which is above sea level by +90 Myr -- the suture its own card
+promises. A name reading "sea" over dry mountains is the app contradicting
+itself, so the window ends at -80 where the water does. That is the fix working
+as intended making a separate authoring error visible.
+
+`audit_label_motion.py` now RATCHETS on the future and only reports the deep
+past. Past 540 Ma the rotation model ends and a frozen name is the honest
+answer; in the future the motion is synthesised, deterministic and already baked
+into every keyframe, so a label frozen there is a label that did not ask.
+
+Remaining, and inherent: 11 labels freeze past 540 Ma. Seven future-only names
+(Pangaea Proxima, Neo-Himalaya, Amasia, the belts) are authored in future map
+coordinates and stay static by design -- they have no present-day crust to ride.

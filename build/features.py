@@ -274,7 +274,11 @@ LABELS = [
     # ---------- future ----------
     ("continent", "Pangaea Proxima", 30,   5, -250, -80),
     ("ocean", "Neo-Panthalassa",  -150,    0, -250,  -60),
-    ("sea", "Mediterranean (closing)", 18, 36, -90,  -20),
+    # -80, not -90. Once the label rides the plate instead of standing at its
+    # present-day coordinate, its own crust is above sea level by +90 Myr -- the
+    # suture its card promises. A name reading "sea" over dry mountains is the
+    # app contradicting itself, so the window ends where the water does.
+    ("sea", "Mediterranean (closing)", 18, 36, -80,  -20),
     ("orogen", "Afro-European Belt", 20,  34, -200,  -50),
     ("orogen", "Neo-Himalaya",       60,  25, -250, -100),
     ("orogen", "Trans-Atlantic Belt", 0,  25, -250, -140),

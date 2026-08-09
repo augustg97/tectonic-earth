@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260809-0728';
+const DATA_V='20260809-0751';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5775,7 +5775,13 @@ function hotspotsNow(){
 // craters/LIPs (featurePos) and now labels (snapLabel), so both ride their plate.
 function trackPos(tr,lon,lat){
   if(!tr||tr.length<2)return [lon,lat];
-  const a=Math.max(0,state.age);
+  // NOT Math.max(0, ...). That clamp made every future age read the age-0
+  // position, so a label could not move in the future even once its track had
+  // points there -- and it was invisible, because when no track went past the
+  // present the clamp and the a<=tr[0][0] branch below returned the same thing.
+  // Tracks that still stop at the present are unaffected: a negative age falls
+  // into that same first branch and returns exactly what it did before.
+  const a=state.age;
   if(a<=tr[0][0])return [tr[0][1],tr[0][2]];
   const last=tr[tr.length-1];
   if(a>=last[0])return [last[1],last[2]];

@@ -119,11 +119,25 @@ def main():
     print(f"\n{'stuck':>6}  {'label':32s} window vs track")
     for s, n, a0, a1, lo, hi in frozen[:10]:
         print(f"{s:5.0f}   {n[:31]:32s} visible {a0:g}-{a1:g} Ma, track {lo:g}-{hi:g}")
-    print(f"\n{len(frozen)} of {ntr} tracked labels freeze 20+ Myr. Most run past the "
-          f"540 Ma end of\nthe rotation model, which is inherent; the CONTINENTS freeze "
-          f"in the future,\nwhere the app already synthesises motion they could ride "
-          f"instead.")
+    # THE FUTURE IS THE RATCHET, the deep past is not.
+    #
+    # Past 540 Ma the rotation model simply ends, and a name held at its 540 Ma
+    # position is the honest answer -- those are reported and not failed. The
+    # future is the opposite case: the motion is synthesised, deterministic and
+    # already baked into every keyframe, so a label frozen there is a label that
+    # did not ask. It was the shipped behaviour until future_motion.py, and it
+    # put four of six continent names in open ocean at +250 Myr.
+    fut = [f for f in frozen if f[2] < 0 and f[4] > f[2] + 2.5]
+    print(f"\n{len(frozen)} of {ntr} tracked labels freeze 20+ Myr; "
+          f"{len(frozen) - len(fut)} of them run past\nthe 540 Ma end of the rotation "
+          f"model, which is inherent.")
+    if fut:
+        print(f"\n  {len(fut)} FREEZE IN THE FUTURE, where the motion exists and is "
+              f"baked:\n    " + ", ".join(f[1] for f in fut))
+        return 1
+    print("  no label freezes in the future — every one rides the synthesised motion")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

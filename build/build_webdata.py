@@ -917,6 +917,90 @@ def _plateau_track(key, a_old, rec, step=5):
     return out
 
 
+FUTURE_STEP = 5          # matches the keyframe spacing the app interpolates over
+
+
+def _future_water_anchor(lon, lat, myr):
+    """Crust anchor for a sea or ocean name, carried `myr` Myr forward.
+
+    Fails soft: if the group mask has no answer here the caller keeps the
+    present-day anchor, which is what shipped before and is merely frozen rather
+    than wrong.
+    """
+    try:
+        import future_motion as FM
+    except ImportError:
+        return None
+    return FM.advance(lon, lat, myr)
+
+
+def extend_tracks_into_future(labels):
+    """Carry every track that outlives the present onto the future plate motion.
+
+    THE DEFECT. paleo_tracks only runs backwards, so a track spans 0..N Ma, and
+    `trackPos` in the app clamps outside its track. Every label visible in the
+    future therefore rendered at its age-0 position for the whole era: Antarctica
+    and Africa frozen 40 Myr, both Americas 30, Eurasia and Australia 20. Not for
+    want of information -- build_fields synthesises the motion and bakes it into
+    every future keyframe; the names just never rode it.
+
+    Measured against the baked +250 Myr elevation, of six continent centroids:
+    forward-rotated 6 land on their own continent, frozen 2 do. Four continent
+    names were standing in open ocean at the end of the era.
+
+    ONE POST-PASS OVER ALL LABELS, not a branch inside each of the four track
+    builders. They produce tracks by very different routes -- plate tracking,
+    craton composites, plateau anchors, water snapping -- and the future
+    extension is the same operation for all of them: take the youngest point of
+    whatever track was built and carry THAT forward. Doing it per branch is four
+    chances to add the third one and forget the fourth, which is how the water
+    branch came to be the only one that handled negative ages at all.
+    """
+    try:
+        import future_motion as FM
+    except ImportError:
+        print("  WARNING no future_motion module — labels will freeze in the future")
+        return 0
+    n = 0
+    for l in labels:
+        tr = l.get("tr")
+        if not tr:
+            continue
+        lo_w = min(l["a0"], l["a1"])
+        if lo_w >= 0:
+            continue
+        tr = sorted(tr, key=lambda t: t[0])
+        young = tr[0]
+        # Only tracks that STOP at the present. A track already reaching into
+        # the future is owned by the branch that built it (the water snapper
+        # walks its whole window), and prepending here would duplicate ages and
+        # leave the array non-monotone -- which trackPos reads as a track that
+        # jumps backwards.
+        if not -2.5 <= young[0] <= 2.5:
+            continue
+        # The group is read at the PRESENT position, once. Reading it per age
+        # would look it up on a present-day plate mask using a future
+        # coordinate, which is a different question with a different answer.
+        g = FM.group_at(young[1], young[2])
+        if g is None:
+            continue
+        add = []
+        a = -FUTURE_STEP
+        while a >= math.floor(lo_w / FUTURE_STEP) * FUTURE_STEP - 0.01:
+            p = FM.advance(young[1], young[2], -a, group=g)
+            if p is None:
+                break
+            add.append([a, round(((p[0] + 180.0) % 360.0) - 180.0, 1),
+                        round(p[1], 1)])
+            a -= FUTURE_STEP
+        if not add:
+            continue
+        add.sort(key=lambda t: t[0])
+        l["tr"] = add + tr
+        n += 1
+    return n
+
+
 def build_labels():
     out = features.labels()
     desc = features.descriptions()
@@ -1114,6 +1198,22 @@ def build_labels():
                     bx, by = base[near]
                 else:
                     bx, by = l["lon"], l["lat"]
+                # Past the present a SEA's crust anchor rides the synthesised
+                # motion too. Without it every future key took the age-0 anchor,
+                # so the water search for a basin at +200 Myr started from where
+                # its crust sat 200 Myr earlier and only the snap moved the name.
+                #
+                # SEAS ONLY, for the same reason the branch above tracks seas and
+                # not oceans: a sea is epicontinental, it sits ON crust and goes
+                # where that crust goes. An ocean is the gap BETWEEN crusts, and
+                # riding one plate's rotation walks it off its own basin -- done
+                # to the East African Ocean, whose anchor departed east with
+                # Somalia while the ocean it names stayed behind between Somalia
+                # and Africa.
+                if key < 0 and l["t"] == "sea":
+                    p = _future_water_anchor(bx, by, -key)
+                    if p is not None:
+                        bx, by = p
                 # A basin the reconstruction is DESTROYING must not be dragged to
                 # whatever water is left over. "Mediterranean (closing)" is the
                 # case: Africa shuts it against Europe, so by the late future
@@ -1176,6 +1276,9 @@ def build_labels():
         print(f"  {n_comp} paleocontinents positioned from their modern fragments")
     if n_water:
         print(f"  {n_water} seas and oceans positioned from their margins")
+    n_fut = extend_tracks_into_future(out)
+    if n_fut:
+        print(f"  {n_fut} labels now ride the synthesised future plate motion")
     if untracked_bad_coord:
         print(f"  {len(untracked_bad_coord)} labels left untracked — their coord is "
               f"not a present-day position: "
