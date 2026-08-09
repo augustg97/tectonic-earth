@@ -131,20 +131,18 @@ def main():
         z0 = dem_for(0.0)
 
         VARIANTS = [("baseline", {})]
-        for v in (40.0, 48.0, 56.0):
-            VARIANTS.append(("LAT_HI=%.0f" % v, {"MONSOON_LAT_HI": v}))
-        for v in (0.65, 0.55):
-            VARIANTS.append(("ORO_DRAIN=%.2f" % v, {"ORO_DRAIN": v}))
-        for lh in (48.0,):
-            for od in (0.65, 0.55):
-                VARIANTS.append(("LAT_HI=%.0f ORO=%.2f" % (lh, od),
-                                 {"MONSOON_LAT_HI": lh, "ORO_DRAIN": od}))
+        for v in (600.0, 900.0, 1400.0):
+            VARIANTS.append(("UPLIFT_SCALE=%.0f" % v, {"UPLIFT_SCALE": v}))
+        VARIANTS.append(("UPL=900 LAT_HI=48",
+                         {"UPLIFT_SCALE": 900.0, "MONSOON_LAT_HI": 48.0}))
+        VARIANTS.append(("UPL=900 ORO=0.65",
+                         {"UPLIFT_SCALE": 900.0, "ORO_DRAIN": 0.65}))
 
         print("  %-18s %-24s %8s %8s %14s" %
               ("variant", "amp wet/seas/grass/des", "Spearman", "Pangaea",
                "Appal/Chesa"))
         base = {k: getattr(RP, k) for k in
-                ("RECYCLE_KM", "FLOOR_BARE", "ORO_DRAIN", "MONSOON_LAT_HI")}
+                ("RECYCLE_KM", "FLOOR_BARE", "ORO_DRAIN", "MONSOON_LAT_HI", "UPLIFT_SCALE")}
         for label, over in VARIANTS:
             for k, v in base.items():
                 setattr(RP, k, v)

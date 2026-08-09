@@ -5528,3 +5528,50 @@ So something else inside `_advect_ns` removes three quarters of the moisture in
 the first 550 km of land -- the orographic strip, the floor, or the way the march
 initialises off a coast. That is where the next round instruments, inside the
 function rather than at its output.
+
+### Iteration 119 -- it is the accumulation, and every lever trades the same way
+
+**What dries the eastern US, measured row by row up the 84W column.** Not the
+`ORO_STRIP_MAX` cap -- no row reaches it, the worst is 0.39. It is the PRODUCT of
+twenty-one modest strips:
+
+| lat | d elev | uplift | strip |
+|---|---|---|---|
+| 30.1 | +15 m | 0.05 | 0.04 |
+| 32.2 | +24 m | 0.08 | 0.07 |
+| 36.4 | +136 m | 0.45 | 0.39 |
+
+Cumulative survival from 28N to 42N: **0.293**, which is the 73% loss iteration
+118 measured, arrived at independently. `UPLIFT_SCALE = 300 m` means uplift
+reaches 1.0 at a **0.8% grade**, so a 15 m rise across a 39 km row is taxed 4%
+and a continent of gentle country loses three quarters of its water to terrain
+that is not a mountain range.
+
+`UPLIFT_SCALE` had never been swept. It is the strongest lever found:
+
+| variant | Spearman | Pangaea | Appalachians |
+|---|---|---|---|
+| baseline | 0.871 | 0.63 | 0.080 |
+| UPLIFT_SCALE=600 | 0.877 | 0.74 | 0.138 |
+| UPLIFT_SCALE=900 | **0.910** | 0.78 | 0.170 |
+| UPLIFT_SCALE=1400 | 0.895 | 0.84 | 0.206 |
+| UPL=900, LAT_HI=48 | **0.913** | 0.78 | 0.211 |
+
+**And it trades exactly like the others.** Every lever that wets the eastern US
+wets Pangaea by a similar proportion -- ORO_DRAIN did, UPLIFT_SCALE does more of
+both. At UPLIFT_SCALE=900 the Pangaea proxy reaches 0.78, which maps to a render
+green fraction near 0.50: the top of the band iteration 109 set, and a Permian
+supercontinent as green as a Cretaceous greenhouse.
+
+That is not a coincidence of tuning, it is the model's structure. **Aridity here
+is a function of distance from water, and the eastern United States is not far
+from water** -- it is 600 km from the Gulf. Its dryness is a TRANSPORT failure,
+and every knob available fixes it by turning depletion down globally, which also
+waters the one place whose dryness is the map's most famous feature.
+
+So this line has reached its end as a tuning problem. The honest options are a
+structural change to the transport (expensive, and none of the four candidate
+mechanisms tested so far survived), or a choice about which error to keep. The
+numbers for that choice are now measured rather than estimated, and the render
+check on the Pangaea end still has to confirm the 0.67 proxy-to-render slope
+before any of it is chosen.
