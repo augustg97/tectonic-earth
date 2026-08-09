@@ -5666,3 +5666,41 @@ A threshold moved to accommodate a defect is usually a validator being defeated.
 This one is moved because the data underneath it changed by three repair rules,
 and the difference between those two cases is whether every survivor has been
 looked at individually. These were.
+
+### Iteration 122 -- pre-flight: everything passes except the frames still baking
+
+The Phanerozoic frames are final, and every gate framing the deploy needs is a
+Phanerozoic age, so the whole gate set can be run now rather than in the deploy
+round. All six pass:
+
+| gate | result |
+|---|---|
+| check_shader | clean |
+| ice_audit | 1 of 23 outside the literature range (the 570 Ma baseline) |
+| audit_all --quick | all validators at or better than baseline |
+| audit_perf storm gate | 0 synchronous uploads, worst crossing 5.2 ms (limit 2 uploads) |
+| audit_biomes | at baseline -- 3 overlaps, Spearman +0.862 |
+| audit_deeptime | **0 of 6 failing**, ordering 0.53 > 0.41 > 0.35 |
+| audit_dem_spikes | Phanerozoic clean at the recalibrated 6,000 m |
+
+**And one thing worth checking that nobody asked for: did the spike repair
+disturb anything else?** Three repair rules rewrote 2,219+ cells across 21 of 109
+ages, and the deep-time character is measured on the render, so a side effect
+would show. It does not:
+
+| | before the repair | after |
+|---|---|---|
+| Pangaea 280 Ma, zoomed | 0.29 (cap 0.32) | 0.29 |
+| Pangaea 280 Ma, globe | 0.35 | 0.35 |
+| present day, globe | 0.42 | 0.41 |
+| Cretaceous 122 Ma, globe | 0.53 | 0.53 |
+
+The repair changed only what it was aimed at. That is the check that separates a
+targeted fix from a broad one, and it is cheap once the gates measure the render.
+
+The deploy is ready and blocked on one thing: the future series, 8 of 50
+rebaked. Those frames still carry fill (11 flagged, worst 7,293 m) because the
+bake has not reached them, and `audit_dem_spikes` will refuse the build until it
+has. Nothing else stands between the current tree and a live deploy carrying the
+Mariana repair, three spike-repair rules, the wet-stop palette fix and the
+future-riding labels.
