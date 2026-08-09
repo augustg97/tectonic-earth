@@ -3725,3 +3725,41 @@ of three rounds and reported the Sahara getting 74% WORSE. And relative-to-mean
 variation is the wrong statistic when a change collapses the mean -- it rose
 while the absolute variation fell. Rebuild the baseline with the code you are
 actually A/B-ing, and measure in the units the consumer uses.
+
+### Iteration 81 -- task 32 gets a number at last: our chroma is twice the Earth's
+
+Last round left the Sahara carrying 231% of Blue Marble's regional contrast with
+drainage the suspected driver, inferred from field statistics. **Tested in the
+render: disabling every drainage-driven term -- rvalley, ripcore, the carve --
+moves Africa 20.49 to 20.64. Drainage is not the driver.** Fourth time this
+session a field-statistic inference has failed a render test.
+
+Splitting the macro band into luminance and chroma is what found it:
+
+| region | Blue Marble lum / chroma | ours |
+|---|---|---|
+| Africa | 8.89 / 4.64 | 20.49 / 8.80 |
+| Asia | 18.82 / 3.56 | 21.66 / 7.66 |
+| N America | 24.67 / 4.81 | 22.22 / 8.71 |
+
+The luminance excess is Africa-only. **The chroma excess is everywhere and it is
+almost exactly a factor of two.** That is task 32 -- "land palette truth, biome
+chroma to reference" -- which has been open since the first week with no number
+attached to it. Google Earth's land is famously muted; this is that difference,
+measured against a true-colour photograph rather than an impression.
+
+**Shipped: chroma compressed toward each pixel's own luminance, keep 0.80.**
+Toward the local biome's luminance rather than toward grey, so a forest stays a
+forest; what compresses is how far apart biomes sit in colour. Chroma macro
+8.80/7.66/8.71 -> 7.28/6.44/7.40.
+
+**Deliberately not taken to the reference, and this is a judgement.** Matching
+3.56-4.81 needs keep 0.52. At 0.65 the Congo greys out and the savanna loses its
+warmth -- undoing iterations 40-42, which fought to make the rainforest read as
+rainforest. 0.80 is a measured step that costs no legibility. The remaining gap
+is a map that must be read as well as looked at, keeping more colour than a
+photograph, and it should be recorded as a choice rather than as a defect
+still outstanding.
+
+Gates: organisation holds at 60%, Spearman +0.849, ice audit 1 of 23, storm gate
+0 uploads. Shader only, no re-bake.
