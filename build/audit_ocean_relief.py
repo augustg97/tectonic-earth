@@ -26,9 +26,14 @@ resolved by both sides and are the only ones that carry information.
 
 The residual signal, such as it is: the equatorial Atlantic runs UNDER at the
 large scale (0.76) while every Pacific box runs over. That is the fracture-zone
-belt -- 100 km-scale linear troughs the source resolves fully -- being
-under-drawn relative to synthetic fabric elsewhere. It is a 24% deficit, not the
-missing feature it looked like by eye.
+belt -- 100 km-scale linear troughs the source resolves fully -- carried more
+weakly than the Pacific's large-scale structure. A 24% deficit, not the missing
+feature it looked like by eye.
+
+NOTE ON THE COHERENCE SECTION BELOW: it does NOT measure the abyssal-hill
+fabric. That fabric is not in this field at all -- seafloor.apply bakes none of
+it into the elevation and the shader grows it per pixel instead. Two iterations
+were spent on a story about the fabric before the module docstring settled it.
 
 **THE ORIENTATION CHECK IS A PRECONDITION, NOT A COURTESY.** The first version
 of this measurement reported our texture at 2.7-4.3x the real relief, with a
@@ -119,39 +124,47 @@ def coherence(g, tile=24):
 
 
 def report_coherence(src, ours):
-    """Organisation, against the source AND against a resampling-only control.
+    """Organisation of the ELEVATION FIELD -- and why the excess is BY DESIGN.
 
-    THE CONTROL IS THE POINT. Bilinear resampling from a 0.1-degree source onto
-    our 0.088-degree grid manufactures directional structure by itself, and
-    without a control that shows up as our synthesis over-lineating the floor.
-    Measured: in the equatorial Atlantic the source reads 0.327, ours 0.372, and
-    the control -- the source alone, put on our grid and through our codec, with
-    no synthesis whatever -- reads 0.387. The entire apparent excess is the
-    resample. Reporting 114% there would have sent a round chasing nothing.
+    READ THIS BEFORE ACTING ON THE NUMBER. On the deep floor the shipped `_e`
+    field is deliberately band-limited and is NOT meant to describe the real sea
+    floor's fine structure. `smooth_bathymetry` cuts it because the source DEM
+    aliased onto our grid produced hard facets -- "the granular black hatch that
+    traced every mid-ocean ridge" -- and the fine structure below the shelf break
+    is synthesised per pixel in the shader from the ocean-structure field
+    instead. Comparing `_e` against real bathymetry on the abyss therefore
+    compares our field against a band we removed on purpose.
 
-    Where the control does NOT explain it, the finding is real and sharp:
+    Traced stage by stage, central Pacific, which is what settled it:
 
-        box                   source  control    ours   synthesis adds
-        equatorial Atlantic    0.327    0.387   0.372   nothing
-        Scotia / Drake         0.574    0.577   0.587   nothing
-        Hawaii plain           0.256    0.273   0.387   +0.114
-        central Pacific        0.169    0.181   0.339   +0.158
-        SE Indian ridge        0.161    0.174   0.332   +0.158
+        resampled DEM            0.201
+        + seafloor.apply         0.241   (+0.040)
+        + polar_lowpass          0.241   (+0.000)
+        + smooth_bathymetry      0.365   (+0.124)   <-- the band-limiting
+        + 8-bit encode           0.320   (-0.045)
+        + AVIF q=90              0.339
 
-    Our abyssal fabric contributes a roughly CONSTANT coherence. Where the real
-    floor is structured that is invisible -- Scotia goes 0.577 to 0.587 and the
-    real arcs and trenches dominate. Where the real floor is quiet, old and
-    sediment-draped it DOUBLES the organisation. The real sea floor's coherence
-    spans 3.6x between provinces; ours spans 1.8x. We flatten the contrast
-    between an active margin and a dead abyssal plain, which is the difference
-    the eye reads as "the same commas everywhere".
+    Smoothing REMOVES isotropic fine detail and leaves whatever directional
+    structure survives, so it raises coherence wherever the isotropic content
+    dominated -- and does nothing where real lineation already dominates:
+    Scotia moves +0.003 through the same step. That is the filter working as
+    documented, not a fabric defect.
 
-    The fabric lives in seafloor.py, so fixing it costs a full re-bake. Recorded
-    here with numbers so the next round starts from them.
+    The valid form of this question is on the RENDER, against a hillshade of the
+    real bathymetry at the same sun angle -- both sides shaded relief. That
+    comparison has been made (see the licGrad notes in index.html: our local
+    coherence had reached 0.63-0.67 against the reference's 0.40-0.50, and the
+    hills were shortened in response).
+
+    What this function is still good for: catching the band-limiting CHANGING.
+    The resample-only control matters for that too -- bilinear resampling from
+    0.1 to 0.088 degrees manufactures directional structure by itself, enough
+    that the equatorial Atlantic's apparent excess is entirely resample.
     """
-    print("  sea-floor ORGANISATION (both sides are relief -- a fair comparison):")
+    print("  sea-floor ORGANISATION of the elevation field (BY DESIGN above the\n"
+          "  source on the abyss -- smooth_bathymetry band-limits it; see docstring):")
     print("    %-22s %8s %8s %8s  %s"
-          % ("box", "source", "control", "ours", "our synthesis adds"))
+          % ("box", "source", "control", "ours", "excess over control"))
     from fieldpack import enc_elev
     from render import resample_dem
     from build_frames import index_dems, read_dem
@@ -167,10 +180,11 @@ def report_coherence(src, ours):
         excess.append(co - cc)
         print("    %-22s %8.3f %8.3f %8.3f  %+.3f%s"
               % (nm, cs, cc, co, co - cc,
-                 "   <-- synthetic lineation on quiet floor"
+                 "   <-- band-limited: quiet floor, isotropic detail removed"
                  if co - cc > 0.08 else ""))
-    print("  worst synthetic excess %+.3f over the resample-only control"
-          % max(excess))
+    print("  worst excess %+.3f over the resample-only control -- expected on the\n"
+          "  abyss, and it must stay near this: a big move means the band-limiting\n"
+          "  changed, in either direction" % max(excess))
     return max(excess)
 
 

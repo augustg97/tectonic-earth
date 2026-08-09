@@ -4549,3 +4549,50 @@ No change made. A bake was stopped this round to fold in a fabric fix that the
 docstring shows would have been aimed at the wrong file -- restarted with the
 Mariana repair alone, which is verified and is what the deploy is waiting on.
 **Do not stop a running bake for a change that has not been read into yet.**
+
+### Iteration 98 -- the excess is the band-limiting, and the line is retired
+
+Iteration 97 narrowed it to "+0.096 enters after seafloor.apply, in a step not
+yet identified". Identified, by measuring every step instead of reasoning about
+them:
+
+| stage | central Pacific | SE Indian | Scotia |
+|---|---|---|---|
+| resampled DEM | 0.201 | 0.194 | 0.583 |
+| + seafloor.apply | 0.241 | 0.222 | 0.572 |
+| + polar_lowpass | 0.241 | 0.225 | 0.623 |
+| **+ smooth_bathymetry** | **0.365 (+0.124)** | **0.345 (+0.120)** | **0.626 (+0.003)** |
+| + 8-bit encode | 0.320 | 0.364 | 0.590 |
+| + AVIF q=90 | 0.339 | 0.331 | 0.588 |
+
+`smooth_bathymetry` is the whole remainder, and **it is doing exactly what it
+was written to do.** Its docstring: the sea floor is band-limited to what the
+grid can carry, because the source DEM aliased onto our raster produced hard
+facets -- "the granular black hatch that traced every mid-ocean ridge" -- and
+the fine structure below the shelf break is synthesised per pixel in the shader
+instead. Removing isotropic fine detail necessarily RAISES measured coherence
+wherever that detail dominated, and does nothing where real lineation already
+dominates: Scotia moves +0.003 through the same step.
+
+**So the comparison itself was invalid.** Measuring `_e` against real bathymetry
+on the abyss compares our field against a band we deliberately removed. Same
+class of error as the hemisphere flip four iterations ago and as reading land
+luminance off Blue Marble: a reference compared on a quantity one side does not
+claim to carry.
+
+The valid form is on the RENDER, against a hillshade of the real bathymetry at
+the same sun angle -- both sides shaded relief. **That comparison already
+exists**, in the licGrad notes in index.html: our local coherence had reached
+0.63-0.67 against the reference's 0.40-0.50 and the hills were shortened in
+response. The question queue item 2 raised had been asked and answered before
+this round started.
+
+Iterations 96-98 produced no change to the app and one durable thing: an audit
+that now says, at the top of the section, what the number does and does not
+mean, so the next reader does not spend three rounds rediscovering it. The
+amplitude finding from 95 (median 1.21x, no defect) stands -- it was measured on
+a band the field does claim to carry.
+
+Cost of the detour: three rounds, one stopped bake. The rule that would have
+prevented all of it is the one from 97, applied one level earlier -- **read the
+module that owns the quantity before measuring it, not just before changing it.**
