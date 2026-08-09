@@ -4002,3 +4002,47 @@ fix landing. That is the next target, and it is a shape correction -- the belt
 multiplier B and the floor together -- not another distance constant.
 
 Nothing shipped: the one change tried had no effect and was reverted.
+
+### Iteration 87 -- what a forest gives back, and the field metric was wrong a third time
+
+Iteration 86 identified the defect as SCATTER, not slope: two sites at the same
+real rainfall landing far apart. Decomposing the worst pair found the mechanism.
+
+| site | R_ns delivered | real mm |
+|---|---|---|
+| Indochina | **0.493** | 1500 |
+| Cerrado | **0.124** | 1500 |
+
+Indochina's meridional column crosses the Gulf of Thailand and arrives fresh;
+the Cerrado's crosses 1665 km of Amazon and falls back on what the forest can
+recycle. **The recycling floor caps every continental interior while coastal
+columns run free** -- the same finding as Siberia, from the opposite hemisphere,
+and one lever serves both. Real basins recycle roughly a third of their own
+rain; ours allowed far less, and weighted on vegetation, which is what actually
+returns the water.
+
+Swept FLOOR_VEG 0.16 / 0.26 / 0.38 / 0.50 / 0.64. **0.50 improves both metrics
+at once** -- log-scatter 0.390 -> 0.288 and Spearman +0.864 -> **+0.868**, the
+best this session -- with class overlaps unchanged at 2.
+
+**AND THE FIELD METRIC SAID DO NOT SHIP IT.** 280 Ma zonal banding in the FIELD
+went 125.7 -> 144.1, and Pangaea's land rain rose, which is the wrong direction
+for a supercontinent. Re-baked and measured in the RENDER instead:
+
+| | before | after |
+|---|---|---|
+| 280 Ma banding PEAK | 132.93 | **97.75** |
+| Siberia chroma | -1.6 | **+6.7** (reference +7.4) |
+
+**The peak fell 26%.** The field's zonal statistic predicted a 15% worsening and
+the render delivered a 26% improvement -- the third time this session a field
+metric has failed to predict its own render (after the drainage-driven macro
+contrast and the banding ratio). **Measure the picture.**
+
+Siberia now sits essentially at the reference, which closes the thread five
+separate rounds pointed at: the snow line capped at 30%, the empty mountain
+drainage, the alpine biomes, the palette dragging it the wrong way, and the
+0.010 that matched the Sahara. Small costs taken knowingly: Sahara -19.3 ->
+-18.0 and Congo +7.8 -> +10.5, both away from reference by ~1.5, and land
+texture organisation 60% -> 57% as wetter interiors carry more vegetation
+pattern.

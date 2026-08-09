@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "3.0",
+      "date": "9 August 2026",
+      "title": "What a forest gives back",
+      "summary": "Rain that falls on a forest does not simply run away -- much of it evaporates and falls again further inland, and over a basin the size of the Amazon roughly a third of the rain is water that already fell there. The model allowed for this but far too weakly, so anywhere a weather system had to cross a continent instead of arriving from a coast came out arid: Siberia, the Brazilian interior, the North American plains. Two places with identical real rainfall could differ fourfold depending only on whether their air had recently crossed water. Letting vegetation return more of what falls on it closes most of that gap -- Siberia now reads as the boreal forest it is rather than as steppe -- and, unexpectedly, makes the deep-time continents look less banded rather than more."
+    },
+    {
       "version": "2.9",
       "date": "9 August 2026",
       "title": "Siberia stops being a desert",
