@@ -3531,3 +3531,44 @@ Shader only, no re-bake.
 100% means texture that is ORGANISED -- dendritic drainage, lineated dunes,
 ridges that run -- not less of the isotropic kind. That is the honest next
 target, and it now has a meter on it.
+
+### Iteration 76 -- three ways to synthesise organisation, all measured, all negative
+
+With `audit_texture.py` giving one number against Blue Marble, the obvious next
+move was to raise it. Three constructions, each swept over amplitude:
+
+| approach | organisation |
+|---|---|
+| shipped baseline | **60%** |
+| domain stretch along the local slope | 58-59% |
+| licGrad along the local slope | 57-59% |
+| licGrad along the REGIONAL slope (4 wide taps) | 51-59% |
+
+**Every one is at or below baseline, and every one gets worse as amplitude
+rises.** That is the useful result: adding a synthetic lineated component
+DILUTES coherence rather than concentrating it, because the added component's
+own coherence is below the field's existing 0.15 and the meter reads the total.
+
+The second attempt had a real diagnosis behind it and it was still wrong, which
+is worth recording. Measured on the shipped field, the LOCAL gradient direction
+agrees with itself over a 32 px tile only **0.15 to 0.29** of the way (1.0 =
+unanimous) -- barely better than random -- while the same field smoothed to
+~150 km agrees **0.53 to 0.63**. Steering by a direction that noisy plainly
+cannot produce lineation. So the third attempt steered by the regional slope
+instead, at four wide `baseElev` taps. It scored WORSE than the local one. The
+diagnosis was right and the remedy still did not work.
+
+**What this closes off:** synthesising organisation by orienting noise -- by
+stretching its domain, or by line-integral convolution, along any slope-derived
+direction. licGrad works on the sea floor because `spr` is a BAKED, genuinely
+smooth direction field with real physics behind it (frozen-in spreading
+direction). Land has no equivalent outside orogens, and a smoothed elevation
+gradient is not a substitute.
+
+**What actually works, and it is the only thing that has:** reducing the
+isotropic component where the reference is quiet. That is what took 46% to 60%
+last round. The remaining 40% is real landform -- connected dendritic drainage,
+lineated ergs -- and it will have to be BAKED as a direction field the way the
+sea floor's is, not grown per pixel from the terrain that is already there.
+
+Reverted to the 60% state; nothing shipped this round but the knowledge.
