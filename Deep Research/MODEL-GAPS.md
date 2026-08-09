@@ -4118,3 +4118,17 @@ re-earning it needs a mechanism that waters boreal interiors WITHOUT watering
 Pangaea's -- which is a real distinction, since one is a cold maritime-fed
 forest and the other a hot continental interior, and the current floor knows
 about neither.
+
+**Iteration 89b -- the gate that would have caught it.** `audit_deeptime.py` is
+new and checks the deep-time map on the RENDER for the character it is supposed
+to have: Pangaea's land green fraction against a cap of 0.32, because the
+Permian interior is the type example of a continental desert heart and the app's
+own copy promises exactly that. Verified against the offending frame -- it reads
+0.59 and flags TOO GREEN. Restored, it reads 0.18 and passes. The 122 Ma
+greenhouse gets its own, looser cap (0.75), because green IS expected there and
+a single global rule would be wrong.
+
+The bounds are stated with their reasoning rather than fitted to today's output,
+so the gate says something about the Earth rather than about the current build.
+
+Update-log entry 3.0 withdrawn with the revert.
