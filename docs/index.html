@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260809-0156';
+const DATA_V='20260809-0205';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3716,25 +3716,20 @@ void main(){
     alpRock*=mix(vec3(1.0), hue, 0.55);
     col=mix(col, alpRock, alp*0.82);
     gAlp=alp;
-    /* BIOME CHROMA TO THE REFERENCE. Band-passed at the regional scale against
-       Blue Marble over three continents, the LUMINANCE structure is close --
-       Asia 115% of reference, North America 90% -- but the green-red spread is
-       about twice the real Earth's everywhere: 7.66-8.80 against 3.56-4.81.
-       Google Earth's land is famously muted and this is that difference,
-       measured. Pulled toward the local biome's own luminance rather than
-       toward grey, so a forest stays a forest and a desert stays a desert;
-       what compresses is how far apart they sit in colour, which is the thing
-       that was out. Task 32 has been open since the first week for want of a
-       number to aim at.
-       Set to 0.80, not to the reference. Taking the measure literally needs
-       0.52, and at 0.65 the Congo greys out and the savanna loses its warmth --
-       undoing the palette work of iterations 40-42. 0.80 lands chroma at
-       6.4-7.4 against a reference 3.6-4.8: still high, and the honest reading
-       is that the rest of that gap is legibility this map is choosing to keep. */
-    {
-      float lum=dot(col, vec3(0.2126,0.7152,0.0722));
-      col=mix(vec3(lum), col, 0.80);
-    }
+    /* BIOME CHROMA: TWO QUANTITIES, ONE KNOB, AND THE KNOB WAS THE WRONG TOOL.
+       Iteration 81 measured band-passed chroma VARIATION at 1.9x Blue Marble's
+       and compressed toward each pixel's luminance to close it. Measuring the
+       other half showed why that was a trade and not a fix: the biome-to-biome
+       chroma SPREAD -- Sahara -31.1 against Congo +3.7 in the reference, a range
+       of 34.8 -- is only 23.4 in ours, already 0.67x the real Earth's. Our
+       deserts are not warm enough and our forests not green enough RELATIVE TO
+       EACH OTHER, while colour wanders too much within each. A global scalar
+       moves both together: keep 0.80 took the variation from 1.90x to 1.57x of
+       reference and the separation from 0.67x to 0.54x. Roughly a wash by the
+       numbers and a loss on the thing anyone actually sees, which is whether a
+       desert reads as a desert.
+       Reverted. The real fix is two-part and belongs in the palette itself:
+       widen the spread BETWEEN biome stops, narrow the drift WITHIN each. */
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
   }

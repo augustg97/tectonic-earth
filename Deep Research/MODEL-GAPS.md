@@ -3810,3 +3810,46 @@ dominating gradients, a reference site on a mountain, relative-vs-absolute
 variation, a baseline predating three rounds, and now a reference image that
 does not contain the quantity being compared. Every one produced a plausible
 defect. On this project the measurement deserves the first suspicion.
+
+### Iteration 83 -- a full visual pass, and iteration 81's fix reverted as a bad trade
+
+Twenty rounds of change since the last complete review -- three climate
+re-bakes, the chroma compression, the flat-ground texture reduction -- so this
+round verified rather than changed. All eight reference framings, shot clean.
+
+The 122 Ma globe, the Sahara and the prairie all read well; the deep-time
+framings are markedly better than iteration 75's equivalents. **Siberia is the
+outlier: brown-grey where the real thing is dark green taiga.** Measuring the
+mean land colour against Blue Marble -- a fair comparison for chroma, per
+iteration 82 -- found something larger than Siberia:
+
+| region | BM chroma / lum | ours |
+|---|---|---|
+| Sahara | **-31.1** / 143.2 | -8.9 / 121.0 |
+| Siberia taiga | +7.4 / 185.9 | -3.3 / 121.7 |
+| Congo | +3.7 / 44.7 | +9.8 / 82.7 |
+
+**The biome-to-biome chroma SPREAD is 34.8 in the reference and 23.4 in ours --
+0.67x.** Our deserts are not warm enough and our forests not green enough
+relative to each other. Luminance is worse: the reference ranges 44.7 to 185.9
+across these biomes, ours 82.7 to 121.7, a range 3.6x too narrow.
+
+**So iteration 81 was a bad trade and is reverted.** It measured band-passed
+chroma VARIATION at 1.9x reference and compressed toward luminance to close it,
+which is a real measurement -- but the same knob moves the separation, which was
+already too low. Keep 0.80 took variation 1.90x -> 1.57x of reference (37%
+better) and separation 0.67x -> 0.54x (41% worse). Roughly a wash by the numbers
+and a loss on the thing anyone actually sees. Update-log entry 2.8 withdrawn
+with it, rather than leave the log describing a change the app no longer has.
+
+**Task 32 restated, and this is the useful output of the round.** It is TWO
+quantities and a global scalar cannot serve both:
+
+  * colour wanders too much WITHIN a biome (band-passed variation 1.9x)
+  * biomes sit too close together BETWEEN them (spread 0.67x, luminance 0.28x)
+
+The fix belongs in the palette stops themselves -- push the desert warmer and
+brighter, the rainforest darker and greener, and quieten the drift in between --
+not in any single multiplier applied afterward. That is the same shape as
+[[one-control-two-quantities]] and it is why three rounds of scalar tuning have
+gone nowhere.

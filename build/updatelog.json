@@ -2,12 +2,6 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
-      "version": "2.8",
-      "date": "9 August 2026",
-      "title": "Land colour, measured against a photograph",
-      "summary": "How saturated should a continent be? The map had been tuned by eye, and eyes drift. Comparing it against NASA's Blue Marble -- a true-colour photograph of the whole Earth, and part of this project's own reference material all along -- shows the brightness structure is close, but the colour separating one biome from the next runs about twice as far apart as the real planet's does. Pulling that back brings the land nearer to what Earth actually looks like from orbit. Not all the way: taking the measurement literally washes the rainforest grey, and a map that has to be read as well as looked at keeps a little more colour than a photograph. Deserts and forests are still unmistakable; they simply sit closer together than they did."
-    },
-    {
       "version": "2.7",
       "date": "8 August 2026",
       "title": "Arabia learns to be a desert",
