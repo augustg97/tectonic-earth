@@ -5301,3 +5301,45 @@ already computable in the shader from values it has. Next round implements and
 A/Bs it.
 
 Task 23 reopened, with a reproduction, two sites, and a measured cause.
+
+### Iteration 114 -- iteration 113 was wrong: those are seamounts
+
+The "quantisation bands" of iteration 113 are the **Newfoundland and Milne
+seamount provinces**, and off Patagonia the Falkland Plateau's seamounts. Real
+features, correctly placed, drawn dark because they are rough.
+
+The fix built from that story was implemented, shot, and **changed 8% of the
+frame's pixels while the patches stayed exactly as they were**. Two probes
+settled it:
+
+  * `aniso = 0.0`, which disables the entire anisotropic fabric block: the
+    surrounding plain lost its fine texture, proving the probe ran -- and the
+    patches were untouched. They are not the fabric.
+  * the 400 roughest deep-water cells in the shipped elevation field cluster at
+    **45W 45N**, which is where the strongest patch sits. Over the whole frame,
+    water luminance falls monotonically with field roughness: 86.5 smooth,
+    74.4 at p90, 72.5 at p99.
+
+**The tell was in iteration 113's own table and I walked past it.** That round
+measured "patch E of Banks: elevation sd 1434 m" -- rough real bathymetry, sitting
+in the same list as two smooth ones -- noted it, and went on to build an
+arithmetic story about R quantisation that fit the other two. The arithmetic was
+correct and irrelevant: one 8-bit level really does buy 0.63 degrees out there,
+and the fabric really is fixed in world space, and none of it is what makes those
+patches dark.
+
+What went wrong procedurally is narrower than "I guessed". The mechanism was
+derived and the numbers checked -- but only against the hypothesis, never against
+the obvious alternative that the sea floor is genuinely rough there. **A
+mechanism that explains the observation is not evidence until the null explains
+it worse.** The null here was one line: look at the elevation field.
+
+The `coStep` fade is reverted. It was built for a reason that turned out not to
+exist, and a change with no demonstrated benefit that moves 8% of the pixels is
+not worth keeping on the chance it helps something else.
+
+Task 23 goes back to unreproduced, which is where it was. Two sessions have now
+looked for a rectangular ocean seam and found, instead, a detector that cannot
+see patches (iteration 113) and a patch that turned out to be a mountain range
+(this one). The honest state: **no ocean-fabric seam has ever been reproduced**,
+and the task should say that rather than staying open on an unverified report.
