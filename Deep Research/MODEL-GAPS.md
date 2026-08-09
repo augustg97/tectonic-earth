@@ -3381,3 +3381,21 @@ PROXY -- transport admitted by a latitude band, recharge by whether a pixel was
 water, descent by where land happened to sit -- and each was repaired by
 branching on the quantity actually meant. The proxies all looked physical, which
 is why they survived so long.
+
+**Iteration 72b -- the shot harness now refuses to fail quietly.** `build/shoot.py`
+replaces the hand-rolled Chrome invocation that every round has been pasting.
+It ensures a receiver, PROVES it by round-trip (POST a byte, read it back off
+disk -- an open socket is not proof, and the round that lost a cycle to a stale
+listener is exactly why), kills and replaces any listener that holds 8901
+without writing to `build/verify`, uses a fresh Chrome profile every run, and
+then checks that every requested name actually arrived, exiting non-zero and
+naming the missing ones.
+
+Verified against both failure modes that have actually happened: receiver dead
+(self-starts, verifies, lands the shot) and a decoy listener holding the port
+while writing elsewhere (detects, replaces, lands the shot). Five silent no-runs
+this session traced to those two.
+
+It also starts the receiver with `start_new_session=True`, so it outlives the
+shell that launched it -- the specific reason the background receiver kept dying
+between rounds.
