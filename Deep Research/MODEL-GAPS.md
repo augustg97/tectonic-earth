@@ -3572,3 +3572,47 @@ lineated ergs -- and it will have to be BAKED as a direction field the way the
 sea floor's is, not grown per pixel from the terrain that is already there.
 
 Reverted to the 60% state; nothing shipped this round but the knowledge.
+
+### Iteration 77 -- the per-pixel family is closed, and the rest is a scope decision
+
+Two more variants, and with them the whole approach:
+
+| variant | organisation |
+|---|---|
+| shipped baseline | **60%** |
+| domain stretch, local slope | 58-59% |
+| licGrad ADDED, local slope | 57-59% |
+| licGrad ADDED, regional slope | 51-59% |
+| licGrad REPLACING the mid band, gain 3 / 6 / 10 | 54 / 49 / 47% |
+| licGrad REPLACING, wavelength 80 / 46 / 27 km | 59 / 58 / 58% |
+
+Replacement was the variant iteration 76 never tested -- every earlier attempt
+summed onto the isotropic octaves, which is a sufficient explanation for why
+they diluted. It is not the explanation, because replacing is worse still. Nor
+is it aliasing: at LF 380 the pattern was 3.4 screen pixels per wavelength, and
+coarsening it to 80 km (13 px) recovers only to 59%.
+
+**Five constructions, every one at or below baseline. The family is closed.**
+No per-pixel orientation of noise -- stretched, convolved, added or substituted,
+at any wavelength or gain, off local or regional slope -- raises measured
+organisation. The only thing that ever has is REMOVING isotropic amplitude where
+the reference is quiet (46% -> 60%, iteration 75).
+
+**Why, and it is worth being precise.** licGrad succeeds on the sea floor
+because `spr` is a baked direction field carrying real physics -- the frozen-in
+spreading direction, smooth by construction and the same one that actually cut
+the faults. On land the only per-pixel direction available is the terrain
+gradient, and it agrees with itself over a tile just 0.15-0.29 of the way
+(0.53-0.63 smoothed to 150 km). Beyond that, Blue Marble's own coherence comes
+from a real planet's features at every scale -- vegetation boundaries, incised
+valleys, dune trains -- and those are not recoverable from an elevation field
+sampled at 9.8 km per texel.
+
+**THIS IS A SCOPE DECISION AND IT IS THE USER'S.** Closing the remaining 40%
+means shipping a new baked per-keyframe direction field for land -- drainage
+azimuth from `build_surface.py`'s D8 receivers, which are connected and
+organised by construction -- at 512x256 like `_t`, over 251 keyframes, with the
+payload and re-bake cost that implies. That is the only route the evidence
+leaves open, and it is a bigger commitment than a tuning round.
+
+Reverted; nothing shipped but the closure.
