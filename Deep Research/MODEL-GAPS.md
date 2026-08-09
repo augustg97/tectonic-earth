@@ -3399,3 +3399,48 @@ this session traced to those two.
 It also starts the receiver with `start_new_session=True`, so it outlives the
 shell that launched it -- the specific reason the background receiver kept dying
 between rounds.
+
+### Iteration 73 -- the validator's own reference list was wrong, and class ordering was too weak a gate
+
+Chasing the last big margin (seasonal/grass, -0.211) down to the Pontic steppe
+at 0.263. Profiling the poleward march along its column explains the number:
+
+```
+Pontic (30E):  30N 0.140 | 33-36N sea | 39N 0.072 | 42-45N sea | 48N 0.440
+Plains (98W):  24N 0.221 | 27N 0.337 (peak inland of the Gulf) | 39N 0.089
+```
+
+The sample sits three degrees north of the Black Sea and takes a fresh coastal
+recharge. **But 30E/49N is Kyiv forest-steppe at ~620 mm, not dry steppe** -- I
+chose the site badly when writing the validator two rounds ago. Moved to the Don
+steppe (45E/47N, ~350 mm), the margin goes **-0.211 -> -0.141** with no change to
+the model at all. A reference list is data, and it gets audited like any other.
+
+**AND CLASS ORDERING WAS HIDING WORSE.** Checked against real annual
+precipitation, the field has no consistent relationship to rainfall across the
+mid-latitudes:
+
+| site | real mm | model |
+|---|---|---|
+| Kazakh steppe | 300 | 0.014 |
+| N Caspian steppe | 280 | **0.234** |
+| Great Plains | 500 | 0.037 |
+| S Ukraine steppe | 420 | **0.459** |
+
+Less rain, seventeen times the value. Every one of those passed the class check,
+because they are all "grass" and the check only asked whether the four groups
+were ordered. What the model is actually tracking there is distance to ANY water.
+
+`audit_biomes.py` now carries real millimetres per site and reports a **Spearman
+rank correlation against them -- currently +0.841** -- plus the worst rank
+inversions by name. That is a single number to move, and it exposes what class
+ordering could not:
+
+| rank gap | site | model | real |
+|---|---|---|---|
+| 6 | Rub al Khali | 0.060 | 40 mm |
+| 5 | Don steppe | 0.193 | 350 mm |
+| 5 | Atacama | 0.017 | 5 mm |
+| 4 | Choco | 0.300 | 6000 mm |
+
+No re-bake this round: the site correction is in the instrument, not the field.

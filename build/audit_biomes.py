@@ -30,28 +30,35 @@ import paleo_tracks
 from build_frames import index_dems, read_dem
 from render import compute_fields, resample_dem
 
-# (lon, lat, name, class). Classes are ordered wet -> dry; the field has to keep
-# them in this order. Sites are chosen to be unambiguous and far from coasts and
-# class boundaries, so a failure here is the field's and not the sampling's.
+# (lon, lat, name, class, REAL annual precipitation in mm). The millimetres are
+# what makes this a gate rather than a vibe: class ordering alone passed a field
+# in which the Kazakh steppe (300 mm) scored 0.014 while the north Caspian
+# steppe (280 mm) scored 0.234 -- less rain, seventeen times the value -- because
+# both are "grass" and the check only asked whether the classes were ordered.
+# Sites are chosen unambiguous and away from class boundaries and coasts.
+#
+# One of these was wrong when this file was written: 30E/49N was labelled
+# "Pontic steppe" and is Kyiv forest-steppe at ~620 mm, wetter than parts of the
+# seasonal class. A reference list is data too, and it gets audited.
 SITES = [
-    (-62.0, -3.0, "Amazon basin", "wet"),
-    (20.0, 0.0, "Congo basin", "wet"),
-    (113.0, 1.0, "Borneo", "wet"),
-    (-77.0, 1.0, "Choco", "wet"),
-    (-49.0, -15.0, "Cerrado", "seasonal"),
-    (78.0, 21.0, "Deccan", "seasonal"),
-    (32.0, -13.0, "Miombo", "seasonal"),
-    (105.0, 15.0, "Indochina", "seasonal"),
-    (-98.0, 39.0, "Great Plains", "grass"),
-    (30.0, 49.0, "Pontic steppe", "grass"),
-    (-63.0, -35.0, "Pampas", "grass"),
-    (70.0, 48.0, "Kazakh steppe", "grass"),
-    (25.0, 25.0, "Sahara", "desert"),
-    (50.0, 21.0, "Rub al Khali", "desert"),
-    (-69.0, -24.0, "Atacama", "desert"),
-    (103.0, 43.0, "Gobi", "desert"),
-    (135.0, -25.0, "Australian interior", "desert"),
-    (-113.0, 39.0, "Great Basin", "desert"),
+    (-62.0, -3.0, "Amazon basin", "wet", 2300),
+    (20.0, 0.0, "Congo basin", "wet", 1700),
+    (113.0, 1.0, "Borneo", "wet", 3200),
+    (-77.0, 1.0, "Choco", "wet", 6000),
+    (-49.0, -15.0, "Cerrado", "seasonal", 1500),
+    (78.0, 21.0, "Deccan", "seasonal", 900),
+    (32.0, -13.0, "Miombo", "seasonal", 1000),
+    (105.0, 15.0, "Indochina", "seasonal", 1500),
+    (-98.0, 39.0, "Great Plains", "grass", 500),
+    (45.0, 47.0, "Don steppe", "grass", 350),
+    (-63.0, -35.0, "Pampas", "grass", 900),
+    (70.0, 48.0, "Kazakh steppe", "grass", 300),
+    (25.0, 25.0, "Sahara", "desert", 15),
+    (50.0, 21.0, "Rub al Khali", "desert", 40),
+    (-69.0, -24.0, "Atacama", "desert", 5),
+    (103.0, 43.0, "Gobi", "desert", 130),
+    (135.0, -25.0, "Australian interior", "desert", 200),
+    (-113.0, 39.0, "Great Basin", "desert", 230),
 ]
 ORDER = ["wet", "seasonal", "grass", "desert"]
 
@@ -70,33 +77,49 @@ def main():
     Rf = solve(age)
     H, W = Rf.shape
     rows = []
-    for lon, lat, name, cls in SITES:
+    for lon, lat, name, cls, mm in SITES:
         r = int((90 - lat) / 180 * H)
         c = int((lon + 180) / 360 * W)
         # A small box, because one texel is 26 km and a single sample lands
         # wherever the reconstruction happens to put a pixel.
         v = float(np.median(Rf[max(r - 2, 0):r + 3, max(c - 2, 0):c + 3]))
-        rows.append((cls, v, name))
+        rows.append((cls, v, name, mm))
 
     print("  reference sites at %s Ma, by class (wet -> dry):" % age)
     for cls in ORDER:
-        vs = [(v, n) for c, v, n in rows if c == cls]
+        vs = [(v, n) for c, v, n, _ in rows if c == cls]
         vs.sort(reverse=True)
         print("    %-9s %s" % (cls, "  ".join("%s %.3f" % (n, v) for v, n in vs)))
 
     fails = 0
     print("  separation between adjacent classes:")
     for a, b in zip(ORDER, ORDER[1:]):
-        lo_a = min(v for c, v, _ in rows if c == a)      # driest of the wetter class
-        hi_b = max(v for c, v, _ in rows if c == b)      # wettest of the drier class
+        lo_a = min(v for c, v, _, _ in rows if c == a)      # driest of the wetter class
+        hi_b = max(v for c, v, _, _ in rows if c == b)      # wettest of the drier class
         margin = lo_a - hi_b
         bad = margin <= 0
         fails += bad
         print("    %-9s driest %.3f  vs  %-9s wettest %.3f   margin %+.3f%s"
               % (a, lo_a, b, hi_b, margin, "   <-- OVERLAP" if bad else ""))
-    span = max(v for _, v, _ in rows) - min(v for _, v, _ in rows)
+    span = max(v for _, v, _, _ in rows) - min(v for _, v, _, _ in rows)
     print("  full span %.3f across %d sites, %d overlapping boundaries"
           % (span, len(rows), fails))
+
+    # RANK AGREEMENT WITH REALITY. The class check only asks whether four groups
+    # are ordered; this asks whether the field agrees with the actual rainfall
+    # site by site, which is the question. Spearman, because the model's units
+    # are companded and only the ordering is meaningful.
+    mv = np.array([v for _, v, _, _ in rows])
+    rv = np.array([float(mm) for _, _, _, mm in rows])
+    rm = np.argsort(np.argsort(mv)).astype(float)
+    rr = np.argsort(np.argsort(rv)).astype(float)
+    rho = float(np.corrcoef(rm, rr)[0, 1])
+    print("  Spearman rank correlation with real annual precipitation: %+.3f" % rho)
+    worst = sorted(zip(np.abs(rm - rr), [n for _, _, n, _ in rows], mv, rv),
+                   reverse=True)[:4]
+    print("  worst rank inversions (rank gap, site, model, real mm):")
+    for g, n, m, r in worst:
+        print("    %2d  %-22s %.3f   %4.0f mm" % (int(g), n, m, r))
     return 1 if fails else 0
 
 
