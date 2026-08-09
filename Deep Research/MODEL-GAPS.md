@@ -3960,3 +3960,45 @@ mechanism recorded so the number is not misread later.
 checking it against chroma targets and never re-checked deep-time banding. A
 change to the colour axis needs re-running the metric that is defined on that
 axis.
+
+### Iteration 86 -- the depletion distance is not the cap, and the target was wrong too
+
+Continuing on Siberia. `FETCH_KM` is the twin of the constant iteration 85 fixed
+-- a single global e-folding distance for how fast a parcel rains itself out --
+so it got the same cold scaling. **No effect whatever:** Siberia holds at 0.026
+across a 3x sweep and Spearman drifts +0.864 -> +0.853. Reverted.
+
+The reason is structural and worth having: `inland = fl + (m - fl) * decay`. Once
+a parcel has decayed to the recycling floor, `decay` operates on nothing. At
+Siberia `m` is already at the floor, so the depletion distance is irrelevant and
+**the floor is the cap.** The whole chain, computed:
+
+    floor 0.156  ->  reach 10395 km  ->  delivered R 0.080
+    belt B 0.456  ->  Rf 0.036   (measured 0.026)
+
+**And then the target itself did not survive checking.** "Siberia should read
+0.13" came from scaling the Congo's 1700 mm / 0.549 linearly. Fitted across all
+eighteen reference sites, the field's relationship to real rainfall has a
+**log-log slope of 0.59** -- it compresses. On its own scale 400 mm predicts
+**0.078**, so Siberia is 3x low rather than 5x, and the floor would need 1.9x
+rather than 3.6x. Reaching the original target would have required boreal
+recycling stronger than tropical, which is plainly wrong; the fit is what says
+so.
+
+**The larger finding is the shape, not Siberia.** Against the fit:
+
+| | real mm | model | fit |
+|---|---|---|---|
+| Australian interior | 200 | 0.013 | 0.052 |
+| Great Basin | 230 | 0.013 | 0.056 |
+| Congo | 1700 | **0.549** | 0.185 |
+| Amazon | 2300 | **0.691** | 0.222 |
+
+**We are roughly 3x high at the wet extreme and 3-4x low across the mid-latitude
+dry-to-moderate band.** The field is too contrasty at its ends and too flat in
+the middle, which is one coherent defect rather than a list of sites, and it
+explains why Spearman sits at +0.864 rather than higher despite every individual
+fix landing. That is the next target, and it is a shape correction -- the belt
+multiplier B and the floor together -- not another distance constant.
+
+Nothing shipped: the one change tried had no effect and was reverted.
