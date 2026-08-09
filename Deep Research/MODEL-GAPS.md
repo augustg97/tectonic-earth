@@ -5491,3 +5491,40 @@ against `R` over North America rather than sweeping another constant.
 
 `MONSOON_LAT_HI` stays named at its shipped value of 32.0. Naming it cost
 nothing and the next attempt will want it.
+
+### Iteration 118 -- the meridional march arrives and is thrown away, and then it is too small anyway
+
+Instrumented `R_ns`, `mons_adm` and the zonal `R` at the moment the solve chooses
+between them, which is `R = max(R, R_ns * mons_adm)`:
+
+| site | R zonal | R_ns | mons_adm | R_ns x adm | picked |
+|---|---|---|---|---|---|
+| Appalachians | 0.192 | **0.264** | 0.574 | 0.151 | zonal |
+| Chesapeake | 0.649 | 0.693 | 0.265 | 0.184 | zonal |
+| Gulf coast | 0.750 | 0.960 | 0.775 | 0.744 | zonal |
+| Florida | 0.923 | 0.919 | 0.917 | 0.843 | zonal |
+| Congo (control) | 0.233 | 1.195 | 0.538 | 0.643 | **MERID** |
+| Amazon (control) | 0.539 | 0.943 | 0.753 | 0.709 | **MERID** |
+
+Two findings, and iteration 117's puzzle resolves.
+
+**The meridional march does reach North America** -- 0.264 at the Appalachians,
+above the zonal 0.192. It loses the `max` only because `mons_adm` of 0.574 scales
+it to 0.151 first. So widening the band DID do what it was supposed to; it moved
+admission toward 1.0, which lifted the picked value from 0.192 to about 0.264,
+and that is exactly the small gain iteration 117 measured and misread as "the
+band is not in the path". It is in the path. It is just not where the deficit is.
+
+**The deficit is R_ns itself.** 0.264 at the Appalachians against the Congo's
+1.195 -- and 0.960 at the Gulf coast, 550 km away. A 73% loss over 550 km inland.
+
+**And the fetch decay cannot be what does it.** `FETCH_KM = 3200 km`, shared by
+both marches, so 550 km costs `exp(-550/3200)` = 16%, not 73%. Checking that
+before writing down "the meridional march decays too fast" is the whole lesson of
+iteration 113, applied in time: the mechanism I was about to name is arithmetically
+incapable of the effect.
+
+So something else inside `_advect_ns` removes three quarters of the moisture in
+the first 550 km of land -- the orographic strip, the floor, or the way the march
+initialises off a coast. That is where the next round instruments, inside the
+function rather than at its output.
