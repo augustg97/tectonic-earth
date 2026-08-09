@@ -5123,3 +5123,49 @@ that suggested it moves Pangaea's green the wrong way. The ordering check is wha
 will say whether that is a correction or a repeat of iteration 87.
 
 Measured now: 0.53 > 0.42 > 0.35, all three inside their new bands.
+
+### Iteration 110 -- a third fill family, a Python trap, and a residue that is a decision
+
+Classifying every cell still over 5 km in the repaired frames put the survivors
+in two places no map has 6 km of relief: 142-149E 40-44S (the Tasman at 70 Ma)
+and 135-140E 16S (the Gulf of Carpentaria at 20 Ma). Checked against the
+repaired source:
+
+    Altiplano, 20 Ma    2680  960  [9300 9300]  2960
+    Tasman,    70 Ma    -160    0  [7500 5700]     0
+    Carpentaria, 20 Ma  smooth, max 2,600 -- real
+
+**Two-cell runs.** They defeat both earlier tests by construction: too low for
+the 8,000 m excursion threshold (7,300-7,500), and not needles, because each
+cell has a high neighbour. So the test generalises from shape to SIZE -- label
+the connected patches standing `rise` above a 9-cell median and reject the small
+ones. At 10 km a cell, nothing real is 5 km high and 20 km wide; the Himalaya
+spans hundreds of cells. A needle is just a one-cell patch, so this subsumes it.
+
+**And a Python trap cost a calibration.** The first sweep returned four
+identical rows for four different parameter pairs. `def _blobs(z,
+rise=BLOB_RISE)` binds its default ONCE, at definition -- so setting
+`BF.BLOB_RISE` afterwards ran the original value every time. Four rows agreeing
+exactly is not a robust result, it is a stuck knob. The globals are now read at
+call time.
+
+With that fixed the window turns out to be narrow, and the residue is a decision
+rather than an oversight:
+
+| rise | outcome |
+|---|---|
+| >= 6,500 | real terrain safe; the Altiplano run survives |
+| <= 6,000 | Altiplano caught, and Sulawesi (+1,160 -> +880) and the 425 Ma range (+8,400 -> +7,500) damaged with it |
+
+**No value of this parameter separates that fill from those two real features.**
+On height-above-surroundings and on size they are the same object. 6,500 takes
+the safe side: it clears the Tasman family and every earlier one, and leaves the
+20 Ma Altiplano run named and unrepaired. Flattening two real features to fix one
+artefact is the trade this file has refused twice already.
+
+**The bake is NOT restarted a third time.** Each stop was justified on its own,
+but the pattern -- find a family, restart, find another -- does not converge, and
+a third restart trades a certain two hours for another maybe. This bake finishes
+and produces a batch whose only remaining spikes are the named ones; the final
+bake then carries the blob rule and `ORO_DRAIN=0.55` together, which was already
+the plan.

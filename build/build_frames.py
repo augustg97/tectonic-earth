@@ -195,11 +195,67 @@ def repair_spikes(z, jump=SPIKE_JUMP):
     # centre. Ages with nothing wrong exit on the first test.
     for _ in range(8):
         bg = median_filter(out, size=9, mode="nearest")
-        bad = (np.abs(out - bg) > jump) | _needles(out)
+        bad = (np.abs(out - bg) > jump) | _blobs(out)
         if not bad.any():
             return out
         out = _fill_holes(out, bad)
     return out
+
+
+# CALIBRATED, and the window is narrow enough that the residue is a decision
+# rather than an oversight:
+#
+#     rise >= 6500   real terrain safe, the Altiplano run survives
+#     rise <= 6000   the Altiplano is caught, and Sulawesi (+1,160 -> +880) and
+#                    the 425 Ma range (+8,400 -> +7,500) are damaged with it
+#
+# No value of this parameter separates that fill from those two real features:
+# on height-above-surroundings and on size they are the same object. 6,500 takes
+# the safe side -- it clears the two-cell Tasman family and every earlier one,
+# and leaves the 20 Ma Altiplano run named and unrepaired.
+BLOB_RISE = 6500.0       # metres a patch must stand above its surroundings
+BLOB_MAX = 6             # ...and how few cells it must span to be a fill
+
+
+def _blobs(z, rise=None, max_cells=None):
+    """Small patches standing far above their surroundings -- fill, at any width.
+
+    THE THIRD FILL FAMILY, and it defeated both earlier tests. The excursion
+    test needs 8,000 m (below that it starts flattening real island-arc
+    margins); the needle test needs all four neighbours to drop, so a fill TWO
+    cells wide is invisible to it because each cell has a high neighbour.
+    Between them sits this, in the repaired source:
+
+        Altiplano, 20 Ma    2680  960  [9300 9300]  2960
+        Tasman,    70 Ma    -160    0  [7500 5700]     0
+
+    Two-cell runs, 7,300-7,500 m above their surroundings -- just under the
+    excursion threshold, and not needles.
+
+    SIZE IS THE DISCRIMINATOR, not shape or height. At 10 km a cell, a real
+    range that stands 5 km above its surroundings spans far more than a dozen
+    cells: the Himalaya is hundreds. Nothing real is 5 km high and 20 km wide.
+    So label the connected patches that stand `rise` above a 9-cell median and
+    reject the small ones -- which subsumes the needle test, a needle being a
+    one-cell patch, and catches every width up to the limit.
+    """
+    from scipy.ndimage import label, median_filter
+    # Read the module globals at CALL time. Python binds default arguments once,
+    # at definition -- so `def _blobs(z, rise=BLOB_RISE)` captures the value and
+    # a sweep that sets BLOB_RISE afterwards silently runs the original every
+    # time. That produced four identical rows and nearly cost a calibration.
+    rise = BLOB_RISE if rise is None else rise
+    max_cells = BLOB_MAX if max_cells is None else max_cells
+    high = (z - median_filter(z, size=9, mode="nearest")) > rise
+    if not high.any():
+        return high
+    lab, n = label(high)
+    if not n:
+        return high
+    sizes = np.bincount(lab.ravel())
+    small = np.zeros(sizes.shape, bool)
+    small[1:] = sizes[1:] <= max_cells
+    return small[lab]
 
 
 NEEDLE_DROP = 3000.0     # metres a cell must fall on BOTH sides to be a needle
