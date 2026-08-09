@@ -3891,3 +3891,44 @@ Remaining chroma gap is 0.78x of reference and the honest read is that closing
 it further needs the wet end darker than the sRGB floor comfortably allows plus
 a desert brighter than shading permits -- so this is close to the end of what
 palette work alone can do.
+
+### Iteration 85 -- central Siberia was as dry as the Sahara
+
+Five threads this session ended at the same sentence -- the snow line capped at
+30%, the empty mountain drainage, the alpine biomes, the palette pulling Siberia
+the wrong way -- so this round went at it directly. Measured against real annual
+precipitation:
+
+| site | real | model |
+|---|---|---|
+| **Central Siberia** | **400 mm** | **0.010** |
+| **Sahara** | **15 mm** | **0.010** |
+| W Siberian lowland | 500 mm | 0.046 |
+| Central Europe | 650 mm | 0.076 |
+| Canadian boreal | 450 mm | 0.061 |
+
+Central Siberia and the Sahara are the same number, twenty-six times apart in
+reality. The whole cold continental interior is at desert values.
+
+**The cause: `RECYCLE_KM` was one global constant.** The evapotranspiration
+floor decays as `exp(-dist/1800 km)`, so the 7000 km of land between the
+Atlantic and central Siberia leaves 2% of it. But recycling persists as long as
+what falls can evaporate and stay aloft, and cold air over boreal forest holds
+its water far better than hot air over savanna -- the e-folding distance scales
+inversely with evaporative demand. Keyed to latitude, the same proxy for local
+temperature the floor and the decay two lines below already use.
+
+Swept 1.6 / 4 / 9 / 16. **Spearman against real precipitation +0.849 -> +0.864**,
+saturating at 9. Boreal sites all rise (Siberia 0.010 -> 0.026, Canada 0.061 ->
+0.071, central Europe 0.076 -> 0.086) and every desert holds: Sahara 0.009
+throughout, Atacama 0.018, and the Rub al Khali improves 0.122 -> 0.061. The
+Gobi rises 0.010 -> 0.020, which is right -- it takes 130 mm against the
+Sahara's 15. Deep time is neutral (280 Ma banding 126.0 -> 125.7).
+
+**Honest about what is left.** Siberia at 0.026 is still far short of the ~0.13
+its rainfall deserves, because the floor itself caps near 0.156 at that latitude
+and the moisture largely never arrives -- longer recycling can only stretch what
+got there. Closing the rest means the zonal march delivering more across a
+continent, which is a larger change than one constant. The direction is now
+measured and the constant is honest; the shortfall is recorded rather than
+tuned away.

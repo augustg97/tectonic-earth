@@ -160,7 +160,7 @@ def _sea_recharge(ocean, W):
     return SEA_RECHARGE * (SEA_MIN + (1.0 - SEA_MIN) * np.clip(openness / 0.55, 0.0, 1.0))
 
 
-def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None):
+def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None, rec_km=None):
     """March moisture downwind across each row, returning delivered rainfall.
 
     direction +1: westerly wind, air travels west->east (increasing column)
@@ -203,7 +203,7 @@ def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None):
         else:
             g = RECYCLE_REGEN * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0)
             dist = np.where(sea, 0.0, np.maximum(dist + dx_km * (1.0 - g), 0.0))
-        fl = floor * np.exp(-dist / RECYCLE_KM)
+        fl = floor * np.exp(-dist / (RECYCLE_KM if rec_km is None else rec_km))
         if regen is not None:
             # ...and wet ground does not merely slow the decay, it raises what
             # the air decays TOWARD. Evapotranspiration over closed canopy
@@ -241,7 +241,7 @@ def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None):
     return R
 
 
-def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None):
+def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None, rec_km=None):
     """March moisture along COLUMNS, from the equator toward one pole.
 
     WHY THIS EXISTS. The zonal solve above carries moisture east-west only, so a
@@ -270,7 +270,7 @@ def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None):
     for r in rows:
         sea = ocean[r]
         dist = np.where(sea, 0.0, dist + dy_km)
-        fl = floor[r] * np.exp(-dist / RECYCLE_KM)
+        fl = floor[r] * np.exp(-dist / (RECYCLE_KM if rec_km is None else rec_km[r]))
         uplift = np.zeros(W) if prev is None else \
             np.clip(elev[r] - elev[prev], 0, None) / UPLIFT_SCALE
         rain = m * (1.0 + ORO_RAIN * uplift)
@@ -314,6 +314,24 @@ def _rainfall(Z, land, lat, cl):
     ocean = ~land
     absl = np.abs(lat)
 
+    # HOW FAR RECYCLED MOISTURE PERSISTS IS A FUNCTION OF TEMPERATURE, and it
+    # was a single global constant. RECYCLE_KM = 1800 means the evapotranspiration
+    # floor is down to 2% after the 7000 km of land between the Atlantic and
+    # central Siberia -- so the model gives Siberia 0.010, exactly what it gives
+    # the Sahara, for 400 mm of real rainfall against 15. The same error runs
+    # through central Europe (650 mm -> 0.076) and the west Siberian lowland
+    # (500 mm -> 0.046).
+    #
+    # Recycling persists as long as what falls can evaporate again and stay in
+    # the air, and cold air over boreal forest holds its water far better than
+    # hot air over savanna: the e-folding distance scales with the inverse of
+    # evaporative demand. Keyed to latitude here, which is the same proxy for
+    # local temperature the floor and the decay already use two lines below.
+    # This is why five separate threads this session -- the snow line, the
+    # drainage network, the alpine biomes, the palette and now Siberia -- all
+    # ended at "our high and cold ground is too dry".
+    rec_km = RECYCLE_KM * (1.0 + RECYCLE_COLD
+                           * np.clip(1.0 - np.cos(np.radians(lat[:, 0])), 0.0, 1.0))
     # columns are physically narrower toward the poles, so a fixed e-folding
     # distance means a latitude-dependent per-column retention
     dx_km = (360.0 / W) * 111.0 * np.clip(np.cos(np.radians(lat[:, 0])), 0.02, 1)
@@ -333,8 +351,8 @@ def _rainfall(Z, land, lat, cl):
     # Amazon and leaves the deserts alone, and a third would only sharpen an
     # already-converged field at twice the cost.
     rech = _sea_recharge(ocean, W)
-    R_west = _advect(elev_s, ocean, +1, decay, floor, recharge=rech)   # mid-latitude westerlies
-    R_east = _advect(elev_s, ocean, -1, decay, floor, recharge=rech)   # tropical & polar easterlies
+    R_west = _advect(elev_s, ocean, +1, decay, floor, recharge=rech, rec_km=rec_km)   # mid-latitude westerlies
+    R_east = _advect(elev_s, ocean, -1, decay, floor, recharge=rech, rec_km=rec_km)   # tropical & polar easterlies
     # SMOOTH THE SEED ACROSS LATITUDE BEFORE FEEDING IT BACK. The advection
     # marches along rows, so a recycling term read row-by-row makes wet rows
     # self-sustaining and dry rows self-limiting -- the feedback sharpens
@@ -350,15 +368,15 @@ def _rainfall(Z, land, lat, cl):
     # threshold applied to a field whose gradient is mostly latitudinal draws a
     # latitude line, which is the shader's jitter to fix, not this.
     R_seed = np.maximum(R_west, R_east)
-    R_west = _advect(elev_s, ocean, +1, decay, floor, regen=R_seed, recharge=rech)
-    R_east = _advect(elev_s, ocean, -1, decay, floor, regen=R_seed, recharge=rech)
+    R_west = _advect(elev_s, ocean, +1, decay, floor, regen=R_seed, recharge=rech, rec_km=rec_km)
+    R_east = _advect(elev_s, ocean, -1, decay, floor, regen=R_seed, recharge=rech, rec_km=rec_km)
     # ...and poleward transport by extratropical cyclones, which is the only way
     # a continental east coast can be watered under westerlies (see _advect_ns).
     dy_km = (180.0 / H) * 111.0
     decay_ns = np.exp(-dy_km / FETCH_KM)
     floor_col = floor[:, None] * np.ones((1, W))
-    R_ns = _advect_ns(elev_s, ocean, True, decay_ns, floor_col, recharge=rech) \
-         + _advect_ns(elev_s, ocean, False, decay_ns, floor_col, recharge=rech)
+    R_ns = _advect_ns(elev_s, ocean, True, decay_ns, floor_col, recharge=rech, rec_km=rec_km) \
+         + _advect_ns(elev_s, ocean, False, decay_ns, floor_col, recharge=rech, rec_km=rec_km)
     # MIX ACROSS LONGITUDE. Every column in the meridional pass is an
     # independent one-dimensional march, so neighbouring columns diverge and the
     # result carries vertical streaks -- the exact mirror of the horizontal
@@ -545,7 +563,8 @@ def _rainfall(Z, land, lat, cl):
     return np.clip(Rf, 0, 1.3)
 
 
-RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling
+RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling, at the equator
+RECYCLE_COLD = 9.0      # ...times this much further where the air is cold and holds it
 RECYCLE_REGEN = 0.90    # how far wet ground rewinds that clock
 RECYCLE_REF = 0.25      # rainfall counted as 'fully recycling'
 RECYCLE_FLOOR = 0.55    # fraction of saturation wet ground sustains
