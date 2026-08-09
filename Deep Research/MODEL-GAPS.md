@@ -4328,3 +4328,79 @@ into every keyframe, so a label frozen there is a label that did not ask.
 Remaining, and inherent: 11 labels freeze past 540 Ma. Seven future-only names
 (Pangaea Proxima, Neo-Himalaya, Amasia, the belts) are authored in future map
 coordinates and stay static by design -- they have no present-day crust to ride.
+
+### Iteration 94 -- there is a desert island in the Mariana Trench
+
+Queue item 2 is the ocean floor against the Hawaii and Scotia references. Two
+framings in, the shot of 143E 12N showed **a tan desert island sitting in the
+middle of the Mariana Trench**, where Google Earth shows the deepest water on
+the planet.
+
+The 6-minute PaleoDEM stores the Challenger Deep axis as **+10500 m** -- the
+magnitude of the depth with its sign lost -- flanked on both sides by -9000. The
+pipeline carried it through untouched and the shipped field renders +3349 m of
+dry land there. 2,219 such cells across 21 of the 109 source ages: Mariana,
+Tonga, a 307-cell patch in the south Pacific at 100 Ma, polar rows at 220 Ma.
+It had survived every check in the suite because nothing ever asked whether a
+cell was absurdly higher than its own neighbourhood -- the elevation gates are
+about ranges and distributions, and a 10 km spike sits comfortably inside a
+range that has to admit Everest.
+
+**THE MEASUREMENT WAS BROKEN BEFORE THE MODEL WAS.** The first hour of this
+round produced a confident, entirely false finding: our abyssal texture runs
+"2.7-4.3x the real relief at 40-440 km", with a band table to prove it. Then a
+sanity line showed the source box reaching +13 m where ours reached +3431, and
+Hawaii cannot be missing from real bathymetry. `read_dem` is documented to
+return latitude ASCENDING -- row 0 is the south pole, and `resample_dem` flips
+it. Every number in that table compared opposite hemispheres. Sanity-check the
+probe against three known landmarks BEFORE reading anything off it; the check
+that caught this cost one line.
+
+**THE TEST IS THE JUMP, NOT A CEILING**, and both earlier attempts damaged real
+terrain:
+
+| rule | catches the fill | but also |
+|---|---|---|
+| absolute ceiling +9,000 m | yes | flattens the real 30 Ma Himalaya (9,300-9,600 m on a 9,000 m rim) |
+| jump > 5,000 m off a 9-cell median | yes | flattens real island-arc margins -- Sulawesi drops 5,760 m in one 10 km cell |
+| **jump > 8,000 m** | **yes** | **nothing measured** |
+
+Calibrated over 22 sampled ages, excursion from a 9-cell median, after excluding
+cells that ARE fill *and cells ADJACENT to fill* -- a valid -9000 sitting inside
+a run of +10200 reads as a 19,200 m excursion and contaminated the first
+calibration:
+
+| | median | p90 | extreme |
+|---|---|---|---|
+| real terrain | 3,540 m | 6,148 | **6,240** (a 425 Ma range) |
+| fill cells | 16,350 m | -- | **12,100 minimum** |
+
+8,000 sits between with ~30% margin either side. The fill is not one family:
+besides +10200/+10500 in the trenches there are isolated +8,400 m spikes in 5 km
+water, which no absolute ceiling below 8,400 could reach and the jump test
+catches at 12,400.
+
+**A 9-cell window cannot see out of a big patch.** The 100 Ma patch is ~20 cells
+across, so for every cell in its middle the neighbourhood median IS the fill,
+the excursion is zero, and one pass repairs only the rim -- leaving an 18,200 m
+core. The repair iterates, eating one rim per pass.
+
+Verified cell by cell: Mariana axis +10500 -> -9000; the 425 Ma 8,400 m range,
+the 30 Ma Himalaya, the Sulawesi margin and Everest all untouched.
+
+**The validator took three tries too, and the failures are the useful part.**
+"Land surrounded by abyssal water" flagged Hawaii -- which is exactly that, and
+real. "5 km above a 15-cell median at stride 4" flagged Hawaii too: at 39 km
+pitch an island IS a jump. What separates them is the step between NEIGHBOURING
+full-resolution cells, because the two differ in slope by 30x -- Hawaii climbs
+590 m per 9.8 km cell, the fill steps from -8,000 to the +8,000 clamp in one.
+That version is also O(n) with no filter: 22 s over 251 frames, cheap enough to
+gate on. It currently flags 62 of 251 frames, every one at Mariana coordinates.
+
+KNOWN RESIDUE, reported rather than hidden: below 8,000 m the repair leaves fill
+it cannot tell from terrain -- an alternating +2,160 / -5,880 core at 100 Ma
+(7,800 m), polar rows of +8,400 at 220 Ma and 160 Ma. Reaching them means
+flattening real margins. Named with numbers so the next attempt starts somewhere.
+
+The field re-bake is running. Nothing deploys until it finishes and the shipped
+side of the validator reads zero.

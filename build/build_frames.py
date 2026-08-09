@@ -3,7 +3,7 @@
 Picks the nearest available DEM for each target age, renders with render.py,
 writes WebP frames + frames_manifest.json (age, era, period, sealevel, file).
 """
-import os, re, glob, json, sys
+import os, re, glob, json, sys, warnings
 import numpy as np
 import netCDF4
 from PIL import Image
@@ -124,7 +124,109 @@ def read_dem(f):
     lat = np.asarray(ds.variables[latname][:])
     if lat[0] > lat[-1]:          # descending (north first) -> flip to ascending
         z = z[::-1]
-    return make_periodic(z)
+    return make_periodic(repair_spikes(z))
+
+
+# Metres a cell may stand off the median of its own 9-cell neighbourhood.
+#
+# CALIBRATED, and the first two attempts were both wrong in ways worth keeping:
+#
+#   * an absolute ceiling of +9,000 m caught the fill but also flattened the
+#     real 30 Ma Himalaya, which reaches 9,300-9,600 m continuous with a 9,000 m
+#     rim. The source's tectonics are not this function's business.
+#   * a jump threshold of 5,000 m caught real island-arc margins -- Sulawesi at
+#     10 Ma drops 5,760 m in one 10 km cell, and so do trench walls. Flattening
+#     every steep margin on the map to fix one island is a far worse trade.
+#
+# Measured over 22 sampled ages, excursion from a 9-cell median, after excluding
+# cells that ARE fill and cells ADJACENT to fill (a valid -9000 sitting inside a
+# run of +10200 reads as a 19,200 m excursion and contaminated the first
+# calibration):
+#
+#     real terrain   median 3,540 m   p90 6,148   max 6,240   (a 425 Ma range)
+#     fill cells     min 12,100 m     median 16,350   max 17,500
+#
+# 8,000 sits between them with about 30% margin on each side. Note the fill is
+# not one family: besides +10200/+10500 in the trenches there are isolated
+# +8,400 m spikes in 5 km water, which no absolute ceiling below 8,400 would
+# reach and this test catches at 12,400.
+SPIKE_JUMP = 8000.0
+
+
+def repair_spikes(z, jump=SPIKE_JUMP):
+    """Remove fill values that the PaleoDEMs leave in the deepest trenches.
+
+    FOUND ON SCREEN: a tan desert island in the middle of the Mariana Trench.
+    The 6-minute PaleoDEM stores the Challenger Deep axis as +10500 m -- the
+    magnitude of the depth with the sign lost -- flanked on both sides by -9000.
+    Our pipeline carried it through, and the shipped field renders +3349 m of dry
+    land at the deepest point on Earth. 2,219 such cells across 21 of the 109
+    source ages, in the Mariana and Tonga trenches, the south Pacific at 100 Ma
+    and elsewhere.
+
+    THE TEST IS THE JUMP, NOT A CEILING, and the distinction matters because
+    there are two different things above 9,000 m in this data:
+
+      * the fill: +10500 sitting on a rim of -8000. An 18.5 km step across one
+        6-minute cell, which is 10 km wide. Nothing on Earth does that.
+      * real reconstruction output: the 30 Ma Himalaya reaches 9,300-9,600 m on
+        a rim of 9,000. Higher than Everest, but continuous with its own
+        surroundings, and it is not this function's business to overrule the
+        source's tectonics.
+
+    A ceiling of 9,000 m would have flattened the second along with the first.
+    The jump test separates them: 18,500 m against 300.
+
+    Repaired by the median of the VALID cells around them, grown outward until
+    every hole is filled. That is a claim about nothing except locality -- it
+    turns the Mariana fill into deep ocean at roughly its rim depth. The
+    magnitudes do look like a lost sign (10500 against a real 10,935), and
+    negating them would recover the true axis, but that is a guess about an
+    upstream bug and the neighbourhood median cannot be wrong by more than the
+    local relief.
+    """
+    from scipy.ndimage import median_filter
+    out = np.asarray(z, dtype=np.float32).copy()
+    # ITERATED, because a 9-cell window cannot see out of a big fill patch.
+    # The 100 Ma south-Pacific patch is 307 cells -- about 20 across -- so for
+    # every cell in its middle the neighbourhood median IS the fill value, the
+    # excursion is zero, and a single pass repairs only the rim and leaves an
+    # 18,200 m core behind. Each pass eats one rim; five or so passes reach the
+    # centre. Ages with nothing wrong exit on the first test.
+    for _ in range(8):
+        bg = median_filter(out, size=9, mode="nearest")
+        bad = np.abs(out - bg) > jump
+        if not bad.any():
+            return out
+        out = _fill_holes(out, bad)
+    return out
+
+
+def _fill_holes(out, bad):
+    """Replace `bad` cells with the median of their valid neighbours."""
+    out = out.copy()
+    out[bad] = np.nan
+    # Grow-fill: each pass takes the median of whatever valid neighbours a hole
+    # has. A 300-cell blob needs several passes, so loop until nothing is left.
+    for _ in range(24):
+        holes = np.isnan(out)
+        if not holes.any():
+            break
+        filled = np.where(holes, np.nan, out)
+        stack = np.stack([np.roll(np.roll(filled, dr, 0), dc, 1)
+                          for dr in (-1, 0, 1) for dc in (-1, 0, 1)])
+        # An interior cell of a large blob has no valid neighbour yet, so its
+        # slice is all-NaN on this pass and gets filled on a later one. That is
+        # the algorithm working, not a problem -- but nanmedian warns about it
+        # every pass, which buries real warnings from the rest of the build.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            m = np.nanmedian(stack, axis=0)
+        out = np.where(holes & np.isfinite(m), m, out)
+    if np.isnan(out).any():
+        good = out[np.isfinite(out)]
+        out[np.isnan(out)] = float(np.median(good)) if good.size else 0.0
+    return out
 
 
 def make_periodic(z, taper_deg=4.0):
