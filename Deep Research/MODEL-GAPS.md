@@ -3649,3 +3649,33 @@ at 7-23 sigma, because a broad gradient ramp is many sigma above a local median
 without being narrow. Requiring the line to ALSO carry more than twice its
 neighbours' gradient separates a discontinuity from a slope, and drops the count
 from eight to zero.
+
+### Iteration 79 -- queue item 3 answered: corridors do not want tuning by age
+
+The corridor widths were narrowed in iteration 61 to fix deep-time banding, and
+that banding then turned out to be mostly a climate defect, repaired over
+iterations 67-72 (132.3 -> 57.4). A constant tuned against a field that no
+longer exists is exactly the trap recorded in
+[[coupled-constants-calibrate-together]], so the widths were re-swept against
+the repaired field.
+
+| corridors | Amazon filament | Congo | N America | 280 Ma banding |
+|---|---|---|---|---|
+| **current (narrow)** | 5.73 | 7.15 | 9.37 | **58.4** |
+| middle | 5.72 | 7.16 | 9.37 | 73.2 |
+| original (wide) | 5.75 | 7.23 | 9.37 | **113.2** |
+
+**Widening buys nothing anywhere and costs 94% more banding at 280 Ma.** The
+present-day corridor filament is identical to within 0.5% across a 2.3x range of
+widths, which says the width parameters are not what limits how rivers read --
+the drainage field's own structure is, and `drain` saturates the smoothstep
+either way. So the narrow setting is not a compromise made for deep time that
+present day pays for; it is simply the better setting everywhere, and there is
+no case for making it age-dependent.
+
+Queue item 3 is closed. The finding also cuts the other way and is worth
+keeping: if rivers ever need to read MORE strongly, widening the corridors is
+not the lever -- it would have to come from the drainage field.
+
+Also this round: `shoot.py --nolabels` used throughout, since iteration 78
+established that label text dominates any pixel statistic on these frames.
