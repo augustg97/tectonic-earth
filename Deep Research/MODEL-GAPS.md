@@ -4416,3 +4416,51 @@ are tiny and local; the arithmetic should have been too.
 
 `audit_dem_spikes.py` is wired into `build_site.py` alongside the biome and
 deep-time ratchets, so a fill value reaching the screen now blocks a deploy.
+
+### Iteration 95 -- the abyssal texture premise, measured properly, is false
+
+The repair reached the render: the Mariana Trench in the freshly baked
+present-day field reads **-6,009 m** where it read +3,349 m of dry land. The
+island is gone.
+
+With the orientation fixed, queue item 2's actual question -- is our sea floor
+too textured? -- gets a real answer, and it is no.
+
+| box | band | source | ours | ratio |
+|---|---|---|---|---|
+| equatorial Atlantic | 110-440 km | 371 | 282 | **0.76** |
+| | 39-110 km | 128 | 126 | 0.99 |
+| Hawaii plain | 110-440 km | 478 | 813 | **1.70** |
+| | 39-110 km | 296 | 372 | 1.25 |
+| Scotia / Drake | 110-440 km | 795 | 921 | 1.16 |
+| | 39-110 km | 370 | 426 | 1.15 |
+| central Pacific | 110-440 km | 175 | 235 | 1.34 |
+| | 39-110 km | 91 | 141 | 1.55 |
+
+**Median 1.21.** The broken version of this measurement said 2.7-4.3x and made
+the abyssal fabric look like the round's main defect. It is a 21% median excess,
+which is inside the uncertainty of comparing a 6-minute source against a
+0.088-degree render.
+
+Only two bands are readable and that is a statement about the reference, not a
+convenience. Below 13-39 km real abyssal hills are 50-300 m at 5-10 km
+wavelength, which a 6-minute grid does not resolve -- a ratio there measures the
+source's resolution, not our fidelity. Above 440 km the box sets the scale.
+
+The one residual: the equatorial Atlantic runs UNDER at the large scale (0.76)
+while every Pacific box runs over. That is the fracture-zone belt -- 100 km
+linear troughs the source resolves completely -- drawn weaker than synthetic
+fabric elsewhere. A 24% deficit, not the missing feature it looked like by eye.
+
+`audit_ocean_relief.py` records all of it, and **refuses to print a single ratio
+until four landmarks come back with the right sign on both sides**. That
+precondition is the whole lesson of iteration 94: the first run of this
+measurement compared Everest against the southern Indian Ocean and produced a
+confident table with a plausible story attached. A reference comparison needs a
+liveness check on the reference.
+
+Also corrected: last round's "the bake stalled for 25 minutes" was itself a
+measurement error -- file timestamps compared against a wall clock I assumed
+rather than read. The bake was progressing the whole time. The localisation of
+`_fill_holes` stands on its own measurement (4.5 h -> 22 min for a 109-age
+repair pass) and remains the right change.
