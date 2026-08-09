@@ -4068,3 +4068,53 @@ The texture-organisation drop (60% -> 57%) is not visible and is explained:
 wetter interiors carry more vegetation pattern, which is real signal rather than
 noise. Nothing shipped this round -- it found no defect, which after shipping on
 numbers alone was the thing worth checking.
+
+### Iteration 89 -- I shipped a regression, and the check I skipped was the obvious one
+
+The local-recycling fix of this round is correct and measured: the floor scaled
+with `cl["veg"]`, the GLOBAL vegetation for the age, so iteration 87's raise
+watered the deserts exactly as much as the forests -- the Rub al Khali reached
+0.097 for 40 mm of real rain, wetter than the Kazakh steppe at 300 and the Great
+Plains at 500, and became the worst rank inversion in the field. Gating the
+floor on `regen`, the local proxy for whether there is vegetation to return the
+water, took **Spearman +0.868 -> +0.884**, the best of the session, with the
+deserts falling and the forests holding exactly.
+
+**Then the frame showed something neither metric was watching.**
+
+| state | Pangaea land greenness | fraction green |
+|---|---|---|
+| iteration 79 | -16.40 | 0.12 |
+| after cold recycling (85) | -14.97 | 0.18 |
+| **after FLOOR_VEG 0.50 (87, SHIPPED)** | **+6.66** | **0.64** |
+| after the local floor (89) | +4.74 | 0.59 |
+
+**Iteration 87 turned Pangaea from an arid supercontinent into a green one --
+18% to 64% -- and I shipped it.** The app's own copy says "Pangaea grows a desert
+heart on its own"; that is the headline behaviour of the deep-time map and it was
+gone. I verified that round on the metrics I was optimising (Spearman, scatter)
+and on the one I feared (the banding peak, which improved 26%), and never looked
+at whether the continent was still a desert.
+
+**The check I skipped is the obvious one: does the thing this map is known for
+still happen?** A metric suite answers the questions it was built to ask. Pangaea's
+aridity had no metric because it had never failed before.
+
+**Reverted to iteration 86 in full** -- both the FLOOR_VEG raise and this round's
+local floor, since local-floor at the old FLOOR_VEG scores +0.847, below the
++0.864 baseline. The two changes only work together and together they cost the
+desert heart. Re-baked back.
+
+Also recorded: the field's "land fraction wet" barely moves across the whole
+sweep (0.198 -> 0.170) while the render goes 64% green to 18%. The biome canopy
+threshold sits far below 0.25, so **the field statistic cannot predict render
+greenness at all** -- a fifth instance of the same lesson, and the reason this
+regression was invisible until a frame was looked at.
+
+The Siberia gain of iterations 85 and 87 is partly lost with this revert:
+RECYCLE_COLD survives (it is in the iteration 86 state) but the floor raise does
+not. Siberia returns to 0.026. That is the honest cost of the revert, and
+re-earning it needs a mechanism that waters boreal interiors WITHOUT watering
+Pangaea's -- which is a real distinction, since one is a cold maritime-fed
+forest and the other a hot continental interior, and the current floor knows
+about neither.

@@ -339,17 +339,7 @@ def _rainfall(Z, land, lat, cl):
     # Evapotranspiration recycles moisture back into passing air -- strongest in
     # the warm, densely vegetated tropics, which is how the Amazon stays wet
     # thousands of km from the Atlantic.
-    # THE FLOOR IS THE CAP ON EVERY CONTINENTAL INTERIOR, and it is set here.
-    # Measured twice from opposite ends of the world: central Siberia sits at it
-    # (0.026 where its rainfall deserves 0.078), and so does the Cerrado, which
-    # takes R_ns 0.124 against Indochina's 0.493 for the SAME 1500 mm -- one
-    # column crossed the Gulf of Thailand and arrived fresh, the other crossed
-    # 1665 km of Amazon and fell back on what the forest could recycle. Real
-    # continental interiors are wetter than that: roughly a third of the rain
-    # over a large forested basin is water that already fell in it.
-    # Weighted harder on vegetation, because that is what actually returns the
-    # water -- bare ground still recycles almost nothing.
-    floor = (FLOOR_BASE + FLOOR_VEG * cl["veg"]) * (0.60 + 0.80 * np.cos(np.radians(lat[:, 0])))
+    floor = (0.08 + 0.16 * cl["veg"]) * (0.60 + 0.80 * np.cos(np.radians(lat[:, 0])))
 
     # Orographic lift must respond to real ranges, not pixel-scale DEM
     # roughness -- otherwise every column registers a small "climb" and the
@@ -573,8 +563,6 @@ def _rainfall(Z, land, lat, cl):
     return np.clip(Rf, 0, 1.3)
 
 
-FLOOR_BASE = 0.08       # what bare ground recycles
-FLOOR_VEG  = 0.50       # ...plus this much where the land is vegetated
 RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling, at the equator
 RECYCLE_COLD = 9.0      # ...times this much further where the air is cold and holds it
 RECYCLE_REGEN = 0.90    # how far wet ground rewinds that clock
