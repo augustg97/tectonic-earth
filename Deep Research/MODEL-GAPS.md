@@ -4694,3 +4694,54 @@ Eliminations narrow a search the way this register has found before -- but four
 measurement errors in one session is the pattern worth naming: **every
 comparison against a reference needs its own control run BEFORE the number is
 believed** -- orientation, resolution, band, and now shading-invariance.
+
+### Iteration 101 -- found it: the humidity axis, and a palette response that does not saturate
+
+Six more terms swept with a harness that reports, per variant, how many pixels
+it changed -- so a null and a no-run cannot be confused. That protection earned
+itself immediately: `laterite off` and `hardness out of lith2` both changed 0-1%
+of pixels and would otherwise have been recorded as "tested, no effect".
+
+| variant | plains spread | pixels changed |
+|---|---|---|
+| baseline | 35.2 | -- |
+| lithology off | **39.1** | 37% |
+| laterite off | 35.0 | **0% (inactive here)** |
+| alluvium off | 35.3 | 19% |
+| hardness out of lith2 | 35.4 | **1% (inactive here)** |
+| warmth axis frozen | 32.3 | 64% |
+| **humidity axis frozen** | **13.3** | 70% |
+
+Lithology is worth noting for the opposite reason: removing it makes the spread
+WORSE (35.2 -> 39.1), so the rock colour is damping the swing, not causing it.
+
+**The humidity axis is the driver.** Freezing `h` takes 35.2 to 13.3, against
+Blue Marble's 8.3 -- so `h` accounts for roughly four fifths of the excess and
+everything else together for the rest.
+
+**And iteration 100's field check was wrong too, which is why the field looked
+innocent.** It computed `smoothstep(0.03, 0.61, Rf)` and got a span of 0.09. But
+the shader's aridity is `ari = Rf / (0.46 * pet)`, not Rf. Rf itself spans
+0.04-0.14 across the plains box -- a factor of 3.5 -- and dividing by a pet that
+also varies with latitude widens it further. The field was never flat; the probe
+just used the wrong expression for it.
+
+So the chain, end to end and consistent at last: **Rf spans 3.5x across the box
+-> ari spans widely -> h walks the dry axis of the palette -> dryCold
+(0.545,0.533,0.443) to dryMid (0.862,0.578,0.318), which is -2.0 to -41.2 in
+normalised chroma, a 39-unit swing against the 35 observed.**
+
+That leaves a real question rather than a bug: the actual Great Plains DO carry a
+strong west-east rainfall gradient, roughly 400 to 900 mm, about 2.2x. Our 3.5x
+is steeper but the same order. Yet Blue Marble's colour spread there is 8.3 and
+ours is 35. **Real land colour is a COMPRESSIVE function of rainfall and ours is
+close to linear across the grassland range.** Grass that gets twice the rain is
+not twice as green.
+
+That is a specific, testable fix, and it is exactly where iteration 83 said the
+fix belonged -- in the palette's own response, not in a multiplier applied
+afterward. Next round: compress the dry-to-mid segment and check it against the
+between-biome separation that iteration 84 widened the stops to protect.
+
+The sweep harness lives in the session scratchpad; the shader is restored
+byte-for-byte and the tree is clean.
