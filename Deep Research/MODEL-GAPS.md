@@ -4938,3 +4938,51 @@ and the Mariana re-bake still holds the machine at 111 of 251.
 
 The probe used a throwaway copy of `render.py` that exposes the factors, written
 and deleted inside the round; the tree is unchanged.
+
+### Iteration 106 -- the orographic strip, swept in seconds instead of hours
+
+`compute_fields` runs in about a second, so a climate constant can be swept
+properly instead of changed once and re-baked to find out. `sweep_climate.py`
+does that with every guard the register has earned, and the sweep found the
+term.
+
+**ORO_DRAIN, the moisture stripped by forced ascent, from 0.85:**
+
+| ORO_DRAIN | seasonal amp | grass amp | Spearman | Pangaea (proxy) |
+|---|---|---|---|---|
+| **0.85 (shipped)** | 3.2 | 1.1 | 0.866 | 0.63 |
+| 0.75 | 3.1 | 1.1 | 0.866 | 0.65 |
+| 0.65 | 2.9 | 1.1 | 0.874 | 0.68 |
+| **0.55** | **2.8** | **1.0** | **0.903** | 0.71 |
+| 0.45 | 2.6 | 0.8 | 0.905 | 0.74 |
+| 0.35 | 2.6 | 0.7 | 0.906 | 0.77 |
+| 0.25 | 2.7 | 0.6 | 0.907 | 0.81 |
+
+It is the right term on the physics as well as the numbers: a strip applied at
+every forced ascent is exactly what makes a lee side and a continental interior
+fall away from a coast, which is the contrast that was too large. And **Spearman
+rises 0.866 to 0.903** -- an independent metric, measuring order rather than
+spread, agreeing that the shipped value is too aggressive. Two different
+statistics moving the right way together is the strongest signal this line of
+work has produced.
+
+0.55 is the choice: Spearman has taken nearly all its gain by there, grass
+amplification lands exactly on 1.0, and below it grass over-corrects into
+compression while Pangaea keeps wetting for no further gain.
+
+**It is NOT shipped, and the reason is iteration 87.** The Pangaea guard here is
+a field-side proxy computing the shader's own `ari` and `h` -- which is a real
+improvement on the statistic that failed in 87 (that one moved 0.198 to 0.170
+while the render went 0.18 to 0.64). But it reads **0.63 where audit_deeptime
+reads 0.29 on the render**, so its absolute level means nothing and only its
+direction can be trusted, and even that is unproven. It moves the wrong way here
+(0.63 -> 0.71, wetter) which is precisely the direction that shipped the
+regression.
+
+So the rule the harness now carries in its own docstring: it narrows a sweep
+from hours of baking to seconds, and the render check still decides. Nothing
+ships on the proxy alone.
+
+Sequence from here: the Mariana re-bake finishes (115 of 251) and deploys with
+the wet-stop palette fix; then ORO_DRAIN=0.55 goes in and gets its own bake with
+audit_deeptime on the render as the gate.
