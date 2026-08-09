@@ -288,7 +288,11 @@ const W = () => document.getElementById('app').contentWindow;
        high-pass sigma of 2.3 against land's 41.8 and read as featureless water,
        which is the capture under-sampling and not the sea floor. Default stays
        760 so every earlier shot remains comparable. */
-    const r = await A.shoot(s.name, +(q.get('shotsize') || 760));
+    /* Labels are drawn into the capture, and white text with a black outline is
+       the largest gradient in any ocean frame -- a seam hunt run with them on
+       finds the lettering every time. */
+    const r = await A.shoot(s.name, +(q.get('shotsize') || 760), undefined, undefined,
+                            {labels: q.get('nolabels') ? false : true});
     console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, still, saved: !!r.saved, err: r.error || null}));
   }
   document.title = 'VERIFY-DONE';

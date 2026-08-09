@@ -3616,3 +3616,36 @@ payload and re-bake cost that implies. That is the only route the evidence
 leaves open, and it is a bigger commitment than a tuning round.
 
 Reverted; nothing shipped but the closure.
+
+### Iteration 78 -- task 23 closed: the ocean seam does not reproduce
+
+"Find and fix the ocean-fabric rectangular seam" has been open since the first
+week and was never reproduced by looking at frames. Hunted by measurement
+instead: `audit_seam.py` takes the mean absolute gradient down every column and
+across every row, high-passes it against a local median, and reports any single
+line standing out. A seam is invisible to whole-frame statistics -- one bad
+column in 760 moves a mean by nothing -- but it is exactly what this sees.
+
+Eight ocean framings, 0 / 122 / 200 / 280 Ma, Pacific, Atlantic, Indian, Tethys,
+Panthalassa, Scotia, Hawaii. **Nothing flags.** The worst line in any frame
+carries 1.58x its neighbours' gradient; a seam would carry several times. The
+lines that do stand 8-21 sigma above the local median at 1.3-1.6x are broad
+ramps -- fracture zones, shelf breaks, the terminator -- which is what they
+should be. Task 23 is closed as not reproducing, with the detector left behind
+so it can be re-checked in one command whenever the ocean shader changes.
+
+**TWO INSTRUMENT FINDINGS, BOTH OF WHICH WOULD HAVE FAKED A RESULT.**
+
+*Labels dominate every image metric.* The first run flagged all eight frames at
+17-162 sigma. White text with a black outline is the largest gradient in an
+ocean frame by a wide margin, and the compositor draws it into the capture. The
+worst "seam" was the word "Seychelles". `shoot.py --nolabels` and a `nolabels`
+parameter on the verify page exist now; **any pixel statistic on these frames is
+contaminated unless labels are off**, which retroactively casts doubt on nothing
+shipped but is worth knowing for everything measured from here.
+
+*Sigma alone is not a seam test.* With labels off the frames still all flagged
+at 7-23 sigma, because a broad gradient ramp is many sigma above a local median
+without being narrow. Requiring the line to ALSO carry more than twice its
+neighbours' gradient separates a discontinuity from a slope, and drops the count
+from eight to zero.

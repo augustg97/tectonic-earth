@@ -90,6 +90,9 @@ def ensure_receiver():
 def main():
     args = [a for a in sys.argv[1:]]
     size = 760
+    nolabels = "--nolabels" in args
+    if nolabels:
+        args.remove("--nolabels")
     if "--size" in args:
         i = args.index("--size")
         size = int(args[i + 1])
@@ -113,7 +116,9 @@ def main():
 
     if os.path.exists(PROFILE):
         shutil.rmtree(PROFILE, ignore_errors=True)
-    url = "%s?shotsize=%d&shots=%s" % (PAGE, size, ";".join(args))
+    url = "%s?shotsize=%d%s&shots=%s" % (PAGE, size,
+                                        "&nolabels=1" if nolabels else "",
+                                        ";".join(args))
     proc = subprocess.Popen(
         [CHROME, "--headless=new", "--use-angle=metal", "--user-data-dir=" + PROFILE,
          "--no-first-run", "--window-size=1280,960", url],
