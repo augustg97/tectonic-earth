@@ -4046,3 +4046,25 @@ drainage, the alpine biomes, the palette dragging it the wrong way, and the
 -18.0 and Congo +7.8 -> +10.5, both away from reference by ~1.5, and land
 texture organisation 60% -> 57% as wetter interiors carry more vegetation
 pattern.
+
+**Iteration 88 -- verified by eye, which iteration 87 shipped without.** Three
+re-bakes and a palette change had landed since the last full visual pass, and
+the recycling-floor round went out on numbers alone. Looked at:
+
+**Siberia is transformed and correct.** Where it was brown-grey steppe across
+the whole frame with patchy green only in the west, it is now a broad dark-green
+taiga belt sitting between the Arctic tundra to the north and the arid Junggar /
+Altai steppe to the south -- which is the real arrangement. This is the single
+most visible improvement of the session and it validates the whole climate
+thread: five rounds of "our high and cold ground is too dry" resolved into one
+picture that looks like Earth.
+
+No over-greening elsewhere. The 122 Ma globe keeps its arid interior against
+green coastal margins; 39 Ma North America now shows a wet-east / dry-west
+gradient where it was uniform tan; the present-day prairie holds its Great
+Plains / Rockies / Appalachian structure.
+
+The texture-organisation drop (60% -> 57%) is not visible and is explained:
+wetter interiors carry more vegetation pattern, which is real signal rather than
+noise. Nothing shipped this round -- it found no defect, which after shipping on
+numbers alone was the thing worth checking.
