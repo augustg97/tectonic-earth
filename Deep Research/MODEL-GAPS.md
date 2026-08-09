@@ -5083,3 +5083,43 @@ there, but its shape is a ridge and not a needle.
 Sequence unchanged otherwise: this bake finishes and deploys with the Mariana
 repair, the needle rule and the wet-stop palette fix; `ORO_DRAIN=0.55` gets its
 own bake afterwards with `audit_deeptime` on the render as the gate.
+
+### Iteration 109 -- the deep-time gate could not fail, and now it can
+
+Two corrections, one of them mine and both about measurement.
+
+**The bake is fine; my arithmetic was not.** I read "13 of 109 frames" against an
+assumed round length and concluded 4 minutes a frame, sixteen hours to go.
+Measured from consecutive file timestamps -- 04:21:04 to 04:26:00 for seven
+frames -- it is **42 seconds a frame**, the same rate as before, about three
+hours end to end. This is the third time this session that a wall-clock
+assumption produced a wrong conclusion. Rate comes from consecutive artefacts,
+never from round boundaries.
+
+**The deep-time gate was one-sided and pointed at a framing that could not test
+it.** `dt_122` is centred on 90E 30N -- central Asia, genuinely arid in the Early
+Cretaceous -- so it reads a green fraction of **0.04 against a cap of 0.75**. The
+entire planet could render brown and that check would pass. It has read 0.04
+since long before this session's palette change, so it is not a regression; it is
+a gate that never had the power to fail.
+
+Shot at globe zoom, the same eras separate properly:
+
+| era | greenness | green fraction |
+|---|---|---|
+| 122 Ma greenhouse | -0.77 | **0.53** |
+| present day | -9.52 | 0.42 |
+| 280 Ma Pangaea | -12.57 | 0.35 |
+
+Cretaceous greener than today, Permian driest, which is the whole claim the
+deep-time map makes. So `audit_deeptime` now carries three globe framings with
+**floors as well as caps** -- a greenhouse world that renders as a desert fails
+from below -- and, more useful than any threshold, an **ORDERING assertion**:
+greenhouse > now > Pangaea. Absolute fractions drift with every palette change;
+the ordering is a claim about the model and survives any monotone palette.
+
+It matters immediately: `ORO_DRAIN=0.55` wets the world, and the field-side proxy
+that suggested it moves Pangaea's green the wrong way. The ordering check is what
+will say whether that is a correction or a repeat of iteration 87.
+
+Measured now: 0.53 > 0.42 > 0.35, all three inside their new bands.
