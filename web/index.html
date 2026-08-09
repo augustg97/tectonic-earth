@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260809-0034';
+const DATA_V='20260809-0050';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -4154,7 +4154,16 @@ void main(){
        the TERRAIN, competing with a 35 km base slope that has none of its own
        detail. Scaling by the pixel footprint keeps every wide framing exactly
        as verified while letting a close pass read as dissected ground. */
-    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0+0.55*closeG));
+    /* FLAT GROUND CARRIES HALF THE TEXTURE IT WAS GIVEN. Measured against
+       Blue Marble over a 30-degree Sahara box: the real thing has a high-pass
+       sigma of 8.74, and we drew 17.72 -- twice the texture, at half the
+       organisation (coherence 0.125 against 0.240). An erg is smooth and
+       lineated; what we put there was isotropic grain at full amplitude
+       because the existing rug gate bottoms out at 0.36 and never goes lower.
+       Fade it further on genuinely flat ground, which is where the reference
+       is quietest and where isotropic noise reads most obviously as noise. */
+    float flatq=1.0-smoothstep(0.14,0.46,rug);
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0-0.70*flatq)*(1.0+0.55*closeG));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
        Real ocean floor is corrugated: long, low hills 2-5 km across, elongated

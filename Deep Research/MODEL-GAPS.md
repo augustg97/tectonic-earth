@@ -3482,3 +3482,52 @@ enclosed-sea recharge again, now the largest visible error left in the field.
 
 No re-bake: this round changed the instrument, and what it revealed was that the
 field was already better than the instrument said.
+
+### Iteration 75 -- Google-Earth equivalence for land texture, finally as a number
+
+Two rounds of instrument work in a row, so this one went back to looking at the
+map -- all eight reference framings, with the harness that now refuses to hand
+back a partial set (it caught 3/8 on the first attempt; the shot loop stalls
+after a few framings, so they batch in threes now).
+
+The whole-globe 122 Ma frame reads well. What is wrong in every closer frame is
+the same thing: **dark mottling over mid-elevation ground, texture that reads as
+noise rather than landform.** The recorded suspicion was two systems in one
+scale band -- iteration 47's ridge-and-valley TONE at ~26 km and iteration 62's
+fold corrugation in the NORMAL at ~26 km, both steered by gFold. Tested: with
+the tone disabled the high-pass sigma moves 22.05 -> 21.55 and coherence 0.116
+-> 0.118. It contributes 2%. Not it.
+
+**SO MEASURE AGAINST THE REAL EARTH.** `data/bluemarble.jpg` has been in the
+repo the whole time -- NASA, public domain, 7.4 km/px. Tiled coherence (32 px
+tiles, so a range curving through frame is not penalised for curving):
+
+| region | Blue Marble sigma / coherence | ours |
+|---|---|---|
+| Siberia | 25.14 / **0.347** | 21.88 / 0.117 |
+| Sahara | **8.74** / 0.240 | **17.72** / 0.125 |
+| N American interior | 22.44 / 0.220 | 21.05 / 0.112 |
+
+Amplitude is about right; **organisation is a third to a half of the real
+Earth's**, which is the whole of "it looks procedural". And the desert says
+something sharper: the real Sahara carries HALF our texture at twice the
+organisation. An erg is smooth and lineated and we drew isotropic grain at full
+strength, because the existing `rug` gate bottoms out at 0.36 and never goes
+below it.
+
+`audit_texture.py` is new and makes this the standing gate it should always have
+been -- one number, MEAN ORGANISATION as a percentage of the real Earth.
+
+**Shipped:** the detail octaves fade further on genuinely flat ground.
+Swept 0.05-0.20 at 0.55 strength, then 0.10-0.38 at 0.62, then 0.14-0.46 at
+0.70: mean organisation **46% -> 50% -> 56% -> 60%**, monotonic, with amplitude
+still under the reference throughout (Siberia 20.91 against 25.14), so this is
+not just stripping texture off. Verified visually against the "flat polar land"
+regression this codebase has hit before: the Sahara now reads as smooth erg with
+the Hoggar standing clear, the prairie is less mottled, Siberia keeps its grain.
+Shader only, no re-bake.
+
+**40% of the gap remains and it will not close this way.** Getting from 60% to
+100% means texture that is ORGANISED -- dendritic drainage, lineated dunes,
+ridges that run -- not less of the isotropic kind. That is the honest next
+target, and it now has a meter on it.
