@@ -4844,3 +4844,53 @@ swept in iteration 102 buy at most 12% of it, and desaturating the mid stops buy
 6%. It is a real and separate defect.
 
 Held for the deploy that is waiting on the Mariana re-bake (90 of 251).
+
+### Iteration 104 -- the root cause: the field over-contrasts the MIDDLE of its range
+
+The close-zoom trail (iterations 99-103) reaches a root cause, and the statistic
+that found it was one nobody was computing.
+
+First, WHERE IN SCALE the excess lives. Chroma sd per band in the plains box,
+ours against Blue Marble: 2.6x below 30 km, 1.8x at 30-120 km, **2.7x at
+120-600 km** -- broadband, largest at the biggest measurable scale, and the band
+sums to about half the total variance so the rest sits at the box-wide gradient.
+Shader noise would have concentrated at the small end. It does not. The field
+does it.
+
+Then the test that located it. `audit_biomes` has always measured ORDER
+(Spearman +0.862) and SEPARATION between classes (2 overlaps). Neither notices
+that two sites with the SAME rainfall can land far apart. Per class, the ratio
+of our field's spread to the real one:
+
+| class | real spread | ours | amplification |
+|---|---|---|---|
+| wet | 3.5x | 1.5x | 0.4x (compressed) |
+| **seasonal** | 1.7x | **5.8x** | **3.5x** |
+| **grass** | 3.0x | 4.8x | **1.6x** |
+| desert | 46x | 10x | 0.2x (compressed) |
+
+**Compressive at both ends, over-contrasted in the middle.** The worst pairs are
+flat contradictions: Cerrado and Indochina both receive 1500 mm and our field
+puts them 4.9x apart; Don steppe (350 mm) scores 4.3x the Great Plains (500 mm),
+less rain for more index.
+
+This reconciles every earlier reading that looked contradictory:
+
+  * the global log-log slope of 0.64 (iteration 103) -- compressive overall,
+    because the extremes dominate the fit;
+  * the S-curve making the close-zoom spread WORSE (iteration 102) -- it
+    steepens the middle, and the middle is where the plains and the Alps live;
+  * the plains and Alps reading 3-4.25x the reference chroma spread while the
+    Sahara and the Andes read correct or under -- the deserts are in the
+    compressed tail, the grasslands in the amplified middle.
+
+So the close-zoom colour defect is not a palette defect and not a shader defect.
+It is the rain field over-contrasting the seasonal and grassland middle of its
+own range, by 1.6-3.5x, and the palette is faithfully drawing what it is given.
+
+Recorded in `audit_biomes` as a per-class amplification report, printed beside
+the Spearman it complements. Not yet a ratchet: the number needs one round of
+being watched before it earns a baseline.
+
+The fix is in the climate solve and costs a re-bake, so it queues behind the
+Mariana one now at 109 of 251 -- the whole Phanerozoic series is through.

@@ -140,6 +140,33 @@ def main():
     rm = np.argsort(np.argsort(mv)).astype(float)
     rr = np.argsort(np.argsort(rv)).astype(float)
     rho = float(np.corrcoef(rm, rr)[0, 1])
+        # WITHIN-CLASS AMPLIFICATION -- the statistic that located the close-zoom
+    # colour defect. Spearman and the class margins both measure ORDER and
+    # SEPARATION between classes; neither notices that two sites with the SAME
+    # rainfall can land far apart. Measured: Cerrado and Indochina both get
+    # 1500 mm and our field puts them 4.9x apart, and Don steppe (350 mm) scores
+    # 4.3x the Great Plains (500 mm). Per class, the ratio of our spread to the
+    # real one:
+    #
+    #     wet       real 3.5x   ours 1.5x   0.4x  (compressed)
+    #     seasonal  real 1.7x   ours 5.8x   3.5x  <-- over-contrasted
+    #     grass     real 3.0x   ours 4.8x   1.6x  <-- over-contrasted
+    #     desert    real 46x    ours 10x    0.2x  (compressed)
+    #
+    # Compressive at both ends and over-contrasted in the middle, which is
+    # exactly where the Great Plains and the Alps sit -- and is why their
+    # rendered colour spreads 3-4x the reference at close zoom.
+    print("  within-class amplification (our spread / the real spread):")
+    _by = {}
+    for _c, _v, _n, _m in rows:
+        _by.setdefault(_c, []).append((float(_m), _v))
+    for _c, _rs in _by.items():
+        _mm = np.array([x[0] for x in _rs]); _vv = np.array([x[1] for x in _rs])
+        _rr = _mm.max() / max(_mm.min(), 1e-9)
+        _vr = _vv.max() / max(_vv.min(), 1e-9)
+        print("    %-9s real %5.1fx   ours %5.1fx   %.1fx%s"
+              % (_c, _rr, _vr, _vr / max(_rr, 1e-9),
+                 "   <-- over-contrasted" if _vr / max(_rr, 1e-9) > 1.4 else ""))
     print("  Spearman rank correlation with real annual precipitation: %+.3f" % rho)
     worst = sorted(zip(np.abs(rm - rr), [n for _, _, n, _ in rows], mv, rv),
                    reverse=True)[:4]
