@@ -5391,3 +5391,51 @@ Not chased further this round: the last two threads that were reasoned rather
 than swept both ended in withdrawals, and the term sweep from iteration 101 is
 built and cheap. Next round runs it on this framing rather than guessing which
 term it is.
+
+### Iteration 116 -- the eastern United States is drawn as steppe
+
+Sweeping the shader terms on the Hudson framing cleared all four candidates:
+lithology 6% of pixels and no effect, laterite inactive, savanna stipple
+inactive, alluvium 11% and it makes the frame GREENER when removed. So the
+orange is the base palette, which meant `h` was not what I had calculated.
+
+**Probed rather than calculated.** A global captured at the palette site and
+written to `gl_FragColor` -- the pattern the register already records, because a
+local is out of scope there. Read directly off the frame:
+
+| pixels | h | w | rendered RGB |
+|---|---|---|---|
+| orange (6.1% of frame) | **0.096** | 0.714 | 208,161,101 |
+| green | 0.963 | 0.627 | 59,89,51 |
+
+So the shader is right and the field is dry. Mapped across the eastern US:
+
+| lat | -86W | -82W | -78W |
+|---|---|---|---|
+| 40N | 0.151 | 0.075 | 0.220 |
+| 36N | 0.107 | 0.075 | 0.295 |
+| 32N | 0.188 | 0.339 | -- |
+
+**The real eastern United States carries 1,000-1,400 mm a year almost
+everywhere** -- among the wettest temperate land on Earth. Ours reads 0.06-0.34,
+which is what the Great Plains read (0.038). A subcontinent of deciduous forest
+is drawn as steppe.
+
+The mechanism follows from the solve's geometry. At 32-40N the zonal march runs
+west to east, so eastern moisture has crossed the Rockies and 4,000 km of land
+and been stripped the whole way. What actually waters the region is southerly
+flow off the Gulf of Mexico -- and the meridional march is admitted only through
+`_band(absl, 5.0, 32.0)`, so at these latitudes **the Gulf is switched off.**
+That is the same over-depletion that iterations 105-106 traced to `ORO_DRAIN`,
+with its most visible consequence, and it suggests the band's poleward limit is
+at least as much of the fix.
+
+**Eighteen reference sites and not one between the Rockies and the Atlantic.**
+Two added, and the wet class split immediately: Appalachians 0.061 against the
+seasonal class's wettest at 0.302. `BASE_OVERLAPS` moves 2 -> 3 with the reason
+written beside it -- the model did not get worse, the measurement got wider --
+and it must go back to 2 when this is fixed and must not be raised again for any
+other reason.
+
+Next round tests the band limit and `ORO_DRAIN` together in `sweep_climate.py`,
+with the two new sites now in the objective.
