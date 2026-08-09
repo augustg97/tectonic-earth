@@ -5439,3 +5439,17 @@ other reason.
 
 Next round tests the band limit and `ORO_DRAIN` together in `sweep_climate.py`,
 with the two new sites now in the objective.
+
+**Iteration 116b -- the sweep harness was silently reverting committed work.**
+`git status` after the round showed `web/index.html` modified, and the diff was
+the iteration-103 wet-stop palette fix -- **removed**. Not by any edit this
+round: the term-sweep harness restores the shader from a snapshot at the end of
+every run, and that snapshot was a fixed path captured back at iteration 100,
+before the palette change existed. Every sweep since has been quietly rolling
+the shader back to a two-week-old state, and only a habit of reading `git
+status` before finishing caught it.
+
+The file is restored from HEAD and the harness now snapshots **whatever is on
+disk when the sweep begins**, so its restore puts back exactly what it found. A
+tool that "restores" from a fixed baseline is a tool that overwrites your work
+the moment the baseline goes stale.
