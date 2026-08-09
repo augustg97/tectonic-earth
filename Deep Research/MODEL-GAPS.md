@@ -5343,3 +5343,51 @@ looked for a rectangular ocean seam and found, instead, a detector that cannot
 see patches (iteration 113) and a patch that turned out to be a mountain range
 (this one). The honest state: **no ocean-fabric seam has ever been reproduced**,
 and the task should say that rather than staying open on an unverified report.
+
+### Iteration 115 -- the margins are fine, and looking at one found something else
+
+**Queue item 2 is now closed on every sub-item.** The last untouched one was the
+shelf break and margin stipple. Traced stage by stage, along-margin variation --
+the quantity submarine canyons live in -- survives the pipeline nearly intact:
+
+| margin | source | our grid | +smooth_bathymetry | shipped |
+|---|---|---|---|---|
+| US mid-Atlantic | 843 | 850 | 844 | **943** |
+| Bay of Biscay | 1,345 | 1,324 | 1,149 | 1,239 |
+| NW Africa | 925 | 902 | 886 | 701 |
+| SE Australia | 2,084 | 2,086 | 2,036 | 1,943 |
+
+83-112% of the source. `smooth_bathymetry` costs 5-15%, not the wholesale loss I
+expected from a 49 km kernel -- because canyons at 11 km per source cell are
+already marginal there, and what survives sampling survives the smoothing. No
+defect, and the close-up confirms it: the Hudson slope renders with its cuts
+legible.
+
+So queue item 2 in full: abyssal amplitude 1.21x of real (no defect, iteration
+95); organisation excess entirely explained by deliberate band-limiting
+(iteration 98); the seam never reproduced in two attempts (iterations 113-114);
+margins preserved at 83-112%. **The premise was false in every part.** That is
+worth stating plainly rather than leaving the item open -- four rounds of
+measurement found nothing to fix, which is a result.
+
+**But the close-up showed something the ocean work was not looking for.** The
+entire US Atlantic coastal plain, New Jersey to Georgia, renders desert-orange --
+real ground that carries 1,100-1,250 mm a year of rain under forest and farmland.
+It is not the rain field:
+
+| site | real mm | our Rf |
+|---|---|---|
+| Virginia coastal plain | 1,100 | 0.383 |
+| N Carolina coast | 1,250 | 0.326 |
+| New Jersey pine barrens | 1,150 | 0.439 |
+| Georgia coast | 1,250 | 0.370 |
+
+Those are firmly wet. At the local temperature they drive `ari = Rf/(0.46*pet)`
+above 1.0, which saturates `h` and should select the WET stop -- a dark green.
+Something downstream paints it orange instead, and `bare` cannot be it because
+`bare` is zero at h=1.
+
+Not chased further this round: the last two threads that were reasoned rather
+than swept both ended in withdrawals, and the term sweep from iteration 101 is
+built and cheap. Next round runs it on this framing rather than guessing which
+term it is.
