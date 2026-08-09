@@ -4647,3 +4647,50 @@ multiplier. Recorded in `audit_texture.chroma_spread` with the resolution-match
 step written into the docstring, because the whole finding depends on it.
 
 No change this round, and the bake is at 17 of 251.
+
+### Iteration 100 -- three mechanisms eliminated, and the measure corrected again
+
+Iteration 99 named a 6x close-zoom chroma excess and pointed at "the vegetated
+response". This round tested three candidates and **all three are innocent**.
+
+| candidate | test | result |
+|---|---|---|
+| river corridors (`drain`, `trunk` add up to 0.54 to `ari` on a 0.58-wide window) | halved both, A/B shot | plains spread 60.0 -> 60.0, mean -20.89 -> -20.90. **Nothing.** |
+| the ecotone jitter (`ari *= 1 + (nA*.62+nB*.32+nC*.16)*edge`, and `edge` peaks exactly at the grassland midpoint) | **zeroed entirely** | 61.0 -> 60.0. One unit of fifty. |
+| the rainfall field itself | measured `Rf` across the box | 10th-90th spans `h` = 0.09 in the plains. Cannot produce 60. |
+
+The jitter looked certain -- `edge = 4*h0*(1-h0)` is maximal in grassland and
+near zero on bare rock, which is exactly the region-dependence 99 measured. It
+is still wrong. The control that makes the elimination trustworthy: zeroing it
+changed **26% of pixels**, so the null is not "the build never ran".
+
+**And the measure was confounded a fourth time.** G-R is a DIFFERENCE, so it
+scales with brightness, and our render is albedo x hillshade while Blue Marble
+carries almost none. Iteration 82 established that for luminance; it reaches an
+unnormalised colour difference too. Normalised by (R+G+B):
+
+| box | ours | Blue Marble | raw ratio | normalised |
+|---|---|---|---|---|
+| N American plain | 36.2 | 8.3 | 6.0x | **4.4x** |
+| Alps | 57.0 | 19.2 | 3.7x | **3.0x** |
+| Andes | 12.0 | 16.5 | 1.2x | **0.7x** |
+
+The Andes crosses from "over" to UNDER. The excess in the plains and Alps is
+real but 25% smaller than reported.
+
+Luminance spread is its own finding and points the opposite way in the two
+places: the plains carry 62.7 against 22.3 (2.8x too much), the Alps 86.3
+against 142.6 (0.6x -- too little). Whatever is wrong is not one knob.
+
+**A silent-no-run trap, walked into knowingly.** One sweep piped `shoot.py` to
+/dev/null and produced a jitter level whose numbers were byte-identical to the
+baseline to four decimals. That is the signature the shoot harness exists to
+make impossible, and redirecting its output threw the protection away. The
+identical rows were discarded and the test redone with output visible.
+
+Net: no change shipped, the shader restored byte-for-byte, three candidates
+eliminated with controls, and the audit switched to a shading-invariant measure.
+Eliminations narrow a search the way this register has found before -- but four
+measurement errors in one session is the pattern worth naming: **every
+comparison against a reference needs its own control run BEFORE the number is
+believed** -- orientation, resolution, band, and now shading-invariance.

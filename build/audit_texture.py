@@ -92,10 +92,10 @@ def chroma_spread(im):
     our 1-7 km detail against a reference that cannot carry that band, which is
     the error that cost iterations 96-98:
 
-        box                  ours raw   ours @7.4km   Blue Marble
-        N American plain           60            60            10
-        Alps                       37            36            10
-        Andes                      22            22            19
+        box                  ours   Blue Marble   ratio
+        N American plain     36.2           8.3    4.4x
+        Alps                 57.0          19.2    3.0x
+        Andes                12.0          16.5    0.7x
 
     Downsampling changes nothing, so the excess is real and at scales the
     reference resolves. It is also REGION-DEPENDENT -- 6x in the prairie, 1.2x
@@ -108,8 +108,15 @@ def chroma_spread(im):
         & (lum > 18) & (lum < 245)
     if land.sum() < 150:
         return None
-    g = (im[:, :, 1] - im[:, :, 0])[land]
-    return float(np.percentile(g, 90) - np.percentile(g, 10))
+    R, G, B = im[:, :, 0][land], im[:, :, 1][land], im[:, :, 2][land]
+    # NORMALISED. G-R is a DIFFERENCE, so it scales with brightness -- and our
+    # render is albedo x hillshade while Blue Marble carries almost none, so a
+    # raw G-R spread counts our shading as chroma. Iteration 82 established that
+    # for luminance; the same confound reaches an unnormalised colour difference
+    # and inflated the first version of this by about 25% (plains 6.0x -> 4.4x,
+    # Andes 1.2x -> 0.7x, which crosses from "over" to "under").
+    c = (G - R) / np.maximum(R + G + B, 1e-6) * 255.0
+    return float(np.percentile(c, 90) - np.percentile(c, 10))
 
 
 def main():
