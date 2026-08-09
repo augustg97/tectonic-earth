@@ -124,7 +124,12 @@ def main():
          "--no-first-run", "--window-size=1280,960", url],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    deadline = time.time() + 40 + 22 * len(names)
+    # 35 s a shot, not 22. The old allowance was set on an idle machine; with a
+    # field re-bake holding a core the last framing of a four-shot run timed out
+    # and the whole run failed. A too-tight deadline turns "the machine is busy"
+    # into "that framing is broken", which is the one confusion this file exists
+    # to prevent.
+    deadline = time.time() + 40 + 35 * len(names)
     while time.time() < deadline:
         if all(os.path.exists(os.path.join(VERIFY, n + ".png")) for n in names):
             break

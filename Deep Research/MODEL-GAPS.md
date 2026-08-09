@@ -4745,3 +4745,50 @@ between-biome separation that iteration 84 widened the stops to protect.
 
 The sweep harness lives in the session scratchpad; the shader is restored
 byte-for-byte and the tree is clean.
+
+### Iteration 102 -- the palette curve is not the lever either, and the trade is now a number
+
+Iteration 101 found the humidity axis drives four fifths of the close-zoom
+excess and proposed compressing the palette's response to it. Both curves were
+built and swept, with between-biome separation measured in the same run so the
+fix that iteration 83 reverted could not be repeated blind.
+
+| variant | plains spread | separation (Sahara..Congo) |
+|---|---|---|
+| baseline | 35.2 | 63.8 |
+| S-curve k=0.40 | 36.3 | 64.0 |
+| S-curve k=0.70 | 37.3 | 63.8 |
+| S-curve k=1.00 | **38.4** | 64.4 |
+| inverse-S k=0.35 | 33.7 | 63.4 |
+| inverse-S k=0.65 | 32.5 | 63.2 |
+| inverse-S k=1.00 | **31.1** | 62.6 |
+
+**The S-curve made it worse, monotonically**, which locates the plains on the h
+axis: a smoothstep flattens the ends and steepens the middle, so if it steepens
+our spread, the plains live in the MIDDLE of the humidity range, not at the dry
+end where I had placed them. The inverse curve confirms it from the other side.
+
+But the inverse-S buys only 12% (35.2 -> 31.1) at full strength, against a
+target of 8.3, and costs 1.9% of separation. **Not shipped**: it is a small gain
+on a large gap, it puts an asin and a sin on the per-pixel path for the whole
+planet, and shipping a symptom treatment now would confound the evaluation of
+the real fix. The trade curve is recorded so a later round can take it if the
+field fix under-delivers.
+
+**What the numbers actually leave.** Freezing h entirely gives 13.3, so h's
+variation is worth ~22 of the ~27 units of excess and everything else ~5. Any
+monotone reshaping of h can only redistribute those 22 units; removing them
+means either less h variation (a field change) or closer palette stops (which
+spends the between-biome separation iteration 84 bought). That is the same "one
+control, two quantities" shape, now with both quantities measured on screen in
+one sweep.
+
+**The remaining legitimate lever is the field.** Our rainfall spans 3.5x across
+the Great Plains box; the real west-east gradient there is roughly 400 to 900 mm,
+about 2.2x. We are about 1.6x too steep, and that is a climate-solve change --
+which belongs after the Mariana re-bake, not during it.
+
+Also fixed this round: `shoot.py`'s deadline was 22 s a framing, set on an idle
+machine. With the re-bake holding a core, the fourth shot of a four-shot run
+timed out and the whole run failed -- reporting "that framing is broken" when
+the truth was "the machine is busy". Now 35 s.
