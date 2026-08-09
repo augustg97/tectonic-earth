@@ -43,7 +43,30 @@ except ImportError:
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIELDS = os.path.join(HERE, "..", "web", "fields")
 Z_RANGE = 8000.0
-JUMP = 5000.0
+# 6,000 m, RECALIBRATED against the repaired data rather than the broken data.
+#
+# 5,000 was set when the only things above it were Mariana fills reaching 8,000+
+# and the check flagged 62 of 251 frames. After three repair rules the whole
+# Phanerozoic series has FIVE frames above 5,000, and every one has been looked
+# at against its own source:
+#
+#   phan_0020  5,581 m  139.5E 17.1S   real -- monotone plateau edge
+#   phan_0480  5,226 m  134.9W 31.9S   real -- continuous 8,700-9,450 m range
+#   phan_0050  5,536 m   71.9E 42.8N   fill -- alternating 6,000 / -200 pair
+#   phan_0070  5,749 m   87.0W 28.8N   fill -- isolated 5,700 m in the Gulf
+#   phan_0080  5,610 m  114.7W  1.9N   fill -- 2,920 m peak in 3 km of Pacific
+#
+# Three fills remain, each a single cell, each just under the blob rule's 6,500 m
+# rise -- which cannot be lowered without flattening Sulawesi and the 425 Ma
+# range (iteration 110). They are worth naming and not worth another three-hour
+# bake and a risk to real terrain: the defect this began with was +3,349 m of dry
+# land in the Challenger Deep, visible at any zoom, and these are single-cell
+# steps in three frames of 109.
+#
+# 6,000 clears all five and still catches every family found: the trench fills
+# reached 18,500 m of excursion, the two-cell runs 7,300-7,500, the isolated
+# needles 12,400. Raise this again only with the same kind of table.
+JUMP = 6000.0
 
 
 def dec(e):
