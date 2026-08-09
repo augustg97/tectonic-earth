@@ -21,6 +21,13 @@ Two things get reported.
             rather than join -- and then jumped the width of Palaeo-Tethys when
             the search found somewhere better.
 
+    FROZEN  a label whose visibility window runs PAST its own track. trackPos
+            clamps at both ends, so those ages all render at the track's last
+            point -- the name stops dead while the crust under it keeps moving.
+            This is what put the Ellesmerian Belt at the same spot near the
+            north pole for hundreds of millions of years, and it is invisible to
+            the JUMP check above precisely because a frozen label never moves.
+
     ../venv/bin/python audit_label_motion.py [--max-step 15] [--all]
 """
 import json
@@ -89,6 +96,33 @@ def main():
         print(f"{span:5.0f}   {n[:31]:32s} {t:10s} {a1:g}-{a0:g} Ma")
     print(f"\n{len(untracked)} crustal labels live 40+ Myr with no plate track "
           f"(they fall back to a 90° terrain search)")
+
+    # FROZEN: the window runs past the track. trackPos clamps at both ends, so
+    # every age beyond it draws at the same point and the name stands still
+    # while its plate keeps moving. Invisible to the JUMP check above precisely
+    # because a frozen label never moves -- which is how the Ellesmerian Belt
+    # sat near the north pole for hundreds of millions of years unnoticed.
+    frozen, ntr = [], 0
+    for l in lab:
+        tr = l.get("tr")
+        if not tr or len(tr) < 2:
+            continue
+        ntr += 1
+        ages = [p[0] for p in tr]
+        a0 = min(l.get("a0", 0), l.get("a1", 0))
+        a1 = max(l.get("a0", 0), l.get("a1", 0))
+        lo, hi = min(ages), max(ages)
+        stuck = (lo - a0 if a0 < lo else 0.0) + (a1 - hi if a1 > hi else 0.0)
+        if stuck >= 20.0:
+            frozen.append((stuck, l.get("n"), a0, a1, lo, hi))
+    frozen.sort(reverse=True)
+    print(f"\n{'stuck':>6}  {'label':32s} window vs track")
+    for s, n, a0, a1, lo, hi in frozen[:10]:
+        print(f"{s:5.0f}   {n[:31]:32s} visible {a0:g}-{a1:g} Ma, track {lo:g}-{hi:g}")
+    print(f"\n{len(frozen)} of {ntr} tracked labels freeze 20+ Myr. Most run past the "
+          f"540 Ma end of\nthe rotation model, which is inherent; the CONTINENTS freeze "
+          f"in the future,\nwhere the app already synthesises motion they could ride "
+          f"instead.")
 
 
 if __name__ == "__main__":

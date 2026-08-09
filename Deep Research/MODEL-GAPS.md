@@ -4204,3 +4204,40 @@ the round that changes the climate is the round that owes it fresh ones.
 `audit_texture` and `audit_seam` stay manual on purpose: both need a specific
 set of framings shot first, and a gate that silently passes for want of input is
 the failure mode this round exists to remove.
+
+### Iteration 92 -- task 50 closed: the labels that freeze, and why the jump check could never see them
+
+Task 50 has been open since the Ellesmerian Belt was reported sitting at one
+spot near the north pole for hundreds of millions of years. `snapLabel` was
+suspected -- the on-land test refusing to move a name -- but the mechanism is
+one line up, in `trackPos`:
+
+    if(a<=tr[0][0])return [tr[0][1],tr[0][2]];
+    if(a>=last[0])  return [last[1],last[2]];
+
+**It clamps at both ends.** Any age outside a label's own track renders at the
+track's endpoint, so the name stands still while the crust under it keeps
+moving. `audit_label_motion.py` already looked for names that JUMP further than
+crust can travel -- and a frozen label is the exact complement, invisible to that
+check because it never moves at all.
+
+Measured: **17 of 251 tracked labels freeze for 20 Myr or more.**
+
+| stuck | label | visible | track |
+|---|---|---|---|
+| 310 Myr | Baikalian Belt | 300-850 Ma | 0-540 |
+| 160 Myr | Yilgarn Craton | 0-700 Ma | 0-540 |
+| 160 Myr | Canadian Shield | 0-700 Ma | 0-540 |
+| 40 Myr | Antarctica | -40-160 Ma | 0-160 |
+
+Two different causes, and the distinction is the useful part. **Most run past
+540 Ma, the end of the Merdith rotation model** -- there is no track to be had
+there, and freezing is arguably the honest answer for a Precambrian name whose
+plate motion nobody knows. **But the CONTINENTS freeze in the FUTURE**, where
+the app is not short of information at all: it already synthesises future plate
+motion from authored targets, and the labels simply do not ride it. That is a
+real defect with a real fix available, now named.
+
+The check lives in `audit_label_motion.py` beside the JUMP and UNTRACKED
+reports, so the three failure modes of a moving name -- moves too far, does not
+move at all, has nothing to move by -- are measured in one place.
