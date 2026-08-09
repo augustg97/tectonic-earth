@@ -4792,3 +4792,55 @@ Also fixed this round: `shoot.py`'s deadline was 22 s a framing, set on an idle
 machine. With the re-bake holding a core, the fourth shot of a four-shot run
 timed out and the whole run failed -- reporting "that framing is broken" when
 the truth was "the machine is busy". Now 35 s.
+
+### Iteration 103 -- task 32's two quantities stop trading, because one was already in surplus
+
+**First, iteration 102's conclusion is withdrawn.** It said our rainfall gradient
+across the Great Plains is "1.6x too steep" and pointed the next round at the
+climate solve. That rested on a remembered 400-900 mm figure, not on data. Fitted
+against the 18 in-repo reference sites, our field's log-log slope on real annual
+precipitation is **0.64** -- compressive, not steep. The claim is unsupported and
+no climate change is warranted by it.
+
+**Then both halves of task 32 measured in ONE unit**, normalised chroma, which is
+what made the answer obvious:
+
+| quantity | ours | Blue Marble | ratio |
+|---|---|---|---|
+| between-biome separation (Sahara..Congo) | 63.8 | 54.7 | **1.17x** |
+| Sahara mean / spread | -18.0 / 12.6 | -18.6 / 13.8 | correct |
+| Congo mean / spread | 45.8 / 92.1 | 36.0 / 53.3 | 1.27x / 1.73x |
+| plains within-region spread | 35.2 | 8.3 | 4.25x |
+
+Iteration 83 restated task 32 as two quantities a single scalar could not serve:
+variation too high WITHIN a biome, separation too low BETWEEN them. **Separation
+is no longer too low. Iteration 84's widening overshot it by 17%.** So the bind
+is gone -- pulling the wet end back corrects the separation surplus AND shrinks
+the colour distance the humidity axis walks. The two move together for the first
+time.
+
+And it has to be the WET END specifically: the Sahara already matches the
+reference almost exactly (-18.0 against -18.6), so any global scalar -- the shape
+iteration 81 tried and 83 reverted -- would have dragged a correct desert off
+target to fix an incorrect forest.
+
+Shipped: the four wet stops pulled 22% toward neutral, luminance preserved.
+
+| | before | after | reference |
+|---|---|---|---|
+| Congo mean | 45.8 | **36.1** | 36.0 |
+| separation | 63.8 | **54.3** | 54.7 (ratio 1.17 -> 0.99) |
+| Sahara mean | -18.0 | -18.2 | -18.6 |
+| Siberia mean | -- | +5.7 | +4.5 |
+
+Gates: shader clean; audit_biomes at baseline (2 overlaps, Spearman +0.862 --
+it reads the field, which did not change); audit_deeptime 0 of 2 failing, with
+Pangaea's green fraction 0.30 -> **0.29** against its 0.32 cap, so the desert
+supercontinent got drier rather than greener.
+
+Not fixed, and now the whole of what remains on task 32: within-region spread.
+Plains 4.25x, Congo 1.73x, Siberia 24.5 against 3.9. The palette response curves
+swept in iteration 102 buy at most 12% of it, and desaturating the mid stops buys
+6%. It is a real and separate defect.
+
+Held for the deploy that is waiting on the Mariana re-bake (90 of 251).
