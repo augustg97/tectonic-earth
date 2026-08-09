@@ -4173,3 +4173,34 @@ interior greening; this is the polar margins doing so, which is the record.
 
 Siberia reaches about half way to the reference. The rest would need the wetting
 to keep climbing, and there is no headroom left at 280 Ma to buy it with.
+
+### Iteration 91 -- the validators are wired into the deploy, and they ratchet
+
+Five validators were written this session -- `audit_biomes`, `audit_texture`,
+`audit_seam`, `audit_deeptime`, and the `shoot` harness -- and every one of them
+was a script somebody had to remember to run. **That is exactly how iteration
+87's regression shipped:** the change improved every metric being watched that
+round, and the one that would have caught it existed only as a file on disk.
+
+`build_site.py` now runs `audit_biomes` and `audit_deeptime` on the deploy path,
+beside the existing baseline suite and the crossing-storm gate. Both are
+read-only and add a couple of seconds.
+
+**They ratchet rather than pass-mark, and that distinction is the whole design.**
+Two biome-class boundaries have overlapped since the validator was written, and
+the field has never separated all four. A gate that fails on that would block
+every deploy and teach the next person to set `SKIP_AUDIT=1` -- which is worse
+than no gate, because it disables the ones that matter too. So the baseline
+holds the best state reached (2 overlaps, Spearman +0.862) and complains only
+below it, with a 0.004 tolerance for solver noise. Raising those numbers is a
+deliberate act in the same commit as the change that earns them.
+
+Verified both directions by simulation rather than by reading the code: with the
+baseline moved to 1 overlap it exits 1 and blocks; restored it exits 0 and the
+deploy proceeds. `audit_deeptime` reads shots rather than the field, so it passes
+when frames are absent instead of blocking a deploy on a missing screenshot --
+the round that changes the climate is the round that owes it fresh ones.
+
+`audit_texture` and `audit_seam` stay manual on purpose: both need a specific
+set of framings shot first, and a gate that silently passes for want of input is
+the failure mode this round exists to remove.

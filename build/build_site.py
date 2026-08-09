@@ -40,6 +40,27 @@ if os.environ.get("SKIP_AUDIT") != "1":
                              "A keyframe crossing is paying synchronous texture "
                              "uploads again. SKIP_PERF=1 overrides.")
 
+    # THE FIELD AND CHARACTER GATES, which existed for a week as scripts nobody
+    # ran. That is exactly how a change that turned Permian Pangaea from 18%
+    # green to 64% went out: every metric being watched that round improved, and
+    # the one that would have caught it was a file on disk. A validator only
+    # protects what it is wired into.
+    #
+    # audit_biomes reads the shipped rainfall field directly and is fast.
+    # audit_deeptime reads SHOTS, so it can only check what has been rendered --
+    # it reports honestly and passes when the frames are absent rather than
+    # blocking a deploy on a missing screenshot, and the round that changes the
+    # climate is the round that owes it fresh ones.
+    _here = os.path.dirname(os.path.abspath(__file__))
+    for _name, _why in (("audit_biomes.py",
+                         "the rainfall field no longer separates the biome classes"),
+                        ("audit_deeptime.py",
+                         "the deep-time map lost the character it is known for")):
+        _q = subprocess.run([sys.executable, os.path.join(_here, _name)])
+        if _q.returncode != 0:
+            raise SystemExit("build_site: %s failed -- %s (above). SKIP_AUDIT=1 "
+                             "overrides." % (_name, _why))
+
 WEB = "../web"
 SITE = "../docs"   # GitHub Pages serves main:/docs natively
 
