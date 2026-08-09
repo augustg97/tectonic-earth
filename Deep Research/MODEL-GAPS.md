@@ -4464,3 +4464,49 @@ measurement error -- file timestamps compared against a wall clock I assumed
 rather than read. The bake was progressing the whole time. The localisation of
 `_fill_holes` stands on its own measurement (4.5 h -> 22 min for a 109-age
 repair pass) and remains the right change.
+
+### Iteration 96 -- the commas are real, and a control says where
+
+Amplitude was the wrong question (iteration 95: median 1.21x, no defect). The
+right one is ORGANISATION -- how directional the relief is -- and here both
+sides are relief, so unlike the Blue Marble land comparison this one is fair
+without caveats.
+
+Raw, our sea floor reads 155% as lineated as the real one. **But 155% is not the
+finding, because bilinear resampling from the 0.1-degree source onto our
+0.088-degree grid manufactures directional structure by itself.** The control is
+the source alone, put on our grid and through our codec, with no synthesis
+whatever:
+
+| box | source | control | ours | our synthesis adds |
+|---|---|---|---|---|
+| equatorial Atlantic | 0.327 | 0.387 | 0.372 | **-0.015** |
+| Scotia / Drake | 0.574 | 0.577 | 0.587 | **+0.010** |
+| Hawaii plain | 0.256 | 0.273 | 0.387 | +0.113 |
+| central Pacific | 0.169 | 0.181 | 0.339 | **+0.158** |
+| SE Indian ridge | 0.161 | 0.174 | 0.332 | **+0.157** |
+
+Two of the five "excesses" vanish entirely. Reporting 114% for the Atlantic
+would have sent a round chasing a resample.
+
+What survives is sharp: **our abyssal fabric contributes a roughly CONSTANT
+coherence.** Where the real floor is structured that is invisible -- Scotia goes
+0.577 to 0.587 and the real arcs and trenches dominate. Where the real floor is
+quiet, old and sediment-draped it DOUBLES the organisation. The real sea floor
+spans 3.6x in coherence between provinces; ours spans 1.8x. We flatten the
+difference between an active margin and a dead abyssal plain, and that flattening
+is what the eye reads as the same commas everywhere -- visible in the Hawaii and
+Scotia framings both.
+
+Note the shader already keys fabric AMPLITUDE to crustal age ("pelagic ooze
+mantles the hills, it does not stretch them"). Amplitude is not the quantity at
+fault: a weaker lineated fabric is still exactly as lineated. Coherence needs its
+own age term.
+
+The fabric is baked in `seafloor.py`, so the fix costs a full re-bake -- and one
+is in flight for the Mariana repair. Changing bake inputs now would invalidate
+2.7 hours of it. Recorded with numbers, queued for after the deploy.
+
+`audit_ocean_relief.py` carries the measurement and the control, and reports
+rather than gates: the excess is a known open defect, and failing the deploy on
+it would block every unrelated change until it is fixed.

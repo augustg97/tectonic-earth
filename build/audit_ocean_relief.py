@@ -95,6 +95,85 @@ def bandsd(a, deg_per_cell, lo_deg, hi_deg):
     return float((blur(a, lo_deg) - blur(a, hi_deg)).std())
 
 
+def coherence(g, tile=24):
+    """Structure-tensor coherence per tile: 0 isotropic, 1 perfectly lineated.
+
+    How ORGANISED the relief is, as distinct from how much of it there is. Real
+    sea floor varies enormously in this: an active margin with arcs, trenches
+    and a spreading axis runs 0.57, while old sediment-draped Pacific interior
+    runs 0.17. Amplitude cannot see that difference at all.
+    """
+    small = (max(g.shape[1] // 8, 2), max(g.shape[0] // 8, 2))
+    lo = np.array(Image.fromarray(g.astype(np.float32)).resize(small, Image.BILINEAR)
+                  .resize((g.shape[1], g.shape[0]), Image.BILINEAR))
+    hp = g - lo
+    v = []
+    for r in range(0, hp.shape[0] - tile, tile):
+        for c in range(0, hp.shape[1] - tile, tile):
+            b = hp[r:r + tile, c:c + tile]
+            gy, gx = np.gradient(b)
+            jxx, jyy, jxy = (gx * gx).mean(), (gy * gy).mean(), (gx * gy).mean()
+            if jxx + jyy > 1e-9:
+                v.append(np.sqrt(max((jxx - jyy) ** 2 + 4 * jxy * jxy, 0)) / (jxx + jyy))
+    return float(np.mean(v)) if v else float("nan")
+
+
+def report_coherence(src, ours):
+    """Organisation, against the source AND against a resampling-only control.
+
+    THE CONTROL IS THE POINT. Bilinear resampling from a 0.1-degree source onto
+    our 0.088-degree grid manufactures directional structure by itself, and
+    without a control that shows up as our synthesis over-lineating the floor.
+    Measured: in the equatorial Atlantic the source reads 0.327, ours 0.372, and
+    the control -- the source alone, put on our grid and through our codec, with
+    no synthesis whatever -- reads 0.387. The entire apparent excess is the
+    resample. Reporting 114% there would have sent a round chasing nothing.
+
+    Where the control does NOT explain it, the finding is real and sharp:
+
+        box                   source  control    ours   synthesis adds
+        equatorial Atlantic    0.327    0.387   0.372   nothing
+        Scotia / Drake         0.574    0.577   0.587   nothing
+        Hawaii plain           0.256    0.273   0.387   +0.114
+        central Pacific        0.169    0.181   0.339   +0.158
+        SE Indian ridge        0.161    0.174   0.332   +0.158
+
+    Our abyssal fabric contributes a roughly CONSTANT coherence. Where the real
+    floor is structured that is invisible -- Scotia goes 0.577 to 0.587 and the
+    real arcs and trenches dominate. Where the real floor is quiet, old and
+    sediment-draped it DOUBLES the organisation. The real sea floor's coherence
+    spans 3.6x between provinces; ours spans 1.8x. We flatten the contrast
+    between an active margin and a dead abyssal plain, which is the difference
+    the eye reads as "the same commas everywhere".
+
+    The fabric lives in seafloor.py, so fixing it costs a full re-bake. Recorded
+    here with numbers so the next round starts from them.
+    """
+    print("  sea-floor ORGANISATION (both sides are relief -- a fair comparison):")
+    print("    %-22s %8s %8s %8s  %s"
+          % ("box", "source", "control", "ours", "our synthesis adds"))
+    from fieldpack import enc_elev
+    from render import resample_dem
+    from build_frames import index_dems, read_dem
+    from fieldpack import dec_elev as _dec
+    raw = read_dem(index_dems()[0.0])          # lat-ASCENDING, as resample_dem wants
+    ctrl = _dec(np.round(enc_elev(resample_dem(raw, ours.shape[0], ours.shape[1]))
+                         * 255.0) / 255.0)
+    excess = []
+    for nm, a, b, c, d in BOXES + [("SE Indian ridge", 90, 115, -50, -35)]:
+        cs = coherence(box(src, a, b, c, d))
+        cc = coherence(box(ctrl, a, b, c, d))
+        co = coherence(box(ours, a, b, c, d))
+        excess.append(co - cc)
+        print("    %-22s %8.3f %8.3f %8.3f  %+.3f%s"
+              % (nm, cs, cc, co, co - cc,
+                 "   <-- synthetic lineation on quiet floor"
+                 if co - cc > 0.08 else ""))
+    print("  worst synthetic excess %+.3f over the resample-only control"
+          % max(excess))
+    return max(excess)
+
+
 def main():
     if not os.path.exists(FIELD):
         print("  audit_ocean_relief: no shipped present-day field to check")
@@ -134,6 +213,10 @@ def main():
         return 1
     print("  within %.2f of the recorded value -- the sea floor still carries"
           " roughly the relief the real one does" % TOLERANCE)
+    # Reported, not gated. The excess is a known open defect with a re-bake
+    # attached; failing the deploy on it would block every unrelated change
+    # until it is fixed, which is what a ratchet is for and this is not one yet.
+    report_coherence(src, ours)
     return 0
 
 
