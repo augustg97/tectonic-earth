@@ -37,14 +37,16 @@ from render import compute_fields, resample_dem
 # both are "grass" and the check only asked whether the classes were ordered.
 # Sites are chosen unambiguous and away from class boundaries and coasts.
 #
-# One of these was wrong when this file was written: 30E/49N was labelled
-# "Pontic steppe" and is Kyiv forest-steppe at ~620 mm, wetter than parts of the
-# seasonal class. A reference list is data too, and it gets audited.
+# TWO of these were wrong when written, and both passed unnoticed. 30E/49N was
+# labelled "Pontic steppe" and is Kyiv forest-steppe at ~620 mm; -77/1 was
+# labelled "Choco" and lands at 2160 m ON THE ANDEAN CREST, spanning 511 to
+# 3772 m, when the Choco is a coastal lowland at ~50 m. A reference list is
+# data too, so terrain_sanity() below audits it on every run.
 SITES = [
     (-62.0, -3.0, "Amazon basin", "wet", 2300),
     (20.0, 0.0, "Congo basin", "wet", 1700),
     (113.0, 1.0, "Borneo", "wet", 3200),
-    (-77.0, 1.0, "Choco", "wet", 6000),
+    (-76.6, 5.7, "Choco", "wet", 6000),
     (-49.0, -15.0, "Cerrado", "seasonal", 1500),
     (78.0, 21.0, "Deccan", "seasonal", 900),
     (32.0, -13.0, "Miombo", "seasonal", 1000),
@@ -69,12 +71,13 @@ def solve(age):
     rec = paleo_tracks.Reconstructor() if paleo_tracks.available() else None
     z = read_dem(idx[float(avail[np.argmin(np.abs(avail - max(age, 0)))])])
     zc = EP.carve(resample_dem(z, BF.ELEV_H, BF.ELEV_W), age, rec)[::-1]
-    return compute_fields(zc, age, BF.CLIM_H, BF.CLIM_W)[2]
+    return (compute_fields(zc, age, BF.CLIM_H, BF.CLIM_W)[2],
+            resample_dem(zc, BF.CLIM_H, BF.CLIM_W))
 
 
 def main():
     age = int(sys.argv[1]) if len(sys.argv) > 1 else 0
-    Rf = solve(age)
+    Rf, Z = solve(age)
     H, W = Rf.shape
     rows = []
     for lon, lat, name, cls, mm in SITES:
@@ -84,6 +87,25 @@ def main():
         # wherever the reconstruction happens to put a pixel.
         v = float(np.median(Rf[max(r - 2, 0):r + 3, max(c - 2, 0):c + 3]))
         rows.append((cls, v, name, mm))
+
+    # THE LIST AUDITS ITSELF. Two sites were wrong before this existed, and both
+    # produced "defects" that were chased into the model before anyone checked
+    # where the sample actually landed.
+    if age == 0:
+        bad = []
+        for lon, lat, name, cls, mm in SITES:
+            r = int((90 - lat) / 180 * H)
+            c = int((lon + 180) / 360 * W)
+            b = Z[max(r - 2, 0):r + 3, max(c - 2, 0):c + 3]
+            if b.max() <= 0:
+                bad.append("%s is in the sea" % name)
+            elif float(np.median(b)) > 1600 and cls in ("wet", "seasonal"):
+                bad.append("%s sits at %.0f m, too high for a lowland biome"
+                           % (name, float(np.median(b))))
+        if bad:
+            print("  SITE LIST SUSPECT: " + "; ".join(bad))
+        else:
+            print("  site list: all 18 land on terrain consistent with their class")
 
     print("  reference sites at %s Ma, by class (wet -> dry):" % age)
     for cls in ORDER:

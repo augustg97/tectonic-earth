@@ -3444,3 +3444,41 @@ ordering could not:
 | 4 | Choco | 0.300 | 6000 mm |
 
 No re-bake this round: the site correction is in the instrument, not the field.
+
+### Iteration 74 -- a reference site on a mountain was hiding a clean separation
+
+Chasing the largest rank inversion, the Choco: 6000 mm of real rainfall, the
+wettest place on Earth, and the model gave it 0.300 -- below Indochina at 1500
+mm. Decomposing there found R_west 0.008 and R_east 0.006, i.e. no delivered
+moisture at all, which looked like a serious transport failure.
+
+**The sample is at 2160 m, on the Andean crest, spanning 511 to 3772 m.** The
+Choco is a coastal lowland at ~50 m. Moved to Quibdo (76.6W, 5.7N):
+
+| boundary | before | after |
+|---|---|---|
+| wet / seasonal | -0.001 | **+0.175, SEPARATED** |
+| seasonal / grass | -0.141 | -0.141 |
+| grass / desert | -0.046 | -0.046 |
+
+Overlapping boundaries 3 -> 2, Spearman +0.841 -> +0.849. **The wet class was
+never the problem at that boundary; the sample was on a mountain.** That is two
+bad sites in two rounds, each of which produced a "model defect" that was chased
+before anyone checked where the sample landed.
+
+So the list now audits itself: `audit_biomes.py` reports, every run, whether all
+eighteen sites land on terrain consistent with their class -- in the sea, or a
+lowland biome sampled above 1600 m. Terrain-checked, the other sixteen are
+sound; the Atacama at 2536 m, the Gobi at 1468 m and the Great Basin at 1619 m
+are all correctly high deserts.
+
+**What is left is mostly unresolvable and worth saying so.** Four of the six
+remaining inversions are WITHIN the desert class, where the model crams 5 mm to
+230 mm of real rainfall into 0.009-0.060 with near-random ordering -- the Great
+Basin (230 mm) reads drier than the Atacama (5 mm). They all render as desert
+either way, so the visual return is nil. The one that matters is the Don steppe
+at 0.193 against the Great Plains' 0.037 when reality is 350 mm against 500: the
+enclosed-sea recharge again, now the largest visible error left in the field.
+
+No re-bake: this round changed the instrument, and what it revealed was that the
+field was already better than the instrument said.
