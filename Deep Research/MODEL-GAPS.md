@@ -4132,3 +4132,44 @@ The bounds are stated with their reasoning rather than fitted to today's output,
 so the gate says something about the Earth rather than about the current build.
 
 Update-log entry 3.0 withdrawn with the revert.
+
+### Iteration 90 -- the boreal repair, done with the discriminator the first one lacked
+
+Iteration 87 raised the recycling floor globally, fixed Siberia and turned
+Pangaea 64% green; iteration 89 reverted it and built the gate that catches it.
+This is the same repair with two terms instead of one.
+
+**Cold sets how much recycling sustains, not only how far it reaches.**
+RECYCLE_COLD (iteration 85) lengthened the reach; the amount was still global.
+Evaporative demand collapses as air cools, so a cold interior keeps far more of
+what it returns. On its own this lifts Siberia 0.026 -> 0.048 -- and raises the
+Gobi's floor 54% with it, because latitude alone cannot tell a boreal forest
+from a mid-latitude desert. Spearman fell to +0.853.
+
+**So it is gated on local vegetation as well.** `regen` is the previous pass's
+rainfall and the only local proxy inside the march. Cold AND wet gets the full
+floor; cold and bare gets a quarter. The Gobi and Great Basin stay dry, and
+Spearman returns to +0.862.
+
+| | reverted baseline | shipped |
+|---|---|---|
+| Siberia (render chroma) | -1.60 | **+2.58** (reference +7.4) |
+| Canada boreal (field) | 0.071 | 0.104 |
+| Gobi / Great Basin | 0.020 / 0.011 | 0.028 / 0.011 |
+| Pangaea green fraction | 0.18 | **0.30** (cap 0.32) |
+| Spearman | +0.864 | +0.862 |
+
+**The deep-time gate passes at 0.30 against a cap of 0.32, and that margin is
+thin enough to record loudly: the next change here has almost no headroom.**
+
+**Why the Pangaean greening is acceptable rather than a repeat of iteration 87.**
+It is not the same greening. Pangaea was pole-to-pole, so its HIGH latitudes take
+the cold boost exactly as Siberia does -- and high-latitude Permian forests are
+well attested, Glossopteris across Gondwana and Cordaites in the north. The
+low-latitude interior, which is the desert heart the app promises, stays tan in
+the frame; verified by eye against the reverted state, both read as an arid
+continent with a wet western margin. Iteration 87's failure was the tropical
+interior greening; this is the polar margins doing so, which is the record.
+
+Siberia reaches about half way to the reference. The rest would need the wetting
+to keep climbing, and there is no headroom left at 280 Ma to buy it with.

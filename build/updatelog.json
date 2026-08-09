@@ -2,6 +2,12 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
   "releases": [
     {
+      "version": "3.0",
+      "date": "9 August 2026",
+      "title": "Boreal forest, without flooding Pangaea",
+      "summary": "An earlier attempt at wetting the world's cold forested interiors worked for Siberia and quietly turned Permian Pangaea from a desert continent into a green one -- it was reverted. This is the same repair done with the distinction the first one lacked: water returned by a landscape depends on how cold it is, because cold ground loses far less of it, AND on whether anything is growing there to return it in the first place. Cold and vegetated gets the full effect; cold and bare -- the Gobi, the Great Basin -- gets almost none. Siberia greens toward the boreal forest it is, and the low-latitude heart of Pangaea stays the desert it was."
+    },
+    {
       "version": "2.9",
       "date": "9 August 2026",
       "title": "Siberia stops being a desert",

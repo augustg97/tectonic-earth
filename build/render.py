@@ -203,7 +203,17 @@ def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None, rec
         else:
             g = RECYCLE_REGEN * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0)
             dist = np.where(sea, 0.0, np.maximum(dist + dx_km * (1.0 - g), 0.0))
-        fl = floor * np.exp(-dist / (RECYCLE_KM if rec_km is None else rec_km))
+        # ...AND GATED ON LOCAL VEGETATION, because cold alone cannot tell a
+        # boreal forest from a mid-latitude desert. Cold-scaling by itself lifts
+        # Siberia to 0.048 but raises the Gobi's floor 54% with it, and Spearman
+        # falls to +0.853. Recycling needs something growing to do the
+        # returning; `regen` is the previous pass's rainfall and the only local
+        # proxy available inside the march. Cold AND wet gets the full floor;
+        # cold and bare gets a quarter of it.
+        locv = (1.0 if regen is None
+                else FLOOR_BARE + (1.0 - FLOOR_BARE)
+                * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0))
+        fl = floor * locv * np.exp(-dist / (RECYCLE_KM if rec_km is None else rec_km))
         if regen is not None:
             # ...and wet ground does not merely slow the decay, it raises what
             # the air decays TOWARD. Evapotranspiration over closed canopy
@@ -339,7 +349,19 @@ def _rainfall(Z, land, lat, cl):
     # Evapotranspiration recycles moisture back into passing air -- strongest in
     # the warm, densely vegetated tropics, which is how the Amazon stays wet
     # thousands of km from the Atlantic.
-    floor = (0.08 + 0.16 * cl["veg"]) * (0.60 + 0.80 * np.cos(np.radians(lat[:, 0])))
+    # THE FLOOR ITSELF SCALES WITH COLD, and this is the discriminator the last
+    # attempt lacked. Iteration 87 raised the floor globally to water the world's
+    # forested interiors; it worked for Siberia and turned Pangaea from 18% green
+    # to 64%, because a global constant cannot tell a boreal forest from a hot
+    # supercontinent interior. They differ in TEMPERATURE: what governs how much
+    # moisture recycling sustains is the evaporative demand it works against, and
+    # a cold interior loses far less of what it returns. Pangaea straddled the
+    # equator, so a cold-keyed floor barely touches it -- at 20 N the factor is
+    # 1.12 against 2.06 at Siberia's 62 N. Same latitude proxy as RECYCLE_COLD,
+    # which is the reach; this is the amount.
+    floor = ((0.08 + 0.16 * cl["veg"])
+             * (0.60 + 0.80 * np.cos(np.radians(lat[:, 0])))
+             * (1.0 + FLOOR_COLD * np.clip(1.0 - np.cos(np.radians(lat[:, 0])), 0.0, 1.0)))
 
     # Orographic lift must respond to real ranges, not pixel-scale DEM
     # roughness -- otherwise every column registers a small "climb" and the
@@ -564,6 +586,8 @@ def _rainfall(Z, land, lat, cl):
 
 
 RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling, at the equator
+FLOOR_BARE   = 0.25     # share of the floor bare ground still gets
+FLOOR_COLD   = 2.0      # recycling sustains more where evaporative demand is low
 RECYCLE_COLD = 9.0      # ...times this much further where the air is cold and holds it
 RECYCLE_REGEN = 0.90    # how far wet ground rewinds that clock
 RECYCLE_REF = 0.25      # rainfall counted as 'fully recycling'
