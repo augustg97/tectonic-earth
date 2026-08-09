@@ -4510,3 +4510,42 @@ is in flight for the Mariana repair. Changing bake inputs now would invalidate
 `audit_ocean_relief.py` carries the measurement and the control, and reports
 rather than gates: the excess is a known open defect, and failing the deploy on
 it would block every unrelated change until it is fixed.
+
+### Iteration 97 -- the mechanism in 96 was wrong, and the search is narrower
+
+Iteration 96 measured a real thing and then named the wrong cause. It said "our
+abyssal fabric contributes a roughly constant coherence". **The abyssal fabric
+is not in the elevation field at all.** `seafloor.apply`'s own docstring says so
+in as many words: *"Nothing of the abyssal-hill FABRIC is baked into the
+ELEVATION -- at 20 km per pixel a 2-5 km hill is sub-pixel... The shader grows
+it from ofield instead."* The measurement was on the baked `_e`, so whatever it
+found, the fabric was not it. Reading the module I was about to change would
+have cost two minutes.
+
+Isolating each stage instead of inferring one, central Pacific:
+
+| stage | coherence |
+|---|---|
+| source, 0.1 degree | 0.169 |
+| resampled to our 0.088-degree grid | 0.201 |
+| after `seafloor.apply` | 0.243 |
+| **shipped `_e`** | **0.339** |
+
+So of the +0.158 excess over the resample control: **+0.042 is seafloor.apply**
+(plateaus, chains, age-depth -- not fabric), and **+0.096 enters after it**, in a
+step not yet identified. The same shape holds at SE Indian (+0.029 from
+seafloor.apply) and the structured boxes stay flat or go slightly DOWN
+(equatorial Atlantic -0.008, Scotia -0.011), which is the one part of 96 that
+survives intact: whatever adds lineation adds it to quiet floor and not to
+structured floor.
+
+What is established: the shipped present-day sea floor is measurably more
+lineated than reality on old quiet crust and correct on active crust; it is not
+the shader fabric; a quarter of it is seafloor.apply. What is not established is
+which later step carries the rest, and whether it is a defect at all rather than
+a fair consequence of drawing detail the 6-minute source cannot hold.
+
+No change made. A bake was stopped this round to fold in a fabric fix that the
+docstring shows would have been aimed at the wrong file -- restarted with the
+Mariana repair alone, which is verified and is what the deploy is waiting on.
+**Do not stop a running bake for a change that has not been read into yet.**
