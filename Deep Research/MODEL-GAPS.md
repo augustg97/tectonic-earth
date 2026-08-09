@@ -5704,3 +5704,37 @@ bake has not reached them, and `audit_dem_spikes` will refuse the build until it
 has. Nothing else stands between the current tree and a live deploy carrying the
 Mariana repair, three spike-repair rules, the wet-stop palette fix and the
 future-riding labels.
+
+### Iteration 123 -- the repair is confirmed across all three series
+
+The future frames were where the fill did the most damage -- the warp inherits
+the 0 Ma DEM and then the collisional uplift piles onto whatever it inherits, so
+the Mariana fill came through as +7,000 to +8,600 m. With 13 of 50 rebaked:
+
+| series | rebaked | frames over 6,000 m |
+|---|---|---|
+| phan | 109 of 109 | **0** |
+| fut | 13 | **0** (worst 5,122 m) |
+| fut | 37 pending | 11 (worst 7,293 m) |
+| pre | 0 (unaffected) | 0 |
+
+And the cell that started all of this, read directly out of two rebaked future
+frames: **fut_0005 -4,120 m, fut_0030 -5,170 m** at the Mariana axis. Deep water,
+where the shipped build draws a tan desert island.
+
+Every rebaked frame in every series passes. The 37 that do not are the ones the
+bake has not reached, and they will clear in order.
+
+**Also re-checked, because this session already caught one silent revert.** A
+sweep harness restoring from a stale snapshot had quietly undone the iteration-103
+palette fix, and only `git status` noticed. So the other shipped work was
+verified present rather than assumed:
+
+  * `audit_label_motion` -- exit 0, "no label freezes in the future"; the 11
+    still frozen all run past the 540 Ma end of the rotation model;
+  * the wet-stop palette comment present in `index.html`;
+  * `trackPos`'s `Math.max(0, state.age)` clamp still removed;
+  * the `future_motion` rotation cache intact.
+
+Four independent things, all still there. Checking is cheap and the failure mode
+is invisible.
