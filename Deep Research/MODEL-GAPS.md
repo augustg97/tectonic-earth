@@ -5575,3 +5575,54 @@ mechanisms tested so far survived), or a choice about which error to keep. The
 numbers for that choice are now measured rather than estimated, and the render
 check on the Pangaea end still has to confirm the 0.67 proxy-to-render slope
 before any of it is chosen.
+
+### Iteration 120 -- what is queued, what is closed, and what needs deciding
+
+Twenty-seven rounds since the last deploy, so a consolidation. **Nothing has
+shipped since iteration 93** because everything queued is behind one re-bake.
+
+**Queued and verified, waiting on the bake** (phan 101 of 109; fut and pre still
+to run):
+
+  * the Mariana repair -- `+10500 m` of PaleoDEM fill rendering as a tan desert
+    island in the Challenger Deep, now `-9000`;
+  * the needle and blob spike rules -- three distinct fill families, calibrated
+    so no real margin, range or island is touched;
+  * the wet-stop palette fix -- Congo mean 45.8 -> 36.1 against the reference's
+    36.0, separation 63.8 -> 54.3 against 54.7. Shader-side and needing no bake,
+    but held with the rest because `audit_dem_spikes` correctly refuses to
+    deploy frames that still carry fill.
+
+**Closed by measurement, with the premise found false:**
+
+  * queue item 2 entire -- abyssal amplitude 1.21x of real, the organisation
+    excess explained by deliberate band-limiting, margins preserved at 83-112%,
+    and no ocean seam reproducible in two attempts;
+  * queue items 1, 3 and 5, closed earlier on the same basis.
+
+**Open, and now a decision rather than a defect.** The eastern United States
+renders as steppe on ground that carries 1,000-1,400 mm a year. Traced to the
+orographic strip accumulating over gentle country -- `UPLIFT_SCALE = 300 m`
+puts full uplift at a 0.8% grade, and twenty-one modest strips multiply to 0.293
+survival across the continent. Four candidate mechanisms were tested and
+eliminated; `UPLIFT_SCALE = 900` is the strongest lever found (Spearman 0.871 ->
+0.910, Appalachians 0.080 -> 0.170).
+
+**But every lever trades the same way**, because aridity here is a function of
+distance from water and the eastern US is 600 km from the Gulf -- its dryness is
+a transport failure, and the only available knobs fix it by reducing depletion
+globally, which also waters Permian Pangaea. At `UPLIFT_SCALE = 900` the Pangaea
+proxy reaches 0.78, mapping to a rendered green fraction near 0.50 -- as green as
+a Cretaceous greenhouse, for the era this map is best known for being a desert.
+
+That is the genuine decision the standing brief anticipated, and it is not mine
+to take. It needs the render check the pending bake will supply, and then a
+choice between a wet eastern US and a dry Pangaea, or a structural change to the
+transport that has so far resisted four attempts.
+
+**Recorded to memory this round**: `reference-comparisons-need-controls`. Six
+confident false findings in this session, each killed by a one-line control --
+orientation, resolution, band, shading-invariance, the null hypothesis, and
+whether the named mechanism is arithmetically capable of the effect. The
+recurring shape is a 2-6x discrepancy against a reference that turns out to be
+in the instrument.
