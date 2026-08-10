@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260809-0751';
+const DATA_V='20260810-0106';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -3282,9 +3282,19 @@ void main(){
        The wet end is a CLOSED CANOPY -- the Amazon from orbit is nearly as
        dark as the ocean beside it; taiga is a dark conifer green, not
        grey-olive; the hot sand is warm orange, not beige. */
+    /* WET STOPS PULLED BACK 22% TOWARD NEUTRAL, luminance preserved.
+       Iteration 84 widened these to close a between-biome separation deficit
+       (0.67x of reference). Measured now in normalised chroma against the same
+       reference, it OVERSHOT: separation ours 63.8 against Blue Marble's 54.7,
+       and the Congo's mean 45.8 against 36.0. The Sahara meanwhile matches
+       almost exactly (-18.0 against -18.6), so the error is entirely at the wet
+       end and a global scalar would have moved the desert too.
+       At 0.22 the two land together -- Congo 34.9 and separation 53.1 measured
+       at 0.25, interpolated here -- which is the first time these two have moved
+       the same way rather than trading against each other. */
     vec3 wet = (w<0.5)
-      ? mix(vec3(0.118,0.222,0.148), vec3(0.132,0.306,0.139), clamp(w*2.0,0.0,1.0))
-      : mix(vec3(0.173,0.345,0.176), vec3(0.047,0.183,0.070), clamp((w-0.5)*2.0,0.0,1.0));
+      ? mix(vec3(0.128,0.209,0.151), vec3(0.145,0.281,0.151), clamp(w*2.0,0.0,1.0))
+      : mix(vec3(0.186,0.320,0.188), vec3(0.059,0.165,0.077), clamp((w-0.5)*2.0,0.0,1.0));
     col = (h<0.45) ? mix(dry,mid,clamp(h/0.45,0.0,1.0))
                    : mix(mid,wet,pow(clamp((h-0.45)/0.55,0.0,1.0),0.85));
     /* Savanna is not just "half-way to forest". It is grass with trees standing
