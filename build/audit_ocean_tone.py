@@ -53,7 +53,16 @@ BM_PATH = os.path.join(HERE, "..", "data", "bluemarble.jpg")
 FIELD = os.path.join(HERE, "..", "web", "fields", "phan_0000_e.avif")
 VERIFY = os.path.join(HERE, "verify")
 SHOT = "oc_atl2"
-BOX = (-36.5, -23.5, -6.5, 6.5)     # what the middle 60% of oc_atl2 covers
+# DERIVED, not assumed. The first value here was a guess at what zoom 2.2 covers
+# and it was half the true width, so every depth bin paired pixels with the wrong
+# depth -- pixels labelled -3,500 m were really shelf, where the river plume is
+# active, which is why the residual came out plume-coloured. Fitted by matching
+# the shot's own land mask row-profile against the field over a range of
+# half-widths: best at 12.5 degrees, error 0.00034, against 6.5 assumed.
+#
+# Re-derive this whenever the framing changes. A framing taken on faith is the
+# same failure as a reference taken on faith.
+BOX = (-42.5, -17.5, -12.5, 12.5)   # oc_atl2 at zoom 2.2, middle 60%, derived
 Z_RANGE = 8000.0
 BROAD_KM = 250.0
 

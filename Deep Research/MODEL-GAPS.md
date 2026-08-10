@@ -6152,3 +6152,45 @@ the palette question is downstream of understanding it.
 
 Also verified this round: shader restored, tree clean, check_shader clean after
 the probe.
+
+### Iteration 134 -- the framing was assumed, and it voided this thread's own numbers
+
+Chasing the residual, its colour was the tell: RGB (14,16,11) at what I had
+labelled -3,500 m, and `vec3(0.34,0.41,0.31)` is the river-plume tint, gated to
+water shallower than 500 m. A plume cannot be active at 3.5 km. Either the gate
+was wrong or the depth label was.
+
+The depth label was. **`audit_ocean_tone`'s BOX was a guess at what zoom 2.2
+covers -- 6.5 degrees of half-width -- and the true figure is 12.5.** Fitted by
+matching the shot's own land-mask row profile against the field across a range of
+half-widths: error 0.00034 at 12.5, and the box was covering the central quarter
+of the frame while the depths were read from the whole of it. Every depth bin
+paired pixels with the wrong depth, which is exactly why the "abyss" residual
+came out the colour of a river plume.
+
+Corrected, and the picture changes materially:
+
+| quantity | wrong box | **corrected** | Blue Marble |
+|---|---|---|---|
+| depth span deep..mid | 1.12 | **1.35** | 3.22 |
+| broad share (>250 km) | 0.18 | **0.52** | 0.48 |
+
+**Our broad tonal variation is not low. It matches the reference** -- 0.52 against
+0.48 -- where the bad box said 0.18 against 0.50. So iterations 128-133's second
+metric was wrong in both directions at different times, and the surviving finding
+is the narrower one: **the right amount of broad variation, too little of it
+depth.** Depth span 1.35 against 3.22.
+
+That also partly rehabilitates G3. It narrowed the ramp because our broad
+variation was too high; today it sits level with the reference, which is what a
+correctly-aimed narrowing looks like after the fact.
+
+**And a second provenance failure inside the same round.** The framing check was
+first run against `verify/oc_atl2.png` while that file still held the
+black-ocean PROBE -- the shader had been restored but the shot had not been
+retaken -- and it reported the crop as 99.9% land. Restoring source without
+re-deriving the artefact is the same mistake as trusting a stale snapshot; the
+file on disk has to be re-made, not just the code that makes it.
+
+Both fixes are in `audit_ocean_tone.py`: the derived BOX, and a note that a
+framing taken on faith is the same failure as a reference taken on faith.
