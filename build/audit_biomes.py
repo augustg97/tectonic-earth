@@ -78,8 +78,17 @@ ORDER = ["wet", "seasonal", "grass", "desert"]
 # immediately split: Appalachians 0.061 against the seasonal class's wettest at
 # 0.302. The model did not get worse -- the measurement got wider, and it
 # exposed a continent-sized error that eighteen sites had no way to see. This
-# number goes back to 2 when the eastern US stops rendering as steppe; it must
-# not be raised again for any other reason.
+# DECIDED 2026-08-09, by the user, and this is not pending work. Every lever
+# that wets the eastern US also waters Permian Pangaea -- aridity here is a
+# function of distance from water and the eastern US is 600 km from the Gulf, so
+# its dryness is a transport failure that no available constant fixes locally.
+# Asked to choose between a wet eastern US and a dry Pangaea, the answer was
+# Pangaea: the desert supercontinent is what this map is known for, and the
+# eastern US being semi-arid is the accepted cost.
+#
+# So 3 is the standing baseline, not a debt. It must not be raised again for any
+# other reason, and this overlap must not be "fixed" by turning global depletion
+# down -- that trade has been measured and declined.
 BASE_OVERLAPS = 3
 BASE_SPEARMAN = 0.862
 

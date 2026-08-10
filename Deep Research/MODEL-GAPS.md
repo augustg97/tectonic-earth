@@ -5738,3 +5738,40 @@ verified present rather than assumed:
 
 Four independent things, all still there. Checking is cheap and the failure mode
 is invisible.
+
+### Iteration 124 -- DECIDED: Pangaea stays dry, and the eastern US is an accepted cost
+
+Put to the user with the numbers, and answered: **keep Pangaea dry, change
+nothing.**
+
+The trade, one last time so it is not re-litigated. Aridity in this solve is a
+function of distance from water. The eastern United States is 600 km from the
+Gulf of Mexico, so its dryness is a TRANSPORT failure, not a depletion one -- and
+every constant available fixes transport failures by reducing depletion globally,
+which also waters the interior of a supercontinent 2,000 km from any coast:
+
+| | Spearman | Appalachians | Pangaea proxy | -> rendered green |
+|---|---|---|---|---|
+| **shipped (chosen)** | 0.871 | 0.080 | 0.63 | **0.35** |
+| UPLIFT_SCALE=600 | 0.877 | 0.138 | 0.74 | ~0.43 |
+| UPLIFT_SCALE=900 | 0.910 | 0.170 | 0.78 | ~0.50 |
+
+The Permian desert heart is what this map is best known for, and 0.50 would draw
+it as green as a Cretaceous greenhouse. A semi-arid eastern North America is the
+cheaper error.
+
+**Recorded where it will actually be read.** `audit_biomes` carries a
+`BASE_OVERLAPS = 3` ratchet, and its comment previously said the number "goes
+back to 2 when the eastern US stops rendering as steppe" -- language that invites
+a future round to treat this as pending work. It now says the opposite: 3 is the
+standing baseline, the overlap must not be fixed by turning global depletion
+down, and that trade has been measured and declined.
+
+Constants confirmed at their shipped values: `ORO_DRAIN` 0.85, `UPLIFT_SCALE`
+300, `MONSOON_LAT_HI` 32, `FETCH_KM` 3200. Nothing from the last twelve rounds of
+climate investigation ships.
+
+That closes the last open item on the queue. What remains is mechanical: 32
+future frames and 92 Precambrian frames still baking, then a deploy carrying the
+Mariana repair, three spike-repair rules, the recalibrated spike gate, the
+wet-stop palette fix and the future-riding labels.
