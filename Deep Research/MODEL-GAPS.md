@@ -5822,3 +5822,44 @@ declined, because it costs Permian Pangaea its desert.
 Both open queue items are closed and the standing brief's exit condition is met:
 the remaining fidelity gaps are either below the data's resolution, or a trade
 already decided.
+
+### Iteration 126 -- post-deploy reference pass, and the ocean's depth ramp flattens where the ridges are
+
+All 251 fields changed in the deploy, so the user's reference set was shot again
+on the live build and looked at. Seven of eight read well: 39 Ma North America
+has relief on the Pacific margin, a dry southwest and a green interior; 122 Ma at
+globe zoom has an arid Eurasian interior, green margins, epeiric seas and legible
+terrain; Siberia, the Sahara, the prairie, Hawaii and Scotia are unchanged from
+their last passes.
+
+**The ocean at whole-globe zoom is the exception: essentially featureless blue.**
+Google Earth at that zoom shows the mid-ocean ridge system as a visible network.
+Measured on our globe framing, un-projecting each water pixel back to the
+elevation field:
+
+| depth band | rendered luminance | contrast per km |
+|---|---|---|
+| shelf / rise, -200 to -2,000 | 78.9 | -- |
+| abyss, -2,000 to -4,500 | 63.9 | **6.5 units/km** |
+| deep, -4,500 to -7,000 | 59.4 | **1.8 units/km** |
+
+Correlation between rendered luminance and depth is +0.269, so depth IS driving
+colour -- the ramp is not missing. **It flattens by 3.6x past 2 km**, and that is
+exactly where the feature lives: a mid-ocean ridge stands about 2,500 m above the
+abyssal plain it interrupts, so the whole ridge system is drawn with 4.5
+luminance units of contrast while the shelf gets 15.
+
+This is stated as an internal inconsistency rather than a reference comparison,
+deliberately. Blue Marble is a TRUE-COLOUR composite whose ocean is uniform water
+colour and carries no bathymetry at all, so it cannot referee this; Google Earth's
+ocean is a bathymetric visualisation, which is a different kind of image. What
+can be said without either: the same 2,500 m of depth change produces 15 units of
+contrast in one part of the range and 4.5 in another, and the flat part is where
+the largest landform on the planet sits.
+
+Not changed this round. Iteration G3 ("open-ocean tone -- calmer deep blue,
+subtler fabric at wide zoom") deliberately calmed this region, so steepening it
+is re-opening a decided trade and needs its own A/B against that framing rather
+than a quick edit. The base ocean colour is set in the branch above the surface
+treatment at index.html ~4700-5060; next round finds the ramp and sweeps it with
+the wide-zoom framings as the guard.
