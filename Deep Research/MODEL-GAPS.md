@@ -6116,3 +6116,39 @@ Doing that took ten seconds.
 What ships: a false claim removed from the code that justified a design, replaced
 by the measurement that refutes it and a list of what has been ruled out. The
 thread stays open with audit_ocean_tone.py as its instrument.
+
+### Iteration 133 -- the palette is not what draws our ocean
+
+Six rounds of elimination had not found the compressor, so I stopped subtracting
+candidates and asked the direct question instead: **force the ocean palette to
+black and see what the frame still shows.** Anything left is not the palette.
+
+| depth | residual with a black palette |
+|---|---|
+| -5,500..-4,500 | 3.0 |
+| -4,500..-3,500 | 7.2 |
+| -3,500..-2,500 | 13.9 |
+| -2,500..-1,500 | **47.5** |
+
+Against the normal render at the same bands -- 51.5, 56.0, 64.7, 50.1 -- the
+palette's own contribution comes out at **48.5, 48.8, 50.8: flat to within 5%
+across two kilometres of depth.** And in the shallowest band, 47.5 of the 50.1
+measured is not the palette at all.
+
+**That is the answer to why widening the ramp does nothing.** The ramp varies, but
+whatever it feeds is contributing a nearly constant amount to the frame, and a
+separate depth-dependent term supplies almost all of the variation that is there
+-- running 3.0 to 47.5, which is a 16x span where the palette manages 1.0x.
+
+So the shape of the problem inverts. It is not "our ocean is too flat"; it is
+**"our ocean's depth signal comes from somewhere other than the depth palette,
+and that somewhere is weaker than the reference"**. The palette is spending 1.97x
+of linear range on a channel that arrives flat.
+
+This is the first round of the seven on this thread to produce a positive result
+rather than an elimination, and it is a clean handoff: find what supplies the
+3.0-to-47.5 residual, since that is the term actually drawing the sea floor, and
+the palette question is downstream of understanding it.
+
+Also verified this round: shader restored, tree clean, check_shader clean after
+the probe.
