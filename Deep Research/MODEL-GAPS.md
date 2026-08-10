@@ -6650,3 +6650,80 @@ without a real spherical reprojection. `audit_land_grain` now reads its scale
 from here rather than keeping a second copy.
 
 No shader change: nothing was found that warranted one.
+
+### Iteration 145 -- Hawaii was the Sahara, and the cause was an average
+
+Shot the Hawaii-chain reference framing and looked at it. Every island in the
+chain draws as **tan desert** -- Kauai, Oahu, Maui, Molokai -- with only the Big
+Island carrying any green. Hawaii is among the wettest places on Earth.
+
+**It is not the shader.** The shipped rainfall field stores Rf **0.0000** at
+Kauai against the Sahara's 0.0000, 0.0000 at Oahu, 0.038 at Maui. The render is
+drawing exactly what the field tells it. `audit_island_biomes`, built two rounds
+ago for precisely this look, passed it: that gate asks whether the RENDER matches
+the FIELD on small land, and here the field itself said desert.
+
+**Traced through the solve, with a landmark precondition after the first attempt
+indexed a flipped array and put Kauai in the South Pacific** (all nine
+neighbouring cells read -4400 m, which is the tell):
+
+| stage | value at Kauai |
+|---|---|
+| moisture arriving off the Pacific | 1.000 |
+| `_advect` delivers | **1.0000** |
+| belts and subsidence scale it to | ~0.165 |
+| shipped field | **0.0055** |
+
+The loss is in the last three lines of `_rainfall`:
+
+    Rf = _smooth(Rf, 2)
+    Rf = 0.5*Rf + 0.25*roll(Rf,1) + 0.25*roll(Rf,-1)
+    Rf = _smooth(Rf, 1)
+
+They exist to remove row-to-row banding from the zonal march, and they are
+UNMASKED. Rainfall is defined only on land -- the march writes
+`where(sea, 0.0, rain)` -- so these read the ocean's "no value here" as "zero
+rain". A continental interior never notices; its neighbours are land and equally
+wet. An island smaller than the kernel is averaged with two dozen zeros.
+
+**The fix is a normalised convolution**: divide the smoothed field by the
+smoothed land mask, so the box averages over land cells only. Where the
+neighbourhood is all land it is arithmetically identical to what was there.
+
+| island | shipped | fixed | | mainland | shipped | fixed |
+|---|---|---|---|---|---|---|
+| Kauai | 0.0000 | 0.1325 | | Amazon | 0.6882 | 0.6882 |
+| Tahiti | 0.0153 | 0.2855 | | Sahara | 0.0000 | 0.0000 |
+| Mauritius | 0.0153 | 0.1835 | | W Siberia | 0.0816 | 0.0816 |
+| Maui | 0.0306 | 0.2039 | | Kansas | 0.0408 | 0.0408 |
+| Big Island | 0.2243 | 0.3875 | | Congo | 0.5557 | 0.5608 |
+
+Worst named-mainland shift **0.0051**, one quantisation step.
+
+**The deep-time control**, which this solve's history demands -- a global floor
+change once took Permian Pangaea from 18% green to 64%:
+
+| age | land mean | delta | green >0.30 |
+|---|---|---|---|
+| 0 Ma | 0.1172 -> 0.1265 | +8.0% | 11.7% -> 12.8% |
+| 120 Ma | 0.1924 -> 0.2045 | +6.3% | 20.5% -> 22.0% |
+| **280 Ma** | 0.1335 -> 0.1386 | **+3.8%** | 13.6% -> 14.4% |
+| 400 Ma | 0.1359 -> 0.1425 | +4.8% | 16.9% -> 17.6% |
+| 540 Ma | 0.1312 -> 0.1371 | +4.5% | 14.3% -> 15.0% |
+
+Pangaea moves LEAST and the present day moves MOST, which is the mechanism's own
+signature: the effect scales with coastline per unit area, and a supercontinent
+has the least while today's world has the most islands. That ordering is a
+better check than the magnitudes.
+
+**`audit_island_rain.py`** gates it, and the FIRST version of that gate passed on
+the broken field. It compared islands against continental interiors at the same
+latitude -- but at 15-30 degrees the mainland median is the Sahara, so anything
+maritime looks wet beside it. The defect is not "islands are dry", it is "SMALL
+islands are dry", because the leak scales with how much of the kernel is ocean.
+Comparing small islands against LARGE ones holds latitude and maritime setting
+fixed and varies only what the mechanism depends on. Rebuilt that way it fails 9
+of 12 testable bands across three eras, at ratios of 0.09 to 0.45.
+
+Rainfall is mid-re-bake (2.1 frames/min, 251 frames); `_d` and `_w` derive from
+it and follow. Not deployed this round.

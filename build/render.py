@@ -579,10 +579,30 @@ def _rainfall(Z, land, lat, cl):
     # The advection runs along rows, so without meridional mixing the field
     # keeps row-to-row streaks that surface later as straight horizontal bands
     # of vegetation. Real atmosphere mixes across latitude; so does this.
-    Rf = _smooth(Rf, 2)
+    #
+    # ...AND IT MUST AVERAGE OVER LAND ONLY. Rainfall is defined on land -- the
+    # march writes `where(sea, 0.0, rain)` -- so an unmasked box treats the
+    # ocean's "no value here" as "zero rain" and drains every coast toward the
+    # water. A continental interior never notices, because its neighbours are
+    # land and equally wet. An island smaller than the kernel is annihilated:
+    # measured at Kauai, the march delivered 1.0000 and the belts scaled it to
+    # 0.165, and what reached the shipped field was 0.0055 -- bit for bit the
+    # Sahara's 0.0049. Every Hawaiian island drew as desert, in the shipped
+    # build, at the exact framing this project uses as an ocean reference.
+    #
+    # A normalised convolution -- divide the smoothed field by the smoothed land
+    # mask -- is arithmetically IDENTICAL wherever the neighbourhood is all
+    # land, so it cannot move a continental interior, and it restores an
+    # isolated island to its own delivered value.
+    lw = land.astype(float)
+
+    def _mix(a, k):
+        den = _smooth(lw, k)
+        return np.where(den > 1e-4, _smooth(a * lw, k) / np.maximum(den, 1e-9), 0.0)
+    Rf = _mix(Rf, 2)
     Rf = 0.5 * Rf + 0.25 * np.roll(Rf, 1, axis=0) + 0.25 * np.roll(Rf, -1, axis=0)
-    Rf = _smooth(Rf, 1)
-    return np.clip(Rf, 0, 1.3)
+    Rf = _mix(Rf, 1)
+    return np.clip(Rf * lw, 0, 1.3)
 
 
 RECYCLE_KM = 1800.0     # e-folding distance of land moisture recycling, at the equator
