@@ -6400,3 +6400,48 @@ standing out at globe zoom.
 Gates: shader clean, ice 1/23 baseline, storm gate 0 synchronous uploads (the
 added pow costs nothing measurable), spikes clean, biomes at baseline, deep-time
 0 of 6 with the ordering 0.53 > 0.43 > 0.35 intact.
+
+### Iteration 140 -- the rainfall lookup is warped by up to 12 degrees, and islands fall out of it
+
+A regression pass on the shelf framings after three ocean changes found the
+shelves fine and something else entirely: **Cuba, Florida and the Bahamas render
+as desert tan on ground the field calls wet.**
+
+Verified rather than eyeballed. Framing derived from the shot's own land-mask
+profile (half-width 5.75 degrees, err 0.018), then pixels sampled at named
+coordinates:
+
+| site | rendered RGB | field Rf | elevation |
+|---|---|---|---|
+| Florida central | 194,147,93 | **0.477** | +44 m |
+| Andros I. | 199,159,109 | -- | +3 m |
+| Cuba central | 102,82,57 | **0.383** | +118 m |
+
+For scale the Congo sits at 0.684. These are wet, and they are correctly land.
+
+**Probed, not inferred**: the shader's humidity axis reads **h = 0.000 at Cuba,
+0.008 at Florida** where the field implies 1.0. So the shader is sampling a
+rainfall of about 0.01 at a place the field stores 0.38.
+
+**The cause is in `rainAt`:**
+
+    vec2 warp = vec2(fbm3(wd*1.7+7.7)-0.5, ...)*0.055
+              + vec2(fbm3(wd*5.1+3.3)-0.5, ...)*0.016;
+    vec2 q = uv + warp;
+
+With `fbm3` in 0..1 that is up to **±0.0355 in uv -- ±12.8 degrees of longitude
+and ±6.4 of latitude.** Its comment describes this as warping the lookup
+"slightly so biome edges wander", and for a continental interior that is what it
+does. **Cuba is 1.4 degrees tall.** The warp does not perturb the sample at its
+edges; it moves it off the island entirely, into open Atlantic where the solve
+stores almost no land rainfall.
+
+That is a genuinely new defect, distinct from the eastern-US one decided in
+iteration 124: there the field really is dry, and the render is faithful. Here
+the field is wet and the render is not reading it.
+
+The fix needs care rather than a smaller constant. Shrinking the warp globally
+brings back the ruler-straight biome edges that iteration 43 removed -- the warp
+is doing real work on continents. What it needs is to be bounded by something
+that knows how big the landmass is, so it wanders across Siberia and holds still
+across Cuba. Next round.
