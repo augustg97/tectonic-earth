@@ -5052,9 +5052,23 @@ void main(){
      exactly where there is most of it -- because the deep field was carrying
      artefacts that shading would have amplified: the 105 m quantisation
      staircase, and a specular highlight keyed to the sea-floor normal. Both are
-     dealt with at source now, so there is nothing left to hide, and the
-     reference is emphatic on this point: below the shelf break its ocean is one
-     colour and EVERY feature you can see is hillshade. */
+     dealt with at source now, so there is nothing left to hide.
+
+     THE CLAIM THAT USED TO END THIS COMMENT IS FALSE, and it was the
+     justification for the narrow ramp above. It read: "the reference is
+     emphatic on this point: below the shelf break its ocean is one colour and
+     EVERY feature you can see is hillshade." Measured directly on the same
+     image (iteration 132), Blue Marble's ocean luminance inside the ABYSS
+     ALONE -- -6,000 to -3,500 m, no shelf, no slope -- correlates +0.893 with
+     depth and runs 8.9 at -5,750 to 27.7 at -3,750. That is a 3.1x span within
+     the abyss and a tighter correlation than the ocean as a whole. Its abyss is
+     not one colour; it is steeply graded by depth, and hillshade rides on top.
+
+     Ours, over the same bands, spans 1.12x and sits at luminance 51 where the
+     reference sits at 9. Whatever compresses it is NOT the depth ramp (widening
+     it 4.5x buys 14%), the specular, the glint, the abyssal fabric, sRGB
+     encoding, or the atmosphere shell -- all measured and eliminated. Open, with
+     audit_ocean_tone.py as the instrument. */
   float hw=(z<wl)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
   col*=((1.0-hw)+hw*shade);
 

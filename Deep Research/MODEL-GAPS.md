@@ -6077,3 +6077,42 @@ withdrawals and one real instrument. The instrument is the durable part: it is
 committed, it measures both quantities the way they have to be measured, and the
 next attempt starts by finding the 2x multiplier rather than by turning the ramp
 again.
+
+### Iteration 132 -- the reference's abyss is NOT one colour, and the comment saying so is corrected
+
+Hunting the compressor, the trail led to the hillshade weight at index.html 5058
+and to the comment above it, which ends: *"the reference is emphatic on this
+point: below the shelf break its ocean is one colour and EVERY feature you can
+see is hillshade."* That is the justification for the narrow ramp. It contradicts
+iteration 128's +0.823 depth correlation, so rather than assume mine was right, I
+tested the difference: a global correlation could be driven entirely by the shelf
+break while the abyss really is flat.
+
+It is not. Inside the ABYSS ALONE -- -6,000 to -3,500 m, no shelf, no slope:
+
+| depth | Blue Marble luminance |
+|---|---|
+| -6,000..-5,500 | 8.9 |
+| -5,000..-4,500 | 12.8 |
+| -4,000..-3,500 | 27.7 |
+
+**Correlation +0.893 within the abyss, tighter than the ocean as a whole (+0.807),
+and a 3.1x span.** The reference's abyss is steeply graded by depth with hillshade
+riding on top. The comment is false, it has been sitting in the shader as the
+reason for a design choice, and it is now corrected in place with the numbers.
+
+Ours over the same bands: 1.12x, sitting at luminance 51 where the reference sits
+at 9. **Six candidates eliminated for the compression** -- the depth ramp itself
+(4.5x widening buys 14%), the surface specular, the sun glint, the abyssal
+fabric, sRGB encoding, and the atmosphere shell (uAtm forced to 0: span unchanged
+at 1.12). It is none of them and I have not found it.
+
+**And the backtick trap, for the fourth time in this project's history.** Writing
+the corrected comment I used backticks around a filename -- inside a GLSL comment
+inside a JS template literal. `check_shader` reported "braces 64/63", and the
+register's own rule is to read a brace complaint as "look for a backtick" first.
+Doing that took ten seconds.
+
+What ships: a false claim removed from the code that justified a design, replaced
+by the measurement that refutes it and a list of what has been ruled out. The
+thread stays open with audit_ocean_tone.py as its instrument.
