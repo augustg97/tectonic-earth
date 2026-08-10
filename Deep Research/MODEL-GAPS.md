@@ -5775,3 +5775,50 @@ That closes the last open item on the queue. What remains is mechanical: 32
 future frames and 92 Precambrian frames still baking, then a deploy carrying the
 Mariana repair, three spike-repair rules, the recalibrated spike gate, the
 wet-stop palette fix and the future-riding labels.
+
+### Iteration 125 -- DEPLOYED. The trench is water.
+
+The bake finished -- 251 keyframes, 78 MB -- and every gate passed on the
+complete set:
+
+| gate | result |
+|---|---|
+| audit_dem_spikes | **worst step 5,749 m across 251 frames, limit 6,000. No fill survived.** |
+| check_shader | clean |
+| ice_audit | 1 of 23 (the 570 Ma baseline) |
+| audit_all --quick | at or better than baseline |
+| audit_perf storm gate | 0 synchronous uploads |
+| audit_biomes | at baseline, 3 overlaps, Spearman +0.863 |
+| audit_deeptime | 0 of 6, ordering 0.53 > 0.42 > 0.35 |
+
+Live at `DATA_V = 20260810-0106`, and verified on the deployed file rather than
+locally: the live `phan_0000` reads **-6,009 m at the Mariana axis**, where the
+previous build shipped +3,349 m of dry land. The framing that started this is
+open water.
+
+**What shipped**, after twenty-eight rounds and three restarted bakes:
+
+  * the Mariana repair and three spike rules -- excursion, needle, blob -- each
+    for a fill family the previous one structurally could not see, and each
+    verified against eight real features that must not move;
+  * the spike gate, recalibrated 5,000 -> 6,000 on repaired data with all five
+    survivors named individually;
+  * the wet palette stops, 22% toward neutral: Congo 45.8 -> 36.1 against the
+    reference's 36.0, separation 63.8 -> 54.3 against 54.7;
+  * labels riding the synthesised future motion, and `trackPos` no longer
+    clamping the age at zero -- 4/142 future keyframes contradicting their label
+    down to 0/142;
+  * `audit_deeptime`'s globe framings, floors, and the ordering assertion;
+  * two eastern North American reference sites, and the decision that follows
+    from them.
+
+**Task 32 closes with both its quantities resolved.** Iteration 83 restated it as
+two things a single scalar could not serve. Between-biome separation is now at
+0.99 of the reference. Within-biome variation was traced past the palette, past
+the shader's six colour terms, to the rain field over-contrasting the middle of
+its own range -- and the fix for that was measured, priced, put to the user, and
+declined, because it costs Permian Pangaea its desert.
+
+Both open queue items are closed and the standing brief's exit condition is met:
+the remaining fidelity gaps are either below the data's resolution, or a trade
+already decided.
