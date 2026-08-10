@@ -63,7 +63,17 @@ if os.environ.get("SKIP_AUDIT") != "1":
                         ("audit_deeptime.py",
                          "the deep-time map lost the character it is known for"),
                         ("audit_dem_spikes.py",
-                         "a source-DEM fill value is being drawn as terrain")):
+                         "a source-DEM fill value is being drawn as terrain"),
+                        # audit_island_biomes tests GEOMETRY, not climate, which
+                        # is why eighteen continental reference sites all passed
+                        # while Cuba, Florida and the Bahamas shipped as desert
+                        # on wet ground: the rain lookup's warp is sized for
+                        # continents and Cuba is 1.4 degrees tall, so the sample
+                        # left the island entirely. Like audit_deeptime it reads
+                        # SHOTS and can only check what has been rendered.
+                        ("audit_island_biomes.py",
+                         "a small landmass draws a climate its field does not "
+                         "give it")):
         _q = subprocess.run([sys.executable, os.path.join(_here, _name)])
         if _q.returncode != 0:
             raise SystemExit("build_site: %s failed -- %s (above). SKIP_AUDIT=1 "

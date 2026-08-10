@@ -6489,3 +6489,35 @@ being drawn as desert, and the ordering intact.
 
 Third backtick-in-a-GLSL-comment of this session, caught by check_shader
 reporting an unclosed block comment.
+
+### Iteration 142 -- a gate for the defect class, and four ways it nearly faked passing
+
+Iteration 141 fixed Cuba. Nothing in the suite would have caught it, and nothing
+would catch the next one: `audit_biomes` has eighteen reference sites and every
+one is on a continent, because they were chosen to span **climate** and small
+islands are not a distinct climate -- they are a distinct **geometry**, and
+geometry is what broke.
+
+`audit_island_biomes.py` closes that: nine small landmasses across the
+Caribbean, island south-east Asia and the Mediterranean, comparing what the
+shader drew against what the field says it should have drawn. That is a
+different question from "is the field right", which stays `audit_biomes`'.
+
+**The validator passed on its first run, and the pass was worth nothing.** Four
+separate ways, each fixed:
+
+| what it did | why it passed | fix |
+|---|---|---|
+| dropped Sardinia, printed "all 8 ok" | site outside its framing, `continue` with no record | skips collected, printed, return 1 |
+| Sardinia + Crete sampled open water | water is never red-dominant, so "not desert" is free | pixel must be on land in the field **and** not water-blue |
+| framing off by a pixel on a 60 km island | derivation is good to a fraction of a degree | nearest-land search out to 7 px |
+| Sardinia still missed at the centre-fix | linear lon/lat -> pixel is exact only at the projection centre; Sardinia sat 7 deg off | its own framing, centred on itself |
+
+The through-line is the same one this session keeps paying for: **a validator
+that cannot distinguish "passed" from "did not run" is not a validator.** Three
+of those four failure modes print the word "ok".
+
+Final: 9 of 9 tested, exit 0, wired into `build_site.py` beside the other
+ratchets. Gates: shader clean, ice 1 of 23 at 570 Ma (baseline), deep-time 0 of
+6 failing with greenhouse > now > Pangaea at 0.57 > 0.44 > 0.37, spikes 251
+frames worst 5,749 m under the 6,000 limit.
