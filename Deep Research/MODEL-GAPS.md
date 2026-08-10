@@ -6273,3 +6273,44 @@ this saturated can carry. Recorded in the shader beside the constant, not chased
 
 Gates: shader clean, ice 1/23 baseline, spikes clean (worst 5,749 m of 6,000),
 biomes at baseline, deep-time 0 of 6 with the ordering 0.53 > 0.42 > 0.35 intact.
+
+### Iteration 137 -- the budget is spent, and the rest of the gap is structural
+
+With the age band removed and the ramp at 6.45x, the shipped ocean sits at span
+1.78 / broad 0.49 against the reference's 3.22 / 0.48. Two further routes tested.
+
+**Tightening the ramp's domain compounds well but is a trade again:**
+
+| domain | span | broad |
+|---|---|---|
+| (z+6300)/4600 (shipped) | 1.78 | 0.49 |
+| (z+5900)/3900 | 1.97 | 0.52 |
+| (z+5600)/3300 | 2.19 | 0.55 |
+| (z+5300)/2800 | **2.61** | 0.57 |
+
+2.61 is 81% of the reference, but it costs 0.08 of broad share against a metric
+that is currently exact. Not shipped.
+
+**And the budget is exhausted.** Every candidate that might hold non-depth broad
+variance has now been measured:
+
+| term | broad share it holds |
+|---|---|
+| age-driven brightness | **0.12** -- removed and spent (iteration 136) |
+| latitude productivity band | **0.00** -- already toned down to nothing |
+| abyssal fabric | negative: removing it RAISES broad to 0.58 (it adds fine variance) |
+| specular, glint | 0.00 |
+| hillshade on water | ~0.00 (span 1.35 -> 1.32 with it fully off) |
+
+**Which makes the remaining gap structural rather than a tuning miss.** Depth
+varies at hundreds of kilometres, so any increase in depth contrast necessarily
+raises the >250 km variance share -- the two are not independent knobs. The
+reference reaches 3.22 at 0.48; we reach 2.61 at 0.57. Its depth signal is
+cheaper in broad variance than ours, and with every non-depth source of ours now
+measured at zero, the difference has to be in the SHAPE of the depth-to-luminance
+curve rather than in what else is competing for the budget.
+
+That is a real, narrow, unresolved question and a good place to leave it: the
+shipped state has one metric exact and the other at 55% of reference, up from
+42%, with the instrument and the full trade curve recorded for whoever picks it
+up.
