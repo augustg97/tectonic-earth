@@ -6194,3 +6194,38 @@ file on disk has to be re-made, not just the code that makes it.
 
 Both fixes are in `audit_ocean_tone.py`: the derived BOX, and a note that a
 framing taken on faith is the same failure as a reference taken on faith.
+
+### Iteration 135 -- the ramp was never inert; that was the box too
+
+Re-ran the ramp sweep with the corrected framing, and it responds monotonically:
+
+| ramp | linear span | depth span | broad share |
+|---|---|---|---|
+| 0.585 / 0.755 (shipped) | 2.29x | 1.35 | 0.52 |
+| 0.350 / 1.050 | 4.00x | 1.58 | 0.56 |
+| 0.220 / 1.200 | 6.45x | 1.74 | 0.57 |
+| 0.140 / 1.300 | 10.29x | **1.86** | 0.57 |
+
+**So "a 4.5x ramp increase buys 14%" (iteration 131) and "the palette is not what
+draws our ocean" (iteration 133) were both artefacts of the same wrong box.** The
+palette does draw the ocean and the ramp does control it. Three rounds of
+increasingly exotic explanations -- a hidden compressor, an additive term, a
+black-palette residual -- all dissolve into one un-derived framing constant.
+
+That is the honest shape of iterations 126-134: **one measurement bug, found on
+the ninth round, having generated six plausible mechanisms along the way.** Each
+was tested and eliminated on its own terms, which is why none of them exposed the
+box; eliminating a wrong candidate tells you nothing about the instrument. What
+finally exposed it was a colour that could not belong -- a river-plume tint at
+3.5 km depth.
+
+**What survives, measured correctly:** our depth span is 1.35 against the
+reference's 3.22, and our broad tonal variation is 0.52 against 0.48 -- level. The
+right amount of broad variation, too little of it depth.
+
+**Not shipping a widening.** The curve saturates at 1.86, well short of 3.22, so
+the ramp cannot close this on its own; and every step moves broad share further
+from the one number that is currently correct. Buying 17% of a 138% gap by
+pushing a matched metric 19% off target is not a trade worth taking, and the
+saturation says something else still limits the span -- which is now a real
+question rather than an artefact, because the instrument is finally sound.
