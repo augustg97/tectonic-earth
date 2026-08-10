@@ -42,6 +42,8 @@ import sys
 import numpy as np
 from PIL import Image
 
+import framing
+
 try:
     import pillow_avif  # noqa: F401
 except ImportError:

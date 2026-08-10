@@ -6589,3 +6589,64 @@ Nyquist, and never on any user's screen either.
 Also fixed: `audit_land_grain`'s scale is derived by fitting a framing that
 straddles a coastline. The same fit on a frame that is 78% land rails at the
 search floor and returns 0.6 degrees for everything.
+
+### Iteration 144 -- two candidate defects, both killed by their own controls
+
+Rendered the user's reference framings and looked at them, which is the part
+that had been crowded out by arithmetic. Two things looked wrong on screen. Both
+were checked and neither survived.
+
+**Dark speckle over high relief.** Present-day Siberia and 39 Ma North America
+both show dark mottling across mountainous ground, and "isolated dark specks"
+is a defect family this project has shipped before -- ridged noise makes
+gradient discontinuities that alias into granular black. The discriminator is
+shape: a hillshade shadows whole SLOPES, aliasing makes 1-3 px specks. Measured
+against a local background so a genuinely dark biome does not count: Siberia
+none, North America none, 122 Ma Eurasia 0.01% in eight blobs. The mottling is
+coherent dark terrain, and my detector's own 25 px window was partly following
+it. Nothing to fix.
+
+**Lakes as fluorescent cyan.** Every small Shield lake draws as a bright
+saturated filament, which looks like a tropical shallow-shelf colour applied to
+boreal freshwater. Against Blue Marble -- valid for chroma, and the Great Lakes
+at 100-400 km are carried at 7.4 km/px -- ours came back 1.14x the blueness and
+**5.13x the blue-green separation**, with lake positions taken from the shipped
+`_w` field so neither image's colour defined its own sample.
+
+Then the mixing control, because at 7.4 km/px a small lake is averaged with its
+shore:
+
+| erosion | Blue Marble (b-g)/sum | ours |
+|---|---|---|
+| 0 | +0.015 | +0.079 |
+| 1 | +0.057 | -- |
+| 2 | +0.138 | +0.106 |
+| 3 | +0.238 | -- |
+
+The reference's chroma is a function of how much land is in the mask, it
+**overtakes ours** by erosion 2, and by erosion 3 its luminance is 5.2 -- black
+pixels where the ratio is JPEG noise. The comparison changes sign depending on a
+free parameter, so it is not a measurement. The 5.13x was mask mixing.
+
+**Shipped: `framing.py`.** Three rounds in a row have needed to know what ground
+a shot covers and each one guessed differently. One coastline framing at five
+zooms, fitted against the field:
+
+| zoom | half-height | fit err | km/px |
+|---|---|---|---|
+| 1.40 | 6.30 deg | 0.00070 | 1.84 |
+| 2.00 | 17.40 deg | 0.01878 | 5.08 |
+| 2.80 | 24.90 deg | 0.03141 | 7.27 |
+| 3.80 | 80.30 deg | 0.02308 | 23.46 |
+| 5.00 | 88.80 deg | 0.04072 | 25.94 |
+
+The second column is the point: **the fit is only trustworthy at the close end.**
+Error rises 30-60x toward zoom 5, because past about zoom 2 the frame is a
+curved cap of a sphere and no single half-width describes it -- 88.8 degrees is
+most of a hemisphere, and the flat-box model behind that number has stopped
+meaning anything. `km_per_px` returns a trustworthy flag and callers branch on
+it. Matched-resolution reference work is valid at 1.4-2.0 and nowhere wider
+without a real spherical reprojection. `audit_land_grain` now reads its scale
+from here rather than keeping a second copy.
+
+No shader change: nothing was found that warranted one.
