@@ -5988,3 +5988,46 @@ ramp, and it is not the specular, the glint or the abyssal fabric. Four things
 eliminated, one of them the change two previous rounds were building toward.
 
 Shader restored; tree clean.
+
+### Iteration 130 -- the ramp is not inert; iteration 129 compared two colour spaces
+
+Read the code instead of probing it, and the chain resolves. `oceanColour`
+returns `c` through six `mix` calls, and every one of them is gated shallow --
+`botRet`, `smoothstep(-1500,-260,z)` and shallower still -- so **in the abyss `c`
+IS the ramp**. The call site passes `z` through unchanged there too: its
+prominence correction is gated by `smoothstep(-40,-260,z)`, zero below 260 m.
+
+So nothing overwrites it, and iteration 129's "the ramp is nearly disconnected
+from the delivered contrast" was wrong. The error was mine and it is the one this
+project has a memory note about: **palette constants are LINEAR and the
+framebuffer is sRGB.**
+
+| depth | ramp, linear mean | ramp, sRGB 0-255 | measured |
+|---|---|---|---|
+| -5,000 | 0.1711 | 111.9 | 51.5 |
+| -4,000 | 0.2063 | 122.1 | 56.0 |
+| -3,000 | 0.2415 | 131.4 | 64.7 |
+
+Span from -5,000 to -3,000: **linear 1.41x, sRGB 1.17x, measured 1.26x.** The
+ramp predicts the measurement. It was doing exactly what it says.
+
+And that is what makes the comparison meaningful at last, because both sides are
+now in the same space. Blue Marble spans **3.79x in sRGB** over that band, which
+is **19x in linear light**. The ramp spends 1.97x. **The reference has an order
+of magnitude more depth contrast than our palette is budgeted for**, and widening
+1.97 -> 2.6 moved the sRGB span 0.94 -> 0.97 because that is a rounding error on
+a scale that has to reach nineteen.
+
+This also retires the number iteration 127 took from the ramp's own comment --
+*"the reference's whole abyss, trench floor to ridge crest, spans about 1.4x in
+luminance"*. 1.41x is exactly what the CURRENT ramp spans in linear light, so
+that comment is describing our own setting, not a measurement of the reference.
+Measured directly here, the reference spans 19x linear over a narrower band.
+
+**What this does not settle** is whether the app should follow it. Blue Marble's
+ocean is a bathymetric composite rendered for legibility, and G3 narrowed this
+ramp on a spectral measurement that found our broad tonal variation too high. A
+19x ramp would put the deep basins near black. That is a look decision with a
+real reference behind it now, rather than a defect -- and after three rounds in
+which every conclusion needed withdrawing, it is not one to take on the same
+evening the arithmetic finally worked.
