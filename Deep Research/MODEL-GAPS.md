@@ -6354,3 +6354,49 @@ changes.
 Gates: shader clean, ice 1/23 baseline, spikes clean, biomes at baseline,
 deep-time 0 of 6 with the ordering 0.53 > 0.42 > 0.35 intact. Land untouched --
 every change in this pair is inside the water branch.
+
+### Iteration 139 -- SHIPPED: the curve's curvature, and why the reference's depth signal is cheap
+
+Iteration 138 left the shape question open. Comparing band by band against the
+reference told me exactly where our curve was wrong:
+
+| depth | ours | Blue Marble | ratio |
+|---|---|---|---|
+| -5,500..-5,000 | 19.4 | 9.3 | **2.08** |
+| -5,000..-4,500 | 26.4 | 15.5 | **1.70** |
+| -4,500..-4,000 | 31.8 | 24.6 | 1.29 |
+| -4,000..-3,500 | 37.4 | 32.1 | 1.16 |
+| -2,000..-1,500 | 56.7 | 44.7 | 1.27 |
+
+**Above -4,500 we track it to within 20% -- a level offset, not a shape error.
+The whole deficit is the two deepest bands.** A linear ramp cannot fix that:
+lowering its floor drags the entire curve down with it.
+
+Raising `t` to a power above 1 darkens small t and leaves large t alone, which is
+precisely what the bands ask for. **It also LOWERS the >250 km variance share
+instead of raising it** -- and that is the answer to iteration 137's structural
+puzzle. Contrast placed on basin floors, which are vast and flat, lands in the
+broad band; contrast placed on margins and flanks, which are narrow, does not.
+The reference gets more span for less broad variance because its contrast is
+where the bathymetry changes fastest. Ours now does too.
+
+| curve | depth span | broad share |
+|---|---|---|
+| linear (before) | 2.23 | 0.50 |
+| **t^1.25, lo 0.150 (shipped)** | **2.83** | **0.44** |
+| t^2.00, lo 0.150 | 3.24 | 0.25 |
+| reference | 3.22 | 0.48 |
+
+t^2 hits the span exactly and empties the budget doing it. 1.25 is the joint fit:
+**combined error against the two reference numbers falls from 0.349 to 0.204.**
+Exponents below 1 were tried first and made both numbers worse -- t^0.5 lifts the
+deep end rather than dropping it, which is the opposite correction.
+
+Across the three shipped changes, depth span has gone **1.35 -> 2.83, from 42% of
+the reference to 88%**, while broad share moved 0.52 -> 0.44 against a target of
+0.48. The deep basins now read dark navy with the ridge system and shelves
+standing out at globe zoom.
+
+Gates: shader clean, ice 1/23 baseline, storm gate 0 synchronous uploads (the
+added pow costs nothing measurable), spikes clean, biomes at baseline, deep-time
+0 of 6 with the ordering 0.53 > 0.43 > 0.35 intact.

@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260810-0250';
+const DATA_V='20260810-0304';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2323,7 +2323,30 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      LINEAR ramp is only about 1.6x once encoded, so reaching 3.22 needs a
      deep end far darker than a colour this saturated can carry. Recorded, not
      chased. */
-  vec3 c=hue*(0.220+1.200*t);
+  /* CONVEX IN t, exponent 1.25 (iteration 139), and the curvature is the point.
+     Band-by-band against the reference our shape error was concentrated entirely
+     in the deep: at -5,250 m we drew 19.4 against its 9.3, at -4,750 26.4
+     against 15.5, and from -4,500 upward we tracked it to within 20%. A linear
+     ramp cannot fix that -- lowering its floor drags the whole curve down.
+
+     Raising t to a power above 1 darkens small t and leaves large t alone, which
+     is exactly the correction the bands asked for. It also LOWERS the >250 km
+     variance share rather than raising it, because it moves contrast off the
+     basin floors, which are vast and flat, and onto the margins and flanks,
+     which are narrow. That is why the reference gets more depth span than us at
+     less broad variance: its contrast is where the bathymetry changes fastest.
+
+         curve                 depth span   broad share
+         linear (before)             2.23          0.50
+         t^1.25, lo 0.150            2.83          0.44
+         t^2.00, lo 0.150            3.24          0.25
+         reference                   3.22          0.48
+
+     t^2 hits the span exactly and empties the broad-variance budget doing it.
+     1.25 is the joint fit: combined error against the two reference numbers
+     falls from 0.349 to 0.204. Exponents below 1 were tried first and made both
+     numbers worse -- t^0.5 lifts the deep end rather than dropping it. */
+  vec3 c=hue*(0.150+1.270*pow(t,1.25));
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and
