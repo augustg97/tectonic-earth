@@ -6229,3 +6229,47 @@ from the one number that is currently correct. Buying 17% of a 138% gap by
 pushing a matched metric 19% off target is not a trade worth taking, and the
 saturation says something else still limits the span -- which is now a real
 question rather than an artefact, because the instrument is finally sound.
+
+### Iteration 136 -- SHIPPED: the ocean encodes depth, by paying for it with the age band
+
+The instrument being sound at last, the two levers separate cleanly. Sweeping
+each alone, both bought depth span by pushing the >250 km variance share off the
+reference -- amplitude 2.29x -> 10.29x gave span 1.35 -> 1.86 with broad 0.52 ->
+0.57; tightening the domain gave 1.35 -> 1.57 with broad 0.52 -> 0.59. Amplitude
+is 2.5x more efficient per unit of broad-share cost, but neither is free.
+
+**Then the budget.** The age-driven brightness term at index.html 4252 -- whose
+own comment already argued it is "a second broad tonal field over the same basin"
+as the depth ramp -- turns out to hold 0.12 of broad share and buy nothing:
+
+| variant | depth span | broad share |
+|---|---|---|
+| baseline | 1.35 | 0.52 |
+| age band off | 1.38 | **0.40** |
+
+The reference sits at 0.48, so removing it opens headroom BELOW target. Spend
+that on the ramp and both numbers move toward the reference at once:
+
+| variant | depth span | broad share |
+|---|---|---|
+| shipped before | 1.35 | 0.52 |
+| age off | 1.38 | 0.40 |
+| **age off + ramp 6.45x** | **1.78** | **0.49** |
+| age off + ramp 10.3x | 1.91 | 0.51 |
+| **reference (Blue Marble)** | **3.22** | **0.48** |
+
+**Depth span +32%, broad-share error from +0.04 to +0.01.** That is the first
+change in this thread where the two quantities did not trade, and it is exactly
+the reallocation iteration 128 predicted before nine rounds of instrument bugs
+buried it.
+
+Visually the globe now shows bathymetry: the mid-Atlantic ridge reads as a
+lighter band, shelves brighten, deep basins darken. Land is untouched -- the
+change is inside the water branch only.
+
+Still 45% short on span, and the remainder is the sRGB curve: a 6.45x LINEAR
+ramp is about 1.6x once encoded, so 3.22 needs a deep end darker than a colour
+this saturated can carry. Recorded in the shader beside the constant, not chased.
+
+Gates: shader clean, ice 1/23 baseline, spikes clean (worst 5,749 m of 6,000),
+biomes at baseline, deep-time 0 of 6 with the ordering 0.53 > 0.42 > 0.35 intact.

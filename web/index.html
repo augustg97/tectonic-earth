@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260810-0106';
+const DATA_V='20260810-0238';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2289,7 +2289,23 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      spectral band carried 20-47% of the energy against the reference's 13-16%,
      and this ramp was most of it. The contrast belongs in the relief. */
   float t=clamp((z + 6300.0)/4600.0, 0.0, 1.0);
-  vec3 c=hue*(0.585+0.755*t);
+  /* 0.220 + 1.200, a 6.45x linear span, up from 2.29x (iteration 136).
+     Widening this alone was a bad trade -- it bought depth contrast by pushing
+     the >250 km variance share off the reference. Paired with dropping the age
+     band above it is not a trade at all: both numbers move toward Blue Marble
+     together, measured over the equatorial Atlantic at matched resolution.
+
+         variant                     depth span    broad share
+         shipped before                    1.35           0.52
+         age band off                      1.38           0.40
+         age off + this ramp               1.78           0.49
+         reference (Blue Marble)           3.22           0.48
+
+     Still 45% short on span, and that remainder is the sRGB curve: a 6.45x
+     LINEAR ramp is only about 1.6x once encoded, so reaching 3.22 needs a
+     deep end far darker than a colour this saturated can carry. Recorded, not
+     chased. */
+  vec3 c=hue*(0.220+1.200*t);
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and
@@ -4249,7 +4265,14 @@ void main(){
        because young crust IS shallower -- this term was adding a second,
        independent age band on top of it, and two broad tonal fields over the
        same basin is exactly the >250 km excess the spectrum showed. */
-    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.11*deepw;
+    /* REMOVED (iteration 136). The comment above already argued this term is a
+       second broad tonal field over the same basin as the depth ramp, and the
+       measurement agrees: switching it off drops the >250 km variance share
+       from 0.52 to 0.40 and changes the depth span by 0.03. It was spending
+       0.12 of the ocean's broad-tone budget and buying no depth contrast, on a
+       quantity the reference sets at 0.48. That freed budget is spent on the
+       ramp below instead, where it does encode depth. */
+    col *= 1.0;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
     if(aniso*deepw > 0.003){
