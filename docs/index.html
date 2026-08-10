@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260810-0238';
+const DATA_V='20260810-0250';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2288,7 +2288,25 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      the single biggest reason ours read as patchwork -- measured, our >250 km
      spectral band carried 20-47% of the energy against the reference's 13-16%,
      and this ramp was most of it. The contrast belongs in the relief. */
-  float t=clamp((z + 6300.0)/4600.0, 0.0, 1.0);
+  /* Zero at -5,500 m, not -6,300 (iteration 138), and the offset is taken from
+     the reference rather than swept. Blue Marble's ocean luminance per 500 m of
+     depth steps +0.2 from -6,000 to -5,500 and then +3.7, +7.8, +7.1, +6.7,
+     +6.5, +6.1, +6.0 above it: FLAT in the deepest water, linear from -5,500 up.
+     Our ramp was spending 800 m of its range on the flat part, which is both
+     wasted contrast and, because the deepest water covers whole basin floors,
+     the most expensive place to spend it in broad variance.
+
+     Moving the offset is nearly free where narrowing the range is not:
+
+         domain              depth span   broad share
+         (z+6300)/4600 old         1.78          0.49
+         (z+5500)/4500 this        2.23          0.50
+         (z+5600)/3300             2.19          0.55
+         reference                 3.22          0.48
+
+     Same span for a sixth of the cost, because the shape now matches where the
+     reference actually puts its contrast. */
+  float t=clamp((z + 5500.0)/4500.0, 0.0, 1.0);
   /* 0.220 + 1.200, a 6.45x linear span, up from 2.29x (iteration 136).
      Widening this alone was a bad trade -- it bought depth contrast by pushing
      the >250 km variance share off the reference. Paired with dropping the age

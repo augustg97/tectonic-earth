@@ -6314,3 +6314,43 @@ That is a real, narrow, unresolved question and a good place to leave it: the
 shipped state has one metric exact and the other at 55% of reference, up from
 42%, with the instrument and the full trade curve recorded for whoever picks it
 up.
+
+### Iteration 138 -- SHIPPED: the ramp's zero point, taken from the reference's own curve
+
+Iteration 137 left the remaining gap as "the SHAPE of the depth-to-luminance
+curve" and that turned out to be readable straight off the reference's band
+table. Blue Marble's ocean luminance per 500 m of depth:
+
+    -6,000 -> -5,500   +0.2
+    -5,500 -> -5,000   +3.7
+    -5,000 -> -4,500   +7.8
+    -4,500 -> -4,000   +7.1
+    -4,000 -> -3,500   +6.7   ... and roughly +6 per 500 m all the way up
+
+**Flat below -5,500, linear above it.** Our ramp started at -6,300, so it was
+spending 800 m of its range on the part the reference draws as one colour -- and
+that is the most expensive range to spend, because the deepest water covers whole
+basin floors, so contrast there lands almost entirely in the >250 km band.
+
+Moving the offset is nearly free where narrowing the range is not:
+
+| domain | depth span | broad share |
+|---|---|---|
+| (z+6300)/4600 (was) | 1.78 | 0.49 |
+| **(z+5500)/4500 (shipped)** | **2.23** | **0.50** |
+| (z+5600)/3300 (blind sweep) | 2.19 | 0.55 |
+| reference | 3.22 | 0.48 |
+
+**Same span for a sixth of the cost** -- 0.01 of broad share against 0.06 -- because
+the shape now matches where the reference actually puts its contrast. The blind
+sweep in iteration 137 found the span but paid six times over for it; deriving
+the offset from the reference's curve found the cheap route.
+
+Depth span is now **2.23 against 3.22, 69% of the reference**, up from 42% two
+rounds ago, with broad share at 0.50 against 0.48. The mid-Atlantic ridge is
+visible as a lighter S-curve at globe zoom, which it was not before this pair of
+changes.
+
+Gates: shader clean, ice 1/23 baseline, spikes clean, biomes at baseline,
+deep-time 0 of 6 with the ordering 0.53 > 0.42 > 0.35 intact. Land untouched --
+every change in this pair is inside the water branch.
