@@ -6445,3 +6445,47 @@ brings back the ruler-straight biome edges that iteration 43 removed -- the warp
 is doing real work on continents. What it needs is to be bounded by something
 that knows how big the landmass is, so it wanders across Siberia and holds still
 across Cuba. Next round.
+
+### Iteration 141 -- SHIPPED: the rain warp now knows how big the land is
+
+Iteration 140 found the rainfall lookup displaced by up to 12.8 degrees of
+longitude and 6.4 of latitude, which perturbs a continent and teleports off an
+island. The fix had to keep the wander -- it is what removed the ruler-straight
+biome edges in iteration 43 -- while stopping it from leaving small land.
+
+**The quantity that separates the two cases was already in the shader.**
+`fetchv`, the share of the air's path spent over land, reads 0.42-0.44 on
+maritime margins and 0.99-1.00 in central Siberia. `rainAt` now takes a damper:
+
+    Rf = rainAt(uv, 0.12 + 0.88*smoothstep(0.42, 0.88, fetchv));
+
+Full wander inland, a tenth of it on an island, and nothing goes ruler-straight
+because of the floor. It cost one reordering: `Rf` is now computed after the
+surface sample rather than before it, which is free -- nothing between the two
+lines used it.
+
+**Probed at the same three points as the diagnosis:**
+
+| site | h before | h after | field Rf |
+|---|---|---|---|
+| Cuba central | 0.000 | **1.000** | 0.383 |
+| Florida central | 0.008 | **1.000** | 0.477 |
+| Andros I. | 0.000 | 0.031 | -- (a 3 m sandbar, mostly water) |
+
+Cuba and Florida now draw as the tropical forest and subtropical wetland they
+are, instead of desert. The Bahama carbonate banks stay sandy, which is correct
+for them.
+
+**And the guard held.** The warp exists to break up biome banding, so the metric
+it protects was measured both ways: 280 Ma banding peak **2079.7 -> 2080.0**,
+Congo **3278.4 -> 3223.4**. Unchanged, because Pangaea and the Congo are
+continental interiors where the damper leaves the warp at full strength. That is
+the whole design working: the fix is invisible everywhere it should be.
+
+Gates: shader clean, ice 1/23 baseline, storm gate 0 synchronous uploads, spikes
+clean, biomes at baseline, deep-time 0 of 6 with the ordering now 0.57 > 0.44 >
+0.37 -- all three eras greener, as expected when wet coasts and islands stop
+being drawn as desert, and the ordering intact.
+
+Third backtick-in-a-GLSL-comment of this session, caught by check_shader
+reporting an unclosed block comment.

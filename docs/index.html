@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260810-0304';
+const DATA_V='20260810-0319';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2241,10 +2241,21 @@ float rainTap(sampler2D t, vec2 uv){
        + (texture2D(t,uv+vec2(0.0,dv)).r + texture2D(t,uv-vec2(0.0,dv)).r)*0.21
        + (texture2D(t,uv+vec2(0.0,2.0*dv)).r + texture2D(t,uv-vec2(0.0,2.0*dv)).r)*0.11;
 }
-float rainAt(vec2 uv){
+/* The damp parameter scales the warp by how continental the pixel is, and it exists because
+   the warp was moving the sample off small islands entirely. At full strength
+   the displacement reaches 0.0355 in uv -- 12.8 degrees of longitude, 6.4 of
+   latitude -- which is a perturbation on Siberia and a teleport on Cuba, which
+   is 1.4 degrees tall. Measured before this: the shader read h = 0.000 at Cuba
+   and 0.008 at Florida where the field stores 0.383 and 0.477, so both drew as
+   desert on wet ground.
+   The caller passes fetch (share of the air's path over land: 0.42-0.44 on
+   maritime margins, 0.99-1.00 in continental interiors), which is exactly the
+   quantity that separates the two cases. A floor keeps a tenth of the wander
+   everywhere so no edge goes ruler-straight -- iteration 43's fix stands. */
+float rainAt(vec2 uv, float damp){
   vec3 wd=dirFromUv(uv);
-  vec2 warp=vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
-             + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016;
+  vec2 warp=(vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
+             + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016)*damp;
   vec2 q=uv+warp;
   return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
 }
@@ -3111,7 +3122,6 @@ void main(){
   vec2 Lh=mix(vec2(-0.55,0.55), -0.55*c + 0.55*vec2(-c.y,c.x), pwL);
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
-  float Rf=rainAt(uv);
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
@@ -3132,6 +3142,8 @@ void main(){
             + vec2(vnoise3(sdir*820.0+5.0)-0.5,  vnoise3(sdir*820.0+37.0)-0.5)*1.05)*uTexel;
   vec3 SP=mix(texture2D(surfA,wA(uv+rwarp)).rgb, texture2D(surfB,wB(uv+rwarp)).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
+  // Rainfall AFTER the surface sample, so the warp can be damped by fetch.
+  float Rf=rainAt(uv, 0.12+0.88*smoothstep(0.42,0.88,fetchv));
   /* TRUNK DRAINAGE (fidelity round iter 2). The per-texel channel network is
      invisible at continental zoom -- one texel wide however large the river.
      What reads from orbit is the CORRIDOR: the Ob, Lena and Amazon are broad
