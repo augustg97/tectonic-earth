@@ -6031,3 +6031,49 @@ ramp on a spectral measurement that found our broad tonal variation too high. A
 real reference behind it now, rather than a defect -- and after three rounds in
 which every conclusion needed withdrawing, it is not one to take on the same
 evening the arithmetic finally worked.
+
+### Iteration 131 -- the guard exists now, and an intervention test falsifies iteration 130
+
+`audit_ocean_tone.py` implements the measurement G3 decided on and never wrote
+down: the fraction of the ocean's spatial variance at wavelengths longer than
+250 km, alongside the depth span, both sides at matched resolution and both in
+sRGB. Baseline, equatorial Atlantic:
+
+| quantity | ours | Blue Marble |
+|---|---|---|
+| depth span, -5,500 to -2,500 | **1.12x** | **2.96x** |
+| broad share (>250 km) | **0.18** | **0.50** |
+
+**Two independent metrics, same direction: our ocean is too flat at large
+scales.** And the second one contradicts G3's premise outright -- G3 recorded
+ours at 20-47% against a reference of 13-16% and narrowed the ramp accordingly;
+measured here the reference carries 0.50 and we carry 0.18. Whatever G3 measured,
+it was not this.
+
+**Then the intervention test, which is what settles it.** Sweeping the ramp's
+linear span:
+
+| ramp | linear span | our depth span | our broad share |
+|---|---|---|---|
+| 0.585 / 0.755 (shipped) | 2.29x | 1.11 | 0.18 |
+| 0.350 / 1.050 | 4.00x | 1.18 | 0.21 |
+| 0.220 / 1.200 | 6.45x | 1.23 | 0.21 |
+| 0.140 / 1.300 | 10.29x | **1.27** | 0.22 |
+
+**A 4.5x increase in the ramp buys 14% of depth span.** In sRGB the widest
+setting should deliver about 3.6x and it delivers 1.27. So there IS a strong
+compressor between the palette and the frame buffer, it is not sRGB, and it is
+not the specular, the glint or the fabric (iteration 129 eliminated those).
+
+**That falsifies iteration 130.** It found the ramp's predicted sRGB ratio
+(1.17x) close to the measured ratio (1.26x) and concluded "the ramp predicts the
+measurement". But the ABSOLUTE values differed by a factor of two -- 112 predicted
+against 51 measured -- and a multiplier that varies with depth changes the ratio
+as well as the level. Ratio agreement at one setting is not a model; the test is
+whether the prediction survives an intervention, and it does not.
+
+Recorded, not acted on. Four rounds on this thread have produced three
+withdrawals and one real instrument. The instrument is the durable part: it is
+committed, it measures both quantities the way they have to be measured, and the
+next attempt starts by finding the 2x multiplier rather than by turning the ramp
+again.
