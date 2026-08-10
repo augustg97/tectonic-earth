@@ -19,7 +19,8 @@ with what the field says it should have drawn, which is a different question
 from "is the field right" -- that one is audit_biomes'.
 
     ../venv/bin/python shoot.py --nolabels isl_carib,-77,20,0,1.6 \\
-        isl_seasia,120,5,0,1.8 isl_medit,16,38,0,2.0 isl_tyrrh,9.1,40.1,0,2.4
+        isl_seasia,120,5,0,1.8 isl_medit,16,38,0,2.0 isl_tyrrh,9.1,40.1,0,2.4 \\
+        isl_hawaii,-157,20.6,0,1.4
     ../venv/bin/python audit_island_biomes.py
 """
 import os
@@ -27,6 +28,8 @@ import sys
 
 import numpy as np
 from PIL import Image
+
+import framing
 
 try:
     import pillow_avif  # noqa: F401
@@ -48,8 +51,15 @@ RF_MAX = 1.6
 # put it in the Tyrrhenian Sea, where "not desert" is true of water and the test
 # passed having measured nothing. It gets its own centred framing. A site more
 # than about 5 degrees off-centre should get one too.
-SHOTS = [("isl_carib", -77.0, 20.0), ("isl_seasia", 120.0, 5.0),
-         ("isl_medit", 16.0, 38.0), ("isl_tyrrh", 9.1, 40.1)]
+# (shot, centre lon, centre lat, ZOOM). The scale now comes from framing.py's
+# measured table, not from a per-shot fit of the land-mask row profile. That fit
+# needs a coastline crossing the frame to have anything to fit: it rails at the
+# search floor on a frame that is 78% land, and it is equally degenerate on one
+# that is 97% ocean, which is what the Hawaii framing is. It put Kauai outside
+# the image and Oahu and Maui in open water.
+SHOTS = [("isl_carib", -77.0, 20.0, 1.6), ("isl_seasia", 120.0, 5.0, 1.8),
+         ("isl_medit", 16.0, 38.0, 2.0), ("isl_tyrrh", 9.1, 40.1, 2.4),
+         ("isl_hawaii", -157.0, 20.6, 1.4)]
 
 # (shot, name, lon, lat) -- land small enough that a warped lookup can leave it
 SITES = [
@@ -61,6 +71,15 @@ SITES = [
     ("isl_seasia", "Luzon", 121.0, 16.0),
     ("isl_medit", "Sicily", 14.2, 37.6),
     ("isl_tyrrh", "Sardinia", 9.1, 40.1),
+    # The Hawaiian chain: the smallest land this gate has been asked about, and
+    # the reason it matters is that the fix for Cuba does not reach it. Cuba is
+    # 1.4 degrees tall and the damped warp still moves the sample about 2.4
+    # degrees, which is a perturbation there and a teleport here -- Kauai is
+    # half a degree across.
+    ("isl_hawaii", "Kauai", -159.5, 22.1),
+    ("isl_hawaii", "Oahu", -158.0, 21.5),
+    ("isl_hawaii", "Maui", -156.3, 20.8),
+    ("isl_hawaii", "Big Island", -155.5, 19.6),
     ("isl_medit", "Crete", 24.8, 35.2),
 ]
 
@@ -100,19 +119,23 @@ def main():
     print("  small-land biome lookup: does the render match the field?")
     print("    %-12s %8s %10s %8s"
           % ("site", "field Rf", "rendered", "verdict"))
-    for shot, lon0, lat0 in SHOTS:
+    for shot, lon0, lat0, zoom in SHOTS:
         if not os.path.exists(os.path.join(VERIFY, shot + ".png")):
             print("    %-12s no shot" % shot)
             continue
-        half, im = derive_half(shot, lon0, lat0, elev)
-        if half is None:
-            continue
+        im = np.asarray(Image.open(os.path.join(VERIFY, shot + ".png"))
+                        .convert("RGB")).astype(float)
+        half, _ = framing.half_degrees(zoom)
         for s, name, lon, lat in SITES:
             if s != shot:
                 continue
             eh, ew = rain.shape
             rf = float(rain[int((90 - lat) / 180 * eh), int((lon + 180) / 360 * ew) % ew])
-            x = int((lon - (lon0 - half)) / (2 * half) * im.shape[1])
+            # Longitude degrees are narrower than latitude degrees by
+            # cos(lat). The fit-based version used one half-width for both axes,
+            # which is a 7% error at 21 N and more further poleward.
+            halfx = half / max(np.cos(np.radians(lat0)), 0.05)
+            x = int((lon - (lon0 - halfx)) / (2 * halfx) * im.shape[1])
             y = int(((lat0 + half) - lat) / (2 * half) * im.shape[0])
             if not (0 <= x < im.shape[1] and 0 <= y < im.shape[0]):
                 # NEVER skip silently. A site that falls outside its framing is

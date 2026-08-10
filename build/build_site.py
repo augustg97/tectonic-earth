@@ -82,7 +82,20 @@ if os.environ.get("SKIP_AUDIT") != "1":
                         # Alps, for a flat basin, with the detail switched off,
                         # and across a 1.66x change in render scale.
                         ("audit_land_grain.py",
-                         "close-zoom ground no longer varies with its relief")):
+                         "close-zoom ground no longer varies with its relief"),
+                        # audit_island_rain guards the SOLVE where
+                        # audit_island_biomes guards the shader. The rainfall
+                        # solve's final anti-banding averages were unmasked, so
+                        # they read the ocean's "no value here" as "zero rain"
+                        # and drained every island smaller than the kernel:
+                        # Kauai was delivered 1.0000 by the advection and
+                        # shipped at 0.0055, the Sahara's number, so the whole
+                        # Hawaiian chain drew as desert. audit_island_biomes
+                        # passed it, because the render matched the field
+                        # faithfully -- the field was what was wrong.
+                        ("audit_island_rain.py",
+                         "the climate solve is leaking island rainfall into "
+                         "the ocean")):
         _q = subprocess.run([sys.executable, os.path.join(_here, _name)])
         if _q.returncode != 0:
             raise SystemExit("build_site: %s failed -- %s (above). SKIP_AUDIT=1 "

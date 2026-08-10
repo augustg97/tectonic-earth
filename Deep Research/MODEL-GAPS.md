@@ -6727,3 +6727,55 @@ of 12 testable bands across three eras, at ratios of 0.09 to 0.45.
 
 Rainfall is mid-re-bake (2.1 frames/min, 251 frames); `_d` and `_w` derive from
 it and follow. Not deployed this round.
+
+### Iteration 146 -- the bake landed, and the render needed two more fixes
+
+Re-baked 251 rainfall fields (93 min), then `_w` lakes and `_d` surface, which
+both derive from rain. Shipped values at present day:
+
+| site | before | after | | site | before | after |
+|---|---|---|---|---|---|---|
+| Kauai | 0.0000 | 0.1318 | | Fiji | 0.3976 | 0.6651 |
+| Tahiti | 0.0153 | 0.3514 | | Big Island | 0.2243 | 0.4957 |
+| Mauritius | 0.0153 | 0.2259 | | Sahara | 0.0000 | 0.0000 |
+
+`audit_island_rain` goes from **9 of 12 bands failing** to **all 10 tested bands
+holding**. `audit_biomes` comes out at Spearman **+0.863** against the +0.862
+baseline with the overlap count unchanged, and `audit_deeptime` keeps
+greenhouse > now > Pangaea at 0.57 > 0.44 > 0.37 -- the same three numbers as
+before the change, so the supercontinents did not move.
+
+**Then the re-shot Hawaii framing still drew tan**, which was two more faults,
+neither in the solve:
+
+1. **`audit_island_biomes` could not frame Hawaii.** It derived each shot's
+   half-width by fitting the land-mask row profile, which needs a coastline
+   crossing the frame to have anything to fit. It rails at the search floor on a
+   frame that is 78% land and is equally degenerate on one that is 97% ocean:
+   Kauai landed outside the image, Oahu and Maui in open water, and the Big
+   Island's sample was sea reported as "ok" -- a free pass, since water is never
+   red-dominant. Now it reads the measured table from `framing.py`.
+2. **It used one half-width for both axes.** Longitude degrees are narrower than
+   latitude degrees by cos(lat) -- 7% at 21 N and worse poleward.
+
+With both fixed, all 13 sites land on land and the gate reports honestly. The
+Big Island, at Rf 0.496, now draws green (98,101,91).
+
+**WHAT IS STILL WRONG, and it is the field, not the render.** Kauai ships at
+0.132 where its real island average of about 1,800 mm scales to roughly 0.66,
+and Oahu still ships **0.000**. Two distinct causes, both measured:
+
+  * **Oahu is not land in the climate grid.** `_e` is 4096x2048 (10 km) and the
+    climate solve runs at 1536x768 (26 km). Oahu averages to **-208 m** there,
+    so it is ocean, and ocean gets no rain by construction. The app draws land
+    from one grid and climate from another and they disagree.
+  * **Kauai's mountain is smoothed away before the uplift is measured.**
+    `elev_s = _smooth(elev, 3)` exists so pixel-scale DEM roughness does not
+    drain moisture across continuous terrain -- a real concern -- but 3 cells is
+    73 km and Kauai is 50 km. Its 396 m cell smooths to **8.1 m**, so the
+    orographic gain is `1 + 1.9 * 0.0000`. A mid-ocean high island makes its own
+    rain and this solve cannot see that it has any relief.
+
+Both are next round's work. The isolated-island case is separable: an island's
+height is not DEM roughness, so it should keep its own relief for the rain gain
+while continuous terrain keeps the smoothed version.
