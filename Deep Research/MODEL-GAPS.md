@@ -5951,3 +5951,40 @@ specific budget reallocation rather than a knob, and this file has three
 withdrawals in it from acting one step ahead of the evidence. Next round
 decomposes the ocean's tonal variance by source, the same way iteration 105
 decomposed the rainfall product.
+
+### Iteration 129 -- the depth ramp is nearly inert, and three candidates are eliminated
+
+Decomposed the ocean's tonal budget by zeroing one term at a time, measuring the
+depth span from -5,500 m to -2,500 m over the equatorial Atlantic and reporting
+pixels-changed so a null cannot pass as a no-run:
+
+| variant | depth span | pixels changed |
+|---|---|---|
+| baseline | 0.94 | -- |
+| surface specular off | 0.94 | **0% (inactive here)** |
+| sun glint off | 0.94 | 0% |
+| abyssal fabric off | 0.94 | 18% |
+| **ramp widened 1.97 -> 2.6** | **0.97** | **53%** |
+
+**The palette ramp is almost disconnected from the delivered contrast.** Widening
+it by 32% repaints half the frame and moves the depth span by 3%. Whatever sets
+ocean luminance in the render, it is not the ramp -- which means iteration 127's
+proposal to widen 1.97 -> 2.28 would have bought essentially nothing, and
+iteration 128's framing of "take the budget back from what varies that is not
+depth" was aimed at three terms that turn out not to hold the budget either.
+
+**A probe attempt is recorded as inconclusive rather than interpreted.** Capturing
+the ramp's own `c` and writing it to `gl_FragColor` gave 46.4 / 44.4 / 42.1 across
+the deep bands -- decreasing toward shallower, which the arithmetic says is
+impossible -- and 2.3 in the shallowest, which is what an uninitialised global
+reads when the branch never runs. Both are artefacts of the probe, not the
+shader: the framebuffer sRGB-encodes what is written to it (the trap that invented
+a 1,800 m elevation deficit in iteration 92) and branch coverage is unknown, so a
+pixel that skips the line reports a stale value. The numbers are noted and not
+used.
+
+What is solid after this round: the compression sits downstream of the palette
+ramp, and it is not the specular, the glint or the abyssal fabric. Four things
+eliminated, one of them the change two previous rounds were building toward.
+
+Shader restored; tree clean.
