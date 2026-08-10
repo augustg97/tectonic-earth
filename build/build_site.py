@@ -73,7 +73,16 @@ if os.environ.get("SKIP_AUDIT") != "1":
                         # SHOTS and can only check what has been rendered.
                         ("audit_island_biomes.py",
                          "a small landmass draws a climate its field does not "
-                         "give it")):
+                         "give it"),
+                        # audit_land_grain checks that close-zoom ground still
+                        # differs by how rugged it really is, where the shipped
+                        # field is too coarse to enforce it. It also self-tests
+                        # before reporting, which the metric it replaced could
+                        # not have survived: that one answered ~0.09 for the
+                        # Alps, for a flat basin, with the detail switched off,
+                        # and across a 1.66x change in render scale.
+                        ("audit_land_grain.py",
+                         "close-zoom ground no longer varies with its relief")):
         _q = subprocess.run([sys.executable, os.path.join(_here, _name)])
         if _q.returncode != 0:
             raise SystemExit("build_site: %s failed -- %s (above). SKIP_AUDIT=1 "

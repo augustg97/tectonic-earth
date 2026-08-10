@@ -101,6 +101,45 @@ def main():
         print(__doc__)
         return 2
 
+    # ZOOM IS A CAMERA DISTANCE, CLAMPED TO [1.35, 5], AND SMALLER IS CLOSER.
+    #
+    # The app clamps silently, in three separate places, so a request for
+    # "zoom 16" renders at 5 -- the FARTHEST setting -- and this harness then
+    # prints "landed", because a file did arrive. A whole round of close-zoom
+    # land measurements was taken that way: rungs at 8, 16 and 32 were the same
+    # image at the far limit, differing only by animation, and every number
+    # derived from them described a framing that was never rendered. The shots
+    # were real, the framing was fiction, and nothing in the pipeline objected.
+    #
+    # Refuse instead. A framing the app cannot take is not a framing.
+    bad = []
+    for spec in args:
+        parts = spec.split(",")
+        if len(parts) < 5:
+            continue                      # no zoom given; the page picks one
+        try:
+            z = float(parts[4])
+        except ValueError:
+            bad.append((parts[0], parts[4], "not a number"))
+            continue
+        if not (1.35 <= z <= 5.0):
+            bad.append((parts[0], parts[4],
+                        "clamps to %.2f -- %s than asked"
+                        % (min(max(z, 1.35), 5.0),
+                           "FARTHER" if z > 5.0 else "closer")))
+    if bad:
+        print("  shoot: FAIL -- zoom is a camera DISTANCE in [1.35, 5] and "
+              "SMALLER IS CLOSER.")
+        for n, z, why in bad:
+            print("    %-14s zoom %-8s %s" % (n, z, why))
+        print("  Refusing: these would render a different framing than the name "
+              "implies,")
+        print("  and every measurement taken from them would describe a view "
+              "that was")
+        print("  never on screen. Use 1.4 for close ground, 5 for the whole "
+              "globe.")
+        return 1
+
     if not _listening(8899):
         print("  shoot: FAIL -- nothing serving on 8899; the page cannot load")
         return 1

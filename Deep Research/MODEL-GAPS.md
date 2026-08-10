@@ -6521,3 +6521,71 @@ Final: 9 of 9 tested, exit 0, wired into `build_site.py` beside the other
 ratchets. Gates: shader clean, ice 1 of 23 at 570 Ma (baseline), deep-time 0 of
 6 failing with greenhouse > now > Pangaea at 0.57 > 0.44 > 0.37, spikes 251
 frames worst 5,749 m under the 6,000 limit.
+
+### Iteration 143 -- the close-zoom round that was never at close zoom
+
+Queue item 4 is "close-zoom land grain". This round measured it, found it badly
+broken, and then found that every number was an artefact. Both the measurement
+and the refutation are recorded because the refutation is the useful part.
+
+**What was claimed, with a table.** Four sites at "zoom 16": real ruggedness from
+the shipped field spanning 23x (Alps 133.5 m between adjacent 10 km cells, the
+West Siberian Lowland 5.8) against a rendered grain spanning 1.19x, ordering
+inverted, the Amazon out-graining the Alps. Flat basins appeared to GAIN grain
+as the camera came in while the Alps lost a little. It looked like synthesised
+detail overwriting relief where the field is too coarse to object.
+
+**Three eliminations, all null.** Zeroing the ~2.4 km normal octave: 9% of pixels
+changed, the number moved 0.0002. Zeroing every land normal octave: 17% changed,
+0%. Zeroing procedural land elevation detail entirely -- the only relief a plain
+has: 20% changed, +1%. Three levers that visibly repaint the frame and a metric
+that cannot feel any of them.
+
+**Two instrument faults, then the real one.**
+
+1. The metric band-passed at RELATIVE scales -- a half-size and a sixth-size
+   resample of whatever it was handed. On any roughly self-similar spectrum that
+   ratio is near-constant, so it answered ~0.09 to everything: four sites, four
+   shader variants, and the same to within 0.07% across a 1.66x change in render
+   scale. It also read 0.099 on West Siberian land and 0.103 on the sea in the
+   same frame. A band that cannot tell land from ocean is not measuring a band.
+2. Rebuilt in absolute kilometres, the difference-of-Gaussians used numpy's
+   `mode="same"`, which zero-pads. On land at luminance 120 that is a 120-level
+   cliff around all four borders, rendered as a bright frame that dominated the
+   statistic: 0.27 response at 1 km and 0.27 at 80 km. Reflect-padding matches
+   the analytic transfer function to three decimals.
+3. **`state.zoom` is a camera DISTANCE clamped to [1.35, 5], and SMALLER IS
+   CLOSER.** Every shot this round was requested at 8, 16 or 32. All three
+   clamp to 5 -- the app's WIDEST view, 53.3% of the frame empty space around
+   the globe's limb. `gl_alps8` and `gl_cal50` carry the identical 53.3%. The
+   rungs of the "zoom ladder" were one image differing only by animation, and
+   the close-zoom shader bands are gated on pixel footprint, so at that distance
+   they were switched off and could not have responded to anything.
+
+**What is true, measured at 1.4, the app's actual closest view (1.84 km/px):**
+
+| site | field m/cell | grain, 6-20 km band |
+|---|---|---|
+| Alps | 133.5 | 0.0750 |
+| Sahara flat | 27.0 | 0.0280 |
+| Amazon | 6.9 | 0.0451 |
+| W Siberia | 5.8 | 0.0301 |
+
+Field spread 23.0x, rendered spread 2.68x, ordering correct, the Amazon elevated
+by vegetation rather than relief. **Close-zoom ground does track its own
+ruggedness.** Queue item 4's premise is false, and the version of it that looked
+true was a whole-globe view measured with a scale-free ruler.
+
+**Shipped.** `shoot.py` now REFUSES a zoom outside [1.35, 5] rather than
+reporting "landed" for a framing the app cannot take -- the whole tree was
+scanned and no pre-existing audit was affected, so this was one round's error
+and is now unrepeatable. `audit_land_grain.py` measures the band in absolute
+kilometres, at a zoom that exists, and refuses to report a site number until it
+has separated a synthetic in-band signal from an out-of-band one (23x) and seen
+a real shader lever move (14%, against the old metric's 0%). The band is 6-20 km
+because 1.84 km/px cannot resolve the 1.5 km one originally chosen -- under
+Nyquist, and never on any user's screen either.
+
+Also fixed: `audit_land_grain`'s scale is derived by fitting a framing that
+straddles a coastline. The same fit on a frame that is 78% land rails at the
+search floor and returns 0.6 degrees for everything.
