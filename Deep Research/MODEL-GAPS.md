@@ -5904,3 +5904,50 @@ span on 1.4x, and that is the number to aim at when the guard exists.
 
 Recorded rather than acted on, because the last thing this file needs is a
 palette re-widened on a measurement whose predecessor was wrong twice.
+
+### Iteration 128 -- Blue Marble's ocean IS bathymetric, and ours barely tracks depth
+
+Iteration 127 said the ocean ramp could not be re-opened until G3's spectral
+guard was rebuilt. Before rebuilding it, the prior question: **can Blue Marble
+referee ocean tone at all?** Iteration 82 established its ocean is a true-colour
+composite, and a photograph of water carries no bathymetry.
+
+It does, and strongly. Correlation between Blue Marble's ocean luminance and the
+source DEM's depth is **+0.823**, running 9.0 at -5,500 m to 56.2 at -1,500 m.
+NASA composited a bathymetric ocean into it. So the hypothesis was wrong and the
+reference is valid here -- one command, and it saved rebuilding a guard against a
+reference that would not have worked.
+
+Measured properly, on a flat framing away from the limb, same box and same depth
+bins for both:
+
+| depth | ours | Blue Marble |
+|---|---|---|
+| -5,500..-4,500 | 53.3 | 11.2 |
+| -4,500..-3,500 | 57.1 | 24.5 |
+| -3,500..-2,500 | 64.5 | 34.4 |
+| -2,500..-1,500 | 50.1 | 42.4 |
+
+**Span from -5,500 to -2,500: ours 0.94x, the reference 3.79x.** Our open ocean
+does not encode depth. The shallowest band even comes out DARKER than the two
+below it, which the linear palette ramp cannot produce -- something depth-
+independent is writing over it.
+
+**And this does not contradict G3, it explains it.** G3 measured spectral energy
+in the >250 km band and found ours carrying 20-47% against the reference's
+13-16%, so it narrowed the ramp. Both can be true at once, and together they say
+something sharper than either: **our ocean has plenty of broad tonal variation
+and it is not depth that drives it.** Cutting the total variation cut the depth
+signal along with the noise, because the two were never separated.
+
+That reframes the fix. It is not "widen the ramp" -- G3 already showed total
+variation was too high. It is "find what varies that is not depth, and take the
+budget back from it". The candidates are the age-driven `rough` term, the
+fabric's contribution to shading, and the surface specular and glint, which add a
+near-constant lift over anything below 120 m and would flatten a ratio.
+
+Not changed this round. The measurement is new, controlled and points at a
+specific budget reallocation rather than a knob, and this file has three
+withdrawals in it from acting one step ahead of the evidence. Next round
+decomposes the ocean's tonal variance by source, the same way iteration 105
+decomposed the rainfall product.
