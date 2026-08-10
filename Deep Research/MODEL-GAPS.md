@@ -5863,3 +5863,44 @@ is re-opening a decided trade and needs its own A/B against that framing rather
 than a quick edit. The base ocean colour is set in the branch above the surface
 treatment at index.html ~4700-5060; next round finds the ramp and sweeps it with
 the wide-zoom framings as the guard.
+
+### Iteration 127 -- iteration 126's number was a binning artefact; the real one is smaller and the other way
+
+Found the ramp. It is `t = clamp((z+6300)/4600, 0, 1); c = hue*(0.585+0.755*t)`
+-- **linear in depth**, which iteration 126's "flattens 3.6x past 2 km" cannot be
+true of. That figure came from three wide bins with very unequal mass: the
+"-4,500 to -7,000" bin has most of its pixels near -5,000, so its mean sat close
+to the shallower bin's and the apparent gradient collapsed. Re-measured in 500 m
+bins:
+
+| depth | rendered luminance | ramp predicts |
+|---|---|---|
+| -5,500..-5,000 | 57.1 | 0.757 |
+| -5,000..-4,500 | 61.5 | 0.839 |
+| -4,000..-3,500 | 63.4 | 1.004 |
+| -3,000..-2,500 | 67.3 | 1.168 |
+| -2,000..-1,500 | 69.0 | 1.332 |
+
+Monotone and roughly even, as a linear ramp should be. **Seventh instance this
+session of a reference-style comparison failing on its own instrument, and the
+control -- narrower bins -- cost one line.** Unequal mass inside a wide bin
+flattens any gradient you measure across it.
+
+What the narrow bins do show is real but smaller and points the other way. The
+palette ramp is specified for a **1.97x** luminance span across the abyss and the
+render delivers **1.21x**. The ramp's own comment records the target: *"the
+reference's whole abyss, trench floor to ridge crest, spans about 1.4x in
+luminance"*. So we are 14% UNDER the reference, not over, and about 30% of the
+ramp is being eaten downstream -- by the surface specular and glint, which add a
+near-constant offset over anything deeper than 120 m, and by whatever else writes
+into water after the palette.
+
+**Not changed.** Iteration G3 set this ramp deliberately, narrowing it from three
+times the reference's span, and its guard was a spectral measurement -- our
+>250 km band carrying 20-47% of the energy against the reference's 13-16%. That
+guard is not implemented as a script, so re-opening the ramp means rebuilding the
+metric that decided it first. Widening 1.97 -> ~2.28 would land the delivered
+span on 1.4x, and that is the number to aim at when the guard exists.
+
+Recorded rather than acted on, because the last thing this file needs is a
+palette re-widened on a measurement whose predecessor was wrong twice.
