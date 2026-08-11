@@ -6975,3 +6975,60 @@ one is open and physical.
 Next: scale the subtropical descent by continentality inside `_rainfall`, verify
 offline at 200 Ma and present day against audit_biomes' Spearman and overlap
 count, then re-bake (93 min) with `_d` and `_w` following.
+
+### Iteration 151 -- the subtropical high, and the same average two stages later
+
+Shipped the belt fix, re-baked, and the round's own gate caught two more
+instances of the defect this session has now met three times.
+
+**The solve.** The subtropical suppression was applied as a latitude band. It
+is not one: the descending branch sits over the ocean basins, which is why
+subtropical east coasts are wet (SE China, SE Brazil, the SE United States)
+while west coasts and interiors at the same latitude are deserts. Scaled by how
+much land the easterlies have already crossed, over a **900 km coastal strip**.
+
+At 2500 km it reached into the deserts the belt exists to make -- the Sahara at
+25E has only ~1500 km of easterly land behind it, so it collected 22% relief and
+went 0.005 -> 0.013, with the Great Basin and Atacama moving too, and Spearman
+fell to 0.822 from the 0.862 baseline. **A fix that breaks the deserts is not a
+fix.** At 900 km the deserts hold and the east coasts come up.
+
+Baked, on audit_biomes' own instrument: **Spearman +0.863** against the +0.862
+baseline, overlaps 3 unchanged. Rendered striping at 200 Ma **52% -> 49%**;
+field zonality 71% -> 68%, and 60% -> 56% at present.
+
+**A METHOD ERROR WORTH RECORDING.** The pre-bake verification compared a
+webp-read "before" against an offline-computed "after" -- two different
+instruments -- and reported 0.862 -> 0.865. Redone baked-against-baked it read
+0.842 -> 0.832, the opposite sign. Both were wrong about the magnitude, because
+audit_biomes samples a **median of a 5x5 box**: one texel is 26 km and a single
+point lands wherever the reconstruction happens to put a pixel. Its own comment
+records two sites previously chased into the model before anyone checked where
+the sample landed. Never compare a value read one way against a value computed
+another.
+
+**Then the gate failed the build, correctly.** Wetter mid-ocean islands pushed
+Kauai and Maui past audit_island_biomes' wet threshold, exposing that the RENDER
+still drew them as desert. Two more unmasked averages, downstream of the one
+fixed in the solve:
+
+  1. the rain-lookup warp kept a 0.12 floor everywhere so no biome edge runs
+     ruler-straight. On Cuba that is a perturbation; on Kauai, half a degree
+     across, it is 2.4 degrees of longitude. Fading the floor on FETCH fixed
+     Hawaii and broke Crete -- same size, but between two continents, so it
+     reads a high fetch. Fetch measures how maritime the air is; the warp cares
+     how large the land is, and in the Mediterranean those disagree completely.
+     Now measured directly: four taps of the elevation field at 1.5 degrees.
+  2. `rainTap`'s vertical blur reaches +-0.94 degrees and rainfall is zero over
+     sea, so Maui -- 0.4 degrees tall -- kept only the centre weight of 0.36.
+     Field 0.471, shader read 0.17, drew desert. Scaled by the same size
+     measure; at zero the five taps collapse to one point and the weights
+     already sum to 1.
+
+All 13 small landmasses now draw their field's climate. Kauai went
+173,151,110 (tan) to 102,110,84, Maui to 92,95,74.
+
+**The pattern, three times in one session: an unmasked average over a field that
+is only defined on land.** The solve's anti-banding smooth, the shader's lookup
+warp, and the shader's own vertical blur. Each was added for a real reason, each
+is invisible on a continent, and each annihilates land smaller than its kernel.

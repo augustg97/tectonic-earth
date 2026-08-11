@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260811-0715';
+const DATA_V='20260811-1038';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2235,8 +2235,17 @@ float elevAt(vec2 uv, float rug){
    showing up as straight horizontal bands of vegetation. Blur across latitude
    when sampling (the atmosphere mixes meridionally anyway) and warp the lookup
    slightly so biome edges wander. */
-float rainTap(sampler2D t, vec2 uv){
-  float dv=1.0/384.0;
+float rainTap(sampler2D t, vec2 uv, float dvs){
+  /* THE BLUR IS AN UNMASKED AVERAGE, and rainfall is zero over the sea, so on
+     land smaller than the kernel it averages the island with the ocean around
+     it. dv is 2 texels of a 768-row field, so this reaches +-0.94 degrees of
+     latitude; Maui is 0.4 degrees tall, which leaves it the centre weight of
+     0.36 and nothing else. Its field says 0.471 and the shader read 0.17, so it
+     drew desert -- the identical fault this round fixed in the solve's own
+     anti-banding smooth, one stage further downstream.
+     The caller scales dv by how much land is actually nearby: at zero the five
+     taps collapse to one point and the weights already sum to 1. */
+  float dv=(1.0/384.0)*dvs;
   return texture2D(t,uv).r*0.36
        + (texture2D(t,uv+vec2(0.0,dv)).r + texture2D(t,uv-vec2(0.0,dv)).r)*0.21
        + (texture2D(t,uv+vec2(0.0,2.0*dv)).r + texture2D(t,uv-vec2(0.0,2.0*dv)).r)*0.11;
@@ -2252,12 +2261,12 @@ float rainTap(sampler2D t, vec2 uv){
    maritime margins, 0.99-1.00 in continental interiors), which is exactly the
    quantity that separates the two cases. A floor keeps a tenth of the wander
    everywhere so no edge goes ruler-straight -- iteration 43's fix stands. */
-float rainAt(vec2 uv, float damp){
+float rainAt(vec2 uv, float damp, float blur){
   vec3 wd=dirFromUv(uv);
   vec2 warp=(vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
              + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016)*damp;
   vec2 q=uv+warp;
-  return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
+  return mix(rainTap(rainA,q,blur), rainTap(rainB,q,blur), mixf)*RF_MAX;
 }
 
 /* Water colour is mostly what the body of water does to light: clear ocean
@@ -3222,7 +3231,38 @@ void main(){
   vec3 SP=mix(texture2D(surfA,wA(uv+rwarp)).rgb, texture2D(surfB,wB(uv+rwarp)).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
   // Rainfall AFTER the surface sample, so the warp can be damped by fetch.
-  float Rf=rainAt(uv, 0.12+0.88*smoothstep(0.42,0.88,fetchv));
+  /* THE FLOOR HAS TO FADE TOO. The damp above kept a tenth of the wander
+     everywhere so no biome edge runs ruler-straight, and on Cuba -- 1.4 degrees
+     tall -- a tenth is a perturbation. On Kauai, half a degree across, 12% of
+     the warp is still 2.4 degrees of longitude, which is the whole island and
+     then some. It did not show until the subtropical fix made mid-ocean islands
+     wet enough for audit_island_biomes to care: Maui's field went to 0.471 and
+     the render still drew desert, so the gate failed the build. The field was
+     right and the lookup was wrong.
+
+     Fade the floor itself on the same quantity, so a continental interior and a
+     large island keep their full wander and genuinely tiny land keeps none. */
+  /* HOW BIG IS THE LAND UNDER THIS PIXEL? Ask directly, because fetch cannot
+     answer it. The damp began as a fetch ramp with a 0.12 floor, so no biome
+     edge would run ruler-straight; on Cuba, 1.4 degrees tall, a tenth of the
+     warp is a perturbation, and on Kauai, half a degree across, it is 2.4
+     degrees of longitude -- the whole island and then some.
+
+     Fading the floor on fetch fixed Hawaii and broke Crete, which is the same
+     size but sits between two continents and so reads a HIGH fetch. Fetch
+     measures how maritime the air is; the warp cares how large the land is,
+     and in the Mediterranean those two disagree completely.
+
+     Four taps of the elevation field at about 1.5 degrees say it outright: an
+     island whose neighbours are all sea gets no wander, a continental interior
+     gets all of it, and a coast gets the part that is over land. */
+  float dLon=1.5/360.0, dLat=1.5/180.0;
+  float landNear=0.25*(step(wl, baseElev(uv+vec2( dLon,0.0)))
+                     + step(wl, baseElev(uv+vec2(-dLon,0.0)))
+                     + step(wl, baseElev(uv+vec2(0.0, dLat)))
+                     + step(wl, baseElev(uv+vec2(0.0,-dLat))));
+  float sizeq=smoothstep(0.10,0.65,landNear);
+  float Rf=rainAt(uv, (0.12+0.88*smoothstep(0.42,0.88,fetchv))*sizeq, sizeq);
   /* TRUNK DRAINAGE (fidelity round iter 2). The per-texel channel network is
      invisible at continental zoom -- one texel wide however large the river.
      What reads from orbit is the CORRIDOR: the Ob, Lena and Amazon are broad
