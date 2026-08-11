@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260811-0657';
+const DATA_V='20260811-0715';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5251,7 +5251,34 @@ void main(){
      encoding, or the atmosphere shell -- all measured and eliminated. Open, with
      audit_ocean_tone.py as the instrument. */
   float hw=(z<wl)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
-  col*=((1.0-hw)+hw*shade);
+  /* SUBMARINE RELIEF CONTRAST, expanded about the mean rather than about 0.5.
+     The comment above records that widening the depth ramp 4.5x bought 14% of
+     contrast and that specular, glint, fabric, sRGB and the atmosphere shell
+     were all measured and eliminated. This round closed that off arithmetically:
+     the rendered span is (A+B)/A, so a bright abyss (A~0.70, luminance 50) with
+     a Blue-Marble span (5.8x sRGB = 51x linear) needs A+B near 36, against a
+     shelf that already clips 23% of its water at A+B=3.8. THE DISPLAY RANGE IS
+     THE WALL. A shoulder caps the top but cannot widen what fits beneath it,
+     and Blue Marble only reaches 5.8x by putting its floor at luminance 9.
+
+     So the depth cue comes from SHADING, which is what the Google Earth
+     reference actually shows -- strong hillshaded relief over a fairly uniform
+     blue. Expanding shade contrast does that directly.
+
+     THE PIVOT IS THE WHOLE TRICK. Expanding about 0.5 brightened the water 27%
+     and then LOST contrast above gain 1.6, because mean shade sits near 0.9 and
+     the expansion drove most of the distribution into its own clamp. About 0.90
+     it adds contrast instead of exposure:
+
+       gain / pivot     slope    basin   water mean
+       1.0 (shipped)   0.0635   0.0690         86.5
+       1.6 / 0.50      0.0665   0.0758        110.0
+       2.2 / 0.50      0.0572   0.0502        120.1   <- saturating, not helping
+       1.5 / 0.90      0.0782   0.0946         92.3
+       2.0 / 0.90      0.0897   0.1080         97.2 */
+  float shd=shade;
+  if(z<wl) shd=clamp(0.90+(shade-0.90)*2.00,0.05,1.5);
+  col*=((1.0-hw)+hw*shd);
 
   if(z<wl && uSchem<0.5){
     // A moving sea surface, without ever touching the height field: fine
