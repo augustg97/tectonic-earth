@@ -6841,3 +6841,28 @@ Also this round: a backtick inside a GLSL comment closed the template literal
 for the fourth time, and `check_shader` passed a ramp line that a shell loop had
 corrupted to `hue*(0.400 2.300+*pow(t,1.35))` -- braces balanced, GLSL invalid.
 The signal that caught it was the shot failing, not the checker.
+
+### Iteration 148 -- A to 0.550 on the user's call, and B came down with it
+
+Shown 0.400 on screen, the user asked for 0.550. Applied, and then the A/B
+separation established last round paid for itself rather than forcing a trade.
+
+At A = 0.550 the abyss is **34** regardless of B, and B alone sets the shelf:
+
+| B | abyss median | shelf median | shelf clipped |
+|---|---|---|---|
+| 2.300 | 34 | 70 | 8.76% |
+| **2.000** | **34** | **65** | **1.90%** |
+| 1.800 | 34 | 61 | 0.33% |
+
+2.300 would have shipped at 8.76% against the CLIP_MAX of 9.0% -- passing, but
+with no margin at all, and a ceiling a change squeaks under is a ceiling that
+will be breached by the next one. 2.000 gives the floor the user asked for at a
+fifth of the clipping.
+
+Shipped `hue*(0.550 + 2.000*pow(t,1.35))`. Atlantic framing: abyss median 43.0
+against the floor of 18.0, channel-clipped water **0.02%** against the ceiling
+of 9.0%. Hawaii framing: abyss 34, against 26 at A=0.400 and **10** originally.
+
+Gates: shader clean, ice 1 of 23 at 570 Ma (baseline), islands hold their rain
+in all 10 bands, storm gate 0 synchronous uploads.

@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260811-0402';
+const DATA_V='20260811-0615';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2381,7 +2381,14 @@ vec3 oceanColour(float z, vec3 sd, float latd){
        ramp                 abyss   shelf median   shelf clipped
        original 0.150/1.270    10             32           0.14%
        Blue Marble fit          9             --              --
-       chosen   0.400/2.300    26             61           4.93%
+                0.400/2.300    26             61           4.93%
+       chosen   0.550/2.000    34             65           1.90%
+
+     A raised to 0.550 on the user's call after seeing 0.400 on screen. B came
+     DOWN with it, and that is the A/B separation paying off rather than a
+     compromise: holding A at 0.550 and sweeping B gave an abyss of 34 at every
+     value, while shelf clipping ran 8.76% / 1.90% / 0.33% for B of 2.300 /
+     2.000 / 1.800. The floor the user asked for, at a fifth of the clipping.
 
      A sets the floor and B the top, which a control established: two ramps with
      the same A and different B came back with the same abyss (26) and shelf
@@ -2402,7 +2409,7 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      A, the shallowest by A+B, so the span is A/(A+B) -- and matching the
      reference's 5.8x in sRGB needs about 51x in linear, against the 9.5x that
      was here. Hence B near fifty times A. */
-  vec3 c=hue*(0.400+2.300*pow(t,1.35));
+  vec3 c=hue*(0.550+2.000*pow(t,1.35));
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and
