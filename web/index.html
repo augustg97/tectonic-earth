@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260810-1403';
+const DATA_V='20260811-0402';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2357,7 +2357,52 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      1.25 is the joint fit: combined error against the two reference numbers
      falls from 0.349 to 0.204. Exponents below 1 were tried first and made both
      numbers worse -- t^0.5 lifts the deep end rather than dropping it. */
-  vec3 c=hue*(0.150+1.270*pow(t,1.25));
+  /* FITTED TO BLUE MARBLE'S ABSOLUTE LUMINANCE, not to a ratio (user feedback:
+     "our ocean floor is far too dark"). Measured at matched 7.4 km/px, the old
+     ramp was not uniformly dark -- it was too FLAT, so the whole sea read as
+     abyss:
+
+       depth      -5500  -4500  -3500  -2500  -1500   -600
+       Blue Marble   9.3   18.8   33.1   38.4   46.9   54.0
+       was          14.2   20.9   28.7   32.8   34.7   39.4
+
+     BUT BLUE MARBLE IS THE WRONG REFERENCE FOR THE LEVEL, and fitting it was
+     this round's first mistake. It is a PHOTOGRAPH of a surface that returns
+     almost no light from 5 km down, so matching it exactly (achieved: RMS 2.21)
+     left the mid-Pacific still reading black -- the user's complaint unchanged.
+     The brief is Google-Earth-equivalent, and Google Earth draws a BATHYMETRIC
+     ramp that stays legibly blue at every depth, because its job is to show the
+     sea floor rather than to reproduce a satellite's exposure.
+
+     So Blue Marble governs the SHAPE (span, broad-variance share) and the
+     visualisation governs the LEVEL. Measured on the Hawaii and Bahamas
+     framings:
+
+       ramp                 abyss   shelf median   shelf clipped
+       original 0.150/1.270    10             32           0.14%
+       Blue Marble fit          9             --              --
+       chosen   0.400/2.300    26             61           4.93%
+
+     A sets the floor and B the top, which a control established: two ramps with
+     the same A and different B came back with the same abyss (26) and shelf
+     clipping of 4.9% against 23.4%. The clipping that remains is the sunlit
+     carbonate banks, which really are near-white, and the 99.5th percentile
+     barely moved (208 -> 211) -- it is the bulk of the shelf that brightened,
+     not the top of it.
+
+     The deepest water was BRIGHTER than the reference and everything above it
+     darker. audit_ocean_tone never saw it because it measures a depth SPAN and
+     a variance SHARE -- both ratios, and a ratio is improved by darkening the
+     deep end, which is exactly what iteration 131-134 did taking the span from
+     1.35 to 2.83. It now checks the absolute level too.
+
+     A IS NOT THE ABYSS OFFSET, which cost a sweep to learn: hue*(A+B*t^P)
+     means A shifts the ENTIRE ramp, and a control that cut A alone from 0.150
+     to 0.050 moved every band down about six levels. The deepest band is set by
+     A, the shallowest by A+B, so the span is A/(A+B) -- and matching the
+     reference's 5.8x in sRGB needs about 51x in linear, against the 9.5x that
+     was here. Hence B near fifty times A. */
+  vec3 c=hue*(0.400+2.300*pow(t,1.35));
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and

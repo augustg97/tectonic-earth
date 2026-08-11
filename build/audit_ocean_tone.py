@@ -65,6 +65,41 @@ SHOT = "oc_atl2"
 BOX = (-42.5, -17.5, -12.5, 12.5)   # oc_atl2 at zoom 2.2, middle 60%, derived
 Z_RANGE = 8000.0
 BROAD_KM = 250.0
+# ABSOLUTE LUMINANCE BY DEPTH, and it is here because its absence shipped a
+# defect the user reported before any gate did: "our ocean floor is far too
+# dark". Span and broad-share are both RATIOS, and a ratio is improved by
+# darkening the deep end -- which is what iteration 131-134 did taking the span
+# from 1.35 to 2.83. Nothing in this file constrained the level, so the palette
+# was free to walk down until the whole sea read as abyss, and it did: measured,
+# the deepest water came out 1.52x the reference's while everything above -4000 m
+# came out 0.73-0.87x.
+#
+# Blue Marble's ocean luminance is a valid reference for this (+0.823 with the
+# source DEM's depth, and it is a composited bathymetric ocean), at matched
+# resolution and in the same colour space -- the two preconditions this file
+# already enforces for the span.
+LEVEL_BANDS = [(-6000, -5000), (-5000, -4000), (-4000, -3000),
+               (-3000, -2000), (-2000, -1000), (-1000, -200)]
+# BLUE MARBLE GOVERNS THE SHAPE, NOT THE LEVEL, and this file learned that the
+# expensive way. Fitting the absolute level to Blue Marble was achieved -- RMS
+# 2.21 across the bands above -- and the mid-Pacific still rendered black,
+# because Blue Marble is a PHOTOGRAPH of water that returns almost no light from
+# 5 km down. The brief is Google-Earth-equivalent, and a bathymetric
+# visualisation stays legibly blue at every depth because its job is to show the
+# sea floor.
+#
+# So the level is checked against what the app is FOR, in two directions:
+#
+#   ABYSS_MIN   the deepest water must remain readable. Below this the sea floor
+#               stops being visible at all, which is the defect the user
+#               reported ("our ocean floor is far too dark") while every ratio
+#               in this file was passing. The originally shipped ramp sat at 10.
+#   CLIP_MAX    and the shallow end must not blow out paying for it. The chosen
+#               ramp clips 4.9% of shelf water in one channel, against 0.14%
+#               before and 23.4% for a ramp one step brighter; what clips is the
+#               sunlit carbonate banks, which really are near-white.
+ABYSS_MIN = 18.0
+CLIP_MAX = 9.0
 
 
 def dec(e):
@@ -146,7 +181,39 @@ def main():
                                      out["ours"][1], out["bm"][1]))
     print("  the two must move together: G3 narrowed the ramp on the second and")
     print("  cost the first, because nothing separated depth from everything else.")
-    return 0
+
+    # ...AND NEITHER OF THEM IS A LEVEL. Both numbers above are ratios and both
+    # can be satisfied by a sea that is uniformly too dark to look at.
+    print("  %-28s %10s %14s" % ("absolute level by depth", "ours", "Blue Marble"))
+    errs = []
+    for a, b in LEVEL_BANDS:
+        def lvl(im_, d_):
+            lum_ = im_.mean(axis=2)
+            s = (d_ >= a) & (d_ < b) & (lum_ > 1) & (im_[:, :, 2] >= im_[:, :, 1])
+            return float(lum_[s].mean()) if s.sum() > 8 else float("nan")
+        o, r = lvl(ours, D), lvl(ref, Dref)
+        if o == o and r == r:
+            errs.append(o - r)
+        print("    %5d..%-6d m %20.1f %14.1f" % (a, b, o, r))
+    if not errs:
+        print("  no depth band had enough water to measure -- NOT TESTED")
+        return 1
+    lum = ours.mean(axis=2)
+    deep = (D < -4500) & (lum > 1)
+    abyss = float(np.median(lum[deep])) if deep.sum() > 40 else float("nan")
+    wet = (D < -50) & (lum > 2)
+    clip = 100.0 * float((ours[wet].max(axis=1) >= 250).mean()) if wet.sum() > 40 \
+        else float("nan")
+    print("  abyss median %.1f (floor %.1f)   channel-clipped water %.2f%% "
+          "(ceiling %.1f%%)" % (abyss, ABYSS_MIN, clip, CLIP_MAX))
+    bad = 0
+    if not (abyss >= ABYSS_MIN):
+        print("  THE SEA FLOOR IS TOO DARK TO READ, whatever its contrast is.")
+        bad = 1
+    if not (clip <= CLIP_MAX):
+        print("  the shallow end is blowing out paying for the deep end.")
+        bad = 1
+    return bad
 
 
 if __name__ == "__main__":

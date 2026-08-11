@@ -6779,3 +6779,65 @@ and Oahu still ships **0.000**. Two distinct causes, both measured:
 Both are next round's work. The isolated-island case is separable: an island's
 height is not DEM roughness, so it should keep its own relief for the rain gain
 while continuous terrain keeps the smoothed version.
+
+### Iteration 147 -- the sea floor was too dark, and Blue Marble said it was fine
+
+User feedback: "our ocean floor is far too dark". It was, and every gate in the
+suite was passing, because `audit_ocean_tone` measured a depth SPAN and a
+broad-variance SHARE and **both are ratios**. A ratio is improved by darkening
+the deep end -- which is precisely what iteration 131-134 did taking the span
+from 1.35 to 2.83. Nothing constrained the level, so the palette walked down
+until the whole sea read as abyss, and nothing objected.
+
+**Measured against Blue Marble at matched 7.4 km/px** the shape of the error was
+not "uniformly dark":
+
+| depth | ours | Blue Marble | ours/ref |
+|---|---|---|---|
+| -6000..-5000 | 14.2 | 9.3 | **1.52** |
+| -4000..-3000 | 28.7 | 33.1 | 0.87 |
+| -2000..-1000 | 34.7 | 46.9 | **0.74** |
+| -1000..-200 | 39.4 | 54.0 | **0.73** |
+
+The abyss was BRIGHTER than the reference and everything above it darker: the
+ramp was too flat, so the whole sea read as abyss.
+
+**A control was needed to find the knobs.** A sweep produced a variant with a
+LOWER A that came out BRIGHTER, which cannot happen if A sets the abyss. Cutting
+A alone from 0.150 to 0.050 moved every band down about six levels: in
+`hue*(A + B*t^P)`, A shifts the ENTIRE ramp. The deepest band is A, the
+shallowest A+B, so the span is A/(A+B) -- and Blue Marble's 5.8x in sRGB needs
+about 51x in linear against the 9.5x that was there.
+
+**Fitting Blue Marble worked and did not fix the complaint.** A=0.058, B=2.900,
+P=1.60 landed at RMS 2.21 against the reference curve, down from 8.56 -- and the
+re-shot mid-Pacific was still black. Blue Marble is a PHOTOGRAPH of water that
+returns almost no light from 5 km down; matching it faithfully reproduces a
+satellite's exposure, not a map of the sea floor. The brief is
+Google-Earth-equivalent, and Google Earth draws a bathymetric ramp that stays
+legibly blue at every depth because its job is to show the floor.
+
+**So Blue Marble governs the SHAPE and the visualisation governs the LEVEL.**
+
+| ramp | abyss | shelf median | shelf clipped |
+|---|---|---|---|
+| original 0.150/1.270 | 10 | 32 | 0.14% |
+| Blue Marble fit 0.058/2.900 | 9 | -- | -- |
+| one step brighter 0.400/3.400 | 26 | 79 | 23.39% |
+| **chosen 0.400/2.300** | **26** | **61** | **4.93%** |
+
+The two 0.400 rows share an abyss of 26 and differ 4.9% against 23.4% in
+clipping, which is the A/B separation confirmed on the render. What still clips
+is the sunlit carbonate banks, which really are near-white, and the 99.5th
+percentile barely moved (208 -> 211): the bulk of the shelf brightened, not the
+top of it.
+
+`audit_ocean_tone` now checks the level in the two directions that matter --
+`ABYSS_MIN = 18` so the floor stays readable, `CLIP_MAX = 9%` so the shallow end
+does not blow out paying for it. Span 1.90 -> 2.81 and broad share 0.45 -> 0.48
+against the reference's 0.48, so the shape improved with the level.
+
+Also this round: a backtick inside a GLSL comment closed the template literal
+for the fourth time, and `check_shader` passed a ramp line that a shell loop had
+corrupted to `hue*(0.400 2.300+*pow(t,1.35))` -- braces balanced, GLSL invalid.
+The signal that caught it was the shot failing, not the checker.
