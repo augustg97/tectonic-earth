@@ -6919,3 +6919,59 @@ exponent. Named as the next step.
 Fifth backtick-in-a-GLSL-comment of the session, caught by check_shader; and
 check_shader again passed a line a shell loop had corrupted into invalid GLSL,
 which only the failing shot revealed.
+
+### Iteration 150 -- the wall is the display range, and the stripes are 18 points of belt
+
+**The shoulder, resolved without building one.** The rendered depth span is
+(A+B)/A, so a bright abyss (A~0.70, luminance 50) with a Blue-Marble span
+(5.8x sRGB = 51x linear) needs A+B near 36, against a shelf that already clips
+23% of its water at A+B=3.8. A shoulder caps the top; it cannot widen what fits
+beneath it. Blue Marble reaches 5.8x only by putting its floor at luminance 9.
+**The display range is the wall, not the curve shape.**
+
+So the depth cue moved to SHADING, which is what the Google Earth reference
+actually shows -- strong hillshaded relief over a fairly uniform blue. Expanding
+shade contrast underwater, and the pivot is the whole trick:
+
+| gain / pivot | slope | basin | water mean |
+|---|---|---|---|
+| 1.0 (shipped) | 0.0635 | 0.0690 | 86.5 |
+| 1.6 / 0.50 | 0.0665 | 0.0758 | 110.0 |
+| 2.2 / 0.50 | 0.0572 | 0.0502 | 120.1 |
+| **2.0 / 0.90** | **0.0897** | **0.1080** | **97.2** |
+
+About 0.5 it brightened 27% and then LOST contrast above gain 1.6, because mean
+shade sits near 0.9 and the expansion drove the distribution into its own clamp.
+About 0.90 it buys relief instead of exposure: slope +41%, basin +57%.
+
+**The biome stripes are upstream of the shader.** Measured on the 200 Ma
+framing, with elevation as a control (5%, so the metric is sound):
+
+| field | latitude explains |
+|---|---|
+| rendered greenness | 52% |
+| **shipped rainfall, 200 Ma** | **71%** |
+| shipped rainfall, present day | 60% |
+
+The render is LESS zonal than the field it draws -- the shader's warp and
+terrain terms are already de-striping. And flattening the latitude-only belt
+term B to its mean drops the field from 71% to **53%**, so B contributes 18 of
+the 71 points and the remaining 53% is trade-wind advection, which is
+legitimately zonal.
+
+That names the target precisely: **the subtropical high is applied as a latitude
+band and is not one.** It sits over ocean basins, strongest on their eastern
+side, which is why west coasts at 25 degrees are deserts (Sahara, Namib,
+Atacama, Baja) and east coasts at the same latitude are wet (SE US, SE China,
+SE Brazil). Applied uniformly in longitude it can only draw a stripe.
+
+NOT attempted this round, deliberately: the shader-side ecotone jitter. A
+previous round measured four variants of it -- re-gating on the final humidity,
+additive-in-h, a continental-scale wander, a dry-side gate -- and each cost more
+green than it bought, because the palette is asymmetric in luminance and a
+symmetric jitter at a grassland margin reads as tan. That path is closed; this
+one is open and physical.
+
+Next: scale the subtropical descent by continentality inside `_rainfall`, verify
+offline at 200 Ma and present day against audit_biomes' Spearman and overlap
+count, then re-bake (93 min) with `_d` and `_w` following.
