@@ -317,6 +317,30 @@ def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None, rec_km=No
     return R
 
 
+def _land_fetch_east(land, W):
+    """Kilometres of land the air has crossed since it last left open water,
+    marching with the EASTERLIES (east to west), which is the flow that governs
+    the subtropics.
+
+    This is the quantity that separates a wet subtropical east coast from a dry
+    west coast at the same latitude: SE China, SE Brazil and the SE United
+    States sit at 0 km of upwind land, while the Sahara, the Rub al Khali and
+    Sonora sit at thousands. Two wraps, same as _advect, so the answer does not
+    depend on where the scan starts.
+    """
+    H = land.shape[0]
+    dx = (360.0 / W) * 111.0 * np.clip(
+        np.cos(np.radians(np.linspace(90.0, -90.0, H))), 0.02, 1.0)
+    d = np.zeros(H)
+    out = np.zeros(land.shape, dtype=float)
+    for step in range(2 * W):
+        c = W - 1 - (step % W)
+        d = np.where(land[:, c], d + dx, 0.0)
+        if step >= W:
+            out[:, c] = d
+    return out
+
+
 def _rainfall(Z, land, lat, cl):
     """Delivered rainfall field, 0..~1.3."""
     H, W = Z.shape
@@ -466,6 +490,36 @@ def _rainfall(Z, land, lat, cl):
          - (0.30 + 0.22 * arid) * np.exp(-((absl - 24) ** 2) / (2 * 11.0 ** 2))
          + 0.24 * np.exp(-((absl - 50) ** 2) / (2 * 13.0 ** 2))
          - 0.34 * np.exp(-((absl - 88) ** 2) / (2 * 18.0 ** 2)))
+    # THE SUBTROPICAL HIGH IS NOT A LATITUDE BAND, and applied as one it can
+    # only draw a stripe. Measured at 200 Ma: latitude explains 71% of the
+    # shipped rainfall field's variance while the RENDER is only 52% zonal, so
+    # the shader was already de-striping what the solve handed it. Flattening B
+    # to its mean took the field 71% -> 53%, which is this term's 18 points.
+    #
+    # Physically the descending branch sits over the ocean basins, strongest on
+    # their eastern side, which is why west coasts and interiors at 25 degrees
+    # are deserts -- Sahara, Rub al Khali, Namib, Atacama, Sonora -- and east
+    # coasts at the SAME latitude are wet: SE China, SE Brazil, the SE United
+    # States. The discriminator is how much land the easterlies have already
+    # crossed, which is zero on an east coast and thousands of kilometres in an
+    # interior.
+    #
+    # This is NOT a second fetch-drying term. The advection already removes
+    # MOISTURE by fetch; this removes the belt's blanket SUPPRESSION where there
+    # is no descending branch to justify it. An east coast keeps 45% of it, a
+    # deep interior all of it, so nothing that is a desert today stops being one.
+    # 900 km, NOT 2500. At 2500 the relief reached deep into the deserts the
+    # belt exists to make: the Sahara at 25E has only about 1500 km of easterly
+    # land behind it, so it collected 22% relief and went 0.005 -> 0.013, and
+    # the Great Basin and Atacama moved with it. Spearman against real
+    # precipitation fell to 0.822 from the 0.862 baseline -- a fix that breaks
+    # the deserts is not a fix. The physical claim is about a COASTAL STRIP:
+    # subtropical east coasts are wet because the descending branch is offshore
+    # of them, and 900 km is that strip. Anything further inland keeps the full
+    # suppression it had.
+    _wc = np.clip(_land_fetch_east(land, W) / 900.0, 0.0, 1.0)
+    B = B + (0.30 + 0.22 * arid) * np.exp(
+        -((absl - 24) ** 2) / (2 * 11.0 ** 2)) * (1.0 - (0.45 + 0.55 * _wc))
     B = np.clip(B, 0.10, 1.15)
 
     # Monsoon: summer heating over a landmass draws in oceanic air. Added over
