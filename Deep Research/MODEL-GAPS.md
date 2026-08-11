@@ -6866,3 +6866,56 @@ of 9.0%. Hawaii framing: abyss 34, against 26 at A=0.400 and **10** originally.
 
 Gates: shader clean, ice 1 of 23 at 570 Ma (baseline), islands hold their rain
 in all 10 bands, storm gate 0 synchronous uploads.
+
+### Iteration 149 -- the slope was the flattest thing on the map
+
+Three pieces of user feedback, with screenshots: still too dark at globe zoom;
+the present-day map "looks oddly contrasted"; and the shelf-to-slope transition
+has lost its definition, against a Google Earth reference showing canyons,
+basins and a crisp shelf break.
+
+**The slope, measured.** Taiwan margin at 1.84 km/px, binned by the shipped
+field rather than by brightness:
+
+| zone | shipped | gates opened | canyG forced to 1 |
+|---|---|---|---|
+| shelf (0..-200 m) | 0.0736 | 0.0742 | 0.0806 |
+| **slope (-200..-2500 m)** | **0.0562** | **0.0639** | 0.0806 |
+| basin (below -3500 m) | 0.0688 | 0.0695 | 0.0717 |
+
+The continental slope was the flattest zone on the map, below even the abyssal
+plain, which is backwards -- a slope is the most incised part of a real sea
+floor. Two earlier rounds had made it so on purpose, and a capability probe
+separated them cleanly: forcing the canyon gate open lifts the slope 43% at 4%
+cost to the basin, while relaxing `slopeq` -- the term that fades the n2
+generator by 88% on slopes -- moved the number by **0.0001**. One lever was
+live, the other dead, and only the probe could say which.
+
+Shipped: canyon depth gates from -350..-1100 to -120..-600, prom from
+-150..-750 to -60..-400, amplitude 9 -> 14, shadow 2.4 -> 3.2. Slope 0.0562 ->
+0.0639 with the basin at +1%. The remaining gap to 0.0806 is cany's own
+geological gates (slopeBand, shelfHi, gScov), which keep canyons off open basin
+floor and were not dismantled blind.
+
+**Tone, and a wall.** The globe's ocean ran p10 33, p50 43, p90 88, p98 152 --
+a dark bulk under a long bright tail, which is "too dark" and "oddly contrasted"
+as one fault rather than two. Raising A and cutting B moves both together:
+
+| ramp | p10 | p50 | p90 | p98 | p90/p10 | shelf clip | depth span |
+|---|---|---|---|---|---|---|---|
+| 0.400/2.300 | -- | -- | -- | -- | -- | 4.93% | 2.81 |
+| 0.550/2.000 | 33 | 43 | 88 | 152 | 2.67 | 1.85% | -- |
+| **0.700/1.600** | **41** | **50** | **87** | **144** | **2.13** | **0.29%** | **1.38** |
+| 0.850/1.300 | 46 | 57 | 88 | 141 | 1.90 | 0.26% | 1.29 |
+
+**The span is the cost, and it is structural.** It falls 2.81 -> 1.38, and going
+further to 0.850 only reaches 1.29 -- in this range the span is set by A, not B.
+The span is (A+B)/A in linear, so a 2.8x sRGB span on a floor of A=0.85 needs
+A+B near 8, and the shelf clips at 23% by A+B=3.8. A power ramp cannot deliver a
+bright abyss AND strong depth contrast. The fix is a SHOULDER -- a tone curve
+that compresses the top while holding the bottom lifted -- not a bigger
+exponent. Named as the next step.
+
+Fifth backtick-in-a-GLSL-comment of the session, caught by check_shader; and
+check_shader again passed a line a shell loop had corrupted into invalid GLSL,
+which only the failing shot revealed.

@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260811-0615';
+const DATA_V='20260811-0657';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -2382,7 +2382,34 @@ vec3 oceanColour(float z, vec3 sd, float latd){
        original 0.150/1.270    10             32           0.14%
        Blue Marble fit          9             --              --
                 0.400/2.300    26             61           4.93%
-       chosen   0.550/2.000    34             65           1.90%
+                0.550/2.000    34             65           1.90%
+       chosen   0.700/1.600    --             --           0.29%
+
+     RAISED AGAIN, AND FLATTENED, on the second round of user feedback: still
+     too dark on the globe, and the present-day map "looks oddly contrasted".
+     Those are one fault, not two -- the whole-globe ocean ran p10 33, p50 43,
+     p90 88, p98 152, which is a dark bulk under a long bright tail. Raising A
+     and cutting B lifts the bulk and pulls the tail in together:
+
+       ramp            p10  p50  p90  p98   p90/p10   shelf clip
+       0.550/2.000      33   43   88  152      2.67        1.85%
+       0.700/1.600      41   50   87  144      2.13        0.29%
+       0.850/1.300      46   57   88  141      1.90        0.26%
+       1.000/1.050      50   65   91  139      1.80        0.23%
+
+     0.700/1.600 lifts the globe median from 43 to 50 and takes the contrast
+     ratio from 2.67 to 2.13.
+
+     AND THE TRADE IS STRUCTURAL, which is worth stating rather than tuning
+     around. The measured depth span falls from 2.81 (at 0.400/2.300) to 1.38
+     here, and going further to 0.850/1.300 only reaches 1.29 -- in this range
+     the span is set by A, not B. A power ramp cannot deliver both a bright
+     abyss and a strong depth contrast: the span is (A+B)/A in linear, so a 2.8x
+     sRGB span on a floor of A=0.85 needs A+B near 8, and the shallow end runs
+     out of headroom far below that (23% of shelf water already clips at
+     A+B=3.8). The fix is a shoulder -- a tone curve that compresses the top
+     while holding the bottom lifted -- rather than a larger exponent. Named
+     here as the next step so the next round does not rediscover the wall.
 
      A raised to 0.550 on the user's call after seeing 0.400 on screen. B came
      DOWN with it, and that is the A/B separation paying off rather than a
@@ -2409,7 +2436,7 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      A, the shallowest by A+B, so the span is A/(A+B) -- and matching the
      reference's 5.8x in sRGB needs about 51x in linear, against the 9.5x that
      was here. Hence B near fifty times A. */
-  vec3 c=hue*(0.550+2.000*pow(t,1.35));
+  vec3 c=hue*(0.700+1.600*pow(t,1.35));
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and
@@ -5113,10 +5140,36 @@ void main(){
          slope wall runs hundreds of metres below it. prom is the IRLS
          regional's own residual, global and robust, and it separates the
          two populations cleanly. */
-      float canyG = cany * smoothstep(-350.0, -1100.0, gZSm)
-                         * smoothstep(-150.0, -750.0, prom);
-      nrm=normalize(nrm+vec3(gully*9.0*canyG, 0.0, 0.0));
-      col *= 1.0 - clamp(abs(gully)*2.4*canyG, 0.0, 0.34);   // shadowed incisions
+      /* GATES OPENED UPWARD (user feedback: the shelf-to-slope transition has
+         lost its definition; the reference shows canyons cutting right up to
+         the shelf break). These started at -350..-1100 m depth and needed prom
+         below -150 m, so the canyon system only reached full strength on the
+         DEEP slope and the upper slope -- the part a viewer sees first -- got
+         nothing.
+
+         Measured on the Taiwan margin at 1.84 km/px, binning by the shipped
+         field rather than by brightness:
+
+           zone                         shipped   gates opened   canyG forced 1
+           shelf   (0..-200 m)           0.0736         0.0742           0.0806
+           slope   (-200..-2500 m)       0.0562         0.0639           0.0806
+           basin   (below -3500 m)       0.0688         0.0695           0.0717
+
+         The slope was the FLATTEST zone on the map, below even the abyssal
+         plain, which is backwards: a continental slope is the most incised part
+         of a real sea floor. Forcing the gate fully open shows the system is
+         capable of 0.0806 there and costs the basin only 4%, so what remains
+         between 0.0639 and 0.0806 is cany's own geological gates -- slopeBand,
+         shelfHi, gScov -- which exist to keep canyons off open basin floor and
+         are not worth dismantling blind.
+
+         A control also ruled out the other suspect: relaxing slopeq, which
+         fades the n2 generator by 88% on slopes, moved the slope number by
+         0.0001. That lever is dead here and was left alone. */
+      float canyG = cany * smoothstep(-120.0, -600.0, gZSm)
+                         * smoothstep(-60.0, -400.0, prom);
+      nrm=normalize(nrm+vec3(gully*14.0*canyG, 0.0, 0.0));
+      col *= 1.0 - clamp(abs(gully)*3.2*canyG, 0.0, 0.40);   // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
