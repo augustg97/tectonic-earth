@@ -7032,3 +7032,54 @@ All 13 small landmasses now draw their field's climate. Kauai went
 is only defined on land.** The solve's anti-banding smooth, the shader's lookup
 warp, and the shader's own vertical blur. Each was added for a real reason, each
 is invisible on a continent, and each annihilates land smaller than its kernel.
+
+### Iteration 152 -- the accordion: reproduced and localised, eight causes eliminated, NOT fixed
+
+User feedback with two screenshots: close-zoom sea floor "looks great", wide
+zoom has "an unnatural accordion-like effect". Reproduced, localised, and then
+eight candidate causes were each ruled out. No change shipped, because none was
+earned.
+
+**First: the framing.** The user's screenshots are ~2000 px; this project's
+verification shoots at 760. Half the resolution is exactly where aliasing hides,
+and the first three measurements of this round were computed on a framing that,
+when finally LOOKED at, contained no accordion at all -- three careful numbers on
+the wrong picture. All shots since are 1280 px and chosen by eye first.
+
+**What it is, visually.** Band-passing the wide render at 6-22 px shows a
+**blocky, rectilinear, axis-aligned corrugation** concentrated in the oblique
+upper right, with nothing comparable in the middle of the frame. It is not the
+abyssal fabric, which reads as isotropic mottle in the same image.
+
+**Eliminated, each with a pixel-change control proving the variant rendered:**
+
+| hypothesis | test | result |
+|---|---|---|
+| elevation quantisation drawing contours | terrace share by byte level | 0.008-0.036, flat vs shading gain |
+| ocean-structure field's byte levels | same, all three channels | 0.03-0.06 |
+| the 2x submarine shading gain | gain 2.0 / 1.5 / 1.0 | no move; 70% px changed |
+| abyssal fabric anisotropy | aniso forced to 0 | no move; 23% px changed |
+| the fixed-baseline differencing comb | da at 1.2 / 2.4 / 4.8 texels | peak did NOT track: 50 / 35 / 50 px |
+| missing mipmaps | LinearMipmapLinear on minify | 4% px changed, no move |
+| bilinear's C1 discontinuity | smoothstepped texel coordinate | 1% px changed, no move |
+| sphere tessellation | SEG 1024 / 2048 / 256 | 7% px changed, band std identical |
+
+**THE HONEST CAVEAT, and it is the important part.** Both numeric metrics --
+spectral peakiness (1.70) and axis-aligned energy ratio (2.03) -- returned the
+SAME value across every one of those variants, including ones that repainted 70%
+of the frame. A metric that holds still while the image visibly changes is
+evidence against the metric, which is the lesson this session already paid for
+twice. So these eliminations rest on the pixel-change control and an unchanged
+band-pass std, NOT on an instrument ever shown to track the artefact.
+
+**What the next round must do first:** find any variant that visibly removes the
+corrugation from the BAND-PASS IMAGE, and only then calibrate a metric on that
+known-answer pair -- the same self-test discipline audit_land_grain was rebuilt
+around. Chasing it with an unvalidated number is how this round spent eight A/Bs
+and learned only what it is not.
+
+Two candidates not yet tried: the elevation field's own AVIF codec blocks at
+oblique magnification (this project has been bitten by codec artefacts before),
+and the interaction between the shrinkage deadband's eight-texel window and the
+oblique footprint -- the only two systems in the chain that are themselves
+rectilinear.
