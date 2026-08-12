@@ -7083,3 +7083,47 @@ oblique magnification (this project has been bitten by codec artefacts before),
 and the interaction between the shrinkage deadband's eight-texel window and the
 oblique footprint -- the only two systems in the chain that are themselves
 rectilinear.
+
+### Iteration 153 -- the accordion was the fabric, aliasing
+
+FIXED. The wide-zoom corrugation is the anisotropic abyssal fabric aliasing: it
+is combed along the spreading direction at a fixed WORLD wavelength of a few
+kilometres, and once a pixel is wider than half that, an aliased directional
+comb is not noise -- it is a moire, which reads as regular nested corrugations.
+
+**The elimination that mattered was one I had already got wrong.** Iteration 152
+tested `aniso = 0` and recorded it as ruled out, on a metric that returned 1.70
+for every variant including ones that repainted 70% of the frame. This round
+re-ran it and LOOKED at the band-passed image: the accordion vanished completely
+and the real seamount chains stayed. Nine other hypotheses had been eliminated
+on the strength of that same dead metric, so all of them were worthless -- three
+were re-tested here for the same reason and two more (the tone ramp reading a
+quantised depth, the noise LUT's 64-cell wrap) turned out to be real mechanisms
+that were simply not THIS artefact.
+
+**The rule this cost two rounds to relearn:** when a metric will not move, stop
+measuring and look. A known-answer pair has to exist before any number is worth
+reading -- which is the discipline audit_land_grain was rebuilt around and which
+this investigation abandoned the moment it had a plausible-looking number.
+
+**gFineFade could not do the job.** It floors at 0.15, feeds a dozen systems,
+and is already saturated at these framings: three different fade windows through
+it returned BYTE-IDENTICAL numbers. A stuck knob, not a null. The fabric needed
+its own term.
+
+Calibrated as rms against the fabric-off render, same geography, two zooms:
+
+| fade window | close 1.4 | wide 2.2 | kept close | left wide |
+|---|---|---|---|---|
+| none | 8.026 | 3.823 | 100% | 100% |
+| 0.75..1.40 | 4.977 | 0.164 | 62% | 4% |
+| 0.90..1.50 | 6.609 | 0.125 | 82% | 3% |
+| **1.10..1.70** | **7.897** | **0.127** | **98%** | **3%** |
+
+Shipped `aniso *= 1.0-smoothstep(1.10,1.70,sfoot)`. The close-zoom sea floor the
+user called great is untouched at 98%; the wide view keeps 3%, and the accordion
+is gone from the band-pass entirely.
+
+Gates: shader clean, ice 1 of 23 at 570 Ma, ocean abyss median 57.7 with 0.16%
+clipped, broad share 0.47 against the reference's 0.48, storm gate 0 synchronous
+uploads. No re-bake -- this is one line of shader.
