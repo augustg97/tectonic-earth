@@ -7127,3 +7127,53 @@ is gone from the band-pass entirely.
 Gates: shader clean, ice 1 of 23 at 570 Ma, ocean abyss median 57.7 with 0.16%
 clipped, broad share 0.47 against the reference's 0.48, storm gate 0 synchronous
 uploads. No re-bake -- this is one line of shader.
+
+### Iteration 154 -- the fuzz is the canyon, amplified by the gain
+
+User feedback: the ocean floor reads fuzzy; make the cliffs, ledges and floors
+smoother and more defined. Reproduced on the Mediterranean and the Gulf.
+
+**A detector that returned zero while the defect was on screen.** The first
+stipple metric read 0.00% for every variant, because it fed
+`np.where(wet, lum, np.nan)` into `uniform_filter` -- one NaN poisons the whole
+convolution, so the background was NaN everywhere and no comparison ever fired.
+Filling with 0 and normalising by coverage instead gives the real figure: at 22
+levels below a 15 px neighbourhood, **12.7% of Mediterranean water pixels are
+dark specks, in 3397 blobs whose MEDIAN SIZE IS 2 PIXELS** and 77% of which are
+6 px or smaller. That is stipple, not terrain.
+
+**What moves it, measured:**
+
+| lever | stipple | note |
+|---|---|---|
+| shipped | 12.70% | |
+| canyon fully off | 6.46% | loses the feature |
+| shading gain 2.0 -> 1.0 | 6.74% | costs 23% of definition |
+| gully fine octave 0.5 -> 0 | 11.55% | |
+| residual keep 0.55 -> 0.10 | 12.08% | |
+| QE 1.25 -> 2.50 | 12.63% | |
+| fabric / sAcross / sdet off | ~12.7% | nothing |
+
+The canyon and the gain are the same half: `gully` is a finite DIFFERENCE of
+value noise, so it is pixel-scale by construction, and the shading-contrast
+expansion added in iteration 153 multiplies it.
+
+**Iteration 149 changed two things and only one of them mattered.** It opened
+the canyon depth gates AND raised the amplitude 9 -> 14 with the shadow
+2.4 -> 3.2. The gates bought the slope definition; the amplitude bought the
+stipple. Rolling the amplitude back to 5 with the shadow at 1.3/0.28 and the
+gully's fine octave at 0.10:
+
+| | stipple | definition | Taiwan slope zone |
+|---|---|---|---|
+| 14 / 3.2 / 0.50 | 12.70% | 12.716 | 0.0910 |
+| **5 / 1.3 / 0.10** | **8.97%** | **11.292** | **0.0876** |
+
+Stipple down 29% for 4% of the slope definition. The gates stay open, so
+canyons still reach the upper slope, which is what gave the definition in the
+first place.
+
+Gates: shader clean, ice 1 of 23 at 570 Ma, abyss median 57.7 with 0.16%
+clipped, broad share 0.47 against 0.48, storm gate 0 synchronous uploads.
+
+Sixth backtick-in-a-GLSL-comment of the session.

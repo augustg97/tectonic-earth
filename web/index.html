@@ -1264,7 +1264,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260812-0743';
+const DATA_V='20260812-0814';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 async function loadAll(){
   const files=['timeline','boundaries','plates','hotspots','labels','plates_time','eras','life','art','photos','platerot'];
@@ -5184,14 +5184,14 @@ void main(){
       vec3 CAX=vec3(0.0,0.0,1.0);            // fixed axis, same reason as SAX
       vec3 c0=sdir*CF - CAX*(gZSm*(CF/78000.0));
       vec3 c1=(sdir+Eax*(cstep/CF))*CF - CAX*(gZSm*(CF/78000.0));
-      float k0=vnoise3(c0)+0.5*vnoise3(c0*2.6+17.0);
-      float k1=vnoise3(c1)+0.5*vnoise3(c1*2.6+17.0);
+      float k0=vnoise3(c0)+0.10*vnoise3(c0*2.6+17.0);
+      float k1=vnoise3(c1)+0.10*vnoise3(c1*2.6+17.0);
       float gully=(k1-k0);
       float TF=CF*2.9;                       // tributaries
       vec3 d0=sdir*TF - CAX*(gZSm*(TF/78000.0));
       vec3 d1=(sdir+Eax*(cstep/TF))*TF - CAX*(gZSm*(TF/78000.0));
-      float t0=vnoise3(d0)+0.5*vnoise3(d0*2.6+41.0);
-      float t1=vnoise3(d1)+0.5*vnoise3(d1*2.6+41.0);
+      float t0=vnoise3(d0)+0.10*vnoise3(d0*2.6+41.0);
+      float t1=vnoise3(d1)+0.10*vnoise3(d1*2.6+41.0);
       // the fine set is throttled where the coarse one already has a canyon,
       // which is what makes them read as tributaries joining a trunk rather
       // than as a second independent comb laid over the first
@@ -5235,8 +5235,28 @@ void main(){
          0.0001. That lever is dead here and was left alone. */
       float canyG = cany * smoothstep(-120.0, -600.0, gZSm)
                          * smoothstep(-60.0, -400.0, prom);
-      nrm=normalize(nrm+vec3(gully*14.0*canyG, 0.0, 0.0));
-      col *= 1.0 - clamp(abs(gully)*3.2*canyG, 0.0, 0.40);   // shadowed incisions
+      /* AMPLITUDE BACK DOWN, GATES LEFT OPEN (user: the sea floor reads fuzzy;
+         make the cliffs and ledges smoother and more defined). Iteration 149
+         opened the canyon depth gates AND raised the amplitude 9 -> 14 with the
+         shadow 2.4 -> 3.2. The gates were the part that mattered; the amplitude
+         was the part that made stipple.
+
+         gully is a finite DIFFERENCE of value noise, so it is pixel-scale by
+         construction, and the shading-contrast expansion added the same round
+         multiplies it. Measured over Mediterranean water as the share of pixels
+         more than 22 levels below their own 15 px neighbourhood, in blobs whose
+         median size is 2 px:
+
+           cany / shadow / fine octave   stipple   definition   slope zone
+           14 / 3.2 / 0.50 (was)          12.70%       12.716       0.0910
+            7 / 1.8 / 0.15                 9.94%       11.686       0.0888
+            5 / 1.3 / 0.10                 8.97%       11.292       0.0876
+
+         Stipple falls 29% for 4% of the slope definition iteration 149 bought,
+         which is the trade the user asked for. The gates stay where they are --
+         canyons still reach the upper slope, which is what gave the definition. */
+      nrm=normalize(nrm+vec3(gully*5.0*canyG, 0.0, 0.0));
+      col *= 1.0 - clamp(abs(gully)*1.3*canyG, 0.0, 0.28);   // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
