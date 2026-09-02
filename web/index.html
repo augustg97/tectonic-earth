@@ -2357,7 +2357,7 @@ float elevDetail(float z, vec3 d, float rug){
     float g=atlasGate(z);
     if(g>0.005){
       vec3 ar=atlasRelief(d, matDir(gFold));   // d, not dF: the atlas carries its own anisotropy
-      det=det*(1.0-0.6*g) + ar.x*900.0*g*(0.55+0.45*clamp(z/3000.0,0.0,1.0));
+      det=det*(1.0-0.6*g) + ar.x*520.0*g*(0.55+0.45*clamp(z/3000.0,0.0,1.0));
     }
   }
   return z + max(det, -z*0.85);
@@ -4430,8 +4430,14 @@ void main(){
       float ga=atlasGate(zp);
       if(ga>0.005){
         vec3 ar=atlasRelief(msd, matDir(gFold));
-        float ampA=ga*1.6*(0.6+0.4*rug);
+        float ampA=ga*2.2*(0.6+0.4*rug);
         nx+=ar.y*ampA; ny+=ar.z*ampA;
+        /* And as TONE, because a lit ridge narrower than a pixel averages away
+           (iteration 56 measured it) while a dark valley floor does not: the
+           patch's own height, valleys darker and crests lighter, is the same
+           albedo cue the reference carries at continental zoom -- derived
+           from an eroded surface, not from the contour loops of a noise. */
+        col*=1.0+ar.x*0.34*ga;
       }
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
