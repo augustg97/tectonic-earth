@@ -89,7 +89,7 @@ build_site.py`, then merge to `main` and push (README §6).
 - **A canvas premultiplies.** Anything read back through a 2-D canvas loses its colour
   under alpha 0. The sheet mask is alpha 0.5 for exactly this reason.
 - **`pkill -f` matches the shell that runs it** when the pattern is in your own command
-  line; kill by exact PID from `ps -eo pid,args`.
+  line; kill by exact PID from `ps -eo pid,args`. The same self-match bit `pgrep -f "node shoot.js"` inside a background script: the harness wrapper's own argv carries the whole command text, so the wait loop never ended. Wait on a marker file or an exact PID, never on a pattern that appears in your own script.
 - **Software GL saturates the box.** A SwiftShader render pins every core; Python work
   run beside it looks hung. Serialise them.
 - **Uphill receivers make cycles.** A steepest-descent receiver must be strictly lower or
