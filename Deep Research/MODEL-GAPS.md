@@ -7362,3 +7362,21 @@ corner of both ranges, where the gate averages 0.02 under the old floor and
 0.07 under the new -- so the two renders differ in 0.7% of pixels, and the
 framing says nothing about the floor. The second pair, below, is chosen by
 the gate difference itself.
+
+The second pair is the 150 Ma window where the floor changes the gate most
+(lon 80, lat -55; gate mean 0.40 under the old floor, 0.65 under the new; the
+no-atlas render as baseline, all at 960x600, 1.6):
+
+    render                   mean |d| vs no-atlas   px > 4    coherence
+    150-700 m floor          3.9/255                27.9%     0.509 -> 0.512
+    100-400 m floor          6.2/255                41.0%     0.509 -> 0.516
+    old floor vs new         2.6/255                22.7%     0.512 -> 0.516
+
+So on a low deep-time belt the lowered floor roughly doubles what the atlas
+contributes and the frame gains organisation with it; the ridges run diagonal
+across the belt's interior in the new render and are faint in the old. Band
+energy is identical between the two floors (13.13 either way), which is the
+term doing what it should: reorganising the detail it displaces, not adding
+to it. The plains controls above are the other half of the gate, and they did
+not move. B4 closes here; the amplitude on plateau interiors (94% of Tibet
+gated above half strength) is the remaining knob and needs a real display.
