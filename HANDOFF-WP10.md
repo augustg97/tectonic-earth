@@ -31,7 +31,10 @@ build_site.py`, then merge to `main` and push (README §6).
   `build/bake_sheets.py`, auto LOD by pixel footprint, Full quality pins the live path
 - **C1/C3** `web/ambient.html` (sheets + `_v` only) and the "Lite view" link in Ambient
 - **B2** `build/build_orogen_atlas.py` — stream-power erosion under fold-belt uplift on
-  periodic patches; **B3** `atlasRelief()` in the shader, gated on `uAtlasOn`
+  periodic patches → `web/atlas.webp`; **B3** `build/build_foldphase.py` bakes the fold
+  coordinates `_q` (two potentials per keyframe) and `atlasRelief()` samples the belt
+  patches at (φ, ψ) — verified in emulation and on the Zagros render; **B5** (first form)
+  `dissectRelief()` lays the plateau/lowland patches on hard flat uplands, untuned
 
 ## What to do next, in order
 
@@ -41,18 +44,22 @@ build_site.py`, then merge to `main` and push (README §6).
    the app with `?perf=1` and watch `path SHEETS` come on at wide zoom. The review
    environment had no GPU: everything sheet-related was verified on software GL at
    512–2048 wide, pixel-faithful but too slow to bake 251 at 4096.
-2. **Finish the orogen atlas** — `python3 build_orogen_atlas.py` writes `build/atlas/*.png`
-   and packs `web/atlas.png` (+ `web/atlas.json`). Look at the patches (a hillshade of
-   the `.npy` is the honest view). Then tune the two amplitudes in the shader —
-   `900.0` in `elevDetail`'s atlas term and `1.6` in the land normal block — against
-   the Himalaya / Andes / 300 Ma framings, by the metrics in WP-10 G1 (structure-tensor
-   coherence at three zooms, 5–30 km band energy, `audit_texture.py` organisation).
-   Every shader edit invalidates shipped sheets: re-run `bake_sheets.py`.
+2. **Tune the atlas on a real display.** The atlas (`web/atlas.webp`) and the fold
+   coordinates (`web/fields/*_q.png`, `python3 build_foldphase.py -j`, ~1 h) are baked
+   and wired. The amplitudes were set on software GL at 960×600: `520.0` (height),
+   `4.0` (normal) and `0.55` (tone) in the belt term, `1.6` / `0.16` in the plains
+   term. Look at the Zagros, Himalaya, Andes and 300 Ma framings at zoom 1.35–2 with
+   `?noatlas=1` beside the default, and judge by the metrics in WP-10 G1
+   (structure-tensor coherence at three zooms, 5–30 km band energy,
+   `audit_texture.py` organisation). Every shader edit invalidates shipped sheets:
+   re-run `bake_sheets.py`.
 3. **B4** the age-relative gate is already what `atlasGate()` uses; check 300 Ma and
    150 Ma framings for belts that are still flat and lower the 150–700 m floor only if
    the plains control (Kansas, the Amazon) stays quiet.
-4. **B5** plains: bake a drainage-azimuth field from `build_surface.py`'s D8 receivers
-   and steer the lowland patches (cells 9–11 of the atlas) by it; ergs from fetch.
+4. **B5** plains, second form: the first form lays isotropic dissection on hard flat
+   uplands; steering it by a drainage-azimuth field from `build_surface.py`'s D8
+   receivers (a third potential, like φ/ψ) and adding erg lineation from fetch are
+   the next steps if the plains still read as unorganised.
 5. **D4/D5** move `docs/fields` and `docs/sheets` out of git history; split `index.html`.
 
 ## Traps this round found (add to README §7 when they recur)
