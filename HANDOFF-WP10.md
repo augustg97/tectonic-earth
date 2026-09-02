@@ -39,6 +39,17 @@ build_site.py`, then merge to `main` and push (README §6).
   floor of `atlasGate()` lowered to 100–400 m (deep-time belts sit at 150–700 m);
   **B5** (first form)
   `dissectRelief()` lays the plateau/lowland patches on hard flat uplands, untuned
+- **Round 2 (2026-09-02, afternoon).** Live knobs for the atlas amplitudes (`?atlasN=`
+  `?atlasT=` `?atlasH=` `?plainsK=`, `uAtlasK`) and the plateau basin envelope
+  (`basinEnv()`, `?basin=0`); **B5 second form**: `build_drainphase.py` bakes drainage
+  coordinates `_x` (χ across the regional flow, ω along it) from the PaleoDEM smoothed to
+  120 km, `build_orogen_atlas.py` erodes four plains patches on a wrap-aware regional tilt
+  (cells 12–15), and `dissectRelief()` samples them at (χ, −ω) where the flow is trusted
+  (`?nodrain=1` for A/B); **D4** `FIELD_BASE`/`SHEET_BASE` in both pages,
+  `build_site.py --field-base/--sheet-base`, `publish_assets.py`; **D5** the page is
+  split: `index.html` markup, `style.css`, `app.js`, `web/shaders/*.glsl` as the shader
+  sources with `check_shader.py` packing `shaders.js` and `build_site.py` inlining the
+  deployed page. `check_shader.py` now also flags a function called above its definition.
 
 ## What to do next, in order
 
