@@ -45,7 +45,7 @@ build_site.py`, then merge to `main` and push (README §6).
    environment had no GPU: everything sheet-related was verified on software GL at
    512–2048 wide, pixel-faithful but too slow to bake 251 at 4096.
 2. **Tune the atlas on a real display.** The atlas (`web/atlas.webp`) and the fold
-   coordinates (`web/fields/*_q.png`, `python3 build_foldphase.py -j`, ~1 h) are baked
+   coordinates (`web/fields/*_q.png`, `python3 build_foldphase.py -j`, ~2 min) are baked
    and wired. The amplitudes were set on software GL at 960×600: `520.0` (height),
    `4.0` (normal) and `0.55` (tone) in the belt term, `1.6` / `0.16` in the plains
    term. Look at the Zagros, Himalaya, Andes and 300 Ma framings at zoom 1.35–2 with

@@ -39,8 +39,6 @@ import sys
 
 import numpy as np
 from PIL import Image
-from scipy import sparse
-from scipy.sparse.linalg import lsqr
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIELDS = os.path.join(HERE, "..", "web", "fields")
@@ -84,39 +82,70 @@ def _consistent_sign(vx, vy, w):
 
 
 def _solve(gx, gy, w, lat):
-    """Least squares grad(f) = (gx, gy) [per radian, east/north] weighted by w
-    on an equirect grid with periodic longitude. Returns f."""
+    """Weighted least squares grad(f) = (gx, gy) [per radian, east/north] on an
+    equirect grid, periodic in longitude, Neumann in latitude. Minimises
+    sum over edges of  w_e * (df_e - g_e)^2  with w_e the gate on the edge plus
+    a small floor, and returns f.
+
+    THE SOLVE. lsqr on this system hit its 3000-iteration cap at 75 s a
+    keyframe -- the discrete Poisson problem at 512x256 is far too
+    ill-conditioned for an unpreconditioned Krylov method. Dropping the weights
+    from the operator and masking only the target (a plain Laplacian, solved
+    exactly by FFT) is fast but WRONG: a gated strip with an along-strike target
+    has curl all along its two sides, and the projection onto gradient fields
+    throws most of that amplitude away -- psi over the Zagros came out at a
+    quarter of its length, i.e. the atlas ridges stretched four times.
+    So: conjugate gradients on the weighted normal equations, preconditioned
+    by that same exact FFT solve of the unit-weight Laplacian. The weights lie
+    in [EPS, 1+EPS], so the preconditioned condition number is about 1/EPS and
+    CG converges in a few dozen iterations of a few milliseconds each."""
+    from scipy.fft import dct, idct
+    from scipy.sparse.linalg import LinearOperator, cg
     h, wd = gx.shape
     n = h * wd
     dlon = 2 * np.pi / wd
     dlat = np.pi / h
-    idx = np.arange(n).reshape(h, wd)
     cl = np.maximum(np.cos(lat), 0.15)
-    rows, cols, vals, rhs, wts = [], [], [], [], []
-    # east differences (periodic), on the cell's own row
-    r = 0
-    e_i = idx
-    e_j = np.roll(idx, -1, axis=1)
-    we = np.sqrt(0.5 * (w + np.roll(w, -1, axis=1))) + 1e-3
-    for a, b, wt, g in ((e_i.ravel(), e_j.ravel(), we.ravel(), ((gx * cl) * dlon).ravel()),):
-        m = a.size
-        rr = np.arange(r, r + m)
-        rows += [rr, rr]; cols += [b, a]; vals += [wt, -wt]
-        rhs.append(wt * g); r += m
-    # north differences
-    n_i = idx[:-1, :]
-    n_j = idx[1:, :]
-    wn = np.sqrt(0.5 * (w[:-1] + w[1:])) + 1e-3
-    gn = (-gy[:-1] * dlat)            # row index increases SOUTH, so north is -row
-    m = n_i.size
-    rr = np.arange(r, r + m)
-    rows += [rr, rr]; cols += [n_j.ravel(), n_i.ravel()]; vals += [wn.ravel(), -wn.ravel()]
-    rhs.append(wn.ravel() * gn.ravel()); r += m
-    A = sparse.csr_matrix((np.concatenate(vals), (np.concatenate(rows), np.concatenate(cols))), shape=(r, n))
-    b = np.concatenate(rhs)
-    f = lsqr(A, b, atol=1e-7, btol=1e-7, iter_lim=3000)[0]
-    f -= np.average(f, weights=w.ravel() + 1e-6)
-    return f.reshape(h, wd)
+    EPS = 0.02
+    # east edges (i, j) -> (i, j+1), periodic; north edges (i, j) -> (i+1, j)
+    te = gx * cl * dlon                                   # target f[i,j+1] - f[i,j]
+    we = 0.5 * (w + np.roll(w, -1, axis=1)) + EPS
+    tn = -gy[:-1] * dlat                                  # row index grows SOUTH
+    wn = 0.5 * (w[:-1] + w[1:]) + EPS
+
+    def A_T(de, dn):
+        out = np.roll(de, 1, axis=1) - de
+        out[1:] += dn
+        out[:-1] -= dn
+        return out
+
+    def op(f):
+        f = f.reshape(h, wd)
+        de = (np.roll(f, -1, axis=1) - f) * we
+        dn = (f[1:] - f[:-1]) * wn
+        return A_T(de, dn).ravel()
+
+    kx = 2.0 - 2.0 * np.cos(2.0 * np.pi * np.arange(wd) / wd)
+    ky = 2.0 - 2.0 * np.cos(np.pi * np.arange(h) / h)
+    lam = ky[:, None] + kx[None, :]
+    lam[0, 0] = 1.0
+
+    def prec(d):
+        D = np.fft.fft(dct(d.reshape(h, wd), type=2, axis=0, norm="ortho"), axis=1)
+        F = D / lam
+        F[0, 0] = 0.0
+        return idct(np.real(np.fft.ifft(F, axis=1)), type=2, axis=0, norm="ortho").ravel()
+
+    rhs = A_T(we * te, wn * tn).ravel()
+    rhs -= rhs.mean()                                     # range of A^T is mean-free
+    f, info = cg(LinearOperator((n, n), matvec=op, dtype=np.float64), rhs,
+                 M=LinearOperator((n, n), matvec=prec, dtype=np.float64),
+                 rtol=1e-6, maxiter=400)
+    if info != 0:
+        print("  warning: cg did not converge (info=%d)" % info)
+    f = f.reshape(h, wd)
+    f -= np.average(f.ravel(), weights=w.ravel() + 1e-6)
+    return f
 
 
 def bake(age, quiet=False):

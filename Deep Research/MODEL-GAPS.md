@@ -7287,7 +7287,8 @@ at texel scale, which iteration 76 had measured for slope-derived directions.
 The replacement is the sea floor's architecture. `build_foldphase.py` fits two
 potentials per keyframe to `_t` -- phi across strike, psi along it, one unit per
 patch -- as a weighted least-squares gradient problem on the equirect grid
-(lsqr, ~40 s a keyframe, sign chosen by region growing from the most shortened
+(conjugate gradients preconditioned by an exact FFT solve of the unit-weight
+Laplacian, ~1.3 s a keyframe, sign chosen by region growing from the most shortened
 cell), and ships them as 16-bit byte pairs (`_q.png`, ~300 KB). The shader
 samples the belt patch at (phi, psi), interpolating the decoded values by hand
 and taking the across/along frame from the potentials' own gradients. The

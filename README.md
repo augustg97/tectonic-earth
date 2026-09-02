@@ -364,7 +364,7 @@ Common targeted rebuilds:
 ONLY_AGE=300 python reskin_seafloor.py     # one keyframe, quick visual check
 python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
 python build_webdata.py                    # labels, timeline, boundaries, life
-python build_foldphase.py -j               # fold coordinates for all 251 (~1 h on three cores)
+python build_foldphase.py -j               # fold coordinates for all 251 (~2 min on three cores)
 python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)
 python bake_sheets.py --width 2048         # the lean set the ambient build runs on
 ```
