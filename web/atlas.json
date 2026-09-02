@@ -86,6 +86,34 @@
    "seed": 3,
    "relief_m": 142,
    "spacing_km": null
+  },
+  {
+   "cell": 12,
+   "kind": "tlow",
+   "seed": 1,
+   "relief_m": 198,
+   "spacing_km": null
+  },
+  {
+   "cell": 13,
+   "kind": "tlow",
+   "seed": 2,
+   "relief_m": 230,
+   "spacing_km": null
+  },
+  {
+   "cell": 14,
+   "kind": "tplat",
+   "seed": 1,
+   "relief_m": 1246,
+   "spacing_km": null
+  },
+  {
+   "cell": 15,
+   "kind": "tplat",
+   "seed": 2,
+   "relief_m": 1087,
+   "spacing_km": null
   }
  ]
 }
