@@ -301,7 +301,11 @@ drawn from the shipped sheets and `_v` only — no terrain shader, no field deco
 for the whole timeline at 2048 wide, a few per cent of a laptop GPU. `?speed=` (Myr/s,
 default 2), `?spin=`, `?fps=` (default 30; 10 under `prefers-reduced-motion`), `?age=`,
 `?ui=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
-wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped.
+wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped. Recipes that
+need no packaging work: on macOS, WebViewScreenSaver (`brew install --cask webviewscreensaver`)
+with the page URL plus `?ui=0` as its address, or Plash for a live wallpaper; on Windows,
+Lively Wallpaper's "URL" source. All three show the page as-is, so `?speed=` and `?fps=`
+tune the pace and cost from the address bar.
 
 ### 5.10 Mountains: the orogen atlas and the fold coordinates
 

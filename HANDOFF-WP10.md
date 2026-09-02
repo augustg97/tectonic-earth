@@ -32,7 +32,9 @@ build_site.py`, then merge to `main` and push (README §6).
 - **C1/C3** `web/ambient.html` (sheets + `_v` only) and the "Lite view" link in Ambient
 - **B2** `build/build_orogen_atlas.py` — stream-power erosion under fold-belt uplift on
   periodic patches → `web/atlas.webp`; **B3** `build/build_foldphase.py` bakes the fold
-  coordinates `_q` (two potentials per keyframe) and `atlasRelief()` samples the belt
+  coordinates `_q` (two potentials per keyframe, conjugate gradients preconditioned by
+  an exact FFT Laplacian solve, 1.3 s a keyframe — the lsqr first cut never converged
+  and a plain FFT projection lost most of ψ) and `atlasRelief()` samples the belt
   patches at (φ, ψ) — verified in emulation and on the Zagros render; **B5** (first form)
   `dissectRelief()` lays the plateau/lowland patches on hard flat uplands, untuned
 
