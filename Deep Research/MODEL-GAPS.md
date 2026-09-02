@@ -7265,3 +7265,35 @@ premultiplied colour, so every water pixel came back black. The mask is alpha
 sheets and `_v` alone: verified headless, time advancing, no console errors.
 The atlas shader code (B3) is in and compiles, gated off until `web/atlas.png`
 exists.
+
+**B2/B3 (same day): the atlas, and why its first sampler was wrong.** The erosion
+model (`build_orogen_atlas.py`: stream-power incision, hillslope diffusion, pit
+filling by morphological reconstruction, flats resolved from the spill) produces
+twelve 256 km periodic patches -- six fold belts with 9.8-17.5 km ridge spacing
+and 1.0-1.6 km relief, three dissected plateaus, three lowlands -- shipped at
+1 km per texel as `web/atlas.webp` (1.14 MB lossless). Two bugs in the model on
+the way: a receiver chosen with slope > -1 could point uphill, which made
+two-cell cycles and an endless level walk; and the sheet was read upside down
+(every bitmap here is uploaded flipped), so a belt cell fetched a lowland.
+
+The first shader sampler rotated a patch to the local strike inside cells of a
+lon/lat lattice. Painting its height as grey over the Zagros, and reproducing it
+exactly in a numpy emulation, showed the two things such a scheme cannot avoid:
+a patch rotated about a cell centre cannot follow a belt that bends (a 20-degree
+strike change 250 km from the centre moves the stripes by six spacings), and
+cells at different rotations meet as a quilt. The strike field itself is noisy
+at texel scale, which iteration 76 had measured for slope-derived directions.
+
+The replacement is the sea floor's architecture. `build_foldphase.py` fits two
+potentials per keyframe to `_t` -- phi across strike, psi along it, one unit per
+patch -- as a weighted least-squares gradient problem on the equirect grid
+(lsqr, ~40 s a keyframe, sign chosen by region growing from the most shortened
+cell), and ships them as 16-bit byte pairs (`_q.png`, ~300 KB). The shader
+samples the belt patch at (phi, psi), interpolating the decoded values by hand
+and taking the across/along frame from the potentials' own gradients. The
+emulation over the Zagros, the Himalaya and the Andean orocline shows ridges
+following the strike and bending with the belt, no seams; the Zagros render at
+the closest zoom shows the same on screen. Measured against the no-atlas render
+at 960x600 (2.5 km/px): mean change 2.8/255 over 25% of pixels, band-pass
+coherence 0.472 -> 0.480 -- the mechanism is right and the amplitude is the
+open question, which is a real-display job (README 5.10).

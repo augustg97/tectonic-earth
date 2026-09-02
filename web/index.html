@@ -4455,14 +4455,14 @@ void main(){
       float ga=atlasGate(zp);
       if(ga>0.005){
         vec3 ar=atlasRelief();
-        float ampA=ga*2.2*(0.6+0.4*rug);
+        float ampA=ga*4.0*(0.6+0.4*rug);
         nx+=ar.y*ampA; ny+=ar.z*ampA;
         /* And as TONE, because a lit ridge narrower than a pixel averages away
            (iteration 56 measured it) while a dark valley floor does not: the
            patch's own height, valleys darker and crests lighter, is the same
            albedo cue the reference carries at continental zoom -- derived
            from an eroded surface, not from the contour loops of a noise. */
-        col*=1.0+ar.x*0.34*ga;
+        col*=1.0+ar.x*0.55*ga;
       }
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
