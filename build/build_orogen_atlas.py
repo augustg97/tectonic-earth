@@ -297,6 +297,41 @@ def encode(h, out_png):
     return rgba
 
 
+def assemble(size):
+    """Pack the patches into the sheet the shader binds (web/atlas.webp): cells
+    0-5 belts, 6-8 plateaus, 9-11 lowlands, cell = column + 4*row. Each patch
+    is box-filtered from its baked size to SHIP px (1 km per texel: the live
+    path samples it at 2 km per pixel at the closest zoom, the sheet bake at
+    10 km or coarser, so finer would only be bytes) and stored as R = height
+    over the patch's relief, G,B = the slope across and along strike at that
+    resolution. Lossless WebP: a lossy codec terraces a height (README 7.13)
+    and the 16-bit PNG this replaced was 9.9 MB."""
+    from PIL import Image
+    meta = json.load(open(os.path.join(OUT, "atlas.json")))
+    SHIP = 256
+    sheet = np.zeros((SHIP * 4, SHIP * 4, 3), np.uint8)
+    cells = []
+    for k, p in enumerate(meta["patches"][:16]):
+        h = np.load(os.path.join(OUT, p["file"].replace(".png", ".npy"))).astype(np.float64)
+        f = h.shape[0] // SHIP
+        if f > 1:
+            h = h.reshape(SHIP, f, SHIP, f).mean(axis=(1, 3))
+        dx = DX * f
+        hn = (h - h.min()) / max(1e-6, h.max() - h.min())
+        nx, ny = _normal(h) if dx == DX else (lambda g: (-g[1], -g[0]))(np.gradient(h, dx))
+        r, c = k // 4, k % 4
+        sheet[r * SHIP:(r + 1) * SHIP, c * SHIP:(c + 1) * SHIP, 0] = np.round(hn * 255)
+        sheet[r * SHIP:(r + 1) * SHIP, c * SHIP:(c + 1) * SHIP, 1] = np.round(np.clip(nx * 0.5 + 0.5, 0, 1) * 255)
+        sheet[r * SHIP:(r + 1) * SHIP, c * SHIP:(c + 1) * SHIP, 2] = np.round(np.clip(ny * 0.5 + 0.5, 0, 1) * 255)
+        cells.append({"cell": k, "kind": p["kind"], "seed": p["seed"], "relief_m": round(p["relief_m"]),
+                      "spacing_km": (round(p["spacing_km"], 1) if p.get("spacing_km") else None)})
+    out = os.path.join(WEB, "atlas.webp")
+    Image.fromarray(sheet, "RGB").save(out, "WEBP", lossless=True, quality=100, method=6)
+    json.dump({"patch": SHIP, "dx_m": DX * (size // SHIP), "km_across": size * DX / 1000.0, "cells": cells},
+              open(os.path.join(WEB, "atlas.json"), "w"), indent=1)
+    print("atlas sheet: %s, %d cells, %.2f MB" % (out, len(cells), os.path.getsize(out) / 1e6))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
@@ -328,27 +363,6 @@ def main():
     print("atlas: %d patches in %s" % (len(meta), OUT))
     if not a.only:
         assemble(size)
-
-
-def assemble(size):
-    """Pack the patches into the 4x4 sheet the shader binds (web/atlas.png):
-    cells 0-5 belts, 6-8 plateaus, 9-11 lowlands, in the order the shader's
-    atlasTex() expects (cell = column + 4*row). PNG, lossless: the height is
-    16-bit across two channels and any lossy codec would terrace it."""
-    from PIL import Image
-    meta = json.load(open(os.path.join(OUT, "atlas.json")))
-    sheet = np.zeros((size * 4, size * 4, 4), np.uint8)
-    cells = []
-    for k, p in enumerate(meta["patches"][:16]):
-        im = np.asarray(Image.open(os.path.join(OUT, p["file"])).convert("RGBA"))
-        r, c = k // 4, k % 4
-        sheet[r * size:(r + 1) * size, c * size:(c + 1) * size] = im
-        cells.append({"cell": k, "kind": p["kind"], "seed": p["seed"], "relief_m": round(p["relief_m"])})
-    out = os.path.join(WEB, "atlas.png")
-    Image.fromarray(sheet, "RGBA").save(out, "PNG", optimize=True)
-    json.dump({"patch": size, "dx_m": DX, "km_across": size * DX / 1000.0, "cells": cells},
-              open(os.path.join(WEB, "atlas.json"), "w"), indent=1)
-    print("atlas sheet: %s, %d cells, %.1f MB" % (out, len(cells), os.path.getsize(out) / 1e6))
 
 
 if __name__ == "__main__":

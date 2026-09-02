@@ -1808,8 +1808,8 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
 /* OROGEN ATLAS (WP-10, plan B3): a 4x4 sheet of eroded relief patches from
-   build_orogen_atlas.py -- R,G height (16-bit), B,A the patch's own slope
-   across and along strike. uAtlasOn is 0 until atlas.png has loaded, and the
+   build_orogen_atlas.py -- R height over the patch's relief, G,B the patch's
+   own slope across and along strike, 1 km per texel, lossless WebP. uAtlasOn is 0 until atlas.png has loaded, and the
    picture is then exactly what it was before this existed. */
 uniform sampler2D uAtlas;
 uniform float uAtlasOn;
@@ -1992,8 +1992,8 @@ vec3 atlasRelief(vec3 msd, vec3 strike){
     vec2 p=vec2(dot(msd-c,Er), dot(msd-c,Nr))*(6371.0/ATLAS_KM);
     float pick=fract(sin(dot(cellw+vec2(7.0*float(L),3.0*float(L)),vec2(12.9898,78.233)))*43758.5453);
     vec4 t=atlasTex(p+vec2(pick*3.7,pick*1.3), floor(pick*5.999));
-    float h=(t.r*255.0*256.0+t.g*255.0)/65535.0;
-    vec2 n=t.ba*2.0-1.0;                             // across, along strike
+    float h=t.r;                                     // height over the patch's relief
+    vec2 n=t.gb*2.0-1.0;                             // slope across, along strike
     tot+=w*vec3(h-0.5, n.x*ca-n.y*sa, n.x*sa+n.y*ca);
     wsum+=w;
   }
@@ -5788,9 +5788,9 @@ function initGL(){
   mapMesh.visible=false; scene.add(mapMesh);
   /* The orogen atlas (WP-10, plan B3), optional: the shader draws exactly the
      old picture until it has loaded. 2048x2048 RGBA, mipmapped, repeat. */
-  mat.uniforms.uAtlas.value=new THREE.DataTexture(new Uint8Array([0,0,128,128]),1,1,THREE.RGBAFormat);
+  mat.uniforms.uAtlas.value=new THREE.DataTexture(new Uint8Array([128,128,128,255]),1,1,THREE.RGBAFormat);
   mat.uniforms.uAtlas.value.needsUpdate=true;
-  fetch('atlas.png?v='+FIELD_V).then(r=>{if(!r.ok)throw 0;return r.blob();})
+  fetch('atlas.webp?v='+FIELD_V).then(r=>{if(!r.ok)throw 0;return r.blob();})
     .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
     .then(bm=>{const t=new THREE.Texture(bm);t.flipY=false;t.colorSpace=THREE.NoColorSpace;
       t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=true;

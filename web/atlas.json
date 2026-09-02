@@ -1,0 +1,91 @@
+{
+ "patch": 256,
+ "dx_m": 1000.0,
+ "km_across": 256.0,
+ "cells": [
+  {
+   "cell": 0,
+   "kind": "belt",
+   "seed": 1,
+   "relief_m": 1140,
+   "spacing_km": 13.6
+  },
+  {
+   "cell": 1,
+   "kind": "belt",
+   "seed": 2,
+   "relief_m": 1358,
+   "spacing_km": 11.4
+  },
+  {
+   "cell": 2,
+   "kind": "belt",
+   "seed": 3,
+   "relief_m": 1643,
+   "spacing_km": 9.8
+  },
+  {
+   "cell": 3,
+   "kind": "belt",
+   "seed": 4,
+   "relief_m": 1046,
+   "spacing_km": 17.5
+  },
+  {
+   "cell": 4,
+   "kind": "belt",
+   "seed": 5,
+   "relief_m": 1173,
+   "spacing_km": 16.2
+  },
+  {
+   "cell": 5,
+   "kind": "belt",
+   "seed": 6,
+   "relief_m": 1293,
+   "spacing_km": 13.8
+  },
+  {
+   "cell": 6,
+   "kind": "plateau",
+   "seed": 1,
+   "relief_m": 1142,
+   "spacing_km": null
+  },
+  {
+   "cell": 7,
+   "kind": "plateau",
+   "seed": 2,
+   "relief_m": 1246,
+   "spacing_km": null
+  },
+  {
+   "cell": 8,
+   "kind": "plateau",
+   "seed": 3,
+   "relief_m": 1319,
+   "spacing_km": null
+  },
+  {
+   "cell": 9,
+   "kind": "lowland",
+   "seed": 1,
+   "relief_m": 108,
+   "spacing_km": null
+  },
+  {
+   "cell": 10,
+   "kind": "lowland",
+   "seed": 2,
+   "relief_m": 131,
+   "spacing_km": null
+  },
+  {
+   "cell": 11,
+   "kind": "lowland",
+   "seed": 3,
+   "relief_m": 142,
+   "spacing_km": null
+  }
+ ]
+}
