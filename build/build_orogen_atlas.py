@@ -230,13 +230,19 @@ def make_patch(kind, seed, size, steps, log):
     y, x = np.mgrid[0:n, 0:n]
     noise = _fbm((n, n), seed + 11, octaves=4, base=3)
     if kind == "belt":
-        # fold-and-thrust stripes along y, spacing 8-20 km, wandering on the noise
+        # fold-and-thrust stripes along y, spacing 9-18 km, wandering on the noise.
+        # The stripes are not a ruled grating: their phase drifts on a low
+        # noise that varies mostly ALONG strike (ridges step and plunge, the
+        # en-echelon habit of real folds), their amplitude pinches and swells
+        # along strike, and the whole belt is highest in the middle of the
+        # patch and tapers to its margins.
         spacing_km = float(rng.uniform(9.0, 18.0))
-        phase = 2 * np.pi * (x * KM_PER_TEXEL / spacing_km) + (noise - 0.5) * 4.0
+        jit = _fbm((n, n), seed + 21, octaves=3, base=2)
+        phase = 2 * np.pi * (x * KM_PER_TEXEL / spacing_km) + (noise - 0.5) * 4.0 + (jit - 0.5) * 7.0
         stripes = 0.5 + 0.5 * np.cos(phase)
-        # the belt is highest in the middle and tapers to its margins
+        swell = 0.45 + 0.55 * _fbm((n, n), seed + 33, octaves=3, base=3)
         envelope = 0.35 + 0.65 * (0.5 - 0.5 * np.cos(2 * np.pi * x / n)) ** 0.8
-        U = (0.0015 + 0.0030 * stripes ** 1.6) * envelope * (0.7 + 0.6 * noise)   # m/yr
+        U = (0.0015 + 0.0030 * stripes ** 1.6 * swell) * envelope * (0.7 + 0.6 * noise)   # m/yr
         K = 2.5e-5 * (0.6 + 0.8 * _fbm((n, n), seed + 5, 3, 2))
         D = 0.03
     elif kind == "plateau":
@@ -260,13 +266,18 @@ def make_patch(kind, seed, size, steps, log):
         for xx in range(n):
             outlet[(cy + wander2[xx]) % n, xx] = True
     if kind == "belt":
-        # a belt's rivers leave ACROSS strike: keep only the cross-strike trunks
+        # a belt's rivers leave ACROSS strike through two wandering transverse
+        # trunks, plus one strike valley running between the ridges
         outlet[:] = False
         for k in range(2):
             cy = int((k + 0.5) * n / 2)
-            wander2 = ((_fbm((n, n), seed + 41 + k, 3, 2)[0, :] - 0.5) * n * 0.10).astype(int)
+            wander2 = ((_fbm((n, n), seed + 41 + k, 3, 2)[0, :] - 0.5) * n * 0.18).astype(int)
             for xx in range(n):
                 outlet[(cy + wander2[xx]) % n, xx] = True
+        cx = int(rng.uniform(0.2, 0.8) * n)
+        wander3 = ((_fbm((n, n), seed + 61, 3, 2)[:, 0] - 0.5) * n * 0.06).astype(int)
+        for yy in range(n):
+            outlet[yy, (cx + wander3[yy]) % n] = True
     dt = 20000.0  # years per step; a few hundred steps is a few Myr, enough for steady state at these K
     h = erode(U, K, D, outlet, steps, dt, seed, log=log)
     return h, {"kind": kind, "seed": seed, "spacing_km": (spacing_km if kind == "belt" else None),
@@ -292,7 +303,10 @@ def main():
     ap.add_argument("--size", type=int, default=PATCH)
     ap.add_argument("--steps", type=int, default=160)
     ap.add_argument("--only", default=None, help="kind:seed, e.g. belt:1")
+    ap.add_argument("--assemble", action="store_true", help="just pack build/atlas/*.png into web/atlas.png")
     a = ap.parse_args()
+    if a.assemble:
+        assemble(json.load(open(os.path.join(OUT, "atlas.json")))["patch"]); return
     size = 128 if a.quick else a.size
     steps = 40 if a.quick else a.steps
     kinds = [("belt", 1), ("belt", 2), ("belt", 3), ("belt", 4), ("belt", 5), ("belt", 6),
@@ -312,6 +326,29 @@ def main():
         print("  -> %s  relief %.0f m" % (name, info["relief_m"]), flush=True)
     json.dump({"patch": size, "dx_m": DX, "patches": meta}, open(os.path.join(OUT, "atlas.json"), "w"), indent=1)
     print("atlas: %d patches in %s" % (len(meta), OUT))
+    if not a.only:
+        assemble(size)
+
+
+def assemble(size):
+    """Pack the patches into the 4x4 sheet the shader binds (web/atlas.png):
+    cells 0-5 belts, 6-8 plateaus, 9-11 lowlands, in the order the shader's
+    atlasTex() expects (cell = column + 4*row). PNG, lossless: the height is
+    16-bit across two channels and any lossy codec would terrace it."""
+    from PIL import Image
+    meta = json.load(open(os.path.join(OUT, "atlas.json")))
+    sheet = np.zeros((size * 4, size * 4, 4), np.uint8)
+    cells = []
+    for k, p in enumerate(meta["patches"][:16]):
+        im = np.asarray(Image.open(os.path.join(OUT, p["file"])).convert("RGBA"))
+        r, c = k // 4, k % 4
+        sheet[r * size:(r + 1) * size, c * size:(c + 1) * size] = im
+        cells.append({"cell": k, "kind": p["kind"], "seed": p["seed"], "relief_m": round(p["relief_m"])})
+    out = os.path.join(WEB, "atlas.png")
+    Image.fromarray(sheet, "RGBA").save(out, "PNG", optimize=True)
+    json.dump({"patch": size, "dx_m": DX, "km_across": size * DX / 1000.0, "cells": cells},
+              open(os.path.join(WEB, "atlas.json"), "w"), indent=1)
+    print("atlas sheet: %s, %d cells, %.1f MB" % (out, len(cells), os.path.getsize(out) / 1e6))
 
 
 if __name__ == "__main__":

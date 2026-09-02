@@ -69,6 +69,12 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    and none of them was where inspection said it would be. Four multiplies by
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
+/* OROGEN ATLAS (WP-10, plan B3): a 4x4 sheet of eroded relief patches from
+   build_orogen_atlas.py -- R,G height (16-bit), B,A the patch's own slope
+   across and along strike. uAtlasOn is 0 until atlas.png has loaded, and the
+   picture is then exactly what it was before this existed. */
+uniform sampler2D uAtlas;
+uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
 float gZSm=-9999.0;
 /* How much of the wide submarine stencil is actually sea (iteration 30).
@@ -192,6 +198,74 @@ vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
   float c=cos(gMatAng), sn=sin(gMatAng);
   return d*c + cross(gMatAxis,d)*sn + gMatAxis*(dot(gMatAxis,d)*(1.0-c));
+}
+/* THE OROGEN ATLAS, SAMPLED ON THE CRUST (WP-10, plan B3).
+
+   What the per-pixel noise never had is ORGANISATION -- connected valleys,
+   divides that run, ridges spaced like real ones -- and iterations 51-77
+   measured that no orientation of noise produces it. Erosion does. So the
+   relief a range is made of comes from a small library of patches that a
+   stream-power erosion model produced offline under fold-belt uplift
+   (build_orogen_atlas.py), and this function lays them over the mountains
+   the way the abyssal fabric lays hills over the sea floor: keyed to the
+   crust, so the texture rides its plate; rotated to the fold axis, so the
+   ridges run along strike; and blended from two offset lattices of cells so
+   no patch edge is ever visible.
+
+   msd is the crust-fixed position (matDir already applied), strike the fold
+   axis in the SAME frame -- the retired grating dotted a rotated position
+   with an unrotated axis, which is why deep time mis-drew it. Cells are
+   ATLAS_CELL_RAD across on a lon/lat lattice of the crust frame (slivers at
+   the poles, where there is nothing to draw), each with its own patch, phase
+   and strike; the patch coordinate is the gnomonic offset from the cell
+   centre in the strike-rotated tangent frame, in units of the patch width.
+   Returns (height - 0.5, slope east, slope north): height in patch units
+   (0..1 is the patch's full relief), slopes in the pixel's east/north frame
+   ready to hand to the shading normal. Two texture reads. */
+const float ATLAS_KM=256.0;          // one patch across, matches DX*PATCH in the baker
+const float ATLAS_NCELL=111.0;       // cells around the equator: 2*pi/111 = 0.0566 rad, ~360 km
+const float ATLAS_CELL_RAD=6.28318530718/ATLAS_NCELL;
+vec4 atlasTex(vec2 p, float which){
+  vec2 c=vec2(mod(which,4.0), floor(which*0.25));
+  return texture2D(uAtlas,(c+fract(p))*0.25);
+}
+vec3 atlasRelief(vec3 msd, vec3 strike){
+  float lat=asin(clamp(msd.y,-1.0,1.0)), lon=atan(msd.z,msd.x);
+  vec2 ll=vec2(lon+3.14159265359,lat)/ATLAS_CELL_RAD;   // lon cells count from the antimeridian
+  vec3 tot=vec3(0.0); float wsum=0.0;
+  for(int L=0;L<2;L++){
+    float off=float(L)*0.5;
+    vec2 cell=floor(ll+off);
+    vec2 q=ll+off-(cell+0.5);                       // -0.5..0.5 inside the cell
+    float w=1.0-smoothstep(0.15,0.55,length(q)*1.35);
+    if(w<=0.0) continue;
+    /* The centre is taken from the UNWRAPPED cell so the gnomonic offset stays
+       small either side of the antimeridian, while the patch pick below uses
+       the wrapped index so both sides of it agree on the patch: the lattice
+       divides the circle exactly (ATLAS_NCELL), so there is no seam. */
+    vec2 cc=(cell+0.5-off)*ATLAS_CELL_RAD-vec2(3.14159265359,0.0);
+    vec2 cellw=vec2(mod(cell.x,ATLAS_NCELL),cell.y);
+    vec3 c=vec3(cos(cc.y)*cos(cc.x), sin(cc.y), cos(cc.y)*sin(cc.x));
+    vec3 Ec=vec3(-sin(cc.x),0.0,cos(cc.x));
+    vec3 Nc=cross(c,Ec);
+    float ang=atan(dot(strike,Nc), dot(strike,Ec));  // strike angle in the cell frame
+    float ca=cos(ang), sa=sin(ang);
+    vec3 Er=Ec*ca+Nc*sa, Nr=Nc*ca-Ec*sa;             // Nr runs ALONG strike
+    vec2 p=vec2(dot(msd-c,Er), dot(msd-c,Nr))*(6371.0/ATLAS_KM);
+    float pick=fract(sin(dot(cellw+vec2(7.0*float(L),3.0*float(L)),vec2(12.9898,78.233)))*43758.5453);
+    vec4 t=atlasTex(p+vec2(pick*3.7,pick*1.3), floor(pick*5.999));
+    float h=(t.r*255.0*256.0+t.g*255.0)/65535.0;
+    vec2 n=t.ba*2.0-1.0;                             // across, along strike
+    tot+=w*vec3(h-0.5, n.x*ca-n.y*sa, n.x*sa+n.y*ca);
+    wsum+=w;
+  }
+  return tot/max(wsum,1e-4);
+}
+/* The gate every atlas term shares: the age-relative shortening field from
+   build_tectonic.topo_fabric, which is what says "this is a belt" at every
+   age, times a floor on absolute height so a lowland never grows ridges. */
+float atlasGate(float z){
+  return smoothstep(0.12,0.40,gShort)*smoothstep(150.0,700.0,z);
 }
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -537,6 +611,17 @@ float elevDetail(float z, vec3 d, float rug){
   float shore=smoothstep(0.0,260.0,z);
   float amp=mix(0.55,1.15,gHard)*shore*(0.75+0.55*clamp(z/2500.0,0.0,1.0));
   float det=(n*250.0+n2*130.0)*(1.0+rug*1.5)*uDetail*amp;
+  /* RIDGE AND VALLEY FROM THE ATLAS, IN THE HEIGHT (B3). Zero-mean relief in
+     proportion to the belt gate, so snow lines, bare rock, treelines and the
+     coast all see the ridges; the fine octaves above fade out where the atlas
+     takes over, so two systems never texture one surface (README 7.4). */
+  if(uAtlasOn>0.5){
+    float g=atlasGate(z);
+    if(g>0.005){
+      vec3 ar=atlasRelief(d, matDir(gFold));   // d, not dF: the atlas carries its own anisotropy
+      det=det*(1.0-0.6*g) + ar.x*900.0*g*(0.55+0.45*clamp(z/3000.0,0.0,1.0));
+    }
+  }
   return z + max(det, -z*0.85);
 }
 // interpolate the two keyframes, then add procedural micro-relief so the
@@ -2598,6 +2683,19 @@ void main(){
        present day the stripes mixed two frames. Removed rather than
        recalibrated: WP-10 plan B replaces per-pixel gratings with baked,
        eroded relief steered by the same gFold. */
+    /* RIDGE AND VALLEY FROM THE ATLAS, IN THE NORMAL (B3). The hillshade
+       stencil is blind at 47 km, so the atlas relief added to the height above
+       lights only its broadest forms; its own slopes, rotated into east/north,
+       carry the 5-30 km band straight to the shading normal -- H7's remedy,
+       with eroded structure instead of a grating. */
+    if(uAtlasOn>0.5){
+      float ga=atlasGate(zp);
+      if(ga>0.005){
+        vec3 ar=atlasRelief(msd, matDir(gFold));
+        float ampA=ga*1.6*(0.6+0.4*rug);
+        nx+=ar.y*ampA; ny+=ar.z*ampA;
+      }
+    }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
        been in the surface field all along and was used only to tint -- "the
        app knows where the valleys on a plain are and declines to carve them"

@@ -7254,3 +7254,14 @@ keyframe 0 is baked with the Holocene lakes; the sea-surface sheen is frozen
 in a sheet; during a scrub the live path is used. Clouds and atmosphere are
 still the live shells. Shipped sheets are not yet in the repo -- baking them
 needs a real GPU, which this review environment does not have.
+
+**A3 / C1 verified (same day).** `build/bake_sheets.py` baked seven 1024-wide sheets
+through the app on software GL and encoded them (85–95 KB each at 1024×512, so
+~200 KB at 2048 and ~50 MB for the timeline); the app loads shipped sheets in
+place of baking. One trap on the way: the sheet's ocean mask was alpha 0, and a
+sheet goes through a 2-D canvas on its way to PNG — a canvas stores
+premultiplied colour, so every water pixel came back black. The mask is alpha
+0.5 now and the lite shaders threshold at 0.75. `web/ambient.html` runs on those
+sheets and `_v` alone: verified headless, time advancing, no console errors.
+The atlas shader code (B3) is in and compiles, gated off until `web/atlas.png`
+exists.
