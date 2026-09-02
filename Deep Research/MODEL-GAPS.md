@@ -7289,7 +7289,7 @@ potentials per keyframe to `_t` -- phi across strike, psi along it, one unit per
 patch -- as a weighted least-squares gradient problem on the equirect grid
 (conjugate gradients preconditioned by an exact FFT solve of the unit-weight
 Laplacian, ~1.3 s a keyframe, sign chosen by region growing from the most shortened
-cell), and ships them as 16-bit byte pairs (`_q.png`, ~300 KB). The shader
+cell), and ships them as 16-bit byte pairs (`_q.webp`, ~215 KB). The shader
 samples the belt patch at (phi, psi), interpolating the decoded values by hand
 and taking the across/along frame from the potentials' own gradients. The
 emulation over the Zagros, the Himalaya and the Andean orocline shows ridges

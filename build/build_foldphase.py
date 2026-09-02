@@ -1,4 +1,4 @@
-"""Bake `*_q.png` -- FOLD COORDINATES for the mountain belts (WP-10, plan B3b).
+"""Bake `*_q.webp` -- FOLD COORDINATES for the mountain belts (WP-10, plan B3b).
 
 WHY A POTENTIAL. The atlas patches carry real eroded ridge-and-valley, but
 laying a striped patch over a belt by rotating it to the local strike fails
@@ -27,7 +27,7 @@ most shortened cell of each belt, each cell taking the sign that agrees with
 the neighbour it was reached from; a belt with a genuine 180-degree twist gets
 a fold in phi along one line, which the patch's own variation hides.
 
-CHANNELS (RGBA, lossless PNG -- a sawtooth would seam and a lossy codec would
+CHANNELS (RGBA, lossless WebP -- a sawtooth would seam and a lossy codec would
 terrace): R,G = phi and B,A = psi, each 16-bit over +-Q_RANGE units.
 
     python3 build_foldphase.py            # all keyframes with a _t field
@@ -175,8 +175,13 @@ def bake(age, quiet=False):
     sg2 = _consistent_sign(sx, sy, w)
     psi = _solve(sg2 * sx / LAMBDA, sg2 * sy / LAMBDA, w, lat)
     out = _encode(phi, psi)
-    name = base + "_q.png"
-    Image.fromarray(out, "RGBA").save(os.path.join(FIELDS, name), "PNG", optimize=True)
+    name = base + "_q.webp"
+    # Lossless WebP is 31% smaller than an optimised PNG of the same bytes
+    # (214 KB against 311 KB at the present day). `exact` matters: the low byte
+    # of psi rides in alpha, and without it the encoder is free to zero the RGB
+    # of any pixel whose alpha happens to be 0 -- which corrupts phi there.
+    Image.fromarray(out, "RGBA").save(os.path.join(FIELDS, name), "WEBP",
+                                      lossless=True, quality=100, method=6, exact=True)
     if not quiet:
         span = lambda a: float(np.percentile(a[w > 0.3], 99) - np.percentile(a[w > 0.3], 1)) if (w > 0.3).any() else 0.0
         print("  %s  gated %.1f%%  phi span %.1f  psi span %.1f  -> %s" % (

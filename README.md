@@ -103,7 +103,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
 | `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`) |
 | `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
-| `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless PNG; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
+| `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless WebP; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
 
 Temperature is **not** shipped: it is a closed form of latitude, elevation and the era anomaly, so the shader recomputes it for free.
 

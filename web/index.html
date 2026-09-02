@@ -1323,7 +1323,7 @@ async function loadAll(){
    age be there, which is what ensureFrames and the prefetch pump below do. */
 const FIELD_KINDS=[['e',()=>ELI],['r',()=>RNI],['m',()=>MOI],
                    ['w',()=>WLI],['d',()=>SFI],['o',()=>OCI],['v',()=>VLI],['p',()=>PLI],['t',()=>TCI],['f',()=>FRI],
-                   ['q',()=>FQI]];   // fold coordinates (build_foldphase.py), lossless PNG
+                   ['q',()=>FQI]];   // fold coordinates (build_foldphase.py), lossless WebP
 const fieldSrc=n=>'fields/'+n+'?v='+FIELD_V;
 const _fieldTried=new Set();     // kind+i once a fetch has SETTLED, success or not
 const _fieldPending=new Map();   // kind+i -> in-flight promise, so nothing is asked for twice
@@ -1343,7 +1343,7 @@ function fieldFile(i,kind){
   const cut=fr.e.lastIndexOf('_e');
   // The fold coordinates are two 16-bit potentials split across byte pairs; a
   // lossy codec would terrace them and a sawtooth would seam, so they are PNG.
-  return fr.e.slice(0,cut)+'_'+kind+(kind==='q'?'.png':'.webp');
+  return fr.e.slice(0,cut)+'_'+kind+'.webp';
 }
 
 /* The opening frame needs twelve files, so the splash counts those and nothing
