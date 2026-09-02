@@ -103,6 +103,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
 | `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`) |
 | `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
+| `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless PNG; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
 
 Temperature is **not** shipped: it is a closed form of latitude, elevation and the era anomaly, so the shader recomputes it for free.
 
@@ -302,6 +303,34 @@ default 2), `?spin=`, `?fps=` (default 30; 10 under `prefers-reduced-motion`), `
 `?ui=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
 wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped.
 
+### 5.10 Mountains: the orogen atlas and the fold coordinates
+
+The three per-pixel constructions that used to make the mountains (a ridged fBm in the
+height, a `sin²(fBm)` tone band and a sine grating in the normal) are retired (WP-10 B1);
+the register's iterations 51–77 had already measured that no orientation of noise produces
+the organisation a range has. Ridge-and-valley now comes from a **model**, twice over:
+
+- **The orogen atlas** (`build_orogen_atlas.py` → `web/atlas.webp`, 1.1 MB): twelve 256 km
+  periodic patches eroded to steady state by a stream-power + hillslope model — six fold
+  belts under striped uplift (ridge spacing 10–18 km, relief 1.0–1.6 km, phase drift and
+  pinch-and-swell along strike), three dissected plateaus, three lowlands — stored as
+  height and slope at 1 km per texel.
+- **The fold coordinates** (`build_foldphase.py` → `_q`): the shader does not rotate a patch
+  to the local strike — a patch rotated about a cell centre cannot follow a belt that bends,
+  and cells meet as a quilt (measured in a numpy emulation of the first cut). Instead two
+  potentials per keyframe, φ across strike and ψ along it, are fitted by least squares to
+  the strike field of `_t`, and the belt patch is sampled at (φ, ψ). That is the land
+  equivalent of keying the abyssal fabric to the companded crustal age: continuous by
+  construction, so the ridges run along the belt and bend with it, with no seams.
+
+In the shader the patch's height goes into the elevation (zero-mean, so snow lines, bare
+rock and treelines see the ridges), its slopes into the shading normal (the hillshade
+stencil is blind at 47 km), and its height into the albedo as tone (a lit ridge narrower
+than a pixel averages away, a dark valley floor does not). All of it gated by the
+age-relative shortening from `topo_fabric` and a 150–700 m floor. `?noatlas=1` switches it
+off. Amplitudes were set on software GL at 960×600 and are the first thing to look at on a
+real display.
+
 ## 6. Build and deploy
 
 ```bash
@@ -335,6 +364,7 @@ Common targeted rebuilds:
 ONLY_AGE=300 python reskin_seafloor.py     # one keyframe, quick visual check
 python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
 python build_webdata.py                    # labels, timeline, boundaries, life
+python build_foldphase.py -j               # fold coordinates for all 251 (~1 h on three cores)
 python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)
 python bake_sheets.py --width 2048         # the lean set the ambient build runs on
 ```

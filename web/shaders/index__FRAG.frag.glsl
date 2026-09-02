@@ -46,6 +46,16 @@ uniform float uTect;
    cannot carry a trough 100-300 km wide and a few hundred metres deep. */
 uniform sampler2D foreA;
 uniform float uFore;
+/* Fold coordinates, baked per keyframe by build_foldphase.py from the strike
+   field: R,G = phi (across strike), B,A = psi (along strike), 16-bit each over
+   +-64 units of one atlas patch (256 km). The belt patches are sampled at
+   (phi, psi), which is what makes their ridges follow a bending belt with no
+   rotation, no cells and no seams -- the land equivalent of keying the abyssal
+   fabric to the companded crustal age. NEAREST-filtered bytes; decoded then
+   interpolated by hand in foldAt(). */
+uniform sampler2D foldA, foldB;
+uniform float uFoldOn;
+uniform vec2 uFoldTexel;
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 /* 0..1: do GRASSES exist and form a sward here yet. Vegetation as a whole is
    already gated by uVeg, which the climate table drives correctly -- 0.00 before
@@ -70,8 +80,8 @@ uniform float uSeaTint;   // 0 ancient green sea .. 1 modern blue (a scalar, not
    1.0 is a fair price for the next one. */
 uniform vec4 uDbg;
 /* OROGEN ATLAS (WP-10, plan B3): a 4x4 sheet of eroded relief patches from
-   build_orogen_atlas.py -- R,G height (16-bit), B,A the patch's own slope
-   across and along strike. uAtlasOn is 0 until atlas.png has loaded, and the
+   build_orogen_atlas.py -- R height over the patch's relief, G,B the patch's
+   own slope across and along strike, 1 km per texel, lossless WebP. uAtlasOn is 0 until atlas.png has loaded, and the
    picture is then exactly what it was before this existed. */
 uniform sampler2D uAtlas;
 uniform float uAtlasOn;
@@ -199,73 +209,84 @@ vec3 matDir(vec3 d){
   float c=cos(gMatAng), sn=sin(gMatAng);
   return d*c + cross(gMatAxis,d)*sn + gMatAxis*(dot(gMatAxis,d)*(1.0-c));
 }
-/* THE OROGEN ATLAS, SAMPLED ON THE CRUST (WP-10, plan B3).
+/* THE OROGEN ATLAS, SAMPLED ON THE FOLD COORDINATES (WP-10, plan B3).
 
    What the per-pixel noise never had is ORGANISATION -- connected valleys,
    divides that run, ridges spaced like real ones -- and iterations 51-77
    measured that no orientation of noise produces it. Erosion does. So the
    relief a range is made of comes from a small library of patches that a
    stream-power erosion model produced offline under fold-belt uplift
-   (build_orogen_atlas.py), and this function lays them over the mountains
-   the way the abyssal fabric lays hills over the sea floor: keyed to the
-   crust, so the texture rides its plate; rotated to the fold axis, so the
-   ridges run along strike; and blended from two offset lattices of cells so
-   no patch edge is ever visible.
+   (build_orogen_atlas.py), and this samples them the way the abyssal fabric is
+   keyed to the companded crustal age: not by position and a rotation, which
+   cannot follow a belt that bends and meets itself as a quilt of cells (the
+   first cut, measured in a numpy emulation), but by two baked POTENTIALS --
+   phi across strike and psi along it, one unit per patch width -- so that
+   (phi, psi) is a curvilinear parameterisation of the belt and the patch's
+   ridges run along it everywhere, bending where it bends, with no seams.
 
-   msd is the crust-fixed position (matDir already applied), strike the fold
-   axis in the SAME frame -- the retired grating dotted a rotated position
-   with an unrotated axis, which is why deep time mis-drew it. Cells are
-   ATLAS_CELL_RAD across on a lon/lat lattice of the crust frame (slivers at
-   the poles, where there is nothing to draw), each with its own patch, phase
-   and strike; the patch coordinate is the gnomonic offset from the cell
-   centre in the strike-rotated tangent frame, in units of the patch width.
-   Returns (height - 0.5, slope east, slope north): height in patch units
-   (0..1 is the patch's full relief), slopes in the pixel's east/north frame
-   ready to hand to the shading normal. Two texture reads. */
+   The potentials ship as 16-bit byte pairs, which bilinear filtering cannot
+   interpolate, so foldAt() reads the four NEAREST texels of each keyframe,
+   decodes, and interpolates by hand; the same four values give the potential's
+   gradient, which is the signed across/along frame the patch slopes are
+   rotated into -- no reliance on gFold's sign at all. Computed ONCE per pixel
+   into gFoldP/gFoldE/gFoldN in main(), before the hillshade taps, so the
+   stencil sees one coordinate and cannot report its variation as slope. */
 const float ATLAS_KM=256.0;          // one patch across, matches DX*PATCH in the baker
-const float ATLAS_NCELL=111.0;       // cells around the equator: 2*pi/111 = 0.0566 rad, ~360 km
-const float ATLAS_CELL_RAD=6.28318530718/ATLAS_NCELL;
+const float FOLD_Q=64.0;             // build_foldphase.Q_RANGE
+vec2 gFoldP=vec2(0.0); vec2 gFoldE=vec2(1.0,0.0); vec2 gFoldN=vec2(0.0,1.0); float gFoldW=0.0;
+vec2 decFold(vec4 t){ return (vec2(t.r*255.0*256.0+t.g*255.0, t.b*255.0*256.0+t.a*255.0)/65535.0)*(2.0*FOLD_Q)-FOLD_Q; }
+/* Bilinear on decoded values. Returns phi, psi and their gradients in uv. */
+void foldTaps(sampler2D T, vec2 uv, out vec2 v, out vec2 dpu, out vec2 dpv){
+  vec2 st=uv/uFoldTexel-0.5;
+  vec2 f=fract(st), b=(floor(st)+0.5)*uFoldTexel;
+  vec2 p00=decFold(texture2D(T,b)), p10=decFold(texture2D(T,b+vec2(uFoldTexel.x,0.0)));
+  vec2 p01=decFold(texture2D(T,b+vec2(0.0,uFoldTexel.y))), p11=decFold(texture2D(T,b+uFoldTexel));
+  v=mix(mix(p00,p10,f.x),mix(p01,p11,f.x),f.y);
+  dpu=mix(p10-p00,p11-p01,f.y);   // change per texel in u
+  dpv=mix(p01-p00,p11-p10,f.x);   // change per texel in v
+}
+void foldAt(vec2 uv){
+  vec2 va,dua,dva, vb,dub,dvb;
+  foldTaps(foldA,wA(uv),va,dua,dva);
+  foldTaps(foldB,wB(uv),vb,dub,dvb);
+  gFoldP=mix(va,vb,mixf);
+  vec2 du=mix(dua,dub,mixf), dv=mix(dva,dvb,mixf);
+  /* Gradient of phi in the east/north frame: u runs east, v runs NORTH (uv.y
+     is 1 at the pole), a texel is uFoldTexel of the map. The across-strike
+     unit vector is grad(phi) normalised, the along-strike one grad(psi). */
+  float cl=max(cos(radians(uv.y*180.0-90.0)),0.15);
+  vec2 gphi=vec2(du.x/cl, dv.x), gpsi=vec2(du.y/cl, dv.y);
+  float lp=length(gphi), ls=length(gpsi);
+  gFoldE = lp>1e-6 ? gphi/lp : vec2(1.0,0.0);   // across strike
+  gFoldN = ls>1e-6 ? gpsi/ls : vec2(-gFoldE.y,gFoldE.x);
+  gFoldW = uFoldOn;
+}
 vec4 atlasTex(vec2 p, float which){
-  vec2 c=vec2(mod(which,4.0), floor(which*0.25));
+  /* The sheet is uploaded flipped (every bitmap here is), so v = 0 is the
+     BOTTOM row of the image: cell row r of the file sits at v = (3 - r)/4. */
+  vec2 c=vec2(mod(which,4.0), 3.0-floor(which*0.25));
   return texture2D(uAtlas,(c+fract(p))*0.25);
 }
-vec3 atlasRelief(vec3 msd, vec3 strike){
-  float lat=asin(clamp(msd.y,-1.0,1.0)), lon=atan(msd.z,msd.x);
-  vec2 ll=vec2(lon+3.14159265359,lat)/ATLAS_CELL_RAD;   // lon cells count from the antimeridian
-  vec3 tot=vec3(0.0); float wsum=0.0;
-  for(int L=0;L<2;L++){
-    float off=float(L)*0.5;
-    vec2 cell=floor(ll+off);
-    vec2 q=ll+off-(cell+0.5);                       // -0.5..0.5 inside the cell
-    float w=1.0-smoothstep(0.15,0.55,length(q)*1.35);
-    if(w<=0.0) continue;
-    /* The centre is taken from the UNWRAPPED cell so the gnomonic offset stays
-       small either side of the antimeridian, while the patch pick below uses
-       the wrapped index so both sides of it agree on the patch: the lattice
-       divides the circle exactly (ATLAS_NCELL), so there is no seam. */
-    vec2 cc=(cell+0.5-off)*ATLAS_CELL_RAD-vec2(3.14159265359,0.0);
-    vec2 cellw=vec2(mod(cell.x,ATLAS_NCELL),cell.y);
-    vec3 c=vec3(cos(cc.y)*cos(cc.x), sin(cc.y), cos(cc.y)*sin(cc.x));
-    vec3 Ec=vec3(-sin(cc.x),0.0,cos(cc.x));
-    vec3 Nc=cross(c,Ec);
-    float ang=atan(dot(strike,Nc), dot(strike,Ec));  // strike angle in the cell frame
-    float ca=cos(ang), sa=sin(ang);
-    vec3 Er=Ec*ca+Nc*sa, Nr=Nc*ca-Ec*sa;             // Nr runs ALONG strike
-    vec2 p=vec2(dot(msd-c,Er), dot(msd-c,Nr))*(6371.0/ATLAS_KM);
-    float pick=fract(sin(dot(cellw+vec2(7.0*float(L),3.0*float(L)),vec2(12.9898,78.233)))*43758.5453);
-    vec4 t=atlasTex(p+vec2(pick*3.7,pick*1.3), floor(pick*5.999));
-    float h=(t.r*255.0*256.0+t.g*255.0)/65535.0;
-    vec2 n=t.ba*2.0-1.0;                             // across, along strike
-    tot+=w*vec3(h-0.5, n.x*ca-n.y*sa, n.x*sa+n.y*ca);
-    wsum+=w;
-  }
-  return tot/max(wsum,1e-4);
+/* Returns (height - 0.5, slope east, slope north) of the belt relief at this
+   pixel. Along strike a different belt patch takes over every patch length,
+   cross-faded over the middle third of each: both share (phi, psi), so their
+   ridges align and the fade only trades one patch's detail for another's. */
+vec3 atlasRelief(){
+  vec2 p=gFoldP;
+  float seg=floor(p.y), fs=fract(p.y);
+  float w1=smoothstep(0.35,0.65,fs);
+  float k0=mod(seg*7.0+3.0,6.0), k1=mod(seg*7.0+10.0,6.0);
+  vec4 t0=atlasTex(p+vec2(k0*0.37,0.0),k0), t1=atlasTex(p+vec2(k1*0.37,0.0),k1);
+  vec4 t=mix(t0,t1,w1);
+  float h=t.r;
+  vec2 n=vec2(t.g*2.0-1.0, -(t.b*2.0-1.0));        // slope across, along strike; the flip mirrors y
+  return vec3(h-0.5, n.x*gFoldE.x+n.y*gFoldN.x, n.x*gFoldE.y+n.y*gFoldN.y);
 }
 /* The gate every atlas term shares: the age-relative shortening field from
    build_tectonic.topo_fabric, which is what says "this is a belt" at every
    age, times a floor on absolute height so a lowland never grows ridges. */
 float atlasGate(float z){
-  return smoothstep(0.12,0.40,gShort)*smoothstep(150.0,700.0,z);
+  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(150.0,700.0,z);
 }
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -618,7 +639,7 @@ float elevDetail(float z, vec3 d, float rug){
   if(uAtlasOn>0.5){
     float g=atlasGate(z);
     if(g>0.005){
-      vec3 ar=atlasRelief(d, matDir(gFold));   // d, not dF: the atlas carries its own anisotropy
+      vec3 ar=atlasRelief();
       det=det*(1.0-0.6*g) + ar.x*520.0*g*(0.55+0.45*clamp(z/3000.0,0.0,1.0));
     }
   }
@@ -1014,6 +1035,7 @@ void main(){
     vec3 Nh=vec3(-sin(la)*cos(lo), -sin(la)*sin(lo), cos(la));
     gFold=normalize(Eh*cos(th)+Nh*sin(th)+vec3(1e-9));
   }
+  if(uAtlasOn>0.5 && uFoldOn>0.5 && gShort>0.08) foldAt(uv);
   // Set the water surface BEFORE anything reads z, because elevDetail() tests
   // it while it is still shaping the terrain. Plain sample, no shoreline
   // jitter: this decides land-or-sea, and a wobbling decision would crawl.
@@ -2691,7 +2713,7 @@ void main(){
     if(uAtlasOn>0.5){
       float ga=atlasGate(zp);
       if(ga>0.005){
-        vec3 ar=atlasRelief(msd, matDir(gFold));
+        vec3 ar=atlasRelief();
         float ampA=ga*2.2*(0.6+0.4*rug);
         nx+=ar.y*ampA; ny+=ar.z*ampA;
         /* And as TONE, because a lit ridge narrower than a pixel averages away
