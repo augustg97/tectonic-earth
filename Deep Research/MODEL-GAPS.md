@@ -7177,3 +7177,80 @@ Gates: shader clean, ice 1 of 23 at 570 Ma, abyss median 57.7 with 0.16%
 clipped, broad share 0.47 against 0.48, storm gate 0 synchronous uploads.
 
 Sixth backtick-in-a-GLSL-comment of the session.
+
+## WP-10 — IMPLEMENTATION, round 1 (2026-09-02): week-one items and the sheet path
+
+The roadmap in `research reports/WP-10-review-and-roadmap.md` was approved and
+work started in its order. What shipped, each with the measurement that says
+it did what it claims. Nothing is deployed to `main` yet; it is on the review
+branch.
+
+**D1 — the foreland moat no longer drowns dry ground.** `elevDetail` floors the
+deflected elevation at 30 m above the local water surface wherever the field
+says the ground is dry; water still deepens, the forebulge still lifts, the
+substrate softening is untouched. `audit_foreland.py` gained the second
+promise: it now reports the dry cells the raw moat WOULD drown and the count
+after the shader floor, and fails on any of the latter.
+
+| age | raw moat would drown | after the floor |
+|---|---|---|
+| 0 | 1,658 cells, 1.02% of land | 0 |
+| 50 | 741, 0.48% | 0 |
+| 100 | 727, 0.42% | 0 |
+| 200 | 635, 0.36% | 0 |
+| 300 | 474, 0.38% | 0 |
+| 400 | 478, 0.40% | 0 |
+| 500 | 206, 0.19% | 0 |
+
+Rendered: the Gangetic plain is land along the whole Himalayan front
+(`wp10/` will carry the frame at deploy). Polarity unchanged, 3 correct / 2
+weak / 0 wrong side; no cell above 1,500 m moved.
+
+**D2 / D3 / D6.** `check_shader.py` now writes `web/shaders/*.glsl` from the
+page on every clean run (the hand-kept copy was 500 lines stale; the variant
+copies are deleted). `site/` -- 624 tracked Finder conflict copies, 13 MB --
+is removed and ignored. README §3/§4 list the ten field kinds that ship.
+
+**A5 — the loop.** Age and rotation advance on real elapsed time (`dtT`, capped
+at 0.5 s) instead of the 50 ms-clamped `dt`, so the slider's Myr/s is true at
+any frame rate. When nothing moves and nothing is decoding, the loop redraws
+five times a second instead of sixty (`APP.step()` always renders). The
+prefetch pump stops in hidden tabs, and on battery or a metered link fetches
+only ±4 keyframes, two at a time. Not done: MSAA off (needs a screenshot
+verdict) and baking the rainfall warp -- both are moot on the sheet path.
+
+**B1 — the three per-pixel mountain constructions are retired**: the sin²(fBm)
+tone band, the across-strike sine grating and the ridged transform in
+`detail3`, with a SCALE CONVENTION note where the 2π unit error lived (a
+value-noise cell is 6371/K km; a sine's period is 40030/K km). Himalaya frame
+at zoom 1.6, 640×400, structure-tensor coherence **0.482 → 0.510**, band σ
+16.96 → 16.71, mean change 3.8/255. The ranges are smoother, not better --
+that is the clean baseline plan B builds on.
+
+**A1–A4 — world sheets, first cut.** FRAG has an equirect bake mode (uMapProj
+2) that writes the ocean mask into alpha; a lite material draws globe and map
+from two sheets, warped on `_v` and blended with the interpolated height
+deciding the coast; sheets bake in 16 strips across frames (the pair plus the
+next keyframe, an LRU pool of render targets), or load from `web/sheets/`
+when `build/bake_sheets.py` has run; the path switches on automatically once
+a screen pixel covers about half a sheet texel. Verified headless (SwiftShader,
+pixel-faithful):
+
+| framing | live vs lite (2048 sheet) mean \|Δ\| /255 | p95 |
+|---|---|---|
+| Himalaya, zoom 3.0 (22 km/px against a 19.5 km texel) | **1.16** | 5.4 |
+| Himalaya, zoom 1.6 (4.4 km/px: auto would not take the lite path here) | 6.96 | 28.0 |
+
+At the LOD where auto engages it, the sheet path is the picture. Bake cost on
+software GL: 512-wide sheets in ~3 s, 2048 in ~40 s; on the M1 the 4096 set
+should be a few hundred milliseconds each. `bake_sheets.py --width 2048` is
+the ambient build's dataset; the encode is the slow half.
+
+**Known limits of the first cut, recorded rather than hidden.** A sheet is
+baked at its keyframe's own climate, so climate uniforms dissolve across an
+interval instead of interpolating; the Messinian drawdown is held off in
+sheets (a basin drained for two frames must not fade in and out over ten);
+keyframe 0 is baked with the Holocene lakes; the sea-surface sheen is frozen
+in a sheet; during a scrub the live path is used. Clouds and atmosphere are
+still the live shells. Shipped sheets are not yet in the repo -- baking them
+needs a real GPU, which this review environment does not have.

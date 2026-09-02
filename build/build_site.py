@@ -118,7 +118,7 @@ if os.path.isdir(dst):
 shutil.copytree(os.path.join(WEB, "fields"), dst,
                 ignore=shutil.ignore_patterns("*_lite.webp"))
 
-DATA_FILES = ("index.html", "three.min.js", "timeline.json", "boundaries.json",
+DATA_FILES = ("index.html", "ambient.html", "three.min.js", "timeline.json", "boundaries.json",
               "plates_time.json", "plates.json", "hotspots.json", "labels.json",
               "eras.json", "life.json", "art.json", "photos.json", "updatelog.json",
               # per-keyframe plate rotations for the material-coordinate texture (H2)

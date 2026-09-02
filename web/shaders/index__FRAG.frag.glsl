@@ -3797,9 +3797,13 @@ void main(){
                   * (1.0 - smoothstep(-1100.0, -250.0, z));
     col=mix(col, salt, 0.80*saltAmt);
   }
-  /* The sheet's alpha is the OCEAN MASK of this keyframe (0 water, 1 land),
-     which is what lets the lite material keep the coastline sharp between two
-     sheets: it takes the interpolated height's own verdict and blends only the
-     sheet(s) that agree with it. On screen alpha is always 1. */
-  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.0:1.0) : 1.0);
+  /* The sheet's alpha is the OCEAN MASK of this keyframe -- 0.5 water, 1 land
+     -- which is what lets the lite material keep the coastline sharp between
+     two sheets: it takes the interpolated height's own verdict and blends only
+     the sheet(s) that agree with it. HALF, NOT ZERO: a sheet that ships goes
+     through a 2-D canvas on its way to a PNG, and a canvas stores premultiplied
+     colour, so anything under alpha 0 comes back black -- the first shipped
+     sheets had black oceans. Under 0.5 the colour halves and is restored to
+     within a level. On screen alpha is always 1. */
+  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }

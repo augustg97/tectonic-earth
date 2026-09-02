@@ -88,6 +88,10 @@ def main():
                 os.remove(p)
         flags = ["--headless=new", "--no-first-run", "--user-data-dir=/tmp/tectonic-bake-profile",
                  "--window-size=1400,1000"]
+        if sys.platform != "darwin":
+            # Chromium on Linux refuses to start as root without these; Chrome on
+            # a Mac neither needs nor minds them.
+            flags += ["--no-sandbox", "--disable-gpu-sandbox", "--disable-dev-shm-usage"]
         if a.software:
             flags += ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
         url = "http://127.0.0.1:%d/_verify.html?bake=%d-%d&sheet=%d" % (SERVE_PORT, i0, i1, a.width)

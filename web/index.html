@@ -399,6 +399,8 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 
 #hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
 #ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s;display:flex;gap:8px}
+#ambientExit a.txtbtn{text-decoration:none;display:inline-flex;align-items:center}
+#ambientExit a.txtbtn[hidden]{display:none}
 body.ambient #controls,body.ambient #bottom,body.ambient #leftrail,body.ambient #hint,body.ambient #info{opacity:0;pointer-events:none}
 /* the readout is the point of ambient mode, so it stays; only the chrome goes */
 body.ambient #title{opacity:0}
@@ -994,7 +996,7 @@ body.ambient .mtab{display:none}
   <button id="figZoomX" aria-label="Close">&times;</button>
   <div id="figZoomArt"></div><p id="figZoomCap"></p>
 </div></div>
-<div id="ambientExit"><button class="txtbtn" id="fullscreenBtn">Full screen</button><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
+<div id="ambientExit"><a class="txtbtn" id="liteLink" href="ambient.html" target="_blank" rel="noopener" hidden title="The background build: pre-baked world sheets, a few percent of a laptop GPU">Lite view ↗</a><button class="txtbtn" id="fullscreenBtn">Full screen</button><button class="txtbtn on" id="exitAmbient">Exit ambient ✕</button></div>
 
 <div id="load">
   <div class="ring"></div>
@@ -5533,11 +5535,15 @@ void main(){
                   * (1.0 - smoothstep(-1100.0, -250.0, z));
     col=mix(col, salt, 0.80*saltAmt);
   }
-  /* The sheet's alpha is the OCEAN MASK of this keyframe (0 water, 1 land),
-     which is what lets the lite material keep the coastline sharp between two
-     sheets: it takes the interpolated height's own verdict and blends only the
-     sheet(s) that agree with it. On screen alpha is always 1. */
-  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.0:1.0) : 1.0);
+  /* The sheet's alpha is the OCEAN MASK of this keyframe -- 0.5 water, 1 land
+     -- which is what lets the lite material keep the coastline sharp between
+     two sheets: it takes the interpolated height's own verdict and blends only
+     the sheet(s) that agree with it. HALF, NOT ZERO: a sheet that ships goes
+     through a 2-D canvas on its way to a PNG, and a canvas stores premultiplied
+     colour, so anything under alpha 0 comes back black -- the first shipped
+     sheets had black oceans. Under 0.5 the colour halves and is restored to
+     within a level. On screen alpha is always 1. */
+  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }`;
 
 /* ================= THE LITE MATERIAL (WP-10, plan A2) =================
@@ -5597,14 +5603,14 @@ void main(){
      shoreline across the whole interval. The interpolated height says which
      state the pixel is in NOW; blend only the sheet(s) that agree with it, and
      fall back to the plain blend where neither does (lakes, dry basins). */
-  float water = h<0.0 ? 1.0 : 0.0;
-  float mA = abs((1.0-cA.a)-water)<0.5 ? 1.0 : 0.0;
-  float mB = abs((1.0-cB.a)-water)<0.5 ? 1.0 : 0.0;
+  float land = h<0.0 ? 0.0 : 1.0;
+  float mA = abs((cA.a>0.75?1.0:0.0)-land)<0.5 ? 1.0 : 0.0;   // sheet alpha: 0.5 water, 1 land
+  float mB = abs((cB.a>0.75?1.0:0.0)-land)<0.5 ? 1.0 : 0.0;
   float wA=(1.0-mixf)*mA, wB=mixf*mB, ws=wA+wB;
   vec3 col = ws>1e-4 ? (cA.rgb*wA+cB.rgb*wB)/ws : mix(cA.rgb,cB.rgb,mixf);
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
-    vec3 sc=(water>0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    vec3 sc=(land<0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
     sc*=(0.82+0.36*lum);
     col=mix(col,sc,uSchem);
   }
@@ -8747,6 +8753,9 @@ document.addEventListener('fullscreenchange',syncFS);
 document.addEventListener('webkitfullscreenchange',syncFS);
 
 function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
+  /* The lite build (WP-10, plan C) is the real background mode; offer it from
+     here whenever the site ships world sheets, carrying the current age. */
+  const ll=$('#liteLink'); if(ll){ll.hidden=!(SHEET_MANIFEST&&SHEET_MANIFEST.files);ll.href='ambient.html?age='+Math.round(state.age);}
   // Ambient is the same view with the chrome hidden: it keeps whatever speed
   // and layer toggles are already set rather than imposing its own.
   if(on){state.playing=true;syncPlay();}
@@ -9066,7 +9075,8 @@ function buildLegend(){
               /* WORLD SHEETS (WP-10). status() lists what is baked; bake(i)
                  finishes keyframe i's sheet synchronously (all strips now);
                  png(i) reads a finished sheet back as RGBA (alpha = ocean
-                 mask) for verification and for build/bake_sheets.py. */
+                 mask, 0.5 water / 1 land -- see the FRAG note on why not 0)
+                 for verification and for build/bake_sheets.py. */
               sheets:{
                 status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,
                   job:_bakeJob?{i:_bakeJob.i,row:_bakeJob.row}:null,

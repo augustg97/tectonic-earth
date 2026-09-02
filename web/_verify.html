@@ -275,8 +275,12 @@ const W = () => document.getElementById('app').contentWindow;
     const W = +(q.get('sheet') || 4096);
     for (let i = i0; i <= i1; i++) {
       A.jumpTo(A.DATA.timeline[i].age);
+      /* No A.step() while waiting: a step renders the whole globe through the
+         terrain shader, which on software GL is half a minute a poll. bake()
+         itself kicks the decodes it is missing and reports pending until they
+         land; nothing else is needed to make them land. */
       let r = null;
-      for (let t = 0; t < 600; t++) { A.step(); r = A.sheets.bake(i); if (r.ready || r.error) break; await sleep(250); }
+      for (let t = 0; t < 600; t++) { r = A.sheets.bake(i); if (r.ready || r.error) break; await sleep(250); }
       if (!(r && r.ready)) { console.log('bake', i, 'FAILED', JSON.stringify(r)); continue; }
       const p = A.sheets.png(i);
       if (p.error) { console.log('bake', i, 'ERROR', p.error); continue; }

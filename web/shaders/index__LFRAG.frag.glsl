@@ -43,14 +43,14 @@ void main(){
      shoreline across the whole interval. The interpolated height says which
      state the pixel is in NOW; blend only the sheet(s) that agree with it, and
      fall back to the plain blend where neither does (lakes, dry basins). */
-  float water = h<0.0 ? 1.0 : 0.0;
-  float mA = abs((1.0-cA.a)-water)<0.5 ? 1.0 : 0.0;
-  float mB = abs((1.0-cB.a)-water)<0.5 ? 1.0 : 0.0;
+  float land = h<0.0 ? 0.0 : 1.0;
+  float mA = abs((cA.a>0.75?1.0:0.0)-land)<0.5 ? 1.0 : 0.0;   // sheet alpha: 0.5 water, 1 land
+  float mB = abs((cB.a>0.75?1.0:0.0)-land)<0.5 ? 1.0 : 0.0;
   float wA=(1.0-mixf)*mA, wB=mixf*mB, ws=wA+wB;
   vec3 col = ws>1e-4 ? (cA.rgb*wA+cB.rgb*wB)/ws : mix(cA.rgb,cB.rgb,mixf);
   if(uSchem>0.001){
     float lum=dot(col,vec3(0.299,0.587,0.114));
-    vec3 sc=(water>0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    vec3 sc=(land<0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
     sc*=(0.82+0.36*lum);
     col=mix(col,sc,uSchem);
   }

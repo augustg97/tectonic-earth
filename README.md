@@ -268,6 +268,40 @@ The background fill re-centres on every completion: it asks each time for the ne
 
 `FIELD_V` (bumped by hand, unlike `DATA_V`) busts the texture cache when the fields change but keep their names — as they did when the elevation grid doubled.
 
+### 5.9 World sheets and the lite path
+
+Since WP-10 (September 2026) the terrain shader no longer has to run per pixel per frame.
+A **world sheet** is one keyframe's whole shaded world: the same fragment shader rendered
+once into an equirect render target (`uMapProj = 2`) with the ocean mask written into
+alpha. A second, ~80-line **lite material** then draws the globe and the map from two
+sheets per frame — each carried toward the other on the displacement warp exactly as the
+keyframe fields are, blended by `mixf`, with the interpolated height deciding which sheet's
+colour a shoreline pixel takes, so the coastline still migrates instead of dissolving — and
+adds only the terminator, the limb and the schematic tint on top. Measured against the live
+shader at the zoom where it engages, the difference is 1.2/255 mean; the cost is a few
+texture reads a pixel.
+
+- Sheets are **baked in the app** in sixteen strips across frames (never one hitch), for
+  the current pair and the next keyframe in the playback direction, from a small pool of
+  render targets. Or they are **shipped**: `build/bake_sheets.py` drives the app headless
+  on a real GPU, bakes all 251, encodes them to AVIF (alpha kept) in `web/sheets/` with a
+  manifest, and the app loads those instead of baking. A shader change invalidates the set:
+  re-run the script (a minute of GPU, ten to twenty of encode) and bump `SHEET_V`.
+- The path switches on **automatically** once a screen pixel covers about half a sheet
+  texel (`?lite=1|0` forces it, `?sheet=N` sets the bake width, default 4096, 2048 on
+  low-memory devices, `?bakefull=1` bakes a sheet in one frame, `?noshipped=1` ignores the
+  manifest). A scrub keeps the live path. `?perf=1` shows which path is drawing.
+- Not carried by a sheet, by design: climate uniforms dissolve across an interval rather
+  than interpolate; the Messinian drawdown is held off (a basin drained for two frames must
+  not fade over ten); the sea-surface sheen is frozen; keyframe 0 carries the Holocene lakes.
+
+**`ambient.html`** is the background build: a slowly turning Earth with time running,
+drawn from the shipped sheets and `_v` only — no terrain shader, no field decoding, ~50 MB
+for the whole timeline at 2048 wide, a few per cent of a laptop GPU. `?speed=` (Myr/s,
+default 2), `?spin=`, `?fps=` (default 30; 10 under `prefers-reduced-motion`), `?age=`,
+`?ui=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
+wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped.
+
 ## 6. Build and deploy
 
 ```bash
@@ -301,6 +335,8 @@ Common targeted rebuilds:
 ONLY_AGE=300 python reskin_seafloor.py     # one keyframe, quick visual check
 python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
 python build_webdata.py                    # labels, timeline, boundaries, life
+python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)
+python bake_sheets.py --width 2048         # the lean set the ambient build runs on
 ```
 
 `stamp_data_version.py` bumps `DATA_V` **before** `index.html` is copied. This is not optional: Pages serves the JSON with `max-age=600` and an ETag, and a returning viewer can sit on a cached copy well past that window. The failure is silent — the app runs perfectly and shows yesterday's data. It has happened three times, on `labels.json`, `plates_time.json` and `life.json`, and each time it looked like the deploy had never landed.
