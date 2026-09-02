@@ -91,7 +91,7 @@ def bake(age, quiet=False):
     out = FP._encode(chi, omega)
     name = base + "_x.webp"
     Image.fromarray(out, "RGBA").save(os.path.join(FIELDS, name), "WEBP",
-                                      lossless=True, quality=100, method=6, exact=True)
+                                      lossless=True, quality=100, method=4, exact=True)
     if not quiet:
         m = w > 0.3
         span = lambda a: float(np.percentile(a[m], 99) - np.percentile(a[m], 1)) if m.any() else 0.0

@@ -180,8 +180,10 @@ def bake(age, quiet=False):
     # (214 KB against 311 KB at the present day). `exact` matters: the low byte
     # of psi rides in alpha, and without it the encoder is free to zero the RGB
     # of any pixel whose alpha happens to be 0 -- which corrupts phi there.
+    # method 4, not 6: the exhaustive search costs 30 s a keyframe for a few
+    # per cent of size, and was 90% of the bake.
     Image.fromarray(out, "RGBA").save(os.path.join(FIELDS, name), "WEBP",
-                                      lossless=True, quality=100, method=6, exact=True)
+                                      lossless=True, quality=100, method=4, exact=True)
     if not quiet:
         span = lambda a: float(np.percentile(a[w > 0.3], 99) - np.percentile(a[w > 0.3], 1)) if (w > 0.3).any() else 0.0
         print("  %s  gated %.1f%%  phi span %.1f  psi span %.1f  -> %s" % (
