@@ -14,7 +14,11 @@ from PIL import Image, ImageDraw
 HERE=__import__('os').path.dirname(__import__('os').path.abspath(__file__))
 ROOT=__import__('os').path.join(HERE,'..')
 age=int(sys.argv[1]); lon0,lon1,lat0,lat1=map(float,sys.argv[2:6]); out=sys.argv[6]; Q=64.0
-base=f'phan_{age:04d}'
+import json
+_man=json.load(open(f'{ROOT}/docs/fields/manifest.json'))
+_fr=next((f for f in _man if f['age']==age),None)
+if _fr is None: sys.exit(f'no keyframe at {age} Ma')
+base=_fr['e'][:_fr['e'].rfind('_e')]
 q=np.asarray(Image.open(f'{ROOT}/web/fields/{base}_q.webp').convert('RGBA')).astype(np.float64)
 phi=((q[...,0]*256+q[...,1])/65535.0)*2*Q-Q; psi=((q[...,2]*256+q[...,3])/65535.0)*2*Q-Q
 t=np.asarray(Image.open(f'{ROOT}/docs/fields/{base}_t.webp').convert('RGB')).astype(np.float64)/255.0
