@@ -7298,3 +7298,56 @@ the closest zoom shows the same on screen. Measured against the no-atlas render
 at 960x600 (2.5 km/px): mean change 2.8/255 over 25% of pixels, band-pass
 coherence 0.472 -> 0.480 -- the mechanism is right and the amplitude is the
 open question, which is a real-display job (README 5.10).
+
+**B3 solver, all 251 keyframes, and the deep-time check (B4).** The first
+`build_foldphase.py` solved the weighted gradient system with lsqr, which hit
+its 3,000-iteration cap at 75 s a keyframe and was stopped after 27. The
+obvious shortcut -- mask the target by the gate and solve the plain Laplacian
+by FFT, exact and instant -- is wrong in a way worth recording: a gated strip
+with an along-strike target has curl along both of its sides, and the
+projection onto gradient fields throws that away. psi over the Zagros came out
+at a quarter of the belt's length, so the atlas ridges would have stretched
+four times. The fix keeps the weights in the operator and uses that FFT solve
+as a preconditioner for conjugate gradients: with the edge weights in
+[0.02, 1.02] the preconditioned system converges in a few dozen iterations,
+1.3 s a keyframe, no warnings over the 251. Checked on the potentials
+themselves rather than on a render: inside the gate the gradient magnitudes are
+0.92 (phi) and 0.73 (psi) of the ideal one unit per 256 km at the present day,
+0.81 and 0.86 at 300 Ma, and the isolines drawn over the Himalaya, the Zagros
+and the Andes run along the belt for phi and across it for psi. The files are
+lossless WebP with the encoder's exact flag (the low byte of psi rides in
+alpha, and without the flag the encoder zeroes RGB under alpha 0): 37 MB for
+the timeline against 59 MB as PNG, and the loader's ImageBitmap path already
+uploads with premultiplyAlpha 'none', so the alpha byte survives by spec.
+
+With the corrected coordinates the A/B against `?noatlas=1` at 960x600, same
+framings as before, all four framings gain band-pass coherence:
+
+    framing                  mean |d|   px > 4    band sigma      coherence
+    Zagros 1.35              5.2/255    36.6%     10.85 -> 10.34  0.472 -> 0.484
+    Himalaya 1.35           11.0/255    50.1%     15.13 -> 12.90  0.428 -> 0.449
+    Pangaea 300 Ma 1.6       3.1/255    17.5%      8.95 ->  8.60  0.542 -> 0.556
+    Pangaea 300 Ma 2.5       2.4/255    15.9%      9.10 ->  8.97  0.730 -> 0.738
+
+Band energy falls a little while coherence rises: the term replaces the noise
+detail it displaces (`det` is scaled by 1 - 0.6 gate) with ridges that share an
+orientation, which is the direction the review asked for. Two things the
+numbers say about where the amplitude question lives. The gate opens on 94% of
+the Tibetan interior and 98% of the Altiplano at more than half strength
+(shortening 0.36 and 0.78, height 4.9 and 3.7 km), so a whole plateau reads as
+corduroy in the Himalaya frame, where the real interior is ranges between broad
+basins; `rug` already scales the normal amplitude 0.6-1.0 and could carry more
+of that. And the present-day Appalachians (shortening 0.10) and Urals (0.02)
+sit below the age-relative gate entirely, so eroded old belts keep the plain
+fabric -- correct for the gate's definition, and a separate question.
+
+B4 itself is about the height floor. Counting belt cells (shortening > 0.12 on
+land) by height: at the present day 46% stand above 700 m, but at 150 Ma only
+27% do and 53% lie in the 150-700 m band where the floor fades the gate out;
+at 500 Ma it is 76% in the band. The PaleoDEM keeps deep-time ranges low, so
+the floor, not the shortening, is what leaves them flat. A 100-400 m floor
+gates 51-63% of belt cells at more than a quarter strength against 40-45% now,
+and the controls do not move: Kansas 11.1% of cells gated either way (the
+High Plains against the front), the Amazon and West Siberia zero, the Sahara
+7.1% either way. No cell can cross sea level under either floor: at 200 m the
+height term is at most +-39 m, at 300 m +-115 m.
