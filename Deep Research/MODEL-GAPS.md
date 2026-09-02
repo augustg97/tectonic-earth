@@ -7344,10 +7344,21 @@ fabric -- correct for the gate's definition, and a separate question.
 B4 itself is about the height floor. Counting belt cells (shortening > 0.12 on
 land) by height: at the present day 46% stand above 700 m, but at 150 Ma only
 27% do and 53% lie in the 150-700 m band where the floor fades the gate out;
-at 500 Ma it is 76% in the band. The PaleoDEM keeps deep-time ranges low, so
-the floor, not the shortening, is what leaves them flat. A 100-400 m floor
-gates 51-63% of belt cells at more than a quarter strength against 40-45% now,
-and the controls do not move: Kansas 11.1% of cells gated either way (the
-High Plains against the front), the Amazon and West Siberia zero, the Sahara
-7.1% either way. No cell can cross sea level under either floor: at 200 m the
-height term is at most +-39 m, at 300 m +-115 m.
+at 500 Ma it is 76% in the band. The PaleoDEM keeps deep-time ranges low.
+Those band cells carry a median shortening of 0.23-0.25, so the shortening
+term alone already halves their gate (mean 0.36-0.52); the 150-700 m floor
+halves it again at their typical 400 m. A 100-400 m floor removes the second
+halving: 51-63% of belt cells gated at more than a quarter strength against
+40-45%, and the controls do not move: Kansas 11.1% of cells gated either way
+(the High Plains against the front), the Amazon and West Siberia zero, the
+Sahara 7.1% either way. No cell can cross sea level under either floor: at
+200 m the height term is at most +-39 m, at 300 m +-115 m. The floor is
+lowered (`atlasGate`, `smoothstep(100.0,400.0,z)`).
+
+The first render pair chosen for it was a lesson in picking a framing by the
+wrong statistic: the 150 Ma window with the most cells in the 150-700 m band
+(lon -35, lat 40) has a median height of 272 m and shortening 0.18, the low
+corner of both ranges, where the gate averages 0.02 under the old floor and
+0.07 under the new -- so the two renders differ in 0.7% of pixels, and the
+framing says nothing about the floor. The second pair, below, is chosen by
+the gate difference itself.

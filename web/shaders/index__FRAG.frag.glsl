@@ -331,7 +331,7 @@ float dissectGate(float z, float rug){
    build_tectonic.topo_fabric, which is what says "this is a belt" at every
    age, times a floor on absolute height so a lowland never grows ridges. */
 float atlasGate(float z){
-  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(150.0,700.0,z);
+  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(100.0,400.0,z);
 }
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
