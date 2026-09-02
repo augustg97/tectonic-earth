@@ -21,7 +21,9 @@ model.
    sine grating in the shading normal. The first two are the squiggle (ridged worms and
    contour loops); the grating is the "uniform" look. Two unit conventions a factor of 2π apart
    coexist in the shader, so the grating meant to draw 26 km and 13.6 km ridges actually draws
-   163 km and 85 km stripes and the tone band meant to be 26 km has a 4 km cell. The height
+   163 km and 85 km stripes, and the tone bands documented as 26 km and 83 km sit near 8 km
+   and 27 km. Measured on a Himalaya frame, the three constructions together move the picture
+   by 8.5/255 and removing them *raises* organisation (coherence 0.39 → 0.43). The height
    gates that switch all of it on exclude deep time, and the 23.5 km hillshade stencil is blind
    at 47 km, so real ridge-and-valley, in the data or in the synthesis, is never lit. Iterations 75–77 measured the
    ceiling of this approach at 60 % of Blue Marble's organisation and closed the family. The
@@ -155,19 +157,22 @@ Follow one land pixel through the pipeline:
      ridged transform `(1-|2n-1|)²` with octave gating, which produces wormy crest lines by
      construction; compressing the domain only makes longer worms. This is most of "squiggly".
    - **The tone band**: `sin²(π·fBm)` multiplied into the albedo, documented as "~26 km, the
-     real spacing of ridges in the Zagros". Its noise cell is 6371/1520 = **4.2 km** (the
-     second band 13 km). A sine of a smooth field draws the *contour lines* of that field —
-     wandering loops — and at 4 km they are pixel-scale at continental zoom: the brushed-metal
-     sheen on Tibet in the first evidence frame. README §7.5 names this construction's failure
-     mode on the sea floor ("marbling — concentric loops") and retired it there.
+     real spacing of ridges in the Zagros" and "~83 km". The noise cells are 6371/1520 =
+     4.2 km and 13 km, so the dominant wavelengths (about two cells) are **8 km and 27 km**,
+     three times finer than documented. Measured (§5), 78 % of what this term adds is a
+     broad *brightening* of the whole belt — `sin²` of a noise centred on 0.5 averages 0.85,
+     not 0.5 — and the rest is texture at 8–27 km. A sine of a smooth field draws the
+     *contour lines* of that field, wandering loops; README §7.5 names this construction's
+     failure mode on the sea floor ("marbling — concentric loops") and retired it there.
    - **The normal grating**: `sin(across-strike coordinate × 246 + noise)` and `× 470`,
      documented as 26 km and 13.6 km. A sine's period is 2π/246 rad = **163 km** and 2π/470
-     rad = **85 km**. That is why iteration 62 found its gain "at WIDE zoom" and none up close:
-     it never drew ridge-and-valley, it drew a handful of broad parallel stripes across each
-     belt, the same wavelength and amplitude everywhere inside it — the "uniform" look. It
-     also builds the across-strike axis from the unrotated local frame (`Eax`, `Nax`) and dots
-     it with the plate-rotated position, so outside the present day the stripes run in a
-     direction that mixes two frames.
+     rad = **85 km**. Measured (§5), the energy this term adds rises monotonically toward long
+     wavelengths and has no peak anywhere near 10–30 km. That is why iteration 62 found its
+     gain "at WIDE zoom" and none up close: it never drew ridge-and-valley, it drew a handful
+     of broad, phase-jittered stripes across each belt — the "uniform" look. It also builds the
+     across-strike axis from the unrotated local frame (`Eax`, `Nax`) and dots it with the
+     plate-rotated position, so outside the present day the stripes run in a direction that
+     mixes two frames.
 4. The gates: the tone band fires only above 1,100–2,500 m and the grating above 900–2,400 m,
    both also gated on `rug` and on shortening. Deep-time belts are genuinely low (0.7 % of land
    above 2.5 km at 300 Ma against 3.4 % today), so Pangaea's ranges get none of it and render
@@ -185,8 +190,16 @@ Follow one land pixel through the pipeline:
 
 Renders taken for this review, with the three constructions switched off one at a time, are
 in §5, with the scale of each one's contribution measured from the difference image rather
-than read off its comment. What is left with all three off is a smooth swell with isotropic
-grain — i.e. nothing, which is the point: there is no mountain model underneath to reveal.
+than read off its comment. Each moves a Himalaya frame at continental zoom by 3–5/255, all
+three together by 8.5/255, and switching them off *raises* structure-tensor coherence from
+0.390 to 0.426: the machinery built to draw ridges adds texture and subtracts organisation.
+The brushed streaking on Tibet survives all three being off. It is the *combing* itself —
+the fold-axis compression of the height detail's sampling domain (release 2.2, "mountain
+ranges start to comb"): switching only that compression off removes the streaks and leaves
+coherence exactly where it was (0.389 against 0.390), which says the comb adds streaks and no
+organisation. Switching every normal perturbation off (grain, grating, drainage carve) moves
+the frame by 7.9/255 and raises coherence to 0.415. There is no mountain model underneath
+any of it to reveal.
 
 ### 2.3 Ambient
 
@@ -298,8 +311,8 @@ per-pixel synthesis that aliases into the pixel.
 ### Plan B — a mountain model (G1)
 
 **B1. Remove the squiggle generators (one day).** Retire the `sin²(fBm)` tone band, the
-163/85 km normal grating and the ridged transform inside orogens, and fix the 2π unit
-convention wherever a scale is named. This makes the ranges smoother, not better — it removes
+163/85 km normal grating and the ridged transform inside orogens (each measured as a net
+loss of organisation, §5), and fix the 2π unit convention wherever a scale is named. This makes the ranges smoother, not better — it removes
 the wrong answer so the right one can be seen against a clean baseline.
 
 **B2. Build an orogen atlas offline (one to two weeks).** A small library of tileable relief
@@ -377,8 +390,49 @@ only genuinely new machinery.
 
 ## 5. Evidence: renders and A/B
 
-See `Deep Research/research reports/wp10/` for the frames. (Filled in below once the batch
-finishes.)
+Frames are in `Deep Research/research reports/wp10/`, rendered with the app's own
+`APP.lookAt` / `APP.snap` harness at 960×600 on SwiftShader (pixel-faithful, not
+timing-faithful). Zoom is camera distance in Earth radii: 1.35 is as close as the UI goes,
+5 the whole globe; a 600-px-tall frame at zoom 1.6 is about 4.4 km per pixel.
+
+| frame | what it shows |
+|---|---|
+| `himalaya_z16` | Tibet and the Himalaya as brushed metal, no valley network; the pale-blue band along the whole range front is the foreland moat drawing the Gangetic plain as a shallow sea |
+| `himalaya_z30` | the whole globe from over India: one bright prism with a sheen; the flooded plain visible even here |
+| `andes_z20` | a strike-carrying belt (0.53 shortening, 0.997 axis strength) that still reads as one smooth brown prism; the modelled sea floor beside it shows fracture zones and fabric |
+| `pangaea300_z26` | the central Pangaean belt at 300 Ma as one long smooth swell |
+| `globe_ambient` | the Ambient framing at 150 Ma: every pixel through the full shader every frame |
+
+**Switching the three constructions off one at a time**, Himalaya at zoom 1.6, one-line
+shader variants (`notone_`, `nocorr_`, `noridge_`, `plain_` frames):
+
+| variant | band-pass σ (4–24 px) | coherence | mean \|Δ\| vs shipped, /255 |
+|---|---|---|---|
+| shipped | 16.76 | 0.390 | — |
+| tone band off | 16.24 | 0.395 | 2.92 |
+| normal grating off | 16.59 | 0.392 | 4.39 |
+| ridged transform off | 16.74 | **0.416** | 5.31 |
+| all three off | 16.08 | **0.426** | 8.53 |
+| fold-axis compression off (`nofold_`) | 17.33 | 0.389 | 4.38 |
+| every normal perturbation off (`nograin_`) | 16.31 | **0.415** | 7.89 |
+
+Where each term's energy sits, from the difference image (energy density per unit
+log-wavelength, %; the documented scales were 26 / 13.6 km for the grating and 26 / 83 km for
+the tone band):
+
+| band, km | 5–10 | 10–16 | 16–22 | 22–32 | 32–50 | 50–70 | 70–100 | 100–140 | 140–190 | 190–300 | >300 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| tone band | 13 | 22 | 15 | 12 | 10 | 9 | 7 | 7 | 6 | 5 | **78** |
+| normal grating | 14 | 23 | 16 | 15 | 16 | 18 | 21 | 24 | **29** | **30** | 26 |
+| ridged transform | 34 | **57** | 38 | 31 | 24 | 16 | 11 | 7 | 5 | 2 | 2 |
+| fold-axis compression | 30 | **54** | 39 | 35 | 25 | 18 | 13 | 8 | 5 | 3 | 1 |
+| every normal perturbation | 14 | 24 | 17 | 17 | 17 | 20 | 25 | 26 | 27 | 24 | 24 |
+
+Reading: the ridged transform and the fold compression are the two terms that live in the
+ridge-and-valley band, and between them they are the worms and the streaks — removing the
+first raises coherence, removing the second leaves it untouched. The tone band is mostly a
+flat brightening. The grating's energy rises toward 150–300 km and has no peak near 26 or
+13.6 km, which is the 2π error made visible.
 
 ---
 
