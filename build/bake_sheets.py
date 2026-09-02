@@ -21,7 +21,7 @@ macOS / Linux paths; the bake needs a real GPU -- software GL takes minutes
 per sheet and is only for verifying the pipeline.
 
 A shader change invalidates every sheet: re-run this (about a minute of GPU
-for the render, ten to twenty for the encode) and bump SHEET_V in index.html.
+for the render, ten to twenty for the encode) and bump SHEET_V in web/app.js.
 """
 import argparse
 import glob
@@ -144,7 +144,7 @@ def main():
     print()
     json.dump(m, open(mpath, "w"), separators=(",", ":"))
     print("bake_sheets: %d sheets in manifest, %.1f MB this run -> %s" % (len(m["files"]), total / 1e6, OUT))
-    print("Now bump SHEET_V in web/index.html if sheets already shipped, and run build_site.py.")
+    print("Now bump SHEET_V in web/app.js if sheets already shipped, and run build_site.py.")
 
 
 if __name__ == "__main__":

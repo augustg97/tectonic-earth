@@ -2,7 +2,7 @@
     uniform sampler2D rainA, rainB; uniform float mixf, uTime, uCloud;
     varying vec2 vUv; varying vec3 vN;
     uniform sampler2D uNz;
-    ${NZOLD?CN_OLD:CN_NEW}
+    /*@cnoise*/
     float cfb(vec3 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*cn(p);p*=2.03;a*=0.5;}return s;}
     void main(){
       float lat=90.0-vUv.y*180.0;

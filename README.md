@@ -71,12 +71,16 @@ Every round ends with `build_site.py` → commit → push to `main`, and a check
 ## 3. Repository layout
 
 ```
-build/          49 Python modules, ~15k lines — the offline pipeline
-web/            the app: index.html (~4k lines, incl. the GLSL shaders) + data
-web/fields/     2,460 field textures (10 kinds × 251 keyframes, some kinds
+build/          52 Python modules, ~16k lines — the offline pipeline
+web/            the app, split (WP-10 D5): index.html is the markup, style.css
+                the styles, app.js the application (~4.2k lines), and
+                web/shaders/*.glsl the five shaders, which check_shader.py
+                validates and packs into shaders.js (generated). build_site.py
+                inlines all of it back into one deployed docs/index.html
+web/fields/     ~2,960 field textures (12 kinds × 251 keyframes, some kinds
                 absent on a few keyframes), plus a second present-day lake field
                 without the geologically young lakes. Gitignored: docs/fields
-                holds the deployed copy
+                holds the deployed copy (or an asset host does, §6)
 docs/           the built static site; GitHub Pages serves main:/docs
 data/           source DEMs, rotation files, catalogues (not in git)
 ```
@@ -103,6 +107,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
 | `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`) |
 | `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
+| `_x` | drainage coordinates | 512×256 | two potentials fitted to the downhill direction of the PaleoDEM smoothed to ~120 km, χ across the regional flow and ω along it (increasing upstream), one unit per 256 km, gated on plains with a regional slope of 0.2–1 m/km; the tilted plains patches of the atlas are sampled at (χ, ω) (`build_drainphase.py`, §5.10) |
 | `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless WebP; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
 
 Temperature is **not** shipped: it is a closed form of latitude, elevation and the era anomaly, so the shader recomputes it for free.
@@ -344,6 +349,10 @@ python check_shader.py && python build_site.py
 
 then commit and push to `main`. GitHub Pages serves `main:/docs`.
 
+**Editing the page.** The shaders are edited in `web/shaders/*.glsl`; `check_shader.py` validates them and writes `web/shaders.js`, which `index.html` loads in development and `build_site.py` inlines for the site — so a shader edit is `edit the .glsl → python check_shader.py → reload`. The two noise variants (`VN_OLD/VN_NEW`, `CN_OLD/CN_NEW`) live in `app.js` and are spliced in at run time where the sources carry `/*@vnoise*/` and `/*@cnoise*/`. The application is `web/app.js`, the styles `web/style.css`; `index.html` is markup only.
+
+**Hosting the textures off the repository** (WP-10, D4). `docs/fields` and `docs/sheets` are the repository's weight. `publish_assets.py --release TAG` uploads them to a GitHub release (or `--dir PATH` copies them into another Pages repository), and `build_site.py --field-base URL --sheet-base URL` publishes a site that fetches them from there, keeping only the manifests in `docs/`. Each base is the directory the files sit in; `?fieldbase=` and `?sheetbase=` on the page override them for a test. Whether to rewrite history so the old copies leave the repository is a separate decision.
+
 `build_site.py` now **runs the validators first and refuses to publish if one moved backwards**. They are read-only and take a few seconds:
 
 ```bash
@@ -369,12 +378,14 @@ ONLY_AGE=300 python reskin_seafloor.py     # one keyframe, quick visual check
 python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
 python build_webdata.py                    # labels, timeline, boundaries, life
 python build_foldphase.py -j               # fold coordinates for all 251 (~2 min on three cores)
+python build_drainphase.py -j              # drainage coordinates for all 251 (~5 min on three cores)
+python build_orogen_atlas.py               # the sixteen atlas patches (~1 h) and web/atlas.webp
 python emulate_fold.py 0 44 58 26 36 z.png  # draw the atlas at (φ, ψ) over a window, no browser
 python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)
 python bake_sheets.py --width 2048         # the lean set the ambient build runs on
 ```
 
-`stamp_data_version.py` bumps `DATA_V` **before** `index.html` is copied. This is not optional: Pages serves the JSON with `max-age=600` and an ETag, and a returning viewer can sit on a cached copy well past that window. The failure is silent — the app runs perfectly and shows yesterday's data. It has happened three times, on `labels.json`, `plates_time.json` and `life.json`, and each time it looked like the deploy had never landed.
+`stamp_data_version.py` bumps `DATA_V` in `app.js` **before** the page is assembled. This is not optional: Pages serves the JSON with `max-age=600` and an ETag, and a returning viewer can sit on a cached copy well past that window. The failure is silent — the app runs perfectly and shows yesterday's data. It has happened three times, on `labels.json`, `plates_time.json` and `life.json`, and each time it looked like the deploy had never landed.
 
 Verify the live `DATA_V` after every push.
 
@@ -389,6 +400,7 @@ Run `check_shader.py` before any shader edit ships. It catches every failure mod
 - **A backtick anywhere in shader source**, including inside a comment. It closes the JS template literal. This has happened three times.
 - **GLSL reserved words as variable names** — `patch`, `flat`, `sample`. The compiler says `'flat' : syntax error` and nothing else.
 - **Use before declaration** inside `main()`.
+- **A function called above its definition.** GLSL has no hoisting; `basinEnv()` calling `vnoise3()` from above the injected definition cost a full render sweep (2026-09-02). The check knows where the noise variants land.
 - **Duplicate declaration at the same scope**, and unbalanced comments or braces.
 
 Chain it: `python check_shader.py && <rebuild>`, so a bad shader blocks the build.

@@ -78,28 +78,34 @@ def _fbm(shape, seed, octaves=5, base=4):
 
 
 # ---------------------------------------------------------------- flow routing
-def _receivers(h):
+def _receivers(h, tilt=0.0):
     """Steepest-descent receiver of every cell on a periodic grid (D8).
-    Returns the flat receiver index and the slope to it; a cell with no lower
-    neighbour is its own receiver (a pit or an outlet)."""
+    Returns the flat receiver index, the slope to it, and the receiver's row
+    offset (-1, 0, +1); a cell with no lower neighbour is its own receiver (a
+    pit or an outlet). `tilt` is a regional slope in metres per texel added
+    to the height as tilt*y -- the TILTED PLAINS of B5 -- and it is applied as
+    a gradient, wrap-aware, so the patch stays periodic: the top row drains
+    across the wrap into the outlet trunk on row 0 exactly as it should."""
     n = h.shape[0]
     # A receiver must be strictly LOWER. Initialising the best slope at -1
     # let a cell pick an uphill neighbour, which made two-cell cycles, and a
     # breadth-first walk over a graph with cycles never ends.
     best = np.zeros(h.shape)
     rcv = np.arange(n * n).reshape(h.shape)
+    dyr = np.zeros(h.shape, np.int8)
     for dy in (-1, 0, 1):
         for dx in (-1, 0, 1):
             if dy == 0 and dx == 0:
                 continue
             nb = np.roll(np.roll(h, -dy, 0), -dx, 1)
             dist = DX * (np.hypot(dy, dx))
-            s = (h - nb) / dist
+            s = (h - nb - tilt * dy) / dist
             better = s > best
             best = np.where(better, s, best)
             idx = (np.roll(np.roll(rcv * 0 + np.arange(n * n).reshape(h.shape), -dy, 0), -dx, 1))
             rcv = np.where(better, idx, rcv)
-    return rcv.ravel(), np.maximum(best, 0.0).ravel()
+            dyr = np.where(better, np.int8(dy), dyr)
+    return rcv.ravel(), np.maximum(best, 0.0).ravel(), dyr.ravel()
 
 
 def _levels(rcv, outlet):
@@ -181,8 +187,9 @@ def _resolve_flats(h, rcv, level, outlet):
 
 
 # ---------------------------------------------------------------- the model
-def erode(uplift, K, D, outlet, steps, dt, seed, init=None, log=None):
+def erode(uplift, K, D, outlet, steps, dt, seed, init=None, log=None, tilt=0.0):
     n = uplift.shape[0]
+    ty = tilt * np.arange(n)[:, None] * np.ones((1, n))   # the tilt as a height, for the fill only
     rng = np.random.default_rng(seed)
     h = init if init is not None else rng.random(uplift.shape) * 5.0
     area_cell = DX * DX
@@ -191,8 +198,8 @@ def erode(uplift, K, D, outlet, steps, dt, seed, init=None, log=None):
         h = h + uplift * dt
         # Pits are filled every few steps: the reconstruction is the one slow
         # call, and once drainage has organised a new closed pit is rare.
-        hf = _fill_pits(h, outlet) if it % fill_every == 0 else h
-        rcv, slope = _receivers(hf)
+        hf = (_fill_pits(h + ty, outlet) - ty) if it % fill_every == 0 else h
+        rcv, slope, dyr = _receivers(hf, tilt)
         order, level = _levels(rcv, outlet.ravel())
         if (level < 0).any():
             rcv = _resolve_flats(hf, rcv, level, outlet)
@@ -207,7 +214,8 @@ def erode(uplift, K, D, outlet, steps, dt, seed, init=None, log=None):
         for lv in range(1, len(order)):
             idx = order[lv]
             r = rcv[idx]
-            hh[idx] = (hh[idx] + Kf[idx] * hh[r]) / (1.0 + Kf[idx])
+            # on a tilt the receiver sits tilt*dy lower than its residual says
+            hh[idx] = (hh[idx] + Kf[idx] * (hh[r] + tilt * dyr[idx])) / (1.0 + Kf[idx])
         h = hh.reshape(n, n)
         # hillslope diffusion, explicit, periodic
         lap = (np.roll(h, 1, 0) + np.roll(h, -1, 0) + np.roll(h, 1, 1) + np.roll(h, -1, 1) - 4 * h) / (DX * DX)
@@ -249,10 +257,20 @@ def make_patch(kind, seed, size, steps, log):
         U = 0.0012 * (0.85 + 0.3 * noise)
         K = 1.2e-5 * (0.6 + 0.8 * _fbm((n, n), seed + 5, 3, 2))
         D = 0.02
-    else:  # lowland
+    elif kind == "tplat":  # a plateau on a regional tilt (B5, second form)
+        U = 0.0012 * (0.85 + 0.3 * noise)
+        K = 1.2e-5 * (0.6 + 0.8 * _fbm((n, n), seed + 5, 3, 2))
+        D = 0.02
+    else:  # lowland, and "tlow", the lowland on a regional tilt
         U = 0.0004 * (0.7 + 0.6 * noise)
         K = 4e-5 * (0.6 + 0.8 * _fbm((n, n), seed + 5, 3, 2))
         D = 0.08
+    # THE TILT (B5, second form): 0.8 m/km down toward row 0, which is what a
+    # plain drains on -- the Great Plains fall 1-1.5 m/km eastward, the Deccan
+    # about 1 m/km. Tributaries then join their trunks pointing downstream,
+    # and the shader samples these patches with their row axis on the baked
+    # drainage coordinate omega, so the herringbone points the right way.
+    tilt = 0.8 * KM_PER_TEXEL if kind in ("tlow", "tplat") else 0.0
     # outlets: a sparse periodic set of base-level cells so the whole patch
     # drains and wraps. Two through-going valleys per axis, wandering.
     outlet = np.zeros((n, n), bool)
@@ -278,9 +296,20 @@ def make_patch(kind, seed, size, steps, log):
         wander3 = ((_fbm((n, n), seed + 61, 3, 2)[:, 0] - 0.5) * n * 0.06).astype(int)
         for yy in range(n):
             outlet[yy, (cx + wander3[yy]) % n] = True
+    if kind in ("tlow", "tplat"):
+        # a tilted plain drains DOWN the tilt into two wandering trunks that
+        # run across it (rows 0 and n/2), and nowhere else: no along-tilt
+        # trunk, so every tributary joins pointing downstream
+        outlet[:] = False
+        for k in range(2):
+            cy = int(k * n / 2)
+            wander2 = ((_fbm((n, n), seed + 41 + k, 3, 2)[0, :] - 0.5) * n * 0.10).astype(int)
+            for xx in range(n):
+                outlet[(cy + wander2[xx]) % n, xx] = True
     dt = 20000.0  # years per step; a few hundred steps is a few Myr, enough for steady state at these K
-    h = erode(U, K, D, outlet, steps, dt, seed, log=log)
+    h = erode(U, K, D, outlet, steps, dt, seed, log=log, tilt=tilt)
     return h, {"kind": kind, "seed": seed, "spacing_km": (spacing_km if kind == "belt" else None),
+               "tilt_m_per_km": tilt / KM_PER_TEXEL,
                "relief_m": float(h.max() - h.min()), "mean_m": float(h.mean())}
 
 
@@ -299,7 +328,8 @@ def encode(h, out_png):
 
 def assemble(size):
     """Pack the patches into the sheet the shader binds (web/atlas.webp): cells
-    0-5 belts, 6-8 plateaus, 9-11 lowlands, cell = column + 4*row. Each patch
+    0-5 belts, 6-8 plateaus, 9-11 lowlands, 12-13 tilted lowlands and 14-15
+    tilted plateaus (B5, second form), cell = column + 4*row. Each patch
     is box-filtered from its baked size to SHIP px (1 km per texel: the live
     path samples it at 2 km per pixel at the closest zoom, the sheet bake at
     10 km or coarser, so finer would only be bytes) and stored as R = height
@@ -346,7 +376,8 @@ def main():
     steps = 40 if a.quick else a.steps
     kinds = [("belt", 1), ("belt", 2), ("belt", 3), ("belt", 4), ("belt", 5), ("belt", 6),
              ("plateau", 1), ("plateau", 2), ("plateau", 3),
-             ("lowland", 1), ("lowland", 2), ("lowland", 3)]
+             ("lowland", 1), ("lowland", 2), ("lowland", 3),
+             ("tlow", 1), ("tlow", 2), ("tplat", 1), ("tplat", 2)]
     if a.only:
         k, sd = a.only.split(":"); kinds = [(k, int(sd))]
     os.makedirs(OUT, exist_ok=True)
@@ -359,6 +390,18 @@ def main():
         np.save(os.path.join(OUT, name.replace(".png", ".npy")), h.astype(np.float32))
         info["file"] = name; meta.append(info)
         print("  -> %s  relief %.0f m" % (name, info["relief_m"]), flush=True)
+    if a.only:
+        # merge into the sheet's record: replace the entry of the same kind and
+        # seed, append a new one, keep the cell order (it IS the cell index)
+        jp = os.path.join(OUT, "atlas.json")
+        old = json.load(open(jp)) if os.path.exists(jp) else {"patch": size, "dx_m": DX, "patches": []}
+        for m in meta:
+            hit = [i for i, p in enumerate(old["patches"]) if p["kind"] == m["kind"] and p["seed"] == m["seed"]]
+            if hit:
+                old["patches"][hit[0]] = m
+            else:
+                old["patches"].append(m)
+        meta = old["patches"]
     json.dump({"patch": size, "dx_m": DX, "patches": meta}, open(os.path.join(OUT, "atlas.json"), "w"), indent=1)
     print("atlas: %d patches in %s" % (len(meta), OUT))
     if not a.only:

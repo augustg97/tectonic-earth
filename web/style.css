@@ -1,0 +1,616 @@
+:root{
+  --bg:#0a0d12; --panel:rgba(18,22,29,.82); --panel-solid:#12161d;
+  --line:rgba(255,255,255,.10); --ink:#e8ecf2; --dim:#9aa6b6; --dim2:#6b7686;
+  --accent:#e2703a; --accent2:#5ea9c4;
+  --ridge:#e8534e; --trench:#59b0d6; --transform:#e0b23a;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidden;-webkit-font-smoothing:antialiased}
+/* touch-action:none is what actually stops a phone browser from taking the
+   gesture for itself. Without it a two-finger pinch is a PAGE zoom before any
+   listener runs, and the whole window scales instead of the globe -- and on
+   iOS Safari the viewport meta's user-scalable=no has been ignored since
+   iOS 10, so the meta tag alone was never going to hold. */
+#stage{position:fixed;inset:0;touch-action:none}
+#gl,#map2d{touch-action:none}
+canvas{display:block}
+#map2d{position:fixed;inset:0;display:none;background:transparent;z-index:5}
+.hidden{display:none!important}
+
+/* ---- top bar ---- */
+#topbar{position:fixed;top:0;left:0;right:0;padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:20;transition:opacity .5s}
+#title{pointer-events:auto}
+#title h1{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+#aboutBtn{cursor:pointer;color:var(--dim2);font-size:12px;margin-left:4px;transition:color .15s}
+#updatelog{position:fixed;left:20px;top:70px;width:360px;max-width:calc(100vw - 40px);
+  background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:14px;padding:20px;z-index:41;opacity:0;
+  transform:translateY(6px);pointer-events:none;transition:.25s;
+  max-height:calc(100vh - 160px);overflow-y:auto}
+#updatelog.show{opacity:1;transform:none;pointer-events:auto}
+#updatelog .ax{position:absolute;top:14px;right:16px;cursor:pointer;color:var(--dim2);font-size:18px;line-height:1}
+#updatelog h2{font-size:15px;letter-spacing:.06em;margin-bottom:6px}
+#updatelog .ulsub{font-size:10.5px;color:var(--dim2);margin-bottom:4px}
+.ulrel{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.ulrel:first-child{border-top:none;margin-top:6px}
+.ulhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ulver{font-size:9.5px;letter-spacing:.14em;color:var(--accent);border:1px solid var(--accent);
+  border-radius:4px;padding:1px 5px;opacity:.85}
+.uldate{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2)}
+.ultitle{font-size:12.5px;color:var(--ink);font-weight:600;width:100%;margin-top:3px}
+.ulsum{font-size:11px;line-height:1.6;color:var(--dim);margin:6px 0 2px}
+.ulsec{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);margin:11px 0 5px}
+.ulitem{font-size:11px;line-height:1.55;color:var(--dim);padding-left:12px;position:relative;margin-bottom:6px}
+.ulitem::before{content:"";position:absolute;left:0;top:6px;width:4px;height:4px;border-radius:50%;
+  background:var(--accent);opacity:.7}
+#aboutBtn:hover{color:var(--accent)}
+#about{position:fixed;left:20px;top:70px;width:340px;max-width:calc(100vw - 40px);background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:14px;padding:20px;z-index:40;opacity:0;transform:translateY(6px);pointer-events:none;transition:.25s;max-height:calc(100vh - 160px);overflow-y:auto}
+#about.show{opacity:1;transform:none;pointer-events:auto}
+#about .ax{position:absolute;top:14px;right:16px;cursor:pointer;color:var(--dim2);font-size:18px;line-height:1}
+#about h2{font-size:15px;letter-spacing:.06em;margin-bottom:10px}
+#about h3{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:14px 0 7px}
+#about p{font-size:11.5px;line-height:1.65;color:var(--dim)}
+#about p b{color:var(--ink);font-weight:600}
+#about ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+#about li{font-size:11px;line-height:1.55;color:var(--dim);padding-left:12px;position:relative}
+#about li::before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+#about li b{color:var(--ink);font-weight:600}
+#about .note{margin-top:12px;font-size:10.5px;color:var(--dim2);border-top:1px solid var(--line);padding-top:10px}
+#title .sub{font-size:11px;color:var(--dim2);letter-spacing:.06em;margin-top:3px}
+#readout{pointer-events:auto;text-align:right;font-variant-numeric:tabular-nums;background:linear-gradient(to left,rgba(10,13,18,.55),rgba(10,13,18,0));padding:6px 4px 8px 40px;border-radius:10px}
+#age{font-size:30px;font-weight:300;letter-spacing:.01em;line-height:1}
+#eraName{font-size:13px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;font-weight:600}
+#periodName{font-size:11px;color:var(--dim);letter-spacing:.05em;margin-top:2px}
+#env{font-size:10.5px;color:var(--dim2);margin-top:8px;line-height:1.7;letter-spacing:.02em}
+#env b{color:var(--dim);font-weight:500}
+
+/* ---- right controls ---- */
+#controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
+/* Context-card stack. Sits under the extinction card and flows downward; each
+   card carries its own accent so the three are told apart at a glance without
+   reading them -- interval amber, supercontinent green, glaciation ice blue. */
+#ctxStack{position:fixed;right:20px;top:582px;width:210px;z-index:20;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.ctxCard{background:var(--panel);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border:1px solid var(--ck);border-radius:12px;
+  overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);pointer-events:auto;
+  transition:opacity .35s}
+.ctxCard .ch{cursor:pointer;padding:8px 12px 9px;position:relative;
+  background:linear-gradient(to right,var(--cg),transparent)}
+.ctxCard .ch:hover{filter:brightness(1.25)}
+.ctxCard .ceb{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ca);font-weight:700}
+.ctxCard .ct{font-size:12px;font-weight:600;color:#e9edf2;margin-top:2px;
+  line-height:1.26;padding-right:16px}
+.ctxCard .cs{font-size:9px;color:var(--dim2);margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.ctxCard .cv{position:absolute;right:11px;top:9px;color:var(--ca);font-size:11px;
+  transition:transform .25s}
+.ctxCard.open .cv{transform:rotate(180deg)}
+.ctxCard .cb{max-height:0;overflow-y:auto;font-size:11px;line-height:1.5;
+  color:#c2cad4;padding:0 12px;transition:max-height .32s ease}
+.ctxCard.open .cb{max-height:190px;padding:2px 12px 11px}
+@media (min-height:1000px){.ctxCard.open .cb{max-height:250px}}
+@media (min-height:1300px){.ctxCard.open .cb{max-height:340px}}
+.ctxCard .cmore{display:inline-block;margin-top:7px;font-size:9.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ca);cursor:pointer}
+.ctxCard .cmore:hover{filter:brightness(1.3)}
+.ctx-interval{--ck:rgba(201,168,106,.5);--ca:#c9a86a;--cg:rgba(201,168,106,.15)}
+.ctx-super{--ck:rgba(122,168,116,.5);--ca:#8ec48a;--cg:rgba(122,168,116,.15)}
+.ctx-glacial{--ck:rgba(126,186,214,.5);--ca:#8fc9e4;--cg:rgba(126,186,214,.15)}
+.ctx-climate{--ck:rgba(226,150,110,.5);--ca:#f0a878;--cg:rgba(226,150,110,.15)}
+body.ambient #ctxStack{opacity:0;pointer-events:none}
+#extinctBox{position:fixed;right:20px;top:582px;width:210px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(224,118,74,.55);border-radius:12px;z-index:21;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);transition:opacity .4s}
+#extinctBox.hidden{opacity:0;pointer-events:none}
+#extinctHead{cursor:pointer;padding:9px 12px 10px;position:relative;background:linear-gradient(to right,rgba(224,118,74,.16),rgba(224,118,74,.03))}
+#extinctHead:hover{background:linear-gradient(to right,rgba(224,118,74,.26),rgba(224,118,74,.06))}
+#extinctEyebrow{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#e8794c;font-weight:700}
+#extinctEyebrow.after{color:#c99a6a}
+#extinctTitle{font-size:12.5px;font-weight:600;color:#e9edf2;margin-top:3px;line-height:1.28;padding-right:16px}
+#extinctChev{position:absolute;right:11px;top:10px;color:#e8794c;font-size:11px;transition:transform .25s}
+#extinctBox.open #extinctChev{transform:rotate(180deg)}
+#extinctBody{max-height:0;overflow-y:auto;font-size:11.5px;line-height:1.52;color:#c2cad4;padding:0 12px;transition:max-height .32s ease}
+#extinctBox.open #extinctBody{max-height:238px;padding:2px 12px 12px}
+@media (min-height:1000px){#extinctBox.open #extinctBody{max-height:320px}}
+@media (min-height:1300px){#extinctBox.open #extinctBody{max-height:430px}}
+/* This card is a 210px-wide dropdown, not a panel — the figure rides as a
+   cropped banner so it does not swallow the whole body. */
+#extinctBody .cardfig{margin:2px 0 8px}
+#extinctBody .cardfig svg{height:50px}
+body.ambient #extinctBox{opacity:0;pointer-events:none}
+.grp{margin-bottom:12px}
+.grp:last-child{margin-bottom:0}
+.grp-h{font-size:9.5px;color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;background:none;border:none;color:var(--dim);font-family:var(--font);font-size:11px;padding:7px 4px;cursor:pointer;letter-spacing:.03em;transition:.15s}
+.seg button.on{background:var(--accent);color:#0a0d12;font-weight:600}
+.seg button:not(.on):hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.tog{display:flex;align-items:center;justify-content:space-between;padding:5px 2px;cursor:pointer;user-select:none}
+.tog span{font-size:12px;color:var(--ink);letter-spacing:.02em}
+.tog .sw{width:32px;height:18px;border-radius:9px;background:rgba(255,255,255,.12);position:relative;transition:.2s;flex:none}
+.tog .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#cfd6df;transition:.2s}
+.tog.on .sw{background:var(--accent)}
+.tog.on .sw::after{left:16px;background:#fff}
+.tog .dotc{width:8px;height:8px;border-radius:50%;margin-right:6px;flex:none;display:inline-block;vertical-align:middle}
+
+/* ---- bottom timeline ---- */
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 22px 16px;background:linear-gradient(to top,rgba(8,10,14,.92),rgba(8,10,14,0));z-index:20;transition:opacity .5s}
+#markrow{position:relative;height:24px;margin:0 4px 2px}
+.mark{position:absolute;transform:translateX(-50%);font-size:9.5px;color:var(--dim2);letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:color .15s}
+.mark:hover{color:var(--ink)}
+.mark::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:5px;background:var(--line)}
+.mark.now{color:var(--accent2)}
+#scalerow{position:relative;height:13px;margin:0 4px}
+.tick{position:absolute;transform:translateX(-50%);font-size:9px;color:#5c6675;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tick::before{content:"";position:absolute;left:50%;top:-4px;width:1px;height:3px;background:rgba(255,255,255,.16)}
+.tick.zero{color:var(--accent2)}
+#track{position:relative;height:26px;margin:0 4px}
+#slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
+#slider::-webkit-slider-runnable-track{height:26px}
+#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:26px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
+#slider::-moz-range-thumb{width:4px;height:26px;border:none;background:#fff;border-radius:2px}
+#trackbg{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
+#trackgrad{position:absolute;inset:0}
+#ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px;position:relative}
+/* Centred on the BAR, not in the flex flow: an auto-margin item would centre
+   itself in whatever space the controls left over, which is off-centre on the
+   page and moves as the speed readout changes width. */
+#contact{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-size:10.5px;line-height:1.4;color:var(--dim2);white-space:nowrap;text-align:center}
+#contact a{color:var(--dim2);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.16)}
+#contact a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+/* The controls close in on the centre before this gets cramped; drop it rather
+   than let it collide with the step buttons. */
+@media (max-width:1180px){#contact{display:none}}
+.pbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
+.qbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);height:30px;padding:0 12px;border-radius:15px;cursor:pointer;font:600 11px/1 var(--font);flex:none;transition:.15s}
+.qbtn:hover{border-color:var(--accent);color:var(--accent)}
+.pbtn:hover{border-color:var(--accent);color:var(--accent)}
+.pbtn svg{width:15px;height:15px;fill:currentColor}
+/* The rotate icon is line art, not a filled glyph, so it has to opt out of the
+   fill above -- and by id, because .pbtn.on svg sets fill too and would flood
+   the globe solid the moment auto-rotate was switched on. stroke follows
+   currentColor, which .pbtn.on already swaps to the accent, so the on-state
+   still lights up without a second rule. The arrowhead is the one filled part. */
+#rotBtn svg{fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+#rotBtn svg .head{fill:currentColor;stroke:none}
+#dir{width:34px;height:34px}
+#speedwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+/* Single-step controls. The slider spans 1250 Myr in ~1200 px, so one pixel is
+   about a million years and fine positioning by drag is not possible. */
+#steprow{display:flex;align-items:center;gap:7px;flex:none}
+#steplbl{color:var(--dim2);font-size:10px;letter-spacing:.1em;min-width:34px;text-align:center}
+.pbtn.small{width:30px;height:30px}
+.pbtn.small svg{width:15px;height:15px}
+#speed{width:96px}
+input[type=range].mini{-webkit-appearance:none;appearance:none;height:3px;background:#2b3240;border-radius:2px;outline:none}
+input[type=range].mini::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
+input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+.pbtn.on{border-color:var(--accent);color:var(--accent)}
+.pbtn.on svg{fill:var(--accent)}
+#spinwrap{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:11px;letter-spacing:.04em}
+#spinwrap[hidden]{display:none}
+#spin{width:72px}
+#spinVal,#tiltVal,#headVal{min-width:34px;font-variant-numeric:tabular-nums}
+/* margin-left:auto moves from #ambientBtn to the camera cluster, so the cluster
+   is what gets pushed right and Ambient stays pinned to its right-hand edge --
+   which is the arrangement the request asks for. */
+#camwrap{margin-left:auto;display:flex;align-items:center}
+#camGlobe,#camMap{display:flex;align-items:center;gap:10px}
+#camGlobe[hidden],#camMap[hidden]{display:none}
+.camrow{display:flex;align-items:center;gap:7px;color:var(--dim);font-size:11px;letter-spacing:.04em;cursor:pointer}
+#tiltR,#headR{width:74px}
+#mapLonLbl{color:var(--dim);font-size:11px;min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
+#resetNorth{padding:6px 9px;font-size:9.5px}
+.txtbtn{background:none;border:1px solid var(--line);color:var(--dim);font-family:var(--font);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:8px;cursor:pointer;transition:.15s}
+.txtbtn:hover{border-color:var(--accent);color:var(--ink)}
+.txtbtn.on{border-color:var(--accent);color:var(--accent)}
+
+/* ---- labels overlay ---- */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+#leaders{position:fixed;inset:0;pointer-events:none;z-index:9}
+#leaders line{stroke:rgba(255,255,255,.30);stroke-width:1}
+.plabel{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:11px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);opacity:0;transition:opacity .4s;pointer-events:none;cursor:pointer;padding:2px 3px;border-radius:4px}
+.plabel.show{pointer-events:auto}
+.plabel:hover{color:var(--accent);background:rgba(10,13,18,.55)}
+.plabel.ocean{font-style:italic;color:#bfe0ef;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0}
+.plabel.sea{color:#cfeaf3;font-size:10px;font-style:italic}
+.plabel.orogen{color:#f0d0a8;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em}
+.plabel.desert{color:#e8cf9a;font-size:9.5px;letter-spacing:.09em}
+.plabel.forest{color:#a8d5a2;font-size:9.5px;letter-spacing:.07em}
+.plabel.grassland{color:#d3d99b;font-size:9.5px;letter-spacing:.07em}
+.plabel.ice{color:#dbeaf5;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+.plabel.basin,.plabel.plateau{color:#d8c9b4;font-size:9.5px;letter-spacing:.07em}
+.plabel.rift{color:#efb08a;font-size:9.5px;letter-spacing:.1em}
+.plabel.island{color:#c8e2e8;font-size:9.5px;font-style:italic}
+.plabel.region{color:#c3c9d4;font-size:9.5px;letter-spacing:.1em}
+.plabel.plate{color:#cbd6e4;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  text-shadow:0 1px 3px rgba(0,0,0,.95);opacity:0}
+.plabel.plate .sp{color:#8fa1b8;letter-spacing:.04em}
+.plabel.show{opacity:.92}
+
+/* ---- info panel (right column, under the controls) ---- */
+/* Its own column, inboard of the controls. The panel now carries phase text,
+   regional fossil notes and an illustrated life list, so stacking it under the
+   controls left it about 200px tall and permanently scrolled. */
+#info{position:fixed;right:218px;top:172px;bottom:158px;width:290px;overflow-y:auto;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:15px;z-index:25;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s,transform .25s}
+#info.show{opacity:1;transform:none;pointer-events:auto}
+#info.wide{width:300px}
+#info h3{font-size:14px;letter-spacing:.03em;margin-bottom:2px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#info .close{cursor:pointer;color:var(--dim2);font-size:16px;line-height:1;flex:none}
+#info .tag{font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+#info .row{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:4px 0;border-top:1px solid var(--line);color:var(--dim)}
+#info .row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+/* Schematic figure at the head of a card. Cards that describe an organism get a
+   silhouette; everything else — a rift, a crater, a flood basalt — was text
+   only. These are diagrams of the KIND of thing, which the caption says. */
+.cardfig{margin:11px 0 2px}
+.zoomfig{cursor:zoom-in}
+.zoomfig:hover svg,.zoomfig:focus svg,
+.zoomfig:hover img,.zoomfig:focus img{outline:1px solid var(--accent);outline-offset:1px}
+.zoomfig:focus{outline:none}
+#figZoom{position:fixed;inset:0;z-index:60;background:rgba(6,8,12,.86);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:4vmin}
+#figZoom[hidden]{display:none}
+#figZoomInner{position:relative;max-width:min(1100px,92vw);width:100%}
+#figZoomArt svg,#figZoomArt img{width:100%;height:auto;max-height:78vh;
+  object-fit:contain;border-radius:10px;
+  background:#0d1218;border:1px solid var(--line)}
+#figZoomCap .cred{display:block;font-size:11px;opacity:.72;padding-top:4px}
+#figZoomCap .cred a{color:#8794a4}
+#figZoomCap{margin:12px 2px 0;color:var(--dim);font-size:13px;line-height:1.5;text-align:center}
+#figZoomX{position:absolute;top:-14px;right:-6px;width:36px;height:36px;
+  border-radius:50%;background:rgba(10,13,18,.9);border:1px solid var(--line);
+  color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+#figZoomX:hover{border-color:var(--accent);color:var(--accent)}
+/* Photograph figure. Sits BELOW the schematic, not instead of it: the diagram
+   says what kind of thing this is, the photograph says what it looks like, and
+   for anything with a modern counterpart both are worth having. Attribution is
+   part of the caption, not a footnote -- CC-BY requires it and public domain
+   deserves it. */
+.cardphoto{margin:12px 0 2px}
+.cardphoto img{display:block;width:100%;height:auto;border-radius:7px;
+  border:1px solid var(--line)}
+.cardphoto figcaption{font-size:9.5px;font-style:italic;color:var(--dim2);
+  line-height:1.5;margin-top:5px}
+.cardphoto .cred{display:block;font-style:normal;color:#6d7887;margin-top:3px;
+  font-size:8.5px;letter-spacing:.02em}
+.cardphoto .cred a{color:#8794a4;text-decoration:none;border-bottom:1px dotted #4a5464}
+
+.cardfig svg{display:block;width:100%;height:auto;border-radius:7px;
+  border:1px solid var(--line)}
+.cardfig figcaption{font-size:9.5px;font-style:italic;color:var(--dim2);
+  line-height:1.5;margin-top:5px}
+#info p.desc{font-size:11px;color:var(--dim);line-height:1.6;margin-top:8px}
+#info p.desc+p.desc{margin-top:6px}
+.ihead{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:13px 0 7px;padding-top:9px;border-top:1px solid var(--line)}
+.evlist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.evlist li{font-size:10.5px;line-height:1.5;color:var(--dim);padding-left:11px;position:relative}
+.evlist li::before{content:"";position:absolute;left:0;top:6px;width:3px;height:3px;border-radius:50%;background:var(--accent)}
+/* life gallery */
+.life{display:flex;flex-direction:column;gap:8px}
+.lifeitem{display:flex;gap:9px;align-items:flex-start}
+/* --ko is the knockout colour the illustrations cut their interior detail with
+   (eyes, gill slits, shell sutures, a trilobite's three lobes). It was never
+   defined, so every var(--ko) fill was invalid-at-computed-value-time and
+   inherited currentColor instead — the detail was drawn in the SAME colour as
+   the body and vanished. Dickinsonia rendered as a bare oval, 19 icons lost
+   their eyes. It has to stay dark enough to read as an engraved cut on all
+   four realm tints below. */
+.lifeicon{--ko:#161d25;width:46px;height:31px;flex:none;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#cfd9e6}
+.lifeicon svg{width:44px;height:29px;display:block;fill:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.lifeicon.sea{background:rgba(94,169,196,.13);color:#a9d6e8}
+.lifeicon.land{background:rgba(150,190,120,.13);color:#c2debb}
+.lifeicon.air{background:rgba(226,178,90,.13);color:#eed6a6}
+.lifeicon.fresh{background:rgba(120,190,190,.13);color:#a9e0dc}
+.lifetxt{min-width:0}
+.lifetxt .ln2{font-size:11px;color:var(--ink);letter-spacing:.02em;line-height:1.3}
+.lifetxt .lr{font-size:8.5px;color:var(--dim2);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
+.lifetxt .lnote{font-size:10px;color:var(--dim);line-height:1.5;margin-top:3px}
+/* size · diet · habit. Dimmer than the note and set apart, because it is a
+   lookup a reader scans rather than a sentence they read. */
+.lifetxt .lattr{font-size:9.5px;color:var(--dim2);line-height:1.45;margin-top:3px;
+  padding-top:3px;border-top:1px solid var(--line)}
+
+/* ---- left rail: legend + browsable sidebars ---- */
+#leftrail{position:fixed;left:20px;top:96px;bottom:118px;width:200px;z-index:18;display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;transition:opacity .5s;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+#leftrail::-webkit-scrollbar{width:6px}
+#leftrail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:3px}
+#leftrail::-webkit-scrollbar-track{background:transparent}
+#legend{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:10.5px;color:var(--dim);flex:none}
+#legend .li{display:flex;align-items:center;gap:7px;padding:2px 0}
+#legend .ln{width:16px;height:2px;border-radius:2px;flex:none}
+#legend .dt{width:7px;height:7px;border-radius:50%;flex:none}
+.panel{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:10px;flex:none;overflow:hidden}
+.panel .ph{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 11px;cursor:pointer;user-select:none;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);transition:color .15s}
+.panel .ph:hover{color:var(--ink)}
+.panel .chev{font-size:9px;transition:transform .22s;flex:none}
+.panel.open .chev{transform:rotate(180deg)}
+.panel .pb{max-height:0;overflow:hidden;transition:max-height .28s ease}
+/* Capped so an open intervals list cannot push the supercontinents panel off
+   the bottom of the rail — each panel scrolls inside itself instead. */
+.panel.open .pb{max-height:min(46vh,420px);overflow-y:auto}
+.panel .pb::-webkit-scrollbar{width:5px}
+.panel .pb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:3px}
+.gh{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#5c6675;padding:8px 11px 3px;border-top:1px solid var(--line)}
+.gh:first-child{border-top:none;padding-top:4px}
+.erow{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:5px 11px;cursor:pointer;transition:background .13s}
+.erow:hover{background:rgba(255,255,255,.055)}
+.erow.cur{background:rgba(226,112,58,.16);box-shadow:inset 2px 0 0 var(--accent)}
+.erow .en{font-size:11px;color:var(--ink);letter-spacing:.02em}
+.erow.cur .en{color:var(--accent)}
+.erow .ea{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.erow.proj .en{color:#9fb6c9;font-style:italic}
+.srow{padding:7px 11px;cursor:pointer;transition:background .13s}
+.srow:hover{background:rgba(255,255,255,.055)}
+.srow.cur{background:rgba(226,112,58,.16);box-shadow:inset 2px 0 0 var(--accent)}
+.srow .sn{font-size:11.5px;color:var(--ink);letter-spacing:.03em}
+.srow.cur .sn{color:var(--accent)}
+.srow .sa{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;margin-top:2px}
+.srow .sd{font-size:8.5px;color:#5c6675;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.exrow{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 11px 4px;cursor:pointer;transition:background .13s}
+.exrow:hover{background:rgba(255,255,255,.055)}
+.exrow.cur{background:rgba(224,118,74,.16);box-shadow:inset 2px 0 0 #e8794c}
+.exrow .exn{font-size:11px;color:var(--ink);letter-spacing:.02em}
+.exrow.cur .exn{color:#f0916a}
+.exrow.proj .exn{color:#e0a888}
+.exrow .exd{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.exrow .exq{font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:#8790a0}
+.exsub{font-size:9.5px;color:#98a2b0;padding:2px 11px 3px 20px;cursor:pointer;transition:background .13s,color .13s}
+.exsub:hover{background:rgba(255,255,255,.05);color:#c8d0da}
+.exsub.cur{color:#e8b98a}
+/* Glaciations get their own colour. Red already means extinction in this
+   rail and the two lists sit next to each other; ice blue keeps a reader
+   from mistaking one for the other at a glance. */
+.glrow{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 11px 4px;cursor:pointer;transition:background .13s}
+.glrow:hover{background:rgba(255,255,255,.055)}
+.glrow.cur{background:rgba(126,186,214,.16);box-shadow:inset 2px 0 0 #7ebad6}
+.glrow .gn{font-size:11px;color:var(--ink);letter-spacing:.02em}
+.glrow.cur .gn{color:#a8d8ee}
+.glrow.snow .gn{color:#cfe4f2}
+.glrow.ce.cur{background:rgba(226,150,110,.16);box-shadow:inset 2px 0 0 #e2966e}
+.glrow.ce.cur .gn{color:#f0b892}
+.glrow.offmap{opacity:.62}
+.glrow.offmap .gd{font-style:italic}
+.modelfig{margin:10px 0 0;padding:0}
+.modelfig img{width:100%;height:auto;display:block;border-radius:4px;background:#11161c}
+.modelfig figcaption{font-size:10.5px;line-height:1.45;color:var(--dim);padding:6px 2px 0}
+.modelfig .cred{display:block;font-size:9.5px;opacity:.72;padding-top:2px}
+.glrow .gd{font-size:9px;color:var(--dim2);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.glrow .gk{font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:#7d8b9c;display:block;margin-top:1px}
+
+/* ---- loading ---- */
+#load{position:fixed;inset:0;background:var(--bg);z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s}
+#load.done{opacity:0;pointer-events:none}
+#load .ring{width:44px;height:44px;border:2px solid rgba(255,255,255,.12);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#load .lt{margin-top:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+#load .lp{margin-top:6px;font-size:10px;color:var(--dim2);font-variant-numeric:tabular-nums}
+
+#hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
+#ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s;display:flex;gap:8px}
+#ambientExit a.txtbtn{text-decoration:none;display:inline-flex;align-items:center}
+#ambientExit a.txtbtn[hidden]{display:none}
+body.ambient #controls,body.ambient #bottom,body.ambient #leftrail,body.ambient #hint,body.ambient #info{opacity:0;pointer-events:none}
+/* the readout is the point of ambient mode, so it stays; only the chrome goes */
+body.ambient #title{opacity:0}
+body.ambient #readout{opacity:1}
+body.ambient #ambientExit{opacity:1;pointer-events:auto}
+/* Narrow windows have no room for a third column, so the panel drops back to
+   the right edge and simply overlaps the controls, which are the less
+   important of the two once something is selected. */
+@media (max-width:1180px){
+  #info{right:20px;top:auto;bottom:158px;max-height:calc(100vh - 400px)}
+}
+.mtab{display:none;position:fixed;top:12px;z-index:38;width:38px;height:38px;
+  align-items:center;justify-content:center;border-radius:10px;
+  background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--ink);
+  font-family:var(--font);font-size:15px;cursor:pointer}
+#mLeft{left:12px} #mRight{right:12px} #mLabels{right:12px;top:58px}
+body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
+#mLabels.on{border-color:var(--accent);color:var(--accent)}
+#mLabels{font-size:12px;letter-spacing:.02em}
+body.ambient .mtab{display:none}
+
+/* ===== MOBILE =====================================================
+   The rails were built for a desktop viewport and simply kept their size on a
+   phone: #readout had no mobile rule at all, so the whole conditions block --
+   age, era, temperature, CO2, biomes -- rendered at full width straight over
+   the globe, and #ctxStack stacked cards on top of that. The globe, which is
+   the entire point, got whatever was left.
+
+   So: nothing overlays the globe by default. Both rails become drawers behind
+   their own button, and the readout keeps only what a glance needs -- the age
+   and the period -- with the rest inside the right drawer. */
+/* Comma is OR. A phone in landscape is about 780x360 -- WIDER than the 720px
+   breakpoint and less than half as tall -- so a width-only query sailed right
+   past it and served the full desktop layout into 360px of height, which is the
+   crammed, overlapping view that got reported. Height is the honest signal for
+   "there is no room here"; width alone never sees a rotated phone. */
+@media (max-width:720px),(max-height:560px){
+  .mtab{display:flex}
+  #controls{position:fixed;top:auto;bottom:150px;width:160px}
+  /* was display:none, which made the legend and timeline unreachable rather
+     than tidy. It is a drawer now. */
+  #leftrail{display:flex;left:0;top:0;bottom:0;width:min(78vw,240px);
+    background:rgba(10,13,18,.94);backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);padding:56px 12px 16px;z-index:36;
+    transform:translateX(-102%);transition:transform .28s ease}
+  body.m-left #leftrail{transform:none}
+  #controls,#ctxStack,#extinctBox{transform:translateX(102%);
+    transition:transform .28s ease}
+  body.m-right #controls,body.m-right #ctxStack,body.m-right #extinctBox{
+    transform:none}
+  #readout{padding:6px 8px 8px 12px;background:none}
+  #readout #env,#readout #eraName{display:none}
+  body.m-right #readout{background:rgba(10,13,18,.94);border-radius:10px}
+  body.m-right #readout #env,body.m-right #readout #eraName{display:block}
+  #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:40vh}
+  #age{font-size:24px}
+  /* clear the drawer button, which was sitting on top of 'TEC' */
+  #title{padding-left:46px} #title h1{font-size:14px} #title .sub{display:none}
+  /* the bottom bar is the one thing that must stay usable, so it wraps rather
+     than pushing the camera cluster off the edge */
+  #ctlrow{flex-wrap:wrap;gap:8px;row-gap:10px}
+  #camwrap{margin-left:0;order:9;width:100%}
+  #camGlobe{width:100%;justify-content:space-between;gap:6px}
+  #tiltR,#headR{width:56px}
+  .camrow{gap:5px;font-size:10px}
+  #tiltVal,#headVal{min-width:26px}
+  /* "Reset to north" wrapped onto three lines and pushed itself off the edge.
+     On a phone the icon says it -- north arrow, no caption. */
+  #resetNorth{padding:6px 8px;font-size:0;line-height:0;white-space:nowrap}
+  #resetNorth::before{content:'\2191 N';font-size:11px;line-height:1.2;letter-spacing:.06em}
+  #contact,#hint{display:none}
+  /* The era ticks are drawn for a 1600px track and collide into unreadable
+     mush at 375. The numeric scale below them still gives the timeline its
+     labels, so drop the words rather than overlap them. */
+  #markrow{display:none}
+  /* fully off-canvas, not merely nudged: a 186px panel translated by its own
+     width still leaves a sliver once a scrollbar or safe-area is involved */
+  #controls,#ctxStack,#extinctBox{transform:translateX(calc(100% + 24px))}
+  /* the age was landing under the right-hand drawer button */
+  #readout{padding-right:46px}
+  #age{font-size:21px}
+}
+/* LANDSCAPE. Here the scarce axis flips: there is plenty of width and almost no
+   height, so the portrait fix -- wrap the control row onto several lines -- is
+   exactly wrong and eats the little height there is. Put the row back on one
+   line, shrink everything vertical, and let the globe have the middle. */
+@media (max-height:560px) and (orientation:landscape){
+  #ctlrow{flex-wrap:nowrap;gap:10px;margin-top:6px}
+  #camwrap{margin-left:auto;order:0;width:auto}
+  #camGlobe{width:auto}
+  #bottom{padding-bottom:6px}
+  #scalerow{font-size:9px}
+  #title{padding-left:44px}
+  #title h1{font-size:12px}
+  #age{font-size:17px}
+  #readout{padding-top:2px;padding-bottom:2px}
+  #speedwrap,#spinwrap{font-size:10px}
+  #speed{width:70px}
+  #steprow{display:none}
+  .mtab{top:8px;width:32px;height:32px}
+  #mLabels{top:46px}
+  #leftrail{padding-top:46px;width:min(52vw,230px)}
+}
+
+/* ===== About one-pager overlay =====================================
+   Fully namespaced under #aboutPage with its own palette variables, so
+   nothing here touches the viewer's own styles and vice versa. */
+#aboutPageBtn{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.14em;
+  border:1px solid var(--line);border-radius:6px;padding:3px 7px;margin-left:9px;
+  vertical-align:middle;transition:color .15s,border-color .15s}
+#aboutPageBtn:hover{color:var(--accent);border-color:var(--accent)}
+#logBtn{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;border:1px solid var(--line);border-radius:5px;padding:2px 7px;
+  margin-left:6px;transition:color .15s,border-color .15s;white-space:nowrap}
+#logBtn:hover{color:var(--accent);border-color:var(--accent)}
+
+#aboutPage{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+  padding:3vh 3vw;background:rgba(4,6,10,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .28s ease;
+  --ap-space:#070a10;--ap-space2:#0b1018;--ap-panel:#121a27;--ap-panel2:#18202f;
+  --ap-line:#243040;--ap-line2:rgba(48,64,84,.6);
+  --ap-ink:#eaeef4;--ap-dim:#9aa8bc;--ap-dim2:#63728a;
+  --ap-amber:#ef8146;--ap-amber-soft:#f6a877;--ap-teal:#5793ab;--ap-green:#84a458;
+  --ap-serif:'Iowan Old Style','Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+  --ap-sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ap-mono:'SF Mono','SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace}
+#aboutPage.show{opacity:1;pointer-events:auto}
+#aboutPage *{box-sizing:border-box}
+#aboutPage .ap-panel{position:relative;width:min(1060px,100%);height:min(960px,94vh);
+  background:radial-gradient(1100px 640px at 72% -6%,rgba(40,74,110,.32),transparent 60%),
+    radial-gradient(820px 560px at 10% 2%,rgba(70,45,30,.16),transparent 55%),var(--ap-space);
+  border:1px solid var(--ap-line);border-radius:16px;overflow:hidden;
+  box-shadow:0 40px 120px -40px rgba(0,0,0,.9);transform:translateY(12px) scale(.992);transition:transform .28s ease}
+#aboutPage.show .ap-panel{transform:none}
+#aboutPage .ap-inner{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+#aboutPage .ap-close{position:absolute;top:12px;right:14px;z-index:6;width:36px;height:36px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;
+  color:var(--ap-ink);background:rgba(10,14,20,.6);border:1px solid var(--ap-line);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .15s,border-color .15s,color .15s}
+#aboutPage .ap-close:hover{background:rgba(239,129,70,.16);border-color:var(--ap-amber);color:var(--ap-amber)}
+#aboutPage .ap-wrap{max-width:900px;margin:0 auto;padding:40px 30px 52px;font-family:var(--ap-sans)}
+#aboutPage p{margin:0 0 1em;color:var(--ap-ink)}
+#aboutPage a{color:var(--ap-amber-soft);text-decoration:none}
+#aboutPage a:hover{color:var(--ap-amber)}
+#aboutPage img{display:block;max-width:100%}
+#aboutPage .eyebrow{font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ap-amber);margin:0 0 12px}
+#aboutPage h1{font-family:var(--ap-serif);font-weight:600;letter-spacing:-.01em;font-size:clamp(34px,5.4vw,54px);line-height:1.03;margin:0}
+#aboutPage h2{font-family:var(--ap-serif);font-weight:600;letter-spacing:-.01em;font-size:clamp(22px,3vw,30px);line-height:1.14;margin:0 0 4px}
+#aboutPage h3{font-weight:650;font-size:15px;margin:0;color:var(--ap-ink)}
+#aboutPage .dim{color:var(--ap-dim)}
+#aboutPage .lead{font-size:clamp(17px,2vw,19.5px);line-height:1.6;color:#dbe2ec;max-width:64ch}
+#aboutPage .hero{text-align:center;padding:8px 0 20px}
+#aboutPage .hero .tag{max-width:56ch;margin:18px auto 0;color:var(--ap-dim);font-size:clamp(15px,1.8vw,17.5px);line-height:1.55}
+#aboutPage .byline{margin:11px auto 0;font-size:12.5px;color:var(--ap-dim2)}
+#aboutPage .byline a{color:var(--ap-dim)}
+#aboutPage .byline a:hover{color:var(--ap-amber)}
+#aboutPage .hero-figure{position:relative;margin:22px auto 0;max-width:440px}
+#aboutPage .hero-figure::before{content:"";position:absolute;inset:6% 8% 10%;background:radial-gradient(closest-side,rgba(70,120,160,.28),transparent 72%);filter:blur(16px);z-index:0}
+#aboutPage .hero-figure img{position:relative;z-index:1;width:100%;border-radius:50%}
+#aboutPage .hero-cap{max-width:52ch;margin:12px auto 0;font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.02em;color:var(--ap-dim2)}
+#aboutPage .ruler{max-width:560px;margin:26px auto 2px;padding:0 4px}
+#aboutPage .ruler-line{position:relative;height:2px;border-radius:2px;background:linear-gradient(90deg,#2a3547,#6b7a45 42%,var(--ap-amber) 62%,#7a3f2a);opacity:.85}
+#aboutPage .ruler-ticks{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--ap-mono);font-size:10.5px;letter-spacing:.04em;color:var(--ap-dim2)}
+#aboutPage .ruler-ticks .now{color:var(--ap-amber)}
+#aboutPage .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+#aboutPage .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--ap-sans);font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,color .15s}
+#aboutPage .btn.primary{background:var(--ap-amber);color:#1a0f08}
+#aboutPage .btn.primary:hover{background:var(--ap-amber-soft);transform:translateY(-1px)}
+#aboutPage .btn.ghost{background:transparent;border-color:var(--ap-line2);color:var(--ap-ink)}
+#aboutPage .btn.ghost:hover{border-color:var(--ap-amber);color:var(--ap-amber)}
+#aboutPage section{padding:30px 0}
+#aboutPage .rule{height:1px;background:var(--ap-line);border:0;margin:0}
+#aboutPage .sec-head{margin-bottom:20px}
+#aboutPage .sec-head .eyebrow{margin-bottom:9px}
+#aboutPage figure{margin:0}
+#aboutPage .shot{border-radius:12px;border:1px solid var(--ap-line);overflow:hidden;background:var(--ap-space2);box-shadow:0 24px 60px -32px rgba(0,0,0,.9)}
+#aboutPage .shot img{width:100%}
+#aboutPage figcaption{margin-top:10px;font-size:13px;color:var(--ap-dim);line-height:1.5}
+#aboutPage figcaption b{color:var(--ap-ink);font-weight:600}
+#aboutPage .split{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+#aboutPage .split.rev{grid-template-columns:.95fr 1.05fr}
+#aboutPage .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+#aboutPage .card{background:linear-gradient(180deg,var(--ap-panel),var(--ap-space2));border:1px solid var(--ap-line);border-radius:12px;padding:16px 16px 18px}
+#aboutPage .card .k{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+#aboutPage .card .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+#aboutPage .card p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ap-dim)}
+#aboutPage .models{display:grid;grid-template-columns:1fr 1fr;gap:12px 32px}
+#aboutPage .model{display:grid;grid-template-columns:126px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--ap-line)}
+#aboutPage .model .lab{font-family:var(--ap-mono);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ap-amber);padding-top:2px}
+#aboutPage .model p{margin:0;font-size:13.5px;color:var(--ap-dim);line-height:1.55}
+#aboutPage .sources{display:grid;gap:11px}
+/* Contributor credits for the traced silhouettes. CC-BY images REQUIRE
+   attribution, so this list is generated from the icon manifest rather than
+   maintained by hand -- it cannot fall out of step with what actually ships. */
+#aboutPage .silcredits{margin-top:9px;max-height:150px;overflow-y:auto;
+  display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;line-height:1.5;
+  padding:9px 11px;border:1px solid var(--ap-line);border-radius:8px;
+  background:rgba(255,255,255,.02)}
+#aboutPage .silcredits span{color:var(--ap-dim)}
+#aboutPage .silcredits b{color:var(--ap-ink);font-weight:500}
+#aboutPage .src{display:grid;grid-template-columns:146px 1fr;gap:16px;align-items:baseline;padding-bottom:11px;border-bottom:1px dashed var(--ap-line)}
+#aboutPage .src .role{font-family:var(--ap-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ap-dim2)}
+#aboutPage .src p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ap-dim)}
+#aboutPage .src .cite{color:var(--ap-ink)}
+#aboutPage .src .doi{font-family:var(--ap-mono);font-size:11.5px;color:var(--ap-teal)}
+#aboutPage .note{border-left:2px solid var(--ap-amber);background:rgba(239,129,70,.055);padding:13px 16px;border-radius:0 8px 8px 0;color:var(--ap-dim);font-size:14px}
+#aboutPage .note b{color:var(--ap-ink)}
+#aboutPage .stat-row{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+#aboutPage .stat{text-align:center}
+#aboutPage .stat .n{font-family:var(--ap-mono);font-size:21px;color:var(--ap-ink)}
+#aboutPage .stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--ap-dim2);margin-top:4px}
+#aboutPage .ap-foot{padding:32px 0 6px;border-top:1px solid var(--ap-line);margin-top:16px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+#aboutPage .ap-foot .caveat{color:var(--ap-dim2);font-size:12.5px;max-width:62ch;line-height:1.5}
+@media (max-width:720px){
+  #aboutPage .split,#aboutPage .split.rev{grid-template-columns:1fr;gap:18px}
+  #aboutPage .models{grid-template-columns:1fr;gap:0}
+  #aboutPage .src{grid-template-columns:1fr;gap:3px}
+  #aboutPage .ap-wrap{padding:34px 20px 44px}
+}
+@media (prefers-reduced-motion:reduce){#aboutPage,#aboutPage .ap-panel{transition:none}}

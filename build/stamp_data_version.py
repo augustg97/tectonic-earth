@@ -21,7 +21,9 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PAGES = [os.path.join(HERE, "..", "web", "index.html"),
+# DATA_V lives in the application source (web/app.js since the page split,
+# WP-10 D5) and in the deployed single-file page.
+PAGES = [os.path.join(HERE, "..", "web", "app.js"),
          os.path.join(HERE, "..", "docs", "index.html")]
 PAT = re.compile(r"(const DATA_V=')([^']*)(')")
 

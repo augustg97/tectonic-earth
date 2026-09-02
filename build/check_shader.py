@@ -1,4 +1,4 @@
-"""Catch the shader traps that only show up as a black globe.
+"""Validate the shader sources in web/shaders/ and write web/shaders.js from them.
 
 Three separate times this project has shipped -- or nearly shipped -- a
 fragment shader that would not compile, and every time the symptom was the
@@ -9,22 +9,33 @@ findable by reading the source:
   * a GLSL RESERVED WORD used as a variable name. "patch" cost an afternoon,
     then "flat" -- an interpolation qualifier -- cost another. The compiler
     says `'flat' : syntax error` and nothing else.
-  * a BACKTICK inside a shader comment, which closes the JavaScript template
-    literal early. The page then dies with a JS SyntaxError and APP never
-    initialises at all.
+  * a BACKTICK inside a shader comment. The shaders travel to the browser as
+    JS template literals (shaders.js), so one backtick closes the literal
+    early and the page dies with a JS SyntaxError.
   * a DOUBLED comment terminator, which drops the prose after the first `*/`
     into the shader as code.
+  * a FUNCTION CALLED ABOVE ITS DEFINITION -- GLSL has no hoisting.
 
-None of these need a browser to detect. Run this before any shader edit ships.
+None of these need a browser to detect. Run this after any shader edit: it
+is also the build step that turns web/shaders/*.glsl into web/shaders.js,
+which index.html loads and build_site.py inlines (WP-10, D5).
 
     python3 check_shader.py            # exits non-zero on any problem
+
+The two noise variants (VN_OLD/VN_NEW for the terrain, CN_OLD/CN_NEW for the
+clouds) live in app.js and are spliced in at run time where the sources
+carry the markers /*@vnoise*/ and /*@cnoise*/; the checks see the NEW ones.
 """
 import os
 import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PAGE = os.path.join(HERE, "..", "web", "index.html")
+WEB = os.path.join(HERE, "..", "web")
+APP = os.path.join(WEB, "app.js")
+SOURCES = {"FRAG": "index__FRAG.frag.glsl", "LFRAG": "index__LFRAG.frag.glsl", "VERT": "index__VERT.vert.glsl",
+           "CFRAG": "index__CFRAG.frag.glsl", "CVERT": "index__CVERT.vert.glsl"}
+MARKERS = {"/*@vnoise*/": "VN_NEW", "/*@cnoise*/": "CN_NEW"}
 
 # GLSL ES 1.00/3.00 keywords and reserved-for-future-use words that are legal
 # English and so plausible as variable names. Not the whole list -- the point
@@ -42,19 +53,29 @@ DECL = re.compile(r"\b(?:float|int|bool|vec2|vec3|vec4|mat2|mat3|mat4|"
                   r"ivec2|ivec3|ivec4|bvec2|bvec3|bvec4)\s+([A-Za-z_]\w*)")
 
 
-def shader_blocks(src):
-    for name in ("FRAG", "LFRAG", "CFRAG", "VERT", "CVERT"):
-        m = re.search(r"\b(?:const|let|var)\s+" + name + r"\s*=\s*`", src)
-        if not m:
+def _js_literal(src, name):
+    m = re.search(r"\bconst\s+" + name + r"\s*=\s*`", src)
+    return src[m.end():src.index("`", m.end())] if m else ""
+
+
+def shader_blocks(raw=False):
+    """(name, body) for each shader source; the noise markers are replaced by
+    the NEW variants from app.js unless raw is asked for."""
+    app = open(APP).read() if os.path.exists(APP) else ""
+    for name, fn in SOURCES.items():
+        p = os.path.join(WEB, "shaders", fn)
+        if not os.path.exists(p):
             continue
-        end = src.index("`", m.end())
-        yield name, src[m.end():end], m.end()
+        body = open(p).read()
+        if not raw:
+            for mark, var in MARKERS.items():
+                body = body.replace(mark, _js_literal(app, var))
+        yield name, body
 
 
 def main():
-    src = open(PAGE).read()
     bad = []
-    for name, body, off in shader_blocks(src):
+    for name, body in shader_blocks():
         # 1. reserved words as identifiers
         for m in DECL.finditer(body):
             if m.group(1) in RESERVED:
@@ -161,16 +182,32 @@ def main():
                         bad.append(f"{name} line {uln}: '{v}' used before it is "
                                    f"declared (declaration is at line {dln})")
                     break
+        # 3c. A FUNCTION CALLED ABOVE ITS DEFINITION. GLSL has no hoisting and
+        # no forward references without a prototype, and the failure is the
+        # same silent black globe. basinEnv() calling vnoise3() from above the
+        # injected definition cost a full render sweep.
+        fdefs = {}
+        for m in re.finditer(r"^(?:float|int|bool|vec[234]|mat[234]|void)\s+([A-Za-z_]\w*)\s*\(", code, flags=re.M):
+            fdefs.setdefault(m.group(1), code[:m.start()].count("\n") + 1)
+        for fn, dln in fdefs.items():
+            if fn == "main":
+                continue
+            for m2 in re.finditer(rf"\b{re.escape(fn)}\s*\(", code):
+                uln = code[:m2.start()].count("\n") + 1
+                if uln < dln:
+                    # skip the definition's own prototype-like appearance on its line
+                    bad.append(f"{name} line {uln}: '{fn}()' is called above its definition (line {dln})")
+                    break
         print(f"{name}: {len(body)} chars, {body.count('{')} blocks, ok"
               if not stray and not d else f"{name}: PROBLEMS")
 
-    # 4. a backtick anywhere between the FIRST shader's opening tick and the
-    #    last one closes the template literal early. shader_blocks already
-    #    stops at the first tick it finds, so a short block is the tell.
-    lens = {n: len(b) for n, b, _ in shader_blocks(src)}
+    # 4. the sources that must exist
+    lens = {n: len(b) for n, b in shader_blocks()}
+    for n in SOURCES:
+        if n not in lens:
+            bad.append(f"{n}: web/shaders/{SOURCES[n]} is missing")
     if lens.get("FRAG", 0) < 8000:
-        bad.append(f"FRAG is only {lens.get('FRAG')} chars -- a backtick inside "
-                   f"it is closing the template literal early")
+        bad.append(f"FRAG is only {lens.get('FRAG')} chars")
 
     if bad:
         print("\nPROBLEMS FOUND:")
@@ -178,27 +215,23 @@ def main():
             print("  !", b)
         return 1
     print("\nshader source clean")
-    write_copies(src)
+    write_shaders_js()
     return 0
 
 
-# The plain-GLSL copies in web/shaders/ exist so the shaders can be read, diffed
-# and syntax-highlighted outside the 8,000-line page. They were hand-kept and
-# went stale: WP-10 found index__FRAG.frag.glsl 500 lines behind the shader
-# that shipped, which is worse than no copy at all. They are now written here,
-# from the same extraction the checks run on, every time the source is clean.
-COPIES = {"FRAG": "index__FRAG.frag.glsl", "LFRAG": "index__LFRAG.frag.glsl", "VERT": "index__VERT.vert.glsl",
-          "CFRAG": "index__CFRAG.frag.glsl", "CVERT": "index__CVERT.vert.glsl"}
-
-
-def write_copies(src):
-    out = os.path.join(HERE, "..", "web", "shaders")
-    os.makedirs(out, exist_ok=True)
-    for name, body, _ in shader_blocks(src):
-        if name in COPIES:
-            with open(os.path.join(out, COPIES[name]), "w") as f:
-                f.write(body.strip("\n") + "\n")
-    print("shader copies written to web/shaders/ (generated -- do not edit by hand)")
+def write_shaders_js():
+    """web/shaders.js: the sources as JS template literals on window.SHADERS,
+    markers intact (app.js splices the noise variant it wants at run time).
+    Generated -- edit web/shaders/*.glsl and run this."""
+    parts = []
+    for name, body in shader_blocks(raw=True):
+        assert "`" not in body and "${" not in body, name
+        parts.append("%s:`%s`" % (name, body))
+    out = os.path.join(WEB, "shaders.js")
+    with open(out, "w") as f:
+        f.write("/* GENERATED by build/check_shader.py from web/shaders/*.glsl -- do not edit. */\n")
+        f.write("window.SHADERS={" + ",\n".join(parts) + "};\n")
+    print("web/shaders.js written (%d shaders)" % len(parts))
 
 
 if __name__ == "__main__":

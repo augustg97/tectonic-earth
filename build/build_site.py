@@ -13,6 +13,22 @@ import os, shutil, json, subprocess, sys
 
 import stamp_data_version
 
+# ASSET BASES (WP-10, D4). `--field-base URL` and `--sheet-base URL` publish a
+# site whose per-keyframe fields and world sheets live elsewhere (a GitHub
+# release, an object store, a second Pages site -- see publish_assets.py):
+# the URLs are stamped into index.html and ambient.html as window.FIELD_BASE
+# and window.SHEET_BASE, only the manifests are copied into docs/fields and
+# docs/sheets, and the repository stops carrying a gigabyte of textures per
+# data revision. Without them the site is self-contained, as before.
+def _arg(name):
+    if name in sys.argv:
+        i = sys.argv.index(name)
+        if i + 1 < len(sys.argv):
+            return sys.argv[i + 1].rstrip("/") + "/"
+    return ""
+FIELD_BASE = _arg("--field-base")
+SHEET_BASE = _arg("--sheet-base")
+
 # THE VALIDATORS RUN BEFORE THE DEPLOY, not after it. Every one of them is
 # read-only and the whole set takes a few seconds; the alternative is finding out
 # from the live site that a card lost its hedge or a label window slipped, which
@@ -115,8 +131,13 @@ if os.path.isdir(dst):
     shutil.rmtree(dst)
 # The "_lite" elevation copies exist only to squeeze the inlined artifact under
 # its 16 MB ceiling; the site serves the full-quality textures.
-shutil.copytree(os.path.join(WEB, "fields"), dst,
-                ignore=shutil.ignore_patterns("*_lite.webp"))
+if FIELD_BASE:
+    os.makedirs(dst, exist_ok=True)
+    shutil.copy2(os.path.join(WEB, "fields", "manifest.json"), os.path.join(dst, "manifest.json"))
+    print(f"fields: manifest only; the files are served from {FIELD_BASE}")
+else:
+    shutil.copytree(os.path.join(WEB, "fields"), dst,
+                    ignore=shutil.ignore_patterns("*_lite.webp"))
 
 DATA_FILES = ("index.html", "ambient.html", "three.min.js", "timeline.json", "boundaries.json",
               "plates_time.json", "plates.json", "hotspots.json", "labels.json",
@@ -125,6 +146,27 @@ DATA_FILES = ("index.html", "ambient.html", "three.min.js", "timeline.json", "bo
               "platerot.json",
               # screenshots for the in-app About one-pager overlay
               "about-globe.jpg", "about-map.jpg", "about-pangaea.jpg", "about-hydro.jpg")
+# THE ONE-FILE PAGE (WP-10, D5). The source is split -- index.html holds the
+# markup, style.css the styles, app.js the application, and web/shaders/*.glsl
+# the shaders, which check_shader.py validates and packs into shaders.js -- and
+# the deployed page is the three files inlined back into index.html, so the
+# site is still a single static page with no load-order or caching subtlety.
+_cs = subprocess.run([sys.executable, os.path.join(_here, "check_shader.py")], capture_output=True, text=True)
+if _cs.returncode != 0:
+    raise SystemExit("build_site: check_shader.py failed:\n" + _cs.stdout[-2000:])
+def inline_page(html):
+    css = open(os.path.join(WEB, "style.css")).read()
+    tag = '<link rel="stylesheet" href="style.css">'
+    assert html.count(tag) == 1, "style link"
+    html = html.replace(tag, "<style>\n" + css + "</style>")
+    for js in ("shaders.js", "app.js"):
+        tag = '<script src="%s"></script>' % js
+        assert html.count(tag) == 1, js
+        body = open(os.path.join(WEB, js)).read()
+        assert "</script" not in body, js
+        html = html.replace(tag, "<script>\n" + body + "</script>")
+    return html
+
 for name in DATA_FILES:
     src = os.path.join(WEB, name)
     # The app degrades gracefully if a data file is missing — the sidebars just
@@ -133,6 +175,9 @@ for name in DATA_FILES:
     if not os.path.exists(src):
         raise SystemExit(f"build_site: {name} is missing from {WEB}. "
                          f"Run build_webdata.py first.")
+    if name == "index.html":
+        open(os.path.join(SITE, name), "w").write(inline_page(open(src).read()))
+        continue
     shutil.copy2(src, os.path.join(SITE, name))
 
 # GitHub Pages otherwise runs the tree through Jekyll, which ignores files and
@@ -170,8 +215,23 @@ sdst = os.path.join(SITE, "sheets")
 if os.path.isdir(sdst):
     shutil.rmtree(sdst)
 if os.path.isdir(ssrc) and os.path.exists(os.path.join(ssrc, "manifest.json")):
-    shutil.copytree(ssrc, sdst)
-    print(f"sheets: {len(os.listdir(sdst)) - 1} world sheets")
+    if SHEET_BASE:
+        os.makedirs(sdst, exist_ok=True)
+        shutil.copy2(os.path.join(ssrc, "manifest.json"), os.path.join(sdst, "manifest.json"))
+        print(f"sheets: manifest only; the files are served from {SHEET_BASE}")
+    else:
+        shutil.copytree(ssrc, sdst)
+        print(f"sheets: {len(os.listdir(sdst)) - 1} world sheets")
+
+if FIELD_BASE or SHEET_BASE:
+    stamp = ("<script>window.FIELD_BASE=%s;window.SHEET_BASE=%s;</script>"
+             % (json.dumps(FIELD_BASE), json.dumps(SHEET_BASE)))
+    for page in ("index.html", "ambient.html"):
+        p = os.path.join(SITE, page)
+        html = open(p).read()
+        assert html.count("<head>") == 1, page
+        open(p, "w").write(html.replace("<head>", "<head>\n" + stamp, 1))
+    print("asset bases stamped into index.html and ambient.html")
 
 open(os.path.join(SITE, ".nojekyll"), "w").close()
 
