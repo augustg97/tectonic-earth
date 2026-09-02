@@ -11,12 +11,18 @@ build/*.png
 # (five build scripts read it), so it is kept deliberately.
 web/fields/
 !web/fields/manifest.json
+# World sheets are baked by build/bake_sheets.py; docs/sheets is the deployed copy.
+web/sheets/
 web/frames/
 web/artifact.html
 web/bluemarble.jpg
 
 # macOS Finder metadata
 .DS_Store
+
+# An old build output directory (build_site.py writes ../docs). It was left
+# holding 624 Finder conflict copies and nothing else, and they were tracked.
+site/
 
 # Finder / iCloud conflict copies: "fut_0005_e 2.webp" beside "fut_0005_e.webp".
 # The project lives under Desktop, so these keep reappearing in docs/fields

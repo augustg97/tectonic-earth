@@ -43,7 +43,7 @@ DECL = re.compile(r"\b(?:float|int|bool|vec2|vec3|vec4|mat2|mat3|mat4|"
 
 
 def shader_blocks(src):
-    for name in ("FRAG", "CFRAG", "VERT", "CVERT"):
+    for name in ("FRAG", "LFRAG", "CFRAG", "VERT", "CVERT"):
         m = re.search(r"\b(?:const|let|var)\s+" + name + r"\s*=\s*`", src)
         if not m:
             continue
@@ -178,7 +178,27 @@ def main():
             print("  !", b)
         return 1
     print("\nshader source clean")
+    write_copies(src)
     return 0
+
+
+# The plain-GLSL copies in web/shaders/ exist so the shaders can be read, diffed
+# and syntax-highlighted outside the 8,000-line page. They were hand-kept and
+# went stale: WP-10 found index__FRAG.frag.glsl 500 lines behind the shader
+# that shipped, which is worse than no copy at all. They are now written here,
+# from the same extraction the checks run on, every time the source is clean.
+COPIES = {"FRAG": "index__FRAG.frag.glsl", "LFRAG": "index__LFRAG.frag.glsl", "VERT": "index__VERT.vert.glsl",
+          "CFRAG": "index__CFRAG.frag.glsl", "CVERT": "index__CVERT.vert.glsl"}
+
+
+def write_copies(src):
+    out = os.path.join(HERE, "..", "web", "shaders")
+    os.makedirs(out, exist_ok=True)
+    for name, body, _ in shader_blocks(src):
+        if name in COPIES:
+            with open(os.path.join(out, COPIES[name]), "w") as f:
+                f.write(body.strip("\n") + "\n")
+    print("shader copies written to web/shaders/ (generated -- do not edit by hand)")
 
 
 if __name__ == "__main__":

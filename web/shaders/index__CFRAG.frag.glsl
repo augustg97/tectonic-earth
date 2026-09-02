@@ -1,4 +1,4 @@
-precision highp float;
+    precision highp float;
     uniform sampler2D rainA, rainB; uniform float mixf, uTime, uCloud;
     varying vec2 vUv; varying vec3 vN;
     uniform sampler2D uNz;

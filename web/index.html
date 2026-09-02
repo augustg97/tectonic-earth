@@ -1275,6 +1275,9 @@ async function loadAll(){
   DATA.art=DATA.art||{art:{},byType:{}};
   DATA.photos=DATA.photos||{};
   DATA.platerot=DATA.platerot||{slots:48,rot:{}};
+  // Shipped world sheets, if the bake script has run (WP-10 plan A3). Optional,
+  // and nothing waits on it: the app bakes its own sheets until it arrives.
+  fetch('sheets/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null).then(m=>{SHEET_MANIFEST=m;}).catch(()=>{});
   // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
   // Seven kilobytes, and the lake swap can be asked for at any age, so it is the
   // one field that is always resident.
@@ -1438,21 +1441,38 @@ function ensureFrames(age,block){
    queue of speculative ones. */
 const PREFETCH_CONCURRENCY=4;
 let _prefetchBusy=0, _prefetchOn=false;
+/* WHAT THE PUMP MAY FETCH (WP-10, A5.5). It used to warm the entire 138 MB
+   timeline into the browser cache on every visit, four files at a time, on
+   battery, on metered connections, and in hidden tabs. Now: a hidden tab
+   fetches nothing until it is shown again; on a metered connection
+   (navigator.connection.saveData) or on battery (navigator.getBattery, where
+   the browser offers it) it fetches only the keyframes within LEAN_RADIUS of
+   the viewer, two at a time -- enough lookahead for playback in either
+   direction, re-aimed on every completion as before -- and the full fill
+   happens only on mains power over an unmetered link. */
+const LEAN_RADIUS=4;
+let _lean=!!(navigator.connection&&navigator.connection.saveData), _charging=true;
+if(navigator.getBattery){navigator.getBattery().then(b=>{
+  const upd=()=>{_charging=b.charging;pumpPrefetch();};
+  b.addEventListener('chargingchange',upd);upd();}).catch(()=>{});}
+function prefetchRadius(){return (_lean||!_charging)?LEAN_RADIUS:DATA.timeline.length;}
 function nextWantedFrame(){
-  const n=DATA.timeline.length, c=frameAt(state.age).i;
-  for(let d=0;d<n;d++){
+  const n=DATA.timeline.length, c=frameAt(state.age).i, R=Math.min(n,prefetchRadius());
+  for(let d=0;d<=R;d++){
     for(const i of (d?[c-d,c+d]:[c])) if(i>=0&&i<n&&!frameSettled(i))return i;
   }
   return -1;
 }
 function pumpPrefetch(){
-  if(!_prefetchOn)return;
-  while(_prefetchBusy<PREFETCH_CONCURRENCY){
+  if(!_prefetchOn||document.hidden)return;
+  const cap=(_lean||!_charging)?2:PREFETCH_CONCURRENCY;
+  while(_prefetchBusy<cap){
     const i=nextWantedFrame(); if(i<0)return;
     _prefetchBusy++;
     loadFrame(i).then(()=>{_prefetchBusy--;pumpPrefetch();});
   }
 }
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pumpPrefetch();});
 function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
 
 /* PREDICTIVE GPU RESIDENCY (perf audit P3, WP-09 F4-F6). Fetch-and-decode
@@ -2063,16 +2083,30 @@ float baseElev(vec2 uv){
    compressed, which is why the first attempt at combed mountains measured a
    21% DROP in structure-tensor coherence. */
 float ridgeK(vec3 p){ float n=vnoise3(p); float r=1.0-abs(n*2.0-1.0); return r*r; }
+/* SCALE CONVENTION, because two were in use here a factor of 2*pi apart.
+   vnoise3(p*K) sampled on the unit sphere has a lattice cell of 6371/K km --
+   K=260 is the "24 km octave", K=145 is 44 km -- and its dominant wavelength
+   is about two cells. A SINE, sin(K*s) along a great-circle coordinate, has a
+   period of 2*pi*6371/K = 40030/K km. Comments in the retired mountain blocks
+   applied each formula to the other kind of term, which is how a "26 km"
+   grating came to be 163 km and a "26 km" tone band 4 km (WP-10 section 2.2).
+   Name a scale here only after checking which of the two it is. */
+/* RIDGED TRANSFORM RETIRED (WP-10, B1). detail3 used to blend the plain fBm
+   toward a ridged variant, (1-|2n-1|)^2 with octave gating, by the slope-driven
+   rug, so steep ground grew crests. Measured on the Himalaya frame against
+   its own difference image, that term's energy sat at 10-16 km and it was the
+   wormy crest-line texture the user read as squiggly: switching it off raised
+   structure-tensor coherence 0.390 -> 0.416 while the fold compression alone
+   left it unchanged. The variable rug stays in the signature so the callers
+   and the compression above it are untouched; a mountain model with real
+   crests -- eroded, strike-oriented, baked -- is WP-10 plan B. */
 float detail3(vec3 p, float rug){
-  float sm=0.0, rg=0.0, a=0.5, w=1.0;
+  float sm=0.0, a=0.5;
   for(int i=0;i<5;i++){
-    float n=vnoise3(p);
-    sm+=a*n;
-    float r=1.0-abs(n*2.0-1.0); r*=r;
-    rg+=a*r*w; w=clamp(r*1.5,0.25,1.0);
+    sm+=a*vnoise3(p);
     p*=2.07; a*=0.5;
   }
-  return mix(sm-0.5, (rg-0.42)*1.35, rug);
+  return sm-0.5;
 }
 // The procedural micro-relief added on top of the shipped field, split out so
 // the pole-filtered path below can add exactly the same detail to its own base.
@@ -2100,7 +2134,23 @@ float elevDetail(float z, vec3 d, float rug){
      foreland is a property of the crust's flexure, not a texture on top of it:
      the basin has to be able to change what biome grows there and where the
      coast runs, which is exactly what the Western Interior Seaway was. */
-  if(uFore>0.5 && gFore!=0.0) z -= gFore*smoothstep(1500.0,700.0,z);
+  /* A FILLED FORELAND IS A PLAIN, NOT A HOLE (WP-10, D1). The moat used to be
+     subtracted from the base elevation outright, and the water test then ran on
+     the result: measured on the shipped fields at 0 Ma, Patna (73 m, moat 126)
+     came out at -54 m, Guwahati at -24 and Dhaka at -21, so the whole Gangetic
+     plain -- 0.76% of present-day land -- drew as a shallow sea along the range
+     front. The deflection is real; the basin fills as fast as it subsides, so
+     dry ground keeps its foreland as a LOW PLAIN: the moat may lower it but never
+     below 30 m above the local water surface, and ground already lower than
+     that is left alone. Ground that is water in the field still deepens, which
+     is what a flooded foreland (the Western Interior Seaway) needs, and the
+     forebulge (gFore < 0) lifts as before. The substrate softening in main()
+     is untouched: that is where most of the basin's look comes from. */
+  if(uFore>0.5 && gFore!=0.0){
+    float zf=z-gFore*smoothstep(1500.0,700.0,z);
+    if(z>=wl && gFore>0.0) zf=max(zf, min(z, wl+30.0));
+    z=zf;
+  }
   // On the steepest submarine slopes the ridged creases alias into the dark
   // margin stipple; real slopes are smooth-swelled. Quench there, keep the
   // quarter-strength character on mid-slopes and shelves.
@@ -2552,7 +2602,17 @@ vec3 oceanColour(float z, vec3 sd, float latd){
 
 void main(){
   vec2 uv=vUv;
-  if(uMapProj>0.5){
+  if(uMapProj>1.5){
+    /* SHEET BAKE (WP-10, plan A). The fragment IS one texel of an equirect
+       world sheet: uv is the equirect coordinate straight off the quad, no
+       projection and no central-meridian shift. Everything below runs exactly
+       as it does for the globe, at mixf 0 on one keyframe, so the sheet is
+       that keyframe's whole shaded world; the lite material then draws the
+       globe and the map from two sheets per frame instead of from this shader.
+       fwidth() still works: a texel's footprint on the sphere is what every
+       scale-aware term should see, and it is what the sheet can carry. */
+    uv=vUv;
+  } else if(uMapProj>0.5){
     vec2 ll;
     if(!mollweideInv(vUv, ll)){ discard; }   // outside the map ellipse
     // The sphere samples with uv.y = 1 at the north pole (flipY puts image row
@@ -4165,48 +4225,15 @@ void main(){
        the maths. Next probe must read gFold through a channel-safe path: the
        obvious one is corrupted by the per-channel province tint, which is why
        its magnitude came back at 0.27 for a vector the field stores at 0.997. */
-    /* RIDGE AND VALLEY, AS TONE. Six rounds of trying to draw crests by
-       perturbing the NORMAL all failed, and the zoom sweep says why: one belt
-       measured coherence 0.480 close, 0.223 mid, 0.269 wide, with detail energy
-       RISING as it zoomed out. A normal perturbation is a lighting effect, and
-       lighting detail averages into the pixel the moment a ridge is narrower
-       than one. Tone does not -- which is exactly why the ocean's abyssal fabric
-       reads at whole-basin zoom while these mountains did not.
-
-       So the crests are drawn as ALBEDO, in two bands: one near 25 km, which is
-       the real spacing of ridges in the Zagros or the Valley-and-Ridge, and one
-       near 80 km, which is what still resolves when a whole orogen is on screen.
-       Both sampled in the fold-compressed domain so they run along strike, and
-       the axis is rotated by matDir into the same crust-fixed frame as the
-       sample point -- without that they are in two different frames and the
-       compression points somewhere arbitrary at every age except the present.
-
-       Smooth noise under a smooth sin^2 ridge transform: no creases, so nothing
-       downstream can trip on them, and no elevation is touched. */
-    /* THE HEIGHT BAR IS LOW AND THE FABRIC CARRIES THE GATE. An absolute
-       1,100-2,500 m ramp silently excluded deep time: measured, 3.4% of modern
-       land stands above 2,500 m against 0.7% at 300 Ma and 0.3% at 150 Ma, so
-       Pangaean belts sat at the very bottom of that ramp and got nothing. The
-       shortening field is already normalised to each age's own hypsometry
-       (build_tectonic.topo_fabric), so IT is the right relative gate, and the
-       height term only has to exclude genuine lowland. */
-    /* The height bar stays high, and the reason is measured. Lowering it to
-       350-1,250 m to reach the lower belts of deep time moved the PLAINS
-       control by 5.46 and bought the 300 Ma wide framing nothing (0.269 ->
-       0.268). Deep-time belts are genuinely low -- 0.7% of land above 2,500 m
-       at 300 Ma against 3.4% today -- and a gate loose enough to include them
-       is loose enough to comb Kansas. */
-    float mtnT=smoothstep(1100.0,2500.0,zp)*smoothstep(0.13,0.38,rug)
-              *smoothstep(0.15,0.45,gShort);
-    if(mtnT>0.004){
-      float St=1.0+2.8*smoothstep(0.15,0.45,gShort);
-      vec3 gFt=matDir(gFold);
-      vec3 pt=matDir(sdir);
-      pt=pt-gFt*(dot(pt,gFt)*(1.0-1.0/St));
-      float rA=sin(3.1416*fbm3(pt*1520.0+5.0)); rA*=rA;   // ~26 km
-      float rB=sin(3.1416*fbm3(pt*480.0+61.0)); rB*=rB;   // ~83 km
-      col*=1.0 + ((rA-0.5)*0.30 + (rB-0.5)*0.26)*mtnT;
-    }
+    /* RIDGES AS TONE: RETIRED (WP-10, B1). Two sin^2(fBm) bands multiplied
+       into the albedo, documented as 26 km and 83 km ridge spacing, were
+       measured from their own difference image: the first band's noise cell is
+       6371/1520 = 4.2 km (see the SCALE CONVENTION note above detail3), so at
+       continental zoom it drew pixel-scale contour loops -- the brushed-metal
+       sheen on Tibet -- and 78% of the term's energy was a flat brightening of
+       the belt, because sin^2 of a noise centred on 0.5 averages 0.85, not
+       0.5. Switching it off changed the frame by 2.9/255 and raised measured
+       coherence. The mountain model that replaces this is plan B of WP-10. */
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
@@ -4295,45 +4322,18 @@ void main(){
         ny+=(vnoise3(msd*5200.0+29.0)-0.5)*0.40*closeH;
       }
     }
-    /* FOLD-PARALLEL RIDGE AND VALLEY, HANDED TO THE NORMAL. This is H7's own
-       remedy applied to the tectonic fabric, and it is the only place it can
-       work. elevAt is differenced over da = +/-23.5 km, so as a filter on the
-       shipped field that stencil PEAKS at 94 km wavelength and is identically
-       BLIND at 47 km -- sin(2*pi*h/L) is zero there. Ridge-and-valley lives at
-       10-30 km, which is far inside the null, so no amount of baking can light
-       it: measured, a 900 m corrugation at 55 km baked straight into the
-       elevation field moved the Himalaya by a mean of 1.7/255, and 900 m is
-       already the top of the real range. The height field cannot carry this
-       band and the shader has been drawing it as TONE instead, which is why a
-       range still reads as one smooth prism however hard the tone is pushed --
-       tone does not turn to face the light.
-
-       Perturbing the NORMAL skips the stencil entirely, so the wavelength is
-       free. gFold is the fold axis as a tangent vector, so the corrugation
-       advances ACROSS it and the ridges come out running along strike, which
-       is what a fold belt does. The phase wanders on its own noise: a pure
-       sine is a ruled grating, and the sea floor already learnt that lesson
-       three hundred lines below. */
-    if(gShort>0.15){
-      float mtnN=smoothstep(900.0,2400.0,zp)*smoothstep(0.15,0.45,gShort);
-      vec3 fx=matDir(gFold);
-      vec2 fen=vec2(dot(fx,Eax),dot(fx,Nax));
-      float fl=length(fen);
-      if(mtnN>0.004 && fl>0.02){
-        fen/=fl;
-        vec2 acr=vec2(-fen.y,fen.x);              // across strike
-        vec3 acr3=Eax*acr.x+Nax*acr.y;
-        float sC=dot(msd,acr3);
-        /* K*L is ~6400 km in this domain -- the three octaves above read 145,
-           400 and 1100 for 44, 16 and 6 km. So 246 is ~26 km and 470 ~13.6 km,
-           which brackets the band the reference shows between parallel ridges. */
-        float w1=sin(sC*246.0+(vnoise3(msd*62.0+31.0)-0.5)*5.0);
-        float w2=sin(sC*470.0+(vnoise3(msd*128.0+7.0)-0.5)*4.0);
-        float corr=w1*0.64+w2*0.36;
-        float ampF=mtnN*(0.55+0.45*rug)*2.10;
-        nx+=corr*acr.x*ampF; ny+=corr*acr.y*ampF;
-      }
-    }
+    /* FOLD-PARALLEL GRATING IN THE NORMAL: RETIRED (WP-10, B1). Two sines
+       across strike, documented as 26 km and 13.6 km, added to the shading
+       normal. A sine's period on the unit sphere is 2*pi/K radians, so K=246
+       is 163 km and K=470 is 85 km, not 26 and 13.6: the term never drew
+       ridge-and-valley, it drew a handful of broad parallel stripes across
+       each belt (the difference image's energy rose toward 150-300 km and had
+       no peak near 26 km), which is why iteration 62 found its gain only at
+       wide zoom. It also built the across-strike axis in the unrotated local
+       frame and dotted it with the plate-rotated position, so outside the
+       present day the stripes mixed two frames. Removed rather than
+       recalibrated: WP-10 plan B replaces per-pixel gratings with baked,
+       eroded relief steered by the same gFold. */
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
        been in the surface field all along and was used only to tint -- "the
        app knows where the valleys on a plain are and declines to carve them"
@@ -5533,9 +5533,95 @@ void main(){
                   * (1.0 - smoothstep(-1100.0, -250.0, z));
     col=mix(col, salt, 0.80*saltAmt);
   }
-  gl_FragColor=vec4(col,1.0);
+  /* The sheet's alpha is the OCEAN MASK of this keyframe (0 water, 1 land),
+     which is what lets the lite material keep the coastline sharp between two
+     sheets: it takes the interpolated height's own verdict and blends only the
+     sheet(s) that agree with it. On screen alpha is always 1. */
+  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.0:1.0) : 1.0);
 }`;
 
+/* ================= THE LITE MATERIAL (WP-10, plan A2) =================
+   Draws the globe and the map from two baked WORLD SHEETS instead of running
+   the terrain shader per pixel. A sheet is one keyframe's whole shaded world
+   (the FRAG above rendered once into an equirect render target, uMapProj 2),
+   so per frame this only has to: carry each sheet toward the other on the
+   displacement warp exactly as the keyframe fields are carried, blend by mixf,
+   and add back the three things a sheet cannot hold -- the coastline's exact
+   position (from the interpolated height, so it still migrates rather than
+   dissolving), the schematic shading, and the globe's terminator and limb.
+   No noise, no field decoding: two sheet reads, two height reads, one warp.
+   Never put a backtick in here: it is a JS template literal like FRAG. */
+const LFRAG=`
+precision highp float;
+uniform sampler2D sheetA, sheetB, elevA, elevB, dispA;
+uniform float mixf, uWarp, uMapProj, uMapLon, uSchem;
+varying vec2 vUv; varying vec3 vVN;
+const float PI=3.14159265359, Z_RANGE=8000.0, V_DEG=12.0;
+float decElev(float e){ float d=e*2.0-1.0; return sign(d)*d*d*Z_RANGE; }
+bool mollweideInv(vec2 p, out vec2 lonlat){
+  float X=(p.x*2.0-1.0)*2.0;
+  float Y=(p.y*2.0-1.0);
+  if(X*X*0.25 + Y*Y > 1.0) return false;
+  float th=asin(clamp(Y,-1.0,1.0));
+  float lat=asin(clamp((2.0*th+sin(2.0*th))/PI,-1.0,1.0));
+  float c=cos(th);
+  if(abs(c)<1e-5) return false;
+  float lon=PI*X/(2.0*c);
+  if(abs(lon)>PI) return false;
+  lonlat=vec2(lon, lat);
+  return true;
+}
+vec2 warpAt(vec2 uv){
+  if(uWarp<0.5) return vec2(0.0);
+  vec3 d=texture2D(dispA,uv).rgb;
+  float dE=(d.r*2.0-1.0)*V_DEG;
+  float dN=(d.g*2.0-1.0)*V_DEG;
+  float tlat=uv.y*180.0-90.0;
+  float cl=max(cos(radians(tlat)),0.15);
+  return vec2(dE/(cl*360.0), dN/180.0);
+}
+void main(){
+  vec2 uv=vUv;
+  if(uMapProj>0.5){
+    vec2 ll;
+    if(!mollweideInv(vUv, ll)){ discard; }
+    float mlon=mod(ll.x+uMapLon+PI, 2.0*PI)-PI;
+    uv=vec2(mlon/(2.0*PI)+0.5, 0.5+ll.y/PI);
+  }
+  vec2 w=warpAt(uv);
+  vec2 ua=uv-mixf*w, ub=uv+(1.0-mixf)*w;
+  float h=mix(decElev(texture2D(elevA,ua).r), decElev(texture2D(elevB,ub).r), mixf);
+  vec4 cA=texture2D(sheetA,ua), cB=texture2D(sheetB,ub);
+  /* THE COASTLINE STAYS SHARP. Where the two sheets disagree about a pixel
+     (land in one keyframe, sea in the other) a plain blend would dissolve the
+     shoreline across the whole interval. The interpolated height says which
+     state the pixel is in NOW; blend only the sheet(s) that agree with it, and
+     fall back to the plain blend where neither does (lakes, dry basins). */
+  float water = h<0.0 ? 1.0 : 0.0;
+  float mA = abs((1.0-cA.a)-water)<0.5 ? 1.0 : 0.0;
+  float mB = abs((1.0-cB.a)-water)<0.5 ? 1.0 : 0.0;
+  float wA=(1.0-mixf)*mA, wB=mixf*mB, ws=wA+wB;
+  vec3 col = ws>1e-4 ? (cA.rgb*wA+cB.rgb*wB)/ws : mix(cA.rgb,cB.rgb,mixf);
+  if(uSchem>0.001){
+    float lum=dot(col,vec3(0.299,0.587,0.114));
+    vec3 sc=(water>0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    sc*=(0.82+0.36*lum);
+    col=mix(col,sc,uSchem);
+  }
+  if(uSchem<0.5 && uMapProj<0.5){
+    float sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
+    float lit=smoothstep(-0.15,0.20,sd);
+    vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
+    float dusk=exp(-pow(sd/0.12,2.0))*lit;
+    col=mix(nightCol, col, lit);
+    col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
+    float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0);
+    col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
+  }
+  gl_FragColor=vec4(col,1.0);
+}
+`;
+let liteMat=null;
 function initGL(){
   const cv=$('#gl');
   /* preserveDrawingBuffer costs a copy of the whole frame at this resolution
@@ -5577,6 +5663,15 @@ function initGL(){
   const SEG=matchMedia('(max-width:720px),(max-height:560px)').matches?[256,128]:[1024,512];
   globe=new THREE.Mesh(new THREE.SphereGeometry(1,SEG[0],SEG[1]),mat);
   scene.add(globe);
+  /* The lite material shares the terrain material's uniform OBJECTS for
+     everything it reads from the keyframe pair, so bindTextures() keeps both
+     materials in step without knowing the second one exists. */
+  const U=mat.uniforms;
+  liteMat=new THREE.ShaderMaterial({uniforms:{
+    sheetA:{value:null},sheetB:{value:null},
+    elevA:U.elevA,elevB:U.elevB,dispA:U.dispA,mixf:U.mixf,uWarp:U.uWarp,
+    uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,uDisp:U.uDisp},
+    vertexShader:VERT,fragmentShader:LFRAG});
   // the flat map is the same shader on a plane, so both views agree exactly
   mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
   mapMesh.visible=false; scene.add(mapMesh);
@@ -7918,11 +8013,15 @@ function bindTextures(){
 /* The climate/appearance uniforms interpolate straight from the timeline
    table, so they track the slider continuously whatever textures are bound --
    which is why a scrub keeps its sweeping seasons even while the crust steps. */
-function bindClimate(f){
+function bindClimate(f,ageOv,dryOv){
+  /* ageOv/dryOv exist for the sheet bake, which binds one keyframe at its own
+     age with the Messinian drawdown held off (a sheet is blended across ten
+     million years; a basin drained for two of them must not fade in and out). */
+  const age=(ageOv===undefined)?state.age:ageOv;
   /* The Messinian lasted 5.97-5.33 Ma: 640 kyr, an eighth of one keyframe gap.
      Gate it to a two-frame window around 5 Ma rather than let a 5 Myr keyframe
      imply the Mediterranean spent ten million years as a desert. */
-  mat.uniforms.uDry.value=(state.age>=4.4&&state.age<=6.6)?1.0:0.0;
+  mat.uniforms.uDry.value=(dryOv!==undefined)?dryOv:((age>=4.4&&age<=6.6)?1.0:0.0);
   const A=DATA.timeline[f.i], B=DATA.timeline[f.j], t=f.t;
   const L=(k)=>A[k]+(B[k]-A[k])*t;
   mat.uniforms.uTemp.value=L('temp');
@@ -7931,7 +8030,7 @@ function bindClimate(f){
      40 Ma, open grassland through the Oligocene and Miocene, C4 savanna from 8.
      Ramped rather than switched, because that is how it happened. The future
      keeps grass, so negative ages clamp to 1. */
-  {const a=Math.max(state.age,0);
+  {const a=Math.max(age,0);
    mat.uniforms.uGrass.value = a<=8 ? 1.0
      : a<=40 ? 1.0-0.45*(a-8)/32.0
      : a<=70 ? 0.55*(1.0-(a-40)/30.0)
@@ -7947,12 +8046,192 @@ function bindClimate(f){
      and the deep-sea carbonate sink, so blue is fully established by ~150 Ma
      and the sea greens going back into the Palaeozoic and Precambrian. Future
      and recent ages are the modern blue. */
-  const ag=state.age;
+  const ag=age;
   mat.uniforms.uSeaTint.value = ag<=150 ? 1.0 : ag>=680 ? 0.12
      : 1.0 - 0.88*(ag-150.0)/530.0;
   const mtex=bindTex('m',f.i); if(mtex)mat.uniforms.motA.value=mtex;
   mat.uniforms.uBounds.value=0;   // boundaries are drawn as lines, not shaded
   mat.uniforms.uMapProj.value=state.view==='map'?1:0;
+}
+/* ===================== WORLD SHEETS (WP-10, plan A) =====================
+   A sheet is one keyframe's whole shaded world, rendered once by the terrain
+   shader into an equirect render target (FRAG with uMapProj 2). The lite
+   material draws the globe and the map from two sheets per frame at a few
+   texture reads a pixel, so the terrain shader runs once per KEYFRAME instead
+   of once per PIXEL PER FRAME. Sheets are baked in strips across several
+   frames so a bake never lands as one hitch, the current pair plus the next
+   keyframe in the playback direction are kept warm, and a small pool of
+   render targets is recycled. ?sheet=N sets the width (2048..8192; default
+   4096, 2048 on low-memory devices), ?lite=1|0 forces the path on or off
+   (default auto: on once a screen pixel covers most of a sheet texel), and
+   ?bakefull=1 renders a whole sheet in one frame (verification only). */
+const _sq=new URLSearchParams(location.search);
+const SHEET_W=(()=>{const v=+_sq.get('sheet');if(v>=256&&v<=8192)return v;
+  return ((navigator.deviceMemory||8)<8)?2048:4096;})();
+const SHEET_H=SHEET_W/2;
+const SHEET_STRIPS=16, SHEET_STRIPS_PER_FRAME=_sq.has('bakefull')?16:4;
+const SHEET_KEEP=4;                 // render targets held: the pair, the next, one spare
+const SHEET_TEXEL_KM=40030/SHEET_W; // at the equator
+let liteMode=_sq.get('lite')==='1'?'on':_sq.get('lite')==='0'?'off':'auto';
+const SHEETS=new Map();             // keyframe index -> {rt|null, tex, w, ready, u}
+const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0;
+/* SHIPPED SHEETS. build/bake_sheets.py renders every keyframe's sheet on a
+   real GPU and encodes it into web/sheets/ with a manifest; when the manifest
+   is present the app decodes those instead of baking, which is what makes
+   playback free at any speed and what the ambient build runs on. A shipped
+   sheet may be any width; the LOD rule reads the width of the sheets in use.
+   ?noshipped=1 ignores the manifest (the bake script itself needs that). */
+const SHEET_V='20260902';
+let SHEET_MANIFEST=null;
+const _shippedPending=new Set(), _shippedMissing=new Set();
+function _shippedSheet(i){
+  if(_sq.has('noshipped')||!SHEET_MANIFEST||!SHEET_MANIFEST.files||_shippedMissing.has(i))return false;
+  const file=SHEET_MANIFEST.files[String(DATA.timeline[i].age)];
+  if(!file){_shippedMissing.add(i);return false;}
+  if(_shippedPending.has(i))return true;
+  _shippedPending.add(i);
+  fetch('sheets/'+file+'?v='+SHEET_V).then(r=>{if(!r.ok)throw 0;return r.blob();})
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+    .then(bm=>{
+      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      t.minFilter=THREE.LinearMipmapLinearFilter; t.magFilter=THREE.LinearFilter; t.generateMipmaps=true;
+      t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+      t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy()); t.needsUpdate=true;
+      _sheetDrop(i); SHEETS.set(i,{rt:null,tex:t,w:bm.width,ready:true,u:++_sheetClock});
+      _shippedPending.delete(i);
+    })
+    .catch(()=>{_shippedPending.delete(i);_shippedMissing.add(i);});
+  return true;
+}
+function _sheetDrop(i){
+  const s=SHEETS.get(i); if(!s)return;
+  if(s.rt)_rtPool.push(s.rt); else if(s.tex){if(s.tex.image&&s.tex.image.close)s.tex.image.close();s.tex.dispose();}
+  SHEETS.delete(i);
+}
+/* A slot for keyframe i's sheet, evicting the least recently used one that is
+   not in `want` when the pool is full. Returns null if nothing can be freed. */
+function _sheetSlot(i,want){
+  let s=SHEETS.get(i); if(s)return s;
+  if(SHEETS.size>=SHEET_KEEP){
+    let vi=-1,vu=1e18;
+    for(const [k,v] of SHEETS)if(!want.includes(k)&&v.u<vu){vu=v.u;vi=k;}
+    if(vi<0)return null;
+    _sheetDrop(vi);
+  }
+  const rt=_sheetRT();
+  s={rt:rt,tex:rt.texture,w:SHEET_W,ready:false,u:++_sheetClock}; SHEETS.set(i,s); return s;
+}
+function _sheetRT(){
+  if(_rtPool.length)return _rtPool.pop();
+  const rt=new THREE.WebGLRenderTarget(SHEET_W,SHEET_H,{depthBuffer:false,stencilBuffer:false});
+  const t=rt.texture;
+  t.minFilter=THREE.LinearMipmapLinearFilter; t.magFilter=THREE.LinearFilter;
+  t.generateMipmaps=false; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+  t.colorSpace=THREE.NoColorSpace;
+  t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
+  return rt;
+}
+function sheetReady(i){const s=SHEETS.get(i);return !!(s&&s.ready);}
+/* Every field kind of keyframe i decoded (or known absent) -- the bake binds
+   the keyframe as a still and must not wait on a texture mid-strip. */
+function _sheetKindsResident(i){
+  let ok=true;
+  for(const [k] of FIELD_KINDS){
+    const key=k+i, e=TEXCACHE.get(key);
+    if(!(e&&e.bm)&&!_bmMissing.has(key)){ok=false;ensureBitmap(k,i,true);}
+  }
+  return ok;
+}
+/* Bind keyframe i into the terrain material as a still: both taps of every
+   pair read the same keyframe, mixf 0, no warp, climate at the keyframe's own
+   age. The same contract the scrub-stepping branch of bindTextures uses. */
+function bindStill(i){
+  const u=mat.uniforms;
+  const T=(k)=>{const e=TEXCACHE.get(k+i);if(!(e&&e.bm))return null;
+    const t=getTex(k,i);if(t)_boundAt.set(k+i,_frameNo);return t;};
+  const es=T('e'); if(es){u.elevA.value=es;u.elevB.value=es;}
+  const rs=T('r'); if(rs){u.rainA.value=rs;u.rainB.value=rs;}
+  const ws=T('w'); if(ws){u.waterA.value=ws;u.waterB.value=ws;}
+  const ds=T('d'); if(ds){u.surfA.value=ds;u.surfB.value=ds;}
+  const os=T('o'); if(os){u.oceanA.value=os;u.oceanB.value=os;}
+  u.uWarp.value=0.0;
+  const ps=T('p'), pr=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[i].age)];
+  if(ps&&pr){u.plateA.value=ps;const Q=u.uPlateQ.value;
+    for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
+    u.uMat.value=1.0;} else u.uMat.value=0.0;
+  const ts=T('t'); if(ts)u.tectA.value=ts; u.uTect.value=ts?1.0:0.0;
+  const fs=T('f'); if(fs)u.foreA.value=fs; u.uFore.value=fs?1.0:0.0;
+  const ms=T('m'); if(ms)u.motA.value=ms;
+  u.mixf.value=0.0;
+  bindClimate({i:i,j:i,t:0},DATA.timeline[i].age,0.0);
+}
+/* Render the next few strips of the current bake job. Binds the job's
+   keyframe into the terrain material, draws the map quad into the sheet's
+   render target with the scissor on a band of rows, and leaves the material
+   for bindTextures() to rebind for the live frame -- which is why this runs
+   BEFORE bindTextures in loop(). Mipmaps are generated on the last strip only. */
+function _bakeStrips(){
+  const j=_bakeJob, rt=j.rt, u=mat.uniforms;
+  bindStill(j.i);
+  u.uMapProj.value=2.0; u.uTime.value=777.0; u.uSchem.value=0.0; u.uDisp.value=0.0;
+  const vis=[globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible];
+  globe.visible=false;atmo.visible=false;starfield.visible=false;clouds.visible=false;mapMesh.visible=true;
+  const prevMat=mapMesh.material; mapMesh.material=mat;
+  orthoCam.left=-0.5;orthoCam.right=0.5;orthoCam.top=0.5;orthoCam.bottom=-0.5;orthoCam.updateProjectionMatrix();
+  mapMesh.scale.set(1,1,1);mapMesh.position.set(0,0,0);
+  const prevRT=renderer.getRenderTarget();
+  const n=Math.min(SHEET_STRIPS_PER_FRAME,SHEET_STRIPS-j.row);
+  for(let k=0;k<n;k++){
+    const y0=Math.floor(j.row*SHEET_H/SHEET_STRIPS), y1=Math.floor((j.row+1)*SHEET_H/SHEET_STRIPS);
+    rt.scissorTest=true; rt.scissor.set(0,y0,SHEET_W,y1-y0); rt.viewport.set(0,0,SHEET_W,SHEET_H);
+    rt.texture.generateMipmaps=(j.row===SHEET_STRIPS-1);
+    renderer.setRenderTarget(rt); renderer.render(scene,orthoCam);
+    j.row++;
+  }
+  renderer.setRenderTarget(prevRT);
+  rt.scissorTest=false;
+  mapMesh.material=prevMat;
+  [globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible]=vis;
+  u.uMapProj.value=state.view==='map'?1:0;
+  if(j.row>=SHEET_STRIPS){const s=SHEETS.get(j.i);s.ready=true;s.u=++_sheetClock;_bakeJob=null;}
+}
+function _sheetWanted(f){
+  const n=DATA.timeline.length, w=[f.i,f.j];
+  // playback: the keyframe ahead; paused: both neighbours, so a scrub either way lands warm
+  if(state.playing){w.push(state.dir<0?f.i-1:f.j+1);}else{w.push(f.i-1,f.j+1);}
+  return [...new Set(w.filter(i=>i>=0&&i<n))];
+}
+function pumpBakes(f){
+  if(liteMode==='off'||!DATA.timeline||!renderer)return;
+  if(_bakeJob){_bakeStrips();return;}
+  const want=_sheetWanted(f);
+  for(const i of want){
+    if(sheetReady(i))continue;
+    if(_shippedSheet(i))continue;       // a shipped sheet is on its way
+    if(!_sheetKindsResident(i))continue;
+    const s=_sheetSlot(i,want); if(!s)return;   // everything held is wanted; next frame
+    _bakeJob={i:i,rt:s.rt,row:0}; _bakeStrips(); return;
+  }
+}
+/* Kilometres per screen pixel at the view centre, the LOD measure. */
+function footprintKm(){
+  const H=(renderer.domElement.height||innerHeight)||1;
+  if(state.view==='map'){const dw=((mapView&&mapView.dw)||innerWidth)*renderer.getPixelRatio();return 40030/dw;}
+  return 2*(state.zoom-1)*Math.tan(19*DEG)*6371/H;
+}
+/* Draw from sheets this frame? Auto switches on once a screen pixel covers
+   about half a sheet texel (a 2x magnification the eye forgives at wide zoom,
+   where the live path is spending its detail on aliasing anyway) and back off
+   with hysteresis, so the threshold never flaps. A scrub keeps the live path:
+   its stepping binds one keyframe as a still and the sheets would not match. */
+function useLite(f){
+  if(liteMode==='off'||_scrubbing)return false;
+  if(!(sheetReady(f.i)&&sheetReady(f.j)))return false;
+  if(liteMode==='on')return true;
+  const texel=40030/Math.min(SHEETS.get(f.i).w,SHEETS.get(f.j).w);
+  const r=footprintKm()/texel;
+  _liteOn = _liteOn ? r>0.35 : r>0.45;
+  return _liteOn;
 }
 /* Quality scale: what setPixelRatio actually gets. Auto starts at full and
    is stepped by the governor in loop(); a pinned choice bypasses it. */
@@ -8023,18 +8302,45 @@ function perfHud(now){
   const txt='frame '+ms.toFixed(1)+' ms ('+(1000/ms).toFixed(0)+' fps)  worst '+_phMax.toFixed(0)+' ms'+
     String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB'+
     String.fromCharCode(10)+'scale '+renderScale().toFixed(2)+' ('+(state.quality==='auto'?'auto:'+_autoScale:state.quality)+')'+
-    '   warp '+(mat.uniforms.uWarp.value>0.5?'on':'OFF')+'  mat '+(mat.uniforms.uMat.value>0.5?'on':'OFF');
+    '   warp '+(mat.uniforms.uWarp.value>0.5?'on':'OFF')+'  mat '+(mat.uniforms.uMat.value>0.5?'on':'OFF')+
+    String.fromCharCode(10)+'path '+(globe.material===liteMat?'SHEETS':'terrain')+'  sheets '+[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i).join(',')+
+    (_bakeJob?('  baking '+_bakeJob.i+' '+_bakeJob.row+'/'+SHEET_STRIPS):'')+'  '+footprintKm().toFixed(1)+' km/px';
   if(txt!==_phLast){_phEl.textContent=txt;_phLast=txt;}
   _phN=0;_phSum=0;_phMax=0;
 }
 let last=performance.now();
 const _camC=new THREE.Vector3(),_camUp=new THREE.Vector3(),_camN=new THREE.Vector3(),
       _camE=new THREE.Vector3(),_camH=new THREE.Vector3();
-function loop(now){
+function loop(now,force){
   const rawMs=now-last;
-  const dt=Math.min(.05,rawMs/1000);last=now;
+  /* TWO CLOCKS (WP-10, A5.1). dt is the per-frame step the camera and the
+     drag use, clamped at 50 ms so a stall never throws the view. Time itself
+     must not be clamped that way: at 3 fps the "18 Myr/s" slider was advancing
+     2.7 Myr/s, unevenly, because a 333 ms frame counted as 50. dtT is real
+     elapsed time, capped at half a second so a tab that was hidden resumes
+     where it was rather than leaping. */
+  const dt=Math.min(.05,rawMs/1000), dtT=Math.min(.5,rawMs/1000);last=now;
   qualityGovernor(rawMs);
   _frameNo++;
+  /* IDLE THROTTLE (WP-10, A5.6). requestAnimationFrame used to redraw the
+     whole planet sixty times a second while nothing on it changed -- a paused
+     app on a laptop is most of what this app is, and it was drawing the same
+     frame at full cost. When nothing is moving and no texture is on its way,
+     redraw five times a second; the picture is a still, and the sea sheen is
+     the only thing that notices. Any input, playback, drag, rotation, scrub,
+     resize, or a decode landing puts the loop straight back to full rate, and
+     APP.step() always renders (the verification harness depends on it). */
+  const idleSig=[state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,
+                 state.view,state.shade,state.mapLon,state.quality,_autoScale,
+                 innerWidth,innerHeight,TEXCACHE.size,_texBytes,_upQ.length,_bmPending.size,
+                 state.layers.boundaries,state.layers.vectors,state.layers.hotspots,
+                 state.layers.labels,state.selPlate].join('|');
+  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||
+               (state.layers.rotate&&state.spin>0)||_upQ.length>0||_bmPending.size>0;
+  if(idleSig!==loop._sig){loop._sig=idleSig;loop._sigAt=now;}
+  const idle=!force&&!moving&&(now-loop._sigAt)>1000;
+  if(idle&&(now-(loop._drawn||0))<200){requestAnimationFrame(loop);return;}
+  loop._drawn=now;
   // A scrub moves more than a keyframe per frame; the speculative queue is
   // then aimed at ages already behind the slider. Drop it, it re-fills.
   if(loop._la===undefined)loop._la=state.age;
@@ -8044,8 +8350,11 @@ function loop(now){
   _scrubbing=_scrubN>=2;
   loop._la=state.age;
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
+  // Sheet bakes render through the terrain material and leave it bound to a
+  // still; bindTextures() below rebinds the live pair, so bakes go first.
+  if(DATA.timeline)pumpBakes(curFrame());
   if(state.playing){
-    state.age+=state.dir*state.speed*dt;
+    state.age+=state.dir*state.speed*dtT;
     if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
     if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
     syncSlider();
@@ -8056,7 +8365,7 @@ function loop(now){
   // different every time it is entered.
   if(_rivWant>=0&&fieldImage('d',_rivWant))buildRivers();
   if((state.layers.rotate&&!dragging)||state.ambient){
-    state.rot+=dt*(state.ambient?0.12:0.05*state.spin);}
+    state.rot+=dtT*(state.ambient?0.12:0.05*state.spin);}
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
   updateContextCards(); // and the interval / supercontinent / glaciation cards
   // Drives only the sea-surface sheen; nothing about world state depends on it,
@@ -8064,6 +8373,16 @@ function loop(now){
   mat.uniforms.uTime.value=now*0.001;
   const f=bindTextures();
   queueUploads(f);   // warm the next keyframe's textures, one upload a frame
+  /* THE PATH DECISION (WP-10, A4). Sheets for the bound pair and a footprint
+     wide enough -> the lite material; otherwise the terrain shader as before. */
+  const lite=useLite(f);
+  const wantMat=lite?liteMat:mat;
+  if(globe.material!==wantMat){globe.material=wantMat;mapMesh.material=wantMat;}
+  if(lite){
+    const sa=SHEETS.get(f.i), sb=SHEETS.get(f.j);
+    liteMat.uniforms.sheetA.value=sa.tex; liteMat.uniforms.sheetB.value=sb.tex;
+    sa.u=++_sheetClock; sb.u=++_sheetClock; _liteFrames++;
+  }
   // overlays visibility & fade
   const fade=presentFade();
   // Hotspots and motion vectors are era-specific, so rebuild them whenever the
@@ -8512,7 +8831,7 @@ function buildLegend(){
                  backgrounded tab reports document.hidden, and the browser then
                  never fires requestAnimationFrame — the app looks frozen when
                  it is simply not being asked to draw. */
-              step(){loop(performance.now());},
+              step(){loop(performance.now(),true);},
               /* ---- VISUAL-VERIFICATION HARNESS ----------------------------
                  Every "I checked it on screen" claim in this project runs
                  through here, because doing it by hand went wrong in three
@@ -8744,6 +9063,34 @@ function buildLegend(){
                   return {saved: await r.text(), bytes: s.png.length};
                 }catch(e){ return {error: 'receiver not running? ' + e.message}; }
               },
+              /* WORLD SHEETS (WP-10). status() lists what is baked; bake(i)
+                 finishes keyframe i's sheet synchronously (all strips now);
+                 png(i) reads a finished sheet back as RGBA (alpha = ocean
+                 mask) for verification and for build/bake_sheets.py. */
+              sheets:{
+                status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,
+                  job:_bakeJob?{i:_bakeJob.i,row:_bakeJob.row}:null,
+                  ready:[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i)};},
+                bake(i){
+                  if(!_sheetKindsResident(i))return {pending:true};
+                  let s=SHEETS.get(i);
+                  if(s&&!s.rt){_sheetDrop(i);s=null;}          // re-bake over a shipped one
+                  if(!s){s=_sheetSlot(i,[i]);if(!s)return {error:'no slot'};}
+                  _bakeJob={i:i,rt:s.rt,row:0};
+                  while(_bakeJob)_bakeStrips();
+                  return {ready:true,i:i};
+                },
+                png(i){
+                  const s=SHEETS.get(i); if(!(s&&s.ready&&s.rt))return {error:'sheet '+i+' not baked here'};
+                  const w=SHEET_W,h=SHEET_H,px=new Uint8Array(w*h*4);
+                  renderer.readRenderTargetPixels(s.rt,0,0,w,h,px);
+                  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+                  const ctx=cv.getContext('2d'),im=ctx.createImageData(w,h);
+                  // readback row 0 is the bottom of the target (uv.y 0, the south pole); a PNG wants north on top
+                  for(let y=0;y<h;y++){im.data.set(px.subarray((h-1-y)*w*4,(h-y)*w*4),y*w*4);}
+                  ctx.putImageData(im,0,0);
+                  return {png:cv.toDataURL('image/png').slice(22),w:w,h:h};
+                }},
               gl:{mat,scene,globe,atmo,clouds,renderer,cam}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.

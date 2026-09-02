@@ -341,16 +341,36 @@ float baseElev(vec2 uv){
    Ridged noise (1-|2n-1|, squared, with each octave gated by the one above)
    produces exactly that. Blend the two by how steep the shipped field already
    is, so the Himalaya grow crests while the Amazon basin stays flat. */
+/* One ridged octave, as a scalar field. Ridge crests need the GRADIENT of a
+   field, not two independent noises used as the two perturbation components --
+   that second construction is isotropic however much the sampling domain is
+   compressed, which is why the first attempt at combed mountains measured a
+   21% DROP in structure-tensor coherence. */
+float ridgeK(vec3 p){ float n=vnoise3(p); float r=1.0-abs(n*2.0-1.0); return r*r; }
+/* SCALE CONVENTION, because two were in use here a factor of 2*pi apart.
+   vnoise3(p*K) sampled on the unit sphere has a lattice cell of 6371/K km --
+   K=260 is the "24 km octave", K=145 is 44 km -- and its dominant wavelength
+   is about two cells. A SINE, sin(K*s) along a great-circle coordinate, has a
+   period of 2*pi*6371/K = 40030/K km. Comments in the retired mountain blocks
+   applied each formula to the other kind of term, which is how a "26 km"
+   grating came to be 163 km and a "26 km" tone band 4 km (WP-10 section 2.2).
+   Name a scale here only after checking which of the two it is. */
+/* RIDGED TRANSFORM RETIRED (WP-10, B1). detail3 used to blend the plain fBm
+   toward a ridged variant, (1-|2n-1|)^2 with octave gating, by the slope-driven
+   rug, so steep ground grew crests. Measured on the Himalaya frame against
+   its own difference image, that term's energy sat at 10-16 km and it was the
+   wormy crest-line texture the user read as squiggly: switching it off raised
+   structure-tensor coherence 0.390 -> 0.416 while the fold compression alone
+   left it unchanged. The variable rug stays in the signature so the callers
+   and the compression above it are untouched; a mountain model with real
+   crests -- eroded, strike-oriented, baked -- is WP-10 plan B. */
 float detail3(vec3 p, float rug){
-  float sm=0.0, rg=0.0, a=0.5, w=1.0;
+  float sm=0.0, a=0.5;
   for(int i=0;i<5;i++){
-    float n=vnoise3(p);
-    sm+=a*n;
-    float r=1.0-abs(n*2.0-1.0); r*=r;
-    rg+=a*r*w; w=clamp(r*1.5,0.25,1.0);
+    sm+=a*vnoise3(p);
     p*=2.07; a*=0.5;
   }
-  return mix(sm-0.5, (rg-0.42)*1.35, rug);
+  return sm-0.5;
 }
 // The procedural micro-relief added on top of the shipped field, split out so
 // the pole-filtered path below can add exactly the same detail to its own base.
@@ -378,7 +398,23 @@ float elevDetail(float z, vec3 d, float rug){
      foreland is a property of the crust's flexure, not a texture on top of it:
      the basin has to be able to change what biome grows there and where the
      coast runs, which is exactly what the Western Interior Seaway was. */
-  if(uFore>0.5 && gFore!=0.0) z -= gFore*smoothstep(1500.0,700.0,z);
+  /* A FILLED FORELAND IS A PLAIN, NOT A HOLE (WP-10, D1). The moat used to be
+     subtracted from the base elevation outright, and the water test then ran on
+     the result: measured on the shipped fields at 0 Ma, Patna (73 m, moat 126)
+     came out at -54 m, Guwahati at -24 and Dhaka at -21, so the whole Gangetic
+     plain -- 0.76% of present-day land -- drew as a shallow sea along the range
+     front. The deflection is real; the basin fills as fast as it subsides, so
+     dry ground keeps its foreland as a LOW PLAIN: the moat may lower it but never
+     below 30 m above the local water surface, and ground already lower than
+     that is left alone. Ground that is water in the field still deepens, which
+     is what a flooded foreland (the Western Interior Seaway) needs, and the
+     forebulge (gFore < 0) lifts as before. The substrate softening in main()
+     is untouched: that is where most of the basin's look comes from. */
+  if(uFore>0.5 && gFore!=0.0){
+    float zf=z-gFore*smoothstep(1500.0,700.0,z);
+    if(z>=wl && gFore>0.0) zf=max(zf, min(z, wl+30.0));
+    z=zf;
+  }
   // On the steepest submarine slopes the ridged creases alias into the dark
   // margin stipple; real slopes are smooth-swelled. Quench there, keep the
   // quarter-strength character on mid-slopes and shelves.
@@ -404,7 +440,20 @@ float elevDetail(float z, vec3 d, float rug){
      is an orogen, and leaves cratons isotropic where they belong. */
   vec3 dF=d;
   if(z>=wl && uTect>0.5 && gShort>0.30){
-    float S=1.0+1.9*smoothstep(0.30,0.78,gShort);
+    /* GATE RECALIBRATED TO THE FIELD'S ACTUAL RANGE (2026-08-03). This demanded
+       gShort above 0.30 before it compressed anything, and the field never went
+       there: measured, the HIMALAYA read 0.365 and the ANDES 0.055, so the
+       smoothstep returned ~0 and the anisotropy that makes a range read as
+       combed had never once run in a real orogen. That is why our mountains
+       looked like extruded prisms. The field now carries a topographic fabric
+       as well as a strain one (build_tectonic.topo_fabric), so orogens read
+       0.33 to 0.54 while open ocean stays at 0.08 and the Amazon plain at 0.02
+       -- and the gate is set to separate exactly those. */
+    /* STRENGTH 1.45, NOT 2.2, and the number could only be chosen once the
+       fabric actually arrived. Every constant here was set while gFold was the
+       zero vector, so none of them had ever been seen: at 2.2 the Himalaya came
+       back combed like brushed metal, which is too much anisotropy for rock. */
+    float S=1.0+1.45*smoothstep(0.15,0.45,gShort);
     dF=d-gFold*(dot(d,gFold)*(1.0-1.0/S));
   }
   float n=detail3(dF*260.0,rugw), n2=detail3(dF*70.0+13.7,rugw);
@@ -500,18 +549,38 @@ float elevAt(vec2 uv, float rug){
    showing up as straight horizontal bands of vegetation. Blur across latitude
    when sampling (the atmosphere mixes meridionally anyway) and warp the lookup
    slightly so biome edges wander. */
-float rainTap(sampler2D t, vec2 uv){
-  float dv=1.0/384.0;
+float rainTap(sampler2D t, vec2 uv, float dvs){
+  /* THE BLUR IS AN UNMASKED AVERAGE, and rainfall is zero over the sea, so on
+     land smaller than the kernel it averages the island with the ocean around
+     it. dv is 2 texels of a 768-row field, so this reaches +-0.94 degrees of
+     latitude; Maui is 0.4 degrees tall, which leaves it the centre weight of
+     0.36 and nothing else. Its field says 0.471 and the shader read 0.17, so it
+     drew desert -- the identical fault this round fixed in the solve's own
+     anti-banding smooth, one stage further downstream.
+     The caller scales dv by how much land is actually nearby: at zero the five
+     taps collapse to one point and the weights already sum to 1. */
+  float dv=(1.0/384.0)*dvs;
   return texture2D(t,uv).r*0.36
        + (texture2D(t,uv+vec2(0.0,dv)).r + texture2D(t,uv-vec2(0.0,dv)).r)*0.21
        + (texture2D(t,uv+vec2(0.0,2.0*dv)).r + texture2D(t,uv-vec2(0.0,2.0*dv)).r)*0.11;
 }
-float rainAt(vec2 uv){
+/* The damp parameter scales the warp by how continental the pixel is, and it exists because
+   the warp was moving the sample off small islands entirely. At full strength
+   the displacement reaches 0.0355 in uv -- 12.8 degrees of longitude, 6.4 of
+   latitude -- which is a perturbation on Siberia and a teleport on Cuba, which
+   is 1.4 degrees tall. Measured before this: the shader read h = 0.000 at Cuba
+   and 0.008 at Florida where the field stores 0.383 and 0.477, so both drew as
+   desert on wet ground.
+   The caller passes fetch (share of the air's path over land: 0.42-0.44 on
+   maritime margins, 0.99-1.00 in continental interiors), which is exactly the
+   quantity that separates the two cases. A floor keeps a tenth of the wander
+   everywhere so no edge goes ruler-straight -- iteration 43's fix stands. */
+float rainAt(vec2 uv, float damp, float blur){
   vec3 wd=dirFromUv(uv);
-  vec2 warp=vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
-             + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016;
+  vec2 warp=(vec2(fbm3(wd*1.7+7.7)-0.5, fbm3(wd*1.9+19.1)-0.5)*0.055
+             + vec2(fbm3(wd*5.1+3.3)-0.5, fbm3(wd*5.7+27.7)-0.5)*0.016)*damp;
   vec2 q=uv+warp;
-  return mix(rainTap(rainA,q), rainTap(rainB,q), mixf)*RF_MAX;
+  return mix(rainTap(rainA,q,blur), rainTap(rainB,q,blur), mixf)*RF_MAX;
 }
 
 /* Water colour is mostly what the body of water does to light: clear ocean
@@ -553,8 +622,144 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      the single biggest reason ours read as patchwork -- measured, our >250 km
      spectral band carried 20-47% of the energy against the reference's 13-16%,
      and this ramp was most of it. The contrast belongs in the relief. */
-  float t=clamp((z + 6300.0)/4600.0, 0.0, 1.0);
-  vec3 c=hue*(0.585+0.755*t);
+  /* Zero at -5,500 m, not -6,300 (iteration 138), and the offset is taken from
+     the reference rather than swept. Blue Marble's ocean luminance per 500 m of
+     depth steps +0.2 from -6,000 to -5,500 and then +3.7, +7.8, +7.1, +6.7,
+     +6.5, +6.1, +6.0 above it: FLAT in the deepest water, linear from -5,500 up.
+     Our ramp was spending 800 m of its range on the flat part, which is both
+     wasted contrast and, because the deepest water covers whole basin floors,
+     the most expensive place to spend it in broad variance.
+
+     Moving the offset is nearly free where narrowing the range is not:
+
+         domain              depth span   broad share
+         (z+6300)/4600 old         1.78          0.49
+         (z+5500)/4500 this        2.23          0.50
+         (z+5600)/3300             2.19          0.55
+         reference                 3.22          0.48
+
+     Same span for a sixth of the cost, because the shape now matches where the
+     reference actually puts its contrast. */
+  float t=clamp((z + 5500.0)/4500.0, 0.0, 1.0);
+  /* 0.220 + 1.200, a 6.45x linear span, up from 2.29x (iteration 136).
+     Widening this alone was a bad trade -- it bought depth contrast by pushing
+     the >250 km variance share off the reference. Paired with dropping the age
+     band above it is not a trade at all: both numbers move toward Blue Marble
+     together, measured over the equatorial Atlantic at matched resolution.
+
+         variant                     depth span    broad share
+         shipped before                    1.35           0.52
+         age band off                      1.38           0.40
+         age off + this ramp               1.78           0.49
+         reference (Blue Marble)           3.22           0.48
+
+     Still 45% short on span, and that remainder is the sRGB curve: a 6.45x
+     LINEAR ramp is only about 1.6x once encoded, so reaching 3.22 needs a
+     deep end far darker than a colour this saturated can carry. Recorded, not
+     chased. */
+  /* CONVEX IN t, exponent 1.25 (iteration 139), and the curvature is the point.
+     Band-by-band against the reference our shape error was concentrated entirely
+     in the deep: at -5,250 m we drew 19.4 against its 9.3, at -4,750 26.4
+     against 15.5, and from -4,500 upward we tracked it to within 20%. A linear
+     ramp cannot fix that -- lowering its floor drags the whole curve down.
+
+     Raising t to a power above 1 darkens small t and leaves large t alone, which
+     is exactly the correction the bands asked for. It also LOWERS the >250 km
+     variance share rather than raising it, because it moves contrast off the
+     basin floors, which are vast and flat, and onto the margins and flanks,
+     which are narrow. That is why the reference gets more depth span than us at
+     less broad variance: its contrast is where the bathymetry changes fastest.
+
+         curve                 depth span   broad share
+         linear (before)             2.23          0.50
+         t^1.25, lo 0.150            2.83          0.44
+         t^2.00, lo 0.150            3.24          0.25
+         reference                   3.22          0.48
+
+     t^2 hits the span exactly and empties the broad-variance budget doing it.
+     1.25 is the joint fit: combined error against the two reference numbers
+     falls from 0.349 to 0.204. Exponents below 1 were tried first and made both
+     numbers worse -- t^0.5 lifts the deep end rather than dropping it. */
+  /* FITTED TO BLUE MARBLE'S ABSOLUTE LUMINANCE, not to a ratio (user feedback:
+     "our ocean floor is far too dark"). Measured at matched 7.4 km/px, the old
+     ramp was not uniformly dark -- it was too FLAT, so the whole sea read as
+     abyss:
+
+       depth      -5500  -4500  -3500  -2500  -1500   -600
+       Blue Marble   9.3   18.8   33.1   38.4   46.9   54.0
+       was          14.2   20.9   28.7   32.8   34.7   39.4
+
+     BUT BLUE MARBLE IS THE WRONG REFERENCE FOR THE LEVEL, and fitting it was
+     this round's first mistake. It is a PHOTOGRAPH of a surface that returns
+     almost no light from 5 km down, so matching it exactly (achieved: RMS 2.21)
+     left the mid-Pacific still reading black -- the user's complaint unchanged.
+     The brief is Google-Earth-equivalent, and Google Earth draws a BATHYMETRIC
+     ramp that stays legibly blue at every depth, because its job is to show the
+     sea floor rather than to reproduce a satellite's exposure.
+
+     So Blue Marble governs the SHAPE (span, broad-variance share) and the
+     visualisation governs the LEVEL. Measured on the Hawaii and Bahamas
+     framings:
+
+       ramp                 abyss   shelf median   shelf clipped
+       original 0.150/1.270    10             32           0.14%
+       Blue Marble fit          9             --              --
+                0.400/2.300    26             61           4.93%
+                0.550/2.000    34             65           1.90%
+       chosen   0.700/1.600    --             --           0.29%
+
+     RAISED AGAIN, AND FLATTENED, on the second round of user feedback: still
+     too dark on the globe, and the present-day map "looks oddly contrasted".
+     Those are one fault, not two -- the whole-globe ocean ran p10 33, p50 43,
+     p90 88, p98 152, which is a dark bulk under a long bright tail. Raising A
+     and cutting B lifts the bulk and pulls the tail in together:
+
+       ramp            p10  p50  p90  p98   p90/p10   shelf clip
+       0.550/2.000      33   43   88  152      2.67        1.85%
+       0.700/1.600      41   50   87  144      2.13        0.29%
+       0.850/1.300      46   57   88  141      1.90        0.26%
+       1.000/1.050      50   65   91  139      1.80        0.23%
+
+     0.700/1.600 lifts the globe median from 43 to 50 and takes the contrast
+     ratio from 2.67 to 2.13.
+
+     AND THE TRADE IS STRUCTURAL, which is worth stating rather than tuning
+     around. The measured depth span falls from 2.81 (at 0.400/2.300) to 1.38
+     here, and going further to 0.850/1.300 only reaches 1.29 -- in this range
+     the span is set by A, not B. A power ramp cannot deliver both a bright
+     abyss and a strong depth contrast: the span is (A+B)/A in linear, so a 2.8x
+     sRGB span on a floor of A=0.85 needs A+B near 8, and the shallow end runs
+     out of headroom far below that (23% of shelf water already clips at
+     A+B=3.8). The fix is a shoulder -- a tone curve that compresses the top
+     while holding the bottom lifted -- rather than a larger exponent. Named
+     here as the next step so the next round does not rediscover the wall.
+
+     A raised to 0.550 on the user's call after seeing 0.400 on screen. B came
+     DOWN with it, and that is the A/B separation paying off rather than a
+     compromise: holding A at 0.550 and sweeping B gave an abyss of 34 at every
+     value, while shelf clipping ran 8.76% / 1.90% / 0.33% for B of 2.300 /
+     2.000 / 1.800. The floor the user asked for, at a fifth of the clipping.
+
+     A sets the floor and B the top, which a control established: two ramps with
+     the same A and different B came back with the same abyss (26) and shelf
+     clipping of 4.9% against 23.4%. The clipping that remains is the sunlit
+     carbonate banks, which really are near-white, and the 99.5th percentile
+     barely moved (208 -> 211) -- it is the bulk of the shelf that brightened,
+     not the top of it.
+
+     The deepest water was BRIGHTER than the reference and everything above it
+     darker. audit_ocean_tone never saw it because it measures a depth SPAN and
+     a variance SHARE -- both ratios, and a ratio is improved by darkening the
+     deep end, which is exactly what iteration 131-134 did taking the span from
+     1.35 to 2.83. It now checks the absolute level too.
+
+     A IS NOT THE ABYSS OFFSET, which cost a sweep to learn: hue*(A+B*t^P)
+     means A shifts the ENTIRE ramp, and a control that cut A alone from 0.150
+     to 0.050 moved every band down about six levels. The deepest band is set by
+     A, the shallowest by A+B, so the span is A/(A+B) -- and matching the
+     reference's 5.8x in sRGB needs about 51x in linear, against the 9.5x that
+     was here. Hence B near fifty times A. */
+  vec3 c=hue*(0.700+1.600*pow(t,1.35));
   /* Shallow water is where hue genuinely changes, and the reason is BOTTOM
      RETURN -- light that reaches the floor and comes back up. That is not a
      linear ramp in depth, it is an exponential: the path is travelled twice and
@@ -593,44 +798,16 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      the palette-lace fix requires. Graded by the SMOOTHED depth, so the
      grader itself cannot flicker. */
   float zsb = (gZSm>-9000.0) ? mix(z, gZSm, mix(0.55, 0.85, smoothstep(-40.0,-160.0,gZSm))) : z;
-  /* CARBONATE BANKS (G9), ON THE SHALLOW COLOUR ITSELF. The paragraph above
-     already says bright shallow water needs a bright FLOOR and not merely a
-     shallow one -- but nothing ever acted on it, so every tropical shelf on the
-     planet got the same pale blue. Measured on the Bahamas frame: R/B 0.59 and
-     G/B 0.74, against a reference near (110,200,205) where R/B is 0.54 and
-     green stands as high as blue at 0.98. That difference IS the floor.
-     Turquoise is carbonate sand reflecting back through a few tens of metres of
-     clear water; a dark clastic or basalt floor returns the water column's blue
-     alone, which is what we were drawing everywhere.
-
-     It modifies shallow instead of mixing over the finished colour, and that
-     placement is the whole trick: iteration 47 tried the latter three times and
-     moved G/B by 0.01 each time, because the machinery below already blends
-     shallow in at up to 0.92 -- anything added afterwards competes with it
-     rather than riding it.
-
-     Two concessions to the field, both deliberate. The depth window is the
-     SHELF, not the bank top: a real Bahama bank stands in under ten metres and
-     this bathymetry is a 10 km grid that never gets that shallow over any area,
-     so a -64 m gate fired on 0.3% of the frame. And the mask is near-binary,
-     because a carbonate platform either is one or is not -- three soft gates
-     multiplied down to an effective 0.1, which is the arithmetic behind those
-     three failed attempts. */
-  /* NO NOISE MASK. A near-binary mask was meant to stop three soft gates
-     multiplying down to nothing -- but it traded dilution for a coverage
-     lottery: at a 78-degree wavelength the Bahamas either fall inside a blob or
-     they do not, by the phase of the noise, and measured they did not. Only
-     0.68% of the frame changed. There is no need to guess where platforms are:
-     warm shallow shelves ARE carbonate-dominated, everywhere except where a
-     big river buries them in mud, so latitude and depth carry it alone. */
-  float carb = smoothstep(33.0, 25.0, abs(latd))
-             * smoothstep(-165.0, -25.0, zsb);
-  /* The target is SATURATED, not pale. A first pass used (0.325,0.755,0.740)
-     and the banks came out white-blue: too much red for turquoise. The
-     reference's (110,200,205) has red at barely half of blue, which is what
-     carbonate sand under clear water actually returns once the column has taken
-     the red out of it. */
-  shallow = mix(shallow, vec3(0.185,0.660,0.645), clamp(carb, 0.0, 0.92));
+  /* CARBONATE BANKS: REVERTED (iteration 49). The G9 tint shipped in iteration
+     48 put saturated magenta blobs -- (250,128,254), 181 pixels on one frame --
+     into shallow water in valleys and rift lakes, and a user reported them.
+     Bisected to this exact line: with the mix disabled the count goes to 0.
+     Every operation involved looks bounded, and rewriting the two gates as
+     clamped linear ramps (in case a decreasing smoothstep was the culprit) did
+     NOT fix it, so the mechanism is still unexplained. The feature bought G/B
+     0.78 -> 0.81 on the Bahamas against a 0.98 target -- a marginal gain that is
+     not worth a visible artefact, so it comes out until the cause is understood.
+     See MODEL-GAPS iteration 49 for what was ruled out. */
   float botRet = exp(zsb/70.0);                      // two-way attenuation
   float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
   c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
@@ -689,7 +866,17 @@ vec3 oceanColour(float z, vec3 sd, float latd){
 
 void main(){
   vec2 uv=vUv;
-  if(uMapProj>0.5){
+  if(uMapProj>1.5){
+    /* SHEET BAKE (WP-10, plan A). The fragment IS one texel of an equirect
+       world sheet: uv is the equirect coordinate straight off the quad, no
+       projection and no central-meridian shift. Everything below runs exactly
+       as it does for the globe, at mixf 0 on one keyframe, so the sheet is
+       that keyframe's whole shaded world; the lite material then draws the
+       globe and the map from two sheets per frame instead of from this shader.
+       fwidth() still works: a texel's footprint on the sphere is what every
+       scale-aware term should see, and it is what the sheet can carry. */
+    uv=vUv;
+  } else if(uMapProj>0.5){
     vec2 ll;
     if(!mollweideInv(vUv, ll)){ discard; }   // outside the map ellipse
     // The sphere samples with uv.y = 1 at the north pole (flipY puts image row
@@ -1347,7 +1534,6 @@ void main(){
   vec2 Lh=mix(vec2(-0.55,0.55), -0.55*c + 0.55*vec2(-c.y,c.x), pwL);
   float zp=max(z,0.0);
   float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
-  float Rf=rainAt(uv);
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
@@ -1368,6 +1554,39 @@ void main(){
             + vec2(vnoise3(sdir*820.0+5.0)-0.5,  vnoise3(sdir*820.0+37.0)-0.5)*1.05)*uTexel;
   vec3 SP=mix(texture2D(surfA,wA(uv+rwarp)).rgb, texture2D(surfB,wB(uv+rwarp)).rgb, mixf);
   float drain=SP.r, hardness=SP.g, fetchv=SP.b;
+  // Rainfall AFTER the surface sample, so the warp can be damped by fetch.
+  /* THE FLOOR HAS TO FADE TOO. The damp above kept a tenth of the wander
+     everywhere so no biome edge runs ruler-straight, and on Cuba -- 1.4 degrees
+     tall -- a tenth is a perturbation. On Kauai, half a degree across, 12% of
+     the warp is still 2.4 degrees of longitude, which is the whole island and
+     then some. It did not show until the subtropical fix made mid-ocean islands
+     wet enough for audit_island_biomes to care: Maui's field went to 0.471 and
+     the render still drew desert, so the gate failed the build. The field was
+     right and the lookup was wrong.
+
+     Fade the floor itself on the same quantity, so a continental interior and a
+     large island keep their full wander and genuinely tiny land keeps none. */
+  /* HOW BIG IS THE LAND UNDER THIS PIXEL? Ask directly, because fetch cannot
+     answer it. The damp began as a fetch ramp with a 0.12 floor, so no biome
+     edge would run ruler-straight; on Cuba, 1.4 degrees tall, a tenth of the
+     warp is a perturbation, and on Kauai, half a degree across, it is 2.4
+     degrees of longitude -- the whole island and then some.
+
+     Fading the floor on fetch fixed Hawaii and broke Crete, which is the same
+     size but sits between two continents and so reads a HIGH fetch. Fetch
+     measures how maritime the air is; the warp cares how large the land is,
+     and in the Mediterranean those two disagree completely.
+
+     Four taps of the elevation field at about 1.5 degrees say it outright: an
+     island whose neighbours are all sea gets no wander, a continental interior
+     gets all of it, and a coast gets the part that is over land. */
+  float dLon=1.5/360.0, dLat=1.5/180.0;
+  float landNear=0.25*(step(wl, baseElev(uv+vec2( dLon,0.0)))
+                     + step(wl, baseElev(uv+vec2(-dLon,0.0)))
+                     + step(wl, baseElev(uv+vec2(0.0, dLat)))
+                     + step(wl, baseElev(uv+vec2(0.0,-dLat))));
+  float sizeq=smoothstep(0.10,0.65,landNear);
+  float Rf=rainAt(uv, (0.12+0.88*smoothstep(0.42,0.88,fetchv))*sizeq, sizeq);
   /* TRUNK DRAINAGE (fidelity round iter 2). The per-texel channel network is
      invisible at continental zoom -- one texel wide however large the river.
      What reads from orbit is the CORRIDOR: the Ob, Lena and Amazon are broad
@@ -1518,6 +1737,21 @@ void main(){
     ari*=mix(mix(1.10,0.88,contl), 1.06, recyc);
     ari+=clamp((420.0-zp)/900.0,0.0,1.0)*0.06
         +smoothstep(0.25,0.62,drain)*0.20+clamp(trunk,0.0,0.5)*0.34;
+    /* THE ECOTONE JITTER IS GATED ON A STALE PROXY, AND FIXING THAT COSTS MORE
+       THAN IT BUYS. The jitter above is weighted by edge, a parabola computed
+       from h0 -- the humidity BEFORE the relief, continentality, drainage and
+       trunk terms shift ari by as much as 0.43 on a 0.58-wide window. Where
+       those terms carry a committed core across the threshold, the boundary is
+       drawn with no jitter at all. Re-gating on the final value was built and
+       measured: 280 Ma banding 90.0 to 87.7 at full strength 79.6, but the
+       North American prairie fell from 2.98 land-greenness to 1.41 and the
+       Congo lost 12%. The reason is the palette, not the gate -- a symmetric
+       jitter at a grassland margin trades dark green for bright tan, and tan is
+       far brighter, so half-and-half reads as tan. Additive-in-h (84.8), a
+       continental-scale wander (72.0, prairie to -0.58) and a dry-side gate
+       (73.1) were each measured and each cost more green than they bought.
+       Left as-is deliberately: the win this round is upstream, in the corridor
+       widths, which cost 0.24 greenness for 43 banding points. */
     float h=smoothstep(0.03,0.61,ari);
     /* Warmth is a smooth function of latitude, so biome edges derived from it
        alone run dead straight across the map. Real vegetation boundaries
@@ -1548,10 +1782,10 @@ void main(){
        makes a grassland green is the grass. Pull the two grassy stops toward the
        stony/sandy ones by (1 - uGrass). */
     vec3 dryCold = mix(vec3(0.545,0.533,0.443), vec3(0.501,0.478,0.420), 1.0-uGrass);
-    vec3 dryMid  = mix(vec3(0.729,0.653,0.443), vec3(0.690,0.608,0.451), 1.0-uGrass);
+    vec3 dryMid  = mix(vec3(0.862,0.578,0.318), vec3(0.774,0.575,0.376), 1.0-uGrass);
     vec3 dry = (w<0.5)
       ? mix(dryCold, dryMid, clamp(w*2.0,0.0,1.0))
-      : mix(dryMid, vec3(0.855,0.678,0.447), clamp((w-0.5)*2.0,0.0,1.0));
+      : mix(dryMid, vec3(0.985,0.660,0.372), clamp((w-0.5)*2.0,0.0,1.0));
     vec3 mid = (w<0.5)
       ? mix(vec3(0.282,0.373,0.263), vec3(0.494,0.557,0.302), clamp(w*2.0,0.0,1.0))
       : mix(vec3(0.494,0.557,0.302), vec3(0.678,0.594,0.345), clamp((w-0.5)*2.0,0.0,1.0));
@@ -1560,9 +1794,19 @@ void main(){
        The wet end is a CLOSED CANOPY -- the Amazon from orbit is nearly as
        dark as the ocean beside it; taiga is a dark conifer green, not
        grey-olive; the hot sand is warm orange, not beige. */
+    /* WET STOPS PULLED BACK 22% TOWARD NEUTRAL, luminance preserved.
+       Iteration 84 widened these to close a between-biome separation deficit
+       (0.67x of reference). Measured now in normalised chroma against the same
+       reference, it OVERSHOT: separation ours 63.8 against Blue Marble's 54.7,
+       and the Congo's mean 45.8 against 36.0. The Sahara meanwhile matches
+       almost exactly (-18.0 against -18.6), so the error is entirely at the wet
+       end and a global scalar would have moved the desert too.
+       At 0.22 the two land together -- Congo 34.9 and separation 53.1 measured
+       at 0.25, interpolated here -- which is the first time these two have moved
+       the same way rather than trading against each other. */
     vec3 wet = (w<0.5)
-      ? mix(vec3(0.155,0.259,0.184), vec3(0.173,0.345,0.176), clamp(w*2.0,0.0,1.0))
-      : mix(vec3(0.173,0.345,0.176), vec3(0.075,0.235,0.098), clamp((w-0.5)*2.0,0.0,1.0));
+      ? mix(vec3(0.128,0.209,0.151), vec3(0.145,0.281,0.151), clamp(w*2.0,0.0,1.0))
+      : mix(vec3(0.186,0.320,0.188), vec3(0.059,0.165,0.077), clamp((w-0.5)*2.0,0.0,1.0));
     col = (h<0.45) ? mix(dry,mid,clamp(h/0.45,0.0,1.0))
                    : mix(mid,wet,pow(clamp((h-0.45)/0.55,0.0,1.0),0.85));
     /* Savanna is not just "half-way to forest". It is grass with trees standing
@@ -1620,7 +1864,7 @@ void main(){
     float flatn=clamp(1.0-rug*2.6,0.0,1.0);
     float lowl=clamp((900.0-zp)/1100.0,0.0,1.0);
     float allu=flatn*lowl*clamp(h*1.8,0.0,1.0);
-    col=mix(col, mix(vec3(0.373,0.404,0.267), vec3(0.267,0.361,0.220), h), allu*0.42);
+    col=mix(col, mix(vec3(0.373,0.404,0.267), vec3(0.267,0.361,0.220), h), allu*0.30);
 
     /* Continentality. Air that has crossed two thousand kilometres of land
        arrives with nothing left in it, and the ground shows it: dust, loess and
@@ -1653,10 +1897,10 @@ void main(){
        still anti-aliased in screen space so it sharpens to a clean thread when
        you zoom in. drain is normalised per age so the network is a fixed thin
        fraction of land at any time, which keeps this from swamping a wet age. */
-    float rvalley=smoothstep(0.14,0.44,drain);
-    col=mix(col, mix(vec3(0.298,0.420,0.259), vec3(0.220,0.392,0.224), h), rvalley*0.60);
-    float ripcore=smoothstep(0.34,0.58,drain);
-    col=mix(col, mix(vec3(0.231,0.388,0.263), vec3(0.157,0.337,0.212), h), ripcore*0.65);
+    float rvalley=smoothstep(0.36,0.60,drain);
+    col=mix(col, mix(vec3(0.298,0.420,0.259), vec3(0.220,0.392,0.224), h), rvalley*0.26);
+    float ripcore=smoothstep(0.56,0.74,drain);
+    col=mix(col, mix(vec3(0.231,0.388,0.263), vec3(0.157,0.337,0.212), h), ripcore*0.30);
     /* A THIN meandering thread, not a solid slab. The flow-accumulation field is
        valley-scale (~20 km), so thresholding it into solid blue fills a wide,
        low-relief basin (the Amazon, the Pangaean interiors) as rectangular
@@ -1888,6 +2132,19 @@ void main(){
        that would hang snow on Andean peaks that are bare all year. */
     float snowline=ela-380.0;
     float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
+    /* ...BUT ABOVE THE LINE THAT GATE HAS ALREADY BEEN PASSED. The ELA is where
+       accumulation balances ablation, and it already carries the climate --
+       scaling snow by CURRENT rainfall on top of it counts the same aridity
+       twice. Where Rf is 0 the floor pins snowfall at 0.30, so no crest
+       anywhere can be more than thirty per cent snow however far above its
+       snowline it stands. Probed at the Everest framing: the crest reaches
+       zp 5834 against a snowline of 5140, clears it by 694 m, scores a full
+       1.0 on the height term -- and is then multiplied down to 0.30. That is
+       why our Himalaya rendered DARKER than the Tibetan plateau below it.
+       Faded in over a kilometre of excess height, so an arid massif sitting
+       near its own line still comes out brown; the Atacama's six-kilometre
+       volcanoes are the control and they stay bare. */
+    snowfall=mix(snowfall,1.0,clamp((zp-snowline)/1100.0,0.0,1.0)*0.80);
     // Same story as the glacier above: the polar temperature-only substitution
     // that used to sit here was a disc, so it is gone. Snow is the ELA band
     // everywhere, and the filtered elevation keeps it clean at the pole.
@@ -1981,6 +2238,20 @@ void main(){
     alpRock*=mix(vec3(1.0), hue, 0.55);
     col=mix(col, alpRock, alp*0.82);
     gAlp=alp;
+    /* BIOME CHROMA: TWO QUANTITIES, ONE KNOB, AND THE KNOB WAS THE WRONG TOOL.
+       Iteration 81 measured band-passed chroma VARIATION at 1.9x Blue Marble's
+       and compressed toward each pixel's luminance to close it. Measuring the
+       other half showed why that was a trade and not a fix: the biome-to-biome
+       chroma SPREAD -- Sahara -31.1 against Congo +3.7 in the reference, a range
+       of 34.8 -- is only 23.4 in ours, already 0.67x the real Earth's. Our
+       deserts are not warm enough and our forests not green enough RELATIVE TO
+       EACH OTHER, while colour wanders too much within each. A global scalar
+       moves both together: keep 0.80 took the variation from 1.90x to 1.57x of
+       reference and the separation from 0.67x to 0.54x. Roughly a wash by the
+       numbers and a loss on the thing anyone actually sees, which is whether a
+       desert reads as a desert.
+       Reverted. The real fix is two-part and belongs in the palette itself:
+       widen the spread BETWEEN biome stops, narrow the drift WITHIN each. */
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
   }
@@ -2207,6 +2478,26 @@ void main(){
        rock, so mountains gain rocky flanks with vegetation in the valleys --
        one of the strongest photoreal cues on a global view. Slope comes from
        the TRUE relief normal (before the grain below perturbs it). */
+    /* Crests are still not drawn here. FIVE constructions have been tried and
+       measured against high-pass structure-tensor coherence; every one added
+       texture and none added lineation. See MODEL-GAPS iterations 51-53 for the
+       full list so none of them is repeated. What IS established: the fabric
+       field now carries a real strike in every orogen (iteration 52), and the
+       domain compression provably elongates features -- verified numerically
+       outside the shader, gradient ratio across:along 0.52 -> 2.13 at S=4.4.
+       So the fault is in how this shader consumes the axis, not in the data or
+       the maths. Next probe must read gFold through a channel-safe path: the
+       obvious one is corrupted by the per-channel province tint, which is why
+       its magnitude came back at 0.27 for a vector the field stores at 0.997. */
+    /* RIDGES AS TONE: RETIRED (WP-10, B1). Two sin^2(fBm) bands multiplied
+       into the albedo, documented as 26 km and 83 km ridge spacing, were
+       measured from their own difference image: the first band's noise cell is
+       6371/1520 = 4.2 km (see the SCALE CONVENTION note above detail3), so at
+       continental zoom it drew pixel-scale contour loops -- the brushed-metal
+       sheen on Tibet -- and 78% of the term's energy was a flat brightening of
+       the belt, because sin^2 of a noise centred on 0.5 averages 0.85, not
+       0.5. Switching it off changed the frame by 2.9/255 and raised measured
+       coherence. The mountain model that replaces this is plan B of WP-10. */
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
@@ -2295,6 +2586,18 @@ void main(){
         ny+=(vnoise3(msd*5200.0+29.0)-0.5)*0.40*closeH;
       }
     }
+    /* FOLD-PARALLEL GRATING IN THE NORMAL: RETIRED (WP-10, B1). Two sines
+       across strike, documented as 26 km and 13.6 km, added to the shading
+       normal. A sine's period on the unit sphere is 2*pi/K radians, so K=246
+       is 163 km and K=470 is 85 km, not 26 and 13.6: the term never drew
+       ridge-and-valley, it drew a handful of broad parallel stripes across
+       each belt (the difference image's energy rose toward 150-300 km and had
+       no peak near 26 km), which is why iteration 62 found its gain only at
+       wide zoom. It also built the across-strike axis in the unrotated local
+       frame and dotted it with the plate-rotated position, so outside the
+       present day the stripes mixed two frames. Removed rather than
+       recalibrated: WP-10 plan B replaces per-pixel gratings with baked,
+       eroded relief steered by the same gFold. */
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
        been in the surface field all along and was used only to tint -- "the
        app knows where the valleys on a plain are and declines to carve them"
@@ -2309,15 +2612,34 @@ void main(){
     float dN=mix(texture2D(surfA,wA(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,
                  texture2D(surfB,wB(uv+rwarp+vec2(0.0,-uTexel.y*dstep))).r,mixf)-drain;
     float aridg=1.0-clamp(moistw*1.4,0.0,1.0);
+    /* THE HEIGHT CUTOFF IS A PROXY FOR A PLATEAU, and on its own it fails on
+       every range. Killing the carve above 3400 m keeps valleys off the flat
+       top of Tibet, which is right -- but the Himalaya, Karakoram, Andes and
+       Alps all stand above that line and are the most dissected ground there
+       is. Branch on what was meant: a plateau is FLAT high ground.
+       This only bites now that _d actually carries headwaters. Tried alone it
+       moved the Everest frame by 0.17/255, because the drainage field was
+       empty there; the field fix tried alone moved it by 0.18, because this
+       gate was still zeroing the result. Each was masking the other. */
+    float plateauw=1.0-smoothstep(0.12,0.32,rug);
     float carve=smoothstep(mix(0.18,0.10,aridg),mix(0.62,0.46,aridg),drain)
-               *(1.0-smoothstep(2400.0,3400.0,zp));
+               *(1.0-smoothstep(2400.0,3400.0,zp)*plateauw);
     nx+=dE*(carve*2.6+trunk*1.4); ny+=dN*(carve*2.6+trunk*1.4);
     /* ...and the perturbation itself grows as the camera closes. The amplitude
        was tuned at continental zoom, where it is a texture; up close it is
        the TERRAIN, competing with a 35 km base slope that has none of its own
        detail. Scaling by the pixel footprint keeps every wide framing exactly
        as verified while letting a close pass read as dissected ground. */
-    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0+0.55*closeG));
+    /* FLAT GROUND CARRIES HALF THE TEXTURE IT WAS GIVEN. Measured against
+       Blue Marble over a 30-degree Sahara box: the real thing has a high-pass
+       sigma of 8.74, and we drew 17.72 -- twice the texture, at half the
+       organisation (coherence 0.125 against 0.240). An erg is smooth and
+       lineated; what we put there was isotropic grain at full amplitude
+       because the existing rug gate bottoms out at 0.36 and never goes lower.
+       Fade it further on genuinely flat ground, which is where the reference
+       is quietest and where isotropic noise reads most obviously as noise. */
+    float flatq=1.0-smoothstep(0.14,0.46,rug);
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0-0.70*flatq)*(1.0+0.55*closeG));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
        Real ocean floor is corrugated: long, low hills 2-5 km across, elongated
@@ -2361,7 +2683,34 @@ void main(){
     float distDeg = CO_D0*(exp(crustCo*CO_K)-1.0);    // true degrees from the axis
     float crustAge = clamp(distDeg/52.0, 0.0, 1.0);   // 0 at the axis, 1 on the oldest surviving crust
     vec2 spr = ocn.gb*2.0-1.0;                        // spreading dir (east,north)
-    float aniso = clamp(length(spr)*1.5, 0.0, 1.0);  // 0 where undefined / plateau
+    float aniso = clamp(length(spr)*1.5, 0.0, 1.0);
+    /* FADE THE FABRIC BY PIXEL FOOTPRINT (user: the sea floor looks great up
+       close, and at wide zoom has "an unnatural accordion-like effect").
+
+       The fabric is combed along the spreading direction at a fixed WORLD
+       wavelength of a few kilometres. Once a pixel is wider than half that, it
+       aliases, and an aliased directional comb is not noise -- it is a moire,
+       which reads as regular nested corrugations. Band-passing the wide render
+       showed exactly that, and forcing aniso to zero removed it completely
+       while leaving the real seamount chains untouched. That pair is what
+       calibrated everything below.
+
+       gFineFade could not do this job: it floors at 0.15, feeds a dozen other
+       systems, and at these framings it is already saturated -- three different
+       fade windows through it returned byte-identical numbers, which is a stuck
+       knob, not a null. So the fabric gets its own term.
+
+       Measured as rms against the fabric-off render, same geography, two zooms:
+
+         fade window     close 1.4   wide 2.2   kept close   left wide
+         none                8.026      3.823        100%        100%
+         0.75..1.40          4.977      0.164         62%          4%
+         0.90..1.50          6.609      0.125         82%          3%
+         1.10..1.70          7.897      0.127         98%          3%
+
+       1.10..1.70 keeps the close-zoom look intact and takes the accordion out
+       of the wide view. Below 0.90 it starts eating the thing the user likes. */
+    aniso *= 1.0-smoothstep(1.10,1.70,sfoot);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
     /* CRUSTAL AGE as tone -- OUTSIDE the fabric branch below. The depth ramp is
        compressed between 3 and 5 km, so without this the whole spreading system
@@ -2379,7 +2728,14 @@ void main(){
        because young crust IS shallower -- this term was adding a second,
        independent age band on top of it, and two broad tonal fields over the
        same basin is exactly the >250 km excess the spectrum showed. */
-    col *= 1.0 + (1.0-smoothstep(0.02,0.40,crustAge))*0.11*deepw;
+    /* REMOVED (iteration 136). The comment above already argued this term is a
+       second broad tonal field over the same basin as the depth ramp, and the
+       measurement agrees: switching it off drops the >250 km variance share
+       from 0.52 to 0.40 and changes the depth span by 0.03. It was spending
+       0.12 of the ocean's broad-tone budget and buying no depth contrast, on a
+       quantity the reference sets at 0.48. That freed budget is spent on the
+       ramp below instead, where it does encode depth. */
+    col *= 1.0;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
     if(aniso*deepw > 0.003){
@@ -2941,6 +3297,51 @@ void main(){
       col *= 1.0 + clamp((knL-kn1)*5.5,-1.0,1.0)*spotm*0.24;
     }
 
+    /* VOLCANIC APRON -- the texture that was MISSING where the fabric is
+       switched off. The abyssal-hill machinery above is deliberately gated out
+       wherever the ground has prominence (flatw), so spreading fabric does not
+       get combed across a guyot or a plateau, and that gate is right. What was
+       wrong is that nothing replaced it: around the Hawaiian swell, which has
+       prominence over an area far larger than the islands, the sea floor
+       rendered as a smooth blue blank several hundred kilometres across, while
+       the fabric resumed in the corners of the frame. That blank is what reads
+       as "generic and flat".
+
+       A real volcanic apron is not smooth. It is hummocky: the Hawaiian flanks
+       are buried in giant landslide debris -- the Nuuanu and Wailau fields are
+       hundreds of blocks, some of them kilometres across -- over rubble and
+       flow lobes. So the region the fabric vacates gets a hummocky grain rather
+       than nothing, gated on exactly the term that suppressed the fabric, so
+       the two hand over instead of leaving a hole between them. Isotropic, not
+       lineated: debris fields have no grain direction, which is precisely what
+       distinguishes them from the combed crust around them. */
+    /* KEYED TO EXACTLY WHAT THE FABRIC GIVES UP, and NOT to deepw. The first
+       version used prominence and deepw, and barely touched the blank: deepw
+       fades everything out above about 2,400 m, and the Hawaiian swell -- the
+       broad rise the islands sit on -- is shallower than that, so the same gate
+       that silences the fabric there silenced its replacement too. The blank is
+       precisely the complement of flatw, so that is what fills it, and the
+       hand-over is exact by construction. Held off the coastal shelf by depth
+       alone, so beaches and banks keep their own treatment. */
+    float apFlat = (1.0-smoothstep(90.0,320.0,length(vec2(gE,gN))))
+                 * (1.0-smoothstep(120.0,520.0,prom));
+    float apr = (1.0-apFlat) * gFineFade * smoothstep(-60.0,-300.0,z);
+    if(apr > 0.004){
+      vec3 apd = matDir(sdir);
+      vec2 aT = vec2(vnoise3(apd*470.0+11.0)-0.5, vnoise3(apd*470.0+77.0)-0.5)*1.45
+              + vec2(vnoise3(apd*1150.0+31.0)-0.5, vnoise3(apd*1150.0+91.0)-0.5)*0.80
+              + vec2(fbm3(apd*230.0+53.0)-0.5, fbm3(apd*230.0+137.0)-0.5)*0.55;
+      nrm = normalize(nrm + vec3(aT*apr*0.72, 0.0));
+      /* The TONE term carries most of the work here, and deliberately. The swell
+         around a big edifice is shallow, and shallow water is drawn pale and
+         nearly face-on, so a perturbed normal barely changes its shade -- the
+         probe showed both gates fully open across the pale zone while it still
+         read flat. A grain that does not depend on the lighting angle is what
+         makes that surface legible. */
+      col *= 1.0 + ((vnoise3(apd*470.0+11.0)-0.5)*0.72
+                   +(vnoise3(apd*1150.0+31.0)-0.5)*0.38)*0.30*apr;
+    }
+
     /* SUBMARINE CANYONS on the continental slope. The slope is the steepest,
        most dissected surface on Earth -- every margin on a real chart is combed
        with gullies cut by turbidity currents running downhill -- and ours was a
@@ -3047,14 +3448,14 @@ void main(){
       vec3 CAX=vec3(0.0,0.0,1.0);            // fixed axis, same reason as SAX
       vec3 c0=sdir*CF - CAX*(gZSm*(CF/78000.0));
       vec3 c1=(sdir+Eax*(cstep/CF))*CF - CAX*(gZSm*(CF/78000.0));
-      float k0=vnoise3(c0)+0.5*vnoise3(c0*2.6+17.0);
-      float k1=vnoise3(c1)+0.5*vnoise3(c1*2.6+17.0);
+      float k0=vnoise3(c0)+0.10*vnoise3(c0*2.6+17.0);
+      float k1=vnoise3(c1)+0.10*vnoise3(c1*2.6+17.0);
       float gully=(k1-k0);
       float TF=CF*2.9;                       // tributaries
       vec3 d0=sdir*TF - CAX*(gZSm*(TF/78000.0));
       vec3 d1=(sdir+Eax*(cstep/TF))*TF - CAX*(gZSm*(TF/78000.0));
-      float t0=vnoise3(d0)+0.5*vnoise3(d0*2.6+41.0);
-      float t1=vnoise3(d1)+0.5*vnoise3(d1*2.6+41.0);
+      float t0=vnoise3(d0)+0.10*vnoise3(d0*2.6+41.0);
+      float t1=vnoise3(d1)+0.10*vnoise3(d1*2.6+41.0);
       // the fine set is throttled where the coarse one already has a canyon,
       // which is what makes them read as tributaries joining a trunk rather
       // than as a second independent comb laid over the first
@@ -3070,10 +3471,56 @@ void main(){
          slope wall runs hundreds of metres below it. prom is the IRLS
          regional's own residual, global and robust, and it separates the
          two populations cleanly. */
-      float canyG = cany * smoothstep(-350.0, -1100.0, gZSm)
-                         * smoothstep(-150.0, -750.0, prom);
-      nrm=normalize(nrm+vec3(gully*9.0*canyG, 0.0, 0.0));
-      col *= 1.0 - clamp(abs(gully)*2.4*canyG, 0.0, 0.34);   // shadowed incisions
+      /* GATES OPENED UPWARD (user feedback: the shelf-to-slope transition has
+         lost its definition; the reference shows canyons cutting right up to
+         the shelf break). These started at -350..-1100 m depth and needed prom
+         below -150 m, so the canyon system only reached full strength on the
+         DEEP slope and the upper slope -- the part a viewer sees first -- got
+         nothing.
+
+         Measured on the Taiwan margin at 1.84 km/px, binning by the shipped
+         field rather than by brightness:
+
+           zone                         shipped   gates opened   canyG forced 1
+           shelf   (0..-200 m)           0.0736         0.0742           0.0806
+           slope   (-200..-2500 m)       0.0562         0.0639           0.0806
+           basin   (below -3500 m)       0.0688         0.0695           0.0717
+
+         The slope was the FLATTEST zone on the map, below even the abyssal
+         plain, which is backwards: a continental slope is the most incised part
+         of a real sea floor. Forcing the gate fully open shows the system is
+         capable of 0.0806 there and costs the basin only 4%, so what remains
+         between 0.0639 and 0.0806 is cany's own geological gates -- slopeBand,
+         shelfHi, gScov -- which exist to keep canyons off open basin floor and
+         are not worth dismantling blind.
+
+         A control also ruled out the other suspect: relaxing slopeq, which
+         fades the n2 generator by 88% on slopes, moved the slope number by
+         0.0001. That lever is dead here and was left alone. */
+      float canyG = cany * smoothstep(-120.0, -600.0, gZSm)
+                         * smoothstep(-60.0, -400.0, prom);
+      /* AMPLITUDE BACK DOWN, GATES LEFT OPEN (user: the sea floor reads fuzzy;
+         make the cliffs and ledges smoother and more defined). Iteration 149
+         opened the canyon depth gates AND raised the amplitude 9 -> 14 with the
+         shadow 2.4 -> 3.2. The gates were the part that mattered; the amplitude
+         was the part that made stipple.
+
+         gully is a finite DIFFERENCE of value noise, so it is pixel-scale by
+         construction, and the shading-contrast expansion added the same round
+         multiplies it. Measured over Mediterranean water as the share of pixels
+         more than 22 levels below their own 15 px neighbourhood, in blobs whose
+         median size is 2 px:
+
+           cany / shadow / fine octave   stipple   definition   slope zone
+           14 / 3.2 / 0.50 (was)          12.70%       12.716       0.0910
+            7 / 1.8 / 0.15                 9.94%       11.686       0.0888
+            5 / 1.3 / 0.10                 8.97%       11.292       0.0876
+
+         Stipple falls 29% for 4% of the slope definition iteration 149 bought,
+         which is the trade the user asked for. The gates stay where they are --
+         canyons still reach the upper slope, which is what gave the definition. */
+      nrm=normalize(nrm+vec3(gully*5.0*canyG, 0.0, 0.0));
+      col *= 1.0 - clamp(abs(gully)*1.3*canyG, 0.0, 0.28);   // shadowed incisions
     }
   }
   /* (The polar ocean used to be flooded with a single deep tone here, to hide
@@ -3137,11 +3584,52 @@ void main(){
      exactly where there is most of it -- because the deep field was carrying
      artefacts that shading would have amplified: the 105 m quantisation
      staircase, and a specular highlight keyed to the sea-floor normal. Both are
-     dealt with at source now, so there is nothing left to hide, and the
-     reference is emphatic on this point: below the shelf break its ocean is one
-     colour and EVERY feature you can see is hillshade. */
+     dealt with at source now, so there is nothing left to hide.
+
+     THE CLAIM THAT USED TO END THIS COMMENT IS FALSE, and it was the
+     justification for the narrow ramp above. It read: "the reference is
+     emphatic on this point: below the shelf break its ocean is one colour and
+     EVERY feature you can see is hillshade." Measured directly on the same
+     image (iteration 132), Blue Marble's ocean luminance inside the ABYSS
+     ALONE -- -6,000 to -3,500 m, no shelf, no slope -- correlates +0.893 with
+     depth and runs 8.9 at -5,750 to 27.7 at -3,750. That is a 3.1x span within
+     the abyss and a tighter correlation than the ocean as a whole. Its abyss is
+     not one colour; it is steeply graded by depth, and hillshade rides on top.
+
+     Ours, over the same bands, spans 1.12x and sits at luminance 51 where the
+     reference sits at 9. Whatever compresses it is NOT the depth ramp (widening
+     it 4.5x buys 14%), the specular, the glint, the abyssal fabric, sRGB
+     encoding, or the atmosphere shell -- all measured and eliminated. Open, with
+     audit_ocean_tone.py as the instrument. */
   float hw=(z<wl)? mix(0.94,0.90,clamp(-z/5200.0,0.0,1.0)) : 1.0;
-  col*=((1.0-hw)+hw*shade);
+  /* SUBMARINE RELIEF CONTRAST, expanded about the mean rather than about 0.5.
+     The comment above records that widening the depth ramp 4.5x bought 14% of
+     contrast and that specular, glint, fabric, sRGB and the atmosphere shell
+     were all measured and eliminated. This round closed that off arithmetically:
+     the rendered span is (A+B)/A, so a bright abyss (A~0.70, luminance 50) with
+     a Blue-Marble span (5.8x sRGB = 51x linear) needs A+B near 36, against a
+     shelf that already clips 23% of its water at A+B=3.8. THE DISPLAY RANGE IS
+     THE WALL. A shoulder caps the top but cannot widen what fits beneath it,
+     and Blue Marble only reaches 5.8x by putting its floor at luminance 9.
+
+     So the depth cue comes from SHADING, which is what the Google Earth
+     reference actually shows -- strong hillshaded relief over a fairly uniform
+     blue. Expanding shade contrast does that directly.
+
+     THE PIVOT IS THE WHOLE TRICK. Expanding about 0.5 brightened the water 27%
+     and then LOST contrast above gain 1.6, because mean shade sits near 0.9 and
+     the expansion drove most of the distribution into its own clamp. About 0.90
+     it adds contrast instead of exposure:
+
+       gain / pivot     slope    basin   water mean
+       1.0 (shipped)   0.0635   0.0690         86.5
+       1.6 / 0.50      0.0665   0.0758        110.0
+       2.2 / 0.50      0.0572   0.0502        120.1   <- saturating, not helping
+       1.5 / 0.90      0.0782   0.0946         92.3
+       2.0 / 0.90      0.0897   0.1080         97.2 */
+  float shd=shade;
+  if(z<wl) shd=clamp(0.90+(shade-0.90)*2.00,0.05,1.5);
+  col*=((1.0-hw)+hw*shd);
 
   if(z<wl && uSchem<0.5){
     // A moving sea surface, without ever touching the height field: fine
@@ -3309,5 +3797,9 @@ void main(){
                   * (1.0 - smoothstep(-1100.0, -250.0, z));
     col=mix(col, salt, 0.80*saltAmt);
   }
-  gl_FragColor=vec4(col,1.0);
+  /* The sheet's alpha is the OCEAN MASK of this keyframe (0 water, 1 land),
+     which is what lets the lite material keep the coastline sharp between two
+     sheets: it takes the interpolated height's own verdict and blends only the
+     sheet(s) that agree with it. On screen alpha is always 1. */
+  gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.0:1.0) : 1.0);
 }

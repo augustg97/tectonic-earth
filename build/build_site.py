@@ -162,6 +162,17 @@ if os.path.isdir(psrc):
     shutil.copytree(psrc, pdst)
     print(f"photos: {len(os.listdir(pdst))} files")
 
+# World sheets (WP-10, plan A3): optional, produced by bake_sheets.py. When
+# present the deployed app plays from them instead of running the terrain
+# shader per frame, and the ambient build depends on them.
+ssrc = os.path.join(WEB, "sheets")
+sdst = os.path.join(SITE, "sheets")
+if os.path.isdir(sdst):
+    shutil.rmtree(sdst)
+if os.path.isdir(ssrc) and os.path.exists(os.path.join(ssrc, "manifest.json")):
+    shutil.copytree(ssrc, sdst)
+    print(f"sheets: {len(os.listdir(sdst)) - 1} world sheets")
+
 open(os.path.join(SITE, ".nojekyll"), "w").close()
 
 open(os.path.join(SITE, "README.md"), "w").write(

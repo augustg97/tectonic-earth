@@ -16,7 +16,10 @@ const q = new URLSearchParams(location.search);
 const passthrough = ['oldnoise','zeronoise'].filter(k => q.get(k)).map(k => '&' + k + '=1').join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
-document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough;
+// ?bake= loads the app in its own sheet-baking configuration: lite path on, shipped
+// sheets ignored, whole-sheet strips, and the requested width.
+const bakeArgs = q.get('bake') ? '&lite=1&noshipped=1&bakefull=1&sheet=' + (q.get('sheet') || 4096) : '';
+document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
   const [name, lon, lat, age, zoom] = s.split(',');
   return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null};
@@ -259,6 +262,28 @@ const W = () => document.getElementById('app').contentWindow;
     await fetch('http://127.0.0.1:8901/' + q.get('rivdbg') + '.json',
                 {method: 'POST', body: btoa(info)});
     await A.shoot(q.get('rivdbg') + '_shot', 960);
+    document.title = 'VERIFY-DONE'; return;
+  }
+  if (q.get('bake')) {
+    /* SHEET BAKE (WP-10, plan A3). ?bake=i0-i1 renders each keyframe's world
+       sheet inside the app on this machine's GPU and POSTs it to the receiver
+       as an RGBA PNG, north up, alpha = ocean mask. build/bake_sheets.py drives
+       this and encodes the result into web/sheets/. Residency first: the app
+       decodes a keyframe's fields only near the age it is showing, so jump
+       there, then let bake() report pending until every kind has landed. */
+    const [i0, i1] = q.get('bake').split('-').map(Number);
+    const W = +(q.get('sheet') || 4096);
+    for (let i = i0; i <= i1; i++) {
+      A.jumpTo(A.DATA.timeline[i].age);
+      let r = null;
+      for (let t = 0; t < 600; t++) { A.step(); r = A.sheets.bake(i); if (r.ready || r.error) break; await sleep(250); }
+      if (!(r && r.ready)) { console.log('bake', i, 'FAILED', JSON.stringify(r)); continue; }
+      const p = A.sheets.png(i);
+      if (p.error) { console.log('bake', i, 'ERROR', p.error); continue; }
+      const resp = await fetch('http://127.0.0.1:8901/sheet_' + String(i).padStart(3, '0') + '.png',
+                               {method: 'POST', body: p.png});
+      console.log('bake', i, p.w + 'x' + p.h, 'saved', await resp.text());
+    }
     document.title = 'VERIFY-DONE'; return;
   }
   for (const s of shots) {

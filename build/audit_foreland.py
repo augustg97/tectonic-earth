@@ -60,6 +60,21 @@ def run():
         zf = z - d + u
         moved = int((np.abs(zf - z)[z >= BF.GATE_HI] > 0.5).sum())
         bad += moved
+        # THE SECOND PROMISE (WP-10, D1): a filled foreland is a plain, not a
+        # hole, so the moat may never drown ground that is dry in the field.
+        # Measured before the shader floor existed: the Gangetic plain went to
+        # -54 m at Patna and 0.76% of present-day land fell below sea level.
+        # `raw` is what the deflection alone would do; `drowned` is what the
+        # shader draws, with its floor of 30 m above the water surface applied
+        # exactly as elevDetail() applies it. The second must be zero.
+        land = z >= 0.0
+        raw = int((land & (zf < 0.0)).sum())
+        zs = np.where(land & (d > 0.0), np.maximum(zf, np.minimum(z, 30.0)), zf)
+        drowned = int((land & (zs < 0.0)).sum())
+        bad += drowned
+        print("       | dry ground the raw moat would drown: %6d cells (%.2f%% of "
+              "land); after the shader floor: %d" % (raw, 100.0 * raw / max(1, land.sum()),
+                                                    drowned))
         def f(a, t):
             return 100.0 * float((a > t).mean())
         print("  %4d | %19d | %5.2f→%5.2f  %5.3f→%5.3f  %5.3f→%5.3f  %5.3f→%5.3f"
@@ -67,7 +82,7 @@ def run():
                  f(z, 2000), f(zf, 2000), f(z, 3000), f(zf, 3000)))
     print()
     if bad:
-        print("  FAIL: %d high-ground cells were altered." % bad)
+        print("  FAIL: %d high-ground cells were altered or dry cells drowned." % bad)
     else:
         print("  PASS: no cell at or above %.0f m moved, at any age tested."
               % BF.GATE_HI)

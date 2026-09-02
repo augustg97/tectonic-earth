@@ -73,8 +73,10 @@ Every round ends with `build_site.py` → commit → push to `main`, and a check
 ```
 build/          49 Python modules, ~15k lines — the offline pipeline
 web/            the app: index.html (~4k lines, incl. the GLSL shaders) + data
-web/fields/     1,506 field textures (6 kinds × 251 keyframes), plus a second
-                present-day lake field without the geologically young lakes
+web/fields/     2,460 field textures (10 kinds × 251 keyframes, some kinds
+                absent on a few keyframes), plus a second present-day lake field
+                without the geologically young lakes. Gitignored: docs/fields
+                holds the deployed copy
 docs/           the built static site; GitHub Pages serves main:/docs
 data/           source DEMs, rotation files, catalogues (not in git)
 ```
@@ -87,16 +89,20 @@ Build scripts use relative paths (`../web`, `../docs`), so the project directory
 
 ## 4. The shipped fields
 
-Six textures per keyframe. All are WebP; all are decoded and interpolated between the two bracketing keyframes in the shader.
+Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13); the rest are WebP. All are decoded and interpolated between the two bracketing keyframes in the shader, the interval ones (`_v`, `_p`) from the younger keyframe of the pair.
 
 | suffix | field | resolution | contents |
 |---|---|---|---|
 | `_e` | elevation | 4096×2048 | signed-sqrt encoded, so precision concentrates near sea level — the coastline is the one contour that must interpolate cleanly. Matches the 6-arc-minute source DEM, so more pixels would only interpolate |
 | `_r` | rainfall | 1536×768 | smooth, so it costs little |
 | `_m` | plate motion | 128×64 | R = east, G = north, B = confidence |
-| `_w` | lake depth | 2048×1024 | baked standing water, sqrt-encoded metres |
+| `_w` | lake depth | 2048×1024 | baked standing water, sqrt-encoded metres; G marks a desiccated basin |
 | `_d` | surface process | 2048×1024 | drainage, substrate, fetch |
 | `_o` | ocean structure | 2048×1024 | R = **crustal age**, log-companded over 0–52° of spreading (190 Myr, the oldest surviving ocean crust); G/B = spreading direction from the age gradient, with confidence in its length |
+| `_v` | displacement | 1024×512 | how far the crust under each pixel moves to the next keyframe, east/north in degrees of great circle, B = divergence (`build_displacement.py`) |
+| `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
+| `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`) |
+| `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
 
 Temperature is **not** shipped: it is a closed form of latitude, elevation and the era anomaly, so the shader recomputes it for free.
 
