@@ -2830,7 +2830,17 @@ void main(){
       if(ga>0.005){
         vec3 ar=atlasRelief();
         float eB=basinEnv(zp,rug);
-        float ampA=ga*4.0*(0.6+0.4*rug)*uAtlasK.x*eB;
+        /* 8.0 (WP-10 item 2): a sweep of 1.0/1.6/2.4 times the first 4.0 at
+           960x600, 1.35, against the no-atlas render: no shading saturates
+           at any of them (0.1% of pixels), the 5-20 km band rises 13% from
+           the lowest to the highest and stays below the noise it replaced,
+           coherence rises monotonically. Energy-neutral replacement of the
+           retired noise sits at 1.6 (Zagros) to 2.7 (Himalaya, where the
+           basin envelope quiets the interior); 2.0 is the middle of that,
+           and ?atlasN= scales it live on a real display. Physical consistency
+           with the DEM's own 59x exaggeration would be 17 times higher and
+           saturates every flank; it is the ceiling, not the answer. */
+        float ampA=ga*8.0*(0.6+0.4*rug)*uAtlasK.x*eB;
         nx+=ar.y*ampA; ny+=ar.z*ampA;
         /* And as TONE, because a lit ridge narrower than a pixel averages away
            (iteration 56 measured it) while a dark valley floor does not: the

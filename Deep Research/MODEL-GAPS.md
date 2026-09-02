@@ -7380,3 +7380,88 @@ term doing what it should: reorganising the detail it displaces, not adding
 to it. The plains controls above are the other half of the gate, and they did
 not move. B4 closes here; the amplitude on plateau interiors (94% of Tibet
 gated above half strength) is the remaining knob and needs a real display.
+
+## WP-10 — IMPLEMENTATION, round 2 (2026-09-02, afternoon): amplitudes, plains with a downstream, the split page
+
+**Item 2, the atlas amplitude, measured instead of eyeballed.** Two anchors
+bracket it. The physical one: the atlas slopes are true metre-per-metre
+slopes at 1 km (belts 0.04-0.10, plateaus 0.05, lowlands 0.006), and the DEM
+enters the shading normal as metres of drop over a 17.6 km baseline against
+a vertical scale of 300 -- a 59x exaggeration. Carrying the atlas at the
+same exaggeration would multiply the term by about 17 and put every ridge
+flank near vertical: that is the ceiling. The other anchor is energy-neutral
+replacement: the term displaces the isotropic noise detail (`det` scaled by
+1 - 0.6 gate), and the user had accepted that amount of texture on a real
+display, so the organised relief should carry about as much fine-band energy
+as the noise it replaced. A sweep of the normal term at 1.0, 1.6 and 2.4
+times its first value (`?atlasN=`, three framings at 960x600, zoom 1.35,
+the page frozen in a snapshot so the sweep ran on one shader):
+
+    framing    variant  band 4-24 px   coherence   band 2-8 px   saturated px
+    Himalaya   no atlas    15.13        0.428        10.00          0.8%
+               x1.0        13.69        0.450         8.68          0.1%
+               x1.6        13.77        0.455         9.10          0.1%
+               x2.4        13.86        0.466         9.77          0.1%
+    Zagros     no atlas    10.85        0.472         6.87          0.0%
+               x1.0        10.38        0.491         6.63          0.0%
+               x1.6        10.44        0.493         6.83          0.0%
+               x2.4        10.55        0.506         7.21          0.0%
+    Andes      x1.0         8.34        0.451         5.55          0.0%
+               x1.6         8.31        0.452         5.68          0.0%
+               x2.4         8.37        0.455         5.98          0.0%
+
+Nothing saturates. The ridges live in the 2-8 px band at this scale (10-18
+km spacing at 2.5 km per pixel), which rises 13% across the sweep and is
+still below the noise it replaced at x2.4; coherence rises monotonically.
+Energy-neutral sits at x1.6 for the Zagros and x2.7 for the Himalaya, where
+the new basin envelope has taken the interior down. The default is now x2.0
+(8.0 in the shader) with `?atlasN=` scaling it live, and the eye agrees with
+the numbers on the Zagros, whose Simply Folded Belt reads as folds at x2.4;
+on Tibet the x2.4 frame combs the plateau despite the envelope, and on the
+Andes it draws arc-parallel ridges -- correct for the fold coordinates, and
+wrong for a magmatic arc, because `_t` carries shortening and not belt type.
+Two things for the display, then: the envelope's depth (0.25 in the troughs)
+and a belt-type channel, which is a `_t` question, not an amplitude one.
+
+**The sweep itself cost a day of the harness.** The first run rendered a
+black globe for every variant: `basinEnv()` called `vnoise3()` from above
+the point where the noise variant is injected, and GLSL has no hoisting.
+`check_shader.py` now sees the injection as the GLSL it becomes and flags a
+function called above its definition. On software GL each page load then
+spends about seven minutes compiling (three programs at over two minutes
+each), a framing another two to three, and anything else on the machine
+doubles both; the drainage bake beside it took a framing to twenty minutes.
+Serialise, or freeze the page in a snapshot and serve that.
+
+**B5, second form: plains with a downstream.** The first form laid the
+dissected patches isotropically. `build_drainphase.py` now bakes drainage
+coordinates per keyframe -- chi across the regional flow and omega along it,
+one unit per 256 km, by the fold solver -- from the downhill direction of the
+PaleoDEM smoothed to 120 km (what a D8 receiver field averaged over a patch
+gives, without running the surface build), with confidence from the slope
+itself, 0.2-1 m/km, times the plains gate. The atlas gained four patches
+eroded on a wrap-aware regional tilt of 0.8 m/km (the tilt applied as a
+gradient in the receiver search and the implicit update, so the patch stays
+periodic and its top row drains across the wrap into the trunk on row 0),
+two trunks across the tilt and no trunk along it, so tributaries join
+pointing downstream; the residual relief ships, the tilt does not. The
+shader samples them at (chi, -omega) where the omega gradient says the bake
+was confident and keeps the lattice form elsewhere -- belts, and basins
+flatter than the confidence, the Amazon at 0.05 m/km among them. At the
+present day the gate covers 45% of land; the isolines over the Great Plains,
+the Deccan and West Siberia cross the downhill arrows for omega and run
+along them for chi. The render pairs are below.
+
+**D4 and D5.** The pages take `FIELD_BASE` and `SHEET_BASE`, `build_site.py`
+stamps them and ships manifests only, `publish_assets.py` uploads to a
+release or copies to another Pages repository; history is the user's call.
+The page is split: `index.html` is 409 lines of markup, `style.css`,
+`app.js` (4,209 lines), and `web/shaders/*.glsl` are the sources, with
+`check_shader.py` packing `shaders.js` and `build_site.py` inlining the
+three into the single deployed page. The two noise variants are spliced at
+run time where the sources carry `/*@vnoise*/` and `/*@cnoise*/`. The one
+subtlety found: the first comparison of the split page against the old one
+differed in 27% of pixels, all on the Arabian plains and along lake shores
+with the belts identical -- the two renders were taken under different
+contention and the harness snaps after forty readiness steps whether or not
+every field of the pair is resident; the back-to-back pair is below.

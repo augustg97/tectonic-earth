@@ -53,21 +53,19 @@ build_site.py`, then merge to `main` and push (README §6).
 
 ## What to do next, in order
 
-1. **Bake the sheets on the M1** — `cd build && python3 bake_sheets.py` (4096 wide,
-   ~1 min GPU + 10–20 min encode) and `python3 bake_sheets.py --width 2048` for the
-   ambient set if a smaller payload is wanted. Look at a few in `web/sheets/`, then run
-   the app with `?perf=1` and watch `path SHEETS` come on at wide zoom. The review
-   environment had no GPU: everything sheet-related was verified on software GL at
-   512–2048 wide, pixel-faithful but too slow to bake 251 at 4096.
-2. **Tune the atlas on a real display.** The atlas (`web/atlas.webp`) and the fold
-   coordinates (`web/fields/*_q.webp`, `python3 build_foldphase.py -j`, ~2 min) are baked
-   and wired. The amplitudes were set on software GL at 960×600: `520.0` (height),
-   `4.0` (normal) and `0.55` (tone) in the belt term, `1.6` / `0.16` in the plains
-   term. Look at the Zagros, Himalaya, Andes and 300 Ma framings at zoom 1.35–2 with
-   `?noatlas=1` beside the default, and judge by the metrics in WP-10 G1
-   (structure-tensor coherence at three zooms, 5–30 km band energy,
-   `audit_texture.py` organisation). Every shader edit invalidates shipped sheets:
-   re-run `bake_sheets.py`.
+1. **Sheets.** A 2048-wide set is baked here on software GL at the end of round 2
+   (`web/sheets/`, gitignored; `build_site.py` ships it) — check `web/sheets/manifest.json`
+   has 251 entries before deploying. The 4096 set still wants the M1:
+   `cd build && python3 bake_sheets.py` (~1 min GPU + 10–20 min encode). Every shader
+   edit invalidates shipped sheets: re-run and bump `SHEET_V` in `web/app.js` and
+   `web/ambient.html`.
+2. **Amplitudes on a real display.** The normal term is calibrated by sweep (register,
+   round 2): default 8.0 (2.0× the first cut), energy-neutral bracket 1.6–2.7×, no
+   saturation up to 2.4×. `?atlasN=` `?atlasT=` `?atlasH=` `?plainsK=` scale the four
+   terms live; `?basin=0` removes the plateau envelope. The two questions the numbers
+   could not settle: the envelope's trough depth on Tibet (0.25 now; the x2.4 frame still
+   combs the plateau), and the Andes drawing fold-belt ridges — a belt-type channel in
+   `_t` (arc vs fold belt), not an amplitude.
 3. **B4 is done** (floor lowered to 100–400 m on the field statistics, controls
    unchanged; register entry of 2026-09-02). What the numbers point at next: the gate
    opens on 94 % of the Tibetan interior and 98 % of the Altiplano at more than half
