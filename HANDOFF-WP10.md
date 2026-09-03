@@ -51,6 +51,32 @@ build_site.py`, then merge to `main` and push (README §6).
   sources with `check_shader.py` packing `shaders.js` and `build_site.py` inlining the
   deployed page. `check_shader.py` now also flags a function called above its definition.
 
+## The review on the M1, and then the deploy (decided 2026-09-03)
+
+Nothing is deployed: the atlas amplitude was calibrated by metrics on software GL and you
+chose to look first. History stays as it is for now. The branch
+`claude/tectonic-earth-review-nze22g` is 27 commits ahead of `main` with no divergence.
+
+**Review.** `cd build && python3 serve.py`, then at zoom 1.35–2:
+- the Zagros (51°E 32°N), the Himalaya (86.9°E 28.2°N), the Andes (−68° −18°), Pangaea at
+  300 Ma (−5° 8°), each beside `?noatlas=1`; `?atlasN=1.6` and `2.4` bracket the default.
+- Tibet with `?basin=0` beside the default (the plateau envelope).
+- the Great Plains (−98° 42°) and the Deccan (78° 18°) at zoom 1 or closer with
+  `?plainsK=2` beside `?nodrain=1` (the second form is invisible at 2.5 km/px).
+- `ambient.html?age=150` — the 2048 sheet set is in `web/sheets/`, gitignored.
+
+**Then one of three deploys**, all from the M1 where the validators run in full:
+1. self-contained: `git checkout main && git merge --ff-only claude/tectonic-earth-review-nze22g
+   && cd build && python3 check_shader.py && python3 build_site.py && cd .. && git add docs
+   && git commit -m "Deploy WP-10 rounds 1-2" && git push` — adds ~160 MB (`_q` 37, `_x` 60,
+   sheets 63) to docs/ and history.
+2. lean: `python3 build/publish_assets.py --release fields-20260903`, then
+   `build_site.py --field-base https://github.com/augustg97/tectonic-earth/releases/download/fields-20260903
+   --sheet-base <same>` — docs/ carries manifests only. Check the browser console once for
+   CORS on the first field fetch.
+3. lean plus history rewrite (D4): `git filter-repo --path docs/fields --path docs/sheets
+   --invert-paths` on a fresh clone, force-push, every clone re-clones. Your call, later.
+
 ## What to do next, in order
 
 1. **Sheets.** A 2048-wide set is baked here on software GL at the end of round 2
