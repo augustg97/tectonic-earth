@@ -639,6 +639,11 @@ and slow in ways that look like hangs. The rules that came out of it, each after
   an A/B number under about 1/255 is inside the harness unless the pair was taken back to back.
 - **An empty framebuffer from `APP.snap` can be a one-off** under contention; re-run before
   reading anything into it.
+- **At an exact keyframe age the bound pair is (the next younger keyframe, this one).** Age 0
+  interpolates frames 49 and 50 at t = 1, and the interval kinds (`_t`, `_f`, `_v`, `_p`) bind
+  from frame 49 — `fut_0005`. A field baked for "age 0" alone is therefore not the one the
+  shader reads at age 0: the first belt-type A/B (round 3) came back null for exactly this
+  reason. Bake the younger neighbour too, or test at an age strictly inside an interval.
 
 ## 8. Sources
 
