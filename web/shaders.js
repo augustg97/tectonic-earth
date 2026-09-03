@@ -738,7 +738,17 @@ float elevDetail(float z, vec3 d, float rug){
        fabric actually arrived. Every constant here was set while gFold was the
        zero vector, so none of them had ever been seen: at 2.2 the Himalaya came
        back combed like brushed metal, which is too much anisotropy for rock. */
-    float S=1.0+1.45*smoothstep(0.15,0.45,gShort);
+    /* ...AND NOT UNDER THE ATLAS (WP-10 round 3). Where the belt gate is open
+       the along-strike band belongs to the eroded ridges; the compressed
+       noise under them is a second system texturing the same surface (README
+       7.4), and the review measured it as streaks that add no organisation.
+       det is already scaled by 1 - 0.6 gate for the atlas, but the 40% that
+       remained was still combed along strike, which is why halving the atlas
+       amplitude on a plateau interior left its corduroy measurably unchanged
+       (Tibet, band 3-8 px sigma 8.12 -> 8.32). The compression fades with the
+       gate; with the atlas off (?noatlas=1, or no _q) it is exactly as it was. */
+    float ga=uAtlasOn>0.5?atlasGate(z):0.0;
+    float S=1.0+1.45*smoothstep(0.15,0.45,gShort)*(1.0-ga);
     dF=d-gFold*(dot(d,gFold)*(1.0-1.0/S));
   }
   float n=detail3(dF*260.0,rugw), n2=detail3(dF*70.0+13.7,rugw);
