@@ -637,10 +637,17 @@ float basinEnv(float z, float rug){
    the high end the range groups between them. So on high ground the atlas
    amplitude follows the DEM's relief: full where the field is rough, a sixth
    where it is flat. Below 2.5 km nothing changes, and a steep front (rug 1)
-   is untouched by construction. ?plat=0 removes it for an A/B. */
+   is untouched by construction. ?plat=0 removes it for an A/B.
+   THE RAMP SITS HIGH because a 62 km baseline crosses a basin into the
+   ranges around it: on the shipped field the Qiangtang reads a median rug
+   of 0.57, the Altiplano floor 0.65, the Tanggula 0.77, and every front
+   1.00. A ramp of 0.15-0.60 left the interiors at 0.77-0.86 of full
+   amplitude and changed nothing (measured, round 3); 0.35-0.85 takes the
+   Qiangtang to 0.55, the Altiplano floor to 0.60 and the Tanggula to 0.70,
+   with the Himalayan front at 0.96 and the Zagros at 1.00. */
 float reliefEnv(float z, float rug){
   float plateau=smoothstep(2500.0,3500.0,z)*uPlatK;
-  return mix(1.0, 0.15+0.85*smoothstep(0.15,0.60,rug), plateau);
+  return mix(1.0, 0.15+0.85*smoothstep(0.35,0.85,rug), plateau);
 }
 float detail3(vec3 p, float rug){
   float sm=0.0, a=0.5;
