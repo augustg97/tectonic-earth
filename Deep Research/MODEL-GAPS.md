@@ -7465,3 +7465,45 @@ differed in 27% of pixels, all on the Arabian plains and along lake shores
 with the belts identical -- the two renders were taken under different
 contention and the harness snaps after forty readiness steps whether or not
 every field of the pair is resident; the back-to-back pair is below.
+
+**Results, next morning.** The render pairs for the second form at 960x600,
+zoom 1.6 (2.5 km per pixel), three plains framings, the page frozen:
+
+    framing        pair                  mean |d|   px > 4   band 4-24     coherence
+    Deccan         lattice vs no atlas   2.17       14.5%    12.78 -> 12.41  0.452 -> 0.451
+                   steered vs lattice    0.16        0.6%    12.41 -> 12.41  0.451 -> 0.451
+    Great Plains   lattice vs no atlas   4.61       25.8%    12.82 -> 12.41  0.450 -> 0.455
+                   steered vs lattice    0.31        0.9%    12.41 -> 12.41  0.455 -> 0.455
+    West Siberia   lattice vs no atlas   1.37        8.9%    12.95 -> 12.73  0.455 -> 0.456
+                   steered vs lattice    0.24        0.7%    12.73 -> 12.74  0.456 -> 0.455
+
+The plains term is there (a quarter of the Great Plains frame moves against
+no atlas) and the steering is invisible at this scale: under one per cent of
+pixels move by more than four levels between the steered and the lattice
+form. That is by construction rather than a failure. The tilted patches'
+slopes are the lowland's (median 0.006), the plains normal term is the
+untuned 1.6, and what distinguishes a herringbone from an isotropic network
+is the dendritic detail at one kilometre, which at 2.5 km per pixel
+averages away; what survives at this zoom is the trunks, which both forms
+have. The second form is correct in emulation and in the field (the omega
+isolines cross the downhill arrows), and it becomes visible where the
+first form does: at close zoom, with `?plainsK=` above 1. That is the
+display's job, with the belts' amplitude.
+
+**The harness has a noise floor, and it is not small.** The same frozen page
+rendered twice, back to back on an idle machine, differs in 153,677 of
+576,000 pixels (max 83, mean 0.854 per 255); the split page against the old
+one differs by less (127,936 pixels, max 25, mean 0.338), and the split page
+against itself by less again (46,543, max 22, mean 0.085). So the split is
+faithful within the harness's own variation, and the first alarm (27% of
+pixels, on the Arabian plains and the lake shores) was that variation under
+contention: something time-dependent or residency-dependent moves between
+two snaps of the same page -- the clouds, or a field of the pair bound as a
+still because it was not yet decoded. Every A/B number in this register
+below about 0.9 per 255 mean is inside that floor unless the pair was taken
+back to back; the belt numbers (3-11) are well above it.
+
+**The 2048 sheet set exists.** `bake_sheets.py --software --width 2048`
+over the final shader: 251 sheets, 65.5 MB, `web/sheets/manifest.json`, ten
+hours on software GL. The present-day sheet carries the ice, the abyssal
+fabric and the atlas, land at 31% by the alpha mask.

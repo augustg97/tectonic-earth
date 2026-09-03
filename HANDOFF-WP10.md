@@ -73,11 +73,17 @@ build_site.py`, then merge to `main` and push (README §6).
    `rug` (now 0.6–1.0) or on a basin/plateau-interior term; and eroded old belts
    (Appalachians 0.10, Urals 0.02 shortening) sit below the age-relative gate, which is
    correct for what the gate means and a separate decision.
-4. **B5** plains, second form: the first form lays isotropic dissection on hard flat
-   uplands; steering it by a drainage-azimuth field from `build_surface.py`'s D8
-   receivers (a third potential, like φ/ψ) and adding erg lineation from fetch are
-   the next steps if the plains still read as unorganised.
-5. **D4/D5** move `docs/fields` and `docs/sheets` out of git history; split `index.html`.
+4. **B5 second form is in** (`_x`, tilted patches, `dissectRelief()` steering) and is
+   invisible at continental zoom by construction (register, round 2): under 1 % of pixels
+   move between the steered and the lattice forms at 2.5 km/px. Judge it at close zoom
+   with `?plainsK=2` beside `?nodrain=1`; the plains normal term (1.6) and tone (0.16)
+   are still the first cut. Erg lineation from the wind fetch is not done: the fetch
+   channel is zonal per latitude band, so a lineation term needs only that direction and
+   a sand gate — a shader term, no bake.
+5. **D4/D5 are done** except the decision: `publish_assets.py` + `build_site.py
+   --field-base/--sheet-base` host the textures elsewhere; whether to rewrite history so
+   the old copies leave the repository is yours. The page is split; edit shaders in
+   `web/shaders/*.glsl` and run `check_shader.py` (README §6).
 
 ## Traps this round found (add to README §7 when they recur)
 
