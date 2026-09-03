@@ -51,6 +51,15 @@ RESERVED = {
 }
 DECL = re.compile(r"\b(?:float|int|bool|vec2|vec3|vec4|mat2|mat3|mat4|"
                   r"ivec2|ivec3|ivec4|bvec2|bvec3|bvec4)\s+([A-Za-z_]\w*)")
+# MAX_TEXTURE_IMAGE_UNITS on the hardware the site is viewed on (Apple silicon
+# through ANGLE/Metal reports 16; so do most desktop GPUs; WebGL2 guarantees it).
+MAX_TEXTURE_UNITS = 16
+
+
+def _strip_comments(body):
+    """Blank block and line comments, keeping newlines so line numbers hold."""
+    code = re.sub(r"/\*.*?\*/", lambda m: re.sub(r"[^\n]", " ", m.group(0)), body, flags=re.S)
+    return re.sub(r"//[^\n]*", lambda m: " " * len(m.group(0)), code)
 
 
 def _js_literal(src, name):
@@ -201,7 +210,26 @@ def main():
         print(f"{name}: {len(body)} chars, {body.count('{')} blocks, ok"
               if not stray and not d else f"{name}: PROBLEMS")
 
-    # 4. the sources that must exist
+    # 4. TEXTURE UNITS. A fragment shader gets MAX_TEXTURE_IMAGE_UNITS
+    # samplers: 16 on Apple/ANGLE Metal and most desktop GL, and the WebGL2
+    # minimum. The software GL the WP-10 rounds were reviewed on allows 32, so
+    # a shader can link there and fail on the M1 -- "texture image units count
+    # exceeds MAX_TEXTURE_IMAGE_UNITS(16)", one console line and a black globe
+    # (README 7.17). Count the samplers each shader actually READS (a declared
+    # sampler nothing reads is not a unit) and refuse above the real limit.
+    for name, body in shader_blocks():
+        code = _strip_comments(body)
+        decls = re.findall(r"uniform\s+sampler2D\s+([^;]+);", code)
+        names = [n.strip() for d in decls for n in d.split(",") if n.strip()]
+        rest = re.sub(r"uniform\s+sampler2D\s+[^;]+;", " ", code)
+        used = [n for n in names if re.search(rf"\b{re.escape(n)}\b", rest)]
+        print(f"{name}: {len(used)} texture units read of {len(names)} declared (limit {MAX_TEXTURE_UNITS})")
+        if len(used) > MAX_TEXTURE_UNITS:
+            bad.append(f"{name}: reads {len(used)} samplers, over the {MAX_TEXTURE_UNITS} texture "
+                       f"units a real GPU has -- links on software GL, black globe on the M1: "
+                       f"{', '.join(used)}")
+
+    # 5. the sources that must exist
     lens = {n: len(b) for n, b in shader_blocks()}
     for n in SOURCES:
         if n not in lens:

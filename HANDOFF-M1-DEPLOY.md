@@ -46,6 +46,10 @@ both counts are 251. If `_q` or `_x` are short, `python3 build_foldphase.py -j`
 python3 check_shader.py                            # must end "shader source clean"
 ```
 
+It also prints the texture units each shader reads; the FRAG line must say
+`16 texture units read` (the hardware limit -- README 7.17 is the sampler
+stack that made the round-3 shader fit on the M1).
+
 ## 3. The display review (the user looks; the session drives)
 
 ```bash
@@ -162,5 +166,14 @@ header, and the self-contained deploy is the fallback. Open the live
   take the self-contained deploy.
 - `build_site: <audit> failed`: read which check moved and why before anything
   else; a moved baseline is a finding, not an obstacle.
+- `FRAGMENT shader texture image units count exceeds MAX_TEXTURE_IMAGE_UNITS(16)`
+  in the console and a black globe: the shader reads more samplers than the
+  GPU has units (software GL allows 32, the M1 16). `check_shader.py` now
+  refuses this; README 7.17.
+- A tab Chrome considers hidden (behind another window) gets no animation
+  frames: the age does not advance, decodes stall and a capture returns the
+  previous frame. Bring the window to the front, or drive frames by hand with
+  `APP.step()` and capture with `APP.shoot(name, px)` (the harness path,
+  `verify_server.py` on 8901).
 - `Operation not permitted` on reads under the repository: the repo has been
   moved under `~/Desktop` or `~/Documents`; move it back out.

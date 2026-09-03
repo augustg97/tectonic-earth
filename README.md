@@ -366,6 +366,17 @@ Two things the gate alone gets wrong, and their model (WP-10 round 3):
   dissection patches take the upland. The cones themselves want a volcanic patch in the
   atlas, which is the next model. `?arc=0` switches it off. `build_tectonic.py` and
   `rebuild_future.py` write the channel on every rebake; a `_t` without it decodes as 0.
+- **The small-field stack (§7.17).** The terrain shader has 16 texture units on real hardware,
+  and the per-keyframe fields had come to 20. `_t`, `_f`, `_q` and `_x` therefore share one
+  1024×1024 RGBA texture per keyframe: `_f` in rows 0–511 at full width, `_t` in rows 512–767
+  twice side by side (the read sits in the right-hand copy, so the dateline neighbours are the
+  left copy and the wrap), `_q` at (0, 768) and `_x` at (512, 768). `stackFill()` composes it on
+  the GPU as the bitmaps land — `texSubImage2D` through `copyTextureToTexture`, no canvas, so
+  nothing is premultiplied and the 16-bit byte pairs survive — and it lives in `TEXCACHE` as
+  `'s'+i` (4 MB, no bitmap) under the same budget and eviction as a field. A band one keyframe
+  of the pair lacks is read from the other through `uStkSel`/`uStkSelB`, which is the per-field
+  fallback the separate samplers had (frame 49 has no `_f`; age 0 reads frame 50's). The
+  16-bit fields are read at exact texel centres, which the linear filter returns unblended.
 
 ## 6. Build and deploy
 
@@ -376,7 +387,7 @@ python check_shader.py && python build_site.py
 
 then commit and push to `main`. GitHub Pages serves `main:/docs`.
 
-**Editing the page.** The shaders are edited in `web/shaders/*.glsl`; `check_shader.py` validates them and writes `web/shaders.js`, which `index.html` loads in development and `build_site.py` inlines for the site — so a shader edit is `edit the .glsl → python check_shader.py → reload`. The two noise variants (`VN_OLD/VN_NEW`, `CN_OLD/CN_NEW`) live in `app.js` and are spliced in at run time where the sources carry `/*@vnoise*/` and `/*@cnoise*/`. The application is `web/app.js`, the styles `web/style.css`; `index.html` is markup only.
+**Editing the page.** The shaders are edited in `web/shaders/*.glsl`; `check_shader.py` validates them, counts the texture units each shader reads (16 is the hardware limit, §7.17) and writes `web/shaders.js`, which `index.html` loads in development and `build_site.py` inlines for the site — so a shader edit is `edit the .glsl → python check_shader.py → reload`. The two noise variants (`VN_OLD/VN_NEW`, `CN_OLD/CN_NEW`) live in `app.js` and are spliced in at run time where the sources carry `/*@vnoise*/` and `/*@cnoise*/`. The application is `web/app.js`, the styles `web/style.css`; `index.html` is markup only.
 
 **Hosting the textures off the repository** (WP-10, D4). `docs/fields` and `docs/sheets` are the repository's weight. `publish_assets.py --release TAG` uploads them to a GitHub release (or `--dir PATH` copies them into another Pages repository), and `build_site.py --field-base URL --sheet-base URL` publishes a site that fetches them from there, keeping only the manifests in `docs/`. Each base is the directory the files sit in; `?fieldbase=` and `?sheetbase=` on the page override them for a test. Whether to rewrite history so the old copies leave the repository is a separate decision.
 
@@ -647,6 +658,30 @@ and slow in ways that look like hangs. The rules that came out of it, each after
   from frame 49 — `fut_0005`. A field baked for "age 0" alone is therefore not the one the
   shader reads at age 0: the first belt-type A/B (round 3) came back null for exactly this
   reason. Bake the younger neighbour too, or test at an age strictly inside an interval.
+
+### 7.17 Sixteen texture units
+
+A fragment shader gets `MAX_TEXTURE_IMAGE_UNITS` samplers: 16 on Apple silicon (ANGLE over
+Metal), on most desktop GL, and as the WebGL2 minimum. The SwiftShader the WP-10 rounds were
+reviewed on (§7.16) reports 32, so the five samplers rounds 2 and 3 added — the fold and
+drainage coordinate pairs and the atlas — took the terrain shader from 15 units to 20, linked
+there, and failed on the M1 at the first framing of the deploy review: one console line,
+`FRAGMENT shader texture image units count exceeds MAX_TEXTURE_IMAGE_UNITS(16)`, and a black
+globe under a page that otherwise worked (2026-09-03).
+
+The fix is structural (§5.8): the four small per-keyframe fields — `_t`, `_f`, `_q`, `_x` —
+share one 1024×1024 texture per keyframe, packed on the GPU from the decoded bitmaps
+(`stackFill()` in app.js; `stkTect()`, `stkFore()` and `foldTaps()` in the shader), which
+returned the shader to 16 units with the atlas and the noise lattice kept. `check_shader.py`
+now counts the samplers each shader reads and refuses above 16, so a shader that would fail on
+real hardware cannot pass the build again; `?show=8` and `?show=9` draw the packed fold and
+drainage coordinates as sawtooth ramps, which read as clean bands when the 16-bit decode is
+exact and as speckle when a tap has blended bytes.
+
+The lesson is the one §7.12 and §7.16 already carry: a review environment is a proxy, and every
+limit it does not share with the hardware is a blind spot. Units, precision, extensions,
+maximum texture size — the list of what the harness differs in wants writing down and checking
+in the build, not discovering per deploy.
 
 ## 8. Sources
 

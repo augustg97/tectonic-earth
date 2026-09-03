@@ -188,6 +188,11 @@ chose to look first. History stays as it is for now. The branch
 - **The stripe metric is orientation-blind.** Band-pass σ did not move when the comb
   came off because compression reorients noise without changing its energy; the
   structure tensor's eigenvalue difference (directional energy) is what sees a corduroy.
+- **The review box had 32 texture units; the M1 has 16.** Rounds 2-3 added five samplers on
+  SwiftShader and the shader linked there and failed on real hardware at the first framing of
+  the deploy (2026-09-03): a black globe with one console line. The four small per-keyframe
+  fields now share one texture (`stackFill`, README 7.17 and §5.8) and `check_shader.py` counts
+  the units. Write down what the harness differs from the hardware in, and check it in the build.
 
 ## Verification harness (unchanged, plus)
 

@@ -37,27 +37,45 @@ uniform float uMat;
    fold axis as cos(2t), sin(2t). A fold axis is a LINE, so the double angle is
    what makes it interpolate: 179 and 1 degree are the same fabric, and a raw
    angle would average them to 90 -- exactly perpendicular to the truth. */
-uniform sampler2D tectA;
 uniform float uTect;
 /* Foreland flexure, baked per keyframe by build_foreland.py. R is the moat's
    depth (0..620 m), G the forebulge beyond it (0..90 m). An orogen loads the
    lithosphere and the plate bends: the range plus its parallel trough is the
    diagnostic signature of a collision, and a 20 km grid authored at 1 degree
    cannot carry a trough 100-300 km wide and a few hundred metres deep. */
-uniform sampler2D foreA;
 uniform float uFore;
 /* Fold coordinates, baked per keyframe by build_foldphase.py from the strike
    field: R,G = phi (across strike), B,A = psi (along strike), 16-bit each over
    +-64 units of one atlas patch (256 km). The belt patches are sampled at
    (phi, psi), which is what makes their ridges follow a bending belt with no
    rotation, no cells and no seams -- the land equivalent of keying the abyssal
-   fabric to the companded crustal age. NEAREST-filtered bytes; decoded then
-   interpolated by hand in foldAt(). */
-uniform sampler2D foldA, foldB;
+   fabric to the companded crustal age. Byte pairs read at texel centres;
+   decoded then interpolated by hand in foldAt(). */
 uniform float uFoldOn;
-uniform sampler2D drainA, drainB;   // drainage coordinates (chi across, omega along; B5 second form)
-uniform float uDrainOn;
-uniform vec2 uFoldTexel;
+uniform float uDrainOn;   // drainage coordinates (chi across, omega along; B5 second form)
+/* THE SMALL-FIELD STACK. A fragment shader has 16 texture units on real GPUs
+   (MAX_TEXTURE_IMAGE_UNITS on Apple/ANGLE Metal and most desktop GL) and 32
+   on the software GL rounds 2-3 were reviewed on, so the five samplers those
+   rounds added linked there and failed on the M1: "texture image units count
+   exceeds MAX_TEXTURE_IMAGE_UNITS(16)", a black globe (README 7.17). The four
+   small per-keyframe fields now share ONE 1024x1024 RGBA texture per keyframe,
+   packed on the GPU by app.js (stackFill) as the bitmaps land:
+       rows   0..511   _f  1024x512, full width                 v in [0, 1/2)
+       rows 512..767   _t  512x256, TWICE side by side          v in [1/2, 3/4)
+       rows 768..1023  _q  at columns 0..511, _x at 512..1023   v in [3/4, 1)
+   _f keeps the texture's own REPEAT wrap; _t is read in its right-hand copy,
+   whose dateline neighbours are the left copy and the wrap; _q and _x are
+   16-bit byte pairs read at exact texel centres (foldTaps), which the linear
+   filter returns unblended. Every read clamps v inside its own band, as
+   CLAMP_TO_EDGE did for the separate textures. stkA is keyframe i of the
+   pair, stkB is j; the selectors send a band to the other keyframe when one
+   file is missing, which is the per-field fallback the samplers had. */
+uniform sampler2D stkA, stkB;
+uniform vec4 uStkSel;    // source of the _t, _f, _q A-taps, _x A-taps: 0 stkA, 1 stkB
+uniform vec2 uStkSelB;   // source of the _q B-taps, _x B-taps
+vec4 stkTap(float sel, vec2 st){ return sel>0.5 ? texture2D(stkB,st) : texture2D(stkA,st); }
+vec4 stkFore(vec2 uv){ return stkTap(uStkSel.y, vec2(uv.x, clamp(uv.y, 0.5/512.0, 1.0-0.5/512.0)*0.5)); }
+vec4 stkTect(vec2 uv){ return stkTap(uStkSel.x, vec2(0.5+fract(uv.x)*0.5, 0.5+clamp(uv.y, 0.5/256.0, 1.0-0.5/256.0)*0.25)); }
 uniform float mixf, uTemp, uVeg, uIceT, uSeaT, uSchem, uDetail;
 /* 0..1: do GRASSES exist and form a sward here yet. Vegetation as a whole is
    already gated by uVeg, which the climate table drives correctly -- 0.00 before
@@ -263,24 +281,30 @@ const float FOLD_Q=64.0;             // build_foldphase.Q_RANGE
 vec2 gFoldP=vec2(0.0); vec2 gFoldE=vec2(1.0,0.0); vec2 gFoldN=vec2(0.0,1.0); float gFoldW=0.0;
 vec2 gDrnP=vec2(0.0); vec2 gDrnE=vec2(1.0,0.0); vec2 gDrnN=vec2(0.0,1.0); float gDrnW=0.0;
 vec2 decFold(vec4 t){ return (vec2(t.r*255.0*256.0+t.g*255.0, t.b*255.0*256.0+t.a*255.0)/65535.0)*(2.0*FOLD_Q)-FOLD_Q; }
-/* Bilinear on decoded values. Returns phi, psi and their gradients in uv. */
-void foldTaps(sampler2D T, vec2 uv, out vec2 v, out vec2 dpu, out vec2 dpv){
-  vec2 st=uv/uFoldTexel-0.5;
-  vec2 f=fract(st), b=(floor(st)+0.5)*uFoldTexel;
-  vec2 p00=decFold(texture2D(T,b)), p10=decFold(texture2D(T,b+vec2(uFoldTexel.x,0.0)));
-  vec2 p01=decFold(texture2D(T,b+vec2(0.0,uFoldTexel.y))), p11=decFold(texture2D(T,b+uFoldTexel));
+/* Bilinear on decoded values. Returns phi, psi and their gradients in uv.
+   sel picks the stack (0 stkA, 1 stkB) and col0 the band's left column in it
+   (0 for _q, 512 for _x); the 512x256 field wraps in u and clamps in v by
+   hand, and every tap lands on a texel centre of the 1024x1024 stack. */
+void foldTaps(float sel, float col0, vec2 uv, out vec2 v, out vec2 dpu, out vec2 dpv){
+  vec2 st=vec2(uv.x*512.0, uv.y*256.0)-0.5;
+  vec2 f=fract(st), k=floor(st);
+  float kx0=mod(k.x,512.0), kx1=mod(k.x+1.0,512.0);
+  float ky0=clamp(k.y,0.0,255.0), ky1=clamp(k.y+1.0,0.0,255.0);
+  vec2 o=vec2(col0+0.5, 768.5);
+  vec2 p00=decFold(stkTap(sel,(o+vec2(kx0,ky0))/1024.0)), p10=decFold(stkTap(sel,(o+vec2(kx1,ky0))/1024.0));
+  vec2 p01=decFold(stkTap(sel,(o+vec2(kx0,ky1))/1024.0)), p11=decFold(stkTap(sel,(o+vec2(kx1,ky1))/1024.0));
   v=mix(mix(p00,p10,f.x),mix(p01,p11,f.x),f.y);
   dpu=mix(p10-p00,p11-p01,f.y);   // change per texel in u
   dpv=mix(p01-p00,p11-p10,f.x);   // change per texel in v
 }
 void foldAt(vec2 uv){
   vec2 va,dua,dva, vb,dub,dvb;
-  foldTaps(foldA,wA(uv),va,dua,dva);
-  foldTaps(foldB,wB(uv),vb,dub,dvb);
+  foldTaps(uStkSel.z,0.0,wA(uv),va,dua,dva);
+  foldTaps(uStkSelB.x,0.0,wB(uv),vb,dub,dvb);
   gFoldP=mix(va,vb,mixf);
   vec2 du=mix(dua,dub,mixf), dv=mix(dva,dvb,mixf);
   /* Gradient of phi in the east/north frame: u runs east, v runs NORTH (uv.y
-     is 1 at the pole), a texel is uFoldTexel of the map. The across-strike
+     is 1 at the pole), a texel is 1/512 by 1/256 of the map. The across-strike
      unit vector is grad(phi) normalised, the along-strike one grad(psi). */
   float cl=max(cos(radians(uv.y*180.0-90.0)),0.15);
   vec2 gphi=vec2(du.x/cl, dv.x), gpsi=vec2(du.y/cl, dv.y);
@@ -299,8 +323,8 @@ void foldAt(vec2 uv){
    gDrnN is the DOWNSTREAM unit vector, which is the tilted patches' +v. */
 void drainAt(vec2 uv){
   vec2 va,dua,dva, vb,dub,dvb;
-  foldTaps(drainA,wA(uv),va,dua,dva);
-  foldTaps(drainB,wB(uv),vb,dub,dvb);
+  foldTaps(uStkSel.w,512.0,wA(uv),va,dua,dva);
+  foldTaps(uStkSelB.y,512.0,wB(uv),vb,dub,dvb);
   gDrnP=mix(va,vb,mixf);
   vec2 du=mix(dua,dub,mixf), dv=mix(dva,dvb,mixf);
   float cl=max(cos(radians(uv.y*180.0-90.0)),0.15);
@@ -1221,7 +1245,7 @@ void main(){
      lifted into 3-D on the local east/north frame, because the noise it steers
      is evaluated on the sphere and a 2-D angle cannot rotate a 3-D domain. */
   if(uFore>0.5){
-    vec3 F=texture2D(foreA,wA(uv)).rgb;
+    vec3 F=stkFore(wA(uv)).rgb;
     gFore=F.r*620.0 - F.g*90.0;      // moat down, forebulge up
     /* A FORELAND IS A SEDIMENT BASIN, and saying so is most of what makes it
        visible. The flexural deflection alone is honest but slight -- a few
@@ -1236,7 +1260,7 @@ void main(){
     gHard=mix(gHard, 0.05, clamp(F.r*620.0/260.0, 0.0, 0.85));
   }
   if(uTect>0.5){
-    vec4 T=texture2D(tectA,wA(uv));
+    vec4 T=stkTect(wA(uv));
     gShort=T.r;
     gArc=(1.0-T.a)*uArcK;
     float fc2=T.g*2.0-1.0, fs2=T.b*2.0-1.0;   // NOT c2/s2 -- s2 is the climate sin^2(lat)
@@ -4220,9 +4244,14 @@ void main(){
      colour, so anything under alpha 0 comes back black -- the first shipped
      sheets had black oceans. Under 0.5 the colour halves and is restored to
      within a level. On screen alpha is always 1. */
+  /* ?show=N draws one gate as grey: 1 gErg, 2 atlasGate, 3 gArc, 4 reliefEnv,
+     5 dissectGate, 6 rug, 7 gShort, 8 fract(phi) and 9 fract(chi) -- the fold
+     and drainage coordinates as sawtooth ramps, which read as clean bands when
+     the 16-bit decode is exact and as speckle when a tap has blended bytes. */
   if(uShow>0.5 && z>=wl){
     float v = uShow<1.5 ? gErg : uShow<2.5 ? atlasGate(z) : uShow<3.5 ? gArc
-            : uShow<4.5 ? reliefEnv(z,rug) : uShow<5.5 ? dissectGate(z,rug) : uShow<6.5 ? rug : gShort;
+            : uShow<4.5 ? reliefEnv(z,rug) : uShow<5.5 ? dissectGate(z,rug) : uShow<6.5 ? rug
+            : uShow<7.5 ? gShort : uShow<8.5 ? fract(gFoldP.x)*gFoldW : fract(gDrnP.x)*step(0.001,gDrnW);
     col=vec3(clamp(v,0.0,1.0));
   }
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);

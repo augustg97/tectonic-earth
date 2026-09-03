@@ -190,6 +190,73 @@ function getTex(kind,i){
   _cacheEvict(key);
   return e.t;
 }
+/* THE SMALL-FIELD STACK (2026-09-03). A fragment shader has 16 texture units
+   on real GPUs (MAX_TEXTURE_IMAGE_UNITS: Apple/ANGLE Metal, most desktop GL)
+   and 32 on the software GL the WP-10 rounds were reviewed on, so the samplers
+   rounds 2-3 added linked there and failed here -- "texture image units count
+   exceeds MAX_TEXTURE_IMAGE_UNITS(16)" and a black globe (README 7.17). The
+   four small per-keyframe fields (_t, _f, _q, _x) now share one 1024x1024 RGBA
+   texture per keyframe, composed ON THE GPU from the decoded bitmaps as they
+   land: texSubImage2D through copyTextureToTexture, no canvas, so nothing is
+   premultiplied and the 16-bit byte pairs of _q and _x survive. The layout is
+   documented at the FRAG uniforms (stkFore, stkTect, foldTaps): _f rows 0-511
+   full width; _t rows 512-767 twice side by side, so the right-hand copy wraps
+   at the dateline; _q at (0,768), _x at (512,768). A stack is a TEXCACHE entry
+   ('s'+i, 4 MB, no bitmap), so the budget and eviction treat it like a field;
+   `have` records the bands filled so far, and bindStacks() sends a band that
+   one keyframe of the pair lacks to the other, which is the per-field fallback
+   the separate samplers had. Terrain shader: 20 units -> 16; check_shader.py
+   counts them. */
+const STK_W=1024, STK_H=1024, STK_BYTES=STK_W*STK_H*4;
+const STK_BANDS={f:[[0,0]], t:[[0,512],[512,512]], q:[[0,768]], x:[[512,768]]};
+let _stkZero=null; const _stkPos=new THREE.Vector2();
+function stackEntry(i){
+  const key='s'+i; let e=TEXCACHE.get(key);
+  if(!e){
+    if(!_stkZero)_stkZero=new Uint8Array(STK_BYTES);
+    const t=new THREE.DataTexture(_stkZero,STK_W,STK_H,THREE.RGBAFormat,THREE.UnsignedByteType);
+    t.colorSpace=THREE.NoColorSpace; t.premultiplyAlpha=false;
+    t.flipY=!_BITMAPS;   // bitmaps are pre-flipped; an <img> fallback is not
+    t.minFilter=THREE.LinearFilter; t.magFilter=THREE.LinearFilter; t.generateMipmaps=false;
+    t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping; t.needsUpdate=true;
+    e={bm:null,t:t,u:0,b:STK_BYTES,have:new Set()};
+    TEXCACHE.set(key,e); _texBytes+=e.b;
+  }
+  return e;
+}
+/* Fill whichever bands of keyframe i's stack have landed. get(kind) is the
+   caller's own binder (bindTex / gT / T): it may kick a decode and return
+   null, in which case the band waits for a later frame, exactly as a late
+   texture did. Returns the stack entry. */
+function stackFill(i,get){
+  const e=stackEntry(i);
+  let gl=null;
+  for(const k in STK_BANDS){
+    if(e.have.has(k))continue;
+    const src=get(k); if(!src)continue;
+    const img=src.image||src;                        // a THREE.Texture, or a bare bitmap
+    if(!gl){gl=renderer.getContext(); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,gl.NONE);}
+    for(const xy of STK_BANDS[k])renderer.copyTextureToTexture(_stkPos.set(xy[0],xy[1]),{image:img},e.t);
+    e.have.add(k);
+  }
+  _cacheTouch(e); _boundAt.set('s'+i,_frameNo);
+  return e;
+}
+/* Bind the pair's stacks and the flags and selectors that go with them. SA is
+   keyframe i's entry, SB keyframe j's (the same entry for a still). A band
+   missing from one keyframe reads from the other: _t and _f from i, else j;
+   the _q/_x A-taps from i, else j; their B-taps from j, else i -- "one
+   missing: a still", as the separate samplers had it. */
+function bindStacks(u,SA,SB){
+  u.stkA.value=SA.t; u.stkB.value=SB.t;
+  const hA=SA.have, hB=SB.have, has=(k)=>hA.has(k)||hB.has(k);
+  u.uTect.value=has('t')?1.0:0.0;
+  u.uFore.value=has('f')?1.0:0.0;
+  u.uFoldOn.value=has('q')?1.0:0.0;
+  u.uDrainOn.value=(has('x')&&!_sq.has('nodrain'))?1.0:0.0;
+  u.uStkSel.value.set(hA.has('t')?0:1, hA.has('f')?0:1, hA.has('q')?0:1, hA.has('x')?0:1);
+  u.uStkSelB.value.set(hB.has('q')?1:0, hB.has('x')?1:0);
+}
 /* The present frame's lake field holds the REAL lakes, traced from Natural
    Earth. Most of the big ones are Holocene: the Great Lakes date from about
    14 ka, when the Laurentide ice sheet withdrew, and Ladoga and Great Slave are
@@ -746,10 +813,9 @@ function initGL(){
     oceanA:{value:null},oceanB:{value:null},
     dispA:{value:null},uWarp:{value:0},
     plateA:{value:null},uMat:{value:0},
-    tectA:{value:null},uTect:{value:0},
-    foreA:{value:null},uFore:{value:0},
-    foldA:{value:null},foldB:{value:null},uFoldOn:{value:0},uFoldTexel:{value:new THREE.Vector2(1/512,1/256)},
-    drainA:{value:null},drainB:{value:null},uDrainOn:{value:0},
+    uTect:{value:0},uFore:{value:0},uFoldOn:{value:0},uDrainOn:{value:0},
+    // the small-field stack: _t, _f, _q, _x of a keyframe in ONE texture (stackFill)
+    stkA:{value:null},stkB:{value:null},uStkSel:{value:new THREE.Vector4(0,0,0,0)},uStkSelB:{value:new THREE.Vector2(0,0)},
     uPlateQ:{value:Array.from({length:48},()=>new THREE.Vector4(0,0,1,0))},
     mixf:{value:0},uTemp:{value:-0.55},uVeg:{value:1},uGrass:{value:1},uIceT:{value:-30},
     uSeaT:{value:-14},uSchem:{value:0},uDetail:{value:1},
@@ -3016,18 +3082,8 @@ function bindTextures(){
       for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
       mat.uniforms.uMat.value=1.0;
     } else mat.uniforms.uMat.value=0.0;
-    const ts=gT('t');
-    if(ts)mat.uniforms.tectA.value=ts;
-    mat.uniforms.uTect.value=ts?1.0:0.0;
-    const fs=gT('f');
-    if(fs)mat.uniforms.foreA.value=fs;
-    mat.uniforms.uFore.value=fs?1.0:0.0;
-    const qs=gT('q');
-    if(qs){mat.uniforms.foldA.value=qs;mat.uniforms.foldB.value=qs;}
-    mat.uniforms.uFoldOn.value=qs?1.0:0.0;
-    const xs=gT('x');
-    if(xs){mat.uniforms.drainA.value=xs;mat.uniforms.drainB.value=xs;}
-    mat.uniforms.uDrainOn.value=(xs&&!_sq.has('nodrain'))?1.0:0.0;
+    const S=stackFill(bi,gT);                       // _t _f _q _x: one texture, a still
+    bindStacks(mat.uniforms,S,S);
     const ms=gT('m'); if(ms)mat.uniforms.motA.value=ms;
     mat.uniforms.mixf.value=0.0;
     bindClimate(f);
@@ -3088,20 +3144,12 @@ function bindTextures(){
      did not exist. The files are baked now; this makes the binding robust so a
      single gap can never silence the feature again. The fabric changes slowly,
      so the neighbour is a good answer rather than a fudge. */
-  const ta=bindTex('t',f.i)||bindTex('t',f.j);
-  if(ta)mat.uniforms.tectA.value=ta;
-  mat.uniforms.uTect.value=ta?1.0:0.0;
-  // Foreland flexure: the moat in front of a mountain belt.
-  const fa=bindTex('f',f.i)||bindTex('f',f.j);   // same fallback, same reason
-  if(fa)mat.uniforms.foreA.value=fa;
-  mat.uniforms.uFore.value=fa?1.0:0.0;
-  // Fold coordinates, interpolated between the pair like the terrain itself.
-  const qa=bindTex('q',f.i), qb=bindTex('q',f.j), qq=qa||qb;
-  if(qq){mat.uniforms.foldA.value=qa||qq;mat.uniforms.foldB.value=qb||qq;}   // one missing: a still, as with _t
-  mat.uniforms.uFoldOn.value=qq?1.0:0.0;
-  const xa=bindTex('x',f.i), xb=bindTex('x',f.j), xx=xa||xb;
-  if(xx){mat.uniforms.drainA.value=xa||xx;mat.uniforms.drainB.value=xb||xx;}
-  mat.uniforms.uDrainOn.value=(xx&&!_sq.has('nodrain'))?1.0:0.0;
+  /* The tectonic state, the foreland (the moat in front of a belt), and the
+     fold and drainage coordinates (interpolated between the pair like the
+     terrain itself) ride the small-field stack: one texture per keyframe of
+     the pair, and bindStacks() keeps that fallback per band. */
+  const SA=stackFill(f.i,k=>bindTex(k,f.i)), SB=(f.j!==f.i)?stackFill(f.j,k=>bindTex(k,f.j)):SA;
+  bindStacks(mat.uniforms,SA,SB);
   // Linear in t: the shader interpolates the height field, so this drives the
   // coastline's position. Easing it would make continents accelerate and stall
   // at every keyframe instead of drifting at a steady rate.
@@ -3258,10 +3306,7 @@ function bindStill(i){
   if(ps&&pr){u.plateA.value=ps;const Q=u.uPlateQ.value;
     for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
     u.uMat.value=1.0;} else u.uMat.value=0.0;
-  const ts=T('t'); if(ts)u.tectA.value=ts; u.uTect.value=ts?1.0:0.0;
-  const fs=T('f'); if(fs)u.foreA.value=fs; u.uFore.value=fs?1.0:0.0;
-  const qs=T('q'); if(qs){u.foldA.value=qs;u.foldB.value=qs;} u.uFoldOn.value=qs?1.0:0.0;
-  const xs=T('x'); if(xs){u.drainA.value=xs;u.drainB.value=xs;} u.uDrainOn.value=(xs&&!_sq.has('nodrain'))?1.0:0.0;
+  const S=stackFill(i,T); bindStacks(u,S,S);      // _t _f _q _x: one texture, a still
   const ms=T('m'); if(ms)u.motA.value=ms;
   u.mixf.value=0.0;
   bindClimate({i:i,j:i,t:0},DATA.timeline[i].age,0.0);
@@ -3931,7 +3976,9 @@ function buildLegend(){
      are snapped to the elevation field, feature coordinates are back-advected —
      so when something does not appear on screen the only way to find out which
      stage dropped it is to be able to call that stage directly. */
-  window.APP={state,DATA,snapLabel,projectLL,curFrame,elevField,elevAtLL,
+  window.APP={state,DATA,mat,TEXCACHE,snapLabel,projectLL,curFrame,elevField,elevAtLL,   // mat/TEXCACHE: the harness reads uniforms and residency
+              loader:()=>({pending:[..._bmPending.keys()],upQ:_upQ.map(q=>q.k+q.i),missing:[..._bmMissing],frame:_frameNo,
+                           mb:Math.round(_texBytes/1048576),hidden:document.hidden,scrubbing:_scrubbing}),   // the decode/upload queues, for the harness
               labelVisible,layoutLabels,hotspotsNow,intervalAt,lifeAt,biomesAt,
               selectAt,showFeature,showEvent,jumpTo,featurePos,
               /* step() drives one frame by hand. Needed because a headless or
