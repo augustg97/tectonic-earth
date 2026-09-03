@@ -97,6 +97,11 @@ uniform vec4 uAtlasK;
    DEM-driven plateau envelope on the atlas terms (?plat=, 0 off). */
 uniform float uErgK, uPlatK;
 uniform float uArcK;   // scales the belt-type suppression of the fold relief (?arc=, 0 off)
+/* MASK VIEW (?show=N): draw one gate as grey over land, so a gate can be
+   looked at instead of inferred from a render pair. 1 the erg mask, 2 the
+   atlas belt gate, 3 the belt type (arc), 4 the DEM plateau envelope, 5 the
+   dissection gate, 6 rug, 7 shortening. Sea keeps its colour for the coast. */
+uniform float uShow;
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
@@ -2328,6 +2333,7 @@ void main(){
          interdune corridors dark, as the reference reads; the crests'
          across-slope reaches the shading normal below. */
       float dune=0.0;
+      gErg=erg;
       if(erg>0.01 && uErgK>0.0){
         float wlat=asin(clamp(sdir.y,-1.0,1.0));
         float wth=radians(45.0)*clamp(wlat/radians(6.0),-1.0,1.0);
@@ -2352,7 +2358,6 @@ void main(){
           dune+=(crest-0.5)*0.5*ergFine;
           slope+=gcr*ergFine;
         }
-        gErg=erg;
         gDuneN=vec2(-sin(wth),cos(wth))*slope*uErgK;
         dune*=uErgK;
       }
@@ -2978,7 +2983,7 @@ void main(){
        the wind-steered corduroy the desert block drew as tone, so a dune field
        is lit as relief and not only painted. Same east/north convention as
        the atlas slopes above. */
-    if(gErg>0.01){
+    if(gErg>0.01 && uErgK>0.0){
       float ampE=gErg*2.2;
       nx+=gDuneN.x*ampE; ny+=gDuneN.y*ampE;
     }
@@ -4189,6 +4194,11 @@ void main(){
      colour, so anything under alpha 0 comes back black -- the first shipped
      sheets had black oceans. Under 0.5 the colour halves and is restored to
      within a level. On screen alpha is always 1. */
+  if(uShow>0.5 && z>=wl){
+    float v = uShow<1.5 ? gErg : uShow<2.5 ? atlasGate(z) : uShow<3.5 ? gArc
+            : uShow<4.5 ? reliefEnv(z,rug) : uShow<5.5 ? dissectGate(z,rug) : uShow<6.5 ? rug : gShort;
+    col=vec3(clamp(v,0.0,1.0));
+  }
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }
 `,

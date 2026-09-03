@@ -762,6 +762,7 @@ function initGL(){
     uErgK:{value:+(_sq.get('erg')||1)},        // wind-steered dune lineation (0 off)
     uPlatK:{value:+(_sq.get('plat')||1)},      // DEM-driven plateau envelope on the atlas (0 off)
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
+    uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
     uNz:{value:bakeNoiseLUT()},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
     // it is used to warp -- not the elevation, which is now twice that.
