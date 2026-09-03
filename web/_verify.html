@@ -13,7 +13,13 @@
 <iframe id="app" style="width:1280px;height:960px;border:0"></iframe>
 <script>
 const q = new URLSearchParams(location.search);
-const passthrough = ['oldnoise','zeronoise'].filter(k => q.get(k)).map(k => '&' + k + '=1').join('');
+// Every key the driver does not consume is forwarded to the app verbatim, so
+// a knob sweep (?atlasN= ?basin=0 ?noatlas=1 ?erg=0 ...) runs through the
+// same harness as a plain shot. The driver's own keys stay here.
+const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','mins','scrub','coherence','secs',
+                             'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
+                             'app','settle','shotsize','nolabels']);
+const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
 // ?bake= loads the app in its own sheet-baking configuration: lite path on, shipped

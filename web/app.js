@@ -759,6 +759,9 @@ function initGL(){
     uAtlas:{value:null},uAtlasOn:{value:0},
     uAtlasK:{value:new THREE.Vector4(+(_sq.get('atlasN')||1),+(_sq.get('atlasT')||1),+(_sq.get('atlasH')||1),+(_sq.get('plainsK')||1))},
     uBasin:{value:_sq.get('basin')==='0'?0:1},
+    uErgK:{value:+(_sq.get('erg')||1)},        // wind-steered dune lineation (0 off)
+    uPlatK:{value:+(_sq.get('plat')||1)},      // DEM-driven plateau envelope on the atlas (0 off)
+    uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
     uNz:{value:bakeNoiseLUT()},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
     // it is used to warp -- not the elevation, which is now twice that.

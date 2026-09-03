@@ -92,6 +92,10 @@ uniform sampler2D uAtlas;
    real display without a shader edit and a sheet re-bake between each try.
    uBasin switches the plateau-interior envelope (basinEnv) off with ?basin=0. */
 uniform vec4 uAtlasK;
+/* uErgK scales the wind-steered dune lineation (?erg=, 0 off); uPlatK the
+   DEM-driven plateau envelope on the atlas terms (?plat=, 0 off). */
+uniform float uErgK, uPlatK;
+uniform float uArcK;   // scales the belt-type suppression of the fold relief (?arc=, 0 off)
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
@@ -213,6 +217,15 @@ vec3 gMatAxis=vec3(0.0,0.0,1.0); float gMatAng=0.0;
 vec3 gFold=vec3(0.0); float gShort=0.0; float gHard=0.5;
 float gFore=0.0;   // metres of flexural deflection, positive = down
 float gAlp=0.0;    // bare-rock fraction above the treeline, set in the land colour block
+/* Sand sea, set in the desert colour block and read by the normal block below
+   it: gErg is the erg mask, gDuneN the dune crests' across-slope already turned
+   into an east/north slope vector (WP-10 B5, the erg half). */
+float gErg=0.0; vec2 gDuneN=vec2(0.0);
+/* Belt type, from the alpha of _t (build_arc.py): 1 where this belt is a
+   magmatic arc -- the overriding plate 150-300 km behind a trench with ocean
+   crust going down -- 0 for a fold-and-thrust belt. A _t written without
+   the channel decodes as 0. */
+float gArc=0.0;
 vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
   float c=cos(gMatAng), sn=sin(gMatAng);
@@ -376,15 +389,21 @@ vec3 dissectRelief(vec3 msd, float hard){
 /* Where the plains take dissection: flat ground that is not a belt, with
    some height and a hard or middling substrate -- a shield or an old
    plateau, not a filling basin, which the reference shows smooth. */
+/* An ARC is not a fold belt (WP-10 item 2, the belt-type channel): where
+   gArc says the belt stands over a subducting slab, the fold ridges are
+   taken down by 0.9*gArc and the dissection patches -- an upland cut by
+   valleys, which is what an ignimbrite plateau looks like between its
+   cones -- are let in by treating the shortening as that much smaller. The
+   volcanoes themselves want a cone patch, which the atlas does not have yet. */
 float dissectGate(float z, float rug){
-  return (1.0-smoothstep(0.08,0.30,gShort))*(1.0-smoothstep(0.10,0.35,rug))
+  return (1.0-smoothstep(0.08,0.30,gShort*(1.0-gArc)))*(1.0-smoothstep(0.10,0.35,rug))
         *smoothstep(120.0,500.0,z)*smoothstep(0.25,0.55,gHard);
 }
 /* The gate every atlas term shares: the age-relative shortening field from
    build_tectonic.topo_fabric, which is what says "this is a belt" at every
    age, times a floor on absolute height so a lowland never grows ridges. */
 float atlasGate(float z){
-  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(100.0,400.0,z);
+  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(100.0,400.0,z)*(1.0-0.9*gArc);
 }
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -493,6 +512,36 @@ float licN(vec3 p, vec3 t, float F, float S){
          + vnoise3((p + t*(1.2*S))*F)*1.4
          + vnoise3((p + t*(2.4*S))*F)*0.6 ) * 0.169492;
 }
+/* The same smear evaluated on both sides of a, so one set of taps gives the
+   smeared VALUE (the mean of the two sides) and its across-slope (their
+   difference). Gaussian taps 0.85-0.9 cells apart -- closer than a cell, or
+   the taps decorrelate and the sum is a comb, not a smear -- nine of them for
+   the corridor octave (+-3.6 cells) and thirteen for the dunes (+-5.1 cells):
+   a linear dune is a crest tens of kilometres long and a few wide, and the
+   five-tap licN (+-2 cells) reads as hills, not as ruled sand. Both are used
+   only inside the erg mask, which is where the cost is paid. */
+float licPair9(vec3 p, vec3 t, vec3 a, float F, float S, float h, out float val){
+  vec3 pa=p+a*h, pb=p-a*h;
+  float sa=vnoise3(pa*F), sb=vnoise3(pb*F);
+  for(int k=1;k<5;k++){
+    float d=float(k)*S, w=exp(-float(k*k)*0.125);
+    sa+=(vnoise3((pa-t*d)*F)+vnoise3((pa+t*d)*F))*w;
+    sb+=(vnoise3((pb-t*d)*F)+vnoise3((pb+t*d)*F))*w;
+  }
+  val=(sa+sb)*0.5*0.2042;      // the weights sum to 4.898
+  return (sa-sb)*0.2042;
+}
+float licPair13(vec3 p, vec3 t, vec3 a, float F, float S, float h, out float val){
+  vec3 pa=p+a*h, pb=p-a*h;
+  float sa=vnoise3(pa*F), sb=vnoise3(pb*F);
+  for(int k=1;k<7;k++){
+    float d=float(k)*S, w=exp(-float(k*k)/18.0);
+    sa+=(vnoise3((pa-t*d)*F)+vnoise3((pa+t*d)*F))*w;
+    sb+=(vnoise3((pb-t*d)*F)+vnoise3((pb+t*d)*F))*w;
+  }
+  val=(sa+sb)*0.5*0.1370;      // the weights sum to 7.298
+  return (sa-sb)*0.1370;
+}
 /* The corrugation itself: the ACROSS-axis difference of an ALONG-axis smear,
    taken from one set of taps rather than by convolving twice and subtracting.
 
@@ -571,6 +620,21 @@ float basinEnv(float z, float rug){
   if(plateau<0.005) return 1.0;
   float n=vnoise3(vec3(gFoldP.x/0.6, gFoldP.y/2.0, 7.3));
   return mix(1.0, 0.25+0.75*smoothstep(0.35,0.65,n), plateau);
+}
+/* THE DEM ALREADY KNOWS WHERE A PLATEAU'S RANGES ARE (WP-10 item 3). The
+   envelope above synthesises basins because the belt gate opens on the whole
+   interior; but rug -- the shipped field's own slope over a 62 km baseline --
+   is not uniform there. Measured at the present day: over the Tibetan interior
+   its p10 / median / p90 are 0.22 / 0.57 / 1.00, over the Altiplano box 0.23 /
+   0.80 / 1.00, against 1.00 / 1.00 / 1.00 on the Himalayan front and the
+   Zagros. The low tail IS the basins (the Qiangtang lake plains, the salars),
+   the high end the range groups between them. So on high ground the atlas
+   amplitude follows the DEM's relief: full where the field is rough, a sixth
+   where it is flat. Below 2.5 km nothing changes, and a steep front (rug 1)
+   is untouched by construction. ?plat=0 removes it for an A/B. */
+float reliefEnv(float z, float rug){
+  float plateau=smoothstep(2500.0,3500.0,z)*uPlatK;
+  return mix(1.0, 0.15+0.85*smoothstep(0.15,0.60,rug), plateau);
 }
 float detail3(vec3 p, float rug){
   float sm=0.0, a=0.5;
@@ -753,7 +817,7 @@ float elevDetail(float z, vec3 d, float rug){
     float g=atlasGate(z);
     if(g>0.005){
       vec3 ar=atlasRelief();
-      float eH=basinEnv(z,rug)*uAtlasK.z;
+      float eH=basinEnv(z,rug)*reliefEnv(z,rug)*uAtlasK.z;
       det=det*(1.0-0.6*g) + ar.x*520.0*g*(0.55+0.45*clamp(z/3000.0,0.0,1.0))*eH;
     }
   }
@@ -1140,8 +1204,9 @@ void main(){
     gHard=mix(gHard, 0.05, clamp(F.r*620.0/260.0, 0.0, 0.85));
   }
   if(uTect>0.5){
-    vec3 T=texture2D(tectA,wA(uv)).rgb;
+    vec4 T=texture2D(tectA,wA(uv));
     gShort=T.r;
+    gArc=(1.0-T.a)*uArcK;
     float fc2=T.g*2.0-1.0, fs2=T.b*2.0-1.0;   // NOT c2/s2 -- s2 is the climate sin^2(lat)
     float th=0.5*atan(fs2,fc2);
     float lo=radians(uv.x*360.0-180.0), la=radians(uv.y*180.0-90.0);
@@ -2233,12 +2298,63 @@ void main(){
       float ergBody=smoothstep(0.40,0.66, fbm3(mdc*3.4+53.0));
       float erg=desert*still*lowrel*ergBody;
       float ham=desert*smoothstep(0.16,0.40,rug);
-      /* DUNE LINEATION. A sand sea is not a wash of colour, it is a corduroy of
-         ridges tens of kilometres apart, and that anisotropy is the single most
-         recognisable thing about an erg from orbit. Stretching the sample
-         coordinate along one axis is what turns noise into ridges. */
-      float dune=(vnoise3(mdc*vec3(150.0,26.0,150.0)+7.0)-0.5)
-                +(vnoise3(mdc*vec3(430.0,72.0,430.0)+19.0)-0.5)*0.45;
+      /* DUNE LINEATION FROM THE WIND (WP-10, B5: the erg half). A sand sea is
+         not a wash of colour, it is a corduroy, and that anisotropy is the
+         single most recognisable thing about an erg from orbit. The term this
+         replaces stretched a noise along the world y axis, which is north-south
+         at the equator and nothing in particular at 30 degrees, where the ergs
+         are; it was keyed to no wind at all.
+
+         The direction is the RESULTANT wind line. The climate model's winds are
+         zonal by latitude band (build_surface.fetch: easterlies inside 30
+         degrees and past 60, westerlies between), and a surface wind is turned
+         by the Coriolis force -- right in the north, left in the south -- so
+         the trades blow from the north-east and the westerlies from the
+         south-west: the LINE is the same one, NE-SW, in every band north of the
+         equator, and NW-SE south of it. Linear dunes lie along the resultant
+         sand drift, which is why the Rub al Khali's uruq run NE-SW and the
+         Kalahari's and the Simpson's NW-SE. One angle per hemisphere, from the
+         PRESENT latitude (sand is reworked in thousands of years, a keyframe is
+         millions), so a drifting plate's dunes turn with its latitude; the
+         pattern itself is welded to the crust.
+
+         Two scales, both smeared ALONG the line (README 7.8: on a sphere that is
+         the only elongation there is): a corridor octave of 8 km cells, the
+         dune-field streaking that survives at continental zoom, and a dune
+         octave of 4 km cells, smeared over +-3.6 cells and ridged into sharp
+         crests, faded in by the pixel footprint like the close-ground grain
+         because at 6 km a pixel it can only alias. Crests light and
+         interdune corridors dark, as the reference reads; the crests'
+         across-slope reaches the shading normal below. */
+      float dune=0.0;
+      if(erg>0.01 && uErgK>0.0){
+        float wlat=asin(clamp(sdir.y,-1.0,1.0));
+        float wth=radians(45.0)*clamp(wlat/radians(6.0),-1.0,1.0);
+        vec3 dT=matDir(normalize(Eax*cos(wth)+Nax*sin(wth)));   // the line, in the material frame
+        vec3 dA=normalize(cross(mdc,dT));                       // across it
+        float ergFine=clamp((gFineFade-0.55)*2.2,0.0,1.0);
+        /* corridor octave: 11 km cells, +-3.6 cells along the line. Its
+           smeared value has a spread of 0.074 (numpy emulation of these
+           taps), so x3 puts +-0.2 into the tone factor below, about what
+           the term this replaces carried. */
+        float vc; float gc=licPair9(mdc, dT, dA, 560.0, 0.9/560.0, 0.35/560.0, vc);
+        dune=(vc-0.5)*3.0;
+        float slope=gc*3.0;
+        if(ergFine>0.01){
+          /* dune octave: 5.8 km cells smeared +-5.1 cells, ridged about the
+             smeared median (spread 0.064, so 0.10 is 1.5 sigma) into sharp
+             crests with rounded interdunes -- a linear dune's profile. */
+          float vd; float gd=licPair13(mdc+vec3(3.1,0.0,0.0), dT, dA, 1100.0, 0.85/1100.0, 0.35/1100.0, vd);
+          float off=(vd-0.5)/0.10;
+          float crest=1.0-min(abs(off),1.0);
+          float gcr=(abs(off)<1.0 ? -sign(off)*gd/0.10 : 0.0);
+          dune+=(crest-0.5)*0.5*ergFine;
+          slope+=gcr*ergFine;
+        }
+        gErg=erg;
+        gDuneN=vec2(-sin(wth),cos(wth))*slope*uErgK;
+        dune*=uErgK;
+      }
       vec3 ergCol=mix(vec3(0.884,0.800,0.616), vec3(0.867,0.592,0.310),
                       clamp(0.30+erg*0.95,0.0,1.0));
       ergCol*=1.0+dune*0.20;
@@ -2829,7 +2945,7 @@ void main(){
       float ga=atlasGate(zp);
       if(ga>0.005){
         vec3 ar=atlasRelief();
-        float eB=basinEnv(zp,rug);
+        float eB=basinEnv(zp,rug)*reliefEnv(zp,rug);
         /* 8.0 (WP-10 item 2): a sweep of 1.0/1.6/2.4 times the first 4.0 at
            960x600, 1.35, against the no-atlas render: no shading saturates
            at any of them (0.1% of pixels), the 5-20 km band rises 13% from
@@ -2856,6 +2972,14 @@ void main(){
         nx+=dr.y*ampD; ny+=dr.z*ampD;
         col*=1.0+dr.x*0.16*gd*uAtlasK.w;
       }
+    }
+    /* DUNE CRESTS IN THE NORMAL (WP-10 B5, the erg half): the across-slope of
+       the wind-steered corduroy the desert block drew as tone, so a dune field
+       is lit as relief and not only painted. Same east/north convention as
+       the atlas slopes above. */
+    if(gErg>0.01){
+      float ampE=gErg*2.2;
+      nx+=gDuneN.x*ampE; ny+=gDuneN.y*ampE;
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has
        been in the surface field all along and was used only to tint -- "the

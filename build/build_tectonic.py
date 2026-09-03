@@ -229,9 +229,15 @@ def bake(age, rot, quiet=False):
     c2 = c2 * fade
     s2 = s2 * fade
     arr = _encode(sh, c2, s2)
+    # The belt-type channel rides in alpha (build_arc.py): arc 1 .. fold belt 0,
+    # from the trenches and the land/ocean masks this keyframe already ships.
+    # `exact` keeps the RGB under low alpha, which the lossless encoder may
+    # otherwise zero (README 7, the fold-coordinate bake).
+    import build_arc
+    arr = build_arc.attach(arr, age)
     name = "phan_%04d_t.webp" % age if age <= 540 else "pre_%04d_t.webp" % age
     path = os.path.join(OUT, name)
-    Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
+    Image.fromarray(arr, "RGBA").save(path, "WEBP", lossless=True, method=6, exact=True)
     if not quiet:
         print("  %-22s %5.1f kB  shortening p99 %.4f max %.4f  active %.1f%%  %.1fs"
               % (name, os.path.getsize(path) / 1024.0, np.percentile(sh, 99),

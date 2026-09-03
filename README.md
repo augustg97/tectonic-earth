@@ -105,7 +105,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_o` | ocean structure | 2048×1024 | R = **crustal age**, log-companded over 0–52° of spreading (190 Myr, the oldest surviving ocean crust); G/B = spreading direction from the age gradient, with confidence in its length |
 | `_v` | displacement | 1024×512 | how far the crust under each pixel moves to the next keyframe, east/north in degrees of great circle, B = divergence (`build_displacement.py`) |
 | `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
-| `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`) |
+| `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`); A the **belt type**, 1 − arc: a magmatic arc (the overriding plate 150–300 km behind a trench with ocean crust going down) against a fold-and-thrust belt (`build_arc.py`, §5.10) |
 | `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
 | `_x` | drainage coordinates | 512×256 | two potentials fitted to the downhill direction of the PaleoDEM smoothed to ~120 km, χ across the regional flow and ω along it (increasing upstream), one unit per 256 km, gated on plains with a regional slope of 0.2–1 m/km; the tilted plains patches of the atlas are sampled at (χ, ω) (`build_drainphase.py`, §5.10) |
 | `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless WebP; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
@@ -243,6 +243,8 @@ Era state (temperature anomaly, ice lines, vegetation, aridity) is literature-in
 
 Ancient river courses are not known, so none are drawn from a map. As a check, the same method on the present-day DEM places channels in the real Himalayan valleys draining to the Bay of Bengal.
 
+**Sand seas** (WP-10 B5, the erg half). An erg is a corduroy, and its lineation follows the resultant wind. The climate model's winds are zonal by latitude band (`fetch` above), and a surface wind is turned by the Coriolis force, so the trades blow from the north-east and the westerlies from the south-west: the *line* is NE–SW everywhere north of the equator and NW–SE south of it, which is the trend of the Rub' al Khali's uruq and of the Kalahari's and the Simpson's dunes. The shader smears value noise along that line at two scales — 11 km cells for the dune-field corridors that survive at continental zoom, and 5.8 km cells over ±5 cells for the dunes themselves, ridged into sharp crests and faded in by the pixel footprint — as tone (crests light, interdune corridors dark) and as slope in the shading normal. The direction comes from the present latitude, the pattern is welded to the crust, and the erg mask (dry, still, flat, and a sand-sea body) is unchanged. `?erg=0` switches it off, `?erg=K` scales it.
+
 Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the geologically young ones are handled explicitly: the Great Lakes are ~14 ka old, and interpolating them out of the present frame left them sitting there in the Pliocene, 4 Myr either side of today. A second present-day lake field *without* them is swapped in outside the window they actually occupy.
 
 ### 5.6 Events, features and life
@@ -336,9 +338,31 @@ In the shader the patch's height goes into the elevation (zero-mean, so snow lin
 rock and treelines see the ridges), its slopes into the shading normal (the hillshade
 stencil is blind at 47 km), and its height into the albedo as tone (a lit ridge narrower
 than a pixel averages away, a dark valley floor does not). All of it gated by the
-age-relative shortening from `topo_fabric` and a 150–700 m floor. `?noatlas=1` switches it
+age-relative shortening from `topo_fabric` and a 100–400 m floor. `?noatlas=1` switches it
 off. Amplitudes were set on software GL at 960×600 and are the first thing to look at on a
 real display.
+
+Two things the gate alone gets wrong, and their model (WP-10 round 3):
+
+- **A plateau's ranges are in the DEM.** The belt gate opens on 94 % of the Tibetan
+  interior, but `rug` — the shipped field's own slope over a 62 km baseline — is not uniform
+  there: p10 / median / p90 of 0.22 / 0.57 / 1.00 at the present day, against 1.00 across the
+  Himalayan front and the Zagros. The low tail is the basins, the high end the range groups
+  between them, so above 2.5 km the atlas amplitude follows `rug` (`reliefEnv()`: a sixth
+  where the field is flat, full where it is rough). The synthetic basin envelope
+  (`basinEnv()`, `?basin=0`) stays as the fallback for what a 10 km grid cannot see; `?plat=0`
+  removes the DEM-driven one.
+- **An arc is not a fold belt.** `_t` carries shortening, and the Andes' Western Cordillera
+  shortens as much as the Eastern, so both drew fold ridges; the western one is a chain of
+  volcanoes on an ignimbrite plateau. `build_arc.py` bakes the belt type into the alpha of
+  `_t` from what is already shipped — the trench segments of `plates_time.json`, the land
+  mask of `_e` and the ocean-crust mask of `_o` — as the band 150–300 km behind a trench on
+  the overriding side, where the point 400 km beyond the trench carries a spreading vector
+  (the Nazca plate does; India, Arabia and the Persian Gulf do not, so the Himalaya and the
+  Zagros stay fold belts). Where it says arc, the fold relief comes down by 0.9 and the
+  dissection patches take the upland. The cones themselves want a volcanic patch in the
+  atlas, which is the next model. `?arc=0` switches it off. `build_tectonic.py` and
+  `rebuild_future.py` write the channel on every rebake; a `_t` without it decodes as 0.
 
 ## 6. Build and deploy
 
@@ -379,6 +403,7 @@ python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
 python build_webdata.py                    # labels, timeline, boundaries, life
 python build_foldphase.py -j               # fold coordinates for all 251 (~2 min on three cores)
 python build_drainphase.py -j              # drainage coordinates for all 251 (~5 min on three cores)
+python build_arc.py                        # the belt-type alpha of _t for all 251 (~1 s each); --stats 0 lists what it flags
 python build_orogen_atlas.py               # the sixteen atlas patches (~1 h) and web/atlas.webp
 python emulate_fold.py 0 44 58 26 36 z.png  # draw the atlas at (φ, ψ) over a window, no browser
 python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)

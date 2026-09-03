@@ -125,8 +125,10 @@ def bake_future_fabric(age, frac):
     sh = b * 0.35                       # clears the shader's 0.30 fabric gate
     fade = np.clip(sh / (0.10 * BT.SHORT_REF), 0.0, 1.0)
     arr = BT._encode(sh, c2 * fade, s2 * fade)
+    import build_arc                    # the belt-type alpha, as build_tectonic.bake ships it
+    arr = build_arc.attach(arr, age)
     path = os.path.join(BF.OUT, "fut_%04d_t.webp" % abs(age))
-    Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
+    Image.fromarray(arr, "RGBA").save(path, "WEBP", lossless=True, method=6, exact=True)
     return float((sh > 0.045).mean()) * 100.0
 
 
