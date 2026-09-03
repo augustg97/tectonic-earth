@@ -243,7 +243,7 @@ Era state (temperature anomaly, ice lines, vegetation, aridity) is literature-in
 
 Ancient river courses are not known, so none are drawn from a map. As a check, the same method on the present-day DEM places channels in the real Himalayan valleys draining to the Bay of Bengal.
 
-**Sand seas** (WP-10 B5, the erg half). An erg is a corduroy, and its lineation follows the resultant wind. The climate model's winds are zonal by latitude band (`fetch` above), and a surface wind is turned by the Coriolis force, so the trades blow from the north-east and the westerlies from the south-west: the *line* is NE–SW everywhere north of the equator and NW–SE south of it, which is the trend of the Rub' al Khali's uruq and of the Kalahari's and the Simpson's dunes. The shader smears value noise along that line at two scales — 11 km cells for the dune-field corridors that survive at continental zoom, and 5.8 km cells over ±5 cells for the dunes themselves, ridged into sharp crests and faded in by the pixel footprint — as tone (crests light, interdune corridors dark) and as slope in the shading normal. The direction comes from the present latitude, the pattern is welded to the crust, and the erg mask (dry, still, flat, and a sand-sea body) is unchanged. `?erg=0` switches it off, `?erg=K` scales it.
+**Sand seas** (WP-10 B5, the erg half). An erg is a corduroy, and its lineation follows the resultant wind. The climate model's winds are zonal by latitude band (`fetch` above), and a surface wind is turned by the Coriolis force, so the trades blow from the north-east and the westerlies from the south-west: the *line* is NE–SW everywhere north of the equator and NW–SE south of it, which is the trend of the Rub' al Khali's uruq and of the Kalahari's and the Simpson's dunes. The shader smears value noise along that line at two scales — 11 km cells for the dune-field corridors that survive at continental zoom, and 5.8 km cells over ±5 cells for the dunes themselves, ridged into sharp crests and faded in by the pixel footprint — as tone (crests light, interdune corridors dark) and as slope in the shading normal. The direction comes from the present latitude, the pattern is welded to the crust, and the erg mask (dry, still, flat, and a sand-sea body) is unchanged — which is the open item: the body is a crust-locked noise, and drawn as a mask (`?show=1`) it is zero over the whole Arabian peninsula and, on Tibet, on only in the Tarim. `?erg=0` switches the lineation off, `?erg=K` scales it.
 
 Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the geologically young ones are handled explicitly: the Great Lakes are ~14 ka old, and interpolating them out of the present frame left them sitting there in the Pliocene, 4 Myr either side of today. A second present-day lake field *without* them is swapped in outside the window they actually occupy.
 
@@ -344,14 +344,17 @@ real display.
 
 Two things the gate alone gets wrong, and their model (WP-10 round 3):
 
-- **A plateau's ranges are in the DEM.** The belt gate opens on 94 % of the Tibetan
-  interior, but `rug` — the shipped field's own slope over a 62 km baseline — is not uniform
-  there: p10 / median / p90 of 0.22 / 0.57 / 1.00 at the present day, against 1.00 across the
-  Himalayan front and the Zagros. The low tail is the basins, the high end the range groups
-  between them, so above 2.5 km the atlas amplitude follows `rug` (`reliefEnv()`: a sixth
-  where the field is flat, full where it is rough). The synthetic basin envelope
-  (`basinEnv()`, `?basin=0`) stays as the fallback for what a 10 km grid cannot see; `?plat=0`
-  removes the DEM-driven one.
+- **A plateau's ranges are not in the DEM, and the comb was.** The belt gate opens on 94 %
+  of the Tibetan interior. A DEM-driven envelope on `rug` (`reliefEnv()`, `?plat=1`) was built
+  and measured out: box statistics said the 62 km slope separates interiors (0.55–0.77) from
+  fronts (1.00), but drawn as a mask (`?show=4`) it is texel-scale speckle on a plateau, and
+  multiplying the ridges by it re-textures them without quieting the basins; prominence at
+  100 km says the Tibetan interior is a ±200 m undulation in a 6-arc-minute DEM. It ships off;
+  the synthetic `basinEnv()` (`?basin=0`) remains the plateau model. What did move the plateau
+  numbers was under the atlas: the fold-axis compression of the detail noise, retired
+  nowhere in B1, was still combing the 40 % of `det` left under the eroded ridges. It now
+  fades with the belt gate (§7.4: one system per band), which leaves band energy where it
+  was and raises coherence in every belt measured.
 - **An arc is not a fold belt.** `_t` carries shortening, and the Andes' Western Cordillera
   shortens as much as the Eastern, so both drew fold ridges; the western one is a chain of
   volcanoes on an ignimbrite plateau. `build_arc.py` bakes the belt type into the alpha of

@@ -7516,3 +7516,242 @@ layer (it moves between any two renders, and is most of the ocean number),
 and resampling texture on land. No gradient across the disc, no tone
 offset: the lite path draws the same Earth. The ambient page on the same
 set: 148 Ma, eight textures resident, nothing pending or missing.
+
+## WP-10 — IMPLEMENTATION, round 3 (2026-09-03): the erg's wind, a plateau's own relief, the belt type, and the comb under the atlas
+
+Worked from the handoff's next-steps list in a review environment with no
+display and no GPU (Chromium on SwiftShader, the round-1/2 harness): the M1
+items -- the 4096 sheet set, the amplitudes on a real display, the deploy --
+are untouched and still the user's. The three items that needed a model
+rather than an eye were built and measured, one of them measured OUT, and a
+fourth thing was found under them. The fields this needs were baked here
+for the test keyframes only (`_q` for 0 and 300 Ma, `_x` for 0, the `_t`
+alpha for -5, 0, 300, 540 and 1000); the full sets are a five-minute M1 job
+listed in the handoff. Every render pair below is the round-2 page, frozen
+as `_old.html` (its own app.js and shaders.js), against this round's page:
+900 px shots at 1280x960, zoom as stated, pin=1, no labels. "aniso" is the
+structure tensor's eigenvalue difference per 32 px tile: the directional
+gradient energy a corduroy carries and an isotropic mottle of the same
+energy does not.
+
+**The erg half of B5: dune lineation keyed to the wind.** The desert block
+had a dune term keyed to nothing: a value noise stretched along the world y
+axis, north-south at the equator and no direction at 30 degrees, where the
+ergs are. The handoff's design was "the fetch channel is zonal per latitude
+band, so a lineation term needs only that direction and a sand gate", and
+that is what was built, with one correction to the direction: a surface
+wind is turned by the Coriolis force -- right in the north, left in the
+south -- so the trades blow from the north-east and the westerlies from
+the south-west, and because the zonal sign and the meridional deflection
+flip together, the resultant LINE is the same in every band: NE-SW north
+of the equator, NW-SE south of it, the trend of the Rub al Khali's uruq and
+of the Kalahari's and the Simpson's dunes. A pure zonal line would have
+drawn every erg east-west, which none of them is. One angle per hemisphere
+from the present latitude (sand is reworked in thousands of years, a
+keyframe is millions), crossing zero over +-6 degrees; the pattern is
+welded to the crust.
+
+The construction is the sea floor's (README 7.8: on a sphere the only
+elongation is a smear along the axis). `licPair9` / `licPair13` evaluate a
+Gaussian smear along the wind line on both sides of the across vector, so
+one set of taps gives the smeared value and its across-slope: an 11 km
+corridor octave over +-3.6 cells (the dune-field streaking that survives
+at continental zoom) and a 5.8 km dune octave over +-5.1 cells, ridged
+about the smeared median into sharp crests with rounded interdunes and
+faded in by the pixel footprint like the close-ground grain. Tone (crests
+light, corridors dark) and the crests' slope in the shading normal, in the
+atlas's east/north convention. Emulated in numpy first: the smeared values
+spread 0.074 and 0.064, which set the tone gain and the ridge
+normalisation; at 1.5 km/px the emulation reads as a lineated sand sea
+with Y-junctions and terminations, at 3 and 6 km/px as a directional
+brush. Nine and thirteen taps because a five-tap smear (+-2 cells) reads
+as hills; taps closer than a cell because taps further apart decorrelate
+and the sum is a comb, not a smear. Paid only inside the erg mask: 18
+lookups at continental zoom, 44 up close.
+
+    framing                     zoom  mean |d|  px>4   band 4-24       coherence
+    Grand Erg Oriental (8E 31N) 1.35  0.44      3.2%   12.48 -> 12.49  0.168 -> 0.190
+      inside the sand-sea box         0.82      6.3%
+    Rub al Khali (50E 20N)      1.35  0.00      0.0%    9.47 -> 9.47   0.191 -> 0.191
+    Sahara + Arabia (15E 23N)   2.5   0.13      0.5%   14.99 -> 14.99  0.303 -> 0.303
+
+The Grand Erg frame is the term working as designed -- coherence up 13% at
+unchanged band energy, the energy-neutral replacement the atlas was held
+to, and the crop (`wp10/r3_grand_erg_old_new.jpg`) shows NE-SW streaks
+across the sand and none on the hamada. The Rub al Khali frame is
+byte-identical, and the mask view says why: the G6 sand-sea gate
+(dryness x stillness x flat ground x a crust-locked noise body of 1900 km
+cells) is ZERO over the whole Arabian peninsula, and on Tibet it is on
+only in the Tarim. The noise says no sand sea under the world's largest
+one. That is the round-G6 model's own randomness, not this term, and it
+is the next erg item: the body should come from something physical (a
+closed basin with a sand supply), not from a noise. At whole-continent
+zoom the corridor octave sits at its Nyquist limit and the ergs are a few
+pixels, hence the 0.13.
+
+**Item 3, the plateau interior: a DEM-driven envelope, built and measured
+out.** Round 2 synthesised basins on the plateaus with a noise envelope
+(`basinEnv`) because the belt gate opens on 94% of the Tibetan interior.
+The handoff's suggestion was to carry more of the amplitude on rug -- the
+shipped field's own slope over its 62 km baseline -- and measured before
+tuning (README 2.4), rug's DISTRIBUTION says it could:
+
+    region                     z_med   rug p10  p50  p90   short  gate>0.5
+    Tibet interior (Qiangtang)  4971    0.22  0.57  1.00   0.38     91%
+    Tanggula / Nyainqentanglha  4775    0.30  0.77  1.00   0.37    100%
+    Altiplano                   3942    0.23  0.80  1.00   0.82    100%
+    Zagros belt                 1571    0.04  1.00  1.00   0.45     70%
+    Himalaya front              3033    0.18  1.00  1.00   0.82     92%
+    E Cordillera, Bolivia       2242    0.25  1.00  1.00   0.76     90%
+    Great Plains                 656    0.12  0.24  0.38   0.10      4%
+
+So `reliefEnv()` was built: above 2.5 km the atlas amplitude follows rug,
+a sixth where the field is flat, full where it is rough. The first ramp
+(0.15-0.60) changed nothing, and the box statistics say why: a 62 km
+baseline crosses a basin into the ranges around it, so the interiors read
+0.55-0.77 and that ramp left them at 0.77-0.86 of full amplitude. Computed
+on the shipped field for the candidates:
+
+    region                    rug50   env 0.15-0.60  0.30-0.80  0.35-0.85  0.40-0.95
+    Qiangtang                  0.57        0.77        0.60       0.55       0.48
+    Tanggula                   0.77        0.86        0.74       0.70       0.64
+    Altiplano floor            0.65        0.75        0.63       0.60       0.55
+    Titicaca basin             0.54        0.67        0.56       0.53       0.50
+    E Cordillera, Bolivia      1.00        0.99        0.99       0.99       0.98
+    Himalaya front             1.00        0.99        0.97       0.96       0.95
+    Zagros, Colorado Plateau   1.00        1.00        1.00       1.00       1.00
+
+0.35-0.85 was taken, and Tibet rendered under it with the synthetic
+envelope on and off. The interior box, snow and lakes excluded:
+
+    Tibet (88E 33N, 1.6)         band 3-8 px  band 4-24  combed area  coherence  mean |d|
+    round-2 page                    8.12        14.76       57%        0.269      --
+    ramp 0.15-0.60, basin on        8.15        15.15       57%        0.270      0.96
+    ramp 0.35-0.85, basin off       8.36        15.60       58%        0.256      2.07
+    ramp 0.35-0.85, basin on        8.32        15.64       57%        0.268      2.32
+    Altiplano floor, both on:  band 4-24 11.75 -> 12.30, aniso 14.66 -> 13.68
+
+Nothing moved down, and the difference image carries the fold texture's
+own orientation with no other component. Drawn as a mask (?show=4,
+`wp10/r3_tibet_rug_envelope_mask.jpg`) the envelope on Tibet is texel-scale
+SPECKLE, flipping between 1 and 0.15 every few pixels: a 62 km difference
+of a 10 km field varies with every undulation of that field, so the box
+statistics were right and the spatial pattern was noise. Multiplying the
+ridges by it re-textures them instead of quieting the basins. Iteration 76
+recorded the same for slope-derived directions; it holds for slope-derived
+amplitudes. Whether the DEM could do better with another statistic was
+measured before deciding it could not -- prominence, z against the robust
+mean of eight taps (the submarine machinery's own), at 78, 111 and 155 km:
+
+    region                     p10 / p50 / p90 at 111 km (m)
+    Qiangtang                  -176     12    236
+    Tanggula                   -252     26    378
+    Altiplano floor            -355    -95    158
+    Titicaca basin             -345   -129    404
+    E Cordillera, Bolivia      -694     87   1123
+    W Cordillera, Chile        -531    476   1041
+    Himalaya front             -637    -51   1113
+
+The Tibetan interior is a +-200 m undulation at 100 km whichever way it is
+measured: its range groups and basins, 500-1500 m apart on the ground, are
+not in a 6-arc-minute PaleoDEM. The Altiplano floor does read as a basin
+(-95 m against its surroundings), but a prominence term cannot gate the
+fold envelope: half the cells of a real fold belt lie below their
+surroundings because they are its valleys (the Eastern Cordillera, median
+-2 m, p10 -694), and the term would strip the ridges off them. So the
+envelope ships OFF (`uPlatK` 0; `?plat=1` turns it on), the code and the
+finding stay, `basinEnv` remains the plateau model, and its depth (0.25 in
+the troughs) is still the display's question. A regional envelope needs a
+smoothed field, which is a bake.
+
+**Item 2's open question: the belt type.** The Andes drew fold-belt ridges
+across the Western Cordillera because `_t` carries shortening and the arc
+shortens as much as the fold belt behind it. The handoff called this a
+belt-type channel in `_t`, not an amplitude, and the source data it seemed
+to need is not needed: an arc stands 150-300 km behind a trench, on the
+overriding plate, above a slab of OCEANIC crust, and the shipped set has
+the trench segments (`plates_time.json`), the land mask (`_e`) and the
+ocean-crust mask (`_o`, whose spreading vector is zero wherever there is no
+real crust: the Persian Gulf, the Black Sea and Kansas all read age 1.0 and
+(0, 0)). `build_arc.py`: distance to the nearest trench point (a k-d tree on
+unit vectors, the polylines densified to 20 km), a band rising over 80-160
+km and falling over 300-430 km, and the point 400 km beyond the trench
+along the great circle from the cell -- past any gulf -- must carry a
+spreading vector. Continental collisions are drawn as 'trench' in the
+boundary set too (SUB, OCB and CCB are one class there); they fail the
+far-side test. At the present day:
+
+    region               arc mean   > 0.5
+    Andes W Cordillera     0.55      65%
+    Andes E Cordillera     0.00       0%
+    Cascades               0.64      68%
+    Japan                  0.41      44%
+    Central America        0.41      44%
+    Kamchatka              0.41      42%
+    Sumatra                0.23      16%
+    Zagros                 0.05       3%
+    Alps                   0.09       0%
+    Himalaya, Tibet        0.00       0%
+
+The channel rides in the alpha of `_t` as 1 + 254*(1 - arc), so a `_t`
+written before it decodes as arc 0 and nothing changes, and the alpha is
+never 0, so the lossless encoder cannot zero the RGB under it (`exact` is
+set regardless; the RGB is byte-identical after the rewrite).
+`build_tectonic.bake()` and `rebuild_future.bake_future_fabric()` attach it
+on every rebake. In the shader the fold relief comes down by 0.9*arc and
+the dissection gate sees the shortening as (1 - arc) of itself, so the
+arc's upland takes the plateau patches; the volcanoes want a cone patch,
+which is the next model.
+
+The first Andes A/B was null for a reason worth the README entry it now
+has (7.16): at age 0 the app binds the interval kinds from frame 49, which
+is fut_0005, and the alpha had been baked into phan_0000 only. With -5 Ma
+baked (W Cordillera 0.50, E Cordillera 0.00), the Andes at 1.35, ?arc=0
+against the default on the same page:
+
+    box                    mean |d|  px>4    band 4-24      coherence        aniso
+    Western Cordillera      5.40     58%     7.10 -> 6.61   0.325 -> 0.280   7.93 -> 4.97
+    Altiplano floor         5.45     44%    13.70 -> 13.61  0.281 -> 0.201  19.05 -> 9.79
+    Eastern Cordillera      0.24      1%     6.61 -> 6.58   0.207 -> 0.207   3.12 -> 3.09
+
+The arc-parallel ridges leave the Western Cordillera and the plateau floor
+(inside the band's outer edge, 300-430 km from the trench) and stay on the
+Eastern Cordillera, the fold-and-thrust belt (`wp10/r3_andes_arc_off_on.jpg`).
+The Altiplano framing (-67.5 -19, 1.35) with everything on against the
+round-2 page carries the whole round for a plateau: the floor's directional
+energy 14.66 -> 9.10 (coherence 0.264 -> 0.216), the Western Cordillera
+6.33 -> 2.84, the Eastern Cordillera 3.45 -> 3.55 with its coherence up
+0.191 -> 0.219 (`wp10/r3_altiplano_old_new.jpg`).
+
+**Found under it: the comb was still running under the atlas.** B1 retired
+the three per-pixel constructions and left the fold-axis COMPRESSION of the
+detail noise (S up to 2.45 along strike), which the review had measured as
+streaks that add no organisation; `det` is scaled by 1 - 0.6 gate for the
+atlas, and the 40% that remained was still combed along strike under the
+eroded ridges -- two systems texturing one surface (README 7.4), and the
+reason halving the atlas amplitude on a plateau left its corduroy
+measurably unchanged. The compression now fades with the belt gate (with
+the atlas off nothing changes). Alone on Tibet: band energy identical
+(8.12 -> 8.12), combed area 57% either way, coherence 0.269 -> 0.283 -- the
+streaks were muddling the ridges' own direction. On the Eastern Cordillera
+of Bolivia, a fold belt, coherence 0.170 -> 0.207. The Zagros regression
+frame (1.35, the round-2 page against everything on): whole frame mean |d|
+0.54, the belt box 1.08 with 7.8% of pixels over four levels, band 4-24
+10.74 -> 10.77, coherence 0.318 -> 0.318, aniso 17.51 -> 17.74; the folds
+carry the belt exactly as before.
+
+**The harness here, and two traps.** Chromium with SwiftShader through the
+app's own `_verify.html?shots=` driver: nine minutes to the first framing
+of a load (the compile), five to eight for each further one, doubled by
+anything else on the machine. The driver now forwards every query key it
+does not consume (so `?erg=0`, `?plat=1`, `?arc=0`, `?basin=0`, `?atlasN=`
+sweep through it), `?quick=1` waits on field residency instead of six
+renders of a camera-still loop, `?show=N` draws one gate as grey, and the
+round-2 page is frozen as `_old.html` for old-against-new pairs. The two
+traps: at an exact keyframe age the interval kinds bind from the younger
+neighbour (README 7.16), and a `run_in_background` waiter outlived its
+stated timeout by an hour and launched the diagnostic chain a second time
+beside the detached one -- two Chromes on one profile directory, one of
+which died at once and skipped a load. A chain launcher wants a lock file,
+and a waiter that must outlive a turn wants `setsid nohup`, not the
+tool's background mode.

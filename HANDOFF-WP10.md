@@ -13,8 +13,9 @@ set this roadmap, with goals G1–G5 and plans A–D — and the two `WP-10 — 
 entries at the end of `Deep Research/MODEL-GAPS.md`, which log what shipped and the
 numbers that say it did.
 
-All of it is on branch `claude/tectonic-earth-review-nze22g`, not on `main`. Nothing
-has been deployed. Deploying is `cd build && python check_shader.py && python
+All of it is on branch `claude/tectonic-earth-wp10-handoff-uie4hu` (fast-forwarded from
+`claude/tectonic-earth-review-nze22g`, which it contains), not on `main`. Nothing has been
+deployed. Deploying is `cd build && python check_shader.py && python
 build_site.py`, then merge to `main` and push (README §6).
 
 ## What is done (in roadmap order)
@@ -50,6 +51,25 @@ build_site.py`, then merge to `main` and push (README §6).
   split: `index.html` markup, `style.css`, `app.js`, `web/shaders/*.glsl` as the shader
   sources with `check_shader.py` packing `shaders.js` and `build_site.py` inlining the
   deployed page. `check_shader.py` now also flags a function called above its definition.
+- **Round 3 (2026-09-03, a review environment: software GL, no display).** The register
+  entry has every number. **B5, the erg half**: the dune lineation is keyed to the resultant
+  wind line of the Coriolis-turned zonal bands (NE–SW north of the equator, NW–SE south),
+  a corridor octave and a ridged dune octave smeared along it, as tone and normal
+  (`?erg=`); verified on the Grand Erg (coherence 0.168 → 0.190 at unchanged band energy).
+  The Rub' al Khali is untouched because the round-G6 sand-sea mask is zero there
+  (`?show=1` draws it) — that mask is the open erg item. **The belt type**: `build_arc.py`
+  bakes 1 − arc into the alpha of `_t` from the shipped trenches, land and ocean-crust
+  masks (no source data); the shader takes the fold relief down by 0.9·arc (`?arc=`).
+  Verified on the Andes: the Western Cordillera and the Altiplano lose the fold ridges
+  (directional energy −37 % and −49 %), the Eastern Cordillera keeps them (0.24/255).
+  **Item 3**: a DEM-driven plateau envelope on `rug` was built and measured out — on a
+  plateau the 62 km slope is texel-scale speckle (`?show=4`) and multiplying the ridges by
+  it re-textures them; it ships off (`?plat=1` to try) and `basinEnv()` remains the model.
+  **Found under it**: the fold-axis compression of the detail noise was still combing the
+  40 % of `det` left under the atlas; it now fades with the belt gate (README §7.4), which
+  raised coherence in every belt measured and left the Zagros regression frame at
+  0.54/255. Harness: `_verify.html` forwards every knob, `?quick=1`, `?show=N`, a frozen
+  `_old.html` for old-against-new pairs (README §7.16).
 
 ## The review on the M1, and then the deploy (decided 2026-09-03)
 
@@ -64,6 +84,10 @@ chose to look first. History stays as it is for now. The branch
 - the Great Plains (−98° 42°) and the Deccan (78° 18°) at zoom 1 or closer with
   `?plainsK=2` beside `?nodrain=1` (the second form is invisible at 2.5 km/px).
 - `ambient.html?age=150` — the 2048 sheet set is in `web/sheets/`, gitignored.
+- Round 3: the Andes (−68° −18°) with `?arc=0` beside the default (the Western Cordillera
+  should lose its folds, the Eastern keep them); the Grand Erg Oriental (8°E 31°N) at 1.35
+  with `?erg=0` beside the default and `?erg=2` for the bracket; Tibet with `?plat=1` to see
+  the retired envelope for yourself; `?show=1` over Arabia for the sand-sea mask.
 
 **Then one of three deploys**, all from the M1 where the validators run in full:
 1. self-contained: `git checkout main && git merge --ff-only claude/tectonic-earth-review-nze22g
@@ -79,6 +103,12 @@ chose to look first. History stays as it is for now. The branch
 
 ## What to do next, in order
 
+0. **Before anything else on the M1** (round 3 changed shipped fields and the shader):
+   `cd build && python3 build_arc.py` writes the belt-type alpha into all 251 `_t` files
+   (~1 s each; the RGB is untouched, verified byte-for-byte; `--stats 0` lists what it
+   flags). `build_foldphase.py -j` and `build_drainphase.py -j` are unchanged. Then
+   `check_shader.py` (clean here), and the sheets are stale again — re-bake and bump
+   `SHEET_V`.
 1. **Sheets.** A 2048-wide set is baked here on software GL at the end of round 2
    (`web/sheets/`, gitignored; `build_site.py` ships it) — check `web/sheets/manifest.json`
    has 251 entries before deploying. The 4096 set still wants the M1:
@@ -103,9 +133,17 @@ chose to look first. History stays as it is for now. The branch
    invisible at continental zoom by construction (register, round 2): under 1 % of pixels
    move between the steered and the lattice forms at 2.5 km/px. Judge it at close zoom
    with `?plainsK=2` beside `?nodrain=1`; the plains normal term (1.6) and tone (0.16)
-   are still the first cut. Erg lineation from the wind fetch is not done: the fetch
-   channel is zonal per latitude band, so a lineation term needs only that direction and
-   a sand gate — a shader term, no bake.
+   are still the first cut. **The erg lineation is done** (round 3); what is not is the
+   sand-sea mask under it: `ergBody` is a crust-locked noise, zero over Arabia. A body
+   from something physical — a closed basin with a sand supply, the drainage and
+   substrate fields already say most of it — is the next erg item.
+4b. **The arcs want their volcanoes.** The belt type only takes the fold ridges away; a
+   cone patch in the atlas (point-source uplift under the erosion model, 30–80 km
+   spacing) sampled where `gArc` is high is the next mountain model.
+4c. **A plateau's basins need a bake.** Neither `rug` nor prominence at 100 km separates
+   the Tibetan interior's ranges from its basins in the PaleoDEM (register, round 3); if
+   the corduroy still reads wrong on the display after `?basin=`, the answer is a smoothed
+   regional field, not a per-pixel gate.
 5. **D4/D5 are done** except the decision: `publish_assets.py` + `build_site.py
    --field-base/--sheet-base` host the textures elsewhere; whether to rewrite history so
    the old copies leave the repository is yours. The page is split; edit shaders in
@@ -137,6 +175,19 @@ chose to look first. History stays as it is for now. The branch
   the level walk never ends (`_receivers` in the atlas baker).
 - The stale `web/shaders/*.glsl` copies were 500 lines behind the page; never read them
   as the shader unless `check_shader.py` has just written them.
+- **At an exact keyframe age the interval kinds bind from the younger neighbour** (age 0
+  reads `fut_0005`'s `_t`); a field baked for one keyframe is not the one the shader reads
+  there (README §7.16). The first belt-type A/B was null for this.
+- **A box statistic is not a spatial pattern.** `rug` on a plateau had the right
+  distribution for an envelope and was texel-scale speckle on screen; draw a gate as a
+  mask (`?show=N`) before multiplying anything by it.
+- **A background waiter can outlive its stated timeout.** One launched the render chain a
+  second time an hour after it should have died; two Chromes on one profile directory,
+  one of which died at once and skipped a load. Chain launchers want a lock file, and
+  anything that must outlive a turn wants `setsid nohup`.
+- **The stripe metric is orientation-blind.** Band-pass σ did not move when the comb
+  came off because compression reorients noise without changing its energy; the
+  structure tensor's eigenvalue difference (directional energy) is what sees a corduroy.
 
 ## Verification harness (unchanged, plus)
 
