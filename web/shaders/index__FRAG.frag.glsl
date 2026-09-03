@@ -643,7 +643,17 @@ float basinEnv(float z, float rug){
    1.00. A ramp of 0.15-0.60 left the interiors at 0.77-0.86 of full
    amplitude and changed nothing (measured, round 3); 0.35-0.85 takes the
    Qiangtang to 0.55, the Altiplano floor to 0.60 and the Tanggula to 0.70,
-   with the Himalayan front at 0.96 and the Zagros at 1.00. */
+   with the Himalayan front at 0.96 and the Zagros at 1.00.
+   OFF BY DEFAULT (round 3, measured). Those are box statistics; drawn as a
+   mask (?show=4) rug on a plateau is texel-scale SPECKLE, flipping between
+   1 and 0.15 every few pixels, because a 62 km difference of a 10 km field
+   varies with every undulation of the field. Multiplying the ridges by that
+   re-textures them instead of quieting the basins: Tibet's interior kept
+   its combed area (57%) and its band energy under every ramp, while the
+   Altiplano's drop came from the belt type. The same lesson iteration 76
+   recorded for slope-derived DIRECTIONS holds for slope-derived amplitudes.
+   A regional envelope needs a smoothed field, which is a bake; the synthetic
+   basinEnv above stays the plateau model until then. ?plat=1 turns this on. */
 float reliefEnv(float z, float rug){
   float plateau=smoothstep(2500.0,3500.0,z)*uPlatK;
   return mix(1.0, 0.15+0.85*smoothstep(0.35,0.85,rug), plateau);

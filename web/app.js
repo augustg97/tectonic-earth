@@ -760,7 +760,7 @@ function initGL(){
     uAtlasK:{value:new THREE.Vector4(+(_sq.get('atlasN')||1),+(_sq.get('atlasT')||1),+(_sq.get('atlasH')||1),+(_sq.get('plainsK')||1))},
     uBasin:{value:_sq.get('basin')==='0'?0:1},
     uErgK:{value:+(_sq.get('erg')||1)},        // wind-steered dune lineation (0 off)
-    uPlatK:{value:+(_sq.get('plat')||1)},      // DEM-driven plateau envelope on the atlas (0 off)
+    uPlatK:{value:+(_sq.get('plat')||0)},      // DEM-driven plateau envelope on the atlas: OFF by default (see FRAG reliefEnv), ?plat=1 to try
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
     uNz:{value:bakeNoiseLUT()},
