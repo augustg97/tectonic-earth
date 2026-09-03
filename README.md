@@ -614,6 +614,32 @@ Split them: geometry on 20 Myr, land fraction on 110 Myr, with the re-levelling 
 
 Two related traps came out of the same hunt. **A label's track is not linear in time**: Siberia barely moves 540->560 and then sweeps 60 degrees by 600, so pinning the ends of the handoff window left the interpolation 23 degrees ahead of it in the middle -- more than the craton's own radius. Pinning the ends of a window says nothing about its middle. And a verification that RE-DERIVES geometry can repeat the very error it is checking for: the first "on land at every age" result was produced by a broadcasting bug and was wrong. Sample the shipped texture instead.
 
+### 7.16 The harness on software GL
+
+Every render in WP-10 rounds 1–3 was taken headless on SwiftShader, which is pixel-faithful
+and slow in ways that look like hangs. The rules that came out of it, each after it cost time:
+
+- **A page load is seven minutes of compile and a framing two to three** — and *anything else
+  running on the machine doubles both*. A numpy bake beside Chrome took a framing from three
+  minutes to eight (2026-09-03). Serialise: bake, then render, then measure.
+- **Wait on a PID or a marker file, never on a process pattern.** `pgrep -f "node shoot.js"`
+  and `pkill -f` both match the shell that runs them when the pattern is in their own command
+  line, so the wait never ends (§7.11). The round-3 runner waits on the expected PNGs by name and
+  kills Chrome by the PID it launched.
+- **Freeze the page for an A/B.** A knob sweep is several page loads, and any shader edit
+  between them changes what "baseline" means. Copy `index.html`, `app.js` and `shaders.js` to
+  `_old.html` / `_app_old.js` / `_shaders_old.js` (gitignored) and point the driver at it with
+  `?app=_old.html`; the new page and the frozen one then render the same fields through their
+  own shaders, in any order.
+- **The driver forwards every query key it does not consume**, so `?erg=0`, `?plat=0`, `?arc=0`,
+  `?basin=0`, `?atlasN=` and the rest run through `_verify.html?shots=` unchanged; and
+  `?quick=1` skips the camera-still loop (the camera is derived from the state, there is no tween
+  to wait for) and waits on field residency instead — two renders a framing instead of six.
+- **Two renders of the same page differ** by up to 0.85/255 mean under contention (round 2), so
+  an A/B number under about 1/255 is inside the harness unless the pair was taken back to back.
+- **An empty framebuffer from `APP.snap` can be a one-off** under contention; re-run before
+  reading anything into it.
+
 ## 8. Sources
 
 | role | source |

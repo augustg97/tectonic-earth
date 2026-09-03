@@ -18,7 +18,7 @@ const q = new URLSearchParams(location.search);
 // same harness as a plain shot. The driver's own keys stay here.
 const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','mins','scrub','coherence','secs',
                              'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
-                             'app','settle','shotsize','nolabels']);
+                             'app','settle','shotsize','nolabels','quick']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
@@ -301,6 +301,26 @@ const W = () => document.getElementById('app').contentWindow;
     if (s.zoom != null) o.zoom = s.zoom;
     const aim = A.lookAt(s.lon, s.lat, o);
     await sleep(+q.get('settle') || 2600);
+    if (q.get('quick')) {
+      /* QUICK MODE (round 3). The camera is derived from the state directly
+         (no tween on rot, tilt or zoom), so the still loop below only costs
+         renders -- six a framing, each a full software-GL frame here. Wait
+         for the fields instead: poll the residency diagnostic with no step
+         until nothing is decoding and the settled-fetch count has stopped
+         moving, then render once and shoot. */
+      let last = -1, calm = 0;
+      for (let t = 0; t < 400 && calm < 3; t++) {
+        await sleep(250);
+        const m = W().__MEM ? W().__MEM() : {tried: 0, pendingDecodes: 0};
+        calm = (m.pendingDecodes === 0 && m.tried === last) ? calm + 1 : 0;
+        last = m.tried;
+      }
+      A.step();
+      const r = await A.shoot(s.name, +(q.get('shotsize') || 760), undefined, undefined,
+                              {labels: q.get('nolabels') ? false : true});
+      console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, quick: true, tried: last, saved: !!r.saved, err: r.error || null}));
+      continue;
+    }
     /* WAIT FOR THE CAMERA TO ACTUALLY STOP (2026-07-31). lookAt tweens, the
        tween outlasts any fixed settle when the zoom changes a lot, and the
        app BOOTS far out -- so every first-slot shot all day was a mid-tween

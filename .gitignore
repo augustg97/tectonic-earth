@@ -50,3 +50,7 @@ web/_atlasdbg.html
 # Erosion-atlas intermediates (build_orogen_atlas.py); web/atlas.png is the shipped result
 build/atlas/
 __pycache__/
+
+# Frozen copies of the page for old-vs-new A/B renders (round 3); never deploy
+web/_old.html
+web/_*_old.js
