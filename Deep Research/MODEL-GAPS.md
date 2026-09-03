@@ -7507,3 +7507,12 @@ back to back; the belt numbers (3-11) are well above it.
 over the final shader: 251 sheets, 65.5 MB, `web/sheets/manifest.json`, ten
 hours on software GL. The present-day sheet carries the ice, the abyssal
 fabric and the atlas, land at 31% by the alpha mask.
+The lite path from the shipped set against the live path at 960x600, zoom
+3.0: mean 4.0 per 255, 25% of pixels over four levels, the band 4% softer.
+Split by ground: space 0.02, ocean 5.0, land 10.7. The difference image is
+three things and no fourth: every coastline as a one-pixel edge (the sheet
+decides the coast from its own texels, the live path per pixel), the cloud
+layer (it moves between any two renders, and is most of the ocean number),
+and resampling texture on land. No gradient across the disc, no tone
+offset: the lite path draws the same Earth. The ambient page on the same
+set: 148 Ma, eight textures resident, nothing pending or missing.
