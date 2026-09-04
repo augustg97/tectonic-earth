@@ -314,7 +314,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260812-0814';
+const DATA_V='20260904-0221';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub

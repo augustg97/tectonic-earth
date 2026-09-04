@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tectonic Earth — Ambient</title>
+<!-- THE LITE BUILD (WP-10, plan C). A slowly turning Earth with time running,
+     drawn from the pre-baked WORLD SHEETS in sheets/ (build/bake_sheets.py) and
+     the per-keyframe displacement field, at a few texture reads a pixel. No
+     terrain shader, no field decoding, no labels: the whole timeline is about
+     50 MB at 2048 wide, fetched two keyframes ahead, and the GPU is idle.
+       ?speed=2   Myr per second (default 2)
+       ?spin=0.05 radians per second (default 0.05)
+       ?fps=30    frame cap (default 30; 10 under prefers-reduced-motion)
+       ?age=300   starting age in Ma (default 1000)
+       ?ui=0      hide the readout
+     Runs as a tab, a screensaver (any WebView screensaver pointing at this URL)
+     or a wallpaper. Escape does nothing here on purpose; there is no chrome. -->
+<style>
+:root{--ink:#d8dfe8;--dim:#7d8898}
+html,body{height:100%;margin:0;background:#05070a;overflow:hidden;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+canvas{display:block}
+#hud{position:fixed;left:22px;bottom:20px;color:var(--ink);pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8);transition:opacity .6s}
+#hud b{display:block;font-size:30px;font-weight:500;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+#hud span{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+#msg{position:fixed;inset:auto 0 0 0;padding:14px 22px;color:var(--dim);font-size:13px;line-height:1.5;background:rgba(5,7,10,.7);max-width:60ch}
+#msg code{color:var(--ink)}
+</style>
+<script src="three.min.js"></script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="hud"><b id="age">&nbsp;</b><span id="era">&nbsp;</span></div>
+<div id="msg" hidden></div>
+<script>
+const q=new URLSearchParams(location.search);
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0.05);
+const FPS=+(q.get('fps')||(REDUCED?10:30));
+const SHEET_V='20260903', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
+// asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
+const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};
+const FIELD_BASE=_base('fieldbase','FIELD_BASE'), SHEET_BASE=_base('sheetbase','SHEET_BASE');
+const KEEP=6;            // textures held: the pair, the two ahead, spares
+if(q.get('ui')==='0')document.getElementById('hud').hidden=true;
+
+/* ---------- data ---------- */
+let TL=null, SM=null;    // fields/manifest.json (timeline), sheets/manifest.json
+const ages=()=>TL.map(f=>f.age);
+function frameAt(age){
+  const A=ages();
+  if(age<=A[0])return{i:0,j:0,t:0};
+  if(age>=A[A.length-1])return{i:A.length-1,j:A.length-1,t:0};
+  for(let k=0;k<A.length-1;k++)if(age>=A[k]&&age<=A[k+1])return{i:k,j:k+1,t:(age-A[k])/(A[k+1]-A[k])};
+  return{i:0,j:0,t:0};
+}
+const vFile=i=>{const e=TL[i].e, c=e.lastIndexOf('_e'); return e.slice(0,c)+'_v.webp';};
+
+/* ---------- textures, a small window that follows the age ---------- */
+const TEX=new Map(), PENDING=new Set(), MISSING=new Set(); let clock=0;
+function makeTex(bm,mips){
+  const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+  t.minFilter=mips?THREE.LinearMipmapLinearFilter:THREE.LinearFilter; t.magFilter=THREE.LinearFilter;
+  t.generateMipmaps=!!mips; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+  if(mips)t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
+  t.needsUpdate=true; return t;
+}
+function want(key,url,mips){
+  if(TEX.has(key)||PENDING.has(key)||MISSING.has(key))return;
+  PENDING.add(key);
+  fetch(url).then(r=>{if(!r.ok)throw 0;return r.blob();})
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+    .then(bm=>{TEX.set(key,{t:makeTex(bm,mips),u:++clock});PENDING.delete(key);})
+    .catch(()=>{PENDING.delete(key);MISSING.add(key);});
+}
+function tex(key){const e=TEX.get(key);if(!e)return null;e.u=++clock;return e.t;}
+function trim(keep){
+  const kinds=['s','v'];
+  for(const k of kinds){
+    const held=[...TEX.keys()].filter(x=>x[0]===k);
+    if(held.length<=KEEP)continue;
+    held.filter(x=>!keep.includes(x)).sort((a,b)=>TEX.get(a).u-TEX.get(b).u)
+        .slice(0,held.length-KEEP).forEach(x=>{const e=TEX.get(x);if(e.t.image&&e.t.image.close)e.t.image.close();e.t.dispose();TEX.delete(x);});
+  }
+}
+function sheetKey(i){return 's'+i;}
+function requestAround(f,dir){
+  const n=TL.length, order=[f.i,f.j];
+  for(let d=1;d<=2;d++)order.push(dir<0?f.i-d:f.j+d);
+  const keep=[];
+  for(const i of order){
+    if(i<0||i>=n)continue;
+    const file=SM.files[String(TL[i].age)];
+    if(file)want(sheetKey(i),(SHEET_BASE||'sheets/')+file+'?v='+SHEET_V,true);
+    want('v'+i,(FIELD_BASE||'fields/')+vFile(i)+'?v='+FIELD_V,false);
+    keep.push(sheetKey(i),'v'+i);
+  }
+  trim(keep);
+}
+
+/* ---------- the globe ---------- */
+const VERT=`varying vec2 vUv; varying vec3 vVN;
+void main(){ vUv=uv; vVN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
+/* Two sheets carried toward each other on the displacement warp (the same
+   contract as the app's lite material, without the height field: a coastline
+   that moves within an interval dissolves over that interval, which at ambient
+   speeds is a few seconds and below notice), a terminator fixed in view space,
+   and a limb haze. */
+const FRAG=`precision highp float;
+uniform sampler2D sheetA, sheetB, dispA; uniform float mixf, uWarp;
+varying vec2 vUv; varying vec3 vVN;
+const float V_DEG=12.0;
+vec2 warpAt(vec2 uv){
+  if(uWarp<0.5) return vec2(0.0);
+  vec3 d=texture2D(dispA,uv).rgb;
+  float dE=(d.r*2.0-1.0)*V_DEG, dN=(d.g*2.0-1.0)*V_DEG;
+  float cl=max(cos(radians(uv.y*180.0-90.0)),0.15);
+  return vec2(dE/(cl*360.0), dN/180.0);
+}
+void main(){
+  vec2 w=warpAt(vUv);
+  vec4 cA=texture2D(sheetA,vUv-mixf*w), cB=texture2D(sheetB,vUv+(1.0-mixf)*w);
+  vec3 col=mix(cA.rgb,cB.rgb,mixf);
+  float sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
+  float lit=smoothstep(-0.15,0.20,sd);
+  vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
+  float dusk=exp(-pow(sd/0.12,2.0))*lit;
+  col=mix(nightCol, col, lit);
+  col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
+  float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0);
+  col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
+  gl_FragColor=vec4(col,1.0);
+}`;
+const cv=document.getElementById('gl');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:false,powerPreference:'low-power'});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(38,1,.01,100);
+const mat=new THREE.ShaderMaterial({uniforms:{sheetA:{value:null},sheetB:{value:null},dispA:{value:null},mixf:{value:0},uWarp:{value:0}},vertexShader:VERT,fragmentShader:FRAG});
+const globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat); scene.add(globe);
+const atmo=new THREE.Mesh(new THREE.SphereGeometry(1.03,64,32),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,
+  vertexShader:`varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`varying vec3 vN;void main(){float i=pow(clamp(0.72-dot(vN,vec3(0,0,1.0)),0.0,1.0),2.2);gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9;}`}));
+scene.add(atmo);
+{const g=new THREE.BufferGeometry(),N=1400,p=new Float32Array(N*3);let s=7;const rnd=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+ for(let i=0;i<N;i++){const r=40+rnd()*30,th=rnd()*6.283,ph=Math.acos(2*rnd()-1);p[i*3]=r*Math.sin(ph)*Math.cos(th);p[i*3+1]=r*Math.cos(ph);p[i*3+2]=r*Math.sin(ph)*Math.sin(th);}
+ g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0x9fb0c8,size:.09,sizeAttenuation:true,transparent:true,opacity:.55})));}
+function resize(){renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+  // back off on a narrow window so the globe always fits
+  const d=3.05*Math.max(1,1.15/cam.aspect); cam.position.set(0,0.35*d/3.05,d); cam.lookAt(0,0,0);}
+addEventListener('resize',resize); resize();
+
+/* ---------- time ---------- */
+const state={age:+(q.get('age')||1000), dir:-1, rot:0, playing:true};
+const $age=document.getElementById('age'), $era=document.getElementById('era');
+function fmtAge(a){return a>0.5?Math.round(a)+' Ma':a<-0.5?'+'+Math.round(-a)+' Myr':'Present';}
+function readout(){
+  const f=frameAt(state.age), m=TL[f.t<0.5?f.i:f.j];
+  $age.textContent=fmtAge(state.age);
+  $era.textContent=(m.epoch&&m.period&&m.epoch!==m.period)?m.epoch+' · '+m.period:(m.period||m.epoch||'');
+}
+let last=performance.now(), lastDraw=0, holding=false;
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt=Math.min(0.5,(now-last)/1000); last=now;
+  if(now-lastDraw<1000/FPS)return;
+  lastDraw=now;
+  const f0=frameAt(state.age); requestAround(f0,state.dir);
+  // advance only when the next pair is drawable; otherwise hold, never show a half-loaded world
+  const nf=frameAt(state.age+state.dir*SPEED*dt);
+  const ready=i=>!!tex(sheetKey(i));
+  holding=!(ready(nf.i)&&ready(nf.j));
+  if(!holding){
+    state.age+=state.dir*SPEED*dt;
+    if(state.age<=-250){state.age=-250;state.dir=1;}       // ping-pong: no jump, no seam
+    if(state.age>=1000){state.age=1000;state.dir=-1;}
+  }
+  state.rot+=SPIN*dt; globe.rotation.y=state.rot;
+  const f=frameAt(state.age);
+  const sa=tex(sheetKey(f.i)), sb=tex(sheetKey(f.j));
+  if(sa&&sb){
+    mat.uniforms.sheetA.value=sa; mat.uniforms.sheetB.value=sb; mat.uniforms.mixf.value=f.t;
+    const v=(f.i!==f.j)?tex('v'+f.i):null;
+    mat.uniforms.dispA.value=v; mat.uniforms.uWarp.value=v?1:0;
+    renderer.render(scene,cam);
+  }
+  readout();
+}
+document.addEventListener('visibilitychange',()=>{last=performance.now();});
+
+/* ---------- boot ---------- */
+(async()=>{
+  try{
+    TL=await fetch('fields/manifest.json?v='+FIELD_V).then(r=>r.json());
+    SM=await fetch('sheets/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null);
+  }catch(e){SM=null;}
+  if(!TL||!SM||!SM.files){
+    const m=document.getElementById('msg'); m.hidden=false;
+    m.innerHTML='No world sheets have been baked for this site yet. Run <code>build/bake_sheets.py --width 2048</code> and deploy; the ambient view draws from <code>sheets/</code> only.';
+    return;
+  }
+  // start on a keyframe that exists in the sheet set
+  const have=new Set(Object.keys(SM.files).map(Number));
+  if(!have.has(Math.round(state.age))){const near=[...have].sort((a,b)=>Math.abs(a-state.age)-Math.abs(b-state.age))[0];if(near!==undefined)state.age=near;}
+  window.AMB={state,step(){loop(performance.now());},status(){return{age:state.age,holding,tex:[...TEX.keys()],pending:[...PENDING],missing:[...MISSING]};},
+    snap(){renderer.render(scene,cam);return cv.toDataURL('image/png').slice(22);}};
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
