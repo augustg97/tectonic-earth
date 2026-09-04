@@ -377,6 +377,9 @@ Two things the gate alone gets wrong, and their model (WP-10 round 3):
   of the pair lacks is read from the other through `uStkSel`/`uStkSelB`, which is the per-field
   fallback the separate samplers had (frame 49 has no `_f`; age 0 reads frame 50's). The
   16-bit fields are read at exact texel centres, which the linear filter returns unblended.
+  The warm-ahead pump composes the bands of the next keyframes' stacks the way it uploads
+  the other fields, because the crossing-storm gate (`audit_perf.py`) counts every GL upload
+  the crossing frame pays: a stack composed at bind time paid seven and failed the build.
 - **The fold ridges ship OFF (the display review of 2026-09-03).** Looked at on the M1 at
   zoom 1.35, the belt patches read as symmetrical ribs laid over the ranges — in the Zagros
   and the Himalaya, in Tibet's basins (where `basinEnv()` made no visible difference), and

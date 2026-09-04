@@ -37,7 +37,7 @@ const q=new URLSearchParams(location.search);
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0.05);
 const FPS=+(q.get('fps')||(REDUCED?10:30));
-const SHEET_V='20260902', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
+const SHEET_V='20260903', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};
 const FIELD_BASE=_base('fieldbase','FIELD_BASE'), SHEET_BASE=_base('sheetbase','SHEET_BASE');

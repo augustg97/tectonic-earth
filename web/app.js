@@ -570,7 +570,13 @@ function queueUploads(f){
       if(_bmMissing.has(key))continue;
       if(!_fieldTried.has(key))continue;            // not even fetched yet
       const e=TEXCACHE.get(key);
-      if(e&&e.t)continue;                           // fully resident
+      /* Resident means: on the GPU where the shader will read it. For the
+         four stack kinds that is a band in the keyframe's stack (the member
+         texture is never bound), and the crossing-storm gate counts every
+         upload the crossing frame pays -- a stack composed at bind time
+         paid seven (2026-09-03), so its bands are warmed here like a field. */
+      if(k in STK_BANDS){const S=TEXCACHE.get('s'+w); if(S&&S.have.has(k))continue;}
+      else if(e&&e.t)continue;                      // fully resident
       if(_BITMAPS&&(!e||!e.bm)){
         // Stage 1, DECODE: off-thread, so a few can run concurrently without
         // touching the frame. ensureBitmap is idempotent. Playback burns
@@ -601,7 +607,13 @@ function queueUploads(f){
     const q=_upQ.shift();
     if(Math.abs(q.i-f.i)>4)continue;                // stale after a far jump
     const e=TEXCACHE.get(q.k+q.i);
-    if(!e||!e.t){
+    if(q.k in STK_BANDS){
+      const S=TEXCACHE.get('s'+q.i);
+      if(!(S&&S.have.has(q.k))){
+        const t=getTex(q.k,q.i);                    // null until decoded
+        if(t){stackFill(q.i,k=>k===q.k?t:null);drains--;}   // one band into the stack, ahead of the crossing
+      }
+    } else if(!e||!e.t){
       const t=getTex(q.k,q.i);                      // null until decoded
       if(t){renderer.initTexture(t);drains--;}
     }
@@ -3229,7 +3241,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260902';
+const SHEET_V='20260903';
 let SHEET_MANIFEST=null;
 const _shippedPending=new Set(), _shippedMissing=new Set();
 function _shippedSheet(i){
