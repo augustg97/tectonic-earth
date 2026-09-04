@@ -10,7 +10,7 @@ const $=s=>document.querySelector(s);
    left-to-right, 1000 Ma toward +250 Myr. Plate boundaries start off; they are
    a specialist overlay and they crowd the first look at the globe. */
 const state={
-  age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:18,
+  age:1000, view:'globe', shade:'sat', playing:false, dir:-1, speed:3,
   /* Render quality. 'auto' keeps native resolution until the measured frame
      interval says the GPU cannot -- an M1 driving a 5K display runs this
      terrain shader at 3 fps, and a slideshow is also not the model at its
