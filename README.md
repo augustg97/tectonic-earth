@@ -314,6 +314,24 @@ with the page URL plus `?ui=0` as its address, or Plash for a live wallpaper; on
 Lively Wallpaper's "URL" source. All three show the page as-is, so `?speed=` and `?fps=`
 tune the pace and cost from the address bar.
 
+**Playback on the sheet path (2026-09-03).** Three things the M1 Mini review found. The sheets
+of the next keyframes are requested ahead by speed — about two seconds' worth, two keyframes at
+3 Myr/s and four at 10 — where one keyframe ahead was 0.28 s of slack at the old 18 Myr/s, less
+than a fetch, a decode and a mipmapped upload. When the next pair's sheet is still late, time
+**waits** for it (`_liteHolds`, capped at 1.5 s so a sheet that never comes cannot stop the
+clock) instead of the path dropping to the terrain shader at full pixel ratio for the wide view,
+which was the "smooth, then a burst of lag" on the Mini; ambient.html always did this. And
+shipped sheets are bounded at `SHEET_KEEP` like the bake slots — they used to accumulate for
+every keyframe visited, 11 MB of GPU texture each. `_verify.html?playtest=NAME&speed=10&secs=8
+&sheetdelay=600` is the measurement: from localhost a sheet lands in tens of milliseconds and
+nothing is ever late, so the delay stands in for a CDN round trip. Before: 69 of 437 frames on
+the terrain shader, two path flips. After: 2507 frames, none, no holds needed; starved at
+40 Myr/s and 1.5 s latency, still none, 66 held frames and playback continuing. Note the LOD
+rule: with the 2048 set a screen at pixel ratio 2 reaches the sheets only near the widest zoom
+(a texel must cover no more than about two device pixels), so on a Retina laptop the sheet path
+is nearly dormant and the terrain shader is the picture; the 4096 set would engage it from
+about zoom 2.
+
 ### 5.10 Mountains: the orogen atlas and the fold coordinates
 
 The three per-pixel constructions that used to make the mountains (a ridged fBm in the

@@ -5,6 +5,7 @@
        ?shots=name,lon,lat,age[,zoom];...   screenshot set via APP.lookAt/shoot
        ?timing=NAME                         frame-time p50 at 2560x1440 -> NAME.json.png
        ?storm=NAME                          keyframe-crossing upload storm -> NAME.json.png
+       ?playtest=NAME&speed=10&secs=8&sheetdelay=600   playback on the sheet path -> NAME.json.png
        ?pin=1                               freeze time (uTime + dt) for exact A/B
        ?oldnoise=1                          passed through to the app iframe
        ?layers=1                            turn hotspot/vector/boundary layers on -->
@@ -16,7 +17,7 @@ const q = new URLSearchParams(location.search);
 // Every key the driver does not consume is forwarded to the app verbatim, so
 // a knob sweep (?atlasN= ?basin=0 ?noatlas=1 ?erg=0 ...) runs through the
 // same harness as a plain shot. The driver's own keys stay here.
-const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','mins','scrub','coherence','secs',
+const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','mins','scrub','coherence','secs','playtest','sheetdelay',
                              'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
                              'app','settle','shotsize','nolabels','quick']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
@@ -208,6 +209,46 @@ const W = () => document.getElementById('app').contentWindow;
     document.title = 'VERIFY-DONE'; return;
   }
 
+  if (q.get('playtest')) {
+    /* PLAYBACK ON THE SHEET PATH (2026-09-03). Zoomed out, the globe draws
+       from the sheets, and a crossing whose sheet had not landed used to drop
+       the frame to the terrain shader: smooth, then a burst of lag. Plays at
+       ?speed= (default the top speed, 10) on the sheet path for ?secs= and
+       reports the frames drawn from sheets against all frames, the frames
+       playback held for a sheet, the most sheets held on the GPU, and every
+       time the path flipped. Pixel ratio 1 (quality 'perf'), so the sheets
+       engage on any display at zoom 5. */
+    A.state.quality = 'perf';
+    if (q.get('sheetdelay')) {
+      // ?sheetdelay=ms: every sheet fetch waits this long first, standing in
+      // for a CDN round trip -- from localhost a sheet lands in tens of ms and
+      // nothing is ever late, which is not what the live site sees.
+      const of = W().fetch.bind(W()), d = +q.get('sheetdelay');
+      W().fetch = (u, o) => String(u).includes('sheets/') ? sleep(d).then(() => of(u, o)) : of(u, o);
+    }
+    A.lookAt(20, 20, {age: +(q.get('age') || 600), zoom: 5, w: 1280, h: 960});
+    await sleep(6000);
+    for (let k = 0; k < 20; k++) { A.step(); await sleep(150); }   // the pair's sheets land
+    const st0 = A.sheets.status(), fr0 = A.loader().frame;
+    A.state.speed = +(q.get('speed') || 10); A.state.dir = -1; A.state.playing = true;
+    const t1 = performance.now(); const samples = []; let flips = 0, last = null, heldMax = 0;
+    while (performance.now() - t1 < +(q.get('secs') || 8) * 1000) {
+      await sleep(100);
+      const s = A.sheets.status();
+      if (last !== null && s.lite !== last) flips++;
+      last = s.lite; heldMax = Math.max(heldMax, s.held);
+      samples.push({t: Math.round(performance.now() - t1), age: +A.state.age.toFixed(1), lite: s.lite, holds: s.holds - st0.holds, held: s.held});
+    }
+    A.state.playing = false;
+    const st1 = A.sheets.status(), fr1 = A.loader().frame;
+    await fetch('http://127.0.0.1:8901/' + q.get('playtest') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({
+                  startLite: st0.lite, ready0: st0.ready.length, frames: fr1 - fr0,
+                  liteFrames: st1.frames - st0.frames, holds: st1.holds - st0.holds, heldMax, flips,
+                  ageFrom: samples.length ? samples[0].age : null, ageTo: +A.state.age.toFixed(1),
+                  samples: samples.filter((x, i) => i % 5 === 0)}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
   if (q.get('evalq')) {
     // Generic in-app probe: ?evalq=NAME&expr=<js>&age=<Ma>. Reports whatever
     // the expression returns, after the fields for that age have landed.

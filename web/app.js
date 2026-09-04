@@ -3230,11 +3230,11 @@ const SHEET_W=(()=>{const v=+_sq.get('sheet');if(v>=256&&v<=8192)return v;
   return ((navigator.deviceMemory||8)<8)?2048:4096;})();
 const SHEET_H=SHEET_W/2;
 const SHEET_STRIPS=16, SHEET_STRIPS_PER_FRAME=_sq.has('bakefull')?16:4;
-const SHEET_KEEP=4;                 // render targets held: the pair, the next, one spare
+const SHEET_KEEP=8;                 // sheets held: the pair, up to four ahead, the neighbours behind, a spare
 const SHEET_TEXEL_KM=40030/SHEET_W; // at the equator
 let liteMode=_sq.get('lite')==='1'?'on':_sq.get('lite')==='0'?'off':'auto';
 const SHEETS=new Map();             // keyframe index -> {rt|null, tex, w, ready, u}
-const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0;
+const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0, _liteHolds=0;   // _liteHolds: frames playback waited for a sheet
 /* SHIPPED SHEETS. build/bake_sheets.py renders every keyframe's sheet on a
    real GPU and encodes it into web/sheets/ with a manifest; when the manifest
    is present the app decodes those instead of baking, which is what makes
@@ -3356,14 +3356,32 @@ function _bakeStrips(){
 }
 function _sheetWanted(f){
   const n=DATA.timeline.length, w=[f.i,f.j];
-  // playback: the keyframe ahead; paused: both neighbours, so a scrub either way lands warm
-  if(state.playing){w.push(state.dir<0?f.i-1:f.j+1);}else{w.push(f.i-1,f.j+1);}
+  /* Playback: LOOK AHEAD BY SPEED (2026-09-03). One keyframe ahead was
+     0.28 s of slack at 18 Myr/s, less than a sheet's fetch, decode and
+     mipmapped upload on an M1, so playback zoomed out kept dropping to the
+     terrain shader at crossings. Want about two seconds of sheets ahead:
+     two keyframes at 3 Myr/s, four at 10. Paused: both neighbours, so a
+     scrub either way lands warm. */
+  if(state.playing){
+    const k=Math.min(4,Math.max(1,Math.ceil(state.speed*2/5)));
+    for(let a=1;a<=k;a++)w.push(state.dir<0?f.i-a:f.j+a);
+  }else{w.push(f.i-1,f.j+1);}
   return [...new Set(w.filter(i=>i>=0&&i<n))];
 }
 function pumpBakes(f){
   if(liteMode==='off'||!DATA.timeline||!renderer)return;
   if(_bakeJob){_bakeStrips();return;}
   const want=_sheetWanted(f);
+  /* Shipped sheets used to accumulate for every keyframe visited -- 11 MB of
+     GPU texture each, 2.7 GB for one pass of the timeline -- because only the
+     bake slots were bounded. Hold SHEET_KEEP of either kind, dropping the
+     least recently drawn that playback does not want next. */
+  while(SHEETS.size>SHEET_KEEP){
+    let vi=-1,vu=1e18;
+    for(const [k,v] of SHEETS)if(!want.includes(k)&&v.u<vu){vu=v.u;vi=k;}
+    if(vi<0)break;
+    _sheetDrop(vi);
+  }
   for(const i of want){
     if(sheetReady(i))continue;
     if(_shippedSheet(i))continue;       // a shipped sheet is on its way
@@ -3516,10 +3534,34 @@ function loop(now,force){
   // still; bindTextures() below rebinds the live pair, so bakes go first.
   if(DATA.timeline)pumpBakes(curFrame());
   if(state.playing){
-    state.age+=state.dir*state.speed*dtT;
-    if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
-    if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
-    syncSlider();
+    const step=state.dir*state.speed*dtT;
+    /* HOLD FOR THE SHEETS (2026-09-03). Zoomed out the globe draws from the
+       sheets, and the path decision used to drop to the terrain shader --
+       at full pixel ratio, 30-100 ms a frame on an M1 -- whenever the next
+       keyframe's sheet had not landed by the crossing: smooth, then a burst
+       of lag, then smooth. Time now waits for the sheets, as ambient.html
+       does: the picture stays on the ready pair, the pump keeps fetching,
+       and the age resumes when both sheets of the next pair are there.
+       Capped at 1.5 s, so a sheet that never comes (no manifest entry, the
+       fields for a bake not resident) cannot stop the clock; past the cap
+       the old fallback applies. Only on the sheet path: close in, the
+       terrain shader is the picture and there is nothing to wait for. */
+    let hold=false;
+    if(globe.material===liteMat){
+      const nf=frameAt(state.age+step);
+      if(!(sheetReady(nf.i)&&sheetReady(nf.j))){
+        if(!loop._holdAt)loop._holdAt=now;
+        hold=(now-loop._holdAt)<1500;
+        if(hold)_liteHolds++;
+      }
+    }
+    if(!hold){
+      loop._holdAt=0;
+      state.age+=step;
+      if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
+      if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
+      syncSlider();
+    }
   }
   // state.spin scales the manual auto-rotate only. Ambient keeps its own fixed
   // pace on purpose: it is a display mode with a composed rhythm, and having it
@@ -4236,7 +4278,7 @@ function buildLegend(){
                  mask, 0.5 water / 1 land -- see the FRAG note on why not 0)
                  for verification and for build/bake_sheets.py. */
               sheets:{
-                status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,
+                status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,holds:_liteHolds,held:SHEETS.size,
                   job:_bakeJob?{i:_bakeJob.i,row:_bakeJob.row}:null,
                   ready:[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i)};},
                 bake(i){
