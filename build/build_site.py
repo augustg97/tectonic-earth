@@ -145,7 +145,11 @@ DATA_FILES = ("index.html", "ambient.html", "three.min.js", "timeline.json", "bo
               # per-keyframe plate rotations for the material-coordinate texture (H2)
               "platerot.json",
               # screenshots for the in-app About one-pager overlay
-              "about-globe.jpg", "about-map.jpg", "about-pangaea.jpg", "about-hydro.jpg")
+              "about-globe.jpg", "about-map.jpg", "about-pangaea.jpg", "about-hydro.jpg",
+              # the orogen atlas (WP-10 B2): app.js fetches it at boot and enables the
+              # atlas terms only when it lands. Left off this list, the live site 404'd
+              # it and the plains dissection was silently off (2026-09-03).
+              "atlas.webp")
 # THE ONE-FILE PAGE (WP-10, D5). The source is split -- index.html holds the
 # markup, style.css the styles, app.js the application, and web/shaders/*.glsl
 # the shaders, which check_shader.py validates and packs into shaders.js -- and
@@ -258,4 +262,25 @@ for root, _, files in os.walk(SITE):
     for f in files:
         total += os.path.getsize(os.path.join(root, f))
 n = sum(len(fs) for _, _, fs in os.walk(SITE))
+
+# EVERY FILE THE PAGES FETCH BY NAME MUST BE IN THE SITE. DATA_FILES is a
+# whitelist and a whitelist drifts: web/atlas.webp was tracked, loaded by
+# app.js at boot and never listed, so the deployed site 404'd it and
+# uAtlasOn stayed 0 on the live page (2026-09-03). Read the literal fetch
+# targets out of the pages and refuse to publish without them.
+import re as _re
+_missing = []
+for _page in ("app.js", "ambient.html"):
+    _src = open(os.path.join(WEB, _page)).read()
+    for _m in _re.finditer(r"fetch\(['\"]([A-Za-z0-9_./-]+)", _src):
+        _rel = _m.group(1)
+        if _rel.startswith("http"):
+            continue
+        if not os.path.exists(os.path.join(SITE, _rel)):
+            _missing.append(f"{_page}: {_rel}")
+if _missing:
+    raise SystemExit("build_site: the pages fetch files the site does not carry -- "
+                     + ", ".join(_missing))
+print("fetch targets: every file the pages fetch by name is in the site")
+
 print(f"site/: {n} files, {total/1e6:.2f} MB (vs a 16 MB inlined-artifact ceiling)")
