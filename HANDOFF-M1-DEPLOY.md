@@ -83,6 +83,10 @@ multiplier; to bake it in, edit the constant in
     erg corridor   (vc-0.5)*3.0         erg crest    (crest-0.5)*0.5  erg normal    ampE=gErg*2.2
     basin trough   0.25+0.75*smoothstep in basinEnv()                 arc           1.0-0.9*gArc in atlasGate()
 
+Done 2026-09-03: the ridges were judged ribbed fabric in every belt and ship
+OFF (`uFoldK`, `?fold=1` to see them); plains and erg were baked at twice the
+first cut. The verdicts are in `HANDOFF-WP10.md` ("The display review").
+
 Every shader edit must be finished before step 4: an edit after the sheets
 are baked means baking them again.
 

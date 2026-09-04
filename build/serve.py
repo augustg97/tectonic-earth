@@ -22,6 +22,17 @@ class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, fmt, *a):
         pass
 
+    def end_headers(self):
+        # index.html loads app.js and shaders.js with no version stamp, and
+        # with no cache headers Chrome's heuristic cache served a stale app.js
+        # across a plain reload (the display review of 2026-09-03: a knob the
+        # new code defined was undefined in the tab). The fields and sheets
+        # carry ?v= stamps and are the bulk of a load, so they stay cacheable;
+        # everything else -- page, scripts, styles, JSON -- is fetched fresh.
+        if not (self.path.startswith("/fields/") or self.path.startswith("/sheets/")):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
 
 if __name__ == "__main__":
     handler = functools.partial(Quiet, directory=os.path.abspath(ROOT))

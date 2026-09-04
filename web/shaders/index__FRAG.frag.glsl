@@ -114,6 +114,15 @@ uniform vec4 uAtlasK;
    DEM-driven plateau envelope on the atlas terms (?plat=, 0 off). */
 uniform float uErgK, uPlatK;
 uniform float uArcK;   // scales the belt-type suppression of the fold relief (?arc=, 0 off)
+/* uFoldK scales the WHOLE fold-belt relief -- the ridges in the normal, the
+   tone and the height, and the fades of the noise under them -- through
+   atlasGate(). It ships at 0 (?fold=1 to see it, ?fold=0.5 for half): on the
+   M1 display (review of 2026-09-03) the belt patches read as symmetrical
+   ribs laid over the ranges, in the Zagros, the Himalaya, Tibet's basins and
+   faintly on the Andes' Pacific side even with the arc suppression, so they
+   wait for an atlas with varied, asymmetric ridges. The plains dissection,
+   the drainage steering and the erg are separate gates and stay on. */
+uniform float uFoldK;
 /* MASK VIEW (?show=N): draw one gate as grey over land, so a gate can be
    looked at instead of inferred from a render pair. 1 the erg mask, 2 the
    atlas belt gate, 3 the belt type (arc), 4 the DEM plateau envelope, 5 the
@@ -432,7 +441,7 @@ float dissectGate(float z, float rug){
    build_tectonic.topo_fabric, which is what says "this is a belt" at every
    age, times a floor on absolute height so a lowland never grows ridges. */
 float atlasGate(float z){
-  return gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(100.0,400.0,z)*(1.0-0.9*gArc);
+  return uFoldK*gFoldW*smoothstep(0.12,0.40,gShort)*smoothstep(100.0,400.0,z)*(1.0-0.9*gArc);
 }
 
 /* Mollweide inverse. The flat map used a plain equirectangular grid, which
@@ -1270,7 +1279,7 @@ void main(){
     vec3 Nh=vec3(-sin(la)*cos(lo), -sin(la)*sin(lo), cos(la));
     gFold=normalize(Eh*cos(th)+Nh*sin(th)+vec3(1e-9));
   }
-  if(uAtlasOn>0.5 && uFoldOn>0.5 && gShort>0.08) foldAt(uv);
+  if(uAtlasOn>0.5 && uFoldOn>0.5 && uFoldK>0.0 && gShort>0.08) foldAt(uv);   // eight taps nobody reads at uFoldK 0
   if(uAtlasOn>0.5 && uDrainOn>0.5 && gShort<0.30) drainAt(uv);
   // Set the water surface BEFORE anything reads z, because elevDetail() tests
   // it while it is still shaping the terrain. Plain sample, no shoreline
@@ -2392,10 +2401,12 @@ void main(){
         float ergFine=clamp((gFineFade-0.55)*2.2,0.0,1.0);
         /* corridor octave: 11 km cells, +-3.6 cells along the line. Its
            smeared value has a spread of 0.074 (numpy emulation of these
-           taps), so x3 puts +-0.2 into the tone factor below, about what
-           the term this replaces carried. */
+           taps), so x3 put +-0.2 into the tone factor below, about what
+           the term this replaces carried; the display review of 2026-09-03
+           chose twice that (?erg=2 then), so x6, the crest x1.0 and the
+           normal 4.4 below are the baked pair. */
         float vc; float gc=licPair9(mdc, dT, dA, 560.0, 0.9/560.0, 0.35/560.0, vc);
-        dune=(vc-0.5)*3.0;
+        dune=(vc-0.5)*6.0;
         float slope=gc*3.0;
         if(ergFine>0.01){
           /* dune octave: 5.8 km cells smeared +-5.1 cells, ridged about the
@@ -2405,7 +2416,7 @@ void main(){
           float off=(vd-0.5)/0.10;
           float crest=1.0-min(abs(off),1.0);
           float gcr=(abs(off)<1.0 ? -sign(off)*gd/0.10 : 0.0);
-          dune+=(crest-0.5)*0.5*ergFine;
+          dune+=(crest-0.5)*1.0*ergFine;
           slope+=gcr*ergFine;
         }
         gDuneN=vec2(-sin(wth),cos(wth))*slope*uErgK;
@@ -3024,9 +3035,9 @@ void main(){
       float gd=dissectGate(zp,rug);
       if(gd>0.005){
         vec3 dr=dissectRelief(msd, gHard);
-        float ampD=gd*1.6*uAtlasK.w;
+        float ampD=gd*3.2*uAtlasK.w;        // 3.2 and 0.32: twice the first cut, the display review of 2026-09-03 (?plainsK=2 then)
         nx+=dr.y*ampD; ny+=dr.z*ampD;
-        col*=1.0+dr.x*0.16*gd*uAtlasK.w;
+        col*=1.0+dr.x*0.32*gd*uAtlasK.w;
       }
     }
     /* DUNE CRESTS IN THE NORMAL (WP-10 B5, the erg half): the across-slope of
@@ -3034,7 +3045,7 @@ void main(){
        is lit as relief and not only painted. Same east/north convention as
        the atlas slopes above. */
     if(gErg>0.01 && uErgK>0.0){
-      float ampE=gErg*2.2;
+      float ampE=gErg*4.4;                 // x2 with the corridor and crest above (review 2026-09-03)
       nx+=gDuneN.x*ampE; ny+=gDuneN.y*ampE;
     }
     /* CARVE THE DRAINAGE (fidelity round, 2026-07-31). The valley network has

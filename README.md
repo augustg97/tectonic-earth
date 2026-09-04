@@ -377,6 +377,17 @@ Two things the gate alone gets wrong, and their model (WP-10 round 3):
   of the pair lacks is read from the other through `uStkSel`/`uStkSelB`, which is the per-field
   fallback the separate samplers had (frame 49 has no `_f`; age 0 reads frame 50's). The
   16-bit fields are read at exact texel centres, which the linear filter returns unblended.
+- **The fold ridges ship OFF (the display review of 2026-09-03).** Looked at on the M1 at
+  zoom 1.35, the belt patches read as symmetrical ribs laid over the ranges — in the Zagros
+  and the Himalaya, in Tibet's basins (where `basinEnv()` made no visible difference), and
+  faintly on the Andes' Pacific side even under the arc suppression; Pangaea's old belt read
+  better than the young ones, which points at the erosion stage of the patches. That is a
+  verdict on the model, not an amplitude, so `uFoldK` (`?fold=`, default 0) multiplies the
+  whole belt relief through `atlasGate()` — ridges, tone, height and the noise fades under
+  them — and `foldAt()` is skipped at 0. `?fold=1` is the round-3 look for the next mountain
+  round to compare against. The plains dissection and the erg lineation were judged mild
+  improvements at twice their first cut and ship at that: `gd*3.2` / `dr.x*0.32`, corridor
+  `*6.0`, crest `*1.0`, `ampE=gErg*4.4`.
 
 ## 6. Build and deploy
 

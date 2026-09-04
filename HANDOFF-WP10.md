@@ -101,6 +101,36 @@ chose to look first. History stays as it is for now. The branch
 3. lean plus history rewrite (D4): `git filter-repo --path docs/fields --path docs/sheets
    --invert-paths` on a fresh clone, force-push, every clone re-clones. Your call, later.
 
+## The display review (M1, 2026-09-03) and what shipped
+
+Looked at in Chrome at zoom 1.35 with the knobs flipped live (`APP.mat.uniforms`), after the
+texture-unit fix (README 7.17) let the round-3 shader link at all. Verdicts, verbatim in
+substance:
+
+- **Zagros, Himalaya**: the fold ridges "still look like ribbed fabric and unnatural",
+  "symmetrical unnatural ribs on top of mountains"; useful for reading elevation, not as
+  mountains. Keep only if they can be made natural and varied. The Ganges plain is fine.
+- **Andes**: fine zoomed out; up close a faint ridged fabric remains on the Pacific side.
+- **Pangaea 300 Ma**: the old belt reads better than the young ones; the ribs still do not.
+- **Tibet**: `?basin=0` makes no noticeable difference; fainter ribs in the basins show
+  depth but do not look good.
+- **Great Plains / Deccan**: a mild improvement at `?plainsK=2`. **Grand Erg**: a mild
+  improvement at `?erg=2`. **Arabia** `?show=1`: black, as expected.
+
+**Decision: ship with the ridges off.** `uFoldK` (`?fold=`, default 0) gates the whole belt
+relief through `atlasGate()`; `?fold=1` restores this round's look. Plains and erg are baked
+at twice the first cut and are the new `1`. The belt-type bake, the fold and drainage
+coordinates, the atlas and the knobs all ship, dormant where the gate is 0, so the next
+mountain round starts from this state instead of rebuilding it.
+
+**What the ribs need** (the next mountain round, before 4b/4c): the patches are periodic
+erosion surfaces sampled at (phi, psi) with one spacing, one asymmetry and one erosion stage
+per belt, so every belt reads as the same comb. Vary them along strike (patch mixing by a
+low-frequency field, or several patches per cell at different stages), give the ridges the
+asymmetry of thrust sheets (steep forelimb, gentle backlimb), and let the stage follow the
+belt's age -- the reviewer preferred Pangaea's eroded belt to the young ones. Judge it on the
+display first this time (`?fold=1` beside `?fold=0`), numbers second.
+
 ## What to do next, in order
 
 0. **Before anything else on the M1** (round 3 changed shipped fields and the shader):
