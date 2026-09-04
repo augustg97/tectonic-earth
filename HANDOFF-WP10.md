@@ -14,7 +14,10 @@ entries at the end of `Deep Research/MODEL-GAPS.md`, which log what shipped and 
 numbers that say it did.
 
 All of it is on branch `claude/tectonic-earth-wp10-handoff-uie4hu` (fast-forwarded from
-`claude/tectonic-earth-review-nze22g`, which it contains), not on `main`. Nothing has been
+`claude/tectonic-earth-review-nze22g`, which it contains). **DEPLOYED 2026-09-03**, self-contained,
+from the M1: `main` 32dce5d5, live `DATA_V` 20260904-0427, `SHEET_V` 20260903, the fold ridges
+off (`?fold=1`), plains and erg at twice the first cut; see "The display review" below and
+`HANDOFF-M1-DEPLOY.md` for what the deploy found. The paragraph that follows is history: nothing had been
 deployed. Deploying is `cd build && python check_shader.py && python
 build_site.py`, then merge to `main` and push (README §6).
 

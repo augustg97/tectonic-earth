@@ -139,6 +139,13 @@ git checkout main && git merge --ff-only claude/tectonic-earth-wp10-handoff-uie4
 If the fast-forward is refused, main has moved: `git merge` without
 `--ff-only` and resolve.
 
+Done 2026-09-03: self-contained, `main` at 32dce5d5, live `DATA_V`
+20260904-0427. Two things the runbook did not anticipate: the round-3
+shader read 20 texture units and the M1 has 16 (README 7.17, fixed before
+the review), and `build_site.py`'s whitelist had never listed `atlas.webp`,
+so the first live page 404'd it and ran with the atlas terms off (fixed in
+the second push; the builder now checks every file the pages fetch).
+
 ## 6. Verify the live site
 
 ```bash
