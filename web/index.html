@@ -34,6 +34,22 @@
          seek's full-detail fields are still arriving (see bindTextures). -->
     <div id="surfStatus" hidden></div>
     <div id="env"></div>
+    <!-- Modelled global mean temperature across the whole timeline, the
+         selected age marked (the Atlas port). Built once from the loaded
+         timeline; only the marker, the value and the description move with
+         the age. A sibling of #env, never inside it: updateReadout() replaces
+         #env's HTML many times a second. -->
+    <figure id="gmstChart" hidden>
+      <svg viewBox="0 0 272 74" role="img" aria-labelledby="gmstTitle gmstDesc" focusable="false">
+        <title id="gmstTitle">Modelled global mean temperature across the timeline</title>
+        <desc id="gmstDesc"></desc>
+        <line id="gmstZero" x1="0" y1="0" x2="272" y2="0"/>
+        <path id="gmstPath" d=""/>
+        <line id="gmstAgeLine" x1="0" y1="2" x2="0" y2="67"/>
+        <circle id="gmstDot" cx="0" cy="0" r="3.5"/>
+      </svg>
+      <figcaption class="gmstAxis"><span>1,000 Ma</span><span id="gmstSel">Global mean temperature</span><span>+250 Myr</span></figcaption>
+    </figure>
   </div>
 </div>
 

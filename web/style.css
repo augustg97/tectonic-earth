@@ -65,6 +65,15 @@ canvas{display:block}
 #surfStatus{font-size:9.5px;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;opacity:.85}
 #env{font-size:10.5px;color:var(--dim2);margin-top:8px;line-height:1.7;letter-spacing:.02em}
 #env b{color:var(--dim);font-weight:500}
+/* the modelled temperature graph under the conditions (the Atlas port) */
+#gmstChart{margin:8px 0 0 auto;width:212px}
+#gmstChart svg{width:100%;height:58px;display:block;overflow:visible}
+#gmstZero{stroke:#35414a;stroke-dasharray:2 4;stroke-width:1}
+#gmstPath{fill:none;stroke:#96b9b4;stroke-width:1.5;stroke-linejoin:round}
+#gmstAgeLine{stroke:var(--accent);stroke-opacity:.45;stroke-width:1}
+#gmstDot{fill:var(--accent);stroke:#111a20;stroke-width:2}
+.gmstAxis{display:flex;justify-content:space-between;gap:6px;font-size:9px;color:var(--dim2);letter-spacing:.03em;margin-top:1px;font-variant-numeric:tabular-nums}
+#gmstSel{color:var(--dim)}
 
 /* ---- right controls ---- */
 #controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
@@ -446,9 +455,9 @@ body.ambient .mtab{display:none}
   body.m-right #controls,body.m-right #ctxStack,body.m-right #extinctBox{
     transform:none}
   #readout{padding:6px 8px 8px 12px;background:none}
-  #readout #env,#readout #eraName{display:none}
+  #readout #env,#readout #eraName,#readout #gmstChart{display:none}
   body.m-right #readout{background:rgba(10,13,18,.94);border-radius:10px}
-  body.m-right #readout #env,body.m-right #readout #eraName{display:block}
+  body.m-right #readout #env,body.m-right #readout #eraName,body.m-right #readout #gmstChart{display:block}
   #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:40vh}
   #age{font-size:24px}
   /* clear the drawer button, which was sitting on top of 'TEC' */

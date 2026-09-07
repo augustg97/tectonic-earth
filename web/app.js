@@ -2735,6 +2735,43 @@ function layoutLabels(){
 
 /* ================= time & environment ================= */
 function fmtAge(a){if(a===0)return'Present';return a>0?`${a} Ma`:`+${-a} Myr`;}
+/* THE TEMPERATURE GRAPH (the Atlas port, 2026-09-07). The timeline's gmst
+   column -- the same modelled global mean the readout prints -- drawn once
+   across the whole span, 1000 Ma at the left edge, the present 80% across,
+   +250 Myr at the right, on a fixed -50..+40 C scale that widens rather than
+   clips should a future table exceed it (TectonicPolicy.chartScale). A
+   polyline through the 251 records, never a spline: a smooth curve would
+   invent overshoot between samples. Only the marker, the value and the
+   description move with the age, and only when the age changes, so weather
+   frames never touch the graph. The values are the inherited model's, not
+   observations; the readout's own caveats stand. */
+const GMST_W=272,GMST_TOP=10,GMST_BOT=62;
+let _gmstScale=null,_gmstLastAge=null;
+function buildGmstChart(){
+  const fig=$('#gmstChart'); if(!fig||!DATA.timeline||!DATA.timeline.length)return;
+  _gmstScale=TectonicPolicy.chartScale(DATA.timeline);
+  const pts=[];
+  for(const rec of DATA.timeline){
+    if(!rec||!Number.isFinite(rec.age)||!Number.isFinite(rec.gmst))continue;
+    pts.push([TectonicPolicy.chartX(rec.age,GMST_W),TectonicPolicy.chartY(rec.gmst,_gmstScale,GMST_TOP,GMST_BOT)]);
+  }
+  if(pts.length<2){fig.hidden=true;_gmstScale=null;return;}
+  pts.sort((a,b)=>a[0]-b[0]);   // left to right; the timeline itself is never reordered
+  $('#gmstPath').setAttribute('d',pts.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+','+q[1].toFixed(1)).join(' '));
+  const y0=TectonicPolicy.chartY(0,_gmstScale,GMST_TOP,GMST_BOT).toFixed(1);
+  const z=$('#gmstZero'); z.setAttribute('y1',y0); z.setAttribute('y2',y0);
+  fig.hidden=false; _gmstLastAge=null;
+}
+function updateGmstChart(age,gmst){
+  if(!_gmstScale||!Number.isFinite(gmst)||age===_gmstLastAge)return;
+  _gmstLastAge=age;
+  const x=TectonicPolicy.chartX(age,GMST_W).toFixed(1), y=TectonicPolicy.chartY(gmst,_gmstScale,GMST_TOP,GMST_BOT).toFixed(1);
+  const l=$('#gmstAgeLine'); l.setAttribute('x1',x); l.setAttribute('x2',x);
+  const d=$('#gmstDot'); d.setAttribute('cx',x); d.setAttribute('cy',y);
+  $('#gmstSel').textContent='Global mean '+gmst.toFixed(1)+'\u00b0C';
+  $('#gmstDesc').textContent='Modelled global mean temperature from 1,000 million years ago to 250 million years ahead, '+
+    'on a scale of '+_gmstScale.lo+' to '+_gmstScale.hi+' degrees Celsius. At '+fmtAge(Math.round(age))+' it is '+gmst.toFixed(1)+' degrees Celsius.';
+}
 function presentFade(){const a=state.age;// present-day layers fade out into deep time / future
   if(a<=0)return a<-30?0:1+ a/30*0; // future: fade fast
   return Math.max(0,1-a/45);}
@@ -2778,6 +2815,7 @@ function updateReadout(){
     : (m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated');
   const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
   const gmst=L('gmst'), co2=L('co2'), o2=L('o2'), sol=L('sol');
+  updateGmstChart(state.age,gmst);   // the same interpolated value the line below prints
   const tw = gmst>30 ? 'Hothouse' : gmst>24 ? 'Warm greenhouse'
            : gmst>18 ? 'Cool greenhouse' : 'Icehouse';
   /* Solar luminosity, from the standard solar model — the faint young Sun in
@@ -2814,6 +2852,16 @@ function updateReadout(){
     +`<b>Extinction rate</b> ~${xrStr} E/MSY <span style="color:#8790a0">(${xr.label})</span><br>`
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
+  /* The controls panel is fixed at 220 px from the top, which the readout
+     used to clear; with the temperature graph it no longer always does, so
+     the panel follows the readout's real bottom (desktop layout only: on a
+     phone the panel is a drawer with its own rule). The extinction and
+     context boxes already follow the panel. */
+  if(!matchMedia('(max-width:720px),(max-height:560px)').matches){
+    const rb=$('#readout').getBoundingClientRect(), ctl=$('#controls');
+    if(rb.bottom>60&&innerHeight>0){const top=Math.max(220,Math.round(rb.bottom+14))+'px';
+      if(ctl.style.top!==top)ctl.style.top=top;}
+  }
   /* The picture's own state, beside the age it claims: a preview or a
      neighbouring still is 'Loading terrain', a bound pair whose other fields
      are still landing is 'Refining detail', a settled pair says nothing. */
@@ -4326,7 +4374,7 @@ function buildLegend(){
 (async function(){
   initGL();
   await loadAll();
-  ensureLabels();buildBoundaries();buildRivers();buildHotspots();buildVectors();buildMarkers();buildLegend();
+  ensureLabels();buildBoundaries();buildRivers();buildHotspots();buildVectors();buildMarkers();buildLegend();buildGmstChart();
   buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();buildInterchangeList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
