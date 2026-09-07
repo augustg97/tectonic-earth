@@ -12,7 +12,9 @@ build/*.png
 web/fields/
 !web/fields/manifest.json
 # World sheets are baked by build/bake_sheets.py; docs/sheets is the deployed copy.
+# sheets/ is the 4096 set the app draws from, sheets2048/ the lean set the ambient page keeps.
 web/sheets/
+web/sheets2048/
 web/frames/
 web/artifact.html
 web/bluemarble.jpg
@@ -55,3 +57,8 @@ __pycache__/
 web/_old.html
 web/_*_old.js
 web/_*_old.css
+
+# A frozen copy of the page for a sheet bake that must not follow live edits (the Atlas port round 2)
+web/_bakeapp.html
+web/_*_bake.js
+web/_*_bake.css

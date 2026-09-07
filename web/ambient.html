@@ -37,7 +37,8 @@ const q=new URLSearchParams(location.search);
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0.05);
 const FPS=+(q.get('fps')||(REDUCED?10:30));
-const SHEET_V='20260903', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
+const SHEET_V='20260907', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
+let SHEET_DIR='sheets2048/';   // the lean set this page runs on; sheets/ (4096, the app's) if it is all the site ships
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};
 const FIELD_BASE=_base('fieldbase','FIELD_BASE'), SHEET_BASE=_base('sheetbase','SHEET_BASE');
@@ -91,7 +92,7 @@ function requestAround(f,dir){
   for(const i of order){
     if(i<0||i>=n)continue;
     const file=SM.files[String(TL[i].age)];
-    if(file)want(sheetKey(i),(SHEET_BASE||'sheets/')+file+'?v='+SHEET_V,true);
+    if(file)want(sheetKey(i),(SHEET_BASE||SHEET_DIR)+file+'?v='+SHEET_V,true);
     want('v'+i,(FIELD_BASE||'fields/')+vFile(i)+'?v='+FIELD_V,false);
     keep.push(sheetKey(i),'v'+i);
   }
@@ -192,7 +193,9 @@ document.addEventListener('visibilitychange',()=>{last=performance.now();});
 (async()=>{
   try{
     TL=await fetch('fields/manifest.json?v='+FIELD_V).then(r=>r.json());
-    SM=await fetch('sheets/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null);
+    // the 2048 set first (a few percent of a laptop GPU all day), the app's 4096 set if that is all there is
+    SM=await fetch('sheets2048/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null);
+    if(!(SM&&SM.files)){SHEET_DIR='sheets/';SM=await fetch('sheets/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null);}
   }catch(e){SM=null;}
   if(!TL||!SM||!SM.files){
     const m=document.getElementById('msg'); m.hidden=false;

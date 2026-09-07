@@ -243,18 +243,25 @@ if os.path.isdir(isrc):
 # World sheets (WP-10, plan A3): optional, produced by bake_sheets.py. When
 # present the deployed app plays from them instead of running the terrain
 # shader per frame, and the ambient build depends on them.
-ssrc = os.path.join(WEB, "sheets")
-sdst = os.path.join(SITE, "sheets")
-if os.path.isdir(sdst):
-    shutil.rmtree(sdst)
-if os.path.isdir(ssrc) and os.path.exists(os.path.join(ssrc, "manifest.json")):
-    if SHEET_BASE:
-        os.makedirs(sdst, exist_ok=True)
-        shutil.copy2(os.path.join(ssrc, "manifest.json"), os.path.join(sdst, "manifest.json"))
-        print(f"sheets: manifest only; the files are served from {SHEET_BASE}")
-    else:
-        shutil.copytree(ssrc, sdst)
-        print(f"sheets: {len(os.listdir(sdst)) - 1} world sheets")
+# Two sets since the port's second round (2026-09-07): sheets/ is the 4096
+# set the app draws from, sheets2048/ the lean set the ambient page keeps
+# (and a constrained device takes). Under --sheet-base only the 4096 set's
+# manifest ships and both pages fetch from the base.
+for _sub in ("sheets", "sheets2048"):
+    ssrc = os.path.join(WEB, _sub)
+    sdst = os.path.join(SITE, _sub)
+    if os.path.isdir(sdst):
+        shutil.rmtree(sdst)
+    if os.path.isdir(ssrc) and os.path.exists(os.path.join(ssrc, "manifest.json")):
+        _w = json.load(open(os.path.join(ssrc, "manifest.json"))).get("w")
+        if SHEET_BASE:
+            if _sub == "sheets":
+                os.makedirs(sdst, exist_ok=True)
+                shutil.copy2(os.path.join(ssrc, "manifest.json"), os.path.join(sdst, "manifest.json"))
+                print(f"{_sub}: manifest only; the files are served from {SHEET_BASE}")
+        else:
+            shutil.copytree(ssrc, sdst)
+            print(f"{_sub}: {len(os.listdir(sdst)) - 1} world sheets, {_w} wide")
 
 if FIELD_BASE or SHEET_BASE:
     stamp = ("<script>window.FIELD_BASE=%s;window.SHEET_BASE=%s;</script>"

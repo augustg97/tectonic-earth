@@ -21,7 +21,7 @@ const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','min
                              'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
                              'app','settle','shotsize','nolabels','quick',
                              // the port round (2026-09-07): matched old/new baselines
-                             'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke']);
+                             'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke','playsmooth','speed','quality','playing']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
@@ -77,6 +77,7 @@ const W = () => document.getElementById('app').contentWindow;
   if (q.get('view') === 'map') {
     const b = W().document.querySelector('#viewSeg button[data-v="map"]'); if (b) b.click();
   }
+  if (q.get('quality')) { A.state.quality = q.get('quality'); W().eval('applyQuality()'); }   // pin a render quality (perf engages the sheets eagerly)
   const shown = () => {
     if (A.surface) return A.surface();
     const f = A.curFrame(), u = A.gl.mat.uniforms;
@@ -233,7 +234,7 @@ const W = () => document.getElementById('app').contentWindow;
     ok('globe view back', S.view === 'globe');
     const a0 = S.age; click('#stepFwd'); ok('step forward 1 Myr', S.age === a0 - 1); click('#stepBack'); ok('step back 1 Myr', S.age === a0);
     click('#playBtn'); A.step(); await sleep(400); A.step();
-    ok('play advances time and hides clouds', S.playing && S.age < a0 && !A.gl.clouds.visible, {age: S.age});
+    ok('play advances time and keeps the clouds', S.playing && S.age < a0 && A.gl.clouds.visible, {age: S.age, clouds: A.gl.clouds.visible});
     click('#playBtn'); A.step();
     ok('pause', !S.playing);
     click('#dir'); ok('direction flips', S.dir === 1); click('#dir');
@@ -263,6 +264,73 @@ const W = () => document.getElementById('app').contentWindow;
     click('.ph'); ok('sidebar panel opens', !!D.querySelector('.panel.open'));
     r.errors = (W().__ERRORS || []).slice(0, 5); r.passed = r.steps.filter(x => x.ok).length; r.total = r.steps.length;
     await fetch('http://127.0.0.1:8901/' + q.get('smoke') + '.json', {method: 'POST', body: btoa(unescape(encodeURIComponent(JSON.stringify(r))))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('playsmooth')) {
+    /* PLAYBACK CONTINUITY (round 2). Plays for ?secs= at ?speed= from ?age=
+       at ?zoom= and samples every animation frame: the surface mode, the
+       bound pair, mixf, the warp and material gates, whether the clouds are
+       drawn, and the age. Reports the share of frames at full detail, the
+       frames time held for a pair or a sheet, the largest age step between
+       consecutive frames against the expected step, any frame where the
+       shown pair moved by more than one keyframe (a jump), any frame where
+       mixf fell by more than half without the pair changing (a snap), and
+       the path flips. */
+    const secs = +q.get('secs') || 15;
+    const o = {age: +(q.get('age') || 300), w: 1280, h: 960, zoom: +(q.get('zoom') || 2.2)};
+    const aim = A.lookAt(+(q.get('lon') || 20), +(q.get('lat') || 10), o);
+    await sleep(7000);
+    for (let k = 0; k < 10; k++) { A.step(); await sleep(150); }
+    A.state.speed = +(q.get('speed') || 3); A.state.dir = -1;
+    const st0 = A.sheets.status();
+    const surf = () => A.surface ? A.surface() : shown();               // the old page has no account of its own
+    const wx0 = () => A.weather ? A.weather() : {globe: A.gl.clouds.visible, map: false, time: 0};
+    const u = A.gl.mat.uniforms, orf = W().requestAnimationFrame.bind(W());
+    const samples = []; let prev = null;
+    const t1 = performance.now();
+    A.state.playing = true;
+    await new Promise(res => {
+      const tick = now => {
+        const s = surf(), sh = A.sheets.status(), wx = wx0();
+        const rec = {t: +(now - t1).toFixed(0), age: +A.state.age.toFixed(3), mode: s.mode, i: s.shown[0], j: s.shown[1],
+                     mixf: +u.mixf.value.toFixed(3), warp: u.uWarp.value, mat: u.uMat.value, lite: sh.lite,
+                     clouds: !!(wx.globe || wx.map), wt: wx.time};
+        samples.push(rec); prev = rec;
+        if (now - t1 < secs * 1000 && A.state.playing) orf(tick); else res();
+      };
+      orf(tick);
+    });
+    A.state.playing = false;
+    const st1 = A.sheets.status();
+    const full = samples.filter(x => x.mode === 'full').length;
+    const dts = [], steps = []; let jumps = 0, snaps = 0, flips = 0, cloudFrames = 0, warpOff = 0;
+    for (let k = 1; k < samples.length; k++) {
+      const a = samples[k - 1], b = samples[k];
+      dts.push(b.t - a.t); steps.push(a.age - b.age);
+      if (Math.abs(b.i - a.i) > 1 && a.i >= 0 && b.i >= 0) jumps++;
+      if (b.i === a.i && b.j === a.j && a.mixf - b.mixf > 0.5) snaps++;
+      if (b.lite !== a.lite) flips++;
+      if (b.clouds) cloudFrames++;
+      if (b.i !== b.j && b.warp < 0.5 && b.mode === 'full') warpOff++;
+    }
+    dts.sort((x, y) => x - y); const sSteps = [...steps].sort((x, y) => x - y);
+    const expected = A.state.speed / 60;
+    const out = {aim: aim.ok, secs, speed: A.state.speed, frames: samples.length,
+                 fps: +(samples.length / secs).toFixed(1), fullPct: +(full / samples.length * 100).toFixed(1),
+                 modes: samples.reduce((m, x) => (m[x.mode] = (m[x.mode] || 0) + 1, m), {}),
+                 frameMsP50: dts[dts.length >> 1], frameMsP95: dts[Math.floor(dts.length * 0.95)], frameMsMax: dts[dts.length - 1],
+                 ageStepMax: +sSteps[sSteps.length - 1].toFixed(3), ageStepP95: +sSteps[Math.floor(sSteps.length * 0.95)].toFixed(3),
+                 zeroSteps: steps.filter(x => x === 0).length, expectedStepAt60fps: +expected.toFixed(3),
+                 pairJumps: jumps, mixfSnaps: snaps, pathFlips: flips, warpOffFrames: warpOff,
+                 cloudFramesPct: +(cloudFrames / Math.max(1, samples.length - 1) * 100).toFixed(1),
+                 weatherAdvanced: +(samples[samples.length - 1].wt - samples[0].wt).toFixed(2),
+                 holds: {sheet: st1.holds - st0.holds, field: (st1.fieldHolds || 0) - (st0.fieldHolds || 0)}, bakes: (st1.bakes || 0) - (st0.bakes || 0),
+                 litePct: +(samples.filter(x => x.lite).length / samples.length * 100).toFixed(1),
+                 ageFrom: samples[0].age, ageTo: samples[samples.length - 1].age,
+                 sheets: {w: st1.shippedW, dir: st1.dir, keep: st1.keep, held: st1.held},
+                 errors: (W().__ERRORS || []).slice(0, 5), samples: samples.filter((x, i) => i % 10 === 0)};
+    await fetch('http://127.0.0.1:8901/' + q.get('playsmooth') + '.json', {method: 'POST', body: btoa(JSON.stringify(out))});
     document.title = 'VERIFY-DONE'; return;
   }
 
@@ -313,13 +381,20 @@ const W = () => document.getElementById('app').contentWindow;
     if (q.get('head')) to.head = +q.get('head');
     const aim = A.lookAt(+(q.get('lon') || 0), +(q.get('lat') || 20), to);
     await sleep(+q.get('wait') || 6000);                 // let the fields land
+    if (q.get('playing')) { A.state.playing = true; A.state.speed = +(q.get('speed') || 3); }   // time a PLAYING frame (direct render, clouds on)
     R.setPixelRatio(2); R.setSize(1280, 720, false);
     A.gl.cam.aspect = 1280 / 720; A.gl.cam.updateProjectionMatrix();
     const px = new Uint8Array(4);
     const sync = () => gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
-    for (let i = 0; i < 6; i++) A.step(); sync();
+    /* Yield between steps: a forced step lands no promise, so twenty-one
+       back to back let no decode arrive, and a playing pair timed out into a
+       still (round 2). The yield is outside the timed span. */
+    const tick = () => new Promise(r => setTimeout(r, 0));
+    for (let i = 0; i < 6; i++) { A.step(); sync(); await tick(); }
     const a = [];
-    for (let i = 0; i < 15; i++) { const t = performance.now(); A.step(); sync(); a.push(performance.now() - t); }
+    /* The app's own frame runs during the yield; the first sync drains its
+       GPU work so the timed span is the forced frame alone. */
+    for (let i = 0; i < 15; i++) { await tick(); sync(); const t = performance.now(); A.step(); sync(); a.push(performance.now() - t); }
     a.sort((x, y) => x - y);
     const mid = new Uint8Array(4);
     gl.readPixels(gl.drawingBufferWidth >> 1, gl.drawingBufferHeight >> 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, mid);

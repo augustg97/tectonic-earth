@@ -95,6 +95,11 @@ def main():
         if a.software:
             flags += ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
         url = "http://127.0.0.1:%d/_verify.html?bake=%d-%d&sheet=%d" % (SERVE_PORT, i0, i1, a.width)
+        # BAKE_APP=_bakeapp.html points the driver at a frozen copy of the page,
+        # so a long bake does not pick up edits to app.js mid-run (a chunk that
+        # loads a half-edited page bakes nothing and says so late).
+        if os.environ.get("BAKE_APP"):
+            url += "&app=" + os.environ["BAKE_APP"]
         print("bake_sheets: %d sheets at %dx%d via %s" % (i1 - i0 + 1, a.width, a.width // 2, chrome))
         chrome_p = subprocess.Popen([chrome] + flags + [url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         per = 240 if a.software else 6
