@@ -54,3 +54,4 @@ __pycache__/
 # Frozen copies of the page for old-vs-new A/B renders (round 3); never deploy
 web/_old.html
 web/_*_old.js
+web/_*_old.css

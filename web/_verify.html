@@ -19,7 +19,9 @@ const q = new URLSearchParams(location.search);
 // same harness as a plain shot. The driver's own keys stay here.
 const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','mins','scrub','coherence','secs','playtest','sheetdelay',
                              'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
-                             'app','settle','shotsize','nolabels','quick']);
+                             'app','settle','shotsize','nolabels','quick',
+                             // the port round (2026-09-07): matched old/new baselines
+                             'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
@@ -28,8 +30,9 @@ const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([
 const bakeArgs = q.get('bake') ? '&lite=1&noshipped=1&bakefull=1&sheet=' + (q.get('sheet') || 4096) : '';
 document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
-  const [name, lon, lat, age, zoom] = s.split(',');
-  return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null};
+  const [name, lon, lat, age, zoom, gtilt, head] = s.split(',');
+  return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null,
+          gtilt: gtilt ? +gtilt : null, head: head ? +head : null};
 });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const W = () => document.getElementById('app').contentWindow;
@@ -53,12 +56,263 @@ const W = () => document.getElementById('app').contentWindow;
     else for (const k of lv.split(',')) if (k in A.state.layers) A.state.layers[k] = true;
   }
 
+  /* ---- THE PORT ROUND (2026-09-07): matched old-vs-new baselines ----
+     ?clouds=0 hides the cloud layer (the frozen old page has no toggle, so
+     its cloud MATERIAL is switched off; the new page uses its layer switch),
+     ?weather=0 freezes the weather clock, ?view=map takes the flat map,
+     ?fielddelay=ms delays every field fetch (a CDN round trip from
+     localhost, as ?sheetdelay does for sheets). shown() reports which
+     elevation pair is actually on screen against the pair the age asks for,
+     on either page: the new app exposes APP.surface(); the old one is read
+     from its uniforms. */
+  if (q.get('clouds') === '0') {
+    if (A.state.layers && 'clouds' in A.state.layers) A.state.layers.clouds = false;
+    else if (A.gl.clouds) A.gl.clouds.material.visible = false;
+  }
+  if (q.get('weather') === '0' && A.state.layers && 'weather' in A.state.layers) A.state.layers.weather = false;
+  if (q.get('fielddelay')) {
+    const of = W().fetch.bind(W()), d = +q.get('fielddelay');
+    W().fetch = (u, o) => String(u).includes('fields/') ? sleep(d).then(() => of(u, o)) : of(u, o);
+  }
+  if (q.get('view') === 'map') {
+    const b = W().document.querySelector('#viewSeg button[data-v="map"]'); if (b) b.click();
+  }
+  const shown = () => {
+    if (A.surface) return A.surface();
+    const f = A.curFrame(), u = A.gl.mat.uniforms;
+    let si = -1, sj = -1;
+    for (const [k, v] of A.TEXCACHE) {
+      if (k.charCodeAt(0) !== 101 || !v.t) continue;
+      if (v.t === u.elevA.value) si = +k.slice(1);
+      if (v.t === u.elevB.value) sj = +k.slice(1);
+    }
+    const full = si === f.i && sj === f.j;
+    return {req: [f.i, f.j], shown: [si, sj], mode: full ? 'full' : 'stale', preview: false};
+  };
+  const resources = () => {
+    let n = 0, b = 0;
+    for (const e of W().performance.getEntriesByType('resource'))
+      if (/fields\/|sheets\/|imagery\//.test(e.name)) { n++; b += e.transferSize || e.encodedBodySize || 0; }
+    return {n, b};
+  };
+
+  if (q.get('seek')) {
+    /* COLD SEEK TO DETAIL. From a settled age, set the age the way the slider
+       does and watch what is on screen: the first moment the picture stops
+       being the pre-seek world (a preview, a nearer still, or the pair
+       itself), and the moment the exact requested pair is bound at full
+       detail. Also the field requests and bytes each seek cost. */
+    const targets = (q.get('targets') || '1000,0,300,-250,700').split(',').map(Number);
+    await sleep(6000);
+    for (let k = 0; k < 10; k++) { A.step(); await sleep(150); }
+    const seeks = [];
+    for (const age of targets) {
+      const before = shown(), r0 = resources(), f0 = A.loader().frame;
+      const t0 = performance.now();
+      A.state.age = age;                       // the slider path: state first, the loop binds
+      const want = A.curFrame();
+      let first = -1, detail = -1, samples = 0, previewN = 0, staleN = 0, stillN = 0;
+      while (performance.now() - t0 < 30000) {
+        await sleep(20);
+        const s = shown(); samples++;
+        const same = s.shown[0] === before.shown[0] && s.shown[1] === before.shown[1] && !s.preview;
+        if (s.preview) previewN++; else if (same) staleN++; else if (!(s.mode === 'full' && s.shown[0] === want.i && s.shown[1] === want.j)) stillN++;
+        if (first < 0 && !same) first = performance.now() - t0;
+        if (s.mode === 'full' && s.shown[0] === want.i && s.shown[1] === want.j) { detail = performance.now() - t0; break; }
+      }
+      const r1 = resources();
+      seeks.push({age, firstMs: +first.toFixed(0), detailMs: +detail.toFixed(0), samples, previewSamples: previewN,
+                  staleSamples: staleN, stillSamples: stillN, frames: A.loader().frame - f0,
+                  requests: r1.n - r0.n, MB: +((r1.b - r0.b) / 1048576).toFixed(2), final: shown()});
+      await sleep(+q.get('dwell') || 1500);
+    }
+    await fetch('http://127.0.0.1:8901/' + q.get('seek') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({readyAt: +(W().__readyAt || 0).toFixed(0),
+                  fielddelay: +(q.get('fielddelay') || 0), seeks, errors: (W().__ERRORS || []).slice(0, 5)}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('mem')) {
+    /* WORKING SET UNDER REPEATED TRAVERSAL. Jumps across the whole timeline
+       every 3 s for ?secs=, sampling residency each half second; the report
+       carries every sample and the peak of each pass, so monotonic growth
+       shows as a rising pass peak. */
+    const secs = +q.get('secs') || 90, jumps = [1000, 0, 300, -250, 700, 66, 540, -100];
+    const samples = [], t1 = Date.now(); let j = 0, lastJump = 0;
+    await sleep(5000);
+    while (Date.now() - t1 < secs * 1000) {
+      await sleep(500);
+      const m = W().__MEM ? W().__MEM() : {};
+      m.t = Math.round((Date.now() - t1) / 1000);
+      m.glTex = A.gl.renderer.info.memory.textures;
+      m.heapMB = W().performance.memory ? Math.round(W().performance.memory.usedJSHeapSize / 1048576) : null;
+      m.pass = Math.floor(j / jumps.length);
+      samples.push(m);
+      if (Date.now() - lastJump > 3000) { A.state.age = jumps[j++ % jumps.length]; lastJump = Date.now(); }
+    }
+    const passes = [];
+    for (const m of samples) { const p = passes[m.pass] || (passes[m.pass] = {pass: m.pass, cacheMB: 0, pinnedMB: 0, glTex: 0, extraMB: 0});
+      p.cacheMB = Math.max(p.cacheMB, m.cacheMB || 0); p.pinnedMB = Math.max(p.pinnedMB, m.pinnedMB || 0);
+      p.glTex = Math.max(p.glTex, m.glTex || 0); p.extraMB = Math.max(p.extraMB, m.extraMB || 0); }
+    await fetch('http://127.0.0.1:8901/' + q.get('mem') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({secs, passes, errors: (W().__ERRORS || []).slice(0, 5), samples}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('compile')) {
+    /* REAL COMPILE AND LINK on this machine's GPU: every material the app
+       owns, including the ones no object carries at boot (the sheet path,
+       the preview, the map cloud plane). Reports link status per program,
+       the GL limits the build check encodes, and any page error. */
+    const R = A.gl.renderer, gl = R.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const glr = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'unknown';
+    const mats = A.gl.materials || {terrain: A.gl.mat, clouds: A.gl.clouds && A.gl.clouds.material};
+    const probes = [];
+    for (const [name, m] of Object.entries(mats)) {
+      if (!m) continue;
+      const mesh = new (W().THREE.Mesh)(new (W().THREE.PlaneGeometry)(1, 1), m);
+      mesh.name = 'probe_' + name; mesh.visible = false; A.gl.scene.add(mesh); probes.push(mesh);
+    }
+    let compileError = null;
+    try { R.compile(A.gl.scene, A.gl.cam); } catch (e) { compileError = String(e && e.message || e); }
+    await sleep(300);
+    const programs = R.info.programs.map(p => ({name: p.name, linked: !!gl.getProgramParameter(p.program, gl.LINK_STATUS),
+      usedTimes: p.usedTimes, diagnostics: p.diagnostics ? {runnable: p.diagnostics.runnable,
+        vertexLog: String(p.diagnostics.vertexShader && p.diagnostics.vertexShader.log || '').slice(0, 600),
+        fragmentLog: String(p.diagnostics.fragmentShader && p.diagnostics.fragmentShader.log || '').slice(0, 600)} : null}));
+    for (const m of probes) A.gl.scene.remove(m);
+    const out = {glr, three: W().THREE.REVISION, webgl2: !!R.capabilities.isWebGL2,
+                 maxTextureUnits: gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+                 materials: Object.keys(mats).filter(k => mats[k]), programs, compileError,
+                 errors: (W().__ERRORS || []).slice(0, 10)};
+    await fetch('http://127.0.0.1:8901/' + q.get('compile') + '.json',
+                {method: 'POST', body: btoa(JSON.stringify(out))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('smoke')) {
+    /* THE ORIGINAL FEATURES, exercised (the port round): every control the
+       page has, driven the way a hand would, with the state read back after
+       each. A regression here is a control that stopped answering. */
+    const D = W().document, S = A.state, r = {steps: []};
+    const ok = (name, cond, extra) => r.steps.push({name, ok: !!cond, ...(extra ? {extra} : {})});
+    const click = sel => { const el = D.querySelector(sel); if (!el) return false; el.click(); return true; };
+    const slide = (sel, v) => { const el = D.querySelector(sel); el.value = v; el.dispatchEvent(new (W().Event)('input', {bubbles: true})); };
+    await sleep(3000);
+    A.jumpTo(300); for (let k = 0; k < 8; k++) { A.step(); await sleep(250); }
+    ok('jumpTo 300', S.age === 300 && A.surface().req[0] === A.curFrame().i);
+    for (const L of ['boundaries', 'vectors', 'hotspots']) { click('.tog[data-layer="' + L + '"]'); }
+    for (let k = 0; k < 6; k++) { A.step(); await sleep(250); }
+    const ov = W().eval('({b:overlay.boundaries.visible||overlay.derived.visible,bn:overlay.derived.children.length+overlay.boundaries.children.length,v:overlay.vectors.visible,vn:overlay.vectors.children.length,h:overlay.hotspots.visible,hn:overlay.hotspots.children.length})');
+    ok('boundaries layer', S.layers.boundaries && ov.b && ov.bn > 0, ov);
+    ok('vectors layer', S.layers.vectors && ov.v, ov);
+    ok('hotspots layer', S.layers.hotspots && ov.h && ov.hn > 0, ov);
+    for (const L of ['boundaries', 'vectors', 'hotspots']) click('.tog[data-layer="' + L + '"]');
+    click('.tog[data-layer="labels"]'); A.step();
+    ok('labels off', S.layers.labels === false && !D.querySelector('.plabel.show'));
+    click('.tog[data-layer="labels"]'); A.step(); A.layoutLabels();
+    ok('labels on', S.layers.labels === true && D.querySelectorAll('.plabel.show').length > 0, {shown: D.querySelectorAll('.plabel.show').length});
+    const lab = (A.DATA.labels || []).find(l => A.labelVisible(l) && l.t === 'continent') || (A.DATA.labels || []).find(l => A.labelVisible(l));
+    if (lab) { A.showFeature(lab); A.step(); }
+    ok('feature card', lab && D.querySelector('#info').classList.contains('show') && D.querySelector('#infoName').textContent === lab.n, {name: lab && lab.n});
+    click('#infoClose'); A.step();
+    ok('card closes', !D.querySelector('#info').classList.contains('show'));
+    A.selectAt(20, 10); A.step();
+    ok('click on the surface opens a card', D.querySelector('#info').classList.contains('show'), {name: D.querySelector('#infoName').textContent});
+    click('#infoClose');
+    slide('#tiltR', 45); slide('#headR', 90); A.step();
+    ok('tilt and heading', S.gtilt === 45 && S.head === 90);
+    click('#resetNorth'); await sleep(900); A.step();
+    ok('reset to north', S.gtilt === 0 && S.head === 0, {gtilt: S.gtilt, head: S.head});
+    click('#viewSeg button[data-v="map"]'); A.step(); A.step();
+    const lon0 = S.mapLon; click('#mapE'); A.step();
+    ok('map view and pan east', S.view === 'map' && S.mapLon === lon0 + 30 && A.gl.mat.uniforms.uMapLon.value !== 0, {mapLon: S.mapLon});
+    const ms = A.snap(200, 200); ok('map draws', !ms.error, ms.error || null);
+    click('#viewSeg button[data-v="globe"]'); A.step();
+    ok('globe view back', S.view === 'globe');
+    const a0 = S.age; click('#stepFwd'); ok('step forward 1 Myr', S.age === a0 - 1); click('#stepBack'); ok('step back 1 Myr', S.age === a0);
+    click('#playBtn'); A.step(); await sleep(400); A.step();
+    ok('play advances time and hides clouds', S.playing && S.age < a0 && !A.gl.clouds.visible, {age: S.age});
+    click('#playBtn'); A.step();
+    ok('pause', !S.playing);
+    click('#dir'); ok('direction flips', S.dir === 1); click('#dir');
+    slide('#speed', 7); ok('speed slider', S.speed === 7 && D.querySelector('#speedVal').textContent === '7 Myr/s'); slide('#speed', 3);
+    click('#rotBtn'); ok('auto-rotate on', S.layers.rotate === true && !D.querySelector('#spinwrap').hidden); click('#rotBtn');
+    const q0 = S.quality; click('#qualBtn'); ok('quality cycles', S.quality !== q0, {from: q0, to: S.quality}); while (S.quality !== q0) click('#qualBtn');
+    click('#ambientBtn'); A.step();
+    ok('ambient on', S.ambient && D.body.classList.contains('ambient') && S.playing);
+    click('#exitAmbient'); A.step(); S.playing = false;
+    ok('ambient off', !S.ambient && !D.body.classList.contains('ambient'));
+    const sr = D.querySelector('#scalerow'), rect = D.querySelector('#track').getBoundingClientRect();
+    sr.dispatchEvent(new (W().PointerEvent)('pointerdown', {bubbles: true, clientX: rect.left + rect.width * 0.5, clientY: 0, button: 0, pointerId: 7}));
+    sr.dispatchEvent(new (W().PointerEvent)('pointerup', {bubbles: true, clientX: rect.left + rect.width * 0.5, clientY: 0, button: 0, pointerId: 7}));
+    ok('era row seeks', Math.abs(S.age - 375) <= 2, {age: S.age});
+    click('.tog[data-layer="clouds"]'); A.step();
+    ok('cloud switch off', S.layers.clouds === false && !A.gl.clouds.visible);
+    click('.tog[data-layer="clouds"]');
+    click('.tog[data-layer="weather"]'); ok('weather switch off', S.layers.weather === false); click('.tog[data-layer="weather"]');
+    const ch = D.querySelector('#gmstChart'), dot = D.querySelector('#gmstDot');
+    A.jumpTo(0); A.step(); W().eval('updateReadout()');
+    ok('graph marks the present at 80%', ch && !ch.hidden && Math.abs(+dot.getAttribute('cx') - 217.6) < 0.2 && D.querySelector('#gmstSel').textContent.includes('14.4'), {cx: dot && dot.getAttribute('cx'), sel: D.querySelector('#gmstSel').textContent});
+    click('#aboutBtn'); ok('about panel', D.querySelector('#about').classList.contains('show')); click('#aboutClose');
+    click('#logBtn'); await sleep(1500);
+    ok('update log opens with 2.4', D.querySelector('#updatelog').classList.contains('show') && D.querySelector('#ulBody').textContent.includes('2.4'), {first: (D.querySelector('.ulver') || {}).textContent});
+    click('#ulClose');
+    click('#aboutPageBtn'); ok('about page', D.querySelector('#aboutPage').classList.contains('show')); click('#aboutPageClose');
+    click('.ph'); ok('sidebar panel opens', !!D.querySelector('.panel.open'));
+    r.errors = (W().__ERRORS || []).slice(0, 5); r.passed = r.steps.filter(x => x.ok).length; r.total = r.steps.length;
+    await fetch('http://127.0.0.1:8901/' + q.get('smoke') + '.json', {method: 'POST', body: btoa(unescape(encodeURIComponent(JSON.stringify(r))))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
+  if (q.get('weathertest')) {
+    /* CLOUD MOTION WITH A FIXED CAMERA. Two shots ?secs= apart at one age and
+       one camera (their pixel difference is measured afterwards by
+       verify_run.py), then Play and Pause to confirm the clouds leave and
+       come back. APP.weather() is the new page's own account of itself. */
+    const name = q.get('weathertest'), secs = +q.get('secs') || 20;
+    const o = {age: +(q.get('age') || 0), w: 1280, h: 960, zoom: +(q.get('zoom') || 2.8)};
+    if (q.get('gtilt')) o.gtilt = +q.get('gtilt');
+    const aim = A.lookAt(+(q.get('lon') || 20), +(q.get('lat') || 10), o);
+    await sleep(7000);
+    for (let k = 0; k < 20; k++) { A.step(); await sleep(150); }
+    const wx = () => A.weather ? A.weather() : {globe: A.gl.clouds.visible, uCloud: A.gl.clouds.material.uniforms.uCloud.value};
+    // the layer fades in over 1.4 s and the image blends in as it lands: shoot only once both are complete
+    let settled = 0;
+    for (let t = 0; t < 120; t++) {
+      const w = wx();
+      if (!A.weather || (w.fade >= 1 && (w.blend >= 1 || !w.image) && w.image)) { settled++; if (settled >= 3) break; } else settled = 0;
+      await sleep(250);
+    }
+    const st0 = wx(), age0 = A.state.age, tA = performance.now();
+    const ra = await A.shoot(name + '_a', 900, undefined, undefined, {labels: false});
+    await sleep(secs * 1000);
+    const st1 = wx(), tB = performance.now();
+    const rb = await A.shoot(name + '_b', 900, undefined, undefined, {labels: false});
+    A.state.playing = true; A.step(); await sleep(500); A.step();
+    const play = wx(), playAge = A.state.age;
+    A.state.playing = false; A.step();
+    await sleep(4000); for (let k = 0; k < 5; k++) { A.step(); await sleep(100); }
+    const paused = wx();
+    await fetch('http://127.0.0.1:8901/' + name + '.json',
+                {method: 'POST', body: btoa(JSON.stringify({aim: aim.ok, ageA: age0, ageB: +A.state.age.toFixed(3), secs: +((tB - tA) / 1000).toFixed(2),
+                  shotA: !!ra.saved, shotB: !!rb.saved, shotErr: [ra.error || null, rb.error || null], canvas: [A.gl.renderer.domElement.width, A.gl.renderer.domElement.height],
+                  frames: A.loader().frame, before: st0, after: st1, play: {age: +playAge.toFixed(2), ...play}, paused,
+                  errors: (W().__ERRORS || []).slice(0, 5)}))});
+    document.title = 'VERIFY-DONE'; return;
+  }
+
   if (q.get('timing')) {
     const R = A.gl.renderer, gl = R.getContext();
     const dbg = gl.getExtension('WEBGL_debug_renderer_info');
     const glr = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'unknown';
-    const aim = A.lookAt(0, 20, {age: 0, w: 1280, h: 720});
-    await sleep(4000);                                   // let the age-0 fields land
+    const to = {age: +(q.get('age') || 0), w: 1280, h: 720};
+    if (q.get('zoom')) to.zoom = +q.get('zoom');
+    if (q.get('gtilt')) to.gtilt = +q.get('gtilt');
+    if (q.get('head')) to.head = +q.get('head');
+    const aim = A.lookAt(+(q.get('lon') || 0), +(q.get('lat') || 20), to);
+    await sleep(+q.get('wait') || 6000);                 // let the fields land
     R.setPixelRatio(2); R.setSize(1280, 720, false);
     A.gl.cam.aspect = 1280 / 720; A.gl.cam.updateProjectionMatrix();
     const px = new Uint8Array(4);
@@ -73,7 +327,12 @@ const W = () => document.getElementById('app').contentWindow;
                  aimOk: aim.ok, p50: +a[7].toFixed(1), min: +a[0].toFixed(1),
                  center: Array.from(mid).slice(0, 3),
                  lutInFrag: A.gl.mat.fragmentShader.includes('(t0+xy)*(1.0/528.0)'),
-                 uNzBound: !!A.gl.mat.uniforms.uNz.value};
+                 uNzBound: !!A.gl.mat.uniforms.uNz.value,
+                 p95: +a[13].toFixed(1), max: +a[14].toFixed(1), samples: a.length,
+                 path: A.sheets ? (A.sheets.status().lite ? 'sheets' : 'terrain') : 'terrain',
+                 shown: shown(), clouds: !!(A.gl.clouds && A.gl.clouds.visible && A.gl.clouds.material.visible),
+                 scale: +R.getPixelRatio().toFixed(2), mem: W().__MEM ? W().__MEM() : null,
+                 glTextures: R.info.memory.textures, triangles: R.info.render.triangles};
     await fetch('http://127.0.0.1:8901/' + q.get('timing') + '.json',
                 {method: 'POST', body: btoa(JSON.stringify(out))});
     document.title = 'VERIFY-DONE'; return;
@@ -340,6 +599,8 @@ const W = () => document.getElementById('app').contentWindow;
   for (const s of shots) {
     const o = {age: s.age, w: 1280, h: 960};
     if (s.zoom != null) o.zoom = s.zoom;
+    if (s.gtilt != null) o.gtilt = s.gtilt;
+    if (s.head != null) o.head = s.head;
     const aim = A.lookAt(s.lon, s.lat, o);
     await sleep(+q.get('settle') || 2600);
     if (q.get('quick')) {
