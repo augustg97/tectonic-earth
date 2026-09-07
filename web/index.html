@@ -83,6 +83,14 @@
     <div class="grp-h">Annotation</div>
     <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
   </div>
+  <!-- The satellite cloud layer (the Atlas port, 2026-09-07): a paused-time
+       layer, hidden during playback whatever the switch says. Its motion is
+       the second switch, off to begin with under prefers-reduced-motion. -->
+  <div class="grp">
+    <div class="grp-h">Atmosphere</div>
+    <div class="tog on" data-layer="clouds"><span>Cloud cover</span><div class="sw"></div></div>
+    <div class="tog on" data-layer="weather"><span>Animate weather</span><div class="sw"></div></div>
+  </div>
 </div>
 
 <!-- Context cards. The mass-extinction card proved the idea: something that
@@ -146,6 +154,7 @@
     <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
     <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
     <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith.</li>
+    <li><b>Clouds</b> — NASA <i>Blue Marble: Clouds</i> (NASA/Goddard Space Flight Center, image by Reto Stöckli), a multi-day composite of visible and polar thermal-infrared imagery published 11 February 2002, reduced to a 4096&nbsp;×&nbsp;2048 cloud-density field. It is one moving composite with small bounded deformation, its opacity broadly adapted to each era's modelled land rainfall and shown only while time is paused: satellite-derived visual structure with illustrative climate adaptation, not reconstructed weather for any date and not a forecast. Provenance and reuse guidance travel with the image in <code>imagery/nasa-clouds.json</code>.</li>
     <li><b>Illustrations</b> — most are silhouettes from <a href="https://www.phylopic.org/" target="_blank" rel="noopener">PhyloPic</a>, traced by their contributors from skeletal reconstructions and life restorations, used under CC0, Public Domain Mark or CC-BY and credited individually in the About page. A silhouette is one artist's reading of an incomplete fossil, not a photograph. Where PhyloPic has nothing to trace — an assemblage like a reef, a sedimentary structure like a stromatolite — the drawing is schematic.</li>
   </ul>
   <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
@@ -216,7 +225,7 @@
             <div class="card"><div class="k"><span class="dot" style="background:#c9a86a"></span><h3>Photoreal terrain</h3></div><p>Per-pixel relief and hillshade, slope-bare rock on mountain flanks, and glaciers from a snowline that answers to both cold and snowfall &mdash; including the Cryogenian, where the ice reaches the equator and life holds on in thin refugia.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#5f86a8"></span><h3>A modelled sea floor</h3></div><p>Ridges, transforms, fracture zones, trenches and abyssal-hill fabric, all derived from each age's own spreading system &mdash; depth from half-space cooling, texture from the fault mechanism that makes it.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-teal)"></span><h3>Rivers, marshes &amp; deltas</h3></div><p>Modeled drainage read from the lows of the reconstructed terrain and weighted by rainfall &mdash; channels in the valleys, marshes in wet flats, deltas at wet coasts.</p></div>
-            <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>A cloud layer driven by each era's own rainfall (tropical convergence, storm tracks, clear desert belts), a day/night terminator, limb haze, and era-appropriate ocean colour.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>NASA's Blue Marble cloud field in slow coherent motion while time is paused, its opacity adapted to each era's own rainfall and land, a day/night terminator, limb haze, and era-appropriate ocean colour. The clouds are satellite-derived structure with illustrative climate adaptation, not the weather of any ancient day.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#d2662f"></span><h3>Deep-time events</h3></div><p>73 confirmed impact structures and 37 large igneous provinces, each carried along its plate toward where that crust sat at the time (an estimate that recovers direction better than distance).</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#8fae5c"></span><h3>The fossil record</h3></div><p>Characteristic life per region and interval &mdash; flora and fauna drawn from the record, with hand-made illustrations &mdash; plus named seas, deserts, plateaus and lakes.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-amber-soft)"></span><h3>The future</h3></div><p>Solar brightening and the next supercontinent &mdash; the most uncertain stretch of the timeline, shown as one plausible scenario with the land biosphere thinning toward refugia.</p></div>

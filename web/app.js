@@ -18,7 +18,10 @@ const state={
      lines are DOM/overlay and stay native-sharp) and steps back up when
      there is headroom. 'full' pins native; 'balanced'/'perf' pin lower. */
   quality:(function(){try{return localStorage.getItem('te_quality')||'auto';}catch(e){return 'auto';}})(),
-  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false},
+  /* clouds: the satellite cloud layer (paused time only); weather: whether it
+     moves. Reduced motion starts with the weather still (the Atlas port). */
+  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false,
+          clouds:true,weather:!matchMedia('(prefers-reduced-motion: reduce)').matches},
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null,
   // rot/tilt are the LONGITUDE and LATITUDE of the point the camera looks at.
   // gtilt and head are the Google Earth pair layered on top: how far the camera
@@ -719,7 +722,7 @@ function ages(){return _AGES||(_AGES=DATA.timeline.map(f=>f.age));}
 function frameAt(age){return TectonicPolicy.frameAt(ages(),age);}
 
 /* ================= three.js globe ================= */
-let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds;
+let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds,cloudShadow,mapClouds;
 const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group(),rivers:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
 let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null,lastBndOn=null;
@@ -917,6 +920,44 @@ function loadPreview(){
     })
     .catch(()=>{_previewJob=null;});   // optional imagery: nothing waits on it
 }
+/* THE CLOUD IMAGE (the Atlas port, 2026-09-07): NASA's Blue Marble cloud
+   field as a 4096x2048 scalar JPEG (web/imagery/nasa-clouds-4096.jpg,
+   provenance in nasa-clouds.json; 2048 wide on a constrained device, and
+   never wider than the GPU allows). One shared texture for the globe shell,
+   its shadow and the map plane. Asked for only once the requested pair is
+   at full detail -- never an opening blocker -- at the lowest priority the
+   broker has, decoded pre-flipped ONCE with no colour conversion (it is a
+   density scalar, not a colour), repeating in longitude, clamped in
+   latitude, mipmapped. Until it lands the shader draws its noise fallback
+   and fades the image in as it arrives; a 404 leaves the fallback for good,
+   a transient failure is tried again in fifteen seconds. About 32 MiB of
+   bitmap and 43 MiB of mipmapped RGBA on the GPU at 4K, 8 + 11 at 2K,
+   counted in _extraBytes outside the field budget. */
+const SHADOW_RATIO=1.0085/1.014;   // the shadow shell sits between the highest displaced peak (1.0208 at full exaggeration, before the lift) and the cloud shell
+let _cloudTex=null,_cloudPending=false,_cloudRetryAt=0,_cloudUnavailable=false,_cloudNeutral=null;
+function loadCloudImage(){
+  if(_cloudTex||_cloudPending||_cloudUnavailable||!_BITMAPS||_sq.has('noclouds'))return;
+  if(performance.now()<_cloudRetryAt)return;
+  _cloudPending=true;
+  const maxW=Math.min(renderer.capabilities.maxTextureSize,(navigator.deviceMemory||8)<8?2048:4096);
+  LOADER.get('imagery/nasa-clouds-4096.jpg?v='+IMAGERY_V,1,null)
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none',
+      resizeWidth:maxW,resizeQuality:'high'}))      // width only: the 2:1 aspect is kept
+    .then(bm=>{
+      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      t.minFilter=THREE.LinearMipmapLinearFilter; t.magFilter=THREE.LinearFilter; t.generateMipmaps=true;
+      t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+      t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy()); t.needsUpdate=true;
+      _cloudTex=t; clouds.material.uniforms.uCloudDetail.value=t;
+      _extraBytes+=bm.width*bm.height*4*(1+4/3);
+    })
+    .catch(err=>{
+      if(err&&err.superseded)return;
+      if(!TectonicLoader.retryable(err))_cloudUnavailable=true;
+      else _cloudRetryAt=performance.now()+15000;
+    })
+    .finally(()=>{_cloudPending=false;});
+}
 function initGL(){
   const cv=$('#gl');
   /* preserveDrawingBuffer costs a copy of the whole frame at this resolution
@@ -1028,24 +1069,47 @@ function initGL(){
       gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9*uAtm;}`});
   atmo=new THREE.Mesh(ageo,amat); scene.add(atmo);
 
-  /* Cloud layer -- the single biggest "seen from space" cue. It is a thin shell
-     just above the terrain, and it reads the SAME shipped rainfall field the
-     biomes come from, so clouds gather where each era is actually wet: a bright
-     ITCZ band over the tropics, mid-latitude storm tracks, and clear subtropical
-     high belts over the deserts. Slowly drifting fBm breaks it into real weather
-     cells. It shares the terrain material's rain textures and clock, so it
-     tracks the era for free. */
+  /* Cloud layer -- the single biggest "seen from space" cue. Since the Atlas
+     port (2026-09-07) it is NASA's Blue Marble cloud field in coherent
+     motion (see the CFRAG source and loadCloudImage), adapted to the era by
+     the SAME shipped elevation and rainfall pair the terrain is drawn from:
+     the material shares the terrain's uniform OBJECTS for the pair, the
+     fraction, the era temperature parameter and the noise lattice, so the
+     clouds can only ever see the world the ground shows. Three meshes, one
+     texture, one clock: the shell over the globe, a darker shadow shell just
+     beneath it, and a plane over the flat map. The shadow and map materials
+     are shallow copies of the cloud uniforms -- shared objects, so one write
+     reaches all three -- overriding only uShadow, and uCloudMap with its own
+     uCloud (the map plane takes the fade without the globe's close-view
+     attenuation). A paused-time layer: loop() hides it the moment Play
+     starts and fades it back once the requested pair is bound. */
   const CVERT=SHADERS.CVERT;
   const CFRAG=SHADERS.CFRAG.replace('/*@cnoise*/', NZOLD?CN_OLD:CN_NEW);
+  _cloudNeutral=new THREE.DataTexture(new Uint8Array([0,0,0,255]),1,1,THREE.RGBAFormat);
+  _cloudNeutral.needsUpdate=true;
   const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
-    side:THREE.FrontSide, uniforms:{
-      rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // shared with terrain
-      mixf:mat.uniforms.mixf, uTime:mat.uniforms.uTime,
+    side:THREE.FrontSide, extensions:{derivatives:true},   // dFdx/dFdy shape the billows
+    uniforms:{
+      rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // the terrain's own objects
+      elevA:mat.uniforms.elevA, elevB:mat.uniforms.elevB,
+      mixf:mat.uniforms.mixf, uTemp:mat.uniforms.uTemp, uMapLon:mat.uniforms.uMapLon,
       uNz:mat.uniforms.uNz,   // the baked noise lattice, shared with the terrain
-      uCloud:{value:1.0}},
+      uWeatherTime:{value:0}, uEra:{value:state.age}, uRainReady:{value:0},
+      uCloudDetail:{value:_cloudNeutral}, uCloudDetailBlend:{value:0},
+      uCloud:{value:0}, uShadow:{value:0}, uCloudMap:{value:0}},
     vertexShader:CVERT, fragmentShader:CFRAG});
   clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
-  globe.add(clouds);   // co-rotates with the terrain; drift comes from uTime
+  clouds.renderOrder=2;
+  globe.add(clouds);   // co-rotates with the terrain; motion comes from uWeatherTime
+  const smat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
+    uniforms:{...cmat.uniforms, uShadow:{value:1}},vertexShader:CVERT,fragmentShader:CFRAG});
+  cloudShadow=new THREE.Mesh(clouds.geometry,smat);
+  cloudShadow.renderOrder=1; cloudShadow.rotation.y=0.003; cloudShadow.scale.setScalar(SHADOW_RATIO);
+  globe.add(cloudShadow);
+  const mmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
+    uniforms:{...cmat.uniforms, uCloudMap:{value:1}, uCloud:{value:0}},vertexShader:CVERT,fragmentShader:CFRAG});
+  mapClouds=new THREE.Mesh(mapMesh.geometry,mmat);
+  mapClouds.renderOrder=2; mapClouds.visible=false; scene.add(mapClouds);
   // stars
   const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
@@ -1641,6 +1705,7 @@ function layoutMap(){
   orthoCam.updateProjectionMatrix();
   mapMesh.scale.set(dw,dh,1);
   mapMesh.position.set(dx+dw/2-W/2, H/2-(dy+dh/2), 0);
+  if(mapClouds){mapClouds.scale.copy(mapMesh.scale);mapClouds.position.copy(mapMesh.position);mapClouds.position.z=0.01;}
 }
 function drawMapOverlays(){
   mctx.clearRect(0,0,mcv.width,mcv.height);
@@ -3502,8 +3567,8 @@ function _bakeStrips(){
   const j=_bakeJob, rt=j.rt, u=mat.uniforms;
   bindStill(j.i);
   u.uMapProj.value=2.0; u.uTime.value=777.0; u.uSchem.value=0.0; u.uDisp.value=0.0;
-  const vis=[globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible];
-  globe.visible=false;atmo.visible=false;starfield.visible=false;clouds.visible=false;mapMesh.visible=true;
+  const vis=[globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible,mapClouds.visible];
+  globe.visible=false;atmo.visible=false;starfield.visible=false;clouds.visible=false;mapClouds.visible=false;mapMesh.visible=true;
   const prevMat=mapMesh.material; mapMesh.material=mat;
   orthoCam.left=-0.5;orthoCam.right=0.5;orthoCam.top=0.5;orthoCam.bottom=-0.5;orthoCam.updateProjectionMatrix();
   mapMesh.scale.set(1,1,1);mapMesh.position.set(0,0,0);
@@ -3519,7 +3584,7 @@ function _bakeStrips(){
   renderer.setRenderTarget(prevRT);
   rt.scissorTest=false;
   mapMesh.material=prevMat;
-  [globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible]=vis;
+  [globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible,mapClouds.visible]=vis;
   u.uMapProj.value=state.view==='map'?1:0;
   if(j.row>=SHEET_STRIPS){const s=SHEETS.get(j.i);s.ready=true;s.u=++_sheetClock;_bakeJob=null;}
 }
@@ -3661,7 +3726,10 @@ let last=performance.now();
 const _camC=new THREE.Vector3(),_camUp=new THREE.Vector3(),_camN=new THREE.Vector3(),
       _camE=new THREE.Vector3(),_camH=new THREE.Vector3();
 function loop(now,force){
-  const rawMs=now-last;
+  /* Never negative: a forced step (APP.step) stamps `last` with
+     performance.now(), and the next animation-frame timestamp can predate it
+     under load, which once ran the cloud fade to -3. */
+  const rawMs=Math.max(0,now-last);
   /* TWO CLOCKS (WP-10, A5.1). dt is the per-frame step the camera and the
      drag use, clamped at 50 ms so a stall never throws the view. Time itself
      must not be clamped that way: at 3 fps the "18 Myr/s" slider was advancing
@@ -3669,8 +3737,15 @@ function loop(now,force){
      elapsed time, capped at half a second so a tab that was hidden resumes
      where it was rather than leaping. */
   const dt=Math.min(.05,rawMs/1000), dtT=Math.min(.5,rawMs/1000);last=now;
-  qualityGovernor(rawMs);
   _frameNo++;
+  /* THE WEATHER CLOCK (the Atlas port): a third clock, apart from the age and
+     from the sea-sheen's uTime. It runs while the app is paused with clouds
+     shown and their animation on, in real time clamped to a tenth of a
+     second a tick so a tab coming back does not leap through weather phases,
+     and it stands still while hidden, while playing, and when the animation
+     is off (reduced motion starts it off). */
+  const weatherMoving=!!clouds&&TectonicPolicy.weatherActive(state,document.hidden)&&_surface.mode==='full';
+  if(clouds)clouds.material.uniforms.uWeatherTime.value+=TectonicPolicy.weatherStep(rawMs,weatherMoving);
   /* IDLE THROTTLE (WP-10, A5.6). requestAnimationFrame used to redraw the
      whole planet sixty times a second while nothing on it changed -- a paused
      app on a laptop is most of what this app is, and it was drawing the same
@@ -3682,14 +3757,23 @@ function loop(now,force){
   const idleSig=[state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,
                  state.view,state.shade,state.mapLon,state.quality,_autoScale,
                  innerWidth,innerHeight,TEXCACHE.size,_texBytes,_upQ.length,_bmPending.size,
-                 _surface.mode,_surface.shown[0],_surface.shown[1],_previewReady,
+                 _surface.mode,_surface.shown[0],_surface.shown[1],_previewReady,state.layers.clouds,state.layers.weather,
                  state.layers.boundaries,state.layers.vectors,state.layers.hotspots,
                  state.layers.labels,state.selPlate].join('|');
-  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||
+  const cloudFading=!!clouds&&TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&
+    ((loop._cloudFade||0)<1||(_cloudTex&&clouds.material.uniforms.uCloudDetailBlend.value<1));
+  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||cloudFading||
                (state.layers.rotate&&state.spin>0)||_upQ.length>0||_bmPending.size>0;
   if(idleSig!==loop._sig){loop._sig=idleSig;loop._sigAt=now;}
   const idle=!force&&!moving&&(now-loop._sigAt)>1000;
-  if(idle&&(now-(loop._drawn||0))<200){requestAnimationFrame(loop);return;}
+  /* Idle draws at the sea-sheen's five a second as before; with the weather
+     moving it draws at the weather's own cadence, 24 a second (15 in the
+     efficient quality), which is deliberate scheduling and not a bottleneck
+     -- so the quality governor is fed by interaction and playback only,
+     never by a weather frame (the brief, section 5). */
+  const weatherCadence=((state.quality==='auto'?_autoScale:state.quality)==='perf')?1000/15:1000/24;
+  if(idle&&(now-(loop._drawn||0))<(weatherMoving?weatherCadence:200)){requestAnimationFrame(loop);return;}
+  if(!(idle&&weatherMoving))qualityGovernor(rawMs);
   loop._drawn=now;
   // A scrub moves more than a keyframe per frame; the speculative queue is
   // then aimed at ages already behind the slider. Drop it, it re-fills.
@@ -3790,8 +3874,25 @@ function loop(now,force){
   setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
   const isGlobe=state.view==='globe';
   globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
-  // clouds only on the globe, and only in the photoreal (satellite) shading
-  clouds.visible=isGlobe && state.shade!=='schem';
+  /* CLOUDS (the Atlas port). Wanted when paused with the layer on and the
+     requested pair bound at full detail. Play hides the shell, its shadow
+     and the map plane at once -- the surface is the point of playback --
+     without touching the layer setting; Pause fades them back over 1.4 s
+     once the pair is bound; the image itself fades in from the noise
+     fallback as it lands. uRainReady is 1 only while the rainfall bound
+     matches the elevation bound, so a pair mid-arrival never colours the
+     clouds with another age's rain. */
+  const cloudsWanted=TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&!f.preview;
+  if(cloudsWanted)loadCloudImage();
+  const cu=clouds.material.uniforms;
+  if(_cloudTex)cu.uCloudDetailBlend.value=Math.min(1,cu.uCloudDetailBlend.value+Math.min(rawMs,100)/1400);
+  loop._cloudFade=cloudsWanted?Math.min(1,(loop._cloudFade||0)+Math.min(rawMs,100)/1400):0;
+  cu.uEra.value=state.age;
+  cu.uRainReady.value=(_bound.eA>=0&&_bound.rA===_bound.eA&&_bound.rB===_bound.eB)?1:0;
+  const cloudsOn=cloudsWanted&&loop._cloudFade>0.001;
+  clouds.visible=cloudsOn&&isGlobe; cloudShadow.visible=clouds.visible;
+  mapClouds.visible=cloudsOn&&!isGlobe;
+  mapClouds.material.uniforms.uCloud.value=loop._cloudFade;
   mapMesh.visible=!isGlobe;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
@@ -3854,19 +3955,18 @@ function loop(now,force){
     // the material itself.
     atmo.material.uniforms.uAtm.value=1.0-0.80*near;
     atmo.material.uniforms.uRim.value=2.2+5.0*near;
-    /* Clouds RETIRE as the camera drops, rather than merely thinning. A cloud
-       shell is a flat texture on a sphere: looked down on from far away it
-       reads as weather, but looked along from low orbit the eye travels through
-       its whole tangential thickness and it becomes an opaque white wall lying
-       across the terrain -- which is precisely what tilt is for looking at.
-       Real clouds would part and show ground between them; this one cannot, so
-       the honest move is to take it away once the geometry stops supporting the
-       illusion. Gone by the time the camera is 60% of the way in. */
-    if(clouds.material.uniforms.uCloud){
-      const cf=Math.max(0.0,1.0-near/0.6);
-      clouds.material.uniforms.uCloud.value=cf;
-      clouds.visible=clouds.visible&&cf>0.01;
-    }
+    /* Clouds THIN as the camera drops rather than retiring (the Atlas port).
+       The old procedural shell was taken away by 60% of the way in because,
+       looked along from low orbit, it became one white wall across the
+       terrain; the satellite field has real clear sectors and thin fringes
+       and stays readable close in, so it keeps 55% at the closest zoom,
+       times the visibility fade. The shadow shell rides the same lift as the
+       clouds, just beneath them and above the highest displaced peak. The
+       map plane has its own uCloud without this attenuation. */
+    const cf=(1.0-0.45*near)*(loop._cloudFade||0);
+    cu.uCloud.value=cf;
+    clouds.visible=clouds.visible&&cf>0.01; cloudShadow.visible=clouds.visible;
+    cloudShadow.scale.setScalar(lift*SHADOW_RATIO);
     const t=state.gtilt*Math.PI/180, hd=state.head*Math.PI/180;
     const cp=Math.cos(state.tilt), sp=Math.sin(state.tilt);
     // scratch vectors, allocated once -- this block runs every frame
@@ -4513,11 +4613,22 @@ function buildLegend(){
               surface(){return {mode:_surface.mode,req:[..._surface.req],shown:[..._surface.shown],preview:_surface.preview,
                                 refining:_surface.refining,ms:Math.round(performance.now()-_surface.since),
                                 bound:{..._bound},previewReady:_previewReady};},
+              /* The cloud layer's own account: what is visible, the fade, the
+                 clock, whether the image has landed and the rain is coherent. */
+              weather(){const cu=clouds.material.uniforms;
+                return {globe:clouds.visible,shadow:cloudShadow.visible,map:mapClouds.visible,
+                        fade:+(loop._cloudFade||0).toFixed(3),uCloud:+cu.uCloud.value.toFixed(3),
+                        animated:TectonicPolicy.weatherActive(state,document.hidden)&&_surface.mode==='full',
+                        time:+cu.uWeatherTime.value.toFixed(2),image:!!_cloudTex,blend:+cu.uCloudDetailBlend.value.toFixed(3),
+                        rainReady:cu.uRainReady.value,era:cu.uEra.value,
+                        layers:{clouds:state.layers.clouds!==false,weather:state.layers.weather!==false},
+                        extraMB:Math.round(_extraBytes/1048576)};},
               gl:{mat,scene,globe,atmo,clouds,renderer,cam,
-                  materials:{terrain:mat,lite:liteMat,preview:previewMat}}};
+                  materials:{terrain:mat,lite:liteMat,preview:previewMat,clouds:clouds.material,shadow:cloudShadow.material,mapClouds:mapClouds.material}}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
   syncSlider();updateReadout();syncPlay();syncDir();
+  document.querySelectorAll('.tog[data-layer]').forEach(t=>t.classList.toggle('on',!!state.layers[t.dataset.layer]));
   const qb=$('#qualBtn'); if(qb){qb.addEventListener('click',cycleQuality);applyQuality();}
   setInterval(updateReadout,120);
   $('#load').classList.add('done');

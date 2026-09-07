@@ -231,6 +231,60 @@ def main():
                        f"units a real GPU has -- links on software GL, black globe on the M1: "
                        f"{', '.join(used)}")
 
+    # 4a. DERIVATIVES AND UNIFORMS, per material (the Atlas port, 2026-09-07).
+    # A fragment shader that reads dFdx/dFdy/fwidth needs its ShaderMaterial
+    # built with extensions:{derivatives:true} (a no-op on WebGL2, the
+    # difference between a picture and a black shell on WebGL1), and every
+    # uniform a shader declares must be provided by the material that
+    # carries it -- three.js only WARNS about a missing uniform, and the
+    # cloud shader gained ten of them. Both are read out of app.js.
+    app = open(APP).read() if os.path.exists(APP) else ""
+    for name, body in shader_blocks():
+        if not name.endswith("FRAG"):
+            continue
+        code = _strip_comments(body)
+        for m in re.finditer(r"fragmentShader:\s*" + name + r"\b", app):
+            start = app.rfind("new THREE.ShaderMaterial(", 0, m.start())
+            if start < 0:
+                continue
+            # the balanced call text
+            depth, i = 0, start + len("new THREE.ShaderMaterial")
+            while i < len(app):
+                if app[i] == "(":
+                    depth += 1
+                elif app[i] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                i += 1
+            call = app[start:i + 1]
+            if re.search(r"\b(dFdx|dFdy|fwidth)\s*\(", code) and "derivatives:true" not in call.replace(" ", ""):
+                bad.append(f"{name}: uses derivatives but its material (app.js:{app[:start].count(chr(10)) + 1}) "
+                           f"does not set extensions:{{derivatives:true}}")
+            declared = set()
+            for d in re.finditer(r"uniform\s+\w+\s+([^;]+);", code):
+                for n in d.group(1).split(","):
+                    declared.add(re.sub(r"\[.*", "", n).strip())
+            um = re.search(r"uniforms:\s*\{", call)
+            provided = set()
+            if um:
+                provided = set(re.findall(r"\b([A-Za-z_]\w*)\s*:\s*(?:\{|mat\.uniforms\.|U\.|cmat\.uniforms\.)", call[um.end():]))
+                inherits = re.search(r"\.\.\.(\w+)\.uniforms", call[um.end():])
+                if inherits:
+                    # a shallow copy of another material's uniforms: take that
+                    # material's keys as provided too
+                    base = inherits.group(1)
+                    bm = re.search(r"const " + base + r"=new THREE\.ShaderMaterial\(", app)
+                    if bm:
+                        seg = app[bm.end():bm.end() + 4000]
+                        provided |= set(re.findall(r"\b([A-Za-z_]\w*)\s*:\s*(?:\{|mat\.uniforms\.|U\.)", seg))
+            missing = sorted(u for u in declared if u not in provided)
+            if missing:
+                bad.append(f"{name}: declares uniforms its material (app.js:{app[:start].count(chr(10)) + 1}) "
+                           f"never provides: {', '.join(missing)}")
+            else:
+                print(f"{name}: {len(declared)} uniforms provided by the material at app.js:{app[:start].count(chr(10)) + 1}")
+
     # 5. the sources that must exist
     lens = {n: len(b) for n, b in shader_blocks()}
     for n in SOURCES:

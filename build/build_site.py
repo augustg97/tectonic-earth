@@ -213,6 +213,33 @@ if os.path.isdir(psrc):
     shutil.copytree(psrc, pdst)
     print(f"photos: {len(os.listdir(pdst))} files")
 
+# THE IMAGERY (the Atlas port, 2026-09-07): the NASA cloud field with its
+# provenance file, and the timeline preview atlas with its metadata. A
+# directory copy, like photos/. The cloud JPEG must be the exact derivative
+# nasa-clouds.json describes (the credit travels with the bytes), and the
+# preview must have been built from the sheets this site ships -- a stale
+# thumbnail shows one keyframe's world under another's age.
+isrc = os.path.join(WEB, "imagery")
+idst = os.path.join(SITE, "imagery")
+if os.path.isdir(idst):
+    shutil.rmtree(idst)
+if os.path.isdir(isrc):
+    import hashlib as _hl
+    _prov = json.load(open(os.path.join(isrc, "nasa-clouds.json")))
+    _jpg = os.path.join(isrc, _prov["asset"])
+    _h = _hl.sha256(open(_jpg, "rb").read()).hexdigest()
+    if _h != _prov["sha256"] or os.path.getsize(_jpg) != _prov["bytes"]:
+        raise SystemExit("build_site: web/imagery/%s does not match nasa-clouds.json "
+                         "(sha256 %s, %d bytes); the credit describes other bytes."
+                         % (_prov["asset"], _h[:12], os.path.getsize(_jpg)))
+    if os.environ.get("SKIP_AUDIT") != "1":
+        _pc = subprocess.run([sys.executable, os.path.join(_here, "build_timeline_preview.py"), "--check"])
+        if _pc.returncode == 1:
+            raise SystemExit("build_site: the timeline preview is stale (above). Run "
+                             "build_timeline_preview.py, bump IMAGERY_V. SKIP_AUDIT=1 overrides.")
+    shutil.copytree(isrc, idst)
+    print(f"imagery: {len(os.listdir(idst))} files ({_prov['credit']})")
+
 # World sheets (WP-10, plan A3): optional, produced by bake_sheets.py. When
 # present the deployed app plays from them instead of running the terrain
 # shader per frame, and the ambient build depends on them.
@@ -274,7 +301,7 @@ import re as _re
 _missing = []
 for _page in ("app.js", "ambient.html"):
     _src = open(os.path.join(WEB, _page)).read()
-    for _m in _re.finditer(r"fetch\(['\"]([A-Za-z0-9_./-]+)", _src):
+    for _m in _re.finditer(r"(?:fetch|LOADER\.get)\(['\"]([A-Za-z0-9_./-]+)", _src):
         _rel = _m.group(1)
         if _rel.startswith("http"):
             continue
