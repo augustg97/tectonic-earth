@@ -93,12 +93,47 @@ function nearestResidentE(target){
   return bi;
 }
 const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
+/* THE REQUEST BROKER (the Atlas port, 2026-09-07; web/loader.js). Every
+   field, sheet and imagery fetch goes through one bounded queue: the same URL
+   is one request however many callers want it, the keyframes the viewer is
+   at go first, and a seek cancels the queued and in-flight requests for
+   keyframes it left behind -- retargetLoads() in loop() -- so a fast series
+   of jumps does not drain a backlog of ages nobody is looking at ahead of the
+   one they stopped on. Six concurrent fetches and an 8 MiB compressed LRU
+   are Atlas's starting settings; the browser's HTTP cache is still the
+   compressed archive, and decoded pixels stay the residency WINDOW above.
+
+   MISSING IS NOT UNAVAILABLE. Only a 404/410 marks a field absent at a
+   keyframe (legitimate: not every keyframe has every kind). A timeout, an
+   abort, a 5xx or a network failure is retried after three seconds, and a
+   request a seek superseded is no outcome at all -- the old loader recorded
+   every settled fetch as tried, so one dropped packet made a field
+   permanently missing until reload. */
+const LOADER=new TectonicLoader({concurrency:6,maxBytes:8*1048576});
+const _fieldRetryAt=new Map();   // kind+i -> performance.now() before which a transient failure is left alone
+let _decodeEMA=0;                // ms an elevation-sized createImageBitmap takes here (sizes the playback look-ahead)
+function fieldBlob(i,kind,priority){return LOADER.get(fieldSrc(fieldFile(i,kind)),priority,i);}
+function _fieldFailed(key,error){
+  if(error&&error.superseded)return;                              // a seek moved on: not an outcome
+  if(!TectonicLoader.retryable(error)){_bmMissing.add(key);_fieldTried.add(key);return;}   // absent at this keyframe
+  _fieldRetryAt.set(key,performance.now()+3000);                  // transient: ask again in a while
+}
 function _cacheTouch(e){e.u=++texClock;}
+/* Eviction never takes the pair the age asks for, even before it is bound:
+   during the overlap between an old on-screen pair and an incoming one, the
+   LRU sees the incoming elevations as cold (nothing has drawn them yet) and
+   the old ones as pinned, and with a full window it would evict the very
+   textures the seek is waiting for -- a stall that looked like a slow
+   network. Guard the requested pair's essential kinds and stacks. */
 function _cacheEvict(keepKey){
+  const guard=new Set(keepKey?[keepKey]:[]);
+  if(DATA.timeline){const f=frameAt(state.age);
+    for(const k of ['e','r','v','p']){guard.add(k+f.i);guard.add(k+f.j);}
+    guard.add('s'+f.i);guard.add('s'+f.j);}
   while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
     let victim=null,best=Infinity;
     for(const[k,v]of TEXCACHE){
-      if(k===keepKey)continue;
+      if(guard.has(k))continue;
       const ba=_boundAt.get(k);
       if(ba!==undefined&&_frameNo-ba<3)continue;   // on screen -- never evict
       if(v.u<best){best=v.u;victim=k;}}
@@ -123,14 +158,18 @@ function ensureBitmap(kind,i,force){
   const e0=TEXCACHE.get(key);
   if(e0&&e0.bm)return Promise.resolve();
   if(_bmMissing.has(key))return Promise.resolve();
+  if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_bmPending.get(key); if(p0)return p0;
-  const pri=(kind==='e'||kind==='r')?'high':'low';
-  const p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
-    .then(r=>{if(!r.ok)throw 0;return r.blob();})
-    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
-      premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+  // Elevation defines the world, then the kinds that define how time LOOKS
+  // between keyframes (KIND_PRIORITY), then the rest.
+  const pri=kind==='e'?20:(kind==='r'||kind==='v'||kind==='p')?15:10;
+  let t0=0;
+  const p=fieldBlob(i,kind,pri)
+    .then(b=>{t0=performance.now();return createImageBitmap(b,{imageOrientation:'flipY',
+      premultiplyAlpha:'none',colorSpaceConversion:'none'});})
     .then(bm=>{
       _bmPending.delete(key);
+      if(kind==='e'){const ms=performance.now()-t0;_decodeEMA=_decodeEMA?_decodeEMA*0.8+ms*0.2:ms;}
       /* A scrub kicked decodes for every age the slider swept past; by the
          time one completes the viewer may be hundreds of Myr away. Inserting
          it would evict something wanted; close it instead -- the HTTP cache
@@ -146,7 +185,7 @@ function ensureBitmap(kind,i,force){
       TEXCACHE.set(key,e);_texBytes+=e.b;_cacheTouch(e);
       _cacheEvict(key);
     })
-    .catch(()=>{_bmPending.delete(key);_bmMissing.add(key);});
+    .catch(err=>{_bmPending.delete(key);_fieldFailed(key,err);});
   _bmPending.set(key,p);
   return p;
 }
@@ -435,28 +474,32 @@ function drawFieldImage(cx,img,w,h){
 function loadField(i,kind,boot){
   const key=kind+i;
   if(_fieldTried.has(key))return Promise.resolve();
+  if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_fieldPending.get(key); if(p0)return p0;
   const arr=FIELD_KINDS.find(k=>k[0]===kind)[1]();
   if(boot)_bootWant++;
-  // Mark tried on BOTH paths. A 404 is legitimate here -- a keyframe may have
-  // no lake field -- and retrying it forever would make the prefetch pump spin.
+  /* Tried means an OUTCOME: the bytes arrived, or the server said the file
+     does not exist (a 404 is legitimate here -- a keyframe may have no lake
+     field -- and retrying it forever would make the prefetch pump spin). A
+     transient failure or a superseded request is neither, and the pump asks
+     again; see _fieldFailed. */
   const fin=()=>{
-    _fieldPending.delete(key);_fieldTried.add(key);
+    _fieldPending.delete(key);
     if(boot){_bootGot++;const el=$('#loadPct');
       if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}};
   let p;
   if(_BITMAPS){
     /* Fetch and DISCARD: this populates the browser's HTTP cache (compressed
-       bytes, disk-backed, browser-managed) and nothing else. Decoding into
-       memory is ensureBitmap's job, and only for the residency window --
-       decoding everything here is the exact mistake that pinned gigabytes of
-       IOSurfaces and crashed the tab. Elevation and rainfall still ride at
-       high priority; the refinement kinds follow. */
-    const pri=(kind==='e'||kind==='r')?'high':'low';
-    p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
-      .then(r=>{if(!r.ok)throw 0;return r.blob();})
-      .then(()=>fin())
-      .catch(fin);
+       bytes, disk-backed, browser-managed) and the broker's small compressed
+       LRU, nothing else. Decoding into memory is ensureBitmap's job, and only
+       for the residency window -- decoding everything here is the exact
+       mistake that pinned gigabytes of IOSurfaces and crashed the tab. The
+       opening pair outranks everything; speculative warming runs below the
+       kinds a seek is waiting on. */
+    p=fieldBlob(i,kind,boot?30:5)
+      .then(()=>{_fieldTried.add(key);})
+      .catch(err=>_fieldFailed(key,err))
+      .finally(fin);
   } else p=new Promise(res=>{
     const img=new Image();
     img.onload=()=>{arr[i]=img;fin();res();};
@@ -499,33 +542,46 @@ function ensureFrames(age,block){
 }
 
 /* PREFETCH, re-centred on every completion. Rather than a fixed queue, ask each
-   time for the nearest keyframe to wherever the viewer is NOW -- so scrubbing
-   across the timeline re-aims the fill instead of waiting out a plan made
-   before they moved. Four at a time: enough to saturate a connection, few
-   enough that a frame the viewer is actually waiting for is not stuck behind a
-   queue of speculative ones. */
+   time for the nearest wanted keyframe to wherever the viewer is NOW -- so
+   scrubbing across the timeline re-aims the fill instead of waiting out a
+   plan made before they moved. Four at a time: enough to saturate a
+   connection, few enough that a frame the viewer is actually waiting for is
+   not stuck behind a queue of speculative ones -- and the broker ranks the
+   pair above them regardless. */
 const PREFETCH_CONCURRENCY=4;
-let _prefetchBusy=0, _prefetchOn=false;
-/* WHAT THE PUMP MAY FETCH (WP-10, A5.5). It used to warm the entire 138 MB
-   timeline into the browser cache on every visit, four files at a time, on
-   battery, on metered connections, and in hidden tabs. Now: a hidden tab
-   fetches nothing until it is shown again; on a metered connection
-   (navigator.connection.saveData) or on battery (navigator.getBattery, where
-   the browser offers it) it fetches only the keyframes within LEAN_RADIUS of
-   the viewer, two at a time -- enough lookahead for playback in either
-   direction, re-aimed on every completion as before -- and the full fill
-   happens only on mains power over an unmetered link. */
-const LEAN_RADIUS=4;
+let _prefetchBusy=0, _prefetchOn=false; const _prefetchFrames=new Set();
+/* WHAT THE PUMP MAY FETCH (WP-10 A5.5, narrowed by the Atlas port). It used
+   to warm the entire 138 MB timeline into the browser cache on every visit,
+   four files at a time, then only on mains power over an unmetered link. Now
+   the neighbourhood is bounded everywhere: paused, three keyframes each way
+   (a scrub either way lands warm); playing, as many keyframes AHEAD as the
+   speed covers in a fetch, a decode and two seconds of slack -- measured
+   here, not assumed (TectonicPolicy.lookahead: 3 at 3 Myr/s, 5 at 10 on a
+   fast link, never more than 8) -- and one behind. A hidden tab fetches
+   nothing until it is shown; a metered link or a battery keeps two. What
+   the pump wants is also the window the broker keeps: retargetLoads()
+   cancels queued and in-flight requests for everything outside it. */
+const LEAN_RADIUS=2;
 let _lean=!!(navigator.connection&&navigator.connection.saveData), _charging=true;
 if(navigator.getBattery){navigator.getBattery().then(b=>{
   const upd=()=>{_charging=b.charging;pumpPrefetch();};
   b.addEventListener('chargingchange',upd);upd();}).catch(()=>{});}
-function prefetchRadius(){return (_lean||!_charging)?LEAN_RADIUS:DATA.timeline.length;}
+function wantedFrames(f){
+  f=f||frameAt(state.age);
+  const n=DATA.timeline.length, out=[f.i]; if(f.j!==f.i)out.push(f.j);
+  const lean=_lean||!_charging||TEX_BUDGET<500*1048576;
+  let ahead,behind;
+  if(state.playing){ahead=TectonicPolicy.lookahead(state.speed,LOADER.stats.msEMA,_decodeEMA,lean);behind=1;}
+  else{ahead=behind=lean?LEAN_RADIUS:3;}
+  // dir<0 counts the age DOWN, which is forward in time and downward in index
+  const dir=state.playing?(state.dir<0?-1:+1):0;
+  if(dir){for(let a=1;a<=ahead;a++)out.push(dir<0?f.i-a:f.j+a);
+          for(let a=1;a<=behind;a++)out.push(dir<0?f.j+a:f.i-a);}
+  else for(let a=1;a<=ahead;a++){out.push(f.i-a);out.push(f.j+a);}
+  return [...new Set(out.filter(i=>i>=0&&i<n))];
+}
 function nextWantedFrame(){
-  const n=DATA.timeline.length, c=frameAt(state.age).i, R=Math.min(n,prefetchRadius());
-  for(let d=0;d<=R;d++){
-    for(const i of (d?[c-d,c+d]:[c])) if(i>=0&&i<n&&!frameSettled(i))return i;
-  }
+  for(const i of wantedFrames())if(!frameSettled(i)&&!_prefetchFrames.has(i))return i;
   return -1;
 }
 function pumpPrefetch(){
@@ -533,12 +589,33 @@ function pumpPrefetch(){
   const cap=(_lean||!_charging)?2:PREFETCH_CONCURRENCY;
   while(_prefetchBusy<cap){
     const i=nextWantedFrame(); if(i<0)return;
-    _prefetchBusy++;
-    loadFrame(i).then(()=>{_prefetchBusy--;pumpPrefetch();});
+    _prefetchBusy++;_prefetchFrames.add(i);
+    loadFrame(i).catch(()=>{}).finally(()=>{_prefetchBusy--;_prefetchFrames.delete(i);
+      // a frame that did not settle had a transient failure: back after its retry window
+      if(frameSettled(i))pumpPrefetch();else setTimeout(pumpPrefetch,3100);});
   }
 }
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)pumpPrefetch();});
+document.addEventListener('visibilitychange',()=>{
+  last=performance.now();   // a hidden tab's clock must not leap on return (dtT is capped anyway)
+  if(!document.hidden)pumpPrefetch();});
 function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
+/* THE BROKER FOLLOWS THE VIEWER. Whenever the pair, the playback direction
+   or the speed changes, the window of keyframes the broker may still work
+   on becomes the pump's neighbourhood plus the sheets playback looks ahead
+   for plus whatever keyframe is on screen; queued and in-flight requests
+   for any other keyframe are cancelled. A far jump therefore starts on the
+   new pair at once instead of behind the tail of the old one. */
+let _loadTarget='';
+function retargetLoads(f){
+  if(!DATA.timeline)return;
+  const key=f.i+':'+f.j+':'+(state.playing?state.dir*state.speed:0);
+  if(key===_loadTarget)return;
+  _loadTarget=key;
+  const keep=new Set(wantedFrames(f));
+  for(const i of _sheetWanted(f))keep.add(i);
+  if(_lastBoundE>=0)keep.add(_lastBoundE);
+  LOADER.retargetFrames([...keep],[f.i,f.j]);
+}
 
 /* PREDICTIVE GPU RESIDENCY (perf audit P3, WP-09 F4-F6). Fetch-and-decode
    (loadField) gets pixels into memory; this gets them onto the GPU BEFORE the
@@ -626,19 +703,15 @@ function queueUploads(f){
    frame. Pure allocation churn; cache it once. */
 let _AGES=null;
 function ages(){return _AGES||(_AGES=DATA.timeline.map(f=>f.age));}
-function frameAt(age){
-  // returns {i,j,t} interpolation between adjacent frames
-  const A=ages();
-  if(age<=A[0])return{i:0,j:0,t:0};
-  if(age>=A[A.length-1])return{i:A.length-1,j:A.length-1,t:0};
-  for(let k=0;k<A.length-1;k++){
-    if(age>=A[k]&&age<=A[k+1]){
-      const t=(age-A[k])/(A[k+1]-A[k]);
-      return{i:k,j:k+1,t};
-    }
-  }
-  return{i:0,j:0,t:0};
-}
+/* {i,j,t}: the keyframes an age sits between and where between them it is.
+   An EXACT keyframe is itself alone ({i,j:i,t:0}) -- the old linear scan
+   answered (the next younger keyframe, this one, t=1), so every marker jump
+   and every 1-Myr step onto a keyframe bound the neighbour's interval fields
+   (README 7.16). Binary search, from web/loader.js, tested in
+   build/test_loader.mjs against the shipped timeline. Every consumer that
+   reads f.i for a per-keyframe field (labels, rivers, motion, the plate
+   slots, the small-field stack) now gets the keyframe the age names. */
+function frameAt(age){return TectonicPolicy.frameAt(ages(),age);}
 
 /* ================= three.js globe ================= */
 let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds;
@@ -762,7 +835,10 @@ function bakeNoiseLUT(){
      ridge crop lost ~11% of its Laplacian energy, i.e. visibly softer crests.
      Half floats carry ~2,000 levels through the same trick at 2 bytes/texel
      (557 KB), and the crispness comes back to parity. */
-  const f2h=v=>{const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+  // One conversion buffer for all 262,144 values (the per-value pair of typed
+  // arrays was a quarter-million allocations at boot). Same bits out.
+  const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+  const f2h=v=>{
     f32[0]=v;const x=u32[0];
     return((x>>16)&0x8000)|((((x>>23)&0xff)-112)<<10)&0x7c00|((x>>13)&0x03ff);};
   const data=new Uint16Array(A*A);
@@ -3243,14 +3319,15 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
 const SHEET_V='20260903';
 let SHEET_MANIFEST=null;
-const _shippedPending=new Set(), _shippedMissing=new Set();
+const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
   if(_sq.has('noshipped')||!SHEET_MANIFEST||!SHEET_MANIFEST.files||_shippedMissing.has(i))return false;
   const file=SHEET_MANIFEST.files[String(DATA.timeline[i].age)];
   if(!file){_shippedMissing.add(i);return false;}
   if(_shippedPending.has(i))return true;
+  if((_sheetRetryAt.get(i)||0)>performance.now())return false;
   _shippedPending.add(i);
-  fetch((SHEET_BASE||'sheets/')+file+'?v='+SHEET_V).then(r=>{if(!r.ok)throw 0;return r.blob();})
+  LOADER.get((SHEET_BASE||'sheets/')+file+'?v='+SHEET_V,25,i)
     .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
     .then(bm=>{
       const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
@@ -3260,7 +3337,12 @@ function _shippedSheet(i){
       _sheetDrop(i); SHEETS.set(i,{rt:null,tex:t,w:bm.width,ready:true,u:++_sheetClock});
       _shippedPending.delete(i);
     })
-    .catch(()=>{_shippedPending.delete(i);_shippedMissing.add(i);});
+    .catch(err=>{_shippedPending.delete(i);
+      // Missing (404) is for good; a superseded request is nothing; anything
+      // else is tried again in a while rather than baked over for ever.
+      if(err&&err.superseded)return;
+      if(!TectonicLoader.retryable(err))_shippedMissing.add(i);
+      else _sheetRetryAt.set(i,performance.now()+3000);});
   return true;
 }
 function _sheetDrop(i){
@@ -3532,7 +3614,7 @@ function loop(now,force){
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   // Sheet bakes render through the terrain material and leave it bound to a
   // still; bindTextures() below rebinds the live pair, so bakes go first.
-  if(DATA.timeline)pumpBakes(curFrame());
+  if(DATA.timeline){const f0=curFrame();retargetLoads(f0);pumpBakes(f0);}
   if(state.playing){
     const step=state.dir*state.speed*dtT;
     /* HOLD FOR THE SHEETS (2026-09-03). Zoomed out the globe draws from the
@@ -4033,7 +4115,9 @@ function buildLegend(){
      stage dropped it is to be able to call that stage directly. */
   window.APP={state,DATA,mat,TEXCACHE,snapLabel,projectLL,curFrame,elevField,elevAtLL,   // mat/TEXCACHE: the harness reads uniforms and residency
               loader:()=>({pending:[..._bmPending.keys()],upQ:_upQ.map(q=>q.k+q.i),missing:[..._bmMissing],frame:_frameNo,
-                           mb:Math.round(_texBytes/1048576),hidden:document.hidden,scrubbing:_scrubbing}),   // the decode/upload queues, for the harness
+                           mb:Math.round(_texBytes/1048576),hidden:document.hidden,scrubbing:_scrubbing,
+                           queued:LOADER.queue.length,active:LOADER.active,stats:{...LOADER.stats},
+                           decodeMs:Math.round(_decodeEMA),wanted:wantedFrames(),retry:_fieldRetryAt.size}),   // the decode/upload queues and the broker, for the harness
               labelVisible,layoutLabels,hotspotsNow,intervalAt,lifeAt,biomesAt,
               selectAt,showFeature,showEvent,jumpTo,featurePos,
               /* step() drives one frame by hand. Needed because a headless or
@@ -4106,7 +4190,10 @@ function buildLegend(){
                  artefacts this project has chased -- so eyeballing the pane is
                  not a check, it is a vibe. */
               snap(w, h, cx, cy, opts){
-                loop(performance.now());
+                /* FORCED, since the port round: the loop's idle cadence would
+                   otherwise skip this draw, and a read-back in a task other than
+                   the one that drew is empty without a preserved buffer. */
+                loop(performance.now(), true);
                 const c = renderer.domElement, gl = renderer.getContext();
                 w = w || 480; h = h || 480;
                 const x0 = Math.max(0, Math.round((cx != null ? cx : c.width / 2) - w / 2));

@@ -163,7 +163,9 @@ def inline_page(html):
     tag = '<link rel="stylesheet" href="style.css">'
     assert html.count(tag) == 1, "style link"
     html = html.replace(tag, "<style>\n" + css + "</style>")
-    for js in ("shaders.js", "app.js"):
+    # loader.js (the request broker and the pure time policy) must run before
+    # app.js, which reads TectonicLoader/TectonicPolicy at its top level.
+    for js in ("loader.js", "shaders.js", "app.js"):
         tag = '<script src="%s"></script>' % js
         assert html.count(tag) == 1, js
         body = open(os.path.join(WEB, js)).read()
