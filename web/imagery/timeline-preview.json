@@ -1,0 +1,8076 @@
+{
+  "file": "timeline-preview.webp",
+  "sha256": "a380c17390f8f9e142c4356bd4afa41a3b4ee10c4a7f087e7c75846f96168f08",
+  "bytes": 1813474,
+  "width": 4096,
+  "height": 2048,
+  "columns": 16,
+  "rows": 16,
+  "cellWidth": 256,
+  "cellHeight": 128,
+  "frameCount": 251,
+  "gutterPixels": 0,
+  "unusedCells": [
+    251,
+    252,
+    253,
+    254,
+    255
+  ],
+  "order": "Timeline array index; ascending age in Ma, from -250 to 1000. Columns left to right, then rows top to bottom.",
+  "encoding": {
+    "format": "WebP",
+    "quality": 88,
+    "method": 6,
+    "mode": "RGB",
+    "downsample": "Lanczos",
+    "colorHandling": "Source RGB retained without alpha compositing, gamma adjustment, or ICC conversion."
+  },
+  "texture": {
+    "flipY": true,
+    "mipmaps": false,
+    "minFilter": "LinearFilter",
+    "magFilter": "LinearFilter",
+    "halfTexel": [
+      0.0001220703125,
+      0.000244140625
+    ],
+    "sampling": "flippedUVRect assumes createImageBitmap(imageOrientation=flipY), texture.flipY=false. Clamp local sheet UV to its texel centers to avoid neighboring frames."
+  },
+  "timelineSHA256": "4a6861bb98025b4318a1009383b2019bfb3647d4ba299474f39e3753ac8f2e67",
+  "sourceManifestSHA256": "c57b956ae83b5ac518b9cfd11a8c778b959ecc3f9c117170f662cb9ce2fd0f4b",
+  "frames": [
+    {
+      "index": 0,
+      "ageMa": -250,
+      "column": 0,
+      "row": 0,
+      "source": "fut_0250_s.avif",
+      "sourceSHA256": "35b7f32835d385047879ec8ce12c7e36ebfce89b96c9d01921af8702f3bfe541",
+      "pixelRect": [
+        0,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.937744140625,
+        0.0623779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 1,
+      "ageMa": -245,
+      "column": 1,
+      "row": 0,
+      "source": "fut_0245_s.avif",
+      "sourceSHA256": "fe70d0b612bff4d56ecf58877bf87769e6bf73a33c22cb99ac0c9c53f2107cc1",
+      "pixelRect": [
+        256,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.937744140625,
+        0.1248779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 2,
+      "ageMa": -240,
+      "column": 2,
+      "row": 0,
+      "source": "fut_0240_s.avif",
+      "sourceSHA256": "88f003e1c15c3ce2a975bc97952fbe01c1f276fc1ff7271b6edbe5b8bd4437aa",
+      "pixelRect": [
+        512,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.937744140625,
+        0.1873779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 3,
+      "ageMa": -235,
+      "column": 3,
+      "row": 0,
+      "source": "fut_0235_s.avif",
+      "sourceSHA256": "4d6260674f0350297154d83fd6ad56b3116702b35070773e876464573bb208fa",
+      "pixelRect": [
+        768,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.937744140625,
+        0.2498779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 4,
+      "ageMa": -230,
+      "column": 4,
+      "row": 0,
+      "source": "fut_0230_s.avif",
+      "sourceSHA256": "32cf1bc29bc2d6d38c34ff4774f302191b4d9a251d3f91dd8846f2babb584f37",
+      "pixelRect": [
+        1024,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.937744140625,
+        0.3123779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 5,
+      "ageMa": -225,
+      "column": 5,
+      "row": 0,
+      "source": "fut_0225_s.avif",
+      "sourceSHA256": "59e3cf4755868fcf33ff7c9c235e7b2a1f755a3de34b3987105b5fab18ffa174",
+      "pixelRect": [
+        1280,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.937744140625,
+        0.3748779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 6,
+      "ageMa": -220,
+      "column": 6,
+      "row": 0,
+      "source": "fut_0220_s.avif",
+      "sourceSHA256": "c0f891834830c7436119740b8f76f634349902abe436b64af7c64afef0bdd536",
+      "pixelRect": [
+        1536,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.937744140625,
+        0.4373779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 7,
+      "ageMa": -215,
+      "column": 7,
+      "row": 0,
+      "source": "fut_0215_s.avif",
+      "sourceSHA256": "14ec5548fe469fbecde2443fe5e7c0e79f1dd74313d44a435d7c6afc89c0499f",
+      "pixelRect": [
+        1792,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.937744140625,
+        0.4998779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 8,
+      "ageMa": -210,
+      "column": 8,
+      "row": 0,
+      "source": "fut_0210_s.avif",
+      "sourceSHA256": "542a4efeefb9f89389d4969be259dcb9c0bb982cc24714b9db6d79575405b212",
+      "pixelRect": [
+        2048,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.937744140625,
+        0.5623779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 9,
+      "ageMa": -205,
+      "column": 9,
+      "row": 0,
+      "source": "fut_0205_s.avif",
+      "sourceSHA256": "974e047ce360bfe48080928d50f14dcdf80ecc6075212785addbc696bbc1302d",
+      "pixelRect": [
+        2304,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.937744140625,
+        0.6248779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 10,
+      "ageMa": -200,
+      "column": 10,
+      "row": 0,
+      "source": "fut_0200_s.avif",
+      "sourceSHA256": "4ce5e7e0c4a7e22dd896af00eda20659efb8780aa4713db1f93abed24c248056",
+      "pixelRect": [
+        2560,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.937744140625,
+        0.6873779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 11,
+      "ageMa": -195,
+      "column": 11,
+      "row": 0,
+      "source": "fut_0195_s.avif",
+      "sourceSHA256": "11d6ae01a9293bf5dfafeb39ae95f7d8323161f21fa56d006030c0baea8d8172",
+      "pixelRect": [
+        2816,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.937744140625,
+        0.7498779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 12,
+      "ageMa": -190,
+      "column": 12,
+      "row": 0,
+      "source": "fut_0190_s.avif",
+      "sourceSHA256": "9a449ef334d6b3cfdd579b5d83c53dff7951092a7bafff650bb6e38b175f44f0",
+      "pixelRect": [
+        3072,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.937744140625,
+        0.8123779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 13,
+      "ageMa": -185,
+      "column": 13,
+      "row": 0,
+      "source": "fut_0185_s.avif",
+      "sourceSHA256": "0c55bd04118369b73efede5ac77c4860e506a5710db328fdab8a67150f971ac3",
+      "pixelRect": [
+        3328,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.937744140625,
+        0.8748779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 14,
+      "ageMa": -180,
+      "column": 14,
+      "row": 0,
+      "source": "fut_0180_s.avif",
+      "sourceSHA256": "4497af5f8159d4f59dc68f34d7fe8c4ea3aa8693384ed4d719a4f73bcdd08bc7",
+      "pixelRect": [
+        3584,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.937744140625,
+        0.9373779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 15,
+      "ageMa": -175,
+      "column": 15,
+      "row": 0,
+      "source": "fut_0175_s.avif",
+      "sourceSHA256": "58207632e313252ab0fc2dc8d2057667e3ec0b9d0b7950b4bb22e8b124fa867d",
+      "pixelRect": [
+        3840,
+        0,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.937744140625,
+        0.9998779296875,
+        0.999755859375
+      ]
+    },
+    {
+      "index": 16,
+      "ageMa": -170,
+      "column": 0,
+      "row": 1,
+      "source": "fut_0170_s.avif",
+      "sourceSHA256": "b34c0aba370c0681dd00f13ffdf3316fa7e2332f6658c963aa42f670f5da25c9",
+      "pixelRect": [
+        0,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.875244140625,
+        0.0623779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 17,
+      "ageMa": -165,
+      "column": 1,
+      "row": 1,
+      "source": "fut_0165_s.avif",
+      "sourceSHA256": "9aece2ea08cd2fe7dd60fd16604efd56ba4acf335856b6045813d6e43c3a035c",
+      "pixelRect": [
+        256,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.875244140625,
+        0.1248779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 18,
+      "ageMa": -160,
+      "column": 2,
+      "row": 1,
+      "source": "fut_0160_s.avif",
+      "sourceSHA256": "f9938c1a4e381e2547e2483f766927857ac107b908e121e49a48038c79b396c1",
+      "pixelRect": [
+        512,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.875244140625,
+        0.1873779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 19,
+      "ageMa": -155,
+      "column": 3,
+      "row": 1,
+      "source": "fut_0155_s.avif",
+      "sourceSHA256": "2ab749f7d58fb97c6789d70d7b785779774f2aa17d3629d4784af18b05a1999c",
+      "pixelRect": [
+        768,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.875244140625,
+        0.2498779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 20,
+      "ageMa": -150,
+      "column": 4,
+      "row": 1,
+      "source": "fut_0150_s.avif",
+      "sourceSHA256": "7a3c2287a2501e3c1a9d933f4162bf15cb09fd07a60ace4abcb7586660bea287",
+      "pixelRect": [
+        1024,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.875244140625,
+        0.3123779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 21,
+      "ageMa": -145,
+      "column": 5,
+      "row": 1,
+      "source": "fut_0145_s.avif",
+      "sourceSHA256": "3779033bb901b20b60d4e92d0d35c2e7cfe7412ce83350b68013b10eedf08565",
+      "pixelRect": [
+        1280,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.875244140625,
+        0.3748779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 22,
+      "ageMa": -140,
+      "column": 6,
+      "row": 1,
+      "source": "fut_0140_s.avif",
+      "sourceSHA256": "f5b0e72eca0a5f44482395fcd168db18447ce3dc8b14e253d7d5cb901850e7c7",
+      "pixelRect": [
+        1536,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.875244140625,
+        0.4373779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 23,
+      "ageMa": -135,
+      "column": 7,
+      "row": 1,
+      "source": "fut_0135_s.avif",
+      "sourceSHA256": "3ae24aa11245259ff5f7f5b4540aa57cfb831edbe3011e6a25ffa3a2009a0a13",
+      "pixelRect": [
+        1792,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.875244140625,
+        0.4998779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 24,
+      "ageMa": -130,
+      "column": 8,
+      "row": 1,
+      "source": "fut_0130_s.avif",
+      "sourceSHA256": "afd190b4515556e3712956ec522a9ebb275c7fcc24a8f96afa62b2eac9f6e8f4",
+      "pixelRect": [
+        2048,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.875244140625,
+        0.5623779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 25,
+      "ageMa": -125,
+      "column": 9,
+      "row": 1,
+      "source": "fut_0125_s.avif",
+      "sourceSHA256": "f9ccd1a6eca5726a8d4f96ba5155bfce679ca223c12d2ab408c0e91653d89a1a",
+      "pixelRect": [
+        2304,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.875244140625,
+        0.6248779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 26,
+      "ageMa": -120,
+      "column": 10,
+      "row": 1,
+      "source": "fut_0120_s.avif",
+      "sourceSHA256": "e4bb51387532160e3800dc514e2e2fac5e55f4f4f013ab161e826e61ce117365",
+      "pixelRect": [
+        2560,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.875244140625,
+        0.6873779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 27,
+      "ageMa": -115,
+      "column": 11,
+      "row": 1,
+      "source": "fut_0115_s.avif",
+      "sourceSHA256": "b8b0931c7134343ab5b0ac259af6a269846932d311f670d393300573469ace95",
+      "pixelRect": [
+        2816,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.875244140625,
+        0.7498779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 28,
+      "ageMa": -110,
+      "column": 12,
+      "row": 1,
+      "source": "fut_0110_s.avif",
+      "sourceSHA256": "fadd5b164880a9201a4e21c0d63673cc6f319e6000961fe8e83d9618dce5b6eb",
+      "pixelRect": [
+        3072,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.875244140625,
+        0.8123779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 29,
+      "ageMa": -105,
+      "column": 13,
+      "row": 1,
+      "source": "fut_0105_s.avif",
+      "sourceSHA256": "3f18cecbfbe3bfe9fa659d6484eb478b817dbd38560111f0b0c233338bffa431",
+      "pixelRect": [
+        3328,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.875244140625,
+        0.8748779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 30,
+      "ageMa": -100,
+      "column": 14,
+      "row": 1,
+      "source": "fut_0100_s.avif",
+      "sourceSHA256": "15e8f0a6dff92a1fe6b83bcdcc1e3a0624baae2e7d2affdd5bd0c48a3593415a",
+      "pixelRect": [
+        3584,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.875244140625,
+        0.9373779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 31,
+      "ageMa": -95,
+      "column": 15,
+      "row": 1,
+      "source": "fut_0095_s.avif",
+      "sourceSHA256": "ce74a0d28f76d7d34f37f717601343d8d21a1ac3c0aac33b40b20111fd68f622",
+      "pixelRect": [
+        3840,
+        128,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.875244140625,
+        0.9998779296875,
+        0.937255859375
+      ]
+    },
+    {
+      "index": 32,
+      "ageMa": -90,
+      "column": 0,
+      "row": 2,
+      "source": "fut_0090_s.avif",
+      "sourceSHA256": "e6d2eac57dacbaadd7372ec08c3cee14642c8c1a22d4ea42be954642bf9e1d3b",
+      "pixelRect": [
+        0,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.812744140625,
+        0.0623779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 33,
+      "ageMa": -85,
+      "column": 1,
+      "row": 2,
+      "source": "fut_0085_s.avif",
+      "sourceSHA256": "b7b9610e1b71d6297034ad6e4501c684a55a5ca4506c4008f2f79e122f28aced",
+      "pixelRect": [
+        256,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.812744140625,
+        0.1248779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 34,
+      "ageMa": -80,
+      "column": 2,
+      "row": 2,
+      "source": "fut_0080_s.avif",
+      "sourceSHA256": "6b49ebcdb30340d4ab578ee380731bc25dc0226a0585567cfe5b544dad5b631e",
+      "pixelRect": [
+        512,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.812744140625,
+        0.1873779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 35,
+      "ageMa": -75,
+      "column": 3,
+      "row": 2,
+      "source": "fut_0075_s.avif",
+      "sourceSHA256": "f989d10be5a2bf06788aa12eac048d671369e1cb8c21a5573b8e9dc790868fb6",
+      "pixelRect": [
+        768,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.812744140625,
+        0.2498779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 36,
+      "ageMa": -70,
+      "column": 4,
+      "row": 2,
+      "source": "fut_0070_s.avif",
+      "sourceSHA256": "e847b200d021a2597806749125b7d31e87feeab28ce6303169d62ac67e5270b5",
+      "pixelRect": [
+        1024,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.812744140625,
+        0.3123779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 37,
+      "ageMa": -65,
+      "column": 5,
+      "row": 2,
+      "source": "fut_0065_s.avif",
+      "sourceSHA256": "c54a64f59157f2391fb97fc991b647b727e523dfdbeeb47f84e233def06d24e2",
+      "pixelRect": [
+        1280,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.812744140625,
+        0.3748779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 38,
+      "ageMa": -60,
+      "column": 6,
+      "row": 2,
+      "source": "fut_0060_s.avif",
+      "sourceSHA256": "976ebdbe8a7f4c98f0dea9cf03b283c9e93217613c15b0afe26926c57f0fa77f",
+      "pixelRect": [
+        1536,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.812744140625,
+        0.4373779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 39,
+      "ageMa": -55,
+      "column": 7,
+      "row": 2,
+      "source": "fut_0055_s.avif",
+      "sourceSHA256": "aef20d91bce9a9af100c30081da640083166c44500dfc4faa81d82269506bcfb",
+      "pixelRect": [
+        1792,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.812744140625,
+        0.4998779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 40,
+      "ageMa": -50,
+      "column": 8,
+      "row": 2,
+      "source": "fut_0050_s.avif",
+      "sourceSHA256": "7f31acf52dd5a5360267e3a57c9ce1bf224bf958c79db1af984da2f1f71c2607",
+      "pixelRect": [
+        2048,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.812744140625,
+        0.5623779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 41,
+      "ageMa": -45,
+      "column": 9,
+      "row": 2,
+      "source": "fut_0045_s.avif",
+      "sourceSHA256": "b1c7b0fab80fb2b05a58e19f141eb61a1e56da33cada7412ddca04e490bea950",
+      "pixelRect": [
+        2304,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.812744140625,
+        0.6248779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 42,
+      "ageMa": -40,
+      "column": 10,
+      "row": 2,
+      "source": "fut_0040_s.avif",
+      "sourceSHA256": "d69f5a7e44b47af4fb7ea3c301ed472c7dc1ea27a37d576a47e77f406a1ca3e6",
+      "pixelRect": [
+        2560,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.812744140625,
+        0.6873779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 43,
+      "ageMa": -35,
+      "column": 11,
+      "row": 2,
+      "source": "fut_0035_s.avif",
+      "sourceSHA256": "b7cf17b963c8e2bbc241bf5b2f2aa5f4abfcf6e36587845814ae7215bc630bc4",
+      "pixelRect": [
+        2816,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.812744140625,
+        0.7498779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 44,
+      "ageMa": -30,
+      "column": 12,
+      "row": 2,
+      "source": "fut_0030_s.avif",
+      "sourceSHA256": "3c2a4c14b7022e3fb9e0843743715ce6120011a1077199d23fb308dc8cd9922c",
+      "pixelRect": [
+        3072,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.812744140625,
+        0.8123779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 45,
+      "ageMa": -25,
+      "column": 13,
+      "row": 2,
+      "source": "fut_0025_s.avif",
+      "sourceSHA256": "dfeafb9bf659d110fc1ba226ec49acf8d0647010ce27aa145304a0c29d896ce5",
+      "pixelRect": [
+        3328,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.812744140625,
+        0.8748779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 46,
+      "ageMa": -20,
+      "column": 14,
+      "row": 2,
+      "source": "fut_0020_s.avif",
+      "sourceSHA256": "5b399b7c9873b5ea02987368dfe4db694bc9c9cf77094ac93188e75dcb4df8ee",
+      "pixelRect": [
+        3584,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.812744140625,
+        0.9373779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 47,
+      "ageMa": -15,
+      "column": 15,
+      "row": 2,
+      "source": "fut_0015_s.avif",
+      "sourceSHA256": "ba9479fff4ac254937cbba66e6f615e8b3d4fa29286b1b8ac47aeba3f6e048ad",
+      "pixelRect": [
+        3840,
+        256,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.812744140625,
+        0.9998779296875,
+        0.874755859375
+      ]
+    },
+    {
+      "index": 48,
+      "ageMa": -10,
+      "column": 0,
+      "row": 3,
+      "source": "fut_0010_s.avif",
+      "sourceSHA256": "182d43462ec0c98c7038434ca27ccfe7b8749bd45389ebb174b861efde7471ee",
+      "pixelRect": [
+        0,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.750244140625,
+        0.0623779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 49,
+      "ageMa": -5,
+      "column": 1,
+      "row": 3,
+      "source": "fut_0005_s.avif",
+      "sourceSHA256": "efae1a5c81122f9c59b72b4021c4b88e858618cedf65cc8d10c2392c18486698",
+      "pixelRect": [
+        256,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.750244140625,
+        0.1248779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 50,
+      "ageMa": 0,
+      "column": 2,
+      "row": 3,
+      "source": "phan_0000_s.avif",
+      "sourceSHA256": "1002d6c4338e1a06eb29f982e621ec29b756bfcd45723268c5cfa71756f3d1d0",
+      "pixelRect": [
+        512,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.750244140625,
+        0.1873779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 51,
+      "ageMa": 5,
+      "column": 3,
+      "row": 3,
+      "source": "phan_0005_s.avif",
+      "sourceSHA256": "eafe0038cf7f0390466e1702b865bb50f589e3d87f8b5b4e154cf5467a34b86a",
+      "pixelRect": [
+        768,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.750244140625,
+        0.2498779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 52,
+      "ageMa": 10,
+      "column": 4,
+      "row": 3,
+      "source": "phan_0010_s.avif",
+      "sourceSHA256": "6909b11c2c05bf0760f1c34ab3c1d1005c769091186aa25ffef87af6fb8f7aee",
+      "pixelRect": [
+        1024,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.750244140625,
+        0.3123779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 53,
+      "ageMa": 15,
+      "column": 5,
+      "row": 3,
+      "source": "phan_0015_s.avif",
+      "sourceSHA256": "e86cfec0653227db62f6bbb363f87d73635dea98f93216b4c95918e1c84cccee",
+      "pixelRect": [
+        1280,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.750244140625,
+        0.3748779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 54,
+      "ageMa": 20,
+      "column": 6,
+      "row": 3,
+      "source": "phan_0020_s.avif",
+      "sourceSHA256": "ff277f6d9b4d77c23152f58d23c9510d92e9d762dc10e430856a6e2e5f20cf01",
+      "pixelRect": [
+        1536,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.750244140625,
+        0.4373779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 55,
+      "ageMa": 25,
+      "column": 7,
+      "row": 3,
+      "source": "phan_0025_s.avif",
+      "sourceSHA256": "64994f076eb2959fe0c32b487d2700ffa09a9a8c94cd43975967c3d9e4cb545c",
+      "pixelRect": [
+        1792,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.750244140625,
+        0.4998779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 56,
+      "ageMa": 30,
+      "column": 8,
+      "row": 3,
+      "source": "phan_0030_s.avif",
+      "sourceSHA256": "4fd9d696ba40de0af37d23ff13a7966d86211e0bf7d77ab7b8a63842d1eac948",
+      "pixelRect": [
+        2048,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.750244140625,
+        0.5623779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 57,
+      "ageMa": 35,
+      "column": 9,
+      "row": 3,
+      "source": "phan_0035_s.avif",
+      "sourceSHA256": "cc0dce474b790db581bfe80d1cd8ffcb37e67da60341e7a8506e58336a50d029",
+      "pixelRect": [
+        2304,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.750244140625,
+        0.6248779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 58,
+      "ageMa": 40,
+      "column": 10,
+      "row": 3,
+      "source": "phan_0040_s.avif",
+      "sourceSHA256": "3ef748dacdbee3ec37e73527516ec0fa4bc709d9963562f54bcf4f2fd802da2c",
+      "pixelRect": [
+        2560,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.750244140625,
+        0.6873779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 59,
+      "ageMa": 45,
+      "column": 11,
+      "row": 3,
+      "source": "phan_0045_s.avif",
+      "sourceSHA256": "7929465d1a7492d9d1e12310471d799d1d73c4e01f3d0e56d409761163ed16bf",
+      "pixelRect": [
+        2816,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.750244140625,
+        0.7498779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 60,
+      "ageMa": 50,
+      "column": 12,
+      "row": 3,
+      "source": "phan_0050_s.avif",
+      "sourceSHA256": "0b23d09f4c57f5d66bd3058aecb1abf24ed6d851a95af1baca1a3ab4451e63c8",
+      "pixelRect": [
+        3072,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.750244140625,
+        0.8123779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 61,
+      "ageMa": 55,
+      "column": 13,
+      "row": 3,
+      "source": "phan_0055_s.avif",
+      "sourceSHA256": "fe52e8c033d3e3193ccbe21e0308900279c2f1afc11a3fce512e4c5a8e018dc9",
+      "pixelRect": [
+        3328,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.750244140625,
+        0.8748779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 62,
+      "ageMa": 60,
+      "column": 14,
+      "row": 3,
+      "source": "phan_0060_s.avif",
+      "sourceSHA256": "18872da7eeb461a40a21ce64933609a539907343b038b59938006167a7072bab",
+      "pixelRect": [
+        3584,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.750244140625,
+        0.9373779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 63,
+      "ageMa": 65,
+      "column": 15,
+      "row": 3,
+      "source": "phan_0065_s.avif",
+      "sourceSHA256": "444d75ff8ce4aa321273ea7352662679d071e6af4f08d5c68fe35e9abc1e2bc2",
+      "pixelRect": [
+        3840,
+        384,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.750244140625,
+        0.9998779296875,
+        0.812255859375
+      ]
+    },
+    {
+      "index": 64,
+      "ageMa": 70,
+      "column": 0,
+      "row": 4,
+      "source": "phan_0070_s.avif",
+      "sourceSHA256": "df45040c2626c2569f7c8b2cbe09fcc2b84a98c26abe8bdcffbbfc62364f4061",
+      "pixelRect": [
+        0,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.687744140625,
+        0.0623779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 65,
+      "ageMa": 75,
+      "column": 1,
+      "row": 4,
+      "source": "phan_0075_s.avif",
+      "sourceSHA256": "a1b740dbac048f4dcf92941cb0786c8c12e3693df0dd85f841bb974e60ad70dc",
+      "pixelRect": [
+        256,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.687744140625,
+        0.1248779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 66,
+      "ageMa": 80,
+      "column": 2,
+      "row": 4,
+      "source": "phan_0080_s.avif",
+      "sourceSHA256": "1368927b493b466ce9b8bf11c2d09b2a9d2652fe647f552f434381d09250bb69",
+      "pixelRect": [
+        512,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.687744140625,
+        0.1873779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 67,
+      "ageMa": 85,
+      "column": 3,
+      "row": 4,
+      "source": "phan_0085_s.avif",
+      "sourceSHA256": "6e8ef50f872a2a228b086e49410dfd6a373fe251e7b55a4ac5a0d09db623e666",
+      "pixelRect": [
+        768,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.687744140625,
+        0.2498779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 68,
+      "ageMa": 90,
+      "column": 4,
+      "row": 4,
+      "source": "phan_0090_s.avif",
+      "sourceSHA256": "2cf9d4640925a538b37905c3926a467678423d7302c63533bec413c83af4fb9a",
+      "pixelRect": [
+        1024,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.687744140625,
+        0.3123779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 69,
+      "ageMa": 95,
+      "column": 5,
+      "row": 4,
+      "source": "phan_0095_s.avif",
+      "sourceSHA256": "cfd266cf3bda5cb273af0502d79ac5b0b15b5d453712aa90941d3960ab0d993b",
+      "pixelRect": [
+        1280,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.687744140625,
+        0.3748779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 70,
+      "ageMa": 100,
+      "column": 6,
+      "row": 4,
+      "source": "phan_0100_s.avif",
+      "sourceSHA256": "49585c79179061168f8caa96c7d6e93e741865c07f6188975101d33b5d465744",
+      "pixelRect": [
+        1536,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.687744140625,
+        0.4373779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 71,
+      "ageMa": 105,
+      "column": 7,
+      "row": 4,
+      "source": "phan_0105_s.avif",
+      "sourceSHA256": "f01e94809103877f1dcc1934a3f8150b3849b0849580bc6a1b25ec99472e30a3",
+      "pixelRect": [
+        1792,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.687744140625,
+        0.4998779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 72,
+      "ageMa": 110,
+      "column": 8,
+      "row": 4,
+      "source": "phan_0110_s.avif",
+      "sourceSHA256": "256a2e8c60343f90b7bca158f27c3aeb897eddd525ae2e6f6fc6e6df8b920b5b",
+      "pixelRect": [
+        2048,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.687744140625,
+        0.5623779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 73,
+      "ageMa": 115,
+      "column": 9,
+      "row": 4,
+      "source": "phan_0115_s.avif",
+      "sourceSHA256": "f9c17d6877f3e943625aa70892280d809965203996297bc256603a38650437eb",
+      "pixelRect": [
+        2304,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.687744140625,
+        0.6248779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 74,
+      "ageMa": 120,
+      "column": 10,
+      "row": 4,
+      "source": "phan_0120_s.avif",
+      "sourceSHA256": "52b425bd006447b5a7fc31670f3deb954ce38a15f0ba93c0f2da1eecf7dacdd3",
+      "pixelRect": [
+        2560,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.687744140625,
+        0.6873779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 75,
+      "ageMa": 125,
+      "column": 11,
+      "row": 4,
+      "source": "phan_0125_s.avif",
+      "sourceSHA256": "180e755025bfe29f76a92c0ae0ae843ce422f9d53f7df4661d47c379967efb7f",
+      "pixelRect": [
+        2816,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.687744140625,
+        0.7498779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 76,
+      "ageMa": 130,
+      "column": 12,
+      "row": 4,
+      "source": "phan_0130_s.avif",
+      "sourceSHA256": "b3f045f1b48043b938d2fa728a26b56346d28337c582aa7009a2d5d08f1ab933",
+      "pixelRect": [
+        3072,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.687744140625,
+        0.8123779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 77,
+      "ageMa": 135,
+      "column": 13,
+      "row": 4,
+      "source": "phan_0135_s.avif",
+      "sourceSHA256": "064f9368b0774cfe705b2bd2485eca794a72021a0409f5c37204ae08d5bff693",
+      "pixelRect": [
+        3328,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.687744140625,
+        0.8748779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 78,
+      "ageMa": 140,
+      "column": 14,
+      "row": 4,
+      "source": "phan_0140_s.avif",
+      "sourceSHA256": "ce873fbeb5d10f91c65850a11d697b63b0f349646e09f23c30e25ba0ac1d4353",
+      "pixelRect": [
+        3584,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.687744140625,
+        0.9373779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 79,
+      "ageMa": 145,
+      "column": 15,
+      "row": 4,
+      "source": "phan_0145_s.avif",
+      "sourceSHA256": "f74fb95335dd7af64c46c2cf29a13113eccc487e103a6476a04859baf292c735",
+      "pixelRect": [
+        3840,
+        512,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.687744140625,
+        0.9998779296875,
+        0.749755859375
+      ]
+    },
+    {
+      "index": 80,
+      "ageMa": 150,
+      "column": 0,
+      "row": 5,
+      "source": "phan_0150_s.avif",
+      "sourceSHA256": "dac7a0f7876b720d3d74bc3daf2de08f3adebb0268f8020c5323e923eb69f063",
+      "pixelRect": [
+        0,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.625244140625,
+        0.0623779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 81,
+      "ageMa": 155,
+      "column": 1,
+      "row": 5,
+      "source": "phan_0155_s.avif",
+      "sourceSHA256": "be85e92b881232e2a10dffae2e5e24c275fab4959e985a829f8c72164b8cd32c",
+      "pixelRect": [
+        256,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.625244140625,
+        0.1248779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 82,
+      "ageMa": 160,
+      "column": 2,
+      "row": 5,
+      "source": "phan_0160_s.avif",
+      "sourceSHA256": "6b5a41dfe12ec78f931b7aff9f064cd0a85c8f638d7ef8f513351b9aad231706",
+      "pixelRect": [
+        512,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.625244140625,
+        0.1873779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 83,
+      "ageMa": 165,
+      "column": 3,
+      "row": 5,
+      "source": "phan_0165_s.avif",
+      "sourceSHA256": "b59285e2a38db574662dc859978beaf5e5dfea5552b0e6082bda96ef261e96b0",
+      "pixelRect": [
+        768,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.625244140625,
+        0.2498779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 84,
+      "ageMa": 170,
+      "column": 4,
+      "row": 5,
+      "source": "phan_0170_s.avif",
+      "sourceSHA256": "d3c5dc3a5f512405aa817c336f9bd67822f7aaddf1c8714671c696e427041557",
+      "pixelRect": [
+        1024,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.625244140625,
+        0.3123779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 85,
+      "ageMa": 175,
+      "column": 5,
+      "row": 5,
+      "source": "phan_0175_s.avif",
+      "sourceSHA256": "cc8490e3d0cc5183292ec713e22f39d0c09cf2aca0d78bdfc0538892c2f1568c",
+      "pixelRect": [
+        1280,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.625244140625,
+        0.3748779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 86,
+      "ageMa": 180,
+      "column": 6,
+      "row": 5,
+      "source": "phan_0180_s.avif",
+      "sourceSHA256": "818733e564083e64a4a3e3475959bbff6f653a7dd74e8f97771f4f4bf3bcabec",
+      "pixelRect": [
+        1536,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.625244140625,
+        0.4373779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 87,
+      "ageMa": 185,
+      "column": 7,
+      "row": 5,
+      "source": "phan_0185_s.avif",
+      "sourceSHA256": "52b93a289ad058d1d134ca3c96a72469ffa612780954197755f0cc46a3deb8bd",
+      "pixelRect": [
+        1792,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.625244140625,
+        0.4998779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 88,
+      "ageMa": 190,
+      "column": 8,
+      "row": 5,
+      "source": "phan_0190_s.avif",
+      "sourceSHA256": "4fae06d45718357c5291ff3d638f3a2c0e860bdbe82773f99de235653e07c01e",
+      "pixelRect": [
+        2048,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.625244140625,
+        0.5623779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 89,
+      "ageMa": 195,
+      "column": 9,
+      "row": 5,
+      "source": "phan_0195_s.avif",
+      "sourceSHA256": "42584de517469c380e1343f304a9a9ca14c14da1b59c9c0d9a8c3a81bc7d2ce3",
+      "pixelRect": [
+        2304,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.625244140625,
+        0.6248779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 90,
+      "ageMa": 200,
+      "column": 10,
+      "row": 5,
+      "source": "phan_0200_s.avif",
+      "sourceSHA256": "3ab22cc3378a5dd426826cccabfe1054b008ea536053f272f04c312b870a7909",
+      "pixelRect": [
+        2560,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.625244140625,
+        0.6873779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 91,
+      "ageMa": 205,
+      "column": 11,
+      "row": 5,
+      "source": "phan_0205_s.avif",
+      "sourceSHA256": "88f23055e37c459e62b7a45568df336a9fcd3014eefeed3a291a71ada5339a59",
+      "pixelRect": [
+        2816,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.625244140625,
+        0.7498779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 92,
+      "ageMa": 210,
+      "column": 12,
+      "row": 5,
+      "source": "phan_0210_s.avif",
+      "sourceSHA256": "5d1304a71157752031e759be04aaff7bdc0ef45f9d16221c71b5ff78254b23eb",
+      "pixelRect": [
+        3072,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.625244140625,
+        0.8123779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 93,
+      "ageMa": 215,
+      "column": 13,
+      "row": 5,
+      "source": "phan_0215_s.avif",
+      "sourceSHA256": "4e23dd34096396e03932d79106bdcc297eddd721b82ebe6bb349c41f0c6ab696",
+      "pixelRect": [
+        3328,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.625244140625,
+        0.8748779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 94,
+      "ageMa": 220,
+      "column": 14,
+      "row": 5,
+      "source": "phan_0220_s.avif",
+      "sourceSHA256": "9dceeabd0deb0b4651795c96976afda3d50b6d2efb476342fbb766cc6ebc9a2d",
+      "pixelRect": [
+        3584,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.625244140625,
+        0.9373779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 95,
+      "ageMa": 225,
+      "column": 15,
+      "row": 5,
+      "source": "phan_0225_s.avif",
+      "sourceSHA256": "41a70ef8bb3a4f8244030b374b2e77732a749e9f7e6682cafdb326d897e521a7",
+      "pixelRect": [
+        3840,
+        640,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.625244140625,
+        0.9998779296875,
+        0.687255859375
+      ]
+    },
+    {
+      "index": 96,
+      "ageMa": 230,
+      "column": 0,
+      "row": 6,
+      "source": "phan_0230_s.avif",
+      "sourceSHA256": "8b4a64d75eda1c015eaa10c14f7e5fd5871c71985c6bef5a2cff3d86e84e41b8",
+      "pixelRect": [
+        0,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.562744140625,
+        0.0623779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 97,
+      "ageMa": 235,
+      "column": 1,
+      "row": 6,
+      "source": "phan_0235_s.avif",
+      "sourceSHA256": "340d6054c230693bb783952f51d30bd8b8e0e12d1ea1780c0b635f081ec12c85",
+      "pixelRect": [
+        256,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.562744140625,
+        0.1248779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 98,
+      "ageMa": 240,
+      "column": 2,
+      "row": 6,
+      "source": "phan_0240_s.avif",
+      "sourceSHA256": "2a634a1235fda2cf6de3af4e093638216522a373915b6e9fd5c40db14d6bdf14",
+      "pixelRect": [
+        512,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.562744140625,
+        0.1873779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 99,
+      "ageMa": 245,
+      "column": 3,
+      "row": 6,
+      "source": "phan_0245_s.avif",
+      "sourceSHA256": "09063fed73e7e8dbf2d2c644628b0d441bed944401f269e184f98aff4f461889",
+      "pixelRect": [
+        768,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.562744140625,
+        0.2498779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 100,
+      "ageMa": 250,
+      "column": 4,
+      "row": 6,
+      "source": "phan_0250_s.avif",
+      "sourceSHA256": "dfb776de809ebb9767612ee0090bc98325de583fe9bb38f2140221f32af826e1",
+      "pixelRect": [
+        1024,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.562744140625,
+        0.3123779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 101,
+      "ageMa": 255,
+      "column": 5,
+      "row": 6,
+      "source": "phan_0255_s.avif",
+      "sourceSHA256": "ecfe697be6cf90502978ee94853c0f96bf3d4b76837afbed18cd44e85d6c52f0",
+      "pixelRect": [
+        1280,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.562744140625,
+        0.3748779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 102,
+      "ageMa": 260,
+      "column": 6,
+      "row": 6,
+      "source": "phan_0260_s.avif",
+      "sourceSHA256": "c2af40465ae7502fb4c81e72baa73344e5713973347f9bdc0e9053a028bd5203",
+      "pixelRect": [
+        1536,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.562744140625,
+        0.4373779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 103,
+      "ageMa": 265,
+      "column": 7,
+      "row": 6,
+      "source": "phan_0265_s.avif",
+      "sourceSHA256": "e4cb35f3647abb5eae3d41239119098652d7c9d3976e5fa0dd7a822ebf0d439a",
+      "pixelRect": [
+        1792,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.562744140625,
+        0.4998779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 104,
+      "ageMa": 270,
+      "column": 8,
+      "row": 6,
+      "source": "phan_0270_s.avif",
+      "sourceSHA256": "a2bb8e30baf78bca479319700e2ff0cf6190f8f0122dffc30411491525605bf6",
+      "pixelRect": [
+        2048,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.562744140625,
+        0.5623779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 105,
+      "ageMa": 275,
+      "column": 9,
+      "row": 6,
+      "source": "phan_0275_s.avif",
+      "sourceSHA256": "2497531e73bd38e9c245a9cc88d75f34b92ce3856300649e24bedcf96cfcfac6",
+      "pixelRect": [
+        2304,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.562744140625,
+        0.6248779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 106,
+      "ageMa": 280,
+      "column": 10,
+      "row": 6,
+      "source": "phan_0280_s.avif",
+      "sourceSHA256": "e1bddf6cc01909760f04bd7c776a3b483ff78e8cd86f4787b91010fa11caa7ef",
+      "pixelRect": [
+        2560,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.562744140625,
+        0.6873779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 107,
+      "ageMa": 285,
+      "column": 11,
+      "row": 6,
+      "source": "phan_0285_s.avif",
+      "sourceSHA256": "f03369a6f2fb279bb5fb68fc1032bbaa62617ef272d82b38565af22b6bfd1985",
+      "pixelRect": [
+        2816,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.562744140625,
+        0.7498779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 108,
+      "ageMa": 290,
+      "column": 12,
+      "row": 6,
+      "source": "phan_0290_s.avif",
+      "sourceSHA256": "3f9190da8c1c74ac925a75efe32213e3df89cc279743387dc88e13e5707359a0",
+      "pixelRect": [
+        3072,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.562744140625,
+        0.8123779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 109,
+      "ageMa": 295,
+      "column": 13,
+      "row": 6,
+      "source": "phan_0295_s.avif",
+      "sourceSHA256": "0d0ed7675fc0e352347a197fba3c2936a7e0db91171486fb3adfd89175dd00b9",
+      "pixelRect": [
+        3328,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.562744140625,
+        0.8748779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 110,
+      "ageMa": 300,
+      "column": 14,
+      "row": 6,
+      "source": "phan_0300_s.avif",
+      "sourceSHA256": "92f4aea4353f0712363db299d00558eb95827ef7ec4bee8be13a793fee192d21",
+      "pixelRect": [
+        3584,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.562744140625,
+        0.9373779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 111,
+      "ageMa": 305,
+      "column": 15,
+      "row": 6,
+      "source": "phan_0305_s.avif",
+      "sourceSHA256": "79ee84efc3a8b91019c1db5d84d111d9098506ab39f72ab5c0da4559dc236df1",
+      "pixelRect": [
+        3840,
+        768,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.562744140625,
+        0.9998779296875,
+        0.624755859375
+      ]
+    },
+    {
+      "index": 112,
+      "ageMa": 310,
+      "column": 0,
+      "row": 7,
+      "source": "phan_0310_s.avif",
+      "sourceSHA256": "c514153e3f0c6817141d465b6e2ac3f92eeba7c49cfee819a29e04f0ad675b26",
+      "pixelRect": [
+        0,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.500244140625,
+        0.0623779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 113,
+      "ageMa": 315,
+      "column": 1,
+      "row": 7,
+      "source": "phan_0315_s.avif",
+      "sourceSHA256": "18acf4771173d3bd459015c4b55474ee42bb75693217dfb496f63a143a006998",
+      "pixelRect": [
+        256,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.500244140625,
+        0.1248779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 114,
+      "ageMa": 320,
+      "column": 2,
+      "row": 7,
+      "source": "phan_0320_s.avif",
+      "sourceSHA256": "b99f7e34d6e7c7705bb7a6e0d9802ec4c2d12557f1e92d23f10c298cee83fe43",
+      "pixelRect": [
+        512,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.500244140625,
+        0.1873779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 115,
+      "ageMa": 325,
+      "column": 3,
+      "row": 7,
+      "source": "phan_0325_s.avif",
+      "sourceSHA256": "11453f4c03ae1fbd5318429821a6421cdd53104c252455fbc1270da87015c5a9",
+      "pixelRect": [
+        768,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.500244140625,
+        0.2498779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 116,
+      "ageMa": 330,
+      "column": 4,
+      "row": 7,
+      "source": "phan_0330_s.avif",
+      "sourceSHA256": "d4b7f4bbce5486c02aaf41db5a168212f6ad4db12909f2db0c77012ac6863f96",
+      "pixelRect": [
+        1024,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.500244140625,
+        0.3123779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 117,
+      "ageMa": 335,
+      "column": 5,
+      "row": 7,
+      "source": "phan_0335_s.avif",
+      "sourceSHA256": "40dbbb7b1bc78eab1c0bca2550604793275d43ea0a551e3a913033382eb6883f",
+      "pixelRect": [
+        1280,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.500244140625,
+        0.3748779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 118,
+      "ageMa": 340,
+      "column": 6,
+      "row": 7,
+      "source": "phan_0340_s.avif",
+      "sourceSHA256": "9fdfea3a6cb79be5d9c889ce8eda696583a34db5d89f8ef5de8ecee4fc7816cb",
+      "pixelRect": [
+        1536,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.500244140625,
+        0.4373779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 119,
+      "ageMa": 345,
+      "column": 7,
+      "row": 7,
+      "source": "phan_0345_s.avif",
+      "sourceSHA256": "cdf60db7dbf833f46d83baf8cad6870781a6318a80b07405f4d44f7e2da1d01b",
+      "pixelRect": [
+        1792,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.500244140625,
+        0.4998779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 120,
+      "ageMa": 350,
+      "column": 8,
+      "row": 7,
+      "source": "phan_0350_s.avif",
+      "sourceSHA256": "0d1afef43179bc6b78637e4e91d6dffb19cad6f186fd4270a4d7cfb1b3b175b1",
+      "pixelRect": [
+        2048,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.500244140625,
+        0.5623779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 121,
+      "ageMa": 355,
+      "column": 9,
+      "row": 7,
+      "source": "phan_0355_s.avif",
+      "sourceSHA256": "2176026eaef9e09c5d3281c70afcf613684fbb3bcac32baeb77466949e6ef9fa",
+      "pixelRect": [
+        2304,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.500244140625,
+        0.6248779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 122,
+      "ageMa": 360,
+      "column": 10,
+      "row": 7,
+      "source": "phan_0360_s.avif",
+      "sourceSHA256": "00a4e5503323702fe88b644ae68b7813ca4350d5f791f576c7ea3e8db677e608",
+      "pixelRect": [
+        2560,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.500244140625,
+        0.6873779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 123,
+      "ageMa": 365,
+      "column": 11,
+      "row": 7,
+      "source": "phan_0365_s.avif",
+      "sourceSHA256": "2031ae421f63ed76098b5bcff39132699d6cde1fc26e61efef355b2accb4c419",
+      "pixelRect": [
+        2816,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.500244140625,
+        0.7498779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 124,
+      "ageMa": 370,
+      "column": 12,
+      "row": 7,
+      "source": "phan_0370_s.avif",
+      "sourceSHA256": "8462c896fc69a882a9e79385f27766dd007e61866b3d218d119bbdaa8bab4175",
+      "pixelRect": [
+        3072,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.500244140625,
+        0.8123779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 125,
+      "ageMa": 375,
+      "column": 13,
+      "row": 7,
+      "source": "phan_0375_s.avif",
+      "sourceSHA256": "c716b0f298d59b2859486154d3d152c8ded8b9812ae279dbe4ce6ac1ae04f124",
+      "pixelRect": [
+        3328,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.500244140625,
+        0.8748779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 126,
+      "ageMa": 380,
+      "column": 14,
+      "row": 7,
+      "source": "phan_0380_s.avif",
+      "sourceSHA256": "96ef8fd35038867c2ccac003426eb2c5bd2fe3640d5736bf6d612fc63fa40321",
+      "pixelRect": [
+        3584,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.500244140625,
+        0.9373779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 127,
+      "ageMa": 385,
+      "column": 15,
+      "row": 7,
+      "source": "phan_0385_s.avif",
+      "sourceSHA256": "f6f8c4edc6317703ca06c524000aa563758989a3bb81d254fdd37ac9148269aa",
+      "pixelRect": [
+        3840,
+        896,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.500244140625,
+        0.9998779296875,
+        0.562255859375
+      ]
+    },
+    {
+      "index": 128,
+      "ageMa": 390,
+      "column": 0,
+      "row": 8,
+      "source": "phan_0390_s.avif",
+      "sourceSHA256": "1c53a0802ff37c5c6a919c1f2ac19a0a0abdf29d8171cd9c27ecb1af980aba37",
+      "pixelRect": [
+        0,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.437744140625,
+        0.0623779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 129,
+      "ageMa": 395,
+      "column": 1,
+      "row": 8,
+      "source": "phan_0395_s.avif",
+      "sourceSHA256": "f3d4b7bd3d894a629a7b8a3af14c591a16c9e3d550e728b34e94f4e69755fe2d",
+      "pixelRect": [
+        256,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.437744140625,
+        0.1248779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 130,
+      "ageMa": 400,
+      "column": 2,
+      "row": 8,
+      "source": "phan_0400_s.avif",
+      "sourceSHA256": "5ce8103b5e6c2a6c45be362d571dcfd636a8900eb26ed8a618910d9f8a161d5a",
+      "pixelRect": [
+        512,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.437744140625,
+        0.1873779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 131,
+      "ageMa": 405,
+      "column": 3,
+      "row": 8,
+      "source": "phan_0405_s.avif",
+      "sourceSHA256": "60662c38ce2b2dda125c59b85ffd1fb4ba85d2c837a56eddb461ce3dc1058035",
+      "pixelRect": [
+        768,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.437744140625,
+        0.2498779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 132,
+      "ageMa": 410,
+      "column": 4,
+      "row": 8,
+      "source": "phan_0410_s.avif",
+      "sourceSHA256": "3b6807dfd2adc6d43937db84296b4bb5dac3fd7335d21d2b3442a7299234a081",
+      "pixelRect": [
+        1024,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.437744140625,
+        0.3123779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 133,
+      "ageMa": 415,
+      "column": 5,
+      "row": 8,
+      "source": "phan_0415_s.avif",
+      "sourceSHA256": "b1fb1880e31facdea4e4968cbacea5ac99288f9cd0cafc1ecf82998fefc8272d",
+      "pixelRect": [
+        1280,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.437744140625,
+        0.3748779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 134,
+      "ageMa": 420,
+      "column": 6,
+      "row": 8,
+      "source": "phan_0420_s.avif",
+      "sourceSHA256": "dfb3710f2b839e14c79d4f73f3e36364b6f7c732f6fc495bd1598de136570313",
+      "pixelRect": [
+        1536,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.437744140625,
+        0.4373779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 135,
+      "ageMa": 425,
+      "column": 7,
+      "row": 8,
+      "source": "phan_0425_s.avif",
+      "sourceSHA256": "297fe827084c2df6a0dcecb5dcf236a848200b05df7c660a01b9fd8ca9adc37f",
+      "pixelRect": [
+        1792,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.437744140625,
+        0.4998779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 136,
+      "ageMa": 430,
+      "column": 8,
+      "row": 8,
+      "source": "phan_0430_s.avif",
+      "sourceSHA256": "24a4dc643ca5c6c9a4a522feefc2401907bca505fb8b5ae07ddcf86e85185fcc",
+      "pixelRect": [
+        2048,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.437744140625,
+        0.5623779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 137,
+      "ageMa": 435,
+      "column": 9,
+      "row": 8,
+      "source": "phan_0435_s.avif",
+      "sourceSHA256": "8830f1cad4dcdb437d99597977f5d752f6e88c0bced3dde552fb518aedcc5fee",
+      "pixelRect": [
+        2304,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.437744140625,
+        0.6248779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 138,
+      "ageMa": 440,
+      "column": 10,
+      "row": 8,
+      "source": "phan_0440_s.avif",
+      "sourceSHA256": "dd562341f1d48ca71845f236021580a9df562a61d5123f8d561d45b9ffe219df",
+      "pixelRect": [
+        2560,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.437744140625,
+        0.6873779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 139,
+      "ageMa": 445,
+      "column": 11,
+      "row": 8,
+      "source": "phan_0445_s.avif",
+      "sourceSHA256": "eb03528de9867253fec183800d2b5fdb558280513696b563e28d0db2a3c574c0",
+      "pixelRect": [
+        2816,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.437744140625,
+        0.7498779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 140,
+      "ageMa": 450,
+      "column": 12,
+      "row": 8,
+      "source": "phan_0450_s.avif",
+      "sourceSHA256": "4f27b665344a50e8b04fb86c5368cb9e37dba3a88edc1afedc3ed9348624fd2f",
+      "pixelRect": [
+        3072,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.437744140625,
+        0.8123779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 141,
+      "ageMa": 455,
+      "column": 13,
+      "row": 8,
+      "source": "phan_0455_s.avif",
+      "sourceSHA256": "aef03374f6d7fd0a8797cdceef69f38e94db2eed43fd5537935a76ce6dfbd737",
+      "pixelRect": [
+        3328,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.437744140625,
+        0.8748779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 142,
+      "ageMa": 460,
+      "column": 14,
+      "row": 8,
+      "source": "phan_0460_s.avif",
+      "sourceSHA256": "29c585f510873e76cb958faa38c63398a1bbce0fd2afc80261fee95f47d627e9",
+      "pixelRect": [
+        3584,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.437744140625,
+        0.9373779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 143,
+      "ageMa": 465,
+      "column": 15,
+      "row": 8,
+      "source": "phan_0465_s.avif",
+      "sourceSHA256": "724621f39a63b034e2a436c5ee5bc530e708d7037d00ef4dbea7ba80165666a6",
+      "pixelRect": [
+        3840,
+        1024,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.5,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.4375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.437744140625,
+        0.9998779296875,
+        0.499755859375
+      ]
+    },
+    {
+      "index": 144,
+      "ageMa": 470,
+      "column": 0,
+      "row": 9,
+      "source": "phan_0470_s.avif",
+      "sourceSHA256": "eb6dfd4b293e49497d5e9f4be23227c5c462d9e8aa2d33d30854ee1dcfb079ef",
+      "pixelRect": [
+        0,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.375244140625,
+        0.0623779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 145,
+      "ageMa": 475,
+      "column": 1,
+      "row": 9,
+      "source": "phan_0475_s.avif",
+      "sourceSHA256": "47245c479538d4aa6e4d32acfd63d3d0faeae0e08ff04a953ff7ce5d7922e575",
+      "pixelRect": [
+        256,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.375244140625,
+        0.1248779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 146,
+      "ageMa": 480,
+      "column": 2,
+      "row": 9,
+      "source": "phan_0480_s.avif",
+      "sourceSHA256": "6cbe0eb0082480f5bfc55e6758aa11874ce61da0129e6fb1df48dbf32a1a446c",
+      "pixelRect": [
+        512,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.375244140625,
+        0.1873779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 147,
+      "ageMa": 485,
+      "column": 3,
+      "row": 9,
+      "source": "phan_0485_s.avif",
+      "sourceSHA256": "ca070b806d80c8ac44698ff9033ca24acc5d49305965338216fdb244ec558334",
+      "pixelRect": [
+        768,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.375244140625,
+        0.2498779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 148,
+      "ageMa": 490,
+      "column": 4,
+      "row": 9,
+      "source": "phan_0490_s.avif",
+      "sourceSHA256": "76db99a63fef21d9cda97df99cf416cf6344611dde9896a2b57ab0f28e0059e8",
+      "pixelRect": [
+        1024,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.375244140625,
+        0.3123779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 149,
+      "ageMa": 495,
+      "column": 5,
+      "row": 9,
+      "source": "phan_0495_s.avif",
+      "sourceSHA256": "40a730c0d6f3502297034a68f5145a557537813742544a30e538a96fb0112f87",
+      "pixelRect": [
+        1280,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.375244140625,
+        0.3748779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 150,
+      "ageMa": 500,
+      "column": 6,
+      "row": 9,
+      "source": "phan_0500_s.avif",
+      "sourceSHA256": "d22e17a6f766bc02a489a66e9d9dfe35ad670f2974480bf3ce6745ac76b2ef1e",
+      "pixelRect": [
+        1536,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.375244140625,
+        0.4373779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 151,
+      "ageMa": 505,
+      "column": 7,
+      "row": 9,
+      "source": "phan_0505_s.avif",
+      "sourceSHA256": "a9c5eaaa55abbcaf6628f59255f4173865681efeabd14cc266ddf971d7a225c6",
+      "pixelRect": [
+        1792,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.375244140625,
+        0.4998779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 152,
+      "ageMa": 510,
+      "column": 8,
+      "row": 9,
+      "source": "phan_0510_s.avif",
+      "sourceSHA256": "58eeec5b596d112287b6db34929683626489d5555b339ef484057088ff083fe4",
+      "pixelRect": [
+        2048,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.375244140625,
+        0.5623779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 153,
+      "ageMa": 515,
+      "column": 9,
+      "row": 9,
+      "source": "phan_0515_s.avif",
+      "sourceSHA256": "3df98383a0e865a8fc9316cac5173f2425835a42d52862f48eab5c4932755e63",
+      "pixelRect": [
+        2304,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.375244140625,
+        0.6248779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 154,
+      "ageMa": 520,
+      "column": 10,
+      "row": 9,
+      "source": "phan_0520_s.avif",
+      "sourceSHA256": "c2def3d4ffbbe6556ecc83c334f1c1f7a8949beccac8e62943c147dc30beb337",
+      "pixelRect": [
+        2560,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.375244140625,
+        0.6873779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 155,
+      "ageMa": 525,
+      "column": 11,
+      "row": 9,
+      "source": "phan_0525_s.avif",
+      "sourceSHA256": "f2508aa751bd304e84c6b3562bed78317bc370e4764d6f510d3f59bff7561a16",
+      "pixelRect": [
+        2816,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.375244140625,
+        0.7498779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 156,
+      "ageMa": 530,
+      "column": 12,
+      "row": 9,
+      "source": "phan_0530_s.avif",
+      "sourceSHA256": "2a468962f8ac89b53a75744cf8565ab48d608fe5fbf2d20ee0c330a143bd6127",
+      "pixelRect": [
+        3072,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.375244140625,
+        0.8123779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 157,
+      "ageMa": 535,
+      "column": 13,
+      "row": 9,
+      "source": "phan_0535_s.avif",
+      "sourceSHA256": "2a12b41b74881149346e66da52135835f4e991333840f0bdf330dd8314622ccb",
+      "pixelRect": [
+        3328,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.375244140625,
+        0.8748779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 158,
+      "ageMa": 540,
+      "column": 14,
+      "row": 9,
+      "source": "phan_0540_s.avif",
+      "sourceSHA256": "7d26993a5e0da513115b2df7f23bfcf10b7c681fb6b3710f5c0ec861d8a4873c",
+      "pixelRect": [
+        3584,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.375244140625,
+        0.9373779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 159,
+      "ageMa": 545,
+      "column": 15,
+      "row": 9,
+      "source": "pre_0545_s.avif",
+      "sourceSHA256": "84dcc1a03d865a5f943a78983126d69b0a81be04e784f0b27171a9604b05c1b5",
+      "pixelRect": [
+        3840,
+        1152,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.5625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.375244140625,
+        0.9998779296875,
+        0.437255859375
+      ]
+    },
+    {
+      "index": 160,
+      "ageMa": 550,
+      "column": 0,
+      "row": 10,
+      "source": "pre_0550_s.avif",
+      "sourceSHA256": "f65d4008bf2268ac8b7a7a84fe6c571a5c263dd2657b8f41f7d5628278023f98",
+      "pixelRect": [
+        0,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.312744140625,
+        0.0623779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 161,
+      "ageMa": 555,
+      "column": 1,
+      "row": 10,
+      "source": "pre_0555_s.avif",
+      "sourceSHA256": "bd3e68832d2b64a392745ebb797bff815a24ddaa179e46d109ee186f6e4d9372",
+      "pixelRect": [
+        256,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.312744140625,
+        0.1248779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 162,
+      "ageMa": 560,
+      "column": 2,
+      "row": 10,
+      "source": "pre_0560_s.avif",
+      "sourceSHA256": "07038e8c1e5aff63086117406ef2161c0d4cabbdf654cfb94982885d336f8114",
+      "pixelRect": [
+        512,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.312744140625,
+        0.1873779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 163,
+      "ageMa": 565,
+      "column": 3,
+      "row": 10,
+      "source": "pre_0565_s.avif",
+      "sourceSHA256": "35220118b653a211ed9f20c7b4ad9c238e8c300c8f28e895b1ab2a858bd4296e",
+      "pixelRect": [
+        768,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.312744140625,
+        0.2498779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 164,
+      "ageMa": 570,
+      "column": 4,
+      "row": 10,
+      "source": "pre_0570_s.avif",
+      "sourceSHA256": "c03001485e32151a894be6cb3dbe00ca491d287e3fa9eb26e18c4d7de64bbfd1",
+      "pixelRect": [
+        1024,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.312744140625,
+        0.3123779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 165,
+      "ageMa": 575,
+      "column": 5,
+      "row": 10,
+      "source": "pre_0575_s.avif",
+      "sourceSHA256": "06cf11afbf09b3d021d2c02cd905548b7046d23ed6a878b341606f35cb9165f9",
+      "pixelRect": [
+        1280,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.312744140625,
+        0.3748779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 166,
+      "ageMa": 580,
+      "column": 6,
+      "row": 10,
+      "source": "pre_0580_s.avif",
+      "sourceSHA256": "0260ed612843be9559a98552fd2abebd122f9228442c6121190026125498005c",
+      "pixelRect": [
+        1536,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.312744140625,
+        0.4373779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 167,
+      "ageMa": 585,
+      "column": 7,
+      "row": 10,
+      "source": "pre_0585_s.avif",
+      "sourceSHA256": "fde6d4246bd6904823f67b0dca4a7b9534ca0b190e4230ef3cb4e8da9f33b755",
+      "pixelRect": [
+        1792,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.312744140625,
+        0.4998779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 168,
+      "ageMa": 590,
+      "column": 8,
+      "row": 10,
+      "source": "pre_0590_s.avif",
+      "sourceSHA256": "c8adcbd5b02d4e5d05ea0a84bfc5cf24c009ee463732d8b2f909f73d7e91b886",
+      "pixelRect": [
+        2048,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.312744140625,
+        0.5623779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 169,
+      "ageMa": 595,
+      "column": 9,
+      "row": 10,
+      "source": "pre_0595_s.avif",
+      "sourceSHA256": "5d0e6c6b17be07293bd8f7a947c0e3162796a22b6b2b55b18edf0a3db089fc0d",
+      "pixelRect": [
+        2304,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.312744140625,
+        0.6248779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 170,
+      "ageMa": 600,
+      "column": 10,
+      "row": 10,
+      "source": "pre_0600_s.avif",
+      "sourceSHA256": "01628a7b6ff54f63bba725c1801b5b1bca03bc942891c3ad72faac332d0060e2",
+      "pixelRect": [
+        2560,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.312744140625,
+        0.6873779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 171,
+      "ageMa": 605,
+      "column": 11,
+      "row": 10,
+      "source": "pre_0605_s.avif",
+      "sourceSHA256": "e45cfa952291080140c8c6e0a82bb2853d0b458be070c05fa0cca53382bbafce",
+      "pixelRect": [
+        2816,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.312744140625,
+        0.7498779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 172,
+      "ageMa": 610,
+      "column": 12,
+      "row": 10,
+      "source": "pre_0610_s.avif",
+      "sourceSHA256": "b04c596534daa5e5454dbcaf3f8d848f532a643daf425dee4927731fc34814ce",
+      "pixelRect": [
+        3072,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.312744140625,
+        0.8123779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 173,
+      "ageMa": 615,
+      "column": 13,
+      "row": 10,
+      "source": "pre_0615_s.avif",
+      "sourceSHA256": "e17bcd0c4dd8499ffbbd614a7457857a8aee95b626d9440994a93f48b9de90f4",
+      "pixelRect": [
+        3328,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.312744140625,
+        0.8748779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 174,
+      "ageMa": 620,
+      "column": 14,
+      "row": 10,
+      "source": "pre_0620_s.avif",
+      "sourceSHA256": "88c06c579e7fda0ad091b62f74e577b883713e6080633296962c15cbaa97e056",
+      "pixelRect": [
+        3584,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.312744140625,
+        0.9373779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 175,
+      "ageMa": 625,
+      "column": 15,
+      "row": 10,
+      "source": "pre_0625_s.avif",
+      "sourceSHA256": "ab01271bab7ec57783e124e270fad7f13848d085b72111b1d41daaebf7543450",
+      "pixelRect": [
+        3840,
+        1280,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.3125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.312744140625,
+        0.9998779296875,
+        0.374755859375
+      ]
+    },
+    {
+      "index": 176,
+      "ageMa": 630,
+      "column": 0,
+      "row": 11,
+      "source": "pre_0630_s.avif",
+      "sourceSHA256": "a61456ae711c412369499db9c40352913cb5184f063acf86eeb91a520c1b579b",
+      "pixelRect": [
+        0,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.250244140625,
+        0.0623779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 177,
+      "ageMa": 635,
+      "column": 1,
+      "row": 11,
+      "source": "pre_0635_s.avif",
+      "sourceSHA256": "aa15a9981c9cb138f573b514bc817c766dd8b155caeac6f8f218ffc2947841f5",
+      "pixelRect": [
+        256,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.250244140625,
+        0.1248779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 178,
+      "ageMa": 640,
+      "column": 2,
+      "row": 11,
+      "source": "pre_0640_s.avif",
+      "sourceSHA256": "0d1667930bd497b10ac5cbbd221ac65938810d4e507a9fce1623fc874d6c6d74",
+      "pixelRect": [
+        512,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.250244140625,
+        0.1873779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 179,
+      "ageMa": 645,
+      "column": 3,
+      "row": 11,
+      "source": "pre_0645_s.avif",
+      "sourceSHA256": "791821f87a6dde33caa90278cf3df17e79a99b6502a1771f07a6422f1586d2b2",
+      "pixelRect": [
+        768,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.250244140625,
+        0.2498779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 180,
+      "ageMa": 650,
+      "column": 4,
+      "row": 11,
+      "source": "pre_0650_s.avif",
+      "sourceSHA256": "33fc4c12623ea29d5c315cae16b0228ced0ea5741ab345ccacbed30d9f50041c",
+      "pixelRect": [
+        1024,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.250244140625,
+        0.3123779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 181,
+      "ageMa": 655,
+      "column": 5,
+      "row": 11,
+      "source": "pre_0655_s.avif",
+      "sourceSHA256": "d5b8ba9de3d168ba8675fc62503218a8249437a7065ae6c46ace0ba171aa5c4a",
+      "pixelRect": [
+        1280,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.250244140625,
+        0.3748779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 182,
+      "ageMa": 660,
+      "column": 6,
+      "row": 11,
+      "source": "pre_0660_s.avif",
+      "sourceSHA256": "8f8a7145841690e3a23aa981b48b62cc14ff43bb145d31e88d9659da7f9f4d26",
+      "pixelRect": [
+        1536,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.250244140625,
+        0.4373779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 183,
+      "ageMa": 665,
+      "column": 7,
+      "row": 11,
+      "source": "pre_0665_s.avif",
+      "sourceSHA256": "253656624a2f74e499a5a2acc6dd3c058b8cf3e414e9900d16d937877f19d68d",
+      "pixelRect": [
+        1792,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.250244140625,
+        0.4998779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 184,
+      "ageMa": 670,
+      "column": 8,
+      "row": 11,
+      "source": "pre_0670_s.avif",
+      "sourceSHA256": "aee30d11637a6a9481fdee0b2a145bb07e67f1a975fa02470d76d8b938e621b8",
+      "pixelRect": [
+        2048,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.250244140625,
+        0.5623779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 185,
+      "ageMa": 675,
+      "column": 9,
+      "row": 11,
+      "source": "pre_0675_s.avif",
+      "sourceSHA256": "78f35bdbe1f1ed2c03d7ce2a439d7f1ced7ae2b91f54f2b3e0cf1106aa061385",
+      "pixelRect": [
+        2304,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.250244140625,
+        0.6248779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 186,
+      "ageMa": 680,
+      "column": 10,
+      "row": 11,
+      "source": "pre_0680_s.avif",
+      "sourceSHA256": "1e0e4f686efb88a70481ec94797503f2f1c330a36947030a93c6963199034407",
+      "pixelRect": [
+        2560,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.250244140625,
+        0.6873779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 187,
+      "ageMa": 685,
+      "column": 11,
+      "row": 11,
+      "source": "pre_0685_s.avif",
+      "sourceSHA256": "6b59b07ecd4b750da948041659f53d28e63677facc8f510d8b09c9e1af151e87",
+      "pixelRect": [
+        2816,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.250244140625,
+        0.7498779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 188,
+      "ageMa": 690,
+      "column": 12,
+      "row": 11,
+      "source": "pre_0690_s.avif",
+      "sourceSHA256": "69185e80f664a838a6b3726aa11b77507996b116779b913fe34d16219b03fd34",
+      "pixelRect": [
+        3072,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.250244140625,
+        0.8123779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 189,
+      "ageMa": 695,
+      "column": 13,
+      "row": 11,
+      "source": "pre_0695_s.avif",
+      "sourceSHA256": "b2a6f6366ee4f4c5c19f464f56fa939c8b993793668ea5a6740c36795a0c7288",
+      "pixelRect": [
+        3328,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.250244140625,
+        0.8748779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 190,
+      "ageMa": 700,
+      "column": 14,
+      "row": 11,
+      "source": "pre_0700_s.avif",
+      "sourceSHA256": "6bcb9796d02813d06260f9758fba8a0cba453692286fa5816d367366c9e9777f",
+      "pixelRect": [
+        3584,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.250244140625,
+        0.9373779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 191,
+      "ageMa": 705,
+      "column": 15,
+      "row": 11,
+      "source": "pre_0705_s.avif",
+      "sourceSHA256": "337b11df4d5e82d8a70db9d975e0f30257553f61a332ea6ff380bf489b06808f",
+      "pixelRect": [
+        3840,
+        1408,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.6875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.25,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.250244140625,
+        0.9998779296875,
+        0.312255859375
+      ]
+    },
+    {
+      "index": 192,
+      "ageMa": 710,
+      "column": 0,
+      "row": 12,
+      "source": "pre_0710_s.avif",
+      "sourceSHA256": "1f35d960af9fa1410e6352754cdf8aa95f44a5d7a4931770ac6017763d4537d7",
+      "pixelRect": [
+        0,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.187744140625,
+        0.0623779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 193,
+      "ageMa": 715,
+      "column": 1,
+      "row": 12,
+      "source": "pre_0715_s.avif",
+      "sourceSHA256": "b3acd1ff5ea4e9ba98f528d282d9f3fdaa43ae08220570f4ca0ea081b37a7935",
+      "pixelRect": [
+        256,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.187744140625,
+        0.1248779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 194,
+      "ageMa": 720,
+      "column": 2,
+      "row": 12,
+      "source": "pre_0720_s.avif",
+      "sourceSHA256": "16b3b0a777ce099d966601b736a4e89807918343746025a59307c395def71ee2",
+      "pixelRect": [
+        512,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.187744140625,
+        0.1873779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 195,
+      "ageMa": 725,
+      "column": 3,
+      "row": 12,
+      "source": "pre_0725_s.avif",
+      "sourceSHA256": "5b7ffb72f88e797f4a8810dfcb249ac38c43294fdc13c0b05d9897d7916faccd",
+      "pixelRect": [
+        768,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.187744140625,
+        0.2498779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 196,
+      "ageMa": 730,
+      "column": 4,
+      "row": 12,
+      "source": "pre_0730_s.avif",
+      "sourceSHA256": "fb435a56125d021da943ca01b968fc4f174b60ecaa9564df2b57962a7bac4b93",
+      "pixelRect": [
+        1024,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.187744140625,
+        0.3123779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 197,
+      "ageMa": 735,
+      "column": 5,
+      "row": 12,
+      "source": "pre_0735_s.avif",
+      "sourceSHA256": "b255b7255776a423860efa386b05803a19a13b8a2e157312291a8c87636c4174",
+      "pixelRect": [
+        1280,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.187744140625,
+        0.3748779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 198,
+      "ageMa": 740,
+      "column": 6,
+      "row": 12,
+      "source": "pre_0740_s.avif",
+      "sourceSHA256": "32db9f31c55ff3f5f67baddce8d863570b6297ebebe1da71bb59eb54df372f76",
+      "pixelRect": [
+        1536,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.187744140625,
+        0.4373779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 199,
+      "ageMa": 745,
+      "column": 7,
+      "row": 12,
+      "source": "pre_0745_s.avif",
+      "sourceSHA256": "c4c12f9498a4454f94b0a1395beffc17e13ed6a4ce0153681050cefe842be233",
+      "pixelRect": [
+        1792,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.187744140625,
+        0.4998779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 200,
+      "ageMa": 750,
+      "column": 8,
+      "row": 12,
+      "source": "pre_0750_s.avif",
+      "sourceSHA256": "acac25faa1ee1644fffaf6e830fe265839993f9aeda0a335b1ea31815023212d",
+      "pixelRect": [
+        2048,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.187744140625,
+        0.5623779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 201,
+      "ageMa": 755,
+      "column": 9,
+      "row": 12,
+      "source": "pre_0755_s.avif",
+      "sourceSHA256": "2377693b65a340131590e92667d88e1a0e799f46e03677305d037dc5ae53a5d8",
+      "pixelRect": [
+        2304,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.187744140625,
+        0.6248779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 202,
+      "ageMa": 760,
+      "column": 10,
+      "row": 12,
+      "source": "pre_0760_s.avif",
+      "sourceSHA256": "1310e67df19561c266d39b68d70e84ea6478f4bed4d5808570d6823df572c5e6",
+      "pixelRect": [
+        2560,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.187744140625,
+        0.6873779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 203,
+      "ageMa": 765,
+      "column": 11,
+      "row": 12,
+      "source": "pre_0765_s.avif",
+      "sourceSHA256": "40e804c1b48d5561b8375013db3554869fec354fa1a6cba6aaac06149f37f970",
+      "pixelRect": [
+        2816,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.187744140625,
+        0.7498779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 204,
+      "ageMa": 770,
+      "column": 12,
+      "row": 12,
+      "source": "pre_0770_s.avif",
+      "sourceSHA256": "67570d88c04739db5cf8e99d9a6646de0085eeec0297af10e014675d88272922",
+      "pixelRect": [
+        3072,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.187744140625,
+        0.8123779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 205,
+      "ageMa": 775,
+      "column": 13,
+      "row": 12,
+      "source": "pre_0775_s.avif",
+      "sourceSHA256": "069bac96c565265d2b795af41a29d91b4243035f99f48f84fc66fface0ed9cc6",
+      "pixelRect": [
+        3328,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.187744140625,
+        0.8748779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 206,
+      "ageMa": 780,
+      "column": 14,
+      "row": 12,
+      "source": "pre_0780_s.avif",
+      "sourceSHA256": "2a3144b17fbd95c7d1bf50a28b65b3de0da4028f3b2673830c02d6a0c006c7c8",
+      "pixelRect": [
+        3584,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.187744140625,
+        0.9373779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 207,
+      "ageMa": 785,
+      "column": 15,
+      "row": 12,
+      "source": "pre_0785_s.avif",
+      "sourceSHA256": "a8b868690e20ade33336ce50a8d8748db2e2f1f0d975b72f92f14f5e0ab27ef3",
+      "pixelRect": [
+        3840,
+        1536,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.75,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.1875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.187744140625,
+        0.9998779296875,
+        0.249755859375
+      ]
+    },
+    {
+      "index": 208,
+      "ageMa": 790,
+      "column": 0,
+      "row": 13,
+      "source": "pre_0790_s.avif",
+      "sourceSHA256": "c917a9ac53211603c063c429b1692b218a62dc91db5c0cf762ed112004a76b1c",
+      "pixelRect": [
+        0,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.125244140625,
+        0.0623779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 209,
+      "ageMa": 795,
+      "column": 1,
+      "row": 13,
+      "source": "pre_0795_s.avif",
+      "sourceSHA256": "244449137a8f5d4f42e58fdeec04b6499571ec9f6c6e58579d4b88f3c6d43622",
+      "pixelRect": [
+        256,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.125244140625,
+        0.1248779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 210,
+      "ageMa": 800,
+      "column": 2,
+      "row": 13,
+      "source": "pre_0800_s.avif",
+      "sourceSHA256": "8a4f6cfdb4b2466cb5b37f1a0ebd69dca63be23d5f695625482c824121a9d486",
+      "pixelRect": [
+        512,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.125244140625,
+        0.1873779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 211,
+      "ageMa": 805,
+      "column": 3,
+      "row": 13,
+      "source": "pre_0805_s.avif",
+      "sourceSHA256": "d6db7f896fec9b4a29e7f1e68d1a224a98d2ddf0da6c5ce3483711d9d2d996af",
+      "pixelRect": [
+        768,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.125244140625,
+        0.2498779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 212,
+      "ageMa": 810,
+      "column": 4,
+      "row": 13,
+      "source": "pre_0810_s.avif",
+      "sourceSHA256": "c4750658c00f99e6a261e6e20b0f1a00860749c446ceb07d7a8d8693f3060ba0",
+      "pixelRect": [
+        1024,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.125244140625,
+        0.3123779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 213,
+      "ageMa": 815,
+      "column": 5,
+      "row": 13,
+      "source": "pre_0815_s.avif",
+      "sourceSHA256": "f5d0fbe7377435cb29902bfc72900626dab382307375ab6680641f02a6a559b2",
+      "pixelRect": [
+        1280,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.125244140625,
+        0.3748779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 214,
+      "ageMa": 820,
+      "column": 6,
+      "row": 13,
+      "source": "pre_0820_s.avif",
+      "sourceSHA256": "45b80ec73049aa79cc13f07abcb09f42c4961e4710120359599477f3eb25c1f9",
+      "pixelRect": [
+        1536,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.125244140625,
+        0.4373779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 215,
+      "ageMa": 825,
+      "column": 7,
+      "row": 13,
+      "source": "pre_0825_s.avif",
+      "sourceSHA256": "d8728db86ade753899b0cc365ab6b2c4fc932cc04e7fdfa985332789009dadd7",
+      "pixelRect": [
+        1792,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.125244140625,
+        0.4998779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 216,
+      "ageMa": 830,
+      "column": 8,
+      "row": 13,
+      "source": "pre_0830_s.avif",
+      "sourceSHA256": "caa1d001b856478afafdc826b4b4af14733676781f06def910107b47937ad860",
+      "pixelRect": [
+        2048,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.125244140625,
+        0.5623779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 217,
+      "ageMa": 835,
+      "column": 9,
+      "row": 13,
+      "source": "pre_0835_s.avif",
+      "sourceSHA256": "c06e39081d7ad6dcb53818a4b7ef0c90f739d0e80700107a151f75fb7983b049",
+      "pixelRect": [
+        2304,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.125244140625,
+        0.6248779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 218,
+      "ageMa": 840,
+      "column": 10,
+      "row": 13,
+      "source": "pre_0840_s.avif",
+      "sourceSHA256": "f26b4026325b3df4ffa300bfa8da801646fa7f58fe4f146bfb86af9b97db451a",
+      "pixelRect": [
+        2560,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.125244140625,
+        0.6873779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 219,
+      "ageMa": 845,
+      "column": 11,
+      "row": 13,
+      "source": "pre_0845_s.avif",
+      "sourceSHA256": "cab080ccd16d72fc119d6b86f0339d70c3ba31e316bbdb906e08f4045ee0aded",
+      "pixelRect": [
+        2816,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.125244140625,
+        0.7498779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 220,
+      "ageMa": 850,
+      "column": 12,
+      "row": 13,
+      "source": "pre_0850_s.avif",
+      "sourceSHA256": "99b3d4842fa66f859ff4f003fbc8a567a7f1e8248e896140ad0aaf9c9d181aa3",
+      "pixelRect": [
+        3072,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.125244140625,
+        0.8123779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 221,
+      "ageMa": 855,
+      "column": 13,
+      "row": 13,
+      "source": "pre_0855_s.avif",
+      "sourceSHA256": "7e7da3c4ee9cd43ba341d6495f3d411be0368ac5bc4c4a2b0bc9e20db81d1d36",
+      "pixelRect": [
+        3328,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.125244140625,
+        0.8748779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 222,
+      "ageMa": 860,
+      "column": 14,
+      "row": 13,
+      "source": "pre_0860_s.avif",
+      "sourceSHA256": "3bb73bc15b0f3ec1214fe5d65d2a66f59b555d85ba5867d5b9d1503bc8c3abe5",
+      "pixelRect": [
+        3584,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.125244140625,
+        0.9373779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 223,
+      "ageMa": 865,
+      "column": 15,
+      "row": 13,
+      "source": "pre_0865_s.avif",
+      "sourceSHA256": "46dc607e1a22d4042b759060cb3f4c11f272715dadc43ca02613b8477945b922",
+      "pixelRect": [
+        3840,
+        1664,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.8125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.125,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.125244140625,
+        0.9998779296875,
+        0.187255859375
+      ]
+    },
+    {
+      "index": 224,
+      "ageMa": 870,
+      "column": 0,
+      "row": 14,
+      "source": "pre_0870_s.avif",
+      "sourceSHA256": "059023c49f3bba1b03e929b601b0c712722da6040b308b07e0d6a29af189b467",
+      "pixelRect": [
+        0,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.062744140625,
+        0.0623779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 225,
+      "ageMa": 875,
+      "column": 1,
+      "row": 14,
+      "source": "pre_0875_s.avif",
+      "sourceSHA256": "36f20735d2dfe57b3d0db6f49f7130cb743830fa64dcb89b9719f8e69c93b5cc",
+      "pixelRect": [
+        256,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.062744140625,
+        0.1248779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 226,
+      "ageMa": 880,
+      "column": 2,
+      "row": 14,
+      "source": "pre_0880_s.avif",
+      "sourceSHA256": "2a55d799b0be097dfecc49ca8e1ddabd3c086eec581d72219b212ba3ac218e2d",
+      "pixelRect": [
+        512,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.062744140625,
+        0.1873779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 227,
+      "ageMa": 885,
+      "column": 3,
+      "row": 14,
+      "source": "pre_0885_s.avif",
+      "sourceSHA256": "da4bed90abfecbb3a6d8e4782cee58a7bd581bf84776c2d72cb6062107908a89",
+      "pixelRect": [
+        768,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.062744140625,
+        0.2498779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 228,
+      "ageMa": 890,
+      "column": 4,
+      "row": 14,
+      "source": "pre_0890_s.avif",
+      "sourceSHA256": "c528859b80d963b8c015ea87aaf4ce93d308c93d16de20af408dbd4ba33ecebb",
+      "pixelRect": [
+        1024,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.062744140625,
+        0.3123779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 229,
+      "ageMa": 895,
+      "column": 5,
+      "row": 14,
+      "source": "pre_0895_s.avif",
+      "sourceSHA256": "07978139726e4128318bb1f171b82aff3440076258c1eb29aaf5f1ca7999e287",
+      "pixelRect": [
+        1280,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.062744140625,
+        0.3748779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 230,
+      "ageMa": 900,
+      "column": 6,
+      "row": 14,
+      "source": "pre_0900_s.avif",
+      "sourceSHA256": "a73307ef82ddf4e3251fb35b1ad2ac8caefe7822d0d953d75f8fc334d7e1173f",
+      "pixelRect": [
+        1536,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.062744140625,
+        0.4373779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 231,
+      "ageMa": 905,
+      "column": 7,
+      "row": 14,
+      "source": "pre_0905_s.avif",
+      "sourceSHA256": "4c1b05f58376e7cd4fddbf54e35f0ab6b3dacac4ff560e2784fe8d2078d27d2c",
+      "pixelRect": [
+        1792,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.062744140625,
+        0.4998779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 232,
+      "ageMa": 910,
+      "column": 8,
+      "row": 14,
+      "source": "pre_0910_s.avif",
+      "sourceSHA256": "4a707e194715b09e5b8d5d87b1f58af1704ad4768cba462d44376ee6c4c814a6",
+      "pixelRect": [
+        2048,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.062744140625,
+        0.5623779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 233,
+      "ageMa": 915,
+      "column": 9,
+      "row": 14,
+      "source": "pre_0915_s.avif",
+      "sourceSHA256": "ffc41d734a14028379d863804f755fa44af06071991d1ed66344e985e564581f",
+      "pixelRect": [
+        2304,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.062744140625,
+        0.6248779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 234,
+      "ageMa": 920,
+      "column": 10,
+      "row": 14,
+      "source": "pre_0920_s.avif",
+      "sourceSHA256": "ba41ed6af8641333795b11d5ed919cf6a884f073c306aeda633f8b6e9559c215",
+      "pixelRect": [
+        2560,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.062744140625,
+        0.6873779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 235,
+      "ageMa": 925,
+      "column": 11,
+      "row": 14,
+      "source": "pre_0925_s.avif",
+      "sourceSHA256": "1f55c6fb3f3371a118b05f01cd18c9ac30c771a983d61eff892308ce8a95ac35",
+      "pixelRect": [
+        2816,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.6875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.6875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6876220703125,
+        0.062744140625,
+        0.7498779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 236,
+      "ageMa": 930,
+      "column": 12,
+      "row": 14,
+      "source": "pre_0930_s.avif",
+      "sourceSHA256": "ed338290cbe1ede097434aa4732048d5ed1073979eaf41ea1b475246957fe4b6",
+      "pixelRect": [
+        3072,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.75,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.75,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.7501220703125,
+        0.062744140625,
+        0.8123779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 237,
+      "ageMa": 935,
+      "column": 13,
+      "row": 14,
+      "source": "pre_0935_s.avif",
+      "sourceSHA256": "61c5b3db77a9d2b33052ea15e655f04c92169fca4f105c22951a65c71f99ca79",
+      "pixelRect": [
+        3328,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.8125,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.8125,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8126220703125,
+        0.062744140625,
+        0.8748779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 238,
+      "ageMa": 940,
+      "column": 14,
+      "row": 14,
+      "source": "pre_0940_s.avif",
+      "sourceSHA256": "1bd40400bbefc13c3186b5c05b47a118e88d27d1086beb1cf361611c3c3a9187",
+      "pixelRect": [
+        3584,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.875,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.875,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.8751220703125,
+        0.062744140625,
+        0.9373779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 239,
+      "ageMa": 945,
+      "column": 15,
+      "row": 14,
+      "source": "pre_0945_s.avif",
+      "sourceSHA256": "a0a88b6e8a677ffe0f5cd6ee63f4544aa9ece0a8041a42a85a7f0f8fa5c3ad5e",
+      "pixelRect": [
+        3840,
+        1792,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.9375,
+        0.875,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.9375,
+        0.0625,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.9376220703125,
+        0.062744140625,
+        0.9998779296875,
+        0.124755859375
+      ]
+    },
+    {
+      "index": 240,
+      "ageMa": 950,
+      "column": 0,
+      "row": 15,
+      "source": "pre_0950_s.avif",
+      "sourceSHA256": "a74aad0132a0edbbc1d74bc82b60a7de3b3d0274d1c494467a12add04442cdc5",
+      "pixelRect": [
+        0,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0001220703125,
+        0.000244140625,
+        0.0623779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 241,
+      "ageMa": 955,
+      "column": 1,
+      "row": 15,
+      "source": "pre_0955_s.avif",
+      "sourceSHA256": "b101fc3aadb16d330e374fabc092736709728325d763379c286588a06644058e",
+      "pixelRect": [
+        256,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.0625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.0625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.0626220703125,
+        0.000244140625,
+        0.1248779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 242,
+      "ageMa": 960,
+      "column": 2,
+      "row": 15,
+      "source": "pre_0960_s.avif",
+      "sourceSHA256": "0add18868a20eab1820ca5a9c71bbbd00efd71f2984ffe2ce8628ef6bd42c18b",
+      "pixelRect": [
+        512,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.125,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.125,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1251220703125,
+        0.000244140625,
+        0.1873779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 243,
+      "ageMa": 965,
+      "column": 3,
+      "row": 15,
+      "source": "pre_0965_s.avif",
+      "sourceSHA256": "095d63c2bdbf9ee34a0f4a8a7e1f96894426defe9a1765a190a2f728b7cedf41",
+      "pixelRect": [
+        768,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.1875,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.1875,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.1876220703125,
+        0.000244140625,
+        0.2498779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 244,
+      "ageMa": 970,
+      "column": 4,
+      "row": 15,
+      "source": "pre_0970_s.avif",
+      "sourceSHA256": "2dc7bec988b6e5c590c42d9768bdf43b2a79395c1bdc871a4042f2c145bda70e",
+      "pixelRect": [
+        1024,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.25,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.25,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.2501220703125,
+        0.000244140625,
+        0.3123779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 245,
+      "ageMa": 975,
+      "column": 5,
+      "row": 15,
+      "source": "pre_0975_s.avif",
+      "sourceSHA256": "d8ac368fd42a2653f4edf7540934c7bf7451e219fcbd195aa21259c0bd566c36",
+      "pixelRect": [
+        1280,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.3125,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.3125,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3126220703125,
+        0.000244140625,
+        0.3748779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 246,
+      "ageMa": 980,
+      "column": 6,
+      "row": 15,
+      "source": "pre_0980_s.avif",
+      "sourceSHA256": "f5b81cd73a7609ee0771412b85494342816d39c351b1b5a10770116460b9e382",
+      "pixelRect": [
+        1536,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.375,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.375,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.3751220703125,
+        0.000244140625,
+        0.4373779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 247,
+      "ageMa": 985,
+      "column": 7,
+      "row": 15,
+      "source": "pre_0985_s.avif",
+      "sourceSHA256": "da460014e19ec6db24db261d52f329706a3189e0327662b30ac72ea4cd77e9b5",
+      "pixelRect": [
+        1792,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.4375,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.4375,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.4376220703125,
+        0.000244140625,
+        0.4998779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 248,
+      "ageMa": 990,
+      "column": 8,
+      "row": 15,
+      "source": "pre_0990_s.avif",
+      "sourceSHA256": "d85c9ce3751efa67b615bcdda12db18bbc37c9ba497ce36a88bd7a936d3aa09b",
+      "pixelRect": [
+        2048,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5001220703125,
+        0.000244140625,
+        0.5623779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 249,
+      "ageMa": 995,
+      "column": 9,
+      "row": 15,
+      "source": "pre_0995_s.avif",
+      "sourceSHA256": "18ce922d204fc85b5e1dc414983f122d44d1dd35416685e9fd5cb151ab0cce32",
+      "pixelRect": [
+        2304,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.5625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.5625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.5626220703125,
+        0.000244140625,
+        0.6248779296875,
+        0.062255859375
+      ]
+    },
+    {
+      "index": 250,
+      "ageMa": 1000,
+      "column": 10,
+      "row": 15,
+      "source": "pre_1000_s.avif",
+      "sourceSHA256": "8f7b988abdac98a0e8cefd05bb18c5ae92b2d7674a8a3cb6bc4d5e4fabfc029d",
+      "pixelRect": [
+        2560,
+        1920,
+        256,
+        128
+      ],
+      "imageUVRect": [
+        0.625,
+        0.9375,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVRect": [
+        0.625,
+        0.0,
+        0.0625,
+        0.0625
+      ],
+      "flippedUVCenters": [
+        0.6251220703125,
+        0.000244140625,
+        0.6873779296875,
+        0.062255859375
+      ]
+    }
+  ]
+}

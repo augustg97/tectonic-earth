@@ -34,7 +34,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WEB = os.path.join(HERE, "..", "web")
 APP = os.path.join(WEB, "app.js")
 SOURCES = {"FRAG": "index__FRAG.frag.glsl", "LFRAG": "index__LFRAG.frag.glsl", "VERT": "index__VERT.vert.glsl",
-           "CFRAG": "index__CFRAG.frag.glsl", "CVERT": "index__CVERT.vert.glsl"}
+           "CFRAG": "index__CFRAG.frag.glsl", "CVERT": "index__CVERT.vert.glsl",
+           # the time preview (the Atlas port, 2026-09-07): thumbnails of the sheets while a seek's fields load
+           "PFRAG": "index__PFRAG.frag.glsl", "PVERT": "index__PVERT.vert.glsl"}
 MARKERS = {"/*@vnoise*/": "VN_NEW", "/*@cnoise*/": "CN_NEW"}
 
 # GLSL ES 1.00/3.00 keywords and reserved-for-future-use words that are legal

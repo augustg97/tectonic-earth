@@ -62,6 +62,7 @@ canvas{display:block}
 #age{font-size:30px;font-weight:300;letter-spacing:.01em;line-height:1}
 #eraName{font-size:13px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;font-weight:600}
 #periodName{font-size:11px;color:var(--dim);letter-spacing:.05em;margin-top:2px}
+#surfStatus{font-size:9.5px;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;opacity:.85}
 #env{font-size:10.5px;color:var(--dim2);margin-top:8px;line-height:1.7;letter-spacing:.02em}
 #env b{color:var(--dim);font-weight:500}
 
@@ -136,21 +137,21 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 
 /* ---- bottom timeline ---- */
 #bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 22px 16px;background:linear-gradient(to top,rgba(8,10,14,.92),rgba(8,10,14,0));z-index:20;transition:opacity .5s}
-#markrow{position:relative;height:24px;margin:0 4px 2px}
+#markrow{position:relative;height:24px;margin:0 4px 2px;cursor:pointer;touch-action:none}
 .mark{position:absolute;transform:translateX(-50%);font-size:9.5px;color:var(--dim2);letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:color .15s}
 .mark:hover{color:var(--ink)}
 .mark::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:5px;background:var(--line)}
 .mark.now{color:var(--accent2)}
-#scalerow{position:relative;height:13px;margin:0 4px}
+#scalerow{position:relative;height:13px;margin:0 4px;cursor:pointer;touch-action:none}
 .tick{position:absolute;transform:translateX(-50%);font-size:9px;color:#5c6675;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tick::before{content:"";position:absolute;left:50%;top:-4px;width:1px;height:3px;background:rgba(255,255,255,.16)}
 .tick.zero{color:var(--accent2)}
-#track{position:relative;height:26px;margin:0 4px}
-#slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
-#slider::-webkit-slider-runnable-track{height:26px}
-#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:26px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
-#slider::-moz-range-thumb{width:4px;height:26px;border:none;background:#fff;border-radius:2px}
-#trackbg{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
+#track{position:relative;height:32px;margin:0 4px}
+#slider{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
+#slider::-webkit-slider-runnable-track{height:32px}
+#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:32px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
+#slider::-moz-range-thumb{width:4px;height:32px;border:none;background:#fff;border-radius:2px}
+#trackbg{position:absolute;top:14px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
 #trackgrad{position:absolute;inset:0}
 #ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px;position:relative}
 /* Centred on the BAR, not in the flex flow: an auto-margin item would centre

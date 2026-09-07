@@ -355,6 +355,11 @@ function oldLakeTex(){
    call changes what lands in web/fields. */
 const DATA_V='20260904-0522';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
+/* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
+   field and the timeline preview atlas. Bumped by hand when their bytes
+   change; the preview must be regenerated whenever the shipped sheets are
+   (build/build_timeline_preview.py checks their hashes). */
+const IMAGERY_V='20260907';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -528,7 +533,7 @@ window.__MEM=()=>{
   for(const[k,v]of TEXCACHE){if(v.bm){n++;bytes+=v.bm.width*v.bm.height*4;}}
   for(const[,get]of FIELD_KINDS){for(const im of get()){if(im&&im.width)legacy++;}}
   return {tried:_fieldTried.size,bitmaps:n,pinnedMB:Math.round(bytes/1048576),
-          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),
+          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),extraMB:Math.round(_extraBytes/1048576),
           entries:TEXCACHE.size,pendingDecodes:_bmPending.size,
           boundE:_lastBoundE,scrubbing:_scrubbing};
 };
@@ -881,6 +886,37 @@ const FRAG=SHADERS.FRAG.replace('/*@vnoise*/', NZOLD?VN_OLD:VN_NEW);
    Never put a backtick in here: it is a JS template literal like FRAG. */
 const LFRAG=SHADERS.LFRAG;
 let liteMat=null;
+/* ================= THE TIME PREVIEW (the Atlas port, 2026-09-07) =========
+   A seek to an age whose fields are not resident used to leave the previous
+   world on screen under the new age until the pair arrived -- 0.8 s from a
+   warm server, several seconds cold -- and nothing said the picture was
+   stale. Now the globe and the map draw the REQUESTED age at once from a
+   4096x2048 atlas of 256x128 thumbnails of all 251 shipped sheets
+   (web/imagery/timeline-preview.webp, built from the same sheets by
+   build/build_timeline_preview.py and hash-checked against them), through a
+   material with no height, no warp and no detail, and switch back to the
+   terrain shader the moment the requested pair is decoded. It is loading
+   feedback, never the settled picture; #surfStatus says so while it shows.
+   Optional: it loads after the opening pair at the lowest priority, and a
+   missing or slow preview changes nothing but the seek experience. */
+let previewMat=null,_previewReady=false,_previewTex=null,_previewJob=null;
+let _extraBytes=0;   // the preview and cloud bitmaps and textures, outside the field budget
+function loadPreview(){
+  if(_previewJob||_sq.has('nopreview')||!_BITMAPS)return;
+  const maxW=Math.min(renderer.capabilities.maxTextureSize,(navigator.deviceMemory||8)<8?2048:4096);
+  _previewJob=LOADER.get('imagery/timeline-preview.webp?v='+IMAGERY_V,2,null)
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none',
+      resizeWidth:maxW,resizeHeight:maxW/2,resizeQuality:'high'}))
+    .then(bm=>{
+      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      t.generateMipmaps=false; t.minFilter=t.magFilter=THREE.LinearFilter;   // no mip chain across cells: each cell is another date
+      t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; t.needsUpdate=true;
+      previewMat.uniforms.uPreview.value=t;
+      previewMat.uniforms.uPreviewTexel.value.set(1/bm.width,1/bm.height);
+      _previewTex=t; _previewReady=true; _extraBytes+=bm.width*bm.height*8;
+    })
+    .catch(()=>{_previewJob=null;});   // optional imagery: nothing waits on it
+}
 function initGL(){
   const cv=$('#gl');
   /* preserveDrawingBuffer costs a copy of the whole frame at this resolution
@@ -940,6 +976,11 @@ function initGL(){
     elevA:U.elevA,elevB:U.elevB,dispA:U.dispA,mixf:U.mixf,uWarp:U.uWarp,
     uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,uDisp:U.uDisp},
     vertexShader:VERT,fragmentShader:LFRAG});
+  previewMat=new THREE.ShaderMaterial({uniforms:{
+    uPreview:{value:null},uFrames:{value:new THREE.Vector2(0,0)},mixf:{value:0},
+    uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,
+    uPreviewTexel:{value:new THREE.Vector2(1/4096,1/2048)}},
+    vertexShader:SHADERS.PVERT,fragmentShader:SHADERS.PFRAG});
   // the flat map is the same shader on a plane, so both views agree exactly
   mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
   mapMesh.visible=false; scene.add(mapMesh);
@@ -2708,6 +2749,14 @@ function updateReadout(){
     +`<b>Extinction rate</b> ~${xrStr} E/MSY <span style="color:#8790a0">(${xr.label})</span><br>`
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
+  /* The picture's own state, beside the age it claims: a preview or a
+     neighbouring still is 'Loading terrain', a bound pair whose other fields
+     are still landing is 'Refining detail', a settled pair says nothing. */
+  const st=$('#surfStatus');
+  if(st){const m=_surface.mode;
+    const txt=(m==='preview'||m==='still'||m==='stale'||m==='sheets')?'Loading terrain\u2026':(m==='full'&&_surface.refining)?'Refining detail\u2026':'';
+    if(st.textContent!==txt)st.textContent=txt;
+    st.hidden=!txt;}
   markSidebarCurrent();
   updateExtinction();updateContextCards();
 }
@@ -3091,6 +3140,30 @@ function markExtinctList(cur){
    of the line. Visually identical to loading the age over the network, minus
    the freeze. */
 let _texMakeBudget=2;
+/* WHAT IS ON SCREEN, against what the age asks for (APP.surface()). The
+   requested age is the one authority (state.age); this is the separate
+   account of what the picture currently shows, so a late completion can
+   never roll the request back and the readout can say when the picture is
+   still on its way. mode: 'full' the requested pair at full detail (other
+   kinds may still be refining); 'sheets' the pair's world sheets with the
+   height field still arriving; 'still' a resident keyframe within
+   STILL_RADIUS of the request, bound as one coherent still (the scrub
+   stepping of 2026-07-31, now also for a short jump); 'preview' the
+   requested age from the thumbnail atlas; 'stale' nothing better yet, the
+   previous binding stays. */
+const STILL_RADIUS=2;
+const _surface={mode:'stale',req:[-1,-1],shown:[-1,-1],preview:false,refining:false,since:0};
+const _bound={eA:-1,eB:-1,rA:-1,rB:-1};   // the keyframe each essential sampler holds
+function _surfaceSet(mode,f,shown){
+  if(mode!==_surface.mode||shown[0]!==_surface.shown[0]||shown[1]!==_surface.shown[1])_surface.since=performance.now();
+  _surface.mode=mode; _surface.req[0]=f.i; _surface.req[1]=f.j;
+  _surface.shown[0]=shown[0]; _surface.shown[1]=shown[1]; _surface.preview=(mode==='preview');
+  let refining=(mode!=='full');
+  if(!refining)for(const i of (f.i===f.j?[f.i]:[f.i,f.j]))for(const k of KIND_PRIORITY){
+    const key=k+i; if(_bmMissing.has(key))continue;
+    const e=TEXCACHE.get(key); if(!(e&&e.bm)){refining=true;break;}}
+  _surface.refining=refining;
+}
 function bindTex(kind,i,essential){
   const key=kind+i;
   const e=TEXCACHE.get(key);
@@ -3134,8 +3207,15 @@ function bindTextures(){
      resident for that keyframe binds with it, and the interval machinery
      (mixf blending, uWarp) stands down -- a stepped world is a still, not an
      interval. On release the exact pair binds and everything resolves. */
-  const bi=_scrubbing?nearestResidentE(f.i):-1;
-  const stepping=bi>=0&&_scrubbing;
+  const pairResident=fieldImage('e',f.i)&&fieldImage('e',f.j);
+  /* A pair that is not here yet. Within STILL_RADIUS keyframes, a resident
+     neighbour is the better stand-in (detailed, and at most 10 Myr off);
+     farther, the preview is (exact age, coarse); with no preview loaded a
+     scrub still steps through whatever is resident, as it always has, and a
+     jump keeps the previous world. */
+  const bi=pairResident?-1:nearestResidentE(f.i);
+  const near=bi>=0&&Math.min(Math.abs(bi-f.i),Math.abs(bi-f.j))<=STILL_RADIUS;
+  const stepping=bi>=0&&(near||(_scrubbing&&!_previewReady));
   if(_scrubbing){
     /* Aim the elevation decodes AHEAD of the drag: a decode takes longer than
        a frame, so one kicked at the slider's position lands behind it. Kicked
@@ -3176,15 +3256,21 @@ function bindTextures(){
     const ms=gT('m'); if(ms)mat.uniforms.motA.value=ms;
     mat.uniforms.mixf.value=0.0;
     bindClimate(f);
+    if(es){_bound.eA=_bound.eB=bi;} if(rs){_bound.rA=_bound.rB=bi;}
+    _surfaceSet('still',f,[bi,bi]);
     return f;
+  }
+  if(!(ea&&eb)){
+    if(_previewReady){bindClimate(f);_surfaceSet('preview',f,[-1,-1]);return {i:f.i,j:f.j,t:f.t,preview:true};}
+    _surfaceSet('stale',f,[_bound.eA,_bound.eB]);
   }
   const wa=(swap&&f.i===P)?oldLakeTex():bindTex('w',f.i);
   const wb=(swap&&f.j===P)?oldLakeTex():bindTex('w',f.j);
-  if(ea)mat.uniforms.elevA.value=ea;
-  if(eb||ea)mat.uniforms.elevB.value=eb||ea;
+  if(ea){mat.uniforms.elevA.value=ea;_bound.eA=f.i;}
+  if(eb||ea){mat.uniforms.elevB.value=eb||ea;_bound.eB=eb?f.j:f.i;}
   if(ea)_lastBoundE=f.i;
-  if(ra)mat.uniforms.rainA.value=ra;
-  if(rb||ra)mat.uniforms.rainB.value=rb||ra;
+  if(ra){mat.uniforms.rainA.value=ra;_bound.rA=f.i;}
+  if(rb||ra){mat.uniforms.rainB.value=rb||ra;_bound.rB=rb?f.j:f.i;}
   // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
   if(wa)mat.uniforms.waterA.value=wa;
   if(wb||wa)mat.uniforms.waterB.value=wb||wa;
@@ -3244,6 +3330,7 @@ function bindTextures(){
   // at every keyframe instead of drifting at a steady rate.
   mat.uniforms.mixf.value=f.t;
   bindClimate(f);
+  if(ea&&eb)_surfaceSet('full',f,[f.i,f.j]);
   return f;
 }
 /* The climate/appearance uniforms interpolate straight from the timeline
@@ -3595,6 +3682,7 @@ function loop(now,force){
   const idleSig=[state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,
                  state.view,state.shade,state.mapLon,state.quality,_autoScale,
                  innerWidth,innerHeight,TEXCACHE.size,_texBytes,_upQ.length,_bmPending.size,
+                 _surface.mode,_surface.shown[0],_surface.shown[1],_previewReady,
                  state.layers.boundaries,state.layers.vectors,state.layers.hotspots,
                  state.layers.labels,state.selPlate].join('|');
   const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||
@@ -3660,10 +3748,19 @@ function loop(now,force){
   const f=bindTextures();
   queueUploads(f);   // warm the next keyframe's textures, one upload a frame
   /* THE PATH DECISION (WP-10, A4). Sheets for the bound pair and a footprint
-     wide enough -> the lite material; otherwise the terrain shader as before. */
+     wide enough -> the lite material; otherwise the terrain shader as before.
+     While the requested pair's height field is still arriving, the pair's
+     sheets are the better stand-in where the footprint allows them (their
+     colour is the requested keyframes; the stale height can at worst turn a
+     coastline pixel into a plain blend), and the preview atlas elsewhere. */
   const lite=useLite(f);
-  const wantMat=lite?liteMat:mat;
+  const wantMat=(f.preview&&!lite)?previewMat:(lite?liteMat:mat);
   if(globe.material!==wantMat){globe.material=wantMat;mapMesh.material=wantMat;}
+  if(f.preview){
+    previewMat.uniforms.uFrames.value.set(f.i,f.j);
+    previewMat.uniforms.mixf.value=f.t;
+    if(lite){mat.uniforms.mixf.value=f.t;mat.uniforms.uWarp.value=0.0;_surfaceSet('sheets',f,[f.i,f.j]);}
+  }
   if(lite){
     const sa=SHEETS.get(f.i), sb=SHEETS.get(f.j);
     liteMat.uniforms.sheetA.value=sa.tex; liteMat.uniforms.sheetB.value=sb.tex;
@@ -3805,6 +3902,28 @@ function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==
 function syncSlider(){$('#slider').value=Math.round(1000-state.age);}
 function sliderToAge(v){return 1000-(+v);}
 $('#slider').addEventListener('input',e=>{state.age=sliderToAge(e.target.value);updateReadout();});
+/* THE ERA ROWS SEEK TOO (the Atlas port). The named markers already jump on a
+   click; the scale and the space between markers did nothing, and the
+   4-pixel thumb was the only thing to grab. A press anywhere on the marker
+   or scale row seeks to that x and captures the pointer, so a drag that
+   starts on the era names scrubs exactly as one on the slider does. The
+   slider itself keeps its native keyboard handling (arrows step a million
+   years, Home/End are the ends) and native pointer capture. */
+{const rows=[$('#markrow'),$('#scalerow')].filter(Boolean);
+ const ageAtX=x=>{const r=$('#track').getBoundingClientRect();
+   return 1000-1250*Math.max(0,Math.min(1,(x-r.left)/Math.max(1,r.width)));};
+ const seek=x=>{state.age=Math.round(ageAtX(x));state.playing=false;syncPlay();syncSlider();updateReadout();};
+ for(const row of rows){
+   row.addEventListener('pointerdown',e=>{
+     if(e.target.classList.contains('mark')||e.button!==0)return;   // a named marker has its own jump
+     e.preventDefault();seek(e.clientX);
+     try{row.setPointerCapture(e.pointerId);}catch(_){}
+     row._seeking=true;});
+   row.addEventListener('pointermove',e=>{if(row._seeking)seek(e.clientX);});
+   const done=e=>{if(!row._seeking)return;row._seeking=false;
+     try{row.releasePointerCapture(e.pointerId);}catch(_){}};
+   row.addEventListener('pointerup',done);row.addEventListener('pointercancel',done);
+ }}
 function syncPlay(){const p=state.playing;$('#playIcon').innerHTML=p?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';}
 $('#playBtn').onclick=()=>{state.playing=!state.playing;syncPlay();};
 /* The arrow points the way the playhead travels along the timeline, which runs
@@ -4388,7 +4507,14 @@ function buildLegend(){
                   ctx.putImageData(im,0,0);
                   return {png:cv.toDataURL('image/png').slice(22),w:w,h:h};
                 }},
-              gl:{mat,scene,globe,atmo,clouds,renderer,cam}};
+              /* The picture against the request: mode, the pair asked for,
+                 the pair shown, whether detail is still arriving, and for
+                 how long the current state has been showing. */
+              surface(){return {mode:_surface.mode,req:[..._surface.req],shown:[..._surface.shown],preview:_surface.preview,
+                                refining:_surface.refining,ms:Math.round(performance.now()-_surface.since),
+                                bound:{..._bound},previewReady:_previewReady};},
+              gl:{mat,scene,globe,atmo,clouds,renderer,cam,
+                  materials:{terrain:mat,lite:liteMat,preview:previewMat}}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
   syncSlider();updateReadout();syncPlay();syncDir();
@@ -4403,4 +4529,5 @@ function buildLegend(){
   // The globe is on screen and interactive by here; the rest of the timeline
   // fills in behind it, nearest-to-the-viewer first.
   startPrefetch();
+  loadPreview();
 })();
