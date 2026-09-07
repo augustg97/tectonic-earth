@@ -73,10 +73,14 @@ Every round ends with `build_site.py` → commit → push to `main`, and a check
 ```
 build/          52 Python modules, ~16k lines — the offline pipeline
 web/            the app, split (WP-10 D5): index.html is the markup, style.css
-                the styles, app.js the application (~4.2k lines), and
-                web/shaders/*.glsl the five shaders, which check_shader.py
-                validates and packs into shaders.js (generated). build_site.py
-                inlines all of it back into one deployed docs/index.html
+                the styles, loader.js the request broker and the pure time
+                policy (Node-testable, build/test_loader.mjs), app.js the
+                application (~4.5k lines), and web/shaders/*.glsl the seven
+                shaders, which check_shader.py validates and packs into
+                shaders.js (generated). build_site.py inlines all of it back
+                into one deployed docs/index.html
+web/imagery/    the NASA cloud field and the timeline preview atlas, each with
+                its provenance/metadata JSON (§5.7, §5.11); shipped to docs/imagery
 web/fields/     ~2,960 field textures (12 kinds × 251 keyframes, some kinds
                 absent on a few keyframes), plus a second present-day lake field
                 without the geologically young lakes. Gitignored: docs/fields
@@ -258,7 +262,9 @@ Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the ge
 
 ### 5.7 Rendering
 
-`web/index.html` holds four GLSL shaders as JS template literals: `VERT`/`FRAG` (globe and map) and `CVERT`/`CFRAG` (clouds). The fragment shader decodes and interpolates the fields, then recomputes temperature, relief, biome colour, water, ice, sky and the ocean fabric per pixel.
+`web/shaders/` holds the GLSL: `VERT`/`FRAG` (globe and map), `LFRAG` (the sheet path, §5.9), `CVERT`/`CFRAG` (clouds) and `PVERT`/`PFRAG` (the time preview, §5.11); `check_shader.py` packs them into `shaders.js`. The fragment shader decodes and interpolates the fields, then recomputes temperature, relief, biome colour, water, ice, sky and the ocean fabric per pixel.
+
+**The clouds (since the Atlas port, September 2026)** are NASA's *Blue Marble: Clouds* — a multi-day composite by Reto Stöckli (NASA/GSFC), reduced to a 4096 × 2048 cloud-density scalar in `web/imagery/`, provenance in `nasa-clouds.json` — sampled as one continuous field in coherent transport (0.004 rad per weather second, a bounded latitude shear, gently varying deformation, never accumulated strain and never a crossfade between phases). The selected era adapts it, not the other way round: the shader reads the same elevation and rainfall pair the terrain is drawn from (the terrain material's own uniform objects) for a land mask and a broad land-normalised wetness that modulates optical depth gently, and `uEra` shifts the arrangement. Rainfall is land-only, so an ocean zero is never read as dryness. Three meshes share one texture and one weather clock: the shell at 1.014 over the globe, a shadow shell at 1.0085 (between the highest displaced peak at full exaggeration and the clouds; both ride the exaggeration lift), and a plane over the flat map. It is a paused-time layer: Play hides it and its shadow at once, Pause fades it back once the requested pair is bound. Clouds thin to 55% at the closest zoom instead of retiring. Across ancient and future eras it is satellite-derived visual structure with illustrative climate adaptation, not reconstructed weather for any date.
 
 ---
 
@@ -272,7 +278,9 @@ Three things already in the architecture made that a loader change rather than a
 - `getTex()` creates GPU textures lazily behind an LRU cap, so residency was never tied to how many images were in memory.
 - every CPU-side reader of the elevation raster goes through `elevField()`, which returns null for a frame it does not have — and every caller already handled that, because a `_w` or `_o` file has always been allowed to be missing.
 
-The background fill re-centres on every completion: it asks each time for the nearest keyframe to wherever the viewer is **now**, so scrubbing re-aims the queue instead of waiting out a plan made before they moved. Four concurrent — enough to saturate a connection, few enough that a frame someone is waiting for is not stuck behind speculative ones. A cold jump to an unfetched age costs about 0.8 s locally, during which the previous age stays on screen.
+The background fill re-centres on every completion: it asks each time for the nearest wanted keyframe to wherever the viewer is **now**, so scrubbing re-aims the queue instead of waiting out a plan made before they moved. Four concurrent — enough to saturate a connection, few enough that a frame someone is waiting for is not stuck behind speculative ones.
+
+**The broker (since the Atlas port, September 2026; `web/loader.js`, tests in `build/test_loader.mjs`).** Every field, sheet and imagery fetch goes through one bounded queue: the same URL is one request however many callers want it, the keyframes the viewer is at outrank everything, and a seek cancels queued *and in-flight* requests for keyframes it left behind (`retargetLoads()` in `loop()`), so a run of jumps starts on the new pair at once instead of behind the tail of the old one. The pump's neighbourhood is bounded everywhere now — paused, three keyframes each way; playing, as many keyframes ahead as the speed covers in a *measured* fetch, a *measured* decode and two seconds of slack (3 at 3 Myr/s, 5 at 10 on a fast link, never more than 8), one behind; two on a metered link or a battery — rather than the whole timeline on mains power. Only an HTTP 404/410 marks a field absent at a keyframe; a timeout, abort, 5xx or network failure is retried after three seconds, and a superseded request is no outcome at all (the old loader recorded every settled fetch as tried, so one dropped packet made a field permanently missing until reload). An exact keyframe age now binds that keyframe alone (`frameAt`, binary search): the old scan answered the next younger keyframe and t = 1, so a marker jump bound the neighbour's interval fields (§7.16). And a cold seek no longer leaves the previous world on screen: §5.11.
 
 `FIELD_V` (bumped by hand, unlike `DATA_V`) busts the texture cache when the fields change but keep their names — as they did when the elevation grid doubled.
 
@@ -331,6 +339,31 @@ rule: with the 2048 set a screen at pixel ratio 2 reaches the sheets only near t
 (a texel must cover no more than about two device pixels), so on a Retina laptop the sheet path
 is nearly dormant and the terrain shader is the picture; the 4096 set would engage it from
 about zoom 2.
+
+### 5.11 The Atlas port: the time preview, the ground cache, the temperature graph
+
+Three things came over from Tectonic Atlas (September 2026), selectively — its lighter renderer, field subset and mesh caps did not, and the terrain shaders are untouched.
+
+- **The time preview.** A seek to an age whose fields are not resident used to leave the previous world on screen under the new age until the pair arrived. Now `bindTextures()` keeps an explicit account of what the picture shows against what the age asks for (`APP.surface()`: `full`, `sheets`, `still`, `preview`, `stale`) and draws the requested age at once from a 4096 × 2048 atlas of 256 × 128 thumbnails of all 251 shipped sheets (`web/imagery/timeline-preview.webp`, built by `build/build_timeline_preview.py` from `web/sheets/` and hash-checked against them at every build). Within two keyframes a resident neighbour is the better stand-in (the scrub stepping of July 2026, now also for short jumps); where the pair's sheets are already resident and the footprint allows them, they are (their colour is the requested keyframes; the stale height can at worst turn a coastline pixel into a plain blend). The readout says *Loading terrain* while a preview or a still shows and *Refining detail* while a bound pair's other fields land. The preview has no height, no warp and no detail; it is loading feedback and is never the settled picture.
+- **The ground cache.** Paused with the weather moving, the terrain shader was being run over every pixel 24 times a second to redraw a ground that had not moved. `drawScene()` renders everything but the cloud layer into a render target of the canvas's own size whenever anything that draws it changes (`groundSig()`: age, camera, view, path, every bound sampler and uniform, overlays, quality, viewport), refreshes it one strip in sixteen per weather frame so the sea sheen keeps moving, and composites the clouds over it. Nothing is drawn at a lower resolution; with the clouds off or anything else in motion the cache stands down and the frame is rendered exactly as before, which is what keeps the cloud-off picture identical (`build/verify_diff.py`). Bounded at 96 MB of render target; `?groundcache=0` disables it.
+- **The temperature graph.** The Conditions readout carries the timeline's `gmst` column across the whole span — 1000 Ma at the left, the present 80 % across, +250 Myr at the right — as a polyline through the 251 records (never a spline, which would invent overshoot) on a fixed −50…+40 °C scale that widens rather than clips. The marker, the value and the accessible description move with the age, and only then; the values are the inherited model's, the readout's caveats stand. Built once as a sibling *after* `#env`, which `updateReadout()` replaces many times a second.
+
+**What it measured** (the M1, `build/verify_run.py` driving `web/_verify.html` on the real GPU, the frozen pre-port page through the same driver back to back; another session's headless Chromes shared the machine, so absolute frame times are an upper bound and the ratios are the result):
+
+| | before | after |
+|---|---|---|
+| cold seek to full detail, 1000 → 0 / 300 / −250 / 700 Ma, warm localhost | 6.6 / 8.8 / 6.0 / 3.4 s, the previous world shown throughout | 0.56 / 0.24 / 0.24 / 0.24 s, the preview within 20–74 ms |
+| the same with a 600 ms delay on every field fetch | 6.6 / 7.1 / 5.7 / 6.1 s | 0.83 / 0.90 / 0.94 / 0.93 s |
+| fast-scrub release to render | 730 ms | 10 ms |
+| keyframe-crossing storm gate | ≤ 2 uploads | ≤ 2 uploads |
+| playback coherence at 18 Myr/s (`uWarp`/`uMat` live) | 100 % | 100 % |
+| sheet-path playback, 10 Myr/s, 600 ms sheet delay | 0 held frames | 5 of 2760 |
+| working set over 90 s of far jumps | 949 MB cache, ~460 pinned, flat | the same, plus 139 MB of imagery (preview 64, clouds 75) |
+| frame p50 at 2560 × 1440, orbital, clouds on / off | 355 / 343 ms | 344 / 328–346 ms direct; **56 ms** paused with the ground cache |
+| frame p50, Himalaya at 1.35 / Andes tilted 55° | 352 / 316 ms | 350 / 307 ms direct; **29 / 30 ms** with the cache |
+| cloud-off frames old against new: orbital, map, close at 2.5 Ma | — | 0.06–0.18, **0.00**, **0.00–0.03** of 255 mean |
+| cloud-off close frames at exactly 0 Ma | — | 1.2–12.9 of 255: the exact-keyframe binding (§7.16), not the renderer |
+| cloud motion, fixed camera: present Globe 20 s / 300 Ma Map 15 s / +250 Myr Globe 15 s | — | 25.6 / 19.7 / 20.5 of 255 mean in the crop (Atlas's own reference pair: 23.7 over 23 s) |
 
 ### 5.10 Mountains: the orogen atlas and the fold coordinates
 
@@ -685,11 +718,14 @@ and slow in ways that look like hangs. The rules that came out of it, each after
   an A/B number under about 1/255 is inside the harness unless the pair was taken back to back.
 - **An empty framebuffer from `APP.snap` can be a one-off** under contention; re-run before
   reading anything into it.
-- **At an exact keyframe age the bound pair is (the next younger keyframe, this one).** Age 0
-  interpolates frames 49 and 50 at t = 1, and the interval kinds (`_t`, `_f`, `_v`, `_p`) bind
-  from frame 49 — `fut_0005`. A field baked for "age 0" alone is therefore not the one the
-  shader reads at age 0: the first belt-type A/B (round 3) came back null for exactly this
-  reason. Bake the younger neighbour too, or test at an age strictly inside an interval.
+- **At an exact keyframe age the bound pair WAS (the next younger keyframe, this one).** Age 0
+  interpolated frames 49 and 50 at t = 1, and the interval kinds (`_t`, `_f`, `_v`, `_p`) bound
+  from frame 49 — `fut_0005`. A field baked for "age 0" alone was therefore not the one the
+  shader read at age 0: the first belt-type A/B (round 3) came back null for exactly this
+  reason. Since the Atlas port (September 2026) `frameAt` is a binary search and an exact
+  keyframe is itself alone ({i, j: i, t: 0}), so age 0 binds frame 50 (`phan_0000`) with no
+  warp and no interval. An age strictly inside an interval still binds the interval kinds from
+  its younger keyframe.
 
 ### 7.17 Sixteen texture units
 
@@ -729,6 +765,7 @@ in the build, not discovering per deploy.
 | Solar model | Gough, D. O. (1981), *Solar Physics* 74, 21–34 |
 | Impacts | Impact Earth database (Osinski et al.) and Schmieder & Kring (2020) |
 | Intervals | ICS chart v2024/12 |
+| Clouds | NASA *Blue Marble: Clouds* — NASA/Goddard Space Flight Center, image by Reto Stöckli; `cloud_combined_8192.tif`, published 11 February 2002, a multi-day composite; reduced to `web/imagery/nasa-clouds-4096.jpg` (provenance and hashes in `nasa-clouds.json`); usage per science.nasa.gov/earth/faq |
 | Illustrations | PhyloPic — CC0, Public Domain Mark or CC-BY only; contributors credited individually |
 | Software | pyGPlates / GPlates; three.js + GLSL |
 

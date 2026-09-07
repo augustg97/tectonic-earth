@@ -69,8 +69,18 @@ canvas{display:block}
 #age{font-size:30px;font-weight:300;letter-spacing:.01em;line-height:1}
 #eraName{font-size:13px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;font-weight:600}
 #periodName{font-size:11px;color:var(--dim);letter-spacing:.05em;margin-top:2px}
+#surfStatus{font-size:9.5px;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;opacity:.85}
 #env{font-size:10.5px;color:var(--dim2);margin-top:8px;line-height:1.7;letter-spacing:.02em}
 #env b{color:var(--dim);font-weight:500}
+/* the modelled temperature graph under the conditions (the Atlas port) */
+#gmstChart{margin:8px 0 0 auto;width:212px}
+#gmstChart svg{width:100%;height:58px;display:block;overflow:visible}
+#gmstZero{stroke:#35414a;stroke-dasharray:2 4;stroke-width:1}
+#gmstPath{fill:none;stroke:#96b9b4;stroke-width:1.5;stroke-linejoin:round}
+#gmstAgeLine{stroke:var(--accent);stroke-opacity:.45;stroke-width:1}
+#gmstDot{fill:var(--accent);stroke:#111a20;stroke-width:2}
+.gmstAxis{display:flex;justify-content:space-between;gap:6px;font-size:9px;color:var(--dim2);letter-spacing:.03em;margin-top:1px;font-variant-numeric:tabular-nums}
+#gmstSel{color:var(--dim)}
 
 /* ---- right controls ---- */
 #controls{position:fixed;top:220px;right:20px;width:186px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:12px;padding:12px;z-index:20;transition:opacity .5s}
@@ -143,21 +153,21 @@ body.ambient #extinctBox{opacity:0;pointer-events:none}
 
 /* ---- bottom timeline ---- */
 #bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 22px 16px;background:linear-gradient(to top,rgba(8,10,14,.92),rgba(8,10,14,0));z-index:20;transition:opacity .5s}
-#markrow{position:relative;height:24px;margin:0 4px 2px}
+#markrow{position:relative;height:24px;margin:0 4px 2px;cursor:pointer;touch-action:none}
 .mark{position:absolute;transform:translateX(-50%);font-size:9.5px;color:var(--dim2);letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:color .15s}
 .mark:hover{color:var(--ink)}
 .mark::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:5px;background:var(--line)}
 .mark.now{color:var(--accent2)}
-#scalerow{position:relative;height:13px;margin:0 4px}
+#scalerow{position:relative;height:13px;margin:0 4px;cursor:pointer;touch-action:none}
 .tick{position:absolute;transform:translateX(-50%);font-size:9px;color:#5c6675;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tick::before{content:"";position:absolute;left:50%;top:-4px;width:1px;height:3px;background:rgba(255,255,255,.16)}
 .tick.zero{color:var(--accent2)}
-#track{position:relative;height:26px;margin:0 4px}
-#slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
-#slider::-webkit-slider-runnable-track{height:26px}
-#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:26px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
-#slider::-moz-range-thumb{width:4px;height:26px;border:none;background:#fff;border-radius:2px}
-#trackbg{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
+#track{position:relative;height:32px;margin:0 4px}
+#slider{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;cursor:pointer;position:absolute;top:0;left:0;z-index:3;margin:0}
+#slider::-webkit-slider-runnable-track{height:32px}
+#slider::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:32px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 12px rgba(226,112,58,.7);cursor:grab}
+#slider::-moz-range-thumb{width:4px;height:32px;border:none;background:#fff;border-radius:2px}
+#trackbg{position:absolute;top:14px;left:0;right:0;height:4px;border-radius:2px;overflow:hidden;background:#20262f}
 #trackgrad{position:absolute;inset:0}
 #ctlrow{display:flex;align-items:center;gap:14px;margin-top:12px;position:relative}
 /* Centred on the BAR, not in the flex flow: an auto-margin item would centre
@@ -452,9 +462,9 @@ body.ambient .mtab{display:none}
   body.m-right #controls,body.m-right #ctxStack,body.m-right #extinctBox{
     transform:none}
   #readout{padding:6px 8px 8px 12px;background:none}
-  #readout #env,#readout #eraName{display:none}
+  #readout #env,#readout #eraName,#readout #gmstChart{display:none}
   body.m-right #readout{background:rgba(10,13,18,.94);border-radius:10px}
-  body.m-right #readout #env,body.m-right #readout #eraName{display:block}
+  body.m-right #readout #env,body.m-right #readout #eraName,body.m-right #readout #gmstChart{display:block}
   #info{left:14px;right:auto;bottom:150px;width:calc(100vw - 28px);max-height:40vh}
   #age{font-size:24px}
   /* clear the drawer button, which was sitting on top of 'TEC' */
@@ -647,7 +657,26 @@ body.ambient .mtab{display:none}
     <div id="age">0 Ma</div>
     <div id="eraName">Holocene</div>
     <div id="periodName">Quaternary</div>
+    <!-- The picture's own state beside the age it claims: shown only while a
+         seek's full-detail fields are still arriving (see bindTextures). -->
+    <div id="surfStatus" hidden></div>
     <div id="env"></div>
+    <!-- Modelled global mean temperature across the whole timeline, the
+         selected age marked (the Atlas port). Built once from the loaded
+         timeline; only the marker, the value and the description move with
+         the age. A sibling of #env, never inside it: updateReadout() replaces
+         #env's HTML many times a second. -->
+    <figure id="gmstChart" hidden>
+      <svg viewBox="0 0 272 74" role="img" aria-labelledby="gmstTitle gmstDesc" focusable="false">
+        <title id="gmstTitle">Modelled global mean temperature across the timeline</title>
+        <desc id="gmstDesc"></desc>
+        <line id="gmstZero" x1="0" y1="0" x2="272" y2="0"/>
+        <path id="gmstPath" d=""/>
+        <line id="gmstAgeLine" x1="0" y1="2" x2="0" y2="67"/>
+        <circle id="gmstDot" cx="0" cy="0" r="3.5"/>
+      </svg>
+      <figcaption class="gmstAxis"><span>1,000 Ma</span><span id="gmstSel">Global mean temperature</span><span>+250 Myr</span></figcaption>
+    </figure>
   </div>
 </div>
 
@@ -696,6 +725,14 @@ body.ambient .mtab{display:none}
   <div class="grp">
     <div class="grp-h">Annotation</div>
     <div class="tog on" data-layer="labels"><span>Era labels</span><div class="sw"></div></div>
+  </div>
+  <!-- The satellite cloud layer (the Atlas port, 2026-09-07): a paused-time
+       layer, hidden during playback whatever the switch says. Its motion is
+       the second switch, off to begin with under prefers-reduced-motion. -->
+  <div class="grp">
+    <div class="grp-h">Atmosphere</div>
+    <div class="tog on" data-layer="clouds"><span>Cloud cover</span><div class="sw"></div></div>
+    <div class="tog on" data-layer="weather"><span>Animate weather</span><div class="sw"></div></div>
   </div>
 </div>
 
@@ -760,6 +797,7 @@ body.ambient .mtab{display:none}
     <li><b>Volcanism &amp; impacts</b> — the IUGS Large Igneous Provinces Commission record and Ernst's LIP compilation, the Earth Impact Database and Schmieder &amp; Kring (2020), with ages taken from the primary geochronology where it has been revised.</li>
     <li><b>Intervals</b> — boundary ages follow the ICS chart v2024/12. Several differ from figures still in wide circulation: base Ordovician is 486.85 Ma, base Cretaceous 143.1 Ma.</li>
     <li><b>Life &amp; biomes</b> — biome names are chosen to suit their period rather than the present: there is no grassland before the Cenozoic, and before land plants the terrestrial world is microbial crust and bare regolith.</li>
+    <li><b>Clouds</b> — NASA <i>Blue Marble: Clouds</i> (NASA/Goddard Space Flight Center, image by Reto Stöckli), a multi-day composite of visible and polar thermal-infrared imagery published 11 February 2002, reduced to a 4096&nbsp;×&nbsp;2048 cloud-density field. It is one moving composite with small bounded deformation, its opacity broadly adapted to each era's modelled land rainfall and shown only while time is paused: satellite-derived visual structure with illustrative climate adaptation, not reconstructed weather for any date and not a forecast. Provenance and reuse guidance travel with the image in <code>imagery/nasa-clouds.json</code>.</li>
     <li><b>Illustrations</b> — most are silhouettes from <a href="https://www.phylopic.org/" target="_blank" rel="noopener">PhyloPic</a>, traced by their contributors from skeletal reconstructions and life restorations, used under CC0, Public Domain Mark or CC-BY and credited individually in the About page. A silhouette is one artist's reading of an incomplete fossil, not a photograph. Where PhyloPic has nothing to trace — an assemblage like a reef, a sedimentary structure like a stromatolite — the drawing is schematic.</li>
   </ul>
   <p class="note">Pre-540 Ma and future frames are authored reconstructions (real cratons rotated into supercontinent fits) and are illustrative rather than exact. Deep-time positions carry real uncertainty; treat this as a visualization of the published record, not a precise map.</p>
@@ -830,7 +868,7 @@ body.ambient .mtab{display:none}
             <div class="card"><div class="k"><span class="dot" style="background:#c9a86a"></span><h3>Photoreal terrain</h3></div><p>Per-pixel relief and hillshade, slope-bare rock on mountain flanks, and glaciers from a snowline that answers to both cold and snowfall &mdash; including the Cryogenian, where the ice reaches the equator and life holds on in thin refugia.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#5f86a8"></span><h3>A modelled sea floor</h3></div><p>Ridges, transforms, fracture zones, trenches and abyssal-hill fabric, all derived from each age's own spreading system &mdash; depth from half-space cooling, texture from the fault mechanism that makes it.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-teal)"></span><h3>Rivers, marshes &amp; deltas</h3></div><p>Modeled drainage read from the lows of the reconstructed terrain and weighted by rainfall &mdash; channels in the valleys, marshes in wet flats, deltas at wet coasts.</p></div>
-            <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>A cloud layer driven by each era's own rainfall (tropical convergence, storm tracks, clear desert belts), a day/night terminator, limb haze, and era-appropriate ocean colour.</p></div>
+            <div class="card"><div class="k"><span class="dot" style="background:#dfe6ef"></span><h3>Sky &amp; sea</h3></div><p>NASA's Blue Marble cloud field in slow coherent motion while time is paused, its opacity adapted to each era's own rainfall and land, a day/night terminator, limb haze, and era-appropriate ocean colour. The clouds are satellite-derived structure with illustrative climate adaptation, not the weather of any ancient day.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#d2662f"></span><h3>Deep-time events</h3></div><p>73 confirmed impact structures and 37 large igneous provinces, each carried along its plate toward where that crust sat at the time (an estimate that recovers direction better than distance).</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:#8fae5c"></span><h3>The fossil record</h3></div><p>Characteristic life per region and interval &mdash; flora and fauna drawn from the record, with hand-made illustrations &mdash; plus named seas, deserts, plateaus and lakes.</p></div>
             <div class="card"><div class="k"><span class="dot" style="background:var(--ap-amber-soft)"></span><h3>The future</h3></div><p>Solar brightening and the next supercontinent &mdash; the most uncertain stretch of the timeline, shown as one plausible scenario with the land biosphere thinning toward refugia.</p></div>
@@ -1019,6 +1057,263 @@ window.addEventListener('error',e=>{
 window.addEventListener('unhandledrejection',e=>{
   window.__ERRORS.push('unhandled rejection: '+(e.reason&&e.reason.message||e.reason));
 });
+</script>
+<script>
+/* Tectonic Earth -- the request broker and the pure time policy.
+
+   index.html loads this before app.js; build_site.py inlines it into the
+   deployed page in the same order. It has no DOM and no three.js in it, so
+   build/test_loader.mjs can load it into Node and test the contracts below
+   against the shipped timeline.
+
+   Adapted from Tectonic Atlas's asset-loader.js and surface-policy.js
+   (commit cb57e9f, 2026-09-06) for the port of 2026-09-07. The parts of
+   Atlas's policy that belonged to its lighter renderer -- its field subset,
+   its mesh caps -- are deliberately not here; the original terrain shader
+   decides what it needs (see FIELD_KINDS in app.js).
+
+   THE BROKER. One bounded queue for every field, sheet and imagery fetch:
+   the same URL asked for twice is one request; a request's priority is
+   raised when a later caller wants it sooner; the keyframes the viewer is
+   at come first; and when the viewer seeks somewhere else, queued and active
+   requests for keyframes no longer wanted are cancelled (aborted) rather
+   than left to drain ahead of the new target. Six concurrent fetches and a
+   small compressed LRU are Atlas's starting settings, not constants of the
+   hardware; the browser's HTTP cache remains the compressed archive.
+
+   MISSING IS NOT THE SAME AS UNAVAILABLE. Only HTTP 404 and 410 mean a
+   field is genuinely absent (not every keyframe has every kind). A timeout,
+   an abort, a 5xx or a network failure rejects with a retryable error, and a
+   request superseded by a seek rejects with `superseded` set -- the caller
+   must not record either as a missing field. fetch is called as a FUNCTION:
+   a browser rejects fetch invoked as a method with a non-Window receiver. */
+(function (root) {
+  class TectonicLoader {
+    constructor({fetcher, concurrency = 6, maxBytes = 8 * 1024 * 1024} = {}) {
+      // Bind at CALL time, not construction time: the verification driver
+      // wraps window.fetch to simulate latency after the app has booted.
+      this.fetcher = fetcher ? (...args) => fetcher(...args) : (...args) => fetch(...args);
+      this.concurrency = concurrency;
+      this.maxBytes = maxBytes;
+      this.active = 0;
+      this.queue = [];
+      this.pending = new Map();
+      this.cache = new Map();
+      this.bytes = 0;
+      this.running = new Set();
+      this.frames = null;          // keyframes still wanted (null: everything)
+      this.primaryFrames = new Set();
+      /* Measured latency, an EMA of successful fetches in ms, so the playback
+         look-ahead can be sized by what the connection actually does rather
+         than by a constant. Counters are for the perf HUD and the harness. */
+      this.stats = {fetched: 0, bytes: 0, cancelled: 0, failed: 0, missing: 0, msEMA: 0};
+    }
+    cancelled() {
+      const error = new Error('Superseded by the selected geological time');
+      error.name = 'AbortError';
+      error.superseded = true;
+      return error;
+    }
+    /* The keyframes the viewer wants now, and the two they are between.
+       Queued work for any other keyframe is rejected as superseded; active
+       requests for them are aborted. Requests without a frame (imagery, the
+       manifest) are never touched. */
+    retargetFrames(frames, primary) {
+      this.frames = new Set(frames);
+      this.primaryFrames = new Set(primary);
+      const stale = (job) => job.frame !== null && !this.frames.has(job.frame);
+      this.queue = this.queue.filter((job) => {
+        if (!stale(job)) return true;
+        this.pending.delete(job.url);
+        this.stats.cancelled++;
+        job.reject(this.cancelled());
+        return false;
+      });
+      for (const job of this.running)
+        if (stale(job) && !job.cancelled) {
+          job.cancelled = true;
+          this.stats.cancelled++;
+          if (job.controller) job.controller.abort();
+        }
+      this.pump();
+    }
+    get(url, priority = 0, frame = null) {
+      if (frame !== null && this.frames && !this.frames.has(frame))
+        return Promise.reject(this.cancelled());
+      if (this.cache.has(url)) {
+        const value = this.cache.get(url);
+        this.cache.delete(url);
+        this.cache.set(url, value);
+        return Promise.resolve(value);
+      }
+      if (this.pending.has(url)) {
+        const job = this.pending.get(url);
+        job.priority = Math.max(job.priority, priority);
+        // A frame that has become current promotes its queued work.
+        if (frame !== null && job.frame !== null && this.primaryFrames.has(frame)) job.frame = frame;
+        return job.promise;
+      }
+      const job = {url, priority, frame, cancelled: false, controller: null};
+      job.promise = new Promise((resolve, reject) => {
+        job.resolve = resolve;
+        job.reject = reject;
+      });
+      this.pending.set(url, job);
+      this.queue.push(job);
+      this.pump();
+      return job.promise;
+    }
+    async run(job) {
+      let error;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        if (job.cancelled) throw this.cancelled();
+        job.controller = new AbortController();
+        const timeout = setTimeout(() => job.controller.abort(), 15000);
+        const t0 = (typeof performance !== 'undefined' ? performance : Date).now();
+        try {
+          const response = await this.fetcher(job.url, {
+            priority: job.priority > 5 ? 'high' : 'low',
+            signal: job.controller.signal,
+          });
+          if (!response.ok) {
+            const e = new Error('Asset request returned ' + response.status);
+            e.status = response.status;
+            throw e;
+          }
+          const blob = await response.blob();
+          const ms = (typeof performance !== 'undefined' ? performance : Date).now() - t0;
+          this.stats.fetched++;
+          this.stats.bytes += blob.size;
+          this.stats.msEMA = this.stats.msEMA ? this.stats.msEMA * 0.8 + ms * 0.2 : ms;
+          if (blob.size <= this.maxBytes) {
+            this.cache.set(job.url, blob);
+            this.bytes += blob.size;
+            while (this.bytes > this.maxBytes && this.cache.size) {
+              const key = this.cache.keys().next().value;
+              this.bytes -= this.cache.get(key).size;
+              this.cache.delete(key);
+            }
+          }
+          return blob;
+        } catch (e) {
+          if (job.cancelled) throw this.cancelled();
+          error = e;
+          if (e.status === 404 || e.status === 410) { this.stats.missing++; break; }
+          if (attempt === 0) await new Promise((r) => setTimeout(r, 200));
+        } finally {
+          clearTimeout(timeout);
+        }
+      }
+      this.stats.failed++;
+      throw error;
+    }
+    pump() {
+      const rank = (job) =>
+        job.frame === null
+          ? job.priority
+          : (this.primaryFrames.has(job.frame) ? 100 : 0) + job.priority;
+      this.queue.sort((a, b) => rank(b) - rank(a));
+      while (this.active < this.concurrency && this.queue.length) {
+        const job = this.queue.shift();
+        this.active++;
+        this.running.add(job);
+        this.run(job)
+          .then(job.resolve, job.reject)
+          .finally(() => {
+            this.active--;
+            this.running.delete(job);
+            this.pending.delete(job.url);
+            this.pump();
+          });
+      }
+    }
+    /* True for an error a caller may retry later; false for a genuinely
+       absent asset or a superseded request. */
+    static retryable(error) {
+      return !(error && (error.superseded || error.status === 404 || error.status === 410));
+    }
+  }
+
+  const TectonicPolicy = {
+    /* THE EXACT TIME BRACKET. Binary search over the ascending keyframe ages:
+       an age that IS a keyframe returns that keyframe alone ({i,j:i,t:0}), a
+       fractional age its actual adjacent pair, the ends clamp. The old linear
+       scan returned (the next younger keyframe, this one, t=1) at an exact
+       keyframe, so every marker jump bound the interval fields of the
+       neighbour (README 7.16). A non-finite age is the first keyframe rather
+       than an exception: this runs inside the render loop. */
+    frameAt(ages, age) {
+      const n = ages.length;
+      if (!n) return {i: 0, j: 0, t: 0};
+      if (!Number.isFinite(age) || age <= ages[0]) return {i: 0, j: 0, t: 0};
+      if (age >= ages[n - 1]) return {i: n - 1, j: n - 1, t: 0};
+      let lo = 0, hi = n - 1;
+      while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        if (ages[mid] === age) return {i: mid, j: mid, t: 0};
+        if (ages[mid] < age) lo = mid + 1;
+        else hi = mid - 1;
+      }
+      return {i: hi, j: lo, t: (age - ages[hi]) / (ages[lo] - ages[hi])};
+    },
+    /* Clouds are a paused-time layer: geological playback exposes the
+       surface, and hiding them never changes the user's layer setting. */
+    cloudsVisible(state) {
+      return !state.playing && state.shade !== 'schem' && state.layers.clouds !== false;
+    },
+    weatherActive(state, hidden) {
+      return !hidden && TectonicPolicy.cloudsVisible(state) && state.layers.weather !== false;
+    },
+    /* Weather seconds per rendered frame: real time, clamped at a tenth of a
+       second so returning to a tab does not leap through weather phases. */
+    weatherStep(milliseconds, active) {
+      return active ? Math.max(0, Math.min(0.1, milliseconds / 1000)) : 0;
+    },
+    /* How many keyframes AHEAD playback should keep warm: enough to cover a
+       fetch, a decode and two seconds of slack at this speed, clamped so the
+       fastest playback stays fed without warming the whole timeline. */
+    lookahead(speedMyrPerS, fetchMs, decodeMs, lean) {
+      if (lean) return 2;
+      const secs = ((fetchMs || 300) + (decodeMs || 150)) / 1000 + 2.0;
+      return Math.max(3, Math.min(8, Math.ceil((speedMyrPerS || 3) * secs / 5)));
+    },
+    /* Modelled global mean surface temperature at an age, from the shipped
+       timeline's gmst column: exact at a keyframe, linear between adjacent
+       keyframes, clamped at the ends. Returns null for empty or malformed
+       data. Never sorts the timeline: its indices address the fields. */
+    gmstAt(timeline, age) {
+      if (!Array.isArray(timeline) || !timeline.length || !Number.isFinite(age)) return null;
+      const ages = timeline.map((f) => f && f.age);
+      if (ages.some((a) => !Number.isFinite(a))) return null;
+      const f = TectonicPolicy.frameAt(ages, age);
+      const A = timeline[f.i], B = timeline[f.j];
+      if (!Number.isFinite(A.gmst) || !Number.isFinite(B.gmst)) return null;
+      return A.gmst + (B.gmst - A.gmst) * f.t;
+    },
+    /* The chart's axes: 1000 Ma at the left edge, the present 80% across,
+       +250 Myr at the right; temperature on a fixed scale that the data must
+       fit inside, widened (never clipped) if a future table exceeds it. */
+    chartX(age, width) {
+      return (1000 - age) / 1250 * width;
+    },
+    chartScale(timeline) {
+      let lo = -50, hi = 40;
+      for (const f of timeline || []) {
+        if (!f || !Number.isFinite(f.gmst)) continue;
+        if (f.gmst < lo) lo = Math.floor(f.gmst / 10) * 10 - 10;
+        if (f.gmst > hi) hi = Math.ceil(f.gmst / 10) * 10 + 10;
+      }
+      return {lo, hi};
+    },
+    chartY(gmst, scale, top, bottom) {
+      const c = Math.max(scale.lo, Math.min(scale.hi, gmst));
+      return bottom - ((c - scale.lo) / (scale.hi - scale.lo)) * (bottom - top);
+    },
+  };
+
+  root.TectonicLoader = TectonicLoader;
+  root.TectonicPolicy = TectonicPolicy;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
 </script>
 <script>
 /* GENERATED by build/check_shader.py from web/shaders/*.glsl -- do not edit. */
@@ -5382,47 +5677,198 @@ void main(){
   gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);
 } 
 `,
-CFRAG:`    precision highp float;
-    uniform sampler2D rainA, rainB; uniform float mixf, uTime, uCloud;
-    varying vec2 vUv; varying vec3 vN;
-    uniform sampler2D uNz;
-    /*@cnoise*/
-    float cfb(vec3 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*cn(p);p*=2.03;a*=0.5;}return s;}
-    void main(){
-      float lat=90.0-vUv.y*180.0;
-      float al=abs(lat);
-      float rain=mix(texture2D(rainA,vUv).r, texture2D(rainB,vUv).r, mixf);
-      float itcz=exp(-pow(lat/9.0,2.0));                 // tropical convection band
-      float storm=exp(-pow((al-52.0)/13.0,2.0));         // mid-latitude storm tracks
-      float subtrop=1.0-0.75*exp(-pow((al-25.0)/10.0,2.0)); // clear subtropical highs
-      // Rainfall drives cloudiness, but with a soft CEILING: orographic and
-      // monsoon coasts spike the rain field, and feeding that in raw piled the
-      // cloud into a solid bright-white glow. This rolls off so heavy rain adds
-      // little more than moderate rain.
-      float rn=rain/(rain+0.55);                          // 0..~0.9, saturating
-      float base=(rn*1.0+itcz*0.42+storm*0.38)*subtrop*uCloud;
-      // weather cells, drifting slowly westward. Weight the fBm heavily so the
-      // latitude bands read as broken cloud fields, not painted stripes.
-      float lon=vUv.x*360.0-180.0+uTime*0.6;
-      float cl=cos(radians(lat));
-      vec3 d=vec3(cl*cos(radians(lon)), sin(radians(lat)), cl*sin(radians(lon)));
-      float tex=cfb(d*3.2)*0.5+cfb(d*7.5+5.0)*0.32+cfb(d*17.0+13.0)*0.18;
-      /* G4 (2026-08-01): the broad low-density skirt rendered as grey haze
-         smudges over land at continent zoom (the Sahul frame). A later onset
-         and a contrast power thin the skirt to nothing while the cores keep
-         their footprint. */
-      float dens=pow(smoothstep(0.58,1.10, base*0.5+tex*0.9),1.25);
-      // Self-shadow: an offset noise darkens parts of the deck so the cloud has
-      // relief and volume instead of reading as a flat glowing sheet.
-      float shade=0.80+0.20*smoothstep(0.25,0.85, cfb(d*10.0+30.0));
-      // soften at the limb so the shell has no hard silhouette ring
-      float face=smoothstep(0.12,0.5,vN.z);
-      gl_FragColor=vec4(vec3(0.90,0.92,0.95)*shade, clamp(dens,0.0,1.0)*0.68*face);
-    }
+CFRAG:`precision highp float;
+/* THE CLOUD LAYER (the Atlas port, 2026-09-07): NASA's Blue Marble cloud
+   field, moving. The old shell composed clouds from the rainfall field and
+   noise; this one samples a 4096x2048 scalar derivative of NASA's cloud-only
+   composite (NASA/Goddard Space Flight Center, image by Reto Stoeckli;
+   web/imagery/nasa-clouds.json carries the provenance) as ONE continuous
+   field in coherent transport -- 0.004 radians per weather second, a
+   bounded latitude shear and gently varying deformation, never accumulated
+   strain and never a crossfade between phases, which is what keeps fronts
+   connected and storms single. The selected era adapts it: the shared
+   elevation and rainfall pair gives a land mask and a broad land-normalised
+   wetness that modulates optical depth gently, and uEra shifts the
+   arrangement. Rainfall is land-only, so an ocean zero is never read as
+   dryness. This is satellite-derived visual structure with illustrative
+   climate adaptation, not reconstructed weather for any date.
+
+   Six samplers, separate from the terrain shader's sixteen: the pair's
+   elevation and rainfall (the terrain's own uniform objects, so the clouds
+   can only ever see the world the ground shows), the noise lattice (uNz,
+   shared, injected at the marker below) and the cloud image. uRainReady is
+   1 only while the rainfall bound matches the elevation bound; otherwise a
+   neutral wetness stands in and no fallback ever reaches the terrain's
+   uniforms. uTemp is the era's temperature PARAMETER (-1..1, present -0.55),
+   not a temperature in degrees. uCloudDetailBlend fades the image in from
+   the noise fallback as it arrives; uCloud is the final visibility (fade and
+   close-view attenuation); uShadow selects the shadow pass; uCloudMap maps
+   the Mollweide plane. Derivatives (dFdx/dFdy) shape the billows, so the
+   material must enable them. */
+uniform sampler2D rainA,rainB,elevA,elevB,uNz,uCloudDetail;
+uniform float mixf,uWeatherTime,uCloud,uShadow,uCloudMap,uMapLon,uRainReady,uEra,uTemp;
+uniform float uCloudDetailBlend;
+varying vec2 vUv;varying vec3 vN;
+const float PI=3.14159265359;
+/*@cnoise*/
+vec3 sphere(float lon,float lat){return vec3(cos(lat)*cos(lon),sin(lat),cos(lat)*sin(lon));}
+vec2 climateAt(vec2 q){
+  q=vec2(fract(q.x),clamp(q.y,0.001,0.999));
+  float a=texture2D(elevA,q).r*2.0-1.0;
+  float h=sign(a)*a*a*8000.0,rain=texture2D(rainA,q).r;
+  if(mixf>0.00001){
+    float b=texture2D(elevB,q).r*2.0-1.0;
+    h=mix(h,sign(b)*b*b*8000.0,mixf);
+    rain=mix(rain,texture2D(rainB,q).r,mixf);
+  }
+  float land=smoothstep(-80.0,160.0,h);
+  return vec2(land,rain);
+}
+vec2 satelliteWeather(float lon,float lat,float gain,float dry){
+  // One unbroken observed cloud field preserves real fronts, spirals and
+  // clear slots. Only bounded residual flow deforms it; strain cannot grow.
+  float t=uWeatherTime;
+  float sourceLon=lon-mod(t*0.0040,2.0*PI)+sin(uEra*0.003)*0.9;
+  vec3 p=sphere(sourceLon,lat);
+  vec3 seed=vec3(7.0,19.0,11.0)+uEra*0.001;
+  float n0=cn(p*2.0+seed)-0.5;
+  float n1=cn(p*2.0+seed+vec3(11.0,7.0,19.0))-0.5;
+  float belt=smoothstep(0.384,0.785,abs(lat));
+  float shear=mix(-1.0,1.0,belt)*0.060*sin(t*0.017);
+  float bend=0.045*n0*sin(t*0.023+1.4);
+  float lift=0.045*cos(lat)*n1*sin(t*0.019+0.7);
+  // Keep longitude unwrapped for continuous mip derivatives at the dateline.
+  vec2 q=vec2((sourceLon+shear+bend)/(2.0*PI)+0.5,(lat+lift)/PI+0.5);
+  float raw=texture2D(uCloudDetail,q).r;
+  float broad=texture2D(uCloudDetail,q,2.0).r;
+  float d=smoothstep(0.025+dry*0.045,0.98,raw);
+  float tau=2.8*pow(d,1.25)*gain;
+  float height=pow(max(broad,0.0),1.4)*gain;
+  return vec2(tau,height);
+}
+vec2 fallbackWeather(float lon,float lat,float gain){
+  vec3 p=sphere(lon-uWeatherTime*0.004,lat);
+  float n=cn(p*3.5+vec3(17.0,5.0,29.0)+uEra*0.01);
+  float f=cn(p*17.0+vec3(3.0,23.0,11.0));
+  float density=smoothstep(0.54,0.78,n)*(0.4+0.6*f);
+  return vec2(density*2.0*gain,density);
+}
+void main(){
+  vec2 uv=vUv;
+  if(uCloudMap>0.5){
+    float X=(uv.x*2.0-1.0)*2.0,Y=uv.y*2.0-1.0;
+    if(X*X*0.25+Y*Y>1.0)discard;
+    float th=asin(clamp(Y,-1.0,1.0)),c=cos(th);
+    if(abs(c)<0.00001)discard;
+    float lon=PI*X/(2.0*c);
+    if(abs(lon)>PI)discard;
+    float lat=asin(clamp((2.0*th+sin(2.0*th))/PI,-1.0,1.0));
+    uv=vec2((lon+uMapLon)/(2.0*PI)+0.5,0.5+lat/PI);
+  }
+  float t=uWeatherTime,lat=(uv.y-0.5)*PI,al=abs(degrees(lat));
+  float lon=(uv.x-0.5)*2.0*PI;
+  // Land-only rainfall is averaged over a broad neighborhood. Climate
+  // modulates optical depth gently; it never chops fronts into noise puffs.
+  vec2 off=vec2((3.0/360.0)/max(0.35,cos(lat)),3.0/180.0);
+  vec2 climate=climateAt(uv)*0.5+climateAt(uv+off)*0.25+climateAt(uv-off)*0.25;
+  float land=smoothstep(0.08,0.92,climate.x);
+  float rain=climate.y/max(climate.x,0.12);
+  float wet=mix(0.30,smoothstep(0.025,0.52,rain),uRainReady);
+  float dry=land*(1.0-wet);
+  float gain=mix(0.94,mix(0.50,1.12,wet),land);
+  gain*=0.60+0.40*smoothstep(-5.0,-1.5,uTemp);
+  vec2 cloud;
+  if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
+  else{
+    cloud=fallbackWeather(lon,lat,gain);
+    if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
+  }
+  float mu=uCloudMap>0.5?1.0:max(normalize(vN).z,0.0);
+  float path=mix(1.0,1.35,1.0-mu);
+  float alpha=1.0-exp(-cloud.x*path);
+  float lit=uCloudMap>0.5?1.0:smoothstep(-0.06,0.18,dot(normalize(vN),normalize(vec3(0.54,0.22,0.86))));
+  float face=uCloudMap>0.5?1.0:smoothstep(-0.05,0.18,vN.z);
+  if(uShadow>0.5){gl_FragColor=vec4(0.012,0.025,0.045,(1.0-exp(-cloud.x*0.30))*0.26*uCloud*face*lit);return;}
+  // A smooth height proxy gives billows relief; use the geographic footprint
+  // to keep it stable between the globe, Map and different pixel densities.
+  vec3 geo=sphere(lon,lat);
+  float footprint=max(length(dFdx(geo))+length(dFdy(geo)),0.0001);
+  float relief=min(18.0,0.025/footprint);
+  vec3 bumpN=normalize(vec3(-dFdx(cloud.y)*relief,-dFdy(cloud.y)*relief,1.0));
+  vec3 L=normalize(vec3(0.54,0.22,0.86));
+  float shade=0.70+0.30*max(dot(bumpN,L),0.0);
+  float rim=0.08*pow(1.0-max(bumpN.z,0.0),3.0);
+  vec3 daylight=vec3(0.95,0.975,1.0)*(shade+rim);
+  vec3 linear=mix(vec3(0.002,0.004,0.009),daylight,lit);
+  vec3 color=pow(max(linear,vec3(0.0)),vec3(1.0/2.2));
+  gl_FragColor=vec4(color,alpha*uCloud*face);
+}
 `,
 CVERT:`varying vec2 vUv; varying vec3 vN;
     void main(){ vUv=uv; vN=normalize(normalMatrix*normal);
       gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} 
+`,
+PFRAG:`precision highp float;
+/* THE TIME PREVIEW (the Atlas port, 2026-09-07). A 4096x2048 atlas holds a
+   256x128 thumbnail of every keyframe's shipped world sheet, sixteen to a
+   row in timeline order. While a seek's full-resolution fields are still
+   arriving, the globe and the map draw the requested age from the two
+   thumbnails it sits between instead of leaving the previous world on
+   screen under a new age. It is loading feedback and nothing more: no
+   height, no interval warp, no procedural detail, and it is replaced by the
+   terrain shader the moment the requested pair is resident. UVs clamp to
+   the cell's texel centres so a bilinear tap can never read the neighbouring
+   keyframe, and the texture carries no mip chain for the same reason. The
+   terminator, limb and schematic tint are the lite material's own, so the
+   handoff to the settled picture changes detail, not light. */
+uniform sampler2D uPreview;
+uniform vec2 uFrames, uPreviewTexel;
+uniform float mixf, uMapProj, uMapLon, uSchem;
+varying vec2 vUv; varying vec3 vVN;
+const float PI=3.14159265359;
+vec3 frameColor(float frame, vec2 uv){
+  // the bitmap is decoded pre-flipped, so row 0 of the atlas is the TOP of the texture
+  vec2 cell=vec2(mod(frame,16.0), 15.0-floor(frame/16.0));
+  vec2 local=clamp(vec2(fract(uv.x),uv.y), uPreviewTexel*8.0, vec2(1.0)-uPreviewTexel*8.0);
+  return texture2D(uPreview,(cell+local)/16.0).rgb;
+}
+void main(){
+  vec2 uv=vUv;
+  if(uMapProj>0.5){
+    float X=(uv.x*2.0-1.0)*2.0, Y=uv.y*2.0-1.0;
+    if(X*X*0.25+Y*Y>1.0) discard;
+    float th=asin(clamp(Y,-1.0,1.0)), c=cos(th);
+    if(abs(c)<0.00001) discard;
+    float lon=PI*X/(2.0*c);
+    if(abs(lon)>PI) discard;
+    float lat=asin(clamp((2.0*th+sin(2.0*th))/PI,-1.0,1.0));
+    uv=vec2(fract((lon+uMapLon)/(2.0*PI)+0.5), 0.5+lat/PI);
+  }
+  vec3 col=mix(frameColor(uFrames.x,uv), frameColor(uFrames.y,uv), mixf);
+  if(uSchem>0.001){
+    float lum=dot(col,vec3(0.299,0.587,0.114));
+    // no height field here: a thumbnail's blue reads as water for the tint
+    float land=step(col.b, max(col.r,col.g)*1.05);
+    vec3 sc=(land<0.5)?vec3(0.16,0.28,0.40):vec3(0.86,0.83,0.74);
+    sc*=(0.82+0.36*lum);
+    col=mix(col,sc,uSchem);
+  }
+  if(uSchem<0.5 && uMapProj<0.5){
+    float sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
+    float lit=smoothstep(-0.15,0.20,sd);
+    vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
+    float dusk=exp(-pow(sd/0.12,2.0))*lit;
+    col=mix(nightCol, col, lit);
+    col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
+    float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0);
+    col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
+  }
+  gl_FragColor=vec4(col,1.0);
+}
+`,
+PVERT:`varying vec2 vUv; varying vec3 vVN;
+void main(){ vUv=uv; vVN=normalize(normalMatrix*normal);
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}
 `};
 </script>
 <script>
@@ -5446,7 +5892,10 @@ const state={
      lines are DOM/overlay and stay native-sharp) and steps back up when
      there is headroom. 'full' pins native; 'balanced'/'perf' pin lower. */
   quality:(function(){try{return localStorage.getItem('te_quality')||'auto';}catch(e){return 'auto';}})(),
-  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false},
+  /* clouds: the satellite cloud layer (paused time only); weather: whether it
+     moves. Reduced motion starts with the weather still (the Atlas port). */
+  layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false,
+          clouds:true,weather:!matchMedia('(prefers-reduced-motion: reduce)').matches},
   ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null,
   // rot/tilt are the LONGITUDE and LATITUDE of the point the camera looks at.
   // gtilt and head are the Google Earth pair layered on top: how far the camera
@@ -5521,12 +5970,47 @@ function nearestResidentE(target){
   return bi;
 }
 const _bmMissing=new Set();   // kind+i whose file genuinely 404s (legit: not every keyframe has every kind)
+/* THE REQUEST BROKER (the Atlas port, 2026-09-07; web/loader.js). Every
+   field, sheet and imagery fetch goes through one bounded queue: the same URL
+   is one request however many callers want it, the keyframes the viewer is
+   at go first, and a seek cancels the queued and in-flight requests for
+   keyframes it left behind -- retargetLoads() in loop() -- so a fast series
+   of jumps does not drain a backlog of ages nobody is looking at ahead of the
+   one they stopped on. Six concurrent fetches and an 8 MiB compressed LRU
+   are Atlas's starting settings; the browser's HTTP cache is still the
+   compressed archive, and decoded pixels stay the residency WINDOW above.
+
+   MISSING IS NOT UNAVAILABLE. Only a 404/410 marks a field absent at a
+   keyframe (legitimate: not every keyframe has every kind). A timeout, an
+   abort, a 5xx or a network failure is retried after three seconds, and a
+   request a seek superseded is no outcome at all -- the old loader recorded
+   every settled fetch as tried, so one dropped packet made a field
+   permanently missing until reload. */
+const LOADER=new TectonicLoader({concurrency:6,maxBytes:8*1048576});
+const _fieldRetryAt=new Map();   // kind+i -> performance.now() before which a transient failure is left alone
+let _decodeEMA=0;                // ms an elevation-sized createImageBitmap takes here (sizes the playback look-ahead)
+function fieldBlob(i,kind,priority){return LOADER.get(fieldSrc(fieldFile(i,kind)),priority,i);}
+function _fieldFailed(key,error){
+  if(error&&error.superseded)return;                              // a seek moved on: not an outcome
+  if(!TectonicLoader.retryable(error)){_bmMissing.add(key);_fieldTried.add(key);return;}   // absent at this keyframe
+  _fieldRetryAt.set(key,performance.now()+3000);                  // transient: ask again in a while
+}
 function _cacheTouch(e){e.u=++texClock;}
+/* Eviction never takes the pair the age asks for, even before it is bound:
+   during the overlap between an old on-screen pair and an incoming one, the
+   LRU sees the incoming elevations as cold (nothing has drawn them yet) and
+   the old ones as pinned, and with a full window it would evict the very
+   textures the seek is waiting for -- a stall that looked like a slow
+   network. Guard the requested pair's essential kinds and stacks. */
 function _cacheEvict(keepKey){
+  const guard=new Set(keepKey?[keepKey]:[]);
+  if(DATA.timeline){const f=frameAt(state.age);
+    for(const k of ['e','r','v','p']){guard.add(k+f.i);guard.add(k+f.j);}
+    guard.add('s'+f.i);guard.add('s'+f.j);}
   while(_texBytes>TEX_BUDGET&&TEXCACHE.size>1){
     let victim=null,best=Infinity;
     for(const[k,v]of TEXCACHE){
-      if(k===keepKey)continue;
+      if(guard.has(k))continue;
       const ba=_boundAt.get(k);
       if(ba!==undefined&&_frameNo-ba<3)continue;   // on screen -- never evict
       if(v.u<best){best=v.u;victim=k;}}
@@ -5551,14 +6035,18 @@ function ensureBitmap(kind,i,force){
   const e0=TEXCACHE.get(key);
   if(e0&&e0.bm)return Promise.resolve();
   if(_bmMissing.has(key))return Promise.resolve();
+  if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_bmPending.get(key); if(p0)return p0;
-  const pri=(kind==='e'||kind==='r')?'high':'low';
-  const p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
-    .then(r=>{if(!r.ok)throw 0;return r.blob();})
-    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',
-      premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+  // Elevation defines the world, then the kinds that define how time LOOKS
+  // between keyframes (KIND_PRIORITY), then the rest.
+  const pri=kind==='e'?20:(kind==='r'||kind==='v'||kind==='p')?15:10;
+  let t0=0;
+  const p=fieldBlob(i,kind,pri)
+    .then(b=>{t0=performance.now();return createImageBitmap(b,{imageOrientation:'flipY',
+      premultiplyAlpha:'none',colorSpaceConversion:'none'});})
     .then(bm=>{
       _bmPending.delete(key);
+      if(kind==='e'){const ms=performance.now()-t0;_decodeEMA=_decodeEMA?_decodeEMA*0.8+ms*0.2:ms;}
       /* A scrub kicked decodes for every age the slider swept past; by the
          time one completes the viewer may be hundreds of Myr away. Inserting
          it would evict something wanted; close it instead -- the HTTP cache
@@ -5574,7 +6062,7 @@ function ensureBitmap(kind,i,force){
       TEXCACHE.set(key,e);_texBytes+=e.b;_cacheTouch(e);
       _cacheEvict(key);
     })
-    .catch(()=>{_bmPending.delete(key);_bmMissing.add(key);});
+    .catch(err=>{_bmPending.delete(key);_fieldFailed(key,err);});
   _bmPending.set(key,p);
   return p;
 }
@@ -5742,8 +6230,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260904-0522';
+const DATA_V='20260907-2103';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
+/* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
+   field and the timeline preview atlas. Bumped by hand when their bytes
+   change; the preview must be regenerated whenever the shipped sheets are
+   (build/build_timeline_preview.py checks their hashes). */
+const IMAGERY_V='20260907';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -5863,28 +6356,32 @@ function drawFieldImage(cx,img,w,h){
 function loadField(i,kind,boot){
   const key=kind+i;
   if(_fieldTried.has(key))return Promise.resolve();
+  if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_fieldPending.get(key); if(p0)return p0;
   const arr=FIELD_KINDS.find(k=>k[0]===kind)[1]();
   if(boot)_bootWant++;
-  // Mark tried on BOTH paths. A 404 is legitimate here -- a keyframe may have
-  // no lake field -- and retrying it forever would make the prefetch pump spin.
+  /* Tried means an OUTCOME: the bytes arrived, or the server said the file
+     does not exist (a 404 is legitimate here -- a keyframe may have no lake
+     field -- and retrying it forever would make the prefetch pump spin). A
+     transient failure or a superseded request is neither, and the pump asks
+     again; see _fieldFailed. */
   const fin=()=>{
-    _fieldPending.delete(key);_fieldTried.add(key);
+    _fieldPending.delete(key);
     if(boot){_bootGot++;const el=$('#loadPct');
       if(el)el.textContent=Math.round(_bootGot/Math.max(_bootWant,1)*100)+'%';}};
   let p;
   if(_BITMAPS){
     /* Fetch and DISCARD: this populates the browser's HTTP cache (compressed
-       bytes, disk-backed, browser-managed) and nothing else. Decoding into
-       memory is ensureBitmap's job, and only for the residency window --
-       decoding everything here is the exact mistake that pinned gigabytes of
-       IOSurfaces and crashed the tab. Elevation and rainfall still ride at
-       high priority; the refinement kinds follow. */
-    const pri=(kind==='e'||kind==='r')?'high':'low';
-    p=fetch(fieldSrc(fieldFile(i,kind)),{priority:pri})
-      .then(r=>{if(!r.ok)throw 0;return r.blob();})
-      .then(()=>fin())
-      .catch(fin);
+       bytes, disk-backed, browser-managed) and the broker's small compressed
+       LRU, nothing else. Decoding into memory is ensureBitmap's job, and only
+       for the residency window -- decoding everything here is the exact
+       mistake that pinned gigabytes of IOSurfaces and crashed the tab. The
+       opening pair outranks everything; speculative warming runs below the
+       kinds a seek is waiting on. */
+    p=fieldBlob(i,kind,boot?30:5)
+      .then(()=>{_fieldTried.add(key);})
+      .catch(err=>_fieldFailed(key,err))
+      .finally(fin);
   } else p=new Promise(res=>{
     const img=new Image();
     img.onload=()=>{arr[i]=img;fin();res();};
@@ -5913,7 +6410,7 @@ window.__MEM=()=>{
   for(const[k,v]of TEXCACHE){if(v.bm){n++;bytes+=v.bm.width*v.bm.height*4;}}
   for(const[,get]of FIELD_KINDS){for(const im of get()){if(im&&im.width)legacy++;}}
   return {tried:_fieldTried.size,bitmaps:n,pinnedMB:Math.round(bytes/1048576),
-          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),
+          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),extraMB:Math.round(_extraBytes/1048576),
           entries:TEXCACHE.size,pendingDecodes:_bmPending.size,
           boundE:_lastBoundE,scrubbing:_scrubbing};
 };
@@ -5927,33 +6424,46 @@ function ensureFrames(age,block){
 }
 
 /* PREFETCH, re-centred on every completion. Rather than a fixed queue, ask each
-   time for the nearest keyframe to wherever the viewer is NOW -- so scrubbing
-   across the timeline re-aims the fill instead of waiting out a plan made
-   before they moved. Four at a time: enough to saturate a connection, few
-   enough that a frame the viewer is actually waiting for is not stuck behind a
-   queue of speculative ones. */
+   time for the nearest wanted keyframe to wherever the viewer is NOW -- so
+   scrubbing across the timeline re-aims the fill instead of waiting out a
+   plan made before they moved. Four at a time: enough to saturate a
+   connection, few enough that a frame the viewer is actually waiting for is
+   not stuck behind a queue of speculative ones -- and the broker ranks the
+   pair above them regardless. */
 const PREFETCH_CONCURRENCY=4;
-let _prefetchBusy=0, _prefetchOn=false;
-/* WHAT THE PUMP MAY FETCH (WP-10, A5.5). It used to warm the entire 138 MB
-   timeline into the browser cache on every visit, four files at a time, on
-   battery, on metered connections, and in hidden tabs. Now: a hidden tab
-   fetches nothing until it is shown again; on a metered connection
-   (navigator.connection.saveData) or on battery (navigator.getBattery, where
-   the browser offers it) it fetches only the keyframes within LEAN_RADIUS of
-   the viewer, two at a time -- enough lookahead for playback in either
-   direction, re-aimed on every completion as before -- and the full fill
-   happens only on mains power over an unmetered link. */
-const LEAN_RADIUS=4;
+let _prefetchBusy=0, _prefetchOn=false; const _prefetchFrames=new Set();
+/* WHAT THE PUMP MAY FETCH (WP-10 A5.5, narrowed by the Atlas port). It used
+   to warm the entire 138 MB timeline into the browser cache on every visit,
+   four files at a time, then only on mains power over an unmetered link. Now
+   the neighbourhood is bounded everywhere: paused, three keyframes each way
+   (a scrub either way lands warm); playing, as many keyframes AHEAD as the
+   speed covers in a fetch, a decode and two seconds of slack -- measured
+   here, not assumed (TectonicPolicy.lookahead: 3 at 3 Myr/s, 5 at 10 on a
+   fast link, never more than 8) -- and one behind. A hidden tab fetches
+   nothing until it is shown; a metered link or a battery keeps two. What
+   the pump wants is also the window the broker keeps: retargetLoads()
+   cancels queued and in-flight requests for everything outside it. */
+const LEAN_RADIUS=2;
 let _lean=!!(navigator.connection&&navigator.connection.saveData), _charging=true;
 if(navigator.getBattery){navigator.getBattery().then(b=>{
   const upd=()=>{_charging=b.charging;pumpPrefetch();};
   b.addEventListener('chargingchange',upd);upd();}).catch(()=>{});}
-function prefetchRadius(){return (_lean||!_charging)?LEAN_RADIUS:DATA.timeline.length;}
+function wantedFrames(f){
+  f=f||frameAt(state.age);
+  const n=DATA.timeline.length, out=[f.i]; if(f.j!==f.i)out.push(f.j);
+  const lean=_lean||!_charging||TEX_BUDGET<500*1048576;
+  let ahead,behind;
+  if(state.playing){ahead=TectonicPolicy.lookahead(state.speed,LOADER.stats.msEMA,_decodeEMA,lean);behind=1;}
+  else{ahead=behind=lean?LEAN_RADIUS:3;}
+  // dir<0 counts the age DOWN, which is forward in time and downward in index
+  const dir=state.playing?(state.dir<0?-1:+1):0;
+  if(dir){for(let a=1;a<=ahead;a++)out.push(dir<0?f.i-a:f.j+a);
+          for(let a=1;a<=behind;a++)out.push(dir<0?f.j+a:f.i-a);}
+  else for(let a=1;a<=ahead;a++){out.push(f.i-a);out.push(f.j+a);}
+  return [...new Set(out.filter(i=>i>=0&&i<n))];
+}
 function nextWantedFrame(){
-  const n=DATA.timeline.length, c=frameAt(state.age).i, R=Math.min(n,prefetchRadius());
-  for(let d=0;d<=R;d++){
-    for(const i of (d?[c-d,c+d]:[c])) if(i>=0&&i<n&&!frameSettled(i))return i;
-  }
+  for(const i of wantedFrames())if(!frameSettled(i)&&!_prefetchFrames.has(i))return i;
   return -1;
 }
 function pumpPrefetch(){
@@ -5961,12 +6471,33 @@ function pumpPrefetch(){
   const cap=(_lean||!_charging)?2:PREFETCH_CONCURRENCY;
   while(_prefetchBusy<cap){
     const i=nextWantedFrame(); if(i<0)return;
-    _prefetchBusy++;
-    loadFrame(i).then(()=>{_prefetchBusy--;pumpPrefetch();});
+    _prefetchBusy++;_prefetchFrames.add(i);
+    loadFrame(i).catch(()=>{}).finally(()=>{_prefetchBusy--;_prefetchFrames.delete(i);
+      // a frame that did not settle had a transient failure: back after its retry window
+      if(frameSettled(i))pumpPrefetch();else setTimeout(pumpPrefetch,3100);});
   }
 }
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)pumpPrefetch();});
+document.addEventListener('visibilitychange',()=>{
+  last=performance.now();   // a hidden tab's clock must not leap on return (dtT is capped anyway)
+  if(!document.hidden)pumpPrefetch();});
 function startPrefetch(){_prefetchOn=true;pumpPrefetch();}
+/* THE BROKER FOLLOWS THE VIEWER. Whenever the pair, the playback direction
+   or the speed changes, the window of keyframes the broker may still work
+   on becomes the pump's neighbourhood plus the sheets playback looks ahead
+   for plus whatever keyframe is on screen; queued and in-flight requests
+   for any other keyframe are cancelled. A far jump therefore starts on the
+   new pair at once instead of behind the tail of the old one. */
+let _loadTarget='';
+function retargetLoads(f){
+  if(!DATA.timeline)return;
+  const key=f.i+':'+f.j+':'+(state.playing?state.dir*state.speed:0);
+  if(key===_loadTarget)return;
+  _loadTarget=key;
+  const keep=new Set(wantedFrames(f));
+  for(const i of _sheetWanted(f))keep.add(i);
+  if(_lastBoundE>=0)keep.add(_lastBoundE);
+  LOADER.retargetFrames([...keep],[f.i,f.j]);
+}
 
 /* PREDICTIVE GPU RESIDENCY (perf audit P3, WP-09 F4-F6). Fetch-and-decode
    (loadField) gets pixels into memory; this gets them onto the GPU BEFORE the
@@ -6054,22 +6585,18 @@ function queueUploads(f){
    frame. Pure allocation churn; cache it once. */
 let _AGES=null;
 function ages(){return _AGES||(_AGES=DATA.timeline.map(f=>f.age));}
-function frameAt(age){
-  // returns {i,j,t} interpolation between adjacent frames
-  const A=ages();
-  if(age<=A[0])return{i:0,j:0,t:0};
-  if(age>=A[A.length-1])return{i:A.length-1,j:A.length-1,t:0};
-  for(let k=0;k<A.length-1;k++){
-    if(age>=A[k]&&age<=A[k+1]){
-      const t=(age-A[k])/(A[k+1]-A[k]);
-      return{i:k,j:k+1,t};
-    }
-  }
-  return{i:0,j:0,t:0};
-}
+/* {i,j,t}: the keyframes an age sits between and where between them it is.
+   An EXACT keyframe is itself alone ({i,j:i,t:0}) -- the old linear scan
+   answered (the next younger keyframe, this one, t=1), so every marker jump
+   and every 1-Myr step onto a keyframe bound the neighbour's interval fields
+   (README 7.16). Binary search, from web/loader.js, tested in
+   build/test_loader.mjs against the shipped timeline. Every consumer that
+   reads f.i for a per-keyframe field (labels, rivers, motion, the plate
+   slots, the small-field stack) now gets the keyframe the age names. */
+function frameAt(age){return TectonicPolicy.frameAt(ages(),age);}
 
 /* ================= three.js globe ================= */
-let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds;
+let renderer,scene,cam,orthoCam,globe,mapMesh,mat,starfield,atmo,clouds,cloudShadow,mapClouds;
 const overlay={boundaries:new THREE.Group(),derived:new THREE.Group(),vectors:new THREE.Group(),hotspots:new THREE.Group(),rivers:new THREE.Group()};
 let dragging=false,lastX=0,lastY=0;
 let lastOverlayFrame=-1,lastVecOn=null,lastHotOn=null,lastBndOn=null;
@@ -6190,7 +6717,10 @@ function bakeNoiseLUT(){
      ridge crop lost ~11% of its Laplacian energy, i.e. visibly softer crests.
      Half floats carry ~2,000 levels through the same trick at 2 bytes/texel
      (557 KB), and the crispness comes back to parity. */
-  const f2h=v=>{const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+  // One conversion buffer for all 262,144 values (the per-value pair of typed
+  // arrays was a quarter-million allocations at boot). Same bits out.
+  const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+  const f2h=v=>{
     f32[0]=v;const x=u32[0];
     return((x>>16)&0x8000)|((((x>>23)&0xff)-112)<<10)&0x7c00|((x>>13)&0x03ff);};
   const data=new Uint16Array(A*A);
@@ -6233,6 +6763,75 @@ const FRAG=SHADERS.FRAG.replace('/*@vnoise*/', NZOLD?VN_OLD:VN_NEW);
    Never put a backtick in here: it is a JS template literal like FRAG. */
 const LFRAG=SHADERS.LFRAG;
 let liteMat=null;
+/* ================= THE TIME PREVIEW (the Atlas port, 2026-09-07) =========
+   A seek to an age whose fields are not resident used to leave the previous
+   world on screen under the new age until the pair arrived -- 0.8 s from a
+   warm server, several seconds cold -- and nothing said the picture was
+   stale. Now the globe and the map draw the REQUESTED age at once from a
+   4096x2048 atlas of 256x128 thumbnails of all 251 shipped sheets
+   (web/imagery/timeline-preview.webp, built from the same sheets by
+   build/build_timeline_preview.py and hash-checked against them), through a
+   material with no height, no warp and no detail, and switch back to the
+   terrain shader the moment the requested pair is decoded. It is loading
+   feedback, never the settled picture; #surfStatus says so while it shows.
+   Optional: it loads after the opening pair at the lowest priority, and a
+   missing or slow preview changes nothing but the seek experience. */
+let previewMat=null,_previewReady=false,_previewTex=null,_previewJob=null;
+let _extraBytes=0;   // the preview and cloud bitmaps and textures, outside the field budget
+function loadPreview(){
+  if(_previewJob||_sq.has('nopreview')||!_BITMAPS)return;
+  const maxW=Math.min(renderer.capabilities.maxTextureSize,(navigator.deviceMemory||8)<8?2048:4096);
+  _previewJob=LOADER.get('imagery/timeline-preview.webp?v='+IMAGERY_V,2,null)
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none',
+      resizeWidth:maxW,resizeHeight:maxW/2,resizeQuality:'high'}))
+    .then(bm=>{
+      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      t.generateMipmaps=false; t.minFilter=t.magFilter=THREE.LinearFilter;   // no mip chain across cells: each cell is another date
+      t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; t.needsUpdate=true;
+      previewMat.uniforms.uPreview.value=t;
+      previewMat.uniforms.uPreviewTexel.value.set(1/bm.width,1/bm.height);
+      _previewTex=t; _previewReady=true; _extraBytes+=bm.width*bm.height*8;
+    })
+    .catch(()=>{_previewJob=null;});   // optional imagery: nothing waits on it
+}
+/* THE CLOUD IMAGE (the Atlas port, 2026-09-07): NASA's Blue Marble cloud
+   field as a 4096x2048 scalar JPEG (web/imagery/nasa-clouds-4096.jpg,
+   provenance in nasa-clouds.json; 2048 wide on a constrained device, and
+   never wider than the GPU allows). One shared texture for the globe shell,
+   its shadow and the map plane. Asked for only once the requested pair is
+   at full detail -- never an opening blocker -- at the lowest priority the
+   broker has, decoded pre-flipped ONCE with no colour conversion (it is a
+   density scalar, not a colour), repeating in longitude, clamped in
+   latitude, mipmapped. Until it lands the shader draws its noise fallback
+   and fades the image in as it arrives; a 404 leaves the fallback for good,
+   a transient failure is tried again in fifteen seconds. About 32 MiB of
+   bitmap and 43 MiB of mipmapped RGBA on the GPU at 4K, 8 + 11 at 2K,
+   counted in _extraBytes outside the field budget. */
+const SHADOW_RATIO=1.0085/1.014;   // the shadow shell sits between the highest displaced peak (1.0208 at full exaggeration, before the lift) and the cloud shell
+let _cloudTex=null,_cloudPending=false,_cloudRetryAt=0,_cloudUnavailable=false,_cloudNeutral=null;
+function loadCloudImage(){
+  if(_cloudTex||_cloudPending||_cloudUnavailable||!_BITMAPS||_sq.has('noclouds'))return;
+  if(performance.now()<_cloudRetryAt)return;
+  _cloudPending=true;
+  const maxW=Math.min(renderer.capabilities.maxTextureSize,(navigator.deviceMemory||8)<8?2048:4096);
+  LOADER.get('imagery/nasa-clouds-4096.jpg?v='+IMAGERY_V,1,null)
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none',
+      resizeWidth:maxW,resizeQuality:'high'}))      // width only: the 2:1 aspect is kept
+    .then(bm=>{
+      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      t.minFilter=THREE.LinearMipmapLinearFilter; t.magFilter=THREE.LinearFilter; t.generateMipmaps=true;
+      t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+      t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy()); t.needsUpdate=true;
+      _cloudTex=t; clouds.material.uniforms.uCloudDetail.value=t;
+      _extraBytes+=bm.width*bm.height*4*(1+4/3);
+    })
+    .catch(err=>{
+      if(err&&err.superseded)return;
+      if(!TectonicLoader.retryable(err))_cloudUnavailable=true;
+      else _cloudRetryAt=performance.now()+15000;
+    })
+    .finally(()=>{_cloudPending=false;});
+}
 function initGL(){
   const cv=$('#gl');
   /* preserveDrawingBuffer costs a copy of the whole frame at this resolution
@@ -6292,6 +6891,11 @@ function initGL(){
     elevA:U.elevA,elevB:U.elevB,dispA:U.dispA,mixf:U.mixf,uWarp:U.uWarp,
     uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,uDisp:U.uDisp},
     vertexShader:VERT,fragmentShader:LFRAG});
+  previewMat=new THREE.ShaderMaterial({uniforms:{
+    uPreview:{value:null},uFrames:{value:new THREE.Vector2(0,0)},mixf:{value:0},
+    uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,
+    uPreviewTexel:{value:new THREE.Vector2(1/4096,1/2048)}},
+    vertexShader:SHADERS.PVERT,fragmentShader:SHADERS.PFRAG});
   // the flat map is the same shader on a plane, so both views agree exactly
   mapMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mat);
   mapMesh.visible=false; scene.add(mapMesh);
@@ -6339,24 +6943,51 @@ function initGL(){
       gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9*uAtm;}`});
   atmo=new THREE.Mesh(ageo,amat); scene.add(atmo);
 
-  /* Cloud layer -- the single biggest "seen from space" cue. It is a thin shell
-     just above the terrain, and it reads the SAME shipped rainfall field the
-     biomes come from, so clouds gather where each era is actually wet: a bright
-     ITCZ band over the tropics, mid-latitude storm tracks, and clear subtropical
-     high belts over the deserts. Slowly drifting fBm breaks it into real weather
-     cells. It shares the terrain material's rain textures and clock, so it
-     tracks the era for free. */
+  /* Cloud layer -- the single biggest "seen from space" cue. Since the Atlas
+     port (2026-09-07) it is NASA's Blue Marble cloud field in coherent
+     motion (see the CFRAG source and loadCloudImage), adapted to the era by
+     the SAME shipped elevation and rainfall pair the terrain is drawn from:
+     the material shares the terrain's uniform OBJECTS for the pair, the
+     fraction, the era temperature parameter and the noise lattice, so the
+     clouds can only ever see the world the ground shows. Three meshes, one
+     texture, one clock: the shell over the globe, a darker shadow shell just
+     beneath it, and a plane over the flat map. The shadow and map materials
+     are shallow copies of the cloud uniforms -- shared objects, so one write
+     reaches all three -- overriding only uShadow, and uCloudMap with its own
+     uCloud (the map plane takes the fade without the globe's close-view
+     attenuation). A paused-time layer: loop() hides it the moment Play
+     starts and fades it back once the requested pair is bound. */
   const CVERT=SHADERS.CVERT;
   const CFRAG=SHADERS.CFRAG.replace('/*@cnoise*/', NZOLD?CN_OLD:CN_NEW);
+  _cloudNeutral=new THREE.DataTexture(new Uint8Array([0,0,0,255]),1,1,THREE.RGBAFormat);
+  _cloudNeutral.needsUpdate=true;
   const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
-    side:THREE.FrontSide, uniforms:{
-      rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // shared with terrain
-      mixf:mat.uniforms.mixf, uTime:mat.uniforms.uTime,
+    side:THREE.FrontSide, extensions:{derivatives:true},   // dFdx/dFdy shape the billows
+    uniforms:{
+      rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // the terrain's own objects
+      elevA:mat.uniforms.elevA, elevB:mat.uniforms.elevB,
+      mixf:mat.uniforms.mixf, uTemp:mat.uniforms.uTemp, uMapLon:mat.uniforms.uMapLon,
       uNz:mat.uniforms.uNz,   // the baked noise lattice, shared with the terrain
-      uCloud:{value:1.0}},
+      uWeatherTime:{value:0}, uEra:{value:state.age}, uRainReady:{value:0},
+      uCloudDetail:{value:_cloudNeutral}, uCloudDetailBlend:{value:0},
+      uCloud:{value:0}, uShadow:{value:0}, uCloudMap:{value:0}},
     vertexShader:CVERT, fragmentShader:CFRAG});
   clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
-  globe.add(clouds);   // co-rotates with the terrain; drift comes from uTime
+  clouds.renderOrder=2; clouds.layers.set(CLOUD_LAYER);
+  globe.add(clouds);   // co-rotates with the terrain; motion comes from uWeatherTime
+  const smat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
+    uniforms:{...cmat.uniforms, uShadow:{value:1}},vertexShader:CVERT,fragmentShader:CFRAG});
+  cloudShadow=new THREE.Mesh(clouds.geometry,smat);
+  cloudShadow.renderOrder=1; cloudShadow.rotation.y=0.003; cloudShadow.scale.setScalar(SHADOW_RATIO);
+  cloudShadow.layers.set(CLOUD_LAYER);
+  globe.add(cloudShadow);
+  const mmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
+    uniforms:{...cmat.uniforms, uCloudMap:{value:1}, uCloud:{value:0}},vertexShader:CVERT,fragmentShader:CFRAG});
+  mapClouds=new THREE.Mesh(mapMesh.geometry,mmat);
+  mapClouds.renderOrder=2; mapClouds.visible=false; mapClouds.layers.set(CLOUD_LAYER); scene.add(mapClouds);
+  cam.layers.enableAll(); orthoCam.layers.enableAll();
+  // a lost context takes the cache with it; it is rebuilt on demand
+  cv.addEventListener('webglcontextlost',()=>{if(_ground){_ground.rt.dispose();_ground=null;}});
   // stars
   const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
@@ -6952,6 +7583,7 @@ function layoutMap(){
   orthoCam.updateProjectionMatrix();
   mapMesh.scale.set(dw,dh,1);
   mapMesh.position.set(dx+dw/2-W/2, H/2-(dy+dh/2), 0);
+  if(mapClouds){mapClouds.scale.copy(mapMesh.scale);mapClouds.position.copy(mapMesh.position);mapClouds.position.z=0.01;}
 }
 function drawMapOverlays(){
   mctx.clearRect(0,0,mcv.width,mcv.height);
@@ -7981,6 +8613,43 @@ function layoutLabels(){
 
 /* ================= time & environment ================= */
 function fmtAge(a){if(a===0)return'Present';return a>0?`${a} Ma`:`+${-a} Myr`;}
+/* THE TEMPERATURE GRAPH (the Atlas port, 2026-09-07). The timeline's gmst
+   column -- the same modelled global mean the readout prints -- drawn once
+   across the whole span, 1000 Ma at the left edge, the present 80% across,
+   +250 Myr at the right, on a fixed -50..+40 C scale that widens rather than
+   clips should a future table exceed it (TectonicPolicy.chartScale). A
+   polyline through the 251 records, never a spline: a smooth curve would
+   invent overshoot between samples. Only the marker, the value and the
+   description move with the age, and only when the age changes, so weather
+   frames never touch the graph. The values are the inherited model's, not
+   observations; the readout's own caveats stand. */
+const GMST_W=272,GMST_TOP=10,GMST_BOT=62;
+let _gmstScale=null,_gmstLastAge=null;
+function buildGmstChart(){
+  const fig=$('#gmstChart'); if(!fig||!DATA.timeline||!DATA.timeline.length)return;
+  _gmstScale=TectonicPolicy.chartScale(DATA.timeline);
+  const pts=[];
+  for(const rec of DATA.timeline){
+    if(!rec||!Number.isFinite(rec.age)||!Number.isFinite(rec.gmst))continue;
+    pts.push([TectonicPolicy.chartX(rec.age,GMST_W),TectonicPolicy.chartY(rec.gmst,_gmstScale,GMST_TOP,GMST_BOT)]);
+  }
+  if(pts.length<2){fig.hidden=true;_gmstScale=null;return;}
+  pts.sort((a,b)=>a[0]-b[0]);   // left to right; the timeline itself is never reordered
+  $('#gmstPath').setAttribute('d',pts.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+','+q[1].toFixed(1)).join(' '));
+  const y0=TectonicPolicy.chartY(0,_gmstScale,GMST_TOP,GMST_BOT).toFixed(1);
+  const z=$('#gmstZero'); z.setAttribute('y1',y0); z.setAttribute('y2',y0);
+  fig.hidden=false; _gmstLastAge=null;
+}
+function updateGmstChart(age,gmst){
+  if(!_gmstScale||!Number.isFinite(gmst)||age===_gmstLastAge)return;
+  _gmstLastAge=age;
+  const x=TectonicPolicy.chartX(age,GMST_W).toFixed(1), y=TectonicPolicy.chartY(gmst,_gmstScale,GMST_TOP,GMST_BOT).toFixed(1);
+  const l=$('#gmstAgeLine'); l.setAttribute('x1',x); l.setAttribute('x2',x);
+  const d=$('#gmstDot'); d.setAttribute('cx',x); d.setAttribute('cy',y);
+  $('#gmstSel').textContent='Global mean '+gmst.toFixed(1)+'\u00b0C';
+  $('#gmstDesc').textContent='Modelled global mean temperature from 1,000 million years ago to 250 million years ahead, '+
+    'on a scale of '+_gmstScale.lo+' to '+_gmstScale.hi+' degrees Celsius. At '+fmtAge(Math.round(age))+' it is '+gmst.toFixed(1)+' degrees Celsius.';
+}
 function presentFade(){const a=state.age;// present-day layers fade out into deep time / future
   if(a<=0)return a<-30?0:1+ a/30*0; // future: fade fast
   return Math.max(0,1-a/45);}
@@ -8024,6 +8693,7 @@ function updateReadout(){
     : (m.veg<0.05?'Barren land':m.veg<0.4?'Sparse land plants':m.veg<0.85?'Spreading forests':'Vegetated');
   const L=(k)=>{const A=DATA.timeline[cf.i],B=DATA.timeline[cf.j];return A[k]+(B[k]-A[k])*cf.t;};
   const gmst=L('gmst'), co2=L('co2'), o2=L('o2'), sol=L('sol');
+  updateGmstChart(state.age,gmst);   // the same interpolated value the line below prints
   const tw = gmst>30 ? 'Hothouse' : gmst>24 ? 'Warm greenhouse'
            : gmst>18 ? 'Cool greenhouse' : 'Icehouse';
   /* Solar luminosity, from the standard solar model — the faint young Sun in
@@ -8060,6 +8730,24 @@ function updateReadout(){
     +`<b>Extinction rate</b> ~${xrStr} E/MSY <span style="color:#8790a0">(${xr.label})</span><br>`
     +`<b>Biosphere</b> ${veg}`
     +(bio.length?`<br><b>Biomes</b> ${bio.map(esc).join(' · ')}`:'');
+  /* The controls panel is fixed at 220 px from the top, which the readout
+     used to clear; with the temperature graph it no longer always does, so
+     the panel follows the readout's real bottom (desktop layout only: on a
+     phone the panel is a drawer with its own rule). The extinction and
+     context boxes already follow the panel. */
+  if(!matchMedia('(max-width:720px),(max-height:560px)').matches){
+    const rb=$('#readout').getBoundingClientRect(), ctl=$('#controls');
+    if(rb.bottom>60&&innerHeight>0){const top=Math.max(220,Math.round(rb.bottom+14))+'px';
+      if(ctl.style.top!==top)ctl.style.top=top;}
+  }
+  /* The picture's own state, beside the age it claims: a preview or a
+     neighbouring still is 'Loading terrain', a bound pair whose other fields
+     are still landing is 'Refining detail', a settled pair says nothing. */
+  const st=$('#surfStatus');
+  if(st){const m=_surface.mode;
+    const txt=(m==='preview'||m==='still'||m==='stale'||m==='sheets')?'Loading terrain\u2026':(m==='full'&&_surface.refining)?'Refining detail\u2026':'';
+    if(st.textContent!==txt)st.textContent=txt;
+    st.hidden=!txt;}
   markSidebarCurrent();
   updateExtinction();updateContextCards();
 }
@@ -8443,6 +9131,30 @@ function markExtinctList(cur){
    of the line. Visually identical to loading the age over the network, minus
    the freeze. */
 let _texMakeBudget=2;
+/* WHAT IS ON SCREEN, against what the age asks for (APP.surface()). The
+   requested age is the one authority (state.age); this is the separate
+   account of what the picture currently shows, so a late completion can
+   never roll the request back and the readout can say when the picture is
+   still on its way. mode: 'full' the requested pair at full detail (other
+   kinds may still be refining); 'sheets' the pair's world sheets with the
+   height field still arriving; 'still' a resident keyframe within
+   STILL_RADIUS of the request, bound as one coherent still (the scrub
+   stepping of 2026-07-31, now also for a short jump); 'preview' the
+   requested age from the thumbnail atlas; 'stale' nothing better yet, the
+   previous binding stays. */
+const STILL_RADIUS=2;
+const _surface={mode:'stale',req:[-1,-1],shown:[-1,-1],preview:false,refining:false,since:0};
+const _bound={eA:-1,eB:-1,rA:-1,rB:-1};   // the keyframe each essential sampler holds
+function _surfaceSet(mode,f,shown){
+  if(mode!==_surface.mode||shown[0]!==_surface.shown[0]||shown[1]!==_surface.shown[1])_surface.since=performance.now();
+  _surface.mode=mode; _surface.req[0]=f.i; _surface.req[1]=f.j;
+  _surface.shown[0]=shown[0]; _surface.shown[1]=shown[1]; _surface.preview=(mode==='preview');
+  let refining=(mode!=='full');
+  if(!refining)for(const i of (f.i===f.j?[f.i]:[f.i,f.j]))for(const k of KIND_PRIORITY){
+    const key=k+i; if(_bmMissing.has(key))continue;
+    const e=TEXCACHE.get(key); if(!(e&&e.bm)){refining=true;break;}}
+  _surface.refining=refining;
+}
 function bindTex(kind,i,essential){
   const key=kind+i;
   const e=TEXCACHE.get(key);
@@ -8486,8 +9198,15 @@ function bindTextures(){
      resident for that keyframe binds with it, and the interval machinery
      (mixf blending, uWarp) stands down -- a stepped world is a still, not an
      interval. On release the exact pair binds and everything resolves. */
-  const bi=_scrubbing?nearestResidentE(f.i):-1;
-  const stepping=bi>=0&&_scrubbing;
+  const pairResident=fieldImage('e',f.i)&&fieldImage('e',f.j);
+  /* A pair that is not here yet. Within STILL_RADIUS keyframes, a resident
+     neighbour is the better stand-in (detailed, and at most 10 Myr off);
+     farther, the preview is (exact age, coarse); with no preview loaded a
+     scrub still steps through whatever is resident, as it always has, and a
+     jump keeps the previous world. */
+  const bi=pairResident?-1:nearestResidentE(f.i);
+  const near=bi>=0&&Math.min(Math.abs(bi-f.i),Math.abs(bi-f.j))<=STILL_RADIUS;
+  const stepping=bi>=0&&(near||(_scrubbing&&!_previewReady));
   if(_scrubbing){
     /* Aim the elevation decodes AHEAD of the drag: a decode takes longer than
        a frame, so one kicked at the slider's position lands behind it. Kicked
@@ -8528,15 +9247,21 @@ function bindTextures(){
     const ms=gT('m'); if(ms)mat.uniforms.motA.value=ms;
     mat.uniforms.mixf.value=0.0;
     bindClimate(f);
+    if(es){_bound.eA=_bound.eB=bi;} if(rs){_bound.rA=_bound.rB=bi;}
+    _surfaceSet('still',f,[bi,bi]);
     return f;
+  }
+  if(!(ea&&eb)){
+    if(_previewReady){bindClimate(f);_surfaceSet('preview',f,[-1,-1]);return {i:f.i,j:f.j,t:f.t,preview:true};}
+    _surfaceSet('stale',f,[_bound.eA,_bound.eB]);
   }
   const wa=(swap&&f.i===P)?oldLakeTex():bindTex('w',f.i);
   const wb=(swap&&f.j===P)?oldLakeTex():bindTex('w',f.j);
-  if(ea)mat.uniforms.elevA.value=ea;
-  if(eb||ea)mat.uniforms.elevB.value=eb||ea;
+  if(ea){mat.uniforms.elevA.value=ea;_bound.eA=f.i;}
+  if(eb||ea){mat.uniforms.elevB.value=eb||ea;_bound.eB=eb?f.j:f.i;}
   if(ea)_lastBoundE=f.i;
-  if(ra)mat.uniforms.rainA.value=ra;
-  if(rb||ra)mat.uniforms.rainB.value=rb||ra;
+  if(ra){mat.uniforms.rainA.value=ra;_bound.rA=f.i;}
+  if(rb||ra){mat.uniforms.rainB.value=rb||ra;_bound.rB=rb?f.j:f.i;}
   // Lake-depth field, interpolated like elevation so lakes fill and drain smoothly.
   if(wa)mat.uniforms.waterA.value=wa;
   if(wb||wa)mat.uniforms.waterB.value=wb||wa;
@@ -8596,6 +9321,7 @@ function bindTextures(){
   // at every keyframe instead of drifting at a steady rate.
   mat.uniforms.mixf.value=f.t;
   bindClimate(f);
+  if(ea&&eb)_surfaceSet('full',f,[f.i,f.j]);
   return f;
 }
 /* The climate/appearance uniforms interpolate straight from the timeline
@@ -8671,14 +9397,15 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
 const SHEET_V='20260903';
 let SHEET_MANIFEST=null;
-const _shippedPending=new Set(), _shippedMissing=new Set();
+const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
   if(_sq.has('noshipped')||!SHEET_MANIFEST||!SHEET_MANIFEST.files||_shippedMissing.has(i))return false;
   const file=SHEET_MANIFEST.files[String(DATA.timeline[i].age)];
   if(!file){_shippedMissing.add(i);return false;}
   if(_shippedPending.has(i))return true;
+  if((_sheetRetryAt.get(i)||0)>performance.now())return false;
   _shippedPending.add(i);
-  fetch((SHEET_BASE||'sheets/')+file+'?v='+SHEET_V).then(r=>{if(!r.ok)throw 0;return r.blob();})
+  LOADER.get((SHEET_BASE||'sheets/')+file+'?v='+SHEET_V,25,i)
     .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
     .then(bm=>{
       const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
@@ -8688,7 +9415,12 @@ function _shippedSheet(i){
       _sheetDrop(i); SHEETS.set(i,{rt:null,tex:t,w:bm.width,ready:true,u:++_sheetClock});
       _shippedPending.delete(i);
     })
-    .catch(()=>{_shippedPending.delete(i);_shippedMissing.add(i);});
+    .catch(err=>{_shippedPending.delete(i);
+      // Missing (404) is for good; a superseded request is nothing; anything
+      // else is tried again in a while rather than baked over for ever.
+      if(err&&err.superseded)return;
+      if(!TectonicLoader.retryable(err))_shippedMissing.add(i);
+      else _sheetRetryAt.set(i,performance.now()+3000);});
   return true;
 }
 function _sheetDrop(i){
@@ -8761,12 +9493,13 @@ function _bakeStrips(){
   const j=_bakeJob, rt=j.rt, u=mat.uniforms;
   bindStill(j.i);
   u.uMapProj.value=2.0; u.uTime.value=777.0; u.uSchem.value=0.0; u.uDisp.value=0.0;
-  const vis=[globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible];
-  globe.visible=false;atmo.visible=false;starfield.visible=false;clouds.visible=false;mapMesh.visible=true;
+  const vis=[globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible,mapClouds.visible];
+  globe.visible=false;atmo.visible=false;starfield.visible=false;clouds.visible=false;mapClouds.visible=false;mapMesh.visible=true;
   const prevMat=mapMesh.material; mapMesh.material=mat;
   orthoCam.left=-0.5;orthoCam.right=0.5;orthoCam.top=0.5;orthoCam.bottom=-0.5;orthoCam.updateProjectionMatrix();
   mapMesh.scale.set(1,1,1);mapMesh.position.set(0,0,0);
   const prevRT=renderer.getRenderTarget();
+  orthoCam.layers.enableAll();
   const n=Math.min(SHEET_STRIPS_PER_FRAME,SHEET_STRIPS-j.row);
   for(let k=0;k<n;k++){
     const y0=Math.floor(j.row*SHEET_H/SHEET_STRIPS), y1=Math.floor((j.row+1)*SHEET_H/SHEET_STRIPS);
@@ -8778,7 +9511,7 @@ function _bakeStrips(){
   renderer.setRenderTarget(prevRT);
   rt.scissorTest=false;
   mapMesh.material=prevMat;
-  [globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible]=vis;
+  [globe.visible,atmo.visible,starfield.visible,clouds.visible,mapMesh.visible,mapClouds.visible]=vis;
   u.uMapProj.value=state.view==='map'?1:0;
   if(j.row>=SHEET_STRIPS){const s=SHEETS.get(j.i);s.ready=true;s.u=++_sheetClock;_bakeJob=null;}
 }
@@ -8840,6 +9573,110 @@ function useLite(f){
   const r=footprintKm()/texel;
   _liteOn = _liteOn ? r>0.35 : r>0.45;
   return _liteOn;
+}
+/* ================= THE GROUND CACHE (the Atlas port, 2026-09-07) =========
+   Paused with the weather moving, the only thing that changes between one
+   frame and the next is the cloud layer -- and the terrain shader was being
+   run over every pixel of the planet 24 times a second to redraw a ground
+   that had not moved. Measured on the M1 (build/verify old_timing_orb): a
+   2560x1440 terrain frame is ~350 ms, so weather at 24 a second was weather
+   at three. Section 5 of the port brief proposes exactly this: keep the
+   fully rendered ground at the SAME visual resolution and composite the
+   clouds over it while it remains valid.
+
+   The ground is everything but the cloud shells and the map cloud plane
+   (those live on CLOUD_LAYER). It is rendered into one render target of the
+   canvas's own size the first time the cache is used or whenever anything
+   that draws it changes -- groundSig() lists it all: the age and the camera,
+   the view, the path (terrain or sheets), every sampler the terrain material
+   holds and every uniform bound with them, the overlays, the quality, the
+   viewport -- and then re-rendered in STRIPS, one sixteenth of the image per
+   weather frame with the scissor on, so the sea-surface sheen (uTime, the
+   one animated ground term) keeps moving at about 1.5 sweeps a second while
+   no single frame pays for the whole planet. Each weather frame is then one
+   blit of the cached image and the cloud passes. Nothing is drawn at a
+   lower resolution, and with the clouds off or anything else in motion the
+   cache stands down and the frame is rendered exactly as before, which is
+   what keeps the cloud-off picture bit-identical (verify_diff.py, the
+   terrain-preservation check).
+
+   Bounded: a target larger than GROUND_MAX_BYTES (a 5K canvas at pixel
+   ratio 2 is 59 MB and fits; multisampling is taken only where four samples
+   still fit) means no cache and direct rendering. ?groundcache=0 disables
+   it; APP.ground() reports it; the perf HUD shows it. */
+const CLOUD_LAYER=1;
+const GROUND_ON=_sq.get('groundcache')!=='0';
+const GROUND_STRIPS=16, GROUND_MAX_BYTES=96*1048576;
+let _ground=null;   // {rt,w,h,samples,sig,row,full,strips,at}
+const _groundQuadCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+let _groundQuad=null;
+function groundSig(){
+  const u=mat.uniforms, L=liteMat.uniforms;
+  const tex=[u.elevA,u.elevB,u.rainA,u.rainB,u.waterA,u.waterB,u.surfA,u.surfB,u.oceanA,u.oceanB,
+             u.dispA,u.plateA,u.motA,u.stkA,u.stkB,u.uAtlas,L.sheetA,L.sheetB].map(x=>x.value?x.value.id:-1).join(',');
+  return [state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,state.view,state.mapLon,state.shade,
+          renderer.getPixelRatio(),innerWidth,innerHeight,globe.material===liteMat?'L':'T',tex,
+          u.uWarp.value,u.uMat.value,u.uTect.value,u.uFore.value,u.uFoldOn.value,u.uDrainOn.value,
+          u.uStkSel.value.x,u.uStkSel.value.y,u.uStkSel.value.z,u.uStkSel.value.w,u.uStkSelB.value.x,u.uStkSelB.value.y,
+          u.mixf.value,u.uDisp.value,u.uAtlasOn.value,u.uTemp.value,u.uVeg.value,u.uIceT.value,u.uSeaT.value,
+          u.uSnowball.value,u.uSeaTint.value,u.uDry.value,u.uGrass.value,u.uSchem.value,u.uDetail.value,
+          lastOverlayFrame,state.layers.boundaries,state.layers.vectors,state.layers.hotspots,state.selPlate,
+          atmo.material.uniforms.uAtm.value,atmo.material.uniforms.uRim.value].join('|');
+}
+function _groundTarget(W,H){
+  if(_ground&&_ground.w===W&&_ground.h===H)return _ground;
+  if(_ground){_ground.rt.dispose();_ground=null;}
+  if(W*H*4>GROUND_MAX_BYTES)return null;
+  const samples=(renderer.capabilities.isWebGL2&&W*H*4*5<=GROUND_MAX_BYTES)?4:0;
+  const rt=new THREE.WebGLRenderTarget(W,H,{depthBuffer:true,stencilBuffer:false,samples:samples});
+  rt.texture.minFilter=THREE.NearestFilter; rt.texture.magFilter=THREE.NearestFilter;
+  rt.texture.generateMipmaps=false; rt.texture.colorSpace=THREE.NoColorSpace;
+  if(!_groundQuad){
+    _groundQuad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({depthTest:false,depthWrite:false,
+      uniforms:{tex:{value:null}},
+      vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
+      fragmentShader:'precision highp float;uniform sampler2D tex;varying vec2 vUv;void main(){gl_FragColor=texture2D(tex,vUv);}'}));
+    _groundQuad.frustumCulled=false;
+  }
+  _ground={rt,w:W,h:H,samples,sig:'',row:0,full:0,strips:0,at:0};
+  return _ground;
+}
+/* Draw the scene with `camera`: through the cache when it applies, directly
+   otherwise. `weather` is loop()'s weatherMoving. */
+function drawScene(camera,weather){
+  const cacheable=GROUND_ON&&weather&&!state.playing&&!dragging&&!state.ambient&&!_scrubbing&&_bakeJob===null&&
+                  !(state.layers.rotate&&state.spin>0)&&globe.material!==previewMat;
+  const W=renderer.domElement.width,H=renderer.domElement.height;
+  const g=cacheable?_groundTarget(W,H):null;
+  if(!g){
+    if(_ground){_ground.active=false;}
+    camera.layers.enableAll();
+    renderer.render(scene,camera);
+    return false;
+  }
+  const sig=groundSig(), rt=g.rt;
+  camera.layers.set(0);
+  if(sig!==g.sig){
+    rt.scissorTest=false;
+    renderer.setRenderTarget(rt); renderer.render(scene,camera);
+    g.sig=sig; g.row=0; g.full++; g.at=performance.now();
+  }else{
+    // one strip of sixteen a frame: the sheen keeps moving, no frame pays for the planet
+    const y0=Math.floor(g.row*H/GROUND_STRIPS), y1=Math.floor((g.row+1)*H/GROUND_STRIPS);
+    rt.scissorTest=true; rt.scissor.set(0,y0,W,y1-y0); rt.viewport.set(0,0,W,H);
+    renderer.setRenderTarget(rt); renderer.render(scene,camera);
+    rt.scissorTest=false; g.row=(g.row+1)%GROUND_STRIPS; g.strips++;
+  }
+  renderer.setRenderTarget(null);
+  _groundQuad.material.uniforms.tex.value=rt.texture;
+  renderer.render(_groundQuad,_groundQuadCam);
+  camera.layers.set(CLOUD_LAYER);
+  renderer.autoClear=false;
+  renderer.render(scene,camera);
+  renderer.autoClear=true;
+  camera.layers.enableAll();
+  g.active=true;
+  return true;
 }
 /* Quality scale: what setPixelRatio actually gets. Auto starts at full and
    is stepped by the governor in loop(); a pinned choice bypasses it. */
@@ -8911,7 +9748,10 @@ function perfHud(now){
     String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB'+
     String.fromCharCode(10)+'scale '+renderScale().toFixed(2)+' ('+(state.quality==='auto'?'auto:'+_autoScale:state.quality)+')'+
     '   warp '+(mat.uniforms.uWarp.value>0.5?'on':'OFF')+'  mat '+(mat.uniforms.uMat.value>0.5?'on':'OFF')+
-    String.fromCharCode(10)+'path '+(globe.material===liteMat?'SHEETS':'terrain')+'  sheets '+[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i).join(',')+
+    String.fromCharCode(10)+'path '+(globe.material===liteMat?'SHEETS':globe.material===previewMat?'PREVIEW':'terrain')+
+    (_ground&&_ground.active?('  ground cache '+_ground.w+'x'+_ground.h+(_ground.samples?' msaa':'')+' full '+_ground.full+' strips '+_ground.strips):'')+
+    '  clouds '+(clouds.visible||mapClouds.visible?(clouds.material.uniforms.uWeatherTime.value.toFixed(0)+'s'):'off')+
+    '  sheets '+[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i).join(',')+
     (_bakeJob?('  baking '+_bakeJob.i+' '+_bakeJob.row+'/'+SHEET_STRIPS):'')+'  '+footprintKm().toFixed(1)+' km/px';
   if(txt!==_phLast){_phEl.textContent=txt;_phLast=txt;}
   _phN=0;_phSum=0;_phMax=0;
@@ -8920,7 +9760,10 @@ let last=performance.now();
 const _camC=new THREE.Vector3(),_camUp=new THREE.Vector3(),_camN=new THREE.Vector3(),
       _camE=new THREE.Vector3(),_camH=new THREE.Vector3();
 function loop(now,force){
-  const rawMs=now-last;
+  /* Never negative: a forced step (APP.step) stamps `last` with
+     performance.now(), and the next animation-frame timestamp can predate it
+     under load, which once ran the cloud fade to -3. */
+  const rawMs=Math.max(0,now-last);
   /* TWO CLOCKS (WP-10, A5.1). dt is the per-frame step the camera and the
      drag use, clamped at 50 ms so a stall never throws the view. Time itself
      must not be clamped that way: at 3 fps the "18 Myr/s" slider was advancing
@@ -8928,8 +9771,15 @@ function loop(now,force){
      elapsed time, capped at half a second so a tab that was hidden resumes
      where it was rather than leaping. */
   const dt=Math.min(.05,rawMs/1000), dtT=Math.min(.5,rawMs/1000);last=now;
-  qualityGovernor(rawMs);
   _frameNo++;
+  /* THE WEATHER CLOCK (the Atlas port): a third clock, apart from the age and
+     from the sea-sheen's uTime. It runs while the app is paused with clouds
+     shown and their animation on, in real time clamped to a tenth of a
+     second a tick so a tab coming back does not leap through weather phases,
+     and it stands still while hidden, while playing, and when the animation
+     is off (reduced motion starts it off). */
+  const weatherMoving=!!clouds&&TectonicPolicy.weatherActive(state,document.hidden)&&_surface.mode==='full';
+  if(clouds)clouds.material.uniforms.uWeatherTime.value+=TectonicPolicy.weatherStep(rawMs,weatherMoving);
   /* IDLE THROTTLE (WP-10, A5.6). requestAnimationFrame used to redraw the
      whole planet sixty times a second while nothing on it changed -- a paused
      app on a laptop is most of what this app is, and it was drawing the same
@@ -8941,13 +9791,23 @@ function loop(now,force){
   const idleSig=[state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,
                  state.view,state.shade,state.mapLon,state.quality,_autoScale,
                  innerWidth,innerHeight,TEXCACHE.size,_texBytes,_upQ.length,_bmPending.size,
+                 _surface.mode,_surface.shown[0],_surface.shown[1],_previewReady,state.layers.clouds,state.layers.weather,
                  state.layers.boundaries,state.layers.vectors,state.layers.hotspots,
                  state.layers.labels,state.selPlate].join('|');
-  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||
+  const cloudFading=!!clouds&&TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&
+    ((loop._cloudFade||0)<1||(_cloudTex&&clouds.material.uniforms.uCloudDetailBlend.value<1));
+  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||cloudFading||
                (state.layers.rotate&&state.spin>0)||_upQ.length>0||_bmPending.size>0;
   if(idleSig!==loop._sig){loop._sig=idleSig;loop._sigAt=now;}
   const idle=!force&&!moving&&(now-loop._sigAt)>1000;
-  if(idle&&(now-(loop._drawn||0))<200){requestAnimationFrame(loop);return;}
+  /* Idle draws at the sea-sheen's five a second as before; with the weather
+     moving it draws at the weather's own cadence, 24 a second (15 in the
+     efficient quality), which is deliberate scheduling and not a bottleneck
+     -- so the quality governor is fed by interaction and playback only,
+     never by a weather frame (the brief, section 5). */
+  const weatherCadence=((state.quality==='auto'?_autoScale:state.quality)==='perf')?1000/15:1000/24;
+  if(idle&&(now-(loop._drawn||0))<(weatherMoving?weatherCadence:200)){requestAnimationFrame(loop);return;}
+  if(!(idle&&weatherMoving))qualityGovernor(rawMs);
   loop._drawn=now;
   // A scrub moves more than a keyframe per frame; the speculative queue is
   // then aimed at ages already behind the slider. Drop it, it re-fills.
@@ -8960,7 +9820,7 @@ function loop(now,force){
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   // Sheet bakes render through the terrain material and leave it bound to a
   // still; bindTextures() below rebinds the live pair, so bakes go first.
-  if(DATA.timeline)pumpBakes(curFrame());
+  if(DATA.timeline){const f0=curFrame();retargetLoads(f0);pumpBakes(f0);}
   if(state.playing){
     const step=state.dir*state.speed*dtT;
     /* HOLD FOR THE SHEETS (2026-09-03). Zoomed out the globe draws from the
@@ -9006,10 +9866,19 @@ function loop(now,force){
   const f=bindTextures();
   queueUploads(f);   // warm the next keyframe's textures, one upload a frame
   /* THE PATH DECISION (WP-10, A4). Sheets for the bound pair and a footprint
-     wide enough -> the lite material; otherwise the terrain shader as before. */
+     wide enough -> the lite material; otherwise the terrain shader as before.
+     While the requested pair's height field is still arriving, the pair's
+     sheets are the better stand-in where the footprint allows them (their
+     colour is the requested keyframes; the stale height can at worst turn a
+     coastline pixel into a plain blend), and the preview atlas elsewhere. */
   const lite=useLite(f);
-  const wantMat=lite?liteMat:mat;
+  const wantMat=(f.preview&&!lite)?previewMat:(lite?liteMat:mat);
   if(globe.material!==wantMat){globe.material=wantMat;mapMesh.material=wantMat;}
+  if(f.preview){
+    previewMat.uniforms.uFrames.value.set(f.i,f.j);
+    previewMat.uniforms.mixf.value=f.t;
+    if(lite){mat.uniforms.mixf.value=f.t;mat.uniforms.uWarp.value=0.0;_surfaceSet('sheets',f,[f.i,f.j]);}
+  }
   if(lite){
     const sa=SHEETS.get(f.i), sb=SHEETS.get(f.j);
     liteMat.uniforms.sheetA.value=sa.tex; liteMat.uniforms.sheetB.value=sb.tex;
@@ -9039,8 +9908,25 @@ function loop(now,force){
   setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
   const isGlobe=state.view==='globe';
   globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
-  // clouds only on the globe, and only in the photoreal (satellite) shading
-  clouds.visible=isGlobe && state.shade!=='schem';
+  /* CLOUDS (the Atlas port). Wanted when paused with the layer on and the
+     requested pair bound at full detail. Play hides the shell, its shadow
+     and the map plane at once -- the surface is the point of playback --
+     without touching the layer setting; Pause fades them back over 1.4 s
+     once the pair is bound; the image itself fades in from the noise
+     fallback as it lands. uRainReady is 1 only while the rainfall bound
+     matches the elevation bound, so a pair mid-arrival never colours the
+     clouds with another age's rain. */
+  const cloudsWanted=TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&!f.preview;
+  if(cloudsWanted)loadCloudImage();
+  const cu=clouds.material.uniforms;
+  if(_cloudTex)cu.uCloudDetailBlend.value=Math.min(1,cu.uCloudDetailBlend.value+Math.min(rawMs,100)/1400);
+  loop._cloudFade=cloudsWanted?Math.min(1,(loop._cloudFade||0)+Math.min(rawMs,100)/1400):0;
+  cu.uEra.value=state.age;
+  cu.uRainReady.value=(_bound.eA>=0&&_bound.rA===_bound.eA&&_bound.rB===_bound.eB)?1:0;
+  const cloudsOn=cloudsWanted&&loop._cloudFade>0.001;
+  clouds.visible=cloudsOn&&isGlobe; cloudShadow.visible=clouds.visible;
+  mapClouds.visible=cloudsOn&&!isGlobe;
+  mapClouds.material.uniforms.uCloud.value=loop._cloudFade;
   mapMesh.visible=!isGlobe;
   if(isGlobe){
     globe.rotation.y=state.rot;overlay.boundaries.rotation.y=0;
@@ -9103,19 +9989,18 @@ function loop(now,force){
     // the material itself.
     atmo.material.uniforms.uAtm.value=1.0-0.80*near;
     atmo.material.uniforms.uRim.value=2.2+5.0*near;
-    /* Clouds RETIRE as the camera drops, rather than merely thinning. A cloud
-       shell is a flat texture on a sphere: looked down on from far away it
-       reads as weather, but looked along from low orbit the eye travels through
-       its whole tangential thickness and it becomes an opaque white wall lying
-       across the terrain -- which is precisely what tilt is for looking at.
-       Real clouds would part and show ground between them; this one cannot, so
-       the honest move is to take it away once the geometry stops supporting the
-       illusion. Gone by the time the camera is 60% of the way in. */
-    if(clouds.material.uniforms.uCloud){
-      const cf=Math.max(0.0,1.0-near/0.6);
-      clouds.material.uniforms.uCloud.value=cf;
-      clouds.visible=clouds.visible&&cf>0.01;
-    }
+    /* Clouds THIN as the camera drops rather than retiring (the Atlas port).
+       The old procedural shell was taken away by 60% of the way in because,
+       looked along from low orbit, it became one white wall across the
+       terrain; the satellite field has real clear sectors and thin fringes
+       and stays readable close in, so it keeps 55% at the closest zoom,
+       times the visibility fade. The shadow shell rides the same lift as the
+       clouds, just beneath them and above the highest displaced peak. The
+       map plane has its own uCloud without this attenuation. */
+    const cf=(1.0-0.45*near)*(loop._cloudFade||0);
+    cu.uCloud.value=cf;
+    clouds.visible=clouds.visible&&cf>0.01; cloudShadow.visible=clouds.visible;
+    cloudShadow.scale.setScalar(lift*SHADOW_RATIO);
     const t=state.gtilt*Math.PI/180, hd=state.head*Math.PI/180;
     const cp=Math.cos(state.tilt), sp=Math.sin(state.tilt);
     // scratch vectors, allocated once -- this block runs every frame
@@ -9135,10 +10020,10 @@ function loop(now,force){
     cam.up.copy(up).multiplyScalar(Math.sin(t)).addScaledVector(horiz,Math.cos(t));
     cam.lookAt(C);
     globe.rotation.x=0;atmo.rotation.copy(globe.rotation);
-    renderer.render(scene,cam);
+    drawScene(cam,weatherMoving);
   }else{
     layoutMap();
-    renderer.render(scene,orthoCam);
+    drawScene(orthoCam,weatherMoving);
     drawMapOverlays();
   }
   layoutLabels();
@@ -9151,6 +10036,28 @@ function setOpacity(grp,o){grp.traverse(c=>{if(c.material&&c.material.opacity!==
 function syncSlider(){$('#slider').value=Math.round(1000-state.age);}
 function sliderToAge(v){return 1000-(+v);}
 $('#slider').addEventListener('input',e=>{state.age=sliderToAge(e.target.value);updateReadout();});
+/* THE ERA ROWS SEEK TOO (the Atlas port). The named markers already jump on a
+   click; the scale and the space between markers did nothing, and the
+   4-pixel thumb was the only thing to grab. A press anywhere on the marker
+   or scale row seeks to that x and captures the pointer, so a drag that
+   starts on the era names scrubs exactly as one on the slider does. The
+   slider itself keeps its native keyboard handling (arrows step a million
+   years, Home/End are the ends) and native pointer capture. */
+{const rows=[$('#markrow'),$('#scalerow')].filter(Boolean);
+ const ageAtX=x=>{const r=$('#track').getBoundingClientRect();
+   return 1000-1250*Math.max(0,Math.min(1,(x-r.left)/Math.max(1,r.width)));};
+ const seek=x=>{state.age=Math.round(ageAtX(x));state.playing=false;syncPlay();syncSlider();updateReadout();};
+ for(const row of rows){
+   row.addEventListener('pointerdown',e=>{
+     if(e.target.classList.contains('mark')||e.button!==0)return;   // a named marker has its own jump
+     e.preventDefault();seek(e.clientX);
+     try{row.setPointerCapture(e.pointerId);}catch(_){}
+     row._seeking=true;});
+   row.addEventListener('pointermove',e=>{if(row._seeking)seek(e.clientX);});
+   const done=e=>{if(!row._seeking)return;row._seeking=false;
+     try{row.releasePointerCapture(e.pointerId);}catch(_){}};
+   row.addEventListener('pointerup',done);row.addEventListener('pointercancel',done);
+ }}
 function syncPlay(){const p=state.playing;$('#playIcon').innerHTML=p?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';}
 $('#playBtn').onclick=()=>{state.playing=!state.playing;syncPlay();};
 /* The arrow points the way the playhead travels along the timeline, which runs
@@ -9453,7 +10360,7 @@ function buildLegend(){
 (async function(){
   initGL();
   await loadAll();
-  ensureLabels();buildBoundaries();buildRivers();buildHotspots();buildVectors();buildMarkers();buildLegend();
+  ensureLabels();buildBoundaries();buildRivers();buildHotspots();buildVectors();buildMarkers();buildLegend();buildGmstChart();
   buildEraList();buildScList();buildExtinctionList();buildGlaciationList();buildClimateEventList();buildInterchangeList();markSidebarCurrent();
   /* A handle on the internals. Everything here is derived — label positions
      are snapped to the elevation field, feature coordinates are back-advected —
@@ -9461,7 +10368,9 @@ function buildLegend(){
      stage dropped it is to be able to call that stage directly. */
   window.APP={state,DATA,mat,TEXCACHE,snapLabel,projectLL,curFrame,elevField,elevAtLL,   // mat/TEXCACHE: the harness reads uniforms and residency
               loader:()=>({pending:[..._bmPending.keys()],upQ:_upQ.map(q=>q.k+q.i),missing:[..._bmMissing],frame:_frameNo,
-                           mb:Math.round(_texBytes/1048576),hidden:document.hidden,scrubbing:_scrubbing}),   // the decode/upload queues, for the harness
+                           mb:Math.round(_texBytes/1048576),hidden:document.hidden,scrubbing:_scrubbing,
+                           queued:LOADER.queue.length,active:LOADER.active,stats:{...LOADER.stats},
+                           decodeMs:Math.round(_decodeEMA),wanted:wantedFrames(),retry:_fieldRetryAt.size}),   // the decode/upload queues and the broker, for the harness
               labelVisible,layoutLabels,hotspotsNow,intervalAt,lifeAt,biomesAt,
               selectAt,showFeature,showEvent,jumpTo,featurePos,
               /* step() drives one frame by hand. Needed because a headless or
@@ -9534,7 +10443,10 @@ function buildLegend(){
                  artefacts this project has chased -- so eyeballing the pane is
                  not a check, it is a vibe. */
               snap(w, h, cx, cy, opts){
-                loop(performance.now());
+                /* FORCED, since the port round: the loop's idle cadence would
+                   otherwise skip this draw, and a read-back in a task other than
+                   the one that drew is empty without a preserved buffer. */
+                loop(performance.now(), true);
                 const c = renderer.domElement, gl = renderer.getContext();
                 w = w || 480; h = h || 480;
                 const x0 = Math.max(0, Math.round((cx != null ? cx : c.width / 2) - w / 2));
@@ -9729,10 +10641,31 @@ function buildLegend(){
                   ctx.putImageData(im,0,0);
                   return {png:cv.toDataURL('image/png').slice(22),w:w,h:h};
                 }},
-              gl:{mat,scene,globe,atmo,clouds,renderer,cam}};
+              /* The picture against the request: mode, the pair asked for,
+                 the pair shown, whether detail is still arriving, and for
+                 how long the current state has been showing. */
+              surface(){return {mode:_surface.mode,req:[..._surface.req],shown:[..._surface.shown],preview:_surface.preview,
+                                refining:_surface.refining,ms:Math.round(performance.now()-_surface.since),
+                                bound:{..._bound},previewReady:_previewReady};},
+              /* The cloud layer's own account: what is visible, the fade, the
+                 clock, whether the image has landed and the rain is coherent. */
+              weather(){const cu=clouds.material.uniforms;
+                return {globe:clouds.visible,shadow:cloudShadow.visible,map:mapClouds.visible,
+                        fade:+(loop._cloudFade||0).toFixed(3),uCloud:+cu.uCloud.value.toFixed(3),
+                        animated:TectonicPolicy.weatherActive(state,document.hidden)&&_surface.mode==='full',
+                        time:+cu.uWeatherTime.value.toFixed(2),image:!!_cloudTex,blend:+cu.uCloudDetailBlend.value.toFixed(3),
+                        rainReady:cu.uRainReady.value,era:cu.uEra.value,mapCloud:+mapClouds.material.uniforms.uCloud.value.toFixed(3),
+                        ground:_ground?{active:!!_ground.active,full:_ground.full,strips:_ground.strips}:null,
+                        layers:{clouds:state.layers.clouds!==false,weather:state.layers.weather!==false},
+                        extraMB:Math.round(_extraBytes/1048576)};},
+              ground(){return _ground?{active:!!_ground.active,w:_ground.w,h:_ground.h,samples:_ground.samples,full:_ground.full,strips:_ground.strips,
+                                        MB:Math.round(_ground.w*_ground.h*4*(1+_ground.samples)/1048576),on:GROUND_ON}:{active:false,on:GROUND_ON};},
+              gl:{mat,scene,globe,atmo,clouds,renderer,cam,
+                  materials:{terrain:mat,lite:liteMat,preview:previewMat,clouds:clouds.material,shadow:cloudShadow.material,mapClouds:mapClouds.material}}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
   // `state`, and hard-coding 0 quietly overrode it.
   syncSlider();updateReadout();syncPlay();syncDir();
+  document.querySelectorAll('.tog[data-layer]').forEach(t=>t.classList.toggle('on',!!state.layers[t.dataset.layer]));
   const qb=$('#qualBtn'); if(qb){qb.addEventListener('click',cycleQuality);applyQuality();}
   setInterval(updateReadout,120);
   $('#load').classList.add('done');
@@ -9744,6 +10677,7 @@ function buildLegend(){
   // The globe is on screen and interactive by here; the rest of the timeline
   // fills in behind it, nearest-to-the-viewer first.
   startPrefetch();
+  loadPreview();
 })();
 </script>
 </body>

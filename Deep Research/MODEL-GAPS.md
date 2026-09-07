@@ -7755,3 +7755,98 @@ beside the detached one -- two Chromes on one profile directory, one of
 which died at once and skipped a load. A chain launcher wants a lock file,
 and a waiter that must outlive a turn wants `setsid nohup`, not the
 tool's background mode.
+
+
+## THE ATLAS PORT (2026-09-07): loading and seeks, NASA's clouds, the temperature graph, the ground cache
+
+The owner's brief (`~/Downloads/claude-tectonic-earth-handoff`) asked for three things from the
+Tectonic Atlas experiment (donor commit `cb57e9f`) to come into the original — its responsive
+loading and timeline behaviour, its satellite-derived moving clouds, and its global-mean-temperature
+graph — with the original's globe, close-up terrain, ocean floor, controls and science kept whole.
+Everything below is measured with `build/verify_run.py` driving `web/_verify.html` on the M1's own
+GPU, the frozen pre-port page (`web/_old.html`) run through the same driver back to back with the
+new one. Another session's headless Chromes shared the machine throughout, so absolute frame times
+are an upper bound; every ratio and every diff is a same-machine, same-minute pair.
+
+**Loading (`web/loader.js`, `build/test_loader.mjs`).** One broker for every field, sheet and
+imagery fetch — dedupe, the pair first, cancel-behind-a-seek, only 404/410 as *absent* — and a
+prefetch neighbourhood bounded everywhere (three keyframes each way paused; playing, as many ahead
+as the speed covers in a measured fetch plus a measured decode plus two seconds, 3–8). The old pump
+warmed the whole timeline on mains power, four files at a time, which is what a cold seek was
+queuing behind. `frameAt` is the binary search whose exact keyframe is itself alone.
+
+**Seeks.** A seek to a non-resident age draws the requested age at once from the 4096×2048 thumbnail
+atlas of all 251 shipped sheets (`build/build_timeline_preview.py`, hash-checked against
+`web/sheets/` at every build), stands in with a resident neighbour within two keyframes, or with
+the pair's sheets where the footprint allows, and hands over to the terrain shader the moment the
+pair is decoded; `APP.surface()` is the account, and the readout says so.
+
+| seek from 1000 Ma to | old: first change = detail | new: first change | new: full detail |
+|---|---|---|---|
+| 0 Ma | 6.56 s (the old world shown throughout) | 74 ms (preview) | 555 ms |
+| 300 Ma | 8.76 s | 20 ms | 240 ms |
+| +250 Myr | 5.95 s | 21 ms | 244 ms |
+| 700 Ma | 3.38 s | 21 ms | 241 ms |
+| the same four with a 600 ms delay on every field fetch | 6.55 / 7.10 / 5.71 / 6.11 s | 63 / 51 / 48 / 23 ms | 829 / 900 / 939 / 925 ms |
+
+Fast scrub, release to render: 730 → 10 ms. The crossing-storm gate is unchanged (≤ 2 synchronous
+uploads), playback coherence 100 % both pages, the working set flat over four passes of far jumps
+(949 MB cache, ~460 pinned, 65–71 GL textures) plus 139 MB of imagery outside the field budget
+(the preview's 64, the clouds' 75). One regression to record: on the sheet path at 10 Myr/s with a
+600 ms sheet delay, 5 frames of 2760 held for a sheet where the old page, with the whole timeline
+warm, held none.
+
+**The clouds (`web/shaders/index__CFRAG.frag.glsl`, `web/imagery/`).** NASA's *Blue Marble: Clouds*
+(NASA/GSFC, image by Reto Stöckli) reduced to a 4096×2048 density scalar, sampled as one continuous
+field in coherent transport, adapted to the era by the terrain's own elevation/rainfall pair through
+the terrain material's uniform objects (so the clouds can only see the world the ground shows;
+`uRainReady` is 1 only while the rain bound matches the elevation bound). A paused-time layer with
+its own clock: Play hides shell, shadow and map plane at once; Pause fades them back once the pair
+is bound; hidden tabs and reduced motion freeze the clock. Shell 1.014, shadow shell 1.0085 (above
+the highest displaced peak, 1.0208 at full exaggeration; both ride the lift), a plane at z = 0.01
+over the map, hidden during sheet bakes. Six samplers, `check_shader.py` now cross-checks every
+declared uniform and the derivatives flag against the material that carries each fragment shader,
+and the real compile/link on the M1 passes for all six materials.
+
+| fixed camera, clouds on, two frames apart | mean \|dRGB\| in the globe crop | pixels moved > 8 / > 40 |
+|---|---|---|
+| present day, Globe at zoom 2.8, 20.1 s | 25.6 / 24.3 / 24.1 of 255 | 42.5 % / 26.1 % |
+| 300 Ma, Map, 15.1 s | 19.7 / 17.1 / 13.5 | 39.2 % / 18.6 % |
+| +250 Myr, Globe at zoom 3.05, 15.2 s | 20.5 / 20.2 / 17.2 | 39.7 % / 20.2 % |
+
+The Atlas reference pair (23.0 s, its own renderer) measured 23.7 / 23.3 / 21.6, so the transport
+came over at the same pace; the side-by-side crops (`build/verify/cmp_weather_ab.png`) show the
+same fronts displaced, not re-drawn. The geological age stayed fixed through every pair; Play
+cleared shell, shadow and map plane within one frame and Pause restored them. Two harness lessons
+on the way: a read-back in a task other than the one that drew is empty without a preserved
+buffer (so `APP.snap` now forces its frame), and a forced step followed by a stale
+animation-frame timestamp made one frame interval negative and ran the fade to −3 (the interval
+is clamped at zero now, which the old page's `dt` also silently needed).
+
+**The ground cache (`drawScene()`).** The paused-weather frame at 2560×1440 was the whole terrain
+shader 24 times a second: 344 ms direct (355 on the old page; the clouds themselves cost ~15 ms).
+With the ground rendered once into a target of the canvas's size, refreshed one strip in sixteen
+per weather frame, and the clouds composited over it: **56 ms orbital, 29 ms Himalaya at 1.35,
+30 ms Andes tilted**. Cloud-off frames are untouched (343 → 328–346 ms, harness noise), because the
+cache stands down whenever the clouds are off or anything else moves. Bounded at 96 MB of target;
+MSAA only where four samples still fit.
+
+**Terrain preservation.** Cloud-off, old against new, 900-px frames: orbital 0 / 300 / 720 / −250 Ma
+at 0.06 / 0.07 / 0.18 / 0.00 of 255 mean; the map at 0 / 300 / 720 Ma **0.00** (bit-identical);
+close frames at 2.5 Ma (Himalaya, erg, plains) **0.00 / 0.03 / 0.00**. Close frames at exactly 0 Ma
+differ (Himalaya 12.8, erg 12.9, plains 10.5, Zagros 8.2, Hawaii 1.2, Mid-Atlantic 2.2), and the
+2.5 Ma control says why: at an exact keyframe the old scan bound the younger neighbour's interval
+fields (README 7.16), so the present day rode `fut_0005`'s plate slots and rotation table; the new
+`frameAt` binds keyframe 50's own, and the per-pixel detail instances move with the material
+coordinates while the statistics do not. That is the requested change, not a rendering difference.
+
+**The graph.** `TectonicPolicy.gmstAt` reproduces the brief's anchors (1000 Ma 20.0, 300 Ma 15.0,
+present 14.4, +250 Myr 24.0, 66 Ma 27.36 from the 65/70 Ma records, 302.5 Ma 14.85), exact at every
+keyframe, linear inside every interval, clamped at the ends, null on malformed data; the marker sits
+at x = 217.6 of 272 at the present (80 %).
+
+**Not done, and why.** The commit series is by feature as the brief asked (harness → broker → seeks
+→ clouds → graph → cache → docs → deploy), rebuilt from the reconstruction patches and checked
+byte-identical to the working tree. The two update-log files have diverged (see
+`HANDOFF-ATLAS-PORT.md`); the shipped one carries 2.4. Close tilted views keep a heavy deck at 55 %
+opacity by the brief's own rule; the switch is the remedy until the owner rules on it.
