@@ -1099,17 +1099,21 @@ function initGL(){
       uCloud:{value:0}, uShadow:{value:0}, uCloudMap:{value:0}},
     vertexShader:CVERT, fragmentShader:CFRAG});
   clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
-  clouds.renderOrder=2;
+  clouds.renderOrder=2; clouds.layers.set(CLOUD_LAYER);
   globe.add(clouds);   // co-rotates with the terrain; motion comes from uWeatherTime
   const smat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
     uniforms:{...cmat.uniforms, uShadow:{value:1}},vertexShader:CVERT,fragmentShader:CFRAG});
   cloudShadow=new THREE.Mesh(clouds.geometry,smat);
   cloudShadow.renderOrder=1; cloudShadow.rotation.y=0.003; cloudShadow.scale.setScalar(SHADOW_RATIO);
+  cloudShadow.layers.set(CLOUD_LAYER);
   globe.add(cloudShadow);
   const mmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.FrontSide,extensions:{derivatives:true},
     uniforms:{...cmat.uniforms, uCloudMap:{value:1}, uCloud:{value:0}},vertexShader:CVERT,fragmentShader:CFRAG});
   mapClouds=new THREE.Mesh(mapMesh.geometry,mmat);
-  mapClouds.renderOrder=2; mapClouds.visible=false; scene.add(mapClouds);
+  mapClouds.renderOrder=2; mapClouds.visible=false; mapClouds.layers.set(CLOUD_LAYER); scene.add(mapClouds);
+  cam.layers.enableAll(); orthoCam.layers.enableAll();
+  // a lost context takes the cache with it; it is rebuilt on demand
+  cv.addEventListener('webglcontextlost',()=>{if(_ground){_ground.rt.dispose();_ground=null;}});
   // stars
   const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
@@ -3621,6 +3625,7 @@ function _bakeStrips(){
   orthoCam.left=-0.5;orthoCam.right=0.5;orthoCam.top=0.5;orthoCam.bottom=-0.5;orthoCam.updateProjectionMatrix();
   mapMesh.scale.set(1,1,1);mapMesh.position.set(0,0,0);
   const prevRT=renderer.getRenderTarget();
+  orthoCam.layers.enableAll();
   const n=Math.min(SHEET_STRIPS_PER_FRAME,SHEET_STRIPS-j.row);
   for(let k=0;k<n;k++){
     const y0=Math.floor(j.row*SHEET_H/SHEET_STRIPS), y1=Math.floor((j.row+1)*SHEET_H/SHEET_STRIPS);
@@ -3695,6 +3700,110 @@ function useLite(f){
   _liteOn = _liteOn ? r>0.35 : r>0.45;
   return _liteOn;
 }
+/* ================= THE GROUND CACHE (the Atlas port, 2026-09-07) =========
+   Paused with the weather moving, the only thing that changes between one
+   frame and the next is the cloud layer -- and the terrain shader was being
+   run over every pixel of the planet 24 times a second to redraw a ground
+   that had not moved. Measured on the M1 (build/verify old_timing_orb): a
+   2560x1440 terrain frame is ~350 ms, so weather at 24 a second was weather
+   at three. Section 5 of the port brief proposes exactly this: keep the
+   fully rendered ground at the SAME visual resolution and composite the
+   clouds over it while it remains valid.
+
+   The ground is everything but the cloud shells and the map cloud plane
+   (those live on CLOUD_LAYER). It is rendered into one render target of the
+   canvas's own size the first time the cache is used or whenever anything
+   that draws it changes -- groundSig() lists it all: the age and the camera,
+   the view, the path (terrain or sheets), every sampler the terrain material
+   holds and every uniform bound with them, the overlays, the quality, the
+   viewport -- and then re-rendered in STRIPS, one sixteenth of the image per
+   weather frame with the scissor on, so the sea-surface sheen (uTime, the
+   one animated ground term) keeps moving at about 1.5 sweeps a second while
+   no single frame pays for the whole planet. Each weather frame is then one
+   blit of the cached image and the cloud passes. Nothing is drawn at a
+   lower resolution, and with the clouds off or anything else in motion the
+   cache stands down and the frame is rendered exactly as before, which is
+   what keeps the cloud-off picture bit-identical (verify_diff.py, the
+   terrain-preservation check).
+
+   Bounded: a target larger than GROUND_MAX_BYTES (a 5K canvas at pixel
+   ratio 2 is 59 MB and fits; multisampling is taken only where four samples
+   still fit) means no cache and direct rendering. ?groundcache=0 disables
+   it; APP.ground() reports it; the perf HUD shows it. */
+const CLOUD_LAYER=1;
+const GROUND_ON=_sq.get('groundcache')!=='0';
+const GROUND_STRIPS=16, GROUND_MAX_BYTES=96*1048576;
+let _ground=null;   // {rt,w,h,samples,sig,row,full,strips,at}
+const _groundQuadCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+let _groundQuad=null;
+function groundSig(){
+  const u=mat.uniforms, L=liteMat.uniforms;
+  const tex=[u.elevA,u.elevB,u.rainA,u.rainB,u.waterA,u.waterB,u.surfA,u.surfB,u.oceanA,u.oceanB,
+             u.dispA,u.plateA,u.motA,u.stkA,u.stkB,u.uAtlas,L.sheetA,L.sheetB].map(x=>x.value?x.value.id:-1).join(',');
+  return [state.age,state.rot,state.tilt,state.zoom,state.gtilt,state.head,state.view,state.mapLon,state.shade,
+          renderer.getPixelRatio(),innerWidth,innerHeight,globe.material===liteMat?'L':'T',tex,
+          u.uWarp.value,u.uMat.value,u.uTect.value,u.uFore.value,u.uFoldOn.value,u.uDrainOn.value,
+          u.uStkSel.value.x,u.uStkSel.value.y,u.uStkSel.value.z,u.uStkSel.value.w,u.uStkSelB.value.x,u.uStkSelB.value.y,
+          u.mixf.value,u.uDisp.value,u.uAtlasOn.value,u.uTemp.value,u.uVeg.value,u.uIceT.value,u.uSeaT.value,
+          u.uSnowball.value,u.uSeaTint.value,u.uDry.value,u.uGrass.value,u.uSchem.value,u.uDetail.value,
+          lastOverlayFrame,state.layers.boundaries,state.layers.vectors,state.layers.hotspots,state.selPlate,
+          atmo.material.uniforms.uAtm.value,atmo.material.uniforms.uRim.value].join('|');
+}
+function _groundTarget(W,H){
+  if(_ground&&_ground.w===W&&_ground.h===H)return _ground;
+  if(_ground){_ground.rt.dispose();_ground=null;}
+  if(W*H*4>GROUND_MAX_BYTES)return null;
+  const samples=(renderer.capabilities.isWebGL2&&W*H*4*5<=GROUND_MAX_BYTES)?4:0;
+  const rt=new THREE.WebGLRenderTarget(W,H,{depthBuffer:true,stencilBuffer:false,samples:samples});
+  rt.texture.minFilter=THREE.NearestFilter; rt.texture.magFilter=THREE.NearestFilter;
+  rt.texture.generateMipmaps=false; rt.texture.colorSpace=THREE.NoColorSpace;
+  if(!_groundQuad){
+    _groundQuad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({depthTest:false,depthWrite:false,
+      uniforms:{tex:{value:null}},
+      vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
+      fragmentShader:'precision highp float;uniform sampler2D tex;varying vec2 vUv;void main(){gl_FragColor=texture2D(tex,vUv);}'}));
+    _groundQuad.frustumCulled=false;
+  }
+  _ground={rt,w:W,h:H,samples,sig:'',row:0,full:0,strips:0,at:0};
+  return _ground;
+}
+/* Draw the scene with `camera`: through the cache when it applies, directly
+   otherwise. `weather` is loop()'s weatherMoving. */
+function drawScene(camera,weather){
+  const cacheable=GROUND_ON&&weather&&!state.playing&&!dragging&&!state.ambient&&!_scrubbing&&_bakeJob===null&&
+                  !(state.layers.rotate&&state.spin>0)&&globe.material!==previewMat;
+  const W=renderer.domElement.width,H=renderer.domElement.height;
+  const g=cacheable?_groundTarget(W,H):null;
+  if(!g){
+    if(_ground){_ground.active=false;}
+    camera.layers.enableAll();
+    renderer.render(scene,camera);
+    return false;
+  }
+  const sig=groundSig(), rt=g.rt;
+  camera.layers.set(0);
+  if(sig!==g.sig){
+    rt.scissorTest=false;
+    renderer.setRenderTarget(rt); renderer.render(scene,camera);
+    g.sig=sig; g.row=0; g.full++; g.at=performance.now();
+  }else{
+    // one strip of sixteen a frame: the sheen keeps moving, no frame pays for the planet
+    const y0=Math.floor(g.row*H/GROUND_STRIPS), y1=Math.floor((g.row+1)*H/GROUND_STRIPS);
+    rt.scissorTest=true; rt.scissor.set(0,y0,W,y1-y0); rt.viewport.set(0,0,W,H);
+    renderer.setRenderTarget(rt); renderer.render(scene,camera);
+    rt.scissorTest=false; g.row=(g.row+1)%GROUND_STRIPS; g.strips++;
+  }
+  renderer.setRenderTarget(null);
+  _groundQuad.material.uniforms.tex.value=rt.texture;
+  renderer.render(_groundQuad,_groundQuadCam);
+  camera.layers.set(CLOUD_LAYER);
+  renderer.autoClear=false;
+  renderer.render(scene,camera);
+  renderer.autoClear=true;
+  camera.layers.enableAll();
+  g.active=true;
+  return true;
+}
 /* Quality scale: what setPixelRatio actually gets. Auto starts at full and
    is stepped by the governor in loop(); a pinned choice bypasses it. */
 let _autoScale='full';
@@ -3765,7 +3874,10 @@ function perfHud(now){
     String.fromCharCode(10)+'uploads q '+_upQ.length+'   tex '+TEXCACHE.size+' / '+Math.round(_texBytes/1048576)+' MB'+
     String.fromCharCode(10)+'scale '+renderScale().toFixed(2)+' ('+(state.quality==='auto'?'auto:'+_autoScale:state.quality)+')'+
     '   warp '+(mat.uniforms.uWarp.value>0.5?'on':'OFF')+'  mat '+(mat.uniforms.uMat.value>0.5?'on':'OFF')+
-    String.fromCharCode(10)+'path '+(globe.material===liteMat?'SHEETS':'terrain')+'  sheets '+[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i).join(',')+
+    String.fromCharCode(10)+'path '+(globe.material===liteMat?'SHEETS':globe.material===previewMat?'PREVIEW':'terrain')+
+    (_ground&&_ground.active?('  ground cache '+_ground.w+'x'+_ground.h+(_ground.samples?' msaa':'')+' full '+_ground.full+' strips '+_ground.strips):'')+
+    '  clouds '+(clouds.visible||mapClouds.visible?(clouds.material.uniforms.uWeatherTime.value.toFixed(0)+'s'):'off')+
+    '  sheets '+[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i).join(',')+
     (_bakeJob?('  baking '+_bakeJob.i+' '+_bakeJob.row+'/'+SHEET_STRIPS):'')+'  '+footprintKm().toFixed(1)+' km/px';
   if(txt!==_phLast){_phEl.textContent=txt;_phLast=txt;}
   _phN=0;_phSum=0;_phMax=0;
@@ -4034,10 +4146,10 @@ function loop(now,force){
     cam.up.copy(up).multiplyScalar(Math.sin(t)).addScaledVector(horiz,Math.cos(t));
     cam.lookAt(C);
     globe.rotation.x=0;atmo.rotation.copy(globe.rotation);
-    renderer.render(scene,cam);
+    drawScene(cam,weatherMoving);
   }else{
     layoutMap();
-    renderer.render(scene,orthoCam);
+    drawScene(orthoCam,weatherMoving);
     drawMapOverlays();
   }
   layoutLabels();
@@ -4668,9 +4780,12 @@ function buildLegend(){
                         fade:+(loop._cloudFade||0).toFixed(3),uCloud:+cu.uCloud.value.toFixed(3),
                         animated:TectonicPolicy.weatherActive(state,document.hidden)&&_surface.mode==='full',
                         time:+cu.uWeatherTime.value.toFixed(2),image:!!_cloudTex,blend:+cu.uCloudDetailBlend.value.toFixed(3),
-                        rainReady:cu.uRainReady.value,era:cu.uEra.value,
+                        rainReady:cu.uRainReady.value,era:cu.uEra.value,mapCloud:+mapClouds.material.uniforms.uCloud.value.toFixed(3),
+                        ground:_ground?{active:!!_ground.active,full:_ground.full,strips:_ground.strips}:null,
                         layers:{clouds:state.layers.clouds!==false,weather:state.layers.weather!==false},
                         extraMB:Math.round(_extraBytes/1048576)};},
+              ground(){return _ground?{active:!!_ground.active,w:_ground.w,h:_ground.h,samples:_ground.samples,full:_ground.full,strips:_ground.strips,
+                                        MB:Math.round(_ground.w*_ground.h*4*(1+_ground.samples)/1048576),on:GROUND_ON}:{active:false,on:GROUND_ON};},
               gl:{mat,scene,globe,atmo,clouds,renderer,cam,
                   materials:{terrain:mat,lite:liteMat,preview:previewMat,clouds:clouds.material,shadow:cloudShadow.material,mapClouds:mapClouds.material}}};
   // Do NOT reset the age here — the opening age is a deliberate choice made in
