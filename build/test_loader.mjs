@@ -146,11 +146,13 @@ test('the pair comes first, and a later caller raises a queued request', async (
   assert.deepEqual(order.slice(1), ['pairB', 'pairA', 'spec10']);
 });
 
-test('clouds hide during playback and the weather clock cannot leap', () => {
+test('clouds persist through playback and the weather clock cannot leap', () => {
   const state = {playing: false, view: 'globe', shade: 'sat', layers: {clouds: true, weather: true}};
   assert.equal(policy.cloudsVisible(state), true);
   assert.equal(policy.weatherActive(state, false), true);
-  assert.equal(policy.cloudsVisible({...state, playing: true}), false);
+  assert.equal(policy.cloudsVisible({...state, playing: true}), true, 'the second round keeps the clouds while time runs');
+  assert.equal(policy.weatherActive({...state, playing: true}, false), true, 'and the weather keeps moving');
+  assert.equal(policy.cloudsVisible({...state, shade: 'schem'}), false);
   assert.equal(policy.cloudsVisible({...state, layers: {clouds: false}}), false);
   assert.equal(policy.cloudsVisible({...state, layers: {clouds: true, weather: false}}), true, 'animation off keeps the clouds');
   assert.equal(policy.weatherActive({...state, layers: {clouds: true, weather: false}}, false), false);

@@ -28,6 +28,7 @@ precision highp float;
    material must enable them. */
 uniform sampler2D rainA,rainB,elevA,elevB,uNz,uCloudDetail;
 uniform float mixf,uWeatherTime,uCloud,uShadow,uCloudMap,uMapLon,uRainReady,uEra,uTemp;
+uniform float uSnowball;   // the era's ice line at the equator (1) damps the whole deck: a frozen ocean feeds little cloud
 uniform float uCloudDetailBlend;
 varying vec2 vUv;varying vec3 vN;
 const float PI=3.14159265359;
@@ -98,12 +99,33 @@ void main(){
   float dry=land*(1.0-wet);
   float gain=mix(0.94,mix(0.50,1.12,wet),land);
   gain*=0.60+0.40*smoothstep(-5.0,-1.5,uTemp);
+  /* THE ERA'S LIKELY WEATHER (round 2, 2026-09-07). A soft zonal
+     climatology under the satellite structure: the tropical convergence
+     band, the mid-latitude storm tracks, the clear subtropical highs --
+     the same three bands the original procedural clouds were built from --
+     as gentle gains, never as masks that would cut a front in two. The
+     era's land and rainfall above already move the deck with the
+     continents; a snowball world loses most of it. */
+  float zonal=0.80+0.30*exp(-pow(lat/0.16,2.0))+0.25*exp(-pow((al-52.0)/13.0,2.0))-0.30*exp(-pow((al-24.0)/9.0,2.0));
+  gain*=zonal*(1.0-0.45*uSnowball);
   vec2 cloud;
   if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
   else{
     cloud=fallbackWeather(lon,lat,gain);
     if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
   }
+  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
+     day in transport; on its own nothing ever forms or dies. A smooth
+     three-dimensional lattice noise drifting through the weather clock
+     (about a minute from clear to overcast at a point) gates the optical
+     depth, so masses thicken, merge across a clearing and dissolve while
+     the fine structure inside them keeps its fronts and spirals. The era
+     moves the pattern too, gently, so a running timeline sees the weather
+     reorganise rather than jump. A gate, multiplicative and broad -- not a
+     second cloud field, and not a crossfade between two. */
+  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
+  float syn=0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0));
+  cloud*=mix(0.30,1.35,smoothstep(0.30,0.72,syn));
   float mu=uCloudMap>0.5?1.0:max(normalize(vN).z,0.0);
   float path=mix(1.0,1.35,1.0-mu);
   float alpha=1.0-exp(-cloud.x*path);

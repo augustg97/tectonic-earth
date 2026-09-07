@@ -195,10 +195,11 @@
       }
       return {i: hi, j: lo, t: (age - ages[hi]) / (ages[lo] - ages[hi])};
     },
-    /* Clouds are a paused-time layer: geological playback exposes the
-       surface, and hiding them never changes the user's layer setting. */
+    /* Clouds are a layer of the world, playing or paused (the port's second
+       round; the first hid them during playback). They leave only for the
+       schematic shading and the user's own switch. */
     cloudsVisible(state) {
-      return !state.playing && state.shade !== 'schem' && state.layers.clouds !== false;
+      return state.shade !== 'schem' && state.layers.clouds !== false;
     },
     weatherActive(state, hidden) {
       return !hidden && TectonicPolicy.cloudsVisible(state) && state.layers.weather !== false;
