@@ -264,7 +264,7 @@ Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the ge
 
 `web/shaders/` holds the GLSL: `VERT`/`FRAG` (globe and map), `LFRAG` (the sheet path, §5.9), `CVERT`/`CFRAG` (clouds) and `PVERT`/`PFRAG` (the time preview, §5.11); `check_shader.py` packs them into `shaders.js`. The fragment shader decodes and interpolates the fields, then recomputes temperature, relief, biome colour, water, ice, sky and the ocean fabric per pixel.
 
-**The clouds (since the Atlas port, September 2026)** are NASA's *Blue Marble: Clouds* — a multi-day composite by Reto Stöckli (NASA/GSFC), reduced to a 4096 × 2048 cloud-density scalar in `web/imagery/`, provenance in `nasa-clouds.json` — sampled as one continuous field in coherent transport (0.004 rad per weather second, a bounded latitude shear, gently varying deformation, never accumulated strain and never a crossfade between phases). The selected era adapts it, not the other way round: the shader reads the same elevation and rainfall pair the terrain is drawn from (the terrain material's own uniform objects) for a land mask and a broad land-normalised wetness that modulates optical depth gently, and `uEra` shifts the arrangement. Rainfall is land-only, so an ocean zero is never read as dryness. Three meshes share one texture and one weather clock: the shell at 1.014 over the globe, a shadow shell at 1.0085 (between the highest displaced peak at full exaggeration and the clouds; both ride the exaggeration lift), and a plane over the flat map. It is a paused-time layer: Play hides it and its shadow at once, Pause fades it back once the requested pair is bound. Clouds thin to 55% at the closest zoom instead of retiring. Across ancient and future eras it is satellite-derived visual structure with illustrative climate adaptation, not reconstructed weather for any date.
+**The clouds (since the Atlas port, September 2026)** are NASA's *Blue Marble: Clouds* — a multi-day composite by Reto Stöckli (NASA/GSFC), reduced to a 4096 × 2048 cloud-density scalar in `web/imagery/`, provenance in `nasa-clouds.json` — sampled as one continuous field in coherent transport (0.004 rad per weather second, a bounded latitude shear, gently varying deformation, never accumulated strain and never a crossfade between phases). The selected era adapts it, not the other way round: the shader reads the same elevation and rainfall pair the terrain is drawn from (the terrain material's own uniform objects) for a land mask and a broad land-normalised wetness that modulates optical depth gently, and `uEra` shifts the arrangement. Rainfall is land-only, so an ocean zero is never read as dryness. Three meshes share one texture and one weather clock: the shell at 1.014 over the globe, a shadow shell at 1.0085 (between the highest displaced peak at full exaggeration and the clouds; both ride the exaggeration lift), and a plane over the flat map. Since the port's second round the deck rides the running timeline too: its transport is on the weather clock, its arrangement follows the era's land, rain and ice as the continents move, and a slow synoptic gate — a three-dimensional lattice noise drifting through the weather clock, about a minute from clear to overcast at a point, moved gently by the era as well — thickens, merges and dissolves cloud masses while the satellite structure inside them keeps its fronts and spirals. A soft zonal climatology underneath (the tropical convergence band, the mid-latitude storm tracks, the clear subtropical highs, the three bands the old procedural clouds were built from) sets where the deck is likely, as gains and never as masks; a snowball world loses most of it. Playback waits for a pair's core before advancing (§5.11), so the clouds never see a half-arrived world. Clouds thin to 55% at the closest zoom instead of retiring. Across ancient and future eras it is satellite-derived visual structure with illustrative climate adaptation, not reconstructed weather for any date.
 
 ---
 
@@ -302,11 +302,23 @@ texture reads a pixel.
   render targets. Or they are **shipped**: `build/bake_sheets.py` drives the app headless
   on a real GPU, bakes all 251, encodes them to AVIF (alpha kept) in `web/sheets/` with a
   manifest, and the app loads those instead of baking. A shader change invalidates the set:
-  re-run the script (a minute of GPU, ten to twenty of encode) and bump `SHEET_V`.
+  re-run the script (a minute of GPU, ten to twenty of encode) and bump `SHEET_V`. **Two
+  sets ship since the port's second round (2026-09-07):** `sheets/` is 4096 wide, what the
+  app draws from on a desktop (a 4096 sheet is 76 MB of bitmap and mipmapped texture, so it
+  holds six of them instead of eight), and `sheets2048/` is the lean set the ambient page
+  keeps and a constrained device takes; `bake_sheets.py --width 2048` refreshes the latter
+  into `web/sheets/`, to be moved aside by hand. The preview atlas (§5.11) is built from the
+  4096 set and `build_site.py` refuses to ship it stale.
 - The path switches on **automatically** once a screen pixel covers about half a sheet
   texel (`?lite=1|0` forces it, `?sheet=N` sets the bake width, default 4096, 2048 on
   low-memory devices, `?bakefull=1` bakes a sheet in one frame, `?noshipped=1` ignores the
-  manifest). A scrub keeps the live path. `?perf=1` shows which path is drawing.
+  manifest). A scrub keeps the live path. `?perf=1` shows which path is drawing. **Eager on a
+  slow GPU** (round 2): once the governor has stepped the render scale down, or the quality
+  is pinned below Full, the sheets engage from a quarter of a texel per pixel: a pre-shaded
+  4096 sheet magnified up to four times is sharper than the live shader at half resolution
+  and a tenth of its cost, which is what makes wide-zoom playback smooth on the M1's 5K
+  display. The wide view the owner reported as "unfinished" was the 2048 set at 1.75×
+  magnification on the stepped-down scale.
 - Not carried by a sheet, by design: climate uniforms dissolve across an interval rather
   than interpolate; the Messinian drawdown is held off (a basin drained for two frames must
   not fade over ten); the sea-surface sheen is frozen; keyframe 0 carries the Holocene lakes.
@@ -326,8 +338,9 @@ tune the pace and cost from the address bar.
 of the next keyframes are requested ahead by speed — about two seconds' worth, two keyframes at
 3 Myr/s and four at 10 — where one keyframe ahead was 0.28 s of slack at the old 18 Myr/s, less
 than a fetch, a decode and a mipmapped upload. When the next pair's sheet is still late, time
-**waits** for it (`_liteHolds`, capped at 1.5 s so a sheet that never comes cannot stop the
-clock) instead of the path dropping to the terrain shader at full pixel ratio for the wide view,
+**waits** for it (`_liteHolds`, capped at `HOLD_MS` — 3 s since the port's second round — so a sheet
+that never comes cannot stop the clock; the terrain path waits the same way for the next pair's
+core, `_fieldHolds`) instead of the path dropping to the terrain shader at full pixel ratio for the wide view,
 which was the "smooth, then a burst of lag" on the Mini; ambient.html always did this. And
 shipped sheets are bounded at `SHEET_KEEP` like the bake slots — they used to accumulate for
 every keyframe visited, 11 MB of GPU texture each. `_verify.html?playtest=NAME&speed=10&secs=8
@@ -339,31 +352,6 @@ rule: with the 2048 set a screen at pixel ratio 2 reaches the sheets only near t
 (a texel must cover no more than about two device pixels), so on a Retina laptop the sheet path
 is nearly dormant and the terrain shader is the picture; the 4096 set would engage it from
 about zoom 2.
-
-### 5.11 The Atlas port: the time preview, the ground cache, the temperature graph
-
-Three things came over from Tectonic Atlas (September 2026), selectively — its lighter renderer, field subset and mesh caps did not, and the terrain shaders are untouched.
-
-- **The time preview.** A seek to an age whose fields are not resident used to leave the previous world on screen under the new age until the pair arrived. Now `bindTextures()` keeps an explicit account of what the picture shows against what the age asks for (`APP.surface()`: `full`, `sheets`, `still`, `preview`, `stale`) and draws the requested age at once from a 4096 × 2048 atlas of 256 × 128 thumbnails of all 251 shipped sheets (`web/imagery/timeline-preview.webp`, built by `build/build_timeline_preview.py` from `web/sheets/` and hash-checked against them at every build). Within two keyframes a resident neighbour is the better stand-in (the scrub stepping of July 2026, now also for short jumps); where the pair's sheets are already resident and the footprint allows them, they are (their colour is the requested keyframes; the stale height can at worst turn a coastline pixel into a plain blend). The readout says *Loading terrain* while a preview or a still shows and *Refining detail* while a bound pair's other fields land. The preview has no height, no warp and no detail; it is loading feedback and is never the settled picture.
-- **The ground cache.** Paused with the weather moving, the terrain shader was being run over every pixel 24 times a second to redraw a ground that had not moved. `drawScene()` renders everything but the cloud layer into a render target of the canvas's own size whenever anything that draws it changes (`groundSig()`: age, camera, view, path, every bound sampler and uniform, overlays, quality, viewport), refreshes it one strip in sixteen per weather frame so the sea sheen keeps moving, and composites the clouds over it. Nothing is drawn at a lower resolution; with the clouds off or anything else in motion the cache stands down and the frame is rendered exactly as before, which is what keeps the cloud-off picture identical (`build/verify_diff.py`). Bounded at 96 MB of render target; `?groundcache=0` disables it.
-- **The temperature graph.** The Conditions readout carries the timeline's `gmst` column across the whole span — 1000 Ma at the left, the present 80 % across, +250 Myr at the right — as a polyline through the 251 records (never a spline, which would invent overshoot) on a fixed −50…+40 °C scale that widens rather than clips. The marker, the value and the accessible description move with the age, and only then; the values are the inherited model's, the readout's caveats stand. Built once as a sibling *after* `#env`, which `updateReadout()` replaces many times a second.
-
-**What it measured** (the M1, `build/verify_run.py` driving `web/_verify.html` on the real GPU, the frozen pre-port page through the same driver back to back; another session's headless Chromes shared the machine, so absolute frame times are an upper bound and the ratios are the result):
-
-| | before | after |
-|---|---|---|
-| cold seek to full detail, 1000 → 0 / 300 / −250 / 700 Ma, warm localhost | 6.6 / 8.8 / 6.0 / 3.4 s, the previous world shown throughout | 0.56 / 0.24 / 0.24 / 0.24 s, the preview within 20–74 ms |
-| the same with a 600 ms delay on every field fetch | 6.6 / 7.1 / 5.7 / 6.1 s | 0.83 / 0.90 / 0.94 / 0.93 s |
-| fast-scrub release to render | 730 ms | 10 ms |
-| keyframe-crossing storm gate | ≤ 2 uploads | ≤ 2 uploads |
-| playback coherence at 18 Myr/s (`uWarp`/`uMat` live) | 100 % | 100 % |
-| sheet-path playback, 10 Myr/s, 600 ms sheet delay | 0 held frames | 5 of 2760 |
-| working set over 90 s of far jumps | 949 MB cache, ~460 pinned, flat | the same, plus 139 MB of imagery (preview 64, clouds 75) |
-| frame p50 at 2560 × 1440, orbital, clouds on / off | 355 / 343 ms | 344 / 328–346 ms direct; **56 ms** paused with the ground cache |
-| frame p50, Himalaya at 1.35 / Andes tilted 55° | 352 / 316 ms | 350 / 307 ms direct; **29 / 30 ms** with the cache |
-| cloud-off frames old against new: orbital, map, close at 2.5 Ma | — | 0.06–0.18, **0.00**, **0.00–0.03** of 255 mean |
-| cloud-off close frames at exactly 0 Ma | — | 1.2–12.9 of 255: the exact-keyframe binding (§7.16), not the renderer |
-| cloud motion, fixed camera: present Globe 20 s / 300 Ma Map 15 s / +250 Myr Globe 15 s | — | 25.6 / 19.7 / 20.5 of 255 mean in the crop (Atlas's own reference pair: 23.7 over 23 s) |
 
 ### 5.10 Mountains: the orogen atlas and the fold coordinates
 
@@ -442,6 +430,47 @@ Two things the gate alone gets wrong, and their model (WP-10 round 3):
   round to compare against. The plains dissection and the erg lineation were judged mild
   improvements at twice their first cut and ship at that: `gd*3.2` / `dr.x*0.32`, corridor
   `*6.0`, crest `*1.0`, `ampE=gErg*4.4`.
+
+### 5.11 The Atlas port: the time preview, the ground cache, the temperature graph
+
+Three things came over from Tectonic Atlas (September 2026), selectively — its lighter renderer, field subset and mesh caps did not, and the terrain shaders are untouched.
+
+- **The time preview.** A seek to an age whose fields are not resident used to leave the previous world on screen under the new age until the pair arrived. Now `bindTextures()` keeps an explicit account of what the picture shows against what the age asks for (`APP.surface()`: `full`, `sheets`, `still`, `preview`, `stale`) and draws the requested age at once from a 4096 × 2048 atlas of 256 × 128 thumbnails of all 251 shipped sheets (`web/imagery/timeline-preview.webp`, built by `build/build_timeline_preview.py` from `web/sheets/` and hash-checked against them at every build). Within two keyframes a resident neighbour is the better stand-in (the scrub stepping of July 2026, now also for short jumps); where the pair's sheets are already resident and the footprint allows them, they are (their colour is the requested keyframes; the stale height can at worst turn a coastline pixel into a plain blend). The readout says *Loading terrain* while a preview or a still shows and *Refining detail* while a bound pair's other fields land. The preview has no height, no warp and no detail; it is loading feedback and is never the settled picture. **The core of a pair** (round 2): the switch from the preview to the terrain shader waits for elevation, rainfall, lakes, surface process and ocean structure of both keyframes and the interval's displacement and plate slots (`coreKinds`), not for elevation alone, which had put a new coastline over the previous age's lakes, drainage and abyssal fabric for the next second — the "unfinished frame". And **playback waits** for the next pair's core the way it waits for a late sheet (capped at 1.5 s, the decodes asked for at essential priority), so continents drift instead of snapping to a still and back.
+- **The ground cache.** Paused with the weather moving, the terrain shader was being run over every pixel 24 times a second to redraw a ground that had not moved. `drawScene()` renders everything but the cloud layer into a render target of the canvas's own size whenever anything that draws it changes (`groundSig()`: age, camera, view, path, every bound sampler and uniform, overlays, quality, viewport), refreshes it one strip in sixteen per weather frame so the sea sheen keeps moving, and composites the clouds over it. Nothing is drawn at a lower resolution; with the clouds off or anything else in motion the cache stands down and the frame is rendered exactly as before, which is what keeps the cloud-off picture identical (`build/verify_diff.py`). Bounded at 96 MB of render target; `?groundcache=0` disables it.
+- **The temperature graph.** The Conditions readout carries the timeline's `gmst` column across the whole span — 1000 Ma at the left, the present 80 % across, +250 Myr at the right — as a polyline through the 251 records (never a spline, which would invent overshoot) on a fixed −50…+40 °C scale that widens rather than clips. The marker, the value and the accessible description move with the age, and only then; the values are the inherited model's, the readout's caveats stand. Built once as a sibling *after* `#env`, which `updateReadout()` replaces many times a second.
+
+- **Round 2 (the same evening): time that waits, and a sheet set the wide view can use.** The owner's screenshots at 608 Ma showed the wide view as an unfinished frame beside the close view, and continents that jumped while time ran. The wide view was the 2048 sheet set drawn at 1.75× magnification on the stepped-down render scale; the app now ships the 4096 set (§5.9) and engages the sheets eagerly once the governor has stepped down or the quality is pinned below Full. The jumps were time advancing into a pair whose fields had not landed: `coreKinds` (elevation, rainfall, lakes, surface process and ocean structure of both keyframes, the interval's displacement and plate slots) gates the switch from the preview, and playback **waits for the next pair's core on both paths** (`_fieldHolds`, capped at `HOLD_MS` = 3 s the way `_liteHolds` waits for a late sheet — 1.5 s let a loaded machine advance into a still; the preview gives up after 6 s and binds progressively). No frame moves time by more than 1.5 Myr (`MAX_STEP_MYR`, 0.3 of an interval): at the default 3 Myr/s the half-second cap on `dtT` already held it there, so only fast playback on slow frames now runs below the slider, smoothly, where a 300 ms frame at 10 Myr/s used to leap 3 Myr. Shipped 4096 sheets upload in sixteen strips — two a frame while the picture has its sheets, up to eight by the frame's length while it is waiting for one — the mip chain once at the end; a rule that scaled with the frame's length alone fed on itself, a slow frame allowing five strips that kept it slow. A shipped sheet whose fetch failed is retried and never baked in the app: falling through to the bake cost 1.8-second frames (four strips of an 8-megapixel terrain render each) in the first playback test, and `APP.sheets.status().bakes` now counts bakes, which a shipped site keeps at zero. And the crossing hitch playback had always carried went with this round: the 256 × 128 CPU elevation raster the labels snap to was drawn from the keyframe's full 4096 × 2048 bitmap on the spot, a 33 MB GPU-to-CPU read-back on the main thread once per keyframe (a crossing with no uploads at all cost 316–387 ms in the storm test, and one sheet-path playback frame in twenty was that size); `elevField` now builds it off the main thread from a resized decode of the same bytes, and readers get null until it lands, as they did while the elevation was in flight. The clouds ride the running timeline and evolve (§5.7).
+
+**What it measured** (the M1, `build/verify_run.py` driving `web/_verify.html` on the real GPU, the frozen pre-port page through the same driver back to back; another session's headless Chromes shared the machine, so absolute frame times are an upper bound and the ratios are the result):
+
+| | before | after |
+|---|---|---|
+| cold seek to full detail, 1000 → 0 / 300 / −250 / 700 Ma, warm localhost | 6.6 / 8.8 / 6.0 / 3.4 s, the previous world shown throughout | 0.56 / 0.24 / 0.24 / 0.24 s, the preview within 20–74 ms |
+| the same with a 600 ms delay on every field fetch | 6.6 / 7.1 / 5.7 / 6.1 s | 0.83 / 0.90 / 0.94 / 0.93 s |
+| fast-scrub release to render | 730 ms | 10 ms |
+| keyframe-crossing storm gate | ≤ 2 uploads | ≤ 2 uploads |
+| playback coherence at 18 Myr/s (`uWarp`/`uMat` live) | 100 % | 100 % |
+| sheet-path playback, 10 Myr/s, 600 ms sheet delay | 0 held frames | 5 of 2760 |
+| working set over 90 s of far jumps | 949 MB cache, ~460 pinned, flat | the same, plus 139 MB of imagery (preview 64, clouds 75) |
+| frame p50 at 2560 × 1440, orbital, clouds on / off | 355 / 343 ms | 344 / 328–346 ms direct; **56 ms** paused with the ground cache |
+| frame p50, Himalaya at 1.35 / Andes tilted 55° | 352 / 316 ms | 350 / 307 ms direct; **29 / 30 ms** with the cache |
+| cloud-off frames old against new: orbital, map, close at 2.5 Ma | — | 0.06–0.18, **0.00**, **0.00–0.03** of 255 mean |
+| cloud-off close frames at exactly 0 Ma | — | 1.2–12.9 of 255: the exact-keyframe binding (§7.16), not the renderer |
+| cloud motion, fixed camera: present Globe 20 s / 300 Ma Map 15 s / +250 Myr Globe 15 s | — | 25.6 / 19.7 / 20.5 of 255 mean in the crop (Atlas's own reference pair: 23.7 over 23 s) |
+| round 2: the wide view at 608 Ma, zoom 3.9, sheet path against the live shader | 2048 sheets at 1.75× magnification on the stepped-down scale | 4096 sheets: 2.2–3.0 of 255 mean |
+| round 2: cloud evolution, fixed camera 60 s at 300 Ma | — | 19.4 of 255 mean; masses reorganise, not translate |
+| round 2: cold seek to a full core (all seven kinds) 1000 → 0 / 300 / −250 / 700 Ma | elevation alone in 0.24–0.56 s | 1.42 / 0.58 / 1.20 / 1.47 s, preview within 26–107 ms |
+| round 2: playback on the sheet path, 3 / 10 Myr/s, 20 / 15 s | 21.2 fps, 50 ms a frame at 3 Myr/s (2048 sheets, no clouds) | 12.8 / 10.7 fps, 67 / 67 ms median (4096 sheets, clouds on every frame); 0 pair jumps, 0 mix-fraction snaps, 0 path flips, 2 / 12 held frames; the weather clock advanced 16.8 s of 20 |
+| round 2: playback at zoom 1.6, the terrain path's zoom, 3 / 10 Myr/s | 0.7 fps at 1.55 s a frame, the terrain shader throughout | 2.5 / 3.1 fps, the sheets three frames in four once the governor stepped down; 0 jumps, 0 snaps, 1 / 3 held frames |
+| round 2: the same with a 600 ms delay on every field fetch | — | 2.7 fps, 0 jumps, 0 snaps, 5 held frames |
+| round 2: the wide view at 608 Ma, quality auto, 3 Myr/s | — | 12.1 fps, 83 ms median, 0 jumps, 0 snaps, 0 flips, 2 held frames |
+| round 2: the most one frame moved time at 10 Myr/s | 5 Myr, a whole interval | 1.5 Myr |
+| round 2: forced frame p50 at 2560 × 1440 on the sheet path — playing, clouds off / on; paused, cache off, clouds on; zoom 1.6 playing | 50 ms (2048 sheets, no clouds) | 25.7 / 29.1 / 24.7 / 18.7 ms |
+| round 2: the keyframe-crossing frame (storm gate), three crossings | ≤ 2 uploads, time not recorded | 2.5 / 2.6 / 5.6 ms, 0 uploads (316–387 ms with 0 uploads before the raster fix; 355 ms with 8 before the warm rule was reverted) |
+| round 2: in-app sheet bakes during playback on the shipped site | — | 0 in every run (the first cut baked a retrying sheet: 1.8 s frames) |
+| round 2: smoke test | 32 / 32 | 32 / 32 |
+
+The rAF frame interval of sheet-path playback (67–83 ms median here, against 25–29 ms for the forced frame) is the per-frame work of playback — the warm uploads for the terrain material, which binds on every path, two sheet strips a frame and the decodes' insertions — on a machine another session's Chromes were also using; one frame in twenty is 250–300 ms. Lazy binding of the terrain material while the sheets draw is the lever left.
 
 ## 6. Build and deploy
 

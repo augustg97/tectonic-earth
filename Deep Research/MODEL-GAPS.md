@@ -7850,3 +7850,73 @@ at x = 217.6 of 272 at the present (80 %).
 byte-identical to the working tree. The two update-log files have diverged (see
 `HANDOFF-ATLAS-PORT.md`); the shipped one carries 2.4. Close tilted views keep a heavy deck at 55 %
 opacity by the brief's own rule; the switch is the remedy until the owner rules on it.
+## THE ATLAS PORT, round 2 (2026-09-07, evening): clouds through playback, and continents that drift
+
+The owner's two screenshots at 608 Ma: the wide view "looks strange, like an unfinished frame"
+beside the close view, and playback is laggy with continents that jump. Three causes, each
+measured before it was fixed.
+
+**The wide view was the sheet path magnified.** The shipped sheets were the 2048 set (baked for
+the ambient page's budget); the owner's window is about 1490 CSS px at pixel ratio 2, and at zoom
+3.9 on the M1 the governor steps the render scale to `perf`, at which a screen pixel covers 0.57
+of a 2048 texel — over the half-texel rule — so the sheets drew at 1.75× magnification through
+the LFRAG's bilinear tap, and the zoomed-in view (below the rule) drew the live shader. Fixed
+structurally: the app now ships the **4096 set** (`web/sheets/`, baked on the M1 from the frozen
+page in about forty-five minutes; 238 MB; 946 KB a sheet), keeps the 2048 set for the ambient page
+and constrained devices (`web/sheets2048/`), holds six 4096 sheets instead of eight (76 MB each of
+bitmap and mipmapped texture), and engages the sheets **eagerly** — from a quarter texel per pixel
+— once the governor has stepped down or the quality is pinned below Full, since a pre-shaded sheet
+at up to 4× magnification beats the live shader at half resolution and a tenth of its cost.
+
+**The jumps were time advancing into a pair whose fields had not landed.** The first round's
+readiness gate was elevation alone: the terrain shader took over the moment both elevations were
+decoded and the other kinds landed behind it, and playback advanced regardless, so at a crossing
+the picture snapped to a still (or to the previous pair) and snapped again when the fields came.
+Now the **core of a pair** — elevation, rainfall, lakes, surface process and ocean structure of
+both keyframes, and the interval's displacement and plate slots (`coreKinds`) — gates the switch
+from the preview, and **playback waits for the next pair's core** (capped at three seconds, the decodes
+asked for at essential priority) the way it waits for a late sheet. The preview cannot wait for
+ever: after six seconds a pair binds progressively as before. And no frame moves time by more
+than 1.5 Myr, three tenths of an interval: at the default 3 Myr/s the half-second cap on the
+frame's elapsed time already held it there, so only fast playback on slow frames now runs below
+the slider, smoothly, where a 300 ms frame at 10 Myr/s used to leap 3 Myr.
+
+**The hitch at every crossing was older than the port.** With the jumps gone, one playback frame
+in twenty was still 300–400 ms, and the storm test found it in a crossing with no texture
+uploads at all: the 256 × 128 CPU elevation raster the labels snap to was drawn from the
+keyframe's full 4096 × 2048 bitmap on the spot, a 33 MB read-back from the GPU on the main
+thread, once per keyframe. It is now built off the main thread from a resized decode of the same
+bytes, and a label rides its plate position for the moment until it lands.
+
+Measured on the M1 through the headless harness (another session's Chromes on the same machine,
+so absolute frame times are upper bounds): playback on the sheet path at 3 and 10 Myr/s, 20 and
+15 s, 0 pair jumps, 0 mix-fraction snaps, 0 path flips, 2 and 12 held frames, 12.8 and 10.7 fps at a
+67 ms median (the old page: 21.2 fps and 50 ms with 2048 sheets and no clouds); at zoom 1.6, where
+the old page drew the terrain shader at 0.7 fps and 1.55 s a frame, 2.5–3.1 fps with the sheets
+three frames in four; with a 600 ms delay on every field fetch, 2.7 fps, 0 jumps, 5 held frames;
+the most one frame moved time at 10 Myr/s, 1.5 Myr (a whole interval before); the crossing frame
+2.5–5.6 ms with no uploads (316–387 ms before the raster fix); no in-app bakes; smoke 32 of 32. The
+forced frame on the sheet path at 2560 × 1440 is 19–29 ms; the playback interval's remainder is
+the per-frame work of playback (the terrain material's warm uploads, two strips a frame), one frame
+in twenty at 250–300 ms — lazy binding of the terrain material while the sheets draw is the lever.
+
+**Clouds through playback, evolving.** `cloudsVisible` no longer depends on `playing`; the deck
+rides the running timeline with its transport on the weather clock, its arrangement on the era's
+land, rain and ice (uSnowball shared from the terrain material) and a soft zonal climatology (the
+ITCZ, the storm tracks, the subtropical highs — gains of 0.8–1.35, never masks), and a **slow
+synoptic gate** — two octaves of the lattice noise drifting through the weather clock at 0.011 per
+second in lattice units, about a minute from clear to overcast at a point, moved by the era at
+0.0007 per Myr — multiplies the optical depth between 0.30 and 1.35 so masses thicken, merge and
+dissolve while the satellite fronts inside them keep their structure. Neither a second cloud
+field nor a crossfade: the brief's warning about doubled fronts still holds.
+
+Measured: clouds on every frame of every playback run (fade 1, the weather clock advancing 16.8 s
+over a 20 s run at 3 Myr/s, holds excepted); over 60 s with a fixed camera at 300 Ma the deck
+reorganises rather than translating (19.4 of 255 mean in the crop, masses gone and new ones formed,
+`build/verify/cmp_evolve_60s.png`); the cloud shells cost about 15 ms of a playing frame.
+
+**What it costs.** The ground cache stands down during playback, so a playing frame is the direct
+render with the cloud shells (about 15 ms of the frame). Memory over four passes of far jumps
+across the whole timeline (90 s): 949 MB of decoded-field cache, 461 MB pinned, 72–77 GL
+textures, 139 MB of imagery, flat from the first pass to the last; the six held 4096 sheets
+add up to 270 MB of texture (78 MB each while its strips are still arriving).

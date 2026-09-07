@@ -1256,10 +1256,11 @@ window.addEventListener('unhandledrejection',e=>{
       }
       return {i: hi, j: lo, t: (age - ages[hi]) / (ages[lo] - ages[hi])};
     },
-    /* Clouds are a paused-time layer: geological playback exposes the
-       surface, and hiding them never changes the user's layer setting. */
+    /* Clouds are a layer of the world, playing or paused (the port's second
+       round; the first hid them during playback). They leave only for the
+       schematic shading and the user's own switch. */
     cloudsVisible(state) {
-      return !state.playing && state.shade !== 'schem' && state.layers.clouds !== false;
+      return state.shade !== 'schem' && state.layers.clouds !== false;
     },
     weatherActive(state, hidden) {
       return !hidden && TectonicPolicy.cloudsVisible(state) && state.layers.weather !== false;
@@ -5707,6 +5708,7 @@ CFRAG:`precision highp float;
    material must enable them. */
 uniform sampler2D rainA,rainB,elevA,elevB,uNz,uCloudDetail;
 uniform float mixf,uWeatherTime,uCloud,uShadow,uCloudMap,uMapLon,uRainReady,uEra,uTemp;
+uniform float uSnowball;   // the era's ice line at the equator (1) damps the whole deck: a frozen ocean feeds little cloud
 uniform float uCloudDetailBlend;
 varying vec2 vUv;varying vec3 vN;
 const float PI=3.14159265359;
@@ -5777,12 +5779,33 @@ void main(){
   float dry=land*(1.0-wet);
   float gain=mix(0.94,mix(0.50,1.12,wet),land);
   gain*=0.60+0.40*smoothstep(-5.0,-1.5,uTemp);
+  /* THE ERA'S LIKELY WEATHER (round 2, 2026-09-07). A soft zonal
+     climatology under the satellite structure: the tropical convergence
+     band, the mid-latitude storm tracks, the clear subtropical highs --
+     the same three bands the original procedural clouds were built from --
+     as gentle gains, never as masks that would cut a front in two. The
+     era's land and rainfall above already move the deck with the
+     continents; a snowball world loses most of it. */
+  float zonal=0.80+0.30*exp(-pow(lat/0.16,2.0))+0.25*exp(-pow((al-52.0)/13.0,2.0))-0.30*exp(-pow((al-24.0)/9.0,2.0));
+  gain*=zonal*(1.0-0.45*uSnowball);
   vec2 cloud;
   if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
   else{
     cloud=fallbackWeather(lon,lat,gain);
     if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
   }
+  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
+     day in transport; on its own nothing ever forms or dies. A smooth
+     three-dimensional lattice noise drifting through the weather clock
+     (about a minute from clear to overcast at a point) gates the optical
+     depth, so masses thicken, merge across a clearing and dissolve while
+     the fine structure inside them keeps its fronts and spirals. The era
+     moves the pattern too, gently, so a running timeline sees the weather
+     reorganise rather than jump. A gate, multiplicative and broad -- not a
+     second cloud field, and not a crossfade between two. */
+  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
+  float syn=0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0));
+  cloud*=mix(0.30,1.35,smoothstep(0.30,0.72,syn));
   float mu=uCloudMap>0.5?1.0:max(normalize(vN).z,0.0);
   float path=mix(1.0,1.35,1.0-mu);
   float alpha=1.0-exp(-cloud.x*path);
@@ -6230,13 +6253,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260907-2103';
+const DATA_V='20260907-2247';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260907';
+const IMAGERY_V='20260907b';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -6257,9 +6280,22 @@ async function loadAll(){
   DATA.art=DATA.art||{art:{},byType:{}};
   DATA.photos=DATA.photos||{};
   DATA.platerot=DATA.platerot||{slots:48,rot:{}};
-  // Shipped world sheets, if the bake script has run (WP-10 plan A3). Optional,
-  // and nothing waits on it: the app bakes its own sheets until it arrives.
-  fetch('sheets/manifest.json?v='+SHEET_V).then(r=>r.ok?r.json():null).then(m=>{SHEET_MANIFEST=m;}).catch(()=>{});
+  /* Shipped world sheets, if the bake script has run (WP-10 plan A3). Optional,
+     and nothing waits on it: the app bakes its own sheets until it arrives.
+     Two sets since the port's second round (2026-09-07): sheets/ is 4096 wide
+     -- what the wide view draws from on a desktop, at most 1.8x magnified
+     where it engages -- and sheets2048/ is the lean set the ambient page
+     runs on, which a constrained device takes instead (a 4096 sheet is
+     76 MB of bitmap and mipmapped texture). */
+  (async()=>{
+    const dirs=((navigator.deviceMemory||8)<8)?['sheets2048/','sheets/']:['sheets/'];
+    for(const dir of dirs){
+      try{const r=await fetch(dir+'manifest.json?v='+SHEET_V); if(!r.ok)continue;
+        const m=await r.json(); if(!(m&&m.files))continue;
+        SHEET_MANIFEST=m; SHEET_DIR=dir; SHEET_KEEP=(m.w>=4096)?6:8; break;
+      }catch(e){}
+    }
+  })();
   // Present-day lakes MINUS the Holocene glacial ones. See youngLakeWeight().
   // Seven kilobytes, and the lake swap can be asked for at any age, so it is the
   // one field that is always resident.
@@ -6409,8 +6445,9 @@ window.__MEM=()=>{
   let n=0,bytes=0,legacy=0;
   for(const[k,v]of TEXCACHE){if(v.bm){n++;bytes+=v.bm.width*v.bm.height*4;}}
   for(const[,get]of FIELD_KINDS){for(const im of get()){if(im&&im.width)legacy++;}}
+  let sheetBytes=0; for(const s of SHEETS.values())if(s.tex&&s.w)sheetBytes+=s.w*s.w/2*4*(s.rt?1:(s.src?2.33:1.33));   // a shipped sheet: its mipmapped texture, plus the bitmap while its strips are still copying; a baked one: the target
   return {tried:_fieldTried.size,bitmaps:n,pinnedMB:Math.round(bytes/1048576),
-          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),extraMB:Math.round(_extraBytes/1048576),
+          legacyImgs:legacy,cacheMB:Math.round(_texBytes/1048576),extraMB:Math.round(_extraBytes/1048576),sheetsMB:Math.round(sheetBytes/1048576),
           entries:TEXCACHE.size,pendingDecodes:_bmPending.size,
           boundE:_lastBoundE,scrubbing:_scrubbing};
 };
@@ -6522,6 +6559,13 @@ function queueUploads(f){
   if(dir<=0){want.push(f.i-1);if(dir<0&&deep){want.push(f.i-2);want.push(f.i-3);}}
   if(dir>=0){want.push(f.j+1);if(dir>0&&deep){want.push(f.j+2);want.push(f.j+3);}}
   let decodesKicked=0;
+  /* The sheet path warms every kind too, one upload a frame. Round 2 tried
+     warming only the two kinds its own material reads (an upload or two of
+     8-32 MB sat in most playback frames): bindTextures binds the terrain
+     material every frame whatever the path, so the skipped uploads merely
+     moved to the crossing frame -- eight at once, 355 ms, the storm the
+     perf audit's gate exists to catch. Spread beats the storm. */
+  const liteNow=globe.material===liteMat;
   for(const w of want){
     if(w<0||w>=n)continue;
     for(const k of KIND_PRIORITY){
@@ -6561,7 +6605,7 @@ function queueUploads(f){
     if(typeof elevField==='function'){elevField(Math.max(0,f.i-1));elevField(Math.min(DATA.timeline.length-1,f.j+1));}
     return;
   }
-  let drains=state.playing?2:1;                     // playback burns keyframes faster
+  let drains=(state.playing&&!liteNow)?2:1;         // playback burns keyframes faster; the sheet path spreads them thinner
   while(_upQ.length&&drains>0){
     const q=_upQ.shift();
     if(Math.abs(q.i-f.i)>4)continue;                // stale after a far jump
@@ -6956,7 +7000,8 @@ function initGL(){
      reaches all three -- overriding only uShadow, and uCloudMap with its own
      uCloud (the map plane takes the fade without the globe's close-view
      attenuation). A paused-time layer: loop() hides it the moment Play
-     starts and fades it back once the requested pair is bound. */
+     starts and fades it back once the requested pair is bound -- until the
+     second round, when the deck stayed through playback too (see loop). */
   const CVERT=SHADERS.CVERT;
   const CFRAG=SHADERS.CFRAG.replace('/*@cnoise*/', NZOLD?CN_OLD:CN_NEW);
   _cloudNeutral=new THREE.DataTexture(new Uint8Array([0,0,0,255]),1,1,THREE.RGBAFormat);
@@ -6967,6 +7012,7 @@ function initGL(){
       rainA:mat.uniforms.rainA, rainB:mat.uniforms.rainB,   // the terrain's own objects
       elevA:mat.uniforms.elevA, elevB:mat.uniforms.elevB,
       mixf:mat.uniforms.mixf, uTemp:mat.uniforms.uTemp, uMapLon:mat.uniforms.uMapLon,
+      uSnowball:mat.uniforms.uSnowball,   // the era's ice line, shared: a snowball world loses most of its deck
       uNz:mat.uniforms.uNz,   // the baked noise lattice, shared with the terrain
       uWeatherTime:{value:0}, uEra:{value:state.age}, uRainReady:{value:0},
       uCloudDetail:{value:_cloudNeutral}, uCloudDetailBlend:{value:0},
@@ -6987,7 +7033,9 @@ function initGL(){
   mapClouds.renderOrder=2; mapClouds.visible=false; mapClouds.layers.set(CLOUD_LAYER); scene.add(mapClouds);
   cam.layers.enableAll(); orthoCam.layers.enableAll();
   // a lost context takes the cache with it; it is rebuilt on demand
-  cv.addEventListener('webglcontextlost',()=>{if(_ground){_ground.rt.dispose();_ground=null;}});
+  cv.addEventListener('webglcontextlost',()=>{if(_ground){_ground.rt.dispose();_ground=null;}
+    for(const [i,s] of [...SHEETS])if(!s.rt)_sheetDrop(i);   // a strip-filled texture has no bitmap to re-upload from
+  });
   // stars
   const sg=new THREE.BufferGeometry();const N=1800;const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){const r=40+Math.random()*30;const th=Math.random()*6.283;const ph=Math.acos(2*Math.random()-1);
@@ -7322,12 +7370,11 @@ function motionAt(fld,lon,lat){
    cell of the right kind, so seas stay on water and landmasses on land. */
 const ELEV_W=256, ELEV_H=128, ELEV_RANGE=8000;
 const ELEVDATA=new Map();
-function elevField(i){
-  if(ELEVDATA.has(i))return ELEVDATA.get(i);
-  const img=fieldImage('e',i); if(!img){ensureBitmap('e',i);return null;}
+const _elevPending=new Set();
+function _elevStore(i,src){
   const c=document.createElement('canvas');c.width=ELEV_W;c.height=ELEV_H;
   const cx=c.getContext('2d',{willReadFrequently:true});
-  drawFieldImage(cx,img,ELEV_W,ELEV_H);
+  drawFieldImage(cx,src,ELEV_W,ELEV_H);
   const d=cx.getImageData(0,0,ELEV_W,ELEV_H).data;
   const z=new Float32Array(ELEV_W*ELEV_H);
   for(let k=0;k<z.length;k++){
@@ -7337,6 +7384,29 @@ function elevField(i){
   ELEVDATA.set(i,z);
   if(ELEVDATA.size>30){for(const k of ELEVDATA.keys()){if(k!==i){ELEVDATA.delete(k);break;}}}
   return z;
+}
+/* The 256x128 CPU elevation raster the labels snap to. It used to be drawn
+   from the keyframe's full 4096x2048 bitmap into the small canvas on the
+   spot: a GPU-to-CPU read-back of 33 MB on the main thread, 150-390 ms once
+   per keyframe -- the crossing hitch playback carried at every keyframe
+   (round 2's storm test: a crossing with no uploads at all cost 316-387 ms,
+   and one frame in twenty of sheet-path playback was that size). Now the
+   raster is built OFF the main thread from a resized decode of the same
+   bytes (the broker's cache or the browser's), and readers get null until
+   it lands, as they always did while the elevation was in flight: a label
+   rides its plate position for a moment, then snaps. The pair ahead is
+   asked for at the crossing, so the raster is usually there in time. */
+function elevField(i){
+  if(ELEVDATA.has(i))return ELEVDATA.get(i);
+  if(!_BITMAPS){const img=fieldImage('e',i);return img?_elevStore(i,img):null;}
+  if(_elevPending.has(i)||_bmMissing.has('e'+i))return null;
+  _elevPending.add(i);
+  fieldBlob(i,'e',12)
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none',
+      resizeWidth:ELEV_W,resizeHeight:ELEV_H,resizeQuality:'high'}))
+    .then(bm=>{_elevPending.delete(i);if(!ELEVDATA.has(i))_elevStore(i,bm);bm.close&&bm.close();})
+    .catch(err=>{_elevPending.delete(i);if(!(err&&err.superseded))_fieldFailed('e'+i,err);});
+  return null;
 }
 function elevAtLL(z,lon,lat){
   const c=((Math.round((lon+180)/360*ELEV_W)%ELEV_W)+ELEV_W)%ELEV_W;
@@ -9144,6 +9214,44 @@ let _texMakeBudget=2;
    previous binding stays. */
 const STILL_RADIUS=2;
 const _surface={mode:'stale',req:[-1,-1],shown:[-1,-1],preview:false,refining:false,since:0};
+/* THE CORE OF A PAIR (round 2, 2026-09-07): the kinds without which the
+   picture is not one world -- elevation, rainfall, lakes, surface process
+   and ocean structure of both keyframes, and the interval's displacement
+   and plate slots from the younger one. The first round switched from the
+   preview to the terrain shader on elevation alone, and the other kinds
+   landed behind it over the next second: a new coastline over the previous
+   age's lakes, drainage and abyssal fabric, which reads as an unfinished
+   frame. Now the preview (or a near still) stays until the core is here,
+   and playback WAITS for the next pair's core the way it waits for a late
+   sheet. A kind the keyframe lacks (a 404) is not waited on; the small-field
+   stack, the motion field and the noise of detail still refine behind. */
+function coreKinds(f){
+  const out=[['e',f.i],['r',f.i],['w',f.i],['d',f.i],['o',f.i],['p',f.i]];
+  if(f.j!==f.i)out.push(['e',f.j],['r',f.j],['w',f.j],['d',f.j],['o',f.j],['v',f.i]);
+  return out;
+}
+function coreResident(f){
+  for(const [k,i] of coreKinds(f)){
+    const key=k+i; if(_bmMissing.has(key))continue;
+    const e=TEXCACHE.get(key); if(!(e&&e.bm))return false;
+  }
+  return true;
+}
+let _fieldHolds=0;   // frames playback waited for the next pair's core (the terrain path's _liteHolds)
+let _bakesStarted=0; // in-app sheet bakes begun (a shipped site should count none)
+const HOLD_MS=3000;  // the longest time waits for a pair's core or a sheet; 1.5 s let a slow machine advance into a still
+const MAX_STEP_MYR=1.5; // the most one frame may move time (0.3 of an interval), whatever the speed and the frame's length
+/* A core that never completes (a server answering 5xx for one kind, a
+   decode that keeps failing) must not leave the preview up for good: after
+   CORE_PATIENCE the pair binds progressively, as it did before the round. */
+const CORE_PATIENCE=6000;
+let _coreWaitKey='',_coreWaitAt=0;
+function coreReadyOrTired(f){
+  if(coreResident(f)){_coreWaitKey='';return true;}
+  const key=f.i+':'+f.j;
+  if(key!==_coreWaitKey){_coreWaitKey=key;_coreWaitAt=performance.now();}
+  return performance.now()-_coreWaitAt>CORE_PATIENCE;
+}
 const _bound={eA:-1,eB:-1,rA:-1,rB:-1};   // the keyframe each essential sampler holds
 function _surfaceSet(mode,f,shown){
   if(mode!==_surface.mode||shown[0]!==_surface.shown[0]||shown[1]!==_surface.shown[1])_surface.since=performance.now();
@@ -9198,12 +9306,12 @@ function bindTextures(){
      resident for that keyframe binds with it, and the interval machinery
      (mixf blending, uWarp) stands down -- a stepped world is a still, not an
      interval. On release the exact pair binds and everything resolves. */
-  const pairResident=fieldImage('e',f.i)&&fieldImage('e',f.j);
-  /* A pair that is not here yet. Within STILL_RADIUS keyframes, a resident
-     neighbour is the better stand-in (detailed, and at most 10 Myr off);
-     farther, the preview is (exact age, coarse); with no preview loaded a
-     scrub still steps through whatever is resident, as it always has, and a
-     jump keeps the previous world. */
+  const pairResident=coreReadyOrTired(f);
+  /* A pair whose core is not here yet. Within STILL_RADIUS keyframes, a
+     resident neighbour is the better stand-in (detailed, and at most 10 Myr
+     off); farther, the preview is (exact age, coarse); with no preview
+     loaded a scrub still steps through whatever is resident, as it always
+     has, and a jump keeps the previous world. */
   const bi=pairResident?-1:nearestResidentE(f.i);
   const near=bi>=0&&Math.min(Math.abs(bi-f.i),Math.abs(bi-f.j))<=STILL_RADIUS;
   const stepping=bi>=0&&(near||(_scrubbing&&!_previewReady));
@@ -9251,7 +9359,9 @@ function bindTextures(){
     _surfaceSet('still',f,[bi,bi]);
     return f;
   }
-  if(!(ea&&eb)){
+  if(!pairResident){
+    // the remaining core kinds, at their essential priority, while the preview stands in
+    for(const [k,i] of coreKinds(f))ensureBitmap(k,i,true);
     if(_previewReady){bindClimate(f);_surfaceSet('preview',f,[-1,-1]);return {i:f.i,j:f.j,t:f.t,preview:true};}
     _surfaceSet('stale',f,[_bound.eA,_bound.eB]);
   }
@@ -9321,7 +9431,7 @@ function bindTextures(){
   // at every keyframe instead of drifting at a steady rate.
   mat.uniforms.mixf.value=f.t;
   bindClimate(f);
-  if(ea&&eb)_surfaceSet('full',f,[f.i,f.j]);
+  if(ea&&eb&&pairResident)_surfaceSet('full',f,[f.i,f.j]);
   return f;
 }
 /* The climate/appearance uniforms interpolate straight from the timeline
@@ -9384,7 +9494,7 @@ const SHEET_W=(()=>{const v=+_sq.get('sheet');if(v>=256&&v<=8192)return v;
   return ((navigator.deviceMemory||8)<8)?2048:4096;})();
 const SHEET_H=SHEET_W/2;
 const SHEET_STRIPS=16, SHEET_STRIPS_PER_FRAME=_sq.has('bakefull')?16:4;
-const SHEET_KEEP=8;                 // sheets held: the pair, up to four ahead, the neighbours behind, a spare
+let SHEET_KEEP=8;                   // sheets held: the pair, up to four ahead, the neighbours behind, a spare (6 with the 4096 set: 76 MB each)
 const SHEET_TEXEL_KM=40030/SHEET_W; // at the equator
 let liteMode=_sq.get('lite')==='1'?'on':_sq.get('lite')==='0'?'off':'auto';
 const SHEETS=new Map();             // keyframe index -> {rt|null, tex, w, ready, u}
@@ -9395,24 +9505,43 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260903';
-let SHEET_MANIFEST=null;
+const SHEET_V='20260907';
+let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
   if(_sq.has('noshipped')||!SHEET_MANIFEST||!SHEET_MANIFEST.files||_shippedMissing.has(i))return false;
   const file=SHEET_MANIFEST.files[String(DATA.timeline[i].age)];
   if(!file){_shippedMissing.add(i);return false;}
   if(_shippedPending.has(i))return true;
-  if((_sheetRetryAt.get(i)||0)>performance.now())return false;
+  const s0=SHEETS.get(i); if(s0&&s0.src)return true;   // arriving, strip by strip
+  /* A shipped sheet whose fetch or strip failed is tried again in a while,
+     and until then it is still "on its way": returning false here made
+     pumpBakes bake it in the app meanwhile -- four strips of an 8-megapixel
+     terrain render a frame, 1.8 s frames in the round-2 playback test. A
+     site that ships its sheets never bakes one. */
+  if((_sheetRetryAt.get(i)||0)>performance.now())return true;
   _shippedPending.add(i);
-  LOADER.get((SHEET_BASE||'sheets/')+file+'?v='+SHEET_V,25,i)
+  LOADER.get((SHEET_BASE||SHEET_DIR)+file+'?v='+SHEET_V,25,i)
     .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
     .then(bm=>{
-      const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+      /* THE STRIP UPLOAD (round 2, 2026-09-07). A 4096 sheet is 32 MB of
+         pixels and a mip chain; uploaded whole at its first draw it cost the
+         crossing frame ~70 ms (the storm gate: 78 ms against 6 with the
+         2048 set). So the texture is allocated empty now and filled in
+         sixteen strips over the following frames -- the same way the bakes
+         render and the small-field stack fills -- with the mip chain built
+         once on the last strip; the sheet reports ready only then, and
+         playback waits for it as for any late sheet. The decoded bitmap is
+         closed once copied, so a shipped sheet resident costs its texture
+         alone (44 MB) instead of texture plus bitmap. */
+      const t=new THREE.DataTexture(null,bm.width,bm.height,THREE.RGBAFormat,THREE.UnsignedByteType);
+      t.flipY=false; t.premultiplyAlpha=false; t.colorSpace=THREE.NoColorSpace;
       t.minFilter=THREE.LinearMipmapLinearFilter; t.magFilter=THREE.LinearFilter; t.generateMipmaps=true;
       t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
       t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy()); t.needsUpdate=true;
-      _sheetDrop(i); SHEETS.set(i,{rt:null,tex:t,w:bm.width,ready:true,u:++_sheetClock});
+      renderer.initTexture(t);      // the storage, allocated in this frame; the pixels follow a strip at a time
+      t.generateMipmaps=false;      // the last strip turns it back on for one generateMipmap
+      _sheetDrop(i); SHEETS.set(i,{rt:null,tex:t,w:bm.width,ready:false,u:++_sheetClock,src:bm,launched:0,done:0,inflight:0,strips:16});
       _shippedPending.delete(i);
     })
     .catch(err=>{_shippedPending.delete(i);
@@ -9425,8 +9554,48 @@ function _shippedSheet(i){
 }
 function _sheetDrop(i){
   const s=SHEETS.get(i); if(!s)return;
+  if(s.src&&s.src.close)s.src.close();
   if(s.rt)_rtPool.push(s.rt); else if(s.tex){if(s.tex.image&&s.tex.image.close)s.tex.image.close();s.tex.dispose();}
   SHEETS.delete(i);
+}
+/* Strips of one arriving shipped sheet: crop each off the decoded bitmap
+   (off the main thread), copy it into the allocated texture. HOW MANY A
+   FRAME FOLLOWS THE FRAME: one strip per 16 ms of the last interval, so a
+   60 fps loop pays a strip a frame and a 300 ms terrain frame pays eight
+   (a few ms more on a frame that long) -- without that, a wide view on a
+   slow GPU filled its sheets at three frames a second, five seconds a
+   sheet, and stayed on the terrain shader that made the frames slow in
+   the first place. Strips complete in any order; the mip chain is built
+   with the last copy. */
+function pumpSheetStrips(rawMs,urgent){
+  /* Strips a frame. Two while the picture has its sheets (a 4096 strip is
+     2 MB of texSubImage2D; sixteen land in eight frames): the first rule,
+     round(rawMs/16), fed on itself -- a slow frame allowed five strips,
+     which kept it slow, 83 ms at 3 Myr/s on the sheet path. Up to eight,
+     by the frame's length, while the picture is WAITING for a sheet: the
+     terrain path at 350 ms a frame needs the sheet in two frames, and one
+     strip a frame there was five seconds of crawl. */
+  const per=urgent?Math.max(2,Math.min(8,Math.round((rawMs||16)/16))):2;
+  for(const [i,s] of SHEETS){
+    if(!s.src)continue;
+    while(s.inflight<per&&s.launched<s.strips){
+      const row=s.launched++, H=s.src.height, y0=Math.floor(row*H/s.strips), y1=Math.floor((row+1)*H/s.strips);
+      s.inflight++;
+      createImageBitmap(s.src,0,y0,s.src.width,y1-y0,{premultiplyAlpha:'none',colorSpaceConversion:'none'})
+        .then(strip=>{
+          s.inflight--;
+          if(SHEETS.get(i)!==s){strip.close();return;}          // dropped while the strip was cut
+          const last=(s.done===s.strips-1);
+          s.tex.generateMipmaps=last;
+          const gl=renderer.getContext(); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,gl.NONE);
+          renderer.copyTextureToTexture(_stkPos.set(0,y0),{image:strip},s.tex);
+          strip.close(); s.done++;
+          if(last){s.src.close();s.src=null;s.ready=true;s.u=++_sheetClock;}
+        })
+        .catch(()=>{s.inflight--;if(SHEETS.get(i)===s){_sheetDrop(i);_sheetRetryAt.set(i,performance.now()+3000);}});
+    }
+    return;   // one sheet at a time
+  }
 }
 /* A slot for keyframe i's sheet, evicting the least recently used one that is
    not in `want` when the pool is full. Returns null if nothing can be freed. */
@@ -9529,8 +9698,19 @@ function _sheetWanted(f){
   }else{w.push(f.i-1,f.j+1);}
   return [...new Set(w.filter(i=>i>=0&&i<n))];
 }
-function pumpBakes(f){
+function pumpBakes(f,rawMs){
   if(liteMode==='off'||!DATA.timeline||!renderer)return;
+  /* Waiting for a sheet: the pair's own is not ready, or playback reaches
+     the next keyframe within a second and its sheet is not ready either. */
+  let urgent=!(sheetReady(f.i)&&sheetReady(f.j));
+  if(!urgent&&state.playing){
+    const nx=state.dir<0?f.i-1:f.j+1, A=ages();
+    if(nx>=0&&nx<A.length&&!sheetReady(nx)){
+      const edge=state.dir<0?A[f.i]:A[f.j];
+      urgent=Math.abs(state.age-edge)/Math.max(0.1,state.speed)<1.0;
+    }
+  }
+  pumpSheetStrips(rawMs,urgent);
   if(_bakeJob){_bakeStrips();return;}
   const want=_sheetWanted(f);
   /* Shipped sheets used to accumulate for every keyframe visited -- 11 MB of
@@ -9548,7 +9728,7 @@ function pumpBakes(f){
     if(_shippedSheet(i))continue;       // a shipped sheet is on its way
     if(!_sheetKindsResident(i))continue;
     const s=_sheetSlot(i,want); if(!s)return;   // everything held is wanted; next frame
-    _bakeJob={i:i,rt:s.rt,row:0}; _bakeStrips(); return;
+    _bakeJob={i:i,rt:s.rt,row:0}; _bakesStarted++; _bakeStrips(); return;
   }
 }
 /* Kilometres per screen pixel at the view centre, the LOD measure. */
@@ -9571,7 +9751,16 @@ function useLite(f){
   if(liteMode==='on')return true;
   const texel=40030/Math.min(SHEETS.get(f.i).w,SHEETS.get(f.j).w);
   const r=footprintKm()/texel;
-  _liteOn = _liteOn ? r>0.35 : r>0.45;
+  /* EAGER ON A SLOW GPU (round 2, 2026-09-07). Once the governor has had to
+     step the render scale down -- or the quality is pinned below Full --
+     the sheets engage from a quarter of a texel per pixel instead of half:
+     a pre-shaded sheet magnified up to four times is sharper than the live
+     shader at half resolution, and a tenth of its cost, which is what makes
+     wide-zoom playback smooth on the M1's 5K display. At full scale the
+     old half-texel rule stands. */
+  const eager=(state.quality==='auto'&&_autoScale!=='full')||state.quality==='balanced'||state.quality==='perf';
+  const on=eager?0.25:0.45, off=on*0.78;
+  _liteOn = _liteOn ? r>off : r>on;
   return _liteOn;
 }
 /* ================= THE GROUND CACHE (the Atlas port, 2026-09-07) =========
@@ -9820,9 +10009,16 @@ function loop(now,force){
   _texMakeBudget=2;   // cold-texture creations this frame; jumps defer the rest
   // Sheet bakes render through the terrain material and leave it bound to a
   // still; bindTextures() below rebinds the live pair, so bakes go first.
-  if(DATA.timeline){const f0=curFrame();retargetLoads(f0);pumpBakes(f0);}
+  if(DATA.timeline){const f0=curFrame();retargetLoads(f0);pumpBakes(f0,rawMs);}
   if(state.playing){
-    const step=state.dir*state.speed*dtT;
+    /* THE LONGEST STEP (the port's second round). dtT keeps the slider's
+       Myr/s honest against the wall clock, but at 10 Myr/s a 300 ms frame
+       moved time 3 Myr -- more than half an interval, a continent leaping
+       14 texels -- which is what "the continents jump" looked like. No frame
+       moves time by more than MAX_STEP_MYR: at the default 3 Myr/s the half-
+       second cap already held it there, so only fast playback on slow frames
+       slows below the slider, and smoothly. */
+    const step=state.dir*Math.min(state.speed*dtT,MAX_STEP_MYR);
     /* HOLD FOR THE SHEETS (2026-09-03). Zoomed out the globe draws from the
        sheets, and the path decision used to drop to the terrain shader --
        at full pixel ratio, 30-100 ms a frame on an M1 -- whenever the next
@@ -9835,13 +10031,27 @@ function loop(now,force){
        the old fallback applies. Only on the sheet path: close in, the
        terrain shader is the picture and there is nothing to wait for. */
     let hold=false;
-    if(globe.material===liteMat){
-      const nf=frameAt(state.age+step);
-      if(!(sheetReady(nf.i)&&sheetReady(nf.j))){
-        if(!loop._holdAt)loop._holdAt=now;
-        hold=(now-loop._holdAt)<1500;
-        if(hold)_liteHolds++;
-      }
+    const nf=frameAt(state.age+step);
+    if(globe.material===liteMat&&!(sheetReady(nf.i)&&sheetReady(nf.j))){
+      if(!loop._holdAt)loop._holdAt=now;
+      hold=(now-loop._holdAt)<HOLD_MS;
+      if(hold)_liteHolds++;
+    }
+    if(!hold&&!coreResident(nf)){
+      /* TIME WAITS FOR THE FIELDS TOO (round 2, 2026-09-07), on both paths.
+         Time used to advance into a pair whose fields were still arriving,
+         and the picture snapped -- to a still of the last keyframe, or to
+         the previous pair under a new age -- and snapped again when the
+         fields landed: continents that jump instead of drifting, and on the
+         sheet path a coastline mask and a warp from the wrong keyframe (at
+         10 Myr/s the first cut spent four frames in five on a still, and
+         the clouds flickered with them). Time now waits for the next pair's
+         core, capped at HOLD_MS so a field that never comes cannot stop the
+         clock; the decodes are asked for at essential priority meanwhile. */
+      for(const [k,i] of coreKinds(nf))ensureBitmap(k,i,true);
+      if(!loop._holdAt)loop._holdAt=now;
+      hold=(now-loop._holdAt)<HOLD_MS;
+      if(hold)_fieldHolds++;
     }
     if(!hold){
       loop._holdAt=0;
@@ -9908,14 +10118,15 @@ function loop(now,force){
   setOpacity(overlay.boundaries,fade);setOpacity(overlay.vectors,0.9);setOpacity(overlay.hotspots,1);
   const isGlobe=state.view==='globe';
   globe.visible=isGlobe; atmo.visible=isGlobe; starfield.visible=isGlobe;
-  /* CLOUDS (the Atlas port). Wanted when paused with the layer on and the
-     requested pair bound at full detail. Play hides the shell, its shadow
-     and the map plane at once -- the surface is the point of playback --
-     without touching the layer setting; Pause fades them back over 1.4 s
-     once the pair is bound; the image itself fades in from the noise
-     fallback as it lands. uRainReady is 1 only while the rainfall bound
-     matches the elevation bound, so a pair mid-arrival never colours the
-     clouds with another age's rain. */
+  /* CLOUDS (the Atlas port, round 2). Wanted whenever the layer is on and
+     the requested pair is bound at full detail -- playing or paused: since
+     the second round the deck rides the running timeline, its transport on
+     the weather clock and its arrangement following the era's land, rain
+     and ice, and playback WAITS for a pair's core (above) so the clouds
+     never see a half-arrived world. They fade over 1.4 s on the switch and
+     whenever a preview or a still stands in; the image itself fades in from
+     the noise fallback as it lands. uRainReady is 1 only while the rainfall
+     bound matches the elevation bound. */
   const cloudsWanted=TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&!f.preview;
   if(cloudsWanted)loadCloudImage();
   const cu=clouds.material.uniforms;
@@ -10618,7 +10829,7 @@ function buildLegend(){
                  mask, 0.5 water / 1 land -- see the FRAG note on why not 0)
                  for verification and for build/bake_sheets.py. */
               sheets:{
-                status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,holds:_liteHolds,held:SHEETS.size,
+                status(){return {mode:liteMode,w:SHEET_W,h:SHEET_H,lite:globe.material===liteMat,frames:_liteFrames,holds:_liteHolds,fieldHolds:_fieldHolds,bakes:_bakesStarted,held:SHEETS.size,keep:SHEET_KEEP,dir:SHEET_DIR,shippedW:SHEET_MANIFEST&&SHEET_MANIFEST.w,
                   job:_bakeJob?{i:_bakeJob.i,row:_bakeJob.row}:null,
                   ready:[...SHEETS].filter(([i,s])=>s.ready).map(([i])=>i)};},
                 bake(i){

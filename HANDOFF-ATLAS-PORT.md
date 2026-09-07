@@ -75,6 +75,66 @@ coordinates, so its *instances* move while its statistics do not — the same cl
 noise-lattice swap of July 2026. Inside an interval (2.5 Ma) old and new are bit-identical, which is
 what proves the rendering path untouched.
 
+## Round 2 (the same evening): clouds through playback, continents that drift
+
+The owner's two screenshots at 608 Ma asked for two things: a cloud layer that lives through
+playback and evolves (masses forming, merging, dissolving, arranged by each era's likely climate),
+and an end to the wide view's "unfinished frame" look and to continents that jump while time runs.
+
+- **Clouds.** `cloudsVisible` no longer depends on `playing`. The shader gained a slow synoptic gate
+  (two octaves of the lattice noise drifting through the weather clock, ~a minute from clear to
+  overcast at a point, moved gently by the era), a soft zonal climatology (ITCZ, storm tracks,
+  subtropical highs, as gains of 0.8–1.35) and a snowball damping (`uSnowball`, shared). Over 60 s
+  at 300 Ma with a fixed camera the deck reorganises rather than translating
+  (`build/verify/cmp_evolve_60s.png`; 19.4 of 255 mean in the crop).
+- **The wide view** was the 2048 sheet set at 1.75× magnification on the stepped-down render
+  scale. The app now ships a **4096 set** (`web/sheets/`, 238 MB, baked on the M1 from the frozen
+  page `web/_bakeapp.html` in about 45 minutes), keeps the 2048 set in `web/sheets2048/` for the
+  ambient page and constrained devices, holds six 4096 sheets, and engages the sheets from a
+  quarter texel per pixel once the governor has stepped down. At 608 Ma, zoom 3.9, the sheet path
+  and the live shader now differ by 2.2–3.0 of 255 (`cmp_wide608_sheets_vs_live.png`).
+- **The jumps** were time advancing into a pair whose fields had not landed. `coreKinds` (elevation,
+  rainfall, lakes, surface process, ocean structure of both keyframes; displacement and plate slots
+  of the younger) now gates the switch from the preview, and **playback waits** for the next pair's
+  core on both paths (capped at `HOLD_MS` = 3 s — 1.5 s let a loaded machine advance into a
+  still; the preview gives up waiting after 6 s and binds
+  progressively). The first cut waited on the terrain path only; at 10 Myr/s on the sheet path
+  four frames in five were stills and the clouds flickered with them.
+- **No frame moves time by more than 1.5 Myr** (`MAX_STEP_MYR`): the slider stays honest against the
+  wall clock at the default speed (the half-second `dtT` cap already held 3 Myr/s to 1.5 Myr a
+  frame), and fast playback on slow frames slows smoothly instead of leaping 3 Myr in one frame.
+- **Shipped 4096 sheets upload in strips** (sixteen a sheet; two a frame while the picture has its sheets, up to eight by the frame's
+  length while it waits for one — scaling by the frame's length alone fed on itself; the mip chain once at
+  the end), since uploading one whole at its first draw cost the crossing frame ~70 ms; the sheet
+  path warms every kind at one upload a frame — warming only the two it samples was tried and moved
+  eight uploads into the crossing frame (355 ms), since the terrain material binds on every path.
+- **The crossing hitch was the label raster.** `elevField` drew the keyframe's full 4096 × 2048
+  bitmap into its 256 × 128 canvas on the spot — a 33 MB GPU-to-CPU read-back on the main thread,
+  once per keyframe, 316–387 ms in the storm test with no uploads in the frame, and one sheet-path
+  playback frame in twenty was that size. It now builds off the main thread from a resized decode
+  of the same bytes; readers get null until it lands (a label rides its plate for a moment).
+- **A shipped sheet is never baked.** A sheet whose fetch or strip failed used to fall through to
+  the in-app bake while its retry waited (four strips of an 8-megapixel terrain render a frame:
+  1.8-second frames in the first playback test); `_shippedSheet` now answers "on its way" through
+  the retry, and `APP.sheets.status().bakes` counts bakes, which a shipped site keeps at zero.
+- Seeks now reach a full core in 0.6–1.5 s (elevation alone was 0.24–0.56 s); the preview still
+  shows within 26–107 ms. Memory stayed flat over four passes of far jumps (`__MEM().sheetsMB`
+  now counts the sheets). Smoke test 32/32.
+
+| what (round 2) | old page | new page |
+|---|---|---|
+| sheet-path playback, 3 / 10 Myr/s, 20 / 15 s | 21.2 fps, 50 ms (2048 sheets, no clouds) | 12.8 / 10.7 fps, 67 / 67 ms median; 0 jumps, 0 snaps, 0 flips, 2 / 12 held frames; clouds on every frame, weather clock +16.8 s of 20 |
+| playback at zoom 1.6, 3 / 10 Myr/s | 0.7 fps, 1.55 s a frame, terrain throughout | 2.5 / 3.1 fps, sheets 3 frames in 4 after the governor stepped down; 0 jumps, 0 snaps, 1 / 3 holds |
+| the same, 600 ms field delay | — | 2.7 fps, 0 jumps, 0 snaps, 5 holds |
+| wide view 608 Ma, quality auto | — | 12.1 fps, 83 ms, 0 jumps / snaps / flips, 2 holds |
+| most time moved in one frame at 10 Myr/s | 5 Myr | 1.5 Myr |
+| forced frame p50, sheet path: playing clouds off / on; paused cache off; zoom 1.6 playing | 50 ms | 25.7 / 29.1 / 24.7 / 18.7 ms |
+| crossing frame (storm), three crossings | ≤ 2 uploads | 2.5 / 2.6 / 5.6 ms, 0 uploads (was 316–387 ms with 0 uploads; 355 ms with 8 before the warm rule was reverted) |
+| in-app bakes during playback | — | 0 in every run |
+| smoke | 32/32 | 32/32 |
+
+Left: the rAF interval of sheet-path playback (67–83 ms median on the loaded machine, 25–29 ms forced) is playback's per-frame work — the terrain material's warm uploads, two strips a frame, decode insertions; one frame in twenty is 250–300 ms. Lazy binding of the terrain material while the sheets draw is the lever.
+
 ## State right now
 
 - Deployed: see the last commit on `main`; the live `DATA_V` is printed by
