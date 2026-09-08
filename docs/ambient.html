@@ -17,8 +17,15 @@
        ?ui=0      hide the readout
        ?clouds=0  no cloud layer (default on)
        ?weather=0 the clouds stand still (default moving; still under prefers-reduced-motion)
-     Runs as a tab, a screensaver (any WebView screensaver pointing at this URL)
-     or a wallpaper. Escape does nothing here on purpose; there is no chrome.
+       ?paused=1  start with time stopped
+       ?embedded=1  opened by the app over its own window (the Close button posts back)
+     Since 2026-09-08 this is THE ambient view: the app's Ambient button opens it
+     over the app, and it carries a small chrome -- Close and Full screen at the
+     top left, Pause/Play and the geological eras (a jump to the start of each,
+     playing or paused) at the top right; ?ui=0 hides all of it for a
+     screensaver. Runs as a tab, a screensaver (any WebView screensaver pointing
+     at this URL) or a wallpaper. Escape closes it when it is over the app; space
+     pauses.
      The shaders are web/shaders/ambient__*.glsl through shaders.js, so
      build/check_shader.py validates them with the app's. -->
 <style>
@@ -30,6 +37,18 @@ canvas{display:block}
 #hud span{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 #msg{position:fixed;inset:auto 0 0 0;padding:14px 22px;color:var(--dim);font-size:13px;line-height:1.5;background:rgba(5,7,10,.7);max-width:60ch}
 #msg code{color:var(--ink)}
+/* the chrome: small chips at the top corners, out of the picture's way */
+#chrome{position:fixed;inset:0;pointer-events:none;z-index:5}
+#chrome[hidden]{display:none}
+.bar{position:absolute;top:12px;display:flex;gap:6px;align-items:center;pointer-events:auto}
+#tl{left:12px} #tr{right:12px;flex-wrap:wrap;justify-content:flex-end;max-width:72vw}
+.chip{font:500 11px/1 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.04em;padding:7px 9px;border-radius:8px;color:#c8d0da;
+  background:rgba(8,11,16,.62);border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .2s,color .2s,border-color .2s}
+.chip:hover{background:rgba(20,26,34,.85);color:#fff}
+.chip.on{border-color:#e8a94a;color:#ffd58a}
+.chip.icon{font-size:12px;padding:6px 8px;min-width:30px;text-align:center}
+@media (max-width:640px){.chip{padding:6px 7px;font-size:10px}#tr{max-width:60vw}}
 </style>
 <script src="three.min.js"></script>
 <script>
@@ -4749,6 +4768,16 @@ CN_NEW:`float cn(vec3 p){
 <canvas id="gl"></canvas>
 <div id="hud"><b id="age">&nbsp;</b><span id="era">&nbsp;</span></div>
 <div id="msg" hidden></div>
+<div id="chrome">
+  <div class="bar" id="tl">
+    <button class="chip" id="btnClose" title="Back to Tectonic Earth (Escape)">✕ Close</button>
+    <button class="chip" id="btnFS" title="Full screen">⛶ Full screen</button>
+  </div>
+  <div class="bar" id="tr">
+    <button class="chip icon" id="btnPlay" title="Pause (space)">❚❚</button>
+    <span id="eras"></span>
+  </div>
+</div>
 <script>
 // Errors are kept for the harness (build/verify_run.py reads __ERRORS), the app's convention.
 window.__ERRORS=[];
@@ -4760,13 +4789,15 @@ const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0
 const FPS=+(q.get('fps')||(REDUCED?10:30));
 let CLOUDS=q.get('clouds')!=='0';
 const WEATHER=q.get('weather')!=='0'&&!REDUCED;
-const SHEET_V='20260907', FIELD_V='20260804-fabric', IMAGERY_V='20260907b', DATA_V='20260812-0814';
+const SHEET_V='20260907', FIELD_V='20260804-fabric', IMAGERY_V='20260907b';
+const DATA_V='20260908-2350';   // stamped by build/stamp_data_version.py (its own line, as the stamp expects)
 let SHEET_DIR='sheets2048/';   // the lean set this page runs on; sheets/ (4096, the app's) if it is all the site ships
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};
 const FIELD_BASE=_base('fieldbase','FIELD_BASE'), SHEET_BASE=_base('sheetbase','SHEET_BASE');
 const KEEP=6;            // sheets held: the pair, the two ahead, spares
-if(q.get('ui')==='0')document.getElementById('hud').hidden=true;
+const $=s=>document.querySelector(s);
+if(q.get('ui')==='0'){$('#hud').hidden=true;$('#chrome').hidden=true;}
 if(!(window.SHADERS&&SHADERS.AFRAG&&SHADERS.AVERT)){
   const m=document.getElementById('msg'); m.hidden=false;
   m.innerHTML='This page needs <code>shaders.js</code>: run <code>build/check_shader.py</code> and deploy.';
@@ -4936,7 +4967,46 @@ function resize(){renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth
 addEventListener('resize',resize); resize();
 
 /* ---------- time ---------- */
-const state={age:+(q.get('age')||1000), dir:-1, rot:0, playing:true};
+const state={age:+(q.get('age')||1000), dir:-1, rot:0, playing:q.get('paused')!=='1'};
+/* THE CHROME (2026-09-08). Close hands the age and play state back to the app
+   when the page is over it (a message to the parent; Escape does the same),
+   and goes to the app's own page otherwise. Full screen is the document's,
+   which a frame allows through allowfullscreen. Pause stops time only: the
+   globe keeps turning and the weather keeps moving. The era chips jump to
+   the START (the oldest edge) of each era from eras.json, playing or paused,
+   and the current era is lit. */
+const EMBEDDED=(window.parent!==window);
+function closeAmbient(){
+  if(EMBEDDED){try{parent.postMessage({tectonic:'ambient',action:'close',age:state.age,playing:state.playing},location.origin);return;}catch(e){}}
+  location.href='./';
+}
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+function toggleFS(){
+  if(fsEl()){const fn=document.exitFullscreen||document.webkitExitFullscreen;if(fn){try{const p=fn.call(document);if(p&&p.catch)p.catch(()=>{});}catch(e){}}return;}
+  const el=document.documentElement,fn=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(fn){try{const p=fn.call(el);if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+}
+function syncFS(){const on=!!fsEl();$('#btnFS').textContent=on?'⛶ Exit full screen':'⛶ Full screen';$('#btnFS').classList.toggle('on',on);}
+function setPlaying(p){state.playing=p;$('#btnPlay').textContent=p?'❚❚':'▶';$('#btnPlay').title=p?'Pause (space)':'Play (space)';}
+$('#btnClose').onclick=closeAmbient; $('#btnFS').onclick=toggleFS; $('#btnPlay').onclick=()=>setPlaying(!state.playing);
+document.addEventListener('fullscreenchange',syncFS); document.addEventListener('webkitfullscreenchange',syncFS);
+document.addEventListener('keydown',e=>{
+  if(e.key===' '){e.preventDefault();setPlaying(!state.playing);}
+  if(e.key==='Escape'&&EMBEDDED&&!fsEl())closeAmbient();
+});
+setPlaying(state.playing);
+let ERAS=[];
+function buildEras(intervals){
+  const g=new Map();
+  for(const x of intervals||[]){const n=x.era||x.eon;if(!n||!Number.isFinite(x.a0)||!Number.isFinite(x.a1))continue;
+    const e=g.get(n)||{name:n,a0:Infinity,a1:-Infinity};e.a0=Math.min(e.a0,x.a0);e.a1=Math.max(e.a1,x.a1);g.set(n,e);}
+  ERAS=[...g.values()].sort((a,b)=>b.a1-a.a1);   // oldest first
+  const box=$('#eras');box.innerHTML='';
+  for(const e of ERAS){const b=document.createElement('button');b.className='chip era';b.textContent=e.name.replace(' (projected)','');
+    b.title='Jump to '+fmtAge(e.a1)+' and run to '+fmtAge(e.a0);b.onclick=()=>jumpEra(e);e.btn=b;box.appendChild(b);}
+}
+function jumpEra(e){state.age=Math.max(-250,Math.min(1000,e.a1));state.dir=-1;}
+function syncEra(){for(const e of ERAS)e.btn.classList.toggle('on',(state.age<=e.a1&&state.age>e.a0)||(e.a0<=-250&&state.age<=e.a0));}
 const $age=document.getElementById('age'), $era=document.getElementById('era');
 function fmtAge(a){return a>0.5?Math.round(a)+' Ma':a<-0.5?'+'+Math.round(-a)+' Myr':'Present';}
 function readout(){
@@ -4968,9 +5038,11 @@ function loop(now){
   holding=!(ready(nf.i)&&ready(nf.j));
   pumpStrips(holding||!(ready(f0.i)&&ready(f0.j)));
   if(!holding){
-    state.age+=state.dir*SPEED*dt;
-    if(state.age<=-250){state.age=-250;state.dir=1;}       // ping-pong: no jump, no seam
-    if(state.age>=1000){state.age=1000;state.dir=-1;}
+    if(state.playing){
+      state.age+=state.dir*SPEED*dt;
+      if(state.age<=-250){state.age=-250;state.dir=1;}       // ping-pong: no jump, no seam
+      if(state.age>=1000){state.age=1000;state.dir=-1;}
+    }
   }else STAT.holds++;
   state.rot+=SPIN*dt; globe.rotation.y=state.rot;
   const f=frameAt(state.age);
@@ -4991,8 +5063,8 @@ function loop(now){
       clouds.visible=fade>0.001;
     }
     renderer.render(scene,cam); STAT.drawn++;
+    readout(); syncEra();   // after a jump the readout waits for the picture, as the picture waits for its sheets
   }
-  readout();
 }
 document.addEventListener('visibilitychange',()=>{lastAt=performance.now();due=0;});
 
@@ -5009,12 +5081,13 @@ document.addEventListener('visibilitychange',()=>{lastAt=performance.now();due=0
     m.innerHTML='No world sheets have been baked for this site yet. Run <code>build/bake_sheets.py --width 2048</code> and deploy; the ambient view draws from <code>sheets/</code> only.';
     return;
   }
+  fetch('eras.json?v='+DATA_V).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.intervals)buildEras(d.intervals);}).catch(()=>{});
   // start on a keyframe that exists in the sheet set
   const have=new Set(Object.keys(SM.files).map(Number));
   if(!have.has(Math.round(state.age))){const near=[...have].sort((a,b)=>Math.abs(a-state.age)-Math.abs(b-state.age))[0];if(near!==undefined)state.age=near;}
   const summary=()=>{const a=[...STAT.ms].sort((x,y)=>x-y),n=a.length;return n?{n,p50:+a[n>>1].toFixed(1),p95:+a[Math.floor(n*0.95)].toFixed(1),max:+a[n-1].toFixed(1),hitches:a.filter(x=>x>60).length}:null;};
   window.AMB={state,step(){loop(performance.now());},
-    status(){return{age:state.age,holding,tex:[...TEX.keys()],pending:[...PENDING],missing:[...MISSING],
+    status(){return{age:state.age,playing:state.playing,embedded:EMBEDDED,eras:ERAS.map(e=>e.name),holding,tex:[...TEX.keys()],pending:[...PENDING],missing:[...MISSING],
       clouds:{on:CLOUDS,ready:!!(TEX.get('c')&&TEX.get('c').ready),fade:+fade.toFixed(3),wt:+wt.toFixed(2)},
       stat:{drawn:STAT.drawn,holds:STAT.holds,strips:STAT.strips,frames:summary()},errors:__ERRORS.slice(0,5)};},
     snap(){renderer.render(scene,cam);return cv.toDataURL('image/png').slice(22);}};
