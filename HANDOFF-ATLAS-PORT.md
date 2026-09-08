@@ -135,14 +135,41 @@ and an end to the wide view's "unfinished frame" look and to continents that jum
 
 Left: the rAF interval of sheet-path playback (67–83 ms median on the loaded machine, 25–29 ms forced) is playback's per-frame work — the terrain material's warm uploads, two strips a frame, decode insertions; one frame in twenty is 250–300 ms. Lazy binding of the terrain material while the sheets draw is the lever.
 
+## Round 3 (2026-09-08): the ambient page, and one update log
+
+- **The two update logs are one.** `build/updatelog.json` is the only source; its `_note` says how
+  the numbering was reconciled (August 2.3–3.0 had never shipped; September became 3.1–3.3; this
+  round is 3.4). `web/updatelog.json` is exactly what `build_webdata.build_updatelog` writes. The
+  smoke test now checks the newest release from the data instead of a hard-coded number.
+- **The ambient page carries the app's clouds.** Its shaders moved to `web/shaders/ambient__*.glsl`
+  (validated and cross-checked against `ambient.html` by `check_shader.py`, which also emits
+  `CN_NEW` into `shaders.js` for the page, and now catches a material that names its shader as
+  `SHADERS.NAME` — the preview shader had never been cross-checked). `ambient__ACFRAG` is
+  `index__CFRAG` with the land and wetness read from the sheets' own colours (blue water, green
+  wet land, tan dry land, white ice, through a coarse mip level), no shadow pass and no map. The
+  page copies `bakeNoiseLUT` from app.js and `build_site.py` refuses drift.
+- **Its frames no longer hitch.** Sheets and the cloud image upload in strips (two a frame, eight
+  while waiting); and the 30 fps cap's `dt` was the interval since the previous *tick*, not the
+  previous *draw*, so time ran at half the slider and stuttered — now frames are due on a grid with
+  a millisecond of tolerance and dt is the time since the last draw.
+- `_verify.html?ambient=NAME&app=ambient.html|_ambient_old.html&secs=&speed=&age=&clouds=0` measures
+  the page (draw cadence from the age samples, holds, the page's own frame statistics, a PNG).
+
+| ambient page (20 s at 2 Myr/s from 300 Ma) | old page | new page |
+|---|---|---|
+| draw cadence median / p95 / max | 48.5 / 50.1 / 51.9 ms, 23.6 a second | 33.3 / 35.1 / 35.4 ms, 30.6 a second |
+| time advanced on a 2 Myr/s setting | 0.79 Myr/s | 2.04 Myr/s |
+| draws over 60 ms / holds | 0 / 0 | 0 / 4 of 855 |
+| clouds | — | on, weather clock +28.5 s, no errors; `?clouds=0` 33.3 / 35.2 ms |
+| 10 Myr/s from 600 Ma, 15 s | — | 33.3 / 50 / 50.1 ms (one draw in twenty a tick late while eight strips a frame feed a waiting sheet), 10.2 Myr/s |
+
 ## State right now
 
 - Deployed: see the last commit on `main`; the live `DATA_V` is printed by
   `curl -s https://augustg97.github.io/tectonic-earth/ | grep -o "DATA_V='[0-9-]*'"`.
-- `web/updatelog.json` carries release 2.4. **It has diverged from `build/updatelog.json`** (which
-  numbers its August entries 2.3–3.0 and lacks the September 2.3 and 2.4 entries); running
-  `build_webdata.py` would overwrite the shipped log with the build copy. Reconcile before the next
-  data build.
+- The two update logs were reconciled on 2026-09-08: `build/updatelog.json` is the only source (its
+  August 5–9 releases 2.3–3.0 had never reached the site; the September releases are 3.1–3.3 after
+  them), and `web/updatelog.json` is exactly what `build_webdata.py` writes from it.
 - The old page copies (`web/_old.html`, `_app_old.js`, `_shaders_old.js`, `_style_old.css`) are the
   frozen pre-port control; delete them when the next round freezes its own.
 
@@ -169,7 +196,7 @@ Plus the standing ones in `HANDOFF-M1-DEPLOY.md` and README §7.
    (the brief asked for Atlas's attenuation instead of the old retirement); over Tibet at zoom 1.4
    and 60° tilt the deck is heavy. If the owner prefers the mountains, lower the close-view floor
    (`cf=(1.0-0.45*near)` in `loop()`) or retire below some zoom; the switch turns them off meanwhile.
-2. **Reconcile the two update logs** (above).
+2. ~~Reconcile the two update logs~~ — done 2026-09-08 (round 3).
 3. **The five held frames on the sheet path at 10 Myr/s with a 600 ms sheet delay** (old: none, with
    the whole timeline warmed): raise the sheet priority above the pair's refinement kinds or widen
    `_sheetWanted` by one if it shows in use.

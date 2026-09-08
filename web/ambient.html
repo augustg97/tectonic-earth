@@ -5,17 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tectonic Earth — Ambient</title>
 <!-- THE LITE BUILD (WP-10, plan C). A slowly turning Earth with time running,
-     drawn from the pre-baked WORLD SHEETS in sheets/ (build/bake_sheets.py) and
-     the per-keyframe displacement field, at a few texture reads a pixel. No
-     terrain shader, no field decoding, no labels: the whole timeline is about
-     50 MB at 2048 wide, fetched two keyframes ahead, and the GPU is idle.
+     drawn from the pre-baked WORLD SHEETS in sheets2048/ (build/bake_sheets.py)
+     and the per-keyframe displacement field, at a few texture reads a pixel,
+     under the app's cloud layer (2026-09-08). No terrain shader, no field
+     decoding, no labels: the whole timeline is about 50 MB at 2048 wide,
+     fetched two keyframes ahead, and the GPU is idle.
        ?speed=2   Myr per second (default 2)
        ?spin=0.05 radians per second (default 0.05)
        ?fps=30    frame cap (default 30; 10 under prefers-reduced-motion)
        ?age=300   starting age in Ma (default 1000)
        ?ui=0      hide the readout
+       ?clouds=0  no cloud layer (default on)
+       ?weather=0 the clouds stand still (default moving; still under prefers-reduced-motion)
      Runs as a tab, a screensaver (any WebView screensaver pointing at this URL)
-     or a wallpaper. Escape does nothing here on purpose; there is no chrome. -->
+     or a wallpaper. Escape does nothing here on purpose; there is no chrome.
+     The shaders are web/shaders/ambient__*.glsl through shaders.js, so
+     build/check_shader.py validates them with the app's. -->
 <style>
 :root{--ink:#d8dfe8;--dim:#7d8898}
 html,body{height:100%;margin:0;background:#05070a;overflow:hidden;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
@@ -27,23 +32,36 @@ canvas{display:block}
 #msg code{color:var(--ink)}
 </style>
 <script src="three.min.js"></script>
+<script src="shaders.js?v=20260908"></script>
 </head>
 <body>
 <canvas id="gl"></canvas>
 <div id="hud"><b id="age">&nbsp;</b><span id="era">&nbsp;</span></div>
 <div id="msg" hidden></div>
 <script>
+// Errors are kept for the harness (build/verify_run.py reads __ERRORS), the app's convention.
+window.__ERRORS=[];
+addEventListener('error',e=>{__ERRORS.push(String(e.message||e));});
+{const ce=console.error.bind(console);console.error=(...a)=>{__ERRORS.push(a.map(String).join(' ').slice(0,300));ce(...a);};}
 const q=new URLSearchParams(location.search);
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0.05);
 const FPS=+(q.get('fps')||(REDUCED?10:30));
-const SHEET_V='20260907', FIELD_V='20260804-fabric', DATA_V='20260812-0814';
+let CLOUDS=q.get('clouds')!=='0';
+const WEATHER=q.get('weather')!=='0'&&!REDUCED;
+const SHEET_V='20260907', FIELD_V='20260804-fabric', IMAGERY_V='20260907b', DATA_V='20260812-0814';
 let SHEET_DIR='sheets2048/';   // the lean set this page runs on; sheets/ (4096, the app's) if it is all the site ships
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};
 const FIELD_BASE=_base('fieldbase','FIELD_BASE'), SHEET_BASE=_base('sheetbase','SHEET_BASE');
-const KEEP=6;            // textures held: the pair, the two ahead, spares
+const KEEP=6;            // sheets held: the pair, the two ahead, spares
 if(q.get('ui')==='0')document.getElementById('hud').hidden=true;
+if(!(window.SHADERS&&SHADERS.AFRAG&&SHADERS.AVERT)){
+  const m=document.getElementById('msg'); m.hidden=false;
+  m.innerHTML='This page needs <code>shaders.js</code>: run <code>build/check_shader.py</code> and deploy.';
+  throw new Error('shaders.js missing');
+}
+if(CLOUDS&&!(SHADERS.ACFRAG&&SHADERS.ACVERT&&SHADERS.CN_NEW)){console.error('ambient: shaders.js has no cloud shader; clouds off');CLOUDS=false;}
 
 /* ---------- data ---------- */
 let TL=null, SM=null;    // fields/manifest.json (timeline), sheets/manifest.json
@@ -58,30 +76,67 @@ function frameAt(age){
 const vFile=i=>{const e=TL[i].e, c=e.lastIndexOf('_e'); return e.slice(0,c)+'_v.webp';};
 
 /* ---------- textures, a small window that follows the age ---------- */
-const TEX=new Map(), PENDING=new Set(), MISSING=new Set(); let clock=0;
-function makeTex(bm,mips){
-  const t=new THREE.Texture(bm); t.flipY=false; t.colorSpace=THREE.NoColorSpace;
+const TEX=new Map(), PENDING=new Set(), MISSING=new Set(), RETRY=new Map(); let clock=0;
+const STAT={drawn:0,ms:[],holds:0,strips:0};
+const POS=new THREE.Vector2();
+function baseTex(t,mips){
+  t.flipY=false; t.colorSpace=THREE.NoColorSpace;
   t.minFilter=mips?THREE.LinearMipmapLinearFilter:THREE.LinearFilter; t.magFilter=THREE.LinearFilter;
-  t.generateMipmaps=!!mips; t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
+  t.wrapS=THREE.RepeatWrapping; t.wrapT=THREE.ClampToEdgeWrapping;
   if(mips)t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
   t.needsUpdate=true; return t;
 }
-function want(key,url,mips){
-  if(TEX.has(key)||PENDING.has(key)||MISSING.has(key))return;
-  PENDING.add(key);
-  fetch(url).then(r=>{if(!r.ok)throw 0;return r.blob();})
-    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
-    .then(bm=>{TEX.set(key,{t:makeTex(bm,mips),u:++clock});PENDING.delete(key);})
-    .catch(()=>{PENDING.delete(key);MISSING.add(key);});
+function makeTex(bm,mips){const t=baseTex(new THREE.Texture(bm),mips);t.generateMipmaps=!!mips;return t;}
+/* STRIP UPLOAD (2026-09-08, the app's shipped-sheet path). A sheet used to
+   reach the GPU whole at its first draw -- 8 MB and a mip chain in the frame
+   of a keyframe crossing, the hitch every 2.5 s that this page carried at
+   2 Myr/s. Now a texture is allocated empty and filled in strips of 128
+   rows, two a frame while the picture has its sheets and eight while it is
+   waiting for one, the mip chain once at the end; the cloud image (32 MB)
+   arrives the same way. */
+function stripTex(bm){
+  const t=baseTex(new THREE.DataTexture(null,bm.width,bm.height,THREE.RGBAFormat,THREE.UnsignedByteType),true);
+  t.generateMipmaps=false; renderer.initTexture(t); return t;
 }
-function tex(key){const e=TEX.get(key);if(!e)return null;e.u=++clock;return e.t;}
+function want(key,url,mips,strips){
+  if(TEX.has(key)||PENDING.has(key)||MISSING.has(key))return;
+  if((RETRY.get(key)||0)>performance.now())return;
+  PENDING.add(key);
+  fetch(url).then(r=>{if(!r.ok){const e=new Error('http '+r.status);e.status=r.status;throw e;}return r.blob();})
+    .then(b=>createImageBitmap(b,{imageOrientation:'flipY',premultiplyAlpha:'none',colorSpaceConversion:'none'}))
+    .then(bm=>{PENDING.delete(key);
+      if(strips)TEX.set(key,{t:stripTex(bm),src:bm,launched:0,done:0,inflight:0,strips:Math.max(1,Math.round(bm.height/128)),ready:false,u:++clock});
+      else TEX.set(key,{t:makeTex(bm,mips),src:null,ready:true,u:++clock});})
+    // only 404/410 mean absent; anything else is asked for again in a while
+    .catch(e=>{PENDING.delete(key);if(e&&(e.status===404||e.status===410))MISSING.add(key);else RETRY.set(key,performance.now()+3000);});
+}
+function drop(key){const e=TEX.get(key);if(!e)return;if(e.src)e.src.close();if(e.t.image&&e.t.image.close)e.t.image.close();e.t.dispose();TEX.delete(key);}
+function pumpStrips(urgent){
+  const per=urgent?8:2;
+  for(const [key,e] of TEX){
+    if(!e.src)continue;
+    while(e.inflight<per&&e.launched<e.strips){
+      const row=e.launched++,H=e.src.height,y0=Math.floor(row*H/e.strips),y1=Math.floor((row+1)*H/e.strips);
+      e.inflight++;
+      createImageBitmap(e.src,0,y0,e.src.width,y1-y0,{premultiplyAlpha:'none',colorSpaceConversion:'none'})
+        .then(strip=>{e.inflight--; if(TEX.get(key)!==e){strip.close();return;}
+          const last=(e.done===e.strips-1); e.t.generateMipmaps=last;
+          const gl=renderer.getContext(); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,gl.NONE);
+          renderer.copyTextureToTexture(POS.set(0,y0),{image:strip},e.t);
+          strip.close(); e.done++; STAT.strips++;
+          if(last){e.src.close();e.src=null;e.ready=true;e.u=++clock;}})
+        .catch(()=>{e.inflight--; if(TEX.get(key)===e){drop(key);RETRY.set(key,performance.now()+3000);}});
+    }
+    return;   // one texture at a time, in the order they were asked for
+  }
+}
+function tex(key){const e=TEX.get(key);if(!e||!e.ready)return null;e.u=++clock;return e.t;}
 function trim(keep){
-  const kinds=['s','v'];
-  for(const k of kinds){
+  for(const k of ['s','v']){
     const held=[...TEX.keys()].filter(x=>x[0]===k);
     if(held.length<=KEEP)continue;
     held.filter(x=>!keep.includes(x)).sort((a,b)=>TEX.get(a).u-TEX.get(b).u)
-        .slice(0,held.length-KEEP).forEach(x=>{const e=TEX.get(x);if(e.t.image&&e.t.image.close)e.t.image.close();e.t.dispose();TEX.delete(x);});
+        .slice(0,held.length-KEEP).forEach(drop);
   }
 }
 function sheetKey(i){return 's'+i;}
@@ -92,52 +147,70 @@ function requestAround(f,dir){
   for(const i of order){
     if(i<0||i>=n)continue;
     const file=SM.files[String(TL[i].age)];
-    if(file)want(sheetKey(i),(SHEET_BASE||SHEET_DIR)+file+'?v='+SHEET_V,true);
-    want('v'+i,(FIELD_BASE||'fields/')+vFile(i)+'?v='+FIELD_V,false);
+    if(file)want(sheetKey(i),(SHEET_BASE||SHEET_DIR)+file+'?v='+SHEET_V,true,true);
+    want('v'+i,(FIELD_BASE||'fields/')+vFile(i)+'?v='+FIELD_V,false,false);
     keep.push(sheetKey(i),'v'+i);
   }
   trim(keep);
 }
 
 /* ---------- the globe ---------- */
-const VERT=`varying vec2 vUv; varying vec3 vVN;
-void main(){ vUv=uv; vVN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
-/* Two sheets carried toward each other on the displacement warp (the same
-   contract as the app's lite material, without the height field: a coastline
-   that moves within an interval dissolves over that interval, which at ambient
-   speeds is a few seconds and below notice), a terminator fixed in view space,
-   and a limb haze. */
-const FRAG=`precision highp float;
-uniform sampler2D sheetA, sheetB, dispA; uniform float mixf, uWarp;
-varying vec2 vUv; varying vec3 vVN;
-const float V_DEG=12.0;
-vec2 warpAt(vec2 uv){
-  if(uWarp<0.5) return vec2(0.0);
-  vec3 d=texture2D(dispA,uv).rgb;
-  float dE=(d.r*2.0-1.0)*V_DEG, dN=(d.g*2.0-1.0)*V_DEG;
-  float cl=max(cos(radians(uv.y*180.0-90.0)),0.15);
-  return vec2(dE/(cl*360.0), dN/180.0);
+// bakeNoiseLUT is COPIED from app.js (the noise lattice the cloud shader reads); build_site.py refuses drift.
+function bakeNoiseLUT(){
+  const mulberry32=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+    t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  const rnd=mulberry32(0x9E3779B9);
+  const P=64,A=528;
+  const V=new Float32Array(P*P*P);
+  // Floor at the smallest NORMAL half float: the encoder below has no
+  // subnormal path, and an unlucky tiny value would decode as ~2.0 -- a
+  // bright pinprick somewhere on the planet. 6e-5 on a noise value is
+  // beneath any visible threshold; a mangled lattice point is not.
+  for(let i=0;i<V.length;i++)V[i]=Math.max(6.104e-5,rnd());
+  /* Half-float, not bytes. An R8 lattice quantises the values to 1/255, and
+     detail3's ridged transform -- (1-|2n-1|)^2 -- turns each tiny flat step
+     near n=0.5 into a flat facet exactly at the crease tip. Measured: the
+     ridge crop lost ~11% of its Laplacian energy, i.e. visibly softer crests.
+     Half floats carry ~2,000 levels through the same trick at 2 bytes/texel
+     (557 KB), and the crispness comes back to parity. */
+  // One conversion buffer for all 262,144 values (the per-value pair of typed
+  // arrays was a quarter-million allocations at boot). Same bits out.
+  const f32=new Float32Array(1),u32=new Uint32Array(f32.buffer);
+  const f2h=v=>{
+    f32[0]=v;const x=u32[0];
+    return((x>>16)&0x8000)|((((x>>23)&0xff)-112)<<10)&0x7c00|((x>>13)&0x03ff);};
+  const data=new Uint16Array(A*A);
+  for(let z=0;z<P;z++){
+    const col=z%8,row=(z/8)|0;
+    for(let y=0;y<66;y++){const ly=(y+63)%64;
+      for(let x=0;x<66;x++){const lx=(x+63)%64;
+        data[(row*66+y)*A+col*66+x]=f2h(V[(z*P+ly)*P+lx]);}}}
+  const t=new THREE.DataTexture(data,A,A,THREE.RedFormat,THREE.HalfFloatType);
+  t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;
+  t.generateMipmaps=false;t.colorSpace=THREE.NoColorSpace;
+  t.wrapS=THREE.ClampToEdgeWrapping;t.wrapT=THREE.ClampToEdgeWrapping;
+  t.needsUpdate=true;
+  return t;
 }
-void main(){
-  vec2 w=warpAt(vUv);
-  vec4 cA=texture2D(sheetA,vUv-mixf*w), cB=texture2D(sheetB,vUv+(1.0-mixf)*w);
-  vec3 col=mix(cA.rgb,cB.rgb,mixf);
-  float sd=dot(normalize(vVN), normalize(vec3(0.54,0.22,0.86)));
-  float lit=smoothstep(-0.15,0.20,sd);
-  vec3 nightCol=col*0.10+vec3(0.020,0.030,0.060);
-  float dusk=exp(-pow(sd/0.12,2.0))*lit;
-  col=mix(nightCol, col, lit);
-  col=mix(col, col*vec3(1.20,0.86,0.62), dusk*0.35);
-  float limb=pow(1.0-clamp(vVN.z,0.0,1.0),3.0);
-  col=mix(col, vec3(0.60,0.71,0.86), limb*0.55*(0.30+0.70*lit));
-  gl_FragColor=vec4(col,1.0);
-}`;
 const cv=document.getElementById('gl');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:false,powerPreference:'low-power'});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
 const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(38,1,.01,100);
-const mat=new THREE.ShaderMaterial({uniforms:{sheetA:{value:null},sheetB:{value:null},dispA:{value:null},mixf:{value:0},uWarp:{value:0}},vertexShader:VERT,fragmentShader:FRAG});
+const AFRAG=SHADERS.AFRAG, AVERT=SHADERS.AVERT;
+const mat=new THREE.ShaderMaterial({uniforms:{sheetA:{value:null},sheetB:{value:null},dispA:{value:null},mixf:{value:0},uWarp:{value:0}},vertexShader:AVERT,fragmentShader:AFRAG});
 const globe=new THREE.Mesh(new THREE.SphereGeometry(1,192,96),mat); scene.add(globe);
+/* THE CLOUDS (2026-09-08): the app's cloud shell (ambient__ACFRAG) over the
+   sheets, a child of the globe so it turns with it, with its own weather
+   clock; its land and wetness come from the sheets' colours. */
+let cmat=null, clouds=null;
+if(CLOUDS){
+  const ACFRAG=SHADERS.ACFRAG.replace('/*@cnoise*/',SHADERS.CN_NEW), ACVERT=SHADERS.ACVERT;
+  cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,extensions:{derivatives:true},
+    uniforms:{sheetA:mat.uniforms.sheetA,sheetB:mat.uniforms.sheetB,mixf:mat.uniforms.mixf,
+              uNz:{value:bakeNoiseLUT()},uCloudDetail:{value:null},uWeatherTime:{value:0},uCloud:{value:0},uEra:{value:1000},uSnowball:{value:0}},
+    vertexShader:ACVERT,fragmentShader:ACFRAG});
+  clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,96,48),cmat); clouds.visible=false; globe.add(clouds);
+}
 const atmo=new THREE.Mesh(new THREE.SphereGeometry(1.03,64,32),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,
   vertexShader:`varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
   fragmentShader:`varying vec3 vN;void main(){float i=pow(clamp(0.72-dot(vN,vec3(0,0,1.0)),0.0,1.0),2.2);gl_FragColor=vec4(0.36,0.62,0.86,1.0)*i*0.9;}`}));
@@ -160,22 +233,34 @@ function readout(){
   $age.textContent=fmtAge(state.age);
   $era.textContent=(m.epoch&&m.period&&m.epoch!==m.period)?m.epoch+' · '+m.period:(m.period||m.epoch||'');
 }
-let last=performance.now(), lastDraw=0, holding=false;
+/* THE CADENCE (2026-09-08). The frame cap used to skip rAF ticks with a
+   bare comparison, and dt was the interval since the previous TICK: on a
+   drawn frame at 30 fps the age moved by 16.7 ms of time, not 33, so time
+   ran at half the slider and rotation and age both stuttered whenever the
+   skip pattern broke. Now frames are due on a grid (one millisecond of
+   tolerance for rAF jitter, a resync after a stall) and dt is the time
+   since the previous DRAW. The tolerance is a fifth of the period: one
+   millisecond let a tick that came 2 ms early slip past, and the next drew
+   50 ms after the last -- one draw in twenty, measured. */
+let due=0, lastAt=0, holding=false, wt=0, fade=0, cloudAsked=false;
 function loop(now){
   requestAnimationFrame(loop);
-  const dt=Math.min(0.5,(now-last)/1000); last=now;
-  if(now-lastDraw<1000/FPS)return;
-  lastDraw=now;
+  const period=1000/FPS;
+  if(now<due-period*0.2)return;
+  const dt=Math.min(0.5,lastAt?(now-lastAt)/1000:period/1000);
+  if(lastAt){STAT.ms.push(now-lastAt);if(STAT.ms.length>3000)STAT.ms.shift();}
+  lastAt=now; due=(now-due>3*period)?now+period:due+period;
   const f0=frameAt(state.age); requestAround(f0,state.dir);
   // advance only when the next pair is drawable; otherwise hold, never show a half-loaded world
   const nf=frameAt(state.age+state.dir*SPEED*dt);
   const ready=i=>!!tex(sheetKey(i));
   holding=!(ready(nf.i)&&ready(nf.j));
+  pumpStrips(holding||!(ready(f0.i)&&ready(f0.j)));
   if(!holding){
     state.age+=state.dir*SPEED*dt;
     if(state.age<=-250){state.age=-250;state.dir=1;}       // ping-pong: no jump, no seam
     if(state.age>=1000){state.age=1000;state.dir=-1;}
-  }
+  }else STAT.holds++;
   state.rot+=SPIN*dt; globe.rotation.y=state.rot;
   const f=frameAt(state.age);
   const sa=tex(sheetKey(f.i)), sb=tex(sheetKey(f.j));
@@ -183,11 +268,22 @@ function loop(now){
     mat.uniforms.sheetA.value=sa; mat.uniforms.sheetB.value=sb; mat.uniforms.mixf.value=f.t;
     const v=(f.i!==f.j)?tex('v'+f.i):null;
     mat.uniforms.dispA.value=v; mat.uniforms.uWarp.value=v?1:0;
-    renderer.render(scene,cam);
+    if(CLOUDS){
+      // the image is asked for once the globe shows, so it never delays the first picture
+      if(!cloudAsked){cloudAsked=true;want('c','imagery/nasa-clouds-4096.jpg?v='+IMAGERY_V,true,true);}
+      const ct=tex('c');
+      if(ct){cmat.uniforms.uCloudDetail.value=ct;fade=Math.min(1,fade+dt/1.4);}
+      if(WEATHER)wt+=Math.min(0.1,dt);
+      const sA=TL[f.i].snowball||0, sB=TL[f.j].snowball||0;
+      cmat.uniforms.uSnowball.value=sA+(sB-sA)*f.t;
+      cmat.uniforms.uEra.value=state.age; cmat.uniforms.uWeatherTime.value=wt; cmat.uniforms.uCloud.value=fade;
+      clouds.visible=fade>0.001;
+    }
+    renderer.render(scene,cam); STAT.drawn++;
   }
   readout();
 }
-document.addEventListener('visibilitychange',()=>{last=performance.now();});
+document.addEventListener('visibilitychange',()=>{lastAt=performance.now();due=0;});
 
 /* ---------- boot ---------- */
 (async()=>{
@@ -205,7 +301,11 @@ document.addEventListener('visibilitychange',()=>{last=performance.now();});
   // start on a keyframe that exists in the sheet set
   const have=new Set(Object.keys(SM.files).map(Number));
   if(!have.has(Math.round(state.age))){const near=[...have].sort((a,b)=>Math.abs(a-state.age)-Math.abs(b-state.age))[0];if(near!==undefined)state.age=near;}
-  window.AMB={state,step(){loop(performance.now());},status(){return{age:state.age,holding,tex:[...TEX.keys()],pending:[...PENDING],missing:[...MISSING]};},
+  const summary=()=>{const a=[...STAT.ms].sort((x,y)=>x-y),n=a.length;return n?{n,p50:+a[n>>1].toFixed(1),p95:+a[Math.floor(n*0.95)].toFixed(1),max:+a[n-1].toFixed(1),hitches:a.filter(x=>x>60).length}:null;};
+  window.AMB={state,step(){loop(performance.now());},
+    status(){return{age:state.age,holding,tex:[...TEX.keys()],pending:[...PENDING],missing:[...MISSING],
+      clouds:{on:CLOUDS,ready:!!(TEX.get('c')&&TEX.get('c').ready),fade:+fade.toFixed(3),wt:+wt.toFixed(2)},
+      stat:{drawn:STAT.drawn,holds:STAT.holds,strips:STAT.strips,frames:summary()},errors:__ERRORS.slice(0,5)};},
     snap(){renderer.render(scene,cam);return cv.toDataURL('image/png').slice(22);}};
   requestAnimationFrame(loop);
 })();

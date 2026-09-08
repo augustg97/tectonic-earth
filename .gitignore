@@ -57,6 +57,7 @@ __pycache__/
 web/_old.html
 web/_*_old.js
 web/_*_old.css
+web/_*_old.html
 
 # A frozen copy of the page for a sheet bake that must not follow live edits (the Atlas port round 2)
 web/_bakeapp.html

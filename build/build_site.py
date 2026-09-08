@@ -173,6 +173,18 @@ def inline_page(html):
         html = html.replace(tag, "<script>\n" + body + "</script>")
     return html
 
+# The ambient page (2026-09-08) reads its shaders from shaders.js too; the site
+# ships no separate shaders.js (index.html has it inlined), so the page gets
+# it inlined the same way -- the first build after the change would have
+# shipped a page that loads a file the site does not carry.
+def inline_ambient(html):
+    import re
+    m = re.search(r'<script src="shaders\.js(?:\?v=[^"]*)?"></script>', html)
+    assert m, "ambient.html: shaders.js script tag"
+    body = open(os.path.join(WEB, "shaders.js")).read()
+    assert "</script" not in body, "shaders.js"
+    return html[:m.start()] + "<script>\n" + body + "</script>" + html[m.end():]
+
 for name in DATA_FILES:
     src = os.path.join(WEB, name)
     # The app degrades gracefully if a data file is missing — the sidebars just
@@ -183,6 +195,9 @@ for name in DATA_FILES:
                          f"Run build_webdata.py first.")
     if name == "index.html":
         open(os.path.join(SITE, name), "w").write(inline_page(open(src).read()))
+        continue
+    if name == "ambient.html":
+        open(os.path.join(SITE, name), "w").write(inline_ambient(open(src).read()))
         continue
     shutil.copy2(src, os.path.join(SITE, name))
 
@@ -314,9 +329,31 @@ for _page in ("app.js", "ambient.html"):
             continue
         if not os.path.exists(os.path.join(SITE, _rel)):
             _missing.append(f"{_page}: {_rel}")
+# ... and every <script src> of a DEPLOYED page: the ambient page once loaded
+# shaders.js by tag while the site inlines it and ships no such file.
+for _page in ("index.html", "ambient.html"):
+    _src = open(os.path.join(SITE, _page)).read()
+    for _m in _re.finditer(r'<script src="([^"?]+)(?:\?[^"]*)?"', _src):
+        if _m.group(1).startswith("http"):
+            continue
+        if not os.path.exists(os.path.join(SITE, _m.group(1))):
+            _missing.append(f"{_page}: <script src={_m.group(1)}>")
 if _missing:
     raise SystemExit("build_site: the pages fetch files the site does not carry -- "
                      + ", ".join(_missing))
-print("fetch targets: every file the pages fetch by name is in the site")
+print("fetch targets: every file the pages fetch by name, and every script tag, is in the site")
+
+# THE AMBIENT PAGE CARRIES A COPY of app.js's bakeNoiseLUT (its cloud shader
+# reads the same lattice and the page has no app.js). A copy drifts; refuse
+# to publish one that has.
+def _fn_text(src, name):
+    i = src.find("function " + name + "(")
+    j = src.find("\n}\n", i)
+    return src[i:j + 3] if i >= 0 and j >= 0 else None
+_lut_app = _fn_text(open(os.path.join(WEB, "app.js")).read(), "bakeNoiseLUT")
+_lut_amb = _fn_text(open(os.path.join(WEB, "ambient.html")).read(), "bakeNoiseLUT")
+if not _lut_app or _lut_app != _lut_amb:
+    raise SystemExit("build_site: ambient.html's bakeNoiseLUT differs from app.js's -- copy it over")
+print("ambient: bakeNoiseLUT matches app.js")
 
 print(f"site/: {n} files, {total/1e6:.2f} MB (vs a 16 MB inlined-artifact ceiling)")

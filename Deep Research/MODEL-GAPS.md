@@ -7920,3 +7920,14 @@ render with the cloud shells (about 15 ms of the frame). Memory over four passes
 across the whole timeline (90 s): 949 MB of decoded-field cache, 461 MB pinned, 72–77 GL
 textures, 139 MB of imagery, flat from the first pass to the last; the six held 4096 sheets
 add up to 270 MB of texture (78 MB each while its strips are still arriving).
+
+## THE AMBIENT PAGE'S CLOUDS (2026-09-08)
+
+The background build now carries the app's cloud layer, but it ships no elevation or rainfall, so
+the land and wetness that arrange its deck are read from the world sheets' own colours: blue is
+water, green is wet land, tan is dry land, white is ice, through a coarse mip level. That is an
+illustrative arrangement standing in for the app's modelled one (ice-covered sea reads as land,
+a green shelf sea would read as wet land, a dark forest as wetter than a bright one), acceptable
+for a screensaver and registered here so nobody reads it as climate. The transport, the zonal
+climatology, the synoptic gate and the snowball damping are the app's, unchanged; there is no
+cloud shadow on the ambient globe.

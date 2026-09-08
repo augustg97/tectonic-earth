@@ -1,6 +1,118 @@
 {
-  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json.",
+  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
   "releases": [
+    {
+      "version": "3.4",
+      "date": "8 September 2026",
+      "title": "The Ambient page gets the clouds, and the update log is whole again",
+      "summary": "The background build — the slowly turning Earth that runs as a screensaver or wallpaper — now carries the same NASA cloud deck as the app, moving on its own clock and arranged by each era's coasts, vegetation and ice, and its frames no longer hitch at every keyframe. This log also regains eight releases from August that were written but never reached the site.",
+      "sections": [
+        {
+          "name": "Ambient",
+          "items": [
+            "Clouds over the ambient globe: NASA's Blue Marble cloud field in the same slow coherent motion as the app's, thickening, merging and dissolving on its own clock, thinner over dry land and a frozen world, lit by the same terminator. Their arrangement follows the colours of the world sheets (water, green land, dry land, ice), since this page carries no climate fields; there is no cloud shadow. ?clouds=0 turns them off, ?weather=0 holds them still, and reduced-motion settings hold them still too.",
+            "No more hitch at a keyframe crossing: each world sheet and the cloud image reach the graphics card in strips across frames instead of in one piece at the moment they are first drawn.",
+            "Time and rotation now advance by the time since the previous drawn frame. The 30 fps cap had been counting the previous tick instead, so time ran at half the requested speed and both motions stuttered whenever the tick pattern broke."
+          ]
+        },
+        {
+          "name": "Update log",
+          "items": [
+            "Eight releases from 5–9 August 2026 (2.3 to 3.0: the monsoon, the deserts, Siberia's forests and more) had been written into the build's log but never copied to the site. They are here now, and the three September releases that had reused their numbers are 3.1 to 3.3."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "3.3",
+      "date": "7 September 2026",
+      "title": "Clouds that live through playback, and continents that drift instead of jumping",
+      "summary": "The same day's second round, from the owner's own screenshots. The clouds now stay on while time runs and evolve on their own clock: masses thicken, merge across a clearing and dissolve, arranged by where each era's land, rain, ice and the zonal circulation make cloud likely, with the satellite structure kept inside them. And the wide view no longer looks like an unfinished frame: the app draws from 4096-wide world sheets on a desktop, takes them earlier when the graphics chip is struggling, and time now waits for a keyframe's fields before moving on, so a continent in motion drifts rather than snapping.",
+      "sections": [
+        {
+          "name": "Clouds",
+          "items": [
+            "Cloud cover persists through Play. The deck's transport runs on its own weather clock while the timeline runs, and its arrangement follows the continents, the era's modelled rainfall, its ice and a soft zonal climatology: the tropical convergence band, the mid-latitude storm tracks and the clear subtropical belts.",
+            "Clouds evolve. A slow synoptic gate (about a minute from clear to overcast at any one place, and moved gently by the era as well) thickens, merges and dissolves cloud masses; the fine fronts and spirals inside them are still the satellite field in coherent motion. A snowball world loses most of its deck.",
+            "The clouds never see a half-arrived world: playback waits for the next keyframe's fields before it advances, and the deck fades only for the schematic shading, your own switch, or a preview standing in."
+          ]
+        },
+        {
+          "name": "Timeline",
+          "items": [
+            "The wide view draws from 4096-wide world sheets on a desktop, twice the previous resolution; the 2048 set stays for the Ambient page and for devices with little memory. Once the quality governor has stepped the render scale down, the sheets take over earlier, since a pre-shaded sheet is sharper than the live shader at half resolution and a tenth of its cost.",
+            "A jump now switches from the coarse preview to the full terrain only when the keyframe's elevation, rainfall, lakes, surface processes, ocean structure, motion and plate coordinates are all here, instead of on elevation alone, which had put a new coastline over the previous age's lakes and drainage for a second.",
+            "Playback waits for a keyframe's fields the way it already waited for a late sheet (never more than a second and a half), so continents drift through a crossing instead of snapping to a still and back.",
+            "No single frame moves time by more than 1.5 million years, whatever the speed: fast playback on a slow frame now runs a little below the slider, smoothly, where it used to leap half an interval at once.",
+            "The hitch at every keyframe crossing is gone: the small elevation map the place-names snap to was being read back from the full-size keyframe on the spot, once per keyframe; it is now prepared in the background."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "3.2",
+      "date": "7 September 2026",
+      "title": "Real clouds in motion, a seek that answers at once, and a temperature curve",
+      "summary": "Three things brought over from the Tectonic Atlas experiment, on top of the original globe rather than in place of it: NASA's Blue Marble cloud field drifting over the paused globe and map, a timeline that shows the age you asked for the moment you ask (a coarse preview first, the full terrain a fraction of a second later, instead of the old world sitting there under the new age for several seconds), and a graph of the modelled global mean temperature across the whole 1.25 billion years under the conditions readout. The terrain, the ocean floor, the mountains, the controls and the science are exactly as before: the cloud-off picture matches the previous release to within the harness's own noise.",
+      "sections": [
+        {
+          "name": "Clouds",
+          "items": [
+            "The clouds are now NASA's Blue Marble cloud composite (NASA/Goddard Space Flight Center, image by Reto Stöckli), one continuous field in slow coherent motion, so fronts stay connected and storms stay single instead of dissolving into noise cells. The image loads only after the terrain is ready and costs nothing until then.",
+            "Each era adapts the field: its own land and modelled rainfall set where the deck thins and thickens, so Pangaea's dry interior clears while its monsoon coasts stay cloudy. Ancient and future ages show satellite-derived structure with illustrative climate adaptation, not the weather of any real day.",
+            "Clouds and their shadows leave the moment you press Play and return when you pause, so playback shows the surface. Cloud cover and Animate weather are separate switches under Atmosphere; the animation starts off if your system asks for reduced motion.",
+            "The clouds now thin as you come close rather than vanishing, and they cover the flat map as well as the globe, with one shared clock."
+          ]
+        },
+        {
+          "name": "Timeline",
+          "items": [
+            "A jump to an age whose terrain is not loaded yet shows that age at once, coarsely, from a preview of all 251 keyframes, and the readout says Loading terrain until the full-detail fields arrive; measured from a warm server, full detail follows in a quarter to half a second where it used to take three to nine seconds with the previous age left on screen.",
+            "Requests follow you: a run of jumps cancels the downloads for ages you left behind instead of draining them ahead of the one you stopped on, and the neighbourhood kept warm now follows the playback speed and the measured connection instead of warming the whole timeline.",
+            "Pressing a marker or stepping onto an exact keyframe now binds that keyframe alone; it used to bind its neighbour's interval fields (the present day read the +5 Myr keyframe's plate motion).",
+            "A press anywhere on the era names or the scale seeks there and drags like the slider, and the slider itself is easier to grab.",
+            "A lost packet no longer makes a field disappear until reload: only a real 404 marks a field absent, and everything else is retried."
+          ]
+        },
+        {
+          "name": "Conditions",
+          "items": [
+            "The conditions readout carries a graph of the modelled global mean temperature across the whole timeline, 1,000 Ma at the left and +250 Myr at the right, with the selected age marked and its value shown. It is the same modelled curve the Avg temp line prints, drawn straight through the 251 records, and the same caveats apply."
+          ]
+        },
+        {
+          "name": "Performance",
+          "items": [
+            "With the clouds moving over a paused globe, the ground is rendered once and kept, refreshed a strip at a time so the sea sheen keeps moving, and only the cloud layer is redrawn each weather frame; the terrain itself is drawn at full resolution as before and the cloud-off frame is unchanged.",
+            "The quality governor no longer reads weather frames as a slow machine: it judges playback and interaction only."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "3.1",
+      "date": "3 September 2026",
+      "title": "The wide view draws from baked sheets, and the clock slows down",
+      "summary": "Zoomed out, the globe now draws from a pre-rendered sheet of each keyframe instead of running the full terrain shader on every pixel, which is what makes playback smooth on modest hardware and lets the Ambient page run all day. Underneath, a first round of the mountain and plains models landed, with its fold ridges deliberately held back until they look like ranges.",
+      "sections": [
+        {
+          "name": "Performance",
+          "items": [
+            "The wide view and the Ambient page draw from 251 baked world sheets. Time waits briefly for a sheet rather than falling back to the heavy shader, and playback looks a few keyframes ahead so it rarely has to wait.",
+            "Playback runs at 3 Myr per second by default and 10 at most. 18 was crossing a keyframe every quarter second, faster than a landscape can be read or a sheet fetched.",
+            "A keyframe crossing no longer stalls the frame: every field is decoded and uploaded ahead of time, and the build refuses to ship if a crossing pays for uploads again."
+          ]
+        },
+        {
+          "name": "Landscape",
+          "items": [
+            "Plains carry a faint valley texture that runs with the regional slope, from a drainage field baked from the reconstruction. The great sand seas carry dune lineation along the trade-wind line.",
+            "The foreland moat in front of a mountain belt no longer drowns dry plains.",
+            "Fold-belt ridges were built, reviewed on screen, and withheld: they read as ribbing rather than ranges. The model ships dormant behind a switch for the next round."
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0",
       "date": "9 August 2026",

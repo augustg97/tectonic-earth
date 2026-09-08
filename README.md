@@ -327,8 +327,30 @@ texture reads a pixel.
 drawn from the shipped sheets and `_v` only — no terrain shader, no field decoding, ~50 MB
 for the whole timeline at 2048 wide, a few per cent of a laptop GPU. `?speed=` (Myr/s,
 default 2), `?spin=`, `?fps=` (default 30; 10 under `prefers-reduced-motion`), `?age=`,
-`?ui=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
-wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped. Recipes that
+`?ui=0`, `?clouds=0`, `?weather=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
+wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped. **Since
+2026-09-08 it carries the app's clouds:** its shaders live in `web/shaders/ambient__*.glsl`
+(validated with the app's by `check_shader.py`, which emits the noise reader into `shaders.js`
+for it), and `ambient__ACFRAG` is `index__CFRAG` with the land and wetness read from the sheets'
+own colours — blue water, green wet land, tan dry land, white ice, through a coarse mip level —
+since the page ships no fields (an illustrative arrangement, registered in MODEL-GAPS.md); the
+same transport, zonal climatology, synoptic gate and snowball damping, on the page's own weather
+clock, no shadow pass. Its sheets and the cloud image upload in strips, two a frame and eight
+while the picture waits, so a keyframe crossing no longer hitches; and its frame cap now advances
+time by the interval since the previous *draw* — the old cap used the previous *tick*, so time
+ran at half the slider and rotation and age stuttered whenever the skip pattern broke.
+**Measured** (the M1, `build/verify_run.py` driving `_verify.html?ambient=`, 20 s at the default
+2 Myr/s from 300 Ma, the frozen old page through the same driver):
+
+| | old page | new page |
+|---|---|---|
+| draw cadence at the 30 fps cap: median / p95 / max | 48.5 / 50.1 / 51.9 ms (23.6 draws a second) | 33.3 / 35.1 / 35.4 ms (30.6 a second) |
+| time actually advanced on a 2 Myr/s setting | 15.9 Myr in 20 s (0.79 Myr/s) | 40.8 Myr in 20 s (2.04 Myr/s) |
+| draws over 60 ms; frames held for a sheet | 0; 0 | 0; 4 of 855 |
+| clouds | none | up from the first sheets, weather clock +28.5 s in 20 s, no shader errors |
+| the same with `?clouds=0` | — | 33.3 / 35.2 / 35.4 ms, 0 slow draws |
+| at 10 Myr/s from 600 Ma (15 s) | — | 33.3 / 50 / 50.1 ms: one draw in twenty is a tick late while eight strips a frame feed a waiting sheet; 4 holds; 10.2 Myr/s |
+| at the present, still, and at 100 Ma, still | — | 33.3 / 35.2 ms; `build/verify/amb_present.png`, `amb2_land.png` | Recipes that
 need no packaging work: on macOS, WebViewScreenSaver (`brew install --cask webviewscreensaver`)
 with the page URL plus `?ui=0` as its address, or Plash for a live wallpaper; on Windows,
 Lively Wallpaper's "URL" source. All three show the page as-is, so `?speed=` and `?fps=`

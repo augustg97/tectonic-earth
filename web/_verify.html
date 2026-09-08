@@ -21,14 +21,17 @@ const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','min
                              'evalq','expr','age','lon','lat','zoom','w','h','wait','rivdbg','rivage','bake','sheet',
                              'app','settle','shotsize','nolabels','quick',
                              // the port round (2026-09-07): matched old/new baselines
-                             'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke','playsmooth','speed','quality','playing']);
+                             'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke','playsmooth','speed','quality','playing',
+                             'ambient','fps','spin']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
 // ?bake= loads the app in its own sheet-baking configuration: lite path on, shipped
 // sheets ignored, whole-sheet strips, and the requested width.
 const bakeArgs = q.get('bake') ? '&lite=1&noshipped=1&bakefull=1&sheet=' + (q.get('sheet') || 4096) : '';
-document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs;
+// the ambient page (2026-09-08) reads its own knobs, some of which are driver keys here
+const ambientArgs = q.get('ambient') ? ['age','speed','clouds','weather','fps','spin'].filter(k => q.has(k)).map(k => '&' + k + '=' + encodeURIComponent(q.get(k))).join('') : '';
+document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs + ambientArgs;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
   const [name, lon, lat, age, zoom, gtilt, head] = s.split(',');
   return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null,
@@ -38,6 +41,35 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const W = () => document.getElementById('app').contentWindow;
 (async () => {
   let t0 = Date.now();
+  if (q.get('ambient')) {
+    /* THE AMBIENT PAGE (2026-09-08): drives ambient.html (or a frozen copy
+       through ?app=), which has no APP. Waits for AMB, lets the sheets and
+       the cloud image arrive, then samples the age at the page's own rAF for
+       ?secs= seconds: the draw cadence is read from the ticks in which the
+       age moved, so the old page, which keeps no statistics of its own,
+       measures the same way; the new page's own draw intervals, holds and
+       strip count are reported beside it. Posts NAME.json.png and NAME.png. */
+    const secs = +(q.get('secs') || 20);
+    while (!(W() && W().AMB) && Date.now() - t0 < 120000) await sleep(300);
+    if (!(W() && W().AMB)) { document.title = 'VERIFY-FAIL-BOOT'; return; }
+    const M = W().AMB;
+    await sleep(+(q.get('wait') || 8000));
+    const orf = W().requestAnimationFrame.bind(W());
+    const samples = []; const t1 = performance.now();
+    await new Promise(res => { const tick = now => { const st = M.status(); samples.push({t: now - t1, age: st.age, holding: !!st.holding}); if (now - t1 < secs * 1000) orf(tick); else res(); }; orf(tick); });
+    const draws = []; let lastT = null, lastAge = null, holdTicks = 0;
+    for (const s of samples) { if (s.holding) holdTicks++; if (lastAge === null || s.age !== lastAge) { if (lastT !== null) draws.push(s.t - lastT); lastT = s.t; lastAge = s.age; } }
+    const a = [...draws].sort((x, y) => x - y), n = a.length;
+    const st = M.status();
+    const out = {secs, ticks: samples.length, ageFrom: samples[0].age, ageTo: samples[samples.length - 1].age,
+                 draws: n, drawFps: +(n / secs).toFixed(1),
+                 drawMsP50: n ? +a[n >> 1].toFixed(1) : null, drawMsP95: n ? +a[Math.floor(n * 0.95)].toFixed(1) : null, drawMsMax: n ? +a[n - 1].toFixed(1) : null,
+                 slowDraws: a.filter(x => x > 60).length, holdTicks,
+                 clouds: st.clouds || null, stat: st.stat || null, errors: st.errors || (W().__ERRORS || []).slice(0, 5)};
+    await fetch('http://127.0.0.1:8901/' + q.get('ambient') + '.json', {method: 'POST', body: btoa(JSON.stringify(out))});
+    await fetch('http://127.0.0.1:8901/' + q.get('ambient'), {method: 'POST', body: M.snap()});
+    document.title = 'VERIFY-DONE'; return;
+  }
   while (!(W() && W().APP) && Date.now() - t0 < 60000) await sleep(300);
   if (!(W() && W().APP)) { document.title = 'VERIFY-FAIL-BOOT'; return; }
   const A = W().APP;
@@ -258,7 +290,8 @@ const W = () => document.getElementById('app').contentWindow;
     ok('graph marks the present at 80%', ch && !ch.hidden && Math.abs(+dot.getAttribute('cx') - 217.6) < 0.2 && D.querySelector('#gmstSel').textContent.includes('14.4'), {cx: dot && dot.getAttribute('cx'), sel: D.querySelector('#gmstSel').textContent});
     click('#aboutBtn'); ok('about panel', D.querySelector('#about').classList.contains('show')); click('#aboutClose');
     click('#logBtn'); await sleep(1500);
-    ok('update log opens with 2.4', D.querySelector('#updatelog').classList.contains('show') && D.querySelector('#ulBody').textContent.includes('2.4'), {first: (D.querySelector('.ulver') || {}).textContent});
+    const ulTop = ((await fetch('updatelog.json?v=' + Date.now()).then(r => r.json())).releases[0] || {}).version;
+    ok('update log opens with the newest release', D.querySelector('#updatelog').classList.contains('show') && !!ulTop && D.querySelector('#ulBody').textContent.includes('v' + ulTop), {first: (D.querySelector('.ulver') || {}).textContent, newest: ulTop});
     click('#ulClose');
     click('#aboutPageBtn'); ok('about page', D.querySelector('#aboutPage').classList.contains('show')); click('#aboutPageClose');
     click('.ph'); ok('sidebar panel opens', !!D.querySelector('.panel.open'));
