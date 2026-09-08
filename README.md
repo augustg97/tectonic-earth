@@ -327,9 +327,15 @@ texture reads a pixel.
 drawn from the shipped sheets and `_v` only — no terrain shader, no field decoding, ~50 MB
 for the whole timeline at 2048 wide, a few per cent of a laptop GPU. `?speed=` (Myr/s,
 default 2), `?spin=`, `?fps=` (default 30; 10 under `prefers-reduced-motion`), `?age=`,
-`?ui=0`, `?clouds=0`, `?weather=0`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
-wallpaper, and the in-app Ambient bar links to it whenever sheets are shipped. **Since
-2026-09-08 it carries the app's clouds:** its shaders live in `web/shaders/ambient__*.glsl`
+`?ui=0`, `?clouds=0`, `?weather=0`, `?paused=1`. It runs as a tab, a screensaver (any WebView screensaver pointing at the URL) or a
+wallpaper. **Since 2026-09-08 it is the only ambient view:** the app's Ambient button opens it in
+a frame over the app's window at the current age and play state (the app's loop idles beneath),
+and its chrome is four small things — Close (back to the app, carrying the age and play state it
+reached; Escape does the same) and Full screen at the top left, Pause/Play (time only: the globe
+keeps turning and the weather moving) and the geological eras from `eras.json` at the top right,
+each a jump to the start of that era, playing or paused, with the current era lit. `?ui=0` hides
+the chrome and the readout for a screensaver. The former in-app ambient mode (this view with
+its chrome hidden) is gone. **It carries the app's clouds:** its shaders live in `web/shaders/ambient__*.glsl`
 (validated with the app's by `check_shader.py`, which emits the noise reader into `shaders.js`
 for it), and `ambient__ACFRAG` is `index__CFRAG` with the land and wetness read from the sheets'
 own colours — blue water, green wet land, tan dry land, white ice, through a coarse mip level —

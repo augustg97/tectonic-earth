@@ -2,6 +2,22 @@
   "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
   "releases": [
     {
+      "version": "3.5",
+      "date": "8 September 2026",
+      "title": "One ambient view, with its own small controls",
+      "summary": "The Ambient button now opens the ambient globe itself over the window — the turning Earth with time running and the clouds — in place of the old in-app mode that only hid the controls. It starts at the age you were looking at, and coming back hands that age (and whether time was running) back to the main view.",
+      "sections": [
+        {
+          "name": "Ambient",
+          "items": [
+            "Top left: Close, back to the main view (Escape does the same), and Full screen.",
+            "Top right: Pause/Play, which stops time only — the globe keeps turning and the weather keeps moving — and the geological eras: Neoproterozoic, Paleozoic, Mesozoic, Cenozoic and the projected Future, each a jump to the start of that era, whether time is running or paused; the era you are in is lit.",
+            "The old in-app ambient mode is gone. The page still runs on its own as a screensaver or wallpaper, and ?ui=0 hides its controls and readout there."
+          ]
+        }
+      ]
+    },
+    {
       "version": "3.4",
       "date": "8 September 2026",
       "title": "The Ambient page gets the clouds, and the update log is whole again",

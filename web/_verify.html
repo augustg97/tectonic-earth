@@ -22,7 +22,7 @@ const DRIVER_KEYS = new Set(['shots','timing','storm','pin','layers','soak','min
                              'app','settle','shotsize','nolabels','quick',
                              // the port round (2026-09-07): matched old/new baselines
                              'clouds','weather','view','seek','targets','fielddelay','gtilt','head','mem','compile','weathertest','dwell','smoke','playsmooth','speed','quality','playing',
-                             'ambient','fps','spin']);
+                             'ambient','fps','spin','jump','paused']);
 const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([k, v]) => '&' + k + '=' + encodeURIComponent(v)).join('');
 // ?app=_lace1.html points the driver at a variant build (bisection probes);
 // default is the real app. Variants never deploy: build_site copies a whitelist.
@@ -30,7 +30,7 @@ const passthrough = [...q.entries()].filter(([k]) => !DRIVER_KEYS.has(k)).map(([
 // sheets ignored, whole-sheet strips, and the requested width.
 const bakeArgs = q.get('bake') ? '&lite=1&noshipped=1&bakefull=1&sheet=' + (q.get('sheet') || 4096) : '';
 // the ambient page (2026-09-08) reads its own knobs, some of which are driver keys here
-const ambientArgs = q.get('ambient') ? ['age','speed','clouds','weather','fps','spin'].filter(k => q.has(k)).map(k => '&' + k + '=' + encodeURIComponent(q.get(k))).join('') : '';
+const ambientArgs = q.get('ambient') ? ['age','speed','clouds','weather','fps','spin','paused'].filter(k => q.has(k)).map(k => '&' + k + '=' + encodeURIComponent(q.get(k))).join('') : '';
 document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs + ambientArgs;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
   const [name, lon, lat, age, zoom, gtilt, head] = s.split(',');
@@ -60,12 +60,21 @@ const W = () => document.getElementById('app').contentWindow;
     const draws = []; let lastT = null, lastAge = null, holdTicks = 0;
     for (const s of samples) { if (s.holding) holdTicks++; if (lastAge === null || s.age !== lastAge) { if (lastT !== null) draws.push(s.t - lastT); lastT = s.t; lastAge = s.age; } }
     const a = [...draws].sort((x, y) => x - y), n = a.length;
+    // ?jump=ERA presses that era chip and reports where time went and whether the picture followed
+    let jump = null;
+    if (q.get('jump')) {
+      const D2 = W().document, chip = [...D2.querySelectorAll('.chip.era')].find(b => b.textContent === q.get('jump'));
+      const before = M.status(); if (chip) chip.click(); await sleep(3500);
+      const after = M.status();
+      jump = {era: q.get('jump'), found: !!chip, ageBefore: before.age, ageAfter: after.age, drewAfter: after.stat.drawn - before.stat.drawn, lit: [...D2.querySelectorAll('.chip.era.on')].map(b => b.textContent)};
+    }
     const st = M.status();
     const out = {secs, ticks: samples.length, ageFrom: samples[0].age, ageTo: samples[samples.length - 1].age,
                  draws: n, drawFps: +(n / secs).toFixed(1),
                  drawMsP50: n ? +a[n >> 1].toFixed(1) : null, drawMsP95: n ? +a[Math.floor(n * 0.95)].toFixed(1) : null, drawMsMax: n ? +a[n - 1].toFixed(1) : null,
                  slowDraws: a.filter(x => x > 60).length, holdTicks,
-                 clouds: st.clouds || null, stat: st.stat || null, errors: st.errors || (W().__ERRORS || []).slice(0, 5)};
+                 clouds: st.clouds || null, stat: st.stat || null, playing: st.playing, eras: st.eras || null, jump,
+                 errors: st.errors || (W().__ERRORS || []).slice(0, 5)};
     await fetch('http://127.0.0.1:8901/' + q.get('ambient') + '.json', {method: 'POST', body: btoa(JSON.stringify(out))});
     await fetch('http://127.0.0.1:8901/' + q.get('ambient'), {method: 'POST', body: M.snap()});
     document.title = 'VERIFY-DONE'; return;
@@ -274,9 +283,13 @@ const W = () => document.getElementById('app').contentWindow;
     click('#rotBtn'); ok('auto-rotate on', S.layers.rotate === true && !D.querySelector('#spinwrap').hidden); click('#rotBtn');
     const q0 = S.quality; click('#qualBtn'); ok('quality cycles', S.quality !== q0, {from: q0, to: S.quality}); while (S.quality !== q0) click('#qualBtn');
     click('#ambientBtn'); A.step();
-    ok('ambient on', S.ambient && D.body.classList.contains('ambient') && S.playing);
-    click('#exitAmbient'); A.step(); S.playing = false;
-    ok('ambient off', !S.ambient && !D.body.classList.contains('ambient'));
+    const af = D.querySelector('#ambientHost iframe');
+    ok('ambient opens the lite page over the app', !!af && af.src.includes('ambient.html?embedded=1&age=') && !S.playing, {src: af && af.src});
+    // the page's own Close button posts back to the app: wait for the page to boot, then press it
+    let aw = null; for (let k = 0; k < 100 && !(aw = af && af.contentWindow && af.contentWindow.AMB); k++) await sleep(200);
+    ok('ambient page boots inside the frame', !!aw);
+    if (aw) { af.contentWindow.AMB.state.age = 123.4; af.contentDocument.querySelector('#btnClose').click(); await sleep(400); A.step(); }
+    ok('ambient closes from its own button and hands back the age', !D.querySelector('#ambientHost') && Math.abs(S.age - 123.4) < 0.01, {age: S.age});
     const sr = D.querySelector('#scalerow'), rect = D.querySelector('#track').getBoundingClientRect();
     sr.dispatchEvent(new (W().PointerEvent)('pointerdown', {bubbles: true, clientX: rect.left + rect.width * 0.5, clientY: 0, button: 0, pointerId: 7}));
     sr.dispatchEvent(new (W().PointerEvent)('pointerup', {bubbles: true, clientX: rect.left + rect.width * 0.5, clientY: 0, button: 0, pointerId: 7}));

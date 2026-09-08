@@ -22,7 +22,7 @@ const state={
      moves. Reduced motion starts with the weather still (the Atlas port). */
   layers:{boundaries:false,vectors:false,hotspots:false,labels:true,rotate:false,
           clouds:true,weather:!matchMedia('(prefers-reduced-motion: reduce)').matches},
-  ambient:false, rot:0, tilt:0, zoom:3.05, selPlate:null,
+  rot:0, tilt:0, zoom:3.05, selPlate:null,
   // rot/tilt are the LONGITUDE and LATITUDE of the point the camera looks at.
   // gtilt and head are the Google Earth pair layered on top: how far the camera
   // leans off that point's vertical, and which way it faces once it has. Both
@@ -356,7 +356,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260908-1641';
+const DATA_V='20260908-2350';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
@@ -3936,7 +3936,7 @@ function _groundTarget(W,H){
 /* Draw the scene with `camera`: through the cache when it applies, directly
    otherwise. `weather` is loop()'s weatherMoving. */
 function drawScene(camera,weather){
-  const cacheable=GROUND_ON&&weather&&!state.playing&&!dragging&&!state.ambient&&!_scrubbing&&_bakeJob===null&&
+  const cacheable=GROUND_ON&&weather&&!state.playing&&!dragging&&!_scrubbing&&_bakeJob===null&&
                   !(state.layers.rotate&&state.spin>0)&&globe.material!==previewMat;
   const W=renderer.domElement.width,H=renderer.domElement.height;
   const g=cacheable?_groundTarget(W,H):null;
@@ -4063,6 +4063,7 @@ function loop(now,force){
      elapsed time, capped at half a second so a tab that was hidden resumes
      where it was rather than leaping. */
   const dt=Math.min(.05,rawMs/1000), dtT=Math.min(.5,rawMs/1000);last=now;
+  if(_ambientFrame){requestAnimationFrame(loop);return;}   // the ambient page is up: idle beneath it
   _frameNo++;
   /* THE WEATHER CLOCK (the Atlas port): a third clock, apart from the age and
      from the sea-sheen's uTime. It runs while the app is paused with clouds
@@ -4088,7 +4089,7 @@ function loop(now,force){
                  state.layers.labels,state.selPlate].join('|');
   const cloudFading=!!clouds&&TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&
     ((loop._cloudFade||0)<1||(_cloudTex&&clouds.material.uniforms.uCloudDetailBlend.value<1));
-  const moving=state.playing||dragging||state.ambient||_scrubbing||_bakeJob!==null||cloudFading||
+  const moving=state.playing||dragging||_scrubbing||_bakeJob!==null||cloudFading||
                (state.layers.rotate&&state.spin>0)||_upQ.length>0||_bmPending.size>0;
   if(idleSig!==loop._sig){loop._sig=idleSig;loop._sigAt=now;}
   const idle=!force&&!moving&&(now-loop._sigAt)>1000;
@@ -4159,18 +4160,14 @@ function loop(now,force){
     if(!hold){
       loop._holdAt=0;
       state.age+=step;
-      if(state.age>1000){state.age=state.ambient?-250:1000;if(!state.ambient)state.playing=false,syncPlay();}
-      if(state.age<-250){state.age=state.ambient?1000:-250;if(!state.ambient)state.playing=false,syncPlay();}
+      if(state.age>1000){state.age=1000;state.playing=false;syncPlay();}
+      if(state.age<-250){state.age=-250;state.playing=false;syncPlay();}
       syncSlider();
     }
   }
-  // state.spin scales the manual auto-rotate only. Ambient keeps its own fixed
-  // pace on purpose: it is a display mode with a composed rhythm, and having it
-  // inherit whatever the slider was left on would make the same mode look
-  // different every time it is entered.
+  // state.spin scales the auto-rotate (the ambient view is its own page since 2026-09-08).
   if(_rivWant>=0&&fieldImage('d',_rivWant))buildRivers();
-  if((state.layers.rotate&&!dragging)||state.ambient){
-    state.rot+=dtT*(state.ambient?0.12:0.05*state.spin);}
+  if(state.layers.rotate&&!dragging)state.rot+=dtT*0.05*state.spin;
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
   updateContextCards(); // and the interval / supercontinent / glaciation cards
   // Drives only the sea-surface sheen; nothing about world state depends on it,
@@ -4501,8 +4498,7 @@ $('#mRight').onclick=()=>{document.body.classList.remove('m-left');
   document.body.classList.toggle('m-right');};
 $('#stage').addEventListener('pointerdown',()=>{
   document.body.classList.remove('m-left','m-right');});
-$('#ambientBtn').onclick=()=>enterAmbient(true);
-$('#exitAmbient').onclick=()=>enterAmbient(false);
+$('#ambientBtn').onclick=openAmbient;
 $('#aboutBtn').onclick=()=>{$('#updatelog').classList.remove('show');
   $('#about').classList.toggle('show');};
 /* The update log. Content is DATA (build/updatelog.json), not markup, so adding a
@@ -4585,33 +4581,37 @@ $('#aboutPageClose').onclick=closeAboutPage;
 aboutPage.addEventListener('click',e=>{ if(e.target===aboutPage) closeAboutPage(); });   // click backdrop
 aboutPage.querySelectorAll('[data-ap-close]').forEach(b=>b.onclick=closeAboutPage);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&aboutPage.classList.contains('show')) closeAboutPage(); });
-/* Full-screen toggle, offered in ambient mode: hides the browser's own tabs and
-   menu bars for a clean, immersive view. Prefixed fallbacks cover Safari, and the
-   request can be refused (e.g. inside a sandboxed frame), so it is guarded. */
-function fsElement(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
-function requestFS(){const el=document.documentElement,fn=el.requestFullscreen||el.webkitRequestFullscreen;
-  if(fn){try{const p=fn.call(el);if(p&&p.catch)p.catch(()=>{});}catch(e){}}}
-function exitFS(){const fn=document.exitFullscreen||document.webkitExitFullscreen;
-  if(fn){try{const p=fn.call(document);if(p&&p.catch)p.catch(()=>{});}catch(e){}}}
-function syncFS(){const on=!!fsElement(),b=$('#fullscreenBtn');
-  b.textContent=on?'Exit full screen':'Full screen';b.classList.toggle('on',on);}
-$('#fullscreenBtn').onclick=()=>{fsElement()?exitFS():requestFS();};
-document.addEventListener('fullscreenchange',syncFS);
-document.addEventListener('webkitfullscreenchange',syncFS);
-
-function enterAmbient(on){state.ambient=on;document.body.classList.toggle('ambient',on);
-  /* The lite build (WP-10, plan C) is the real background mode; offer it from
-     here whenever the site ships world sheets, carrying the current age. */
-  const ll=$('#liteLink'); if(ll){ll.hidden=!(SHEET_MANIFEST&&SHEET_MANIFEST.files);ll.href='ambient.html?age='+Math.round(state.age);}
-  // Ambient is the same view with the chrome hidden: it keeps whatever speed
-  // and layer toggles are already set rather than imposing its own.
-  if(on){state.playing=true;syncPlay();}
-  else if(fsElement()){exitFS();}   // leaving ambient drops back to the normal windowed view
+/* AMBIENT (2026-09-08): the lite page, ambient.html, over the app. It was an
+   in-app mode (this view with the chrome hidden, and a link to the lite page);
+   now the Ambient button opens the lite page itself in a frame that covers the
+   window, starting at the current age and play state, and the app's loop idles
+   beneath it. The page's own Close button (or Escape) posts back with the age
+   and play state it reached, which the app takes up. Full screen is the page's
+   own button. */
+let _ambientFrame=null;
+function openAmbient(){
+  if(_ambientFrame)return;
+  const host=document.createElement('div'); host.id='ambientHost';
+  const f=document.createElement('iframe'); f.id='ambientFrame'; f.title='Ambient view';
+  f.allowFullscreen=true; f.setAttribute('allow','fullscreen');
+  f.src='ambient.html?embedded=1&age='+state.age.toFixed(2)+(state.playing?'':'&paused=1');
+  host.appendChild(f); document.body.appendChild(host); _ambientFrame=host;
+  state.playing=false; syncPlay();
 }
-document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
-  // In full screen the browser's own Escape exits full screen first; a second
-  // Escape then leaves ambient. Outside full screen, Escape leaves ambient.
-  if(e.key==='Escape'&&state.ambient&&!fsElement())enterAmbient(false);
+function closeAmbient(m){
+  if(!_ambientFrame)return;
+  _ambientFrame.remove(); _ambientFrame=null;
+  if(m&&Number.isFinite(m.age))jumpTo(Math.max(-250,Math.min(1000,m.age)));
+  if(m&&typeof m.playing==='boolean'){state.playing=m.playing;syncPlay();}
+  last=performance.now();
+}
+addEventListener('message',e=>{
+  if(e.origin!==location.origin)return;
+  const m=e.data; if(!m||m.tectonic!=='ambient')return;
+  if(m.action==='close')closeAmbient(m);
+});
+document.addEventListener('keydown',e=>{if(_ambientFrame)return;   // the ambient page has the keys while it is up
+  if(e.key===' '){e.preventDefault();state.playing=!state.playing;syncPlay();}
   // Arrow keys step one million years. Right is rightward on the timeline,
   // which is FORWARD in time and therefore a DECREASE in age. Ignored while a
   // text field or the range input has focus so it cannot fight them.

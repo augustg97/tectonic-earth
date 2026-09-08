@@ -24,6 +24,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # DATA_V lives in the application source (web/app.js since the page split,
 # WP-10 D5) and in the deployed single-file page.
 PAGES = [os.path.join(HERE, "..", "web", "app.js"),
+         os.path.join(HERE, "..", "web", "ambient.html"),     # its eras.json fetch is versioned by it (2026-09-08)
          os.path.join(HERE, "..", "docs", "index.html")]
 PAT = re.compile(r"(const DATA_V=')([^']*)(')")
 

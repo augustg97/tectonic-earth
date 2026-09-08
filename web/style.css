@@ -110,7 +110,6 @@ canvas{display:block}
 .ctx-super{--ck:rgba(122,168,116,.5);--ca:#8ec48a;--cg:rgba(122,168,116,.15)}
 .ctx-glacial{--ck:rgba(126,186,214,.5);--ca:#8fc9e4;--cg:rgba(126,186,214,.15)}
 .ctx-climate{--ck:rgba(226,150,110,.5);--ca:#f0a878;--cg:rgba(226,150,110,.15)}
-body.ambient #ctxStack{opacity:0;pointer-events:none}
 #extinctBox{position:fixed;right:20px;top:582px;width:210px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(224,118,74,.55);border-radius:12px;z-index:21;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.4);transition:opacity .4s}
 #extinctBox.hidden{opacity:0;pointer-events:none}
 #extinctHead{cursor:pointer;padding:9px 12px 10px;position:relative;background:linear-gradient(to right,rgba(224,118,74,.16),rgba(224,118,74,.03))}
@@ -128,7 +127,6 @@ body.ambient #ctxStack{opacity:0;pointer-events:none}
    cropped banner so it does not swallow the whole body. */
 #extinctBody .cardfig{margin:2px 0 8px}
 #extinctBody .cardfig svg{height:50px}
-body.ambient #extinctBox{opacity:0;pointer-events:none}
 .grp{margin-bottom:12px}
 .grp:last-child{margin-bottom:0}
 .grp-h{font-size:9.5px;color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
@@ -400,15 +398,10 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 #load .lt{margin-top:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 #load .lp{margin-top:6px;font-size:10px;color:var(--dim2);font-variant-numeric:tabular-nums}
 
+/* the ambient page over the app (2026-09-08): a frame that covers the window */
+#ambientHost{position:fixed;inset:0;z-index:500;background:#05070a}
+#ambientHost iframe{width:100%;height:100%;border:0;display:block}
 #hint{position:fixed;left:50%;bottom:168px;transform:translateX(-50%);font-size:10.5px;color:var(--dim2);letter-spacing:.06em;z-index:15;transition:opacity .5s;pointer-events:none}
-#ambientExit{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:40;opacity:0;pointer-events:none;transition:opacity .4s;display:flex;gap:8px}
-#ambientExit a.txtbtn{text-decoration:none;display:inline-flex;align-items:center}
-#ambientExit a.txtbtn[hidden]{display:none}
-body.ambient #controls,body.ambient #bottom,body.ambient #leftrail,body.ambient #hint,body.ambient #info{opacity:0;pointer-events:none}
-/* the readout is the point of ambient mode, so it stays; only the chrome goes */
-body.ambient #title{opacity:0}
-body.ambient #readout{opacity:1}
-body.ambient #ambientExit{opacity:1;pointer-events:auto}
 /* Narrow windows have no room for a third column, so the panel drops back to
    the right edge and simply overlaps the controls, which are the less
    important of the two once something is selected. */
@@ -423,7 +416,6 @@ body.ambient #ambientExit{opacity:1;pointer-events:auto}
 body.m-left #mLeft,body.m-right #mRight{border-color:var(--accent);color:var(--accent)}
 #mLabels.on{border-color:var(--accent);color:var(--accent)}
 #mLabels{font-size:12px;letter-spacing:.02em}
-body.ambient .mtab{display:none}
 
 /* ===== MOBILE =====================================================
    The rails were built for a desktop viewport and simply kept their size on a

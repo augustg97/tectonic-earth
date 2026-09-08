@@ -163,6 +163,30 @@ Left: the rAF interval of sheet-path playback (67–83 ms median on the loaded m
 | clouds | — | on, weather clock +28.5 s, no errors; `?clouds=0` 33.3 / 35.2 ms |
 | 10 Myr/s from 600 Ma, 15 s | — | 33.3 / 50 / 50.1 ms (one draw in twenty a tick late while eight strips a frame feed a waiting sheet), 10.2 Myr/s |
 
+## Round 4 (2026-09-08, later): one ambient view
+
+- The in-app ambient mode (`state.ambient`, `#ambientExit`, the Lite link, the in-app full-screen
+  button, Escape handling) is gone. `#ambientBtn` → `openAmbient()`: an `#ambientHost` frame over
+  the window running `ambient.html?embedded=1&age=&paused=`, the app's loop idling beneath
+  (`_ambientFrame`); the page's Close (or Escape) posts `{tectonic:'ambient',action:'close',age,
+  playing}` and `closeAmbient()` takes the age and play state up. The app's key handler yields
+  while the frame is up.
+- `ambient.html` chrome: `#tl` Close + Full screen (the document's, through `allowfullscreen`),
+  `#tr` Pause/Play (time only) + era chips built from `eras.json` (`era` field, grouped, oldest
+  first; a chip jumps to the era's oldest edge, `state.dir=-1`, playing or paused; the readout and
+  the lit chip follow the DRAWN frame, so a jump shows the old picture until the new sheets are
+  in). `?ui=0` hides it all. `stamp_data_version.py` stamps the page (its `eras.json` fetch).
+- Smoke test: open → the page boots inside the frame → its own Close button → the frame is gone
+  and the app holds the age it sent. `_verify.html?ambient=…&jump=ERA&paused=1` probes the chips.
+
+| probe (`_verify.html`, headless M1) | result |
+|---|---|
+| smoke: Ambient opens the frame → the page boots inside it → its own Close → frame gone, app at the sent age | 3 of 3 steps, 33 of 33 overall |
+| ambient page 12 s at 2 Myr/s with the chrome | 30.9 draws a second, 33.3 / 35.0 / 35.3 ms, clouds on, five era chips, no errors |
+| `?paused=1` for 8 s | age held at 300, weather clock +16.4 s |
+| Cenozoic chip while playing | 271 → 66 Ma and running (59.4 after 3.5 s), 99 frames drawn after, the chip lit |
+| Neoproterozoic chip while paused | 300 → 1000 Ma, 102 frames drawn after (the picture follows a jump while paused), the chip lit |
+
 ## State right now
 
 - Deployed: see the last commit on `main`; the live `DATA_V` is printed by
