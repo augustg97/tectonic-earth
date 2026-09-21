@@ -19,6 +19,8 @@ exactly when it passes.
                           without anyone looking at it
   anachronisms            a taxon on a card at an age it was not alive
   misplaced               a taxon on a card whose crust it never lived on
+  (--placements AGE       prints taxon -> labels for that age: the review that
+                          finds what the rules cannot -- read it)
   curated conflicts       a curated list claims a taxon for a label its registry
                           range excludes: one of the two is wrong
   land cards, no fauna    ) after 385 Ma both exist everywhere there is land,
@@ -425,7 +427,40 @@ def coverage():
     return thin
 
 
+def placements(age):
+    """taxon -> the labels it lands on at `age`, for every taxon the COMPOSER chose
+    (curated entries are an author's statement about that place and are left out).
+
+    This listing, read by eye, is what found alligators on the Great Lakes, Amazon
+    river dolphins in Lake Titicaca and sequoias on the Gulf of California: each
+    was inside its region code, so no rule objected. Reasoning about the filter
+    found none of them. Run it at a few ages after any large registry change.
+    """
+    life, labels = load_shipped()
+    with open(os.path.join(HERE, "life_data.json")) as f:
+        curated = json.load(f).get("region_taxa") or {}
+    use = collections.defaultdict(list)
+    for lab, a, ba, _tier, _pid, groups, _run in replay(life, labels):
+        if a != int(round(age)):
+            continue
+        span = biota.curated_at(curated.get(lab["n"]), ba)
+        cur = {(t[0] if isinstance(t, (list, tuple)) else t["name"])
+               for t in (span or {}).get("taxa", [])}
+        plat = biota.lat_at(lab, ba)
+        for _k, ts in groups:
+            for t in ts:
+                if t["n"] not in cur:
+                    use[t["n"]].append(lab["n"] + (f"({plat:.0f})" if plat is not None else ""))
+    print(f"{len(use)} composer-chosen taxa on cards at {age:g} Ma  --  label(palaeolatitude)")
+    for n, v in sorted(use.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        print(f"{n} [{len(v)}]: " + ", ".join(v))
+    return 0
+
+
 def main(argv):
+    if "--placements" in argv:
+        i = argv.index("--placements")
+        return placements(float(argv[i + 1]) if len(argv) > i + 1 else 0.0)
     if "--coverage" in argv:
         coverage()
         return 0

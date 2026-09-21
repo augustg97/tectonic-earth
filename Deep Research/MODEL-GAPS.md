@@ -3,6 +3,20 @@
 Every open item this research programme has produced, tied to the specific Tectonic Earth
 subsystem it would change. **This was the handover surface between research and the build.**
 
+## APPLIED, 2026-09-21 — B13 and the biota cards, rebuilt on a registry (release 3.6)
+
+| item | what shipped | measured |
+|---|---|---|
+| **B13** (land cards were plants only) and the reader's report behind it: wrong icons, anachronisms, misplacements | One taxon registry (`build/taxa`, 1,156 entries: form, lifetime, range in present-day crust codes, habitat, latitude, box) + a composer (`build/biota.py`) that builds every label's card per age and balances Fauna / Flora on purpose + a gate (`build/audit_biota.py`) that replays the shipped cards. The name-substring icon binder and its realm fallback are deleted. | **38,036 card-ages replayed: 0 anachronisms, 0 misplaced, 0 outside own range, 0 wrong form, 0 undrawn, 0 land cards missing fauna or flora, 0 thin without a stated reason.** Parent-form drawings 33 → **30**, ratcheted. Bison at 60 Ma, moose in Patagonia and Ursus-as-coyote are each now a build failure. |
+| the province model's modern tropics | `_cenozoic_marine_extended` splits the post-14 Ma tropics by basin (`block="Atlantic"` / `"East Pacific"`, passed by `provinces._basin_hint`); a pre-433 Ma "Cryptospore-plant crust" province stops Cooksonia appearing on Ordovician cards | every warm sea had been headed "Indo-Pacific Realm", the Caribbean and the Mid-Atlantic Ridge included; **63 provinces** now, all 211 markers describable |
+| label SETTING, which the type field cannot say | `SUBMERGED` (dated), time-sliced `LABEL_HOME`, `HABITAT_SINCE`, the polar rule, and a present-day DEM check in the gate | **16 labels** typed as land are drawn under >200 m of water; their cards listed ants, termites and crocodiles. 0 now, and the check is permanent |
+
+Open after this round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
+level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time
+ages (`audit_biota.py --placements 50` already shows Rhododendron reaching Eocene Kerguelen
+through its Indian-crust code); 30 forms with no traceable drawing; and the palaeo-frame labels
+drawn on the wrong crust (B-series, new: **B14**), whose biota is right and whose position is not.
+
 ## APPLIED, 2026-07-26 — the handover was executed
 
 The standing rule that this folder does not change the app held for eight rounds. It has
