@@ -54,9 +54,12 @@ CHECKS = [
           r"matched to a known block or assembly; (\d+) findings", "gt", 2,
           "a label drawn when the entity it names did not exist"),
     Check("curated biota · exceptions", os.path.join(MODELING, "audit_curated_biota.py"),
-          r"EXCEPTION (\d+)", "ne", 10,
-          "the ten localities the province model must never overwrite. A run that "
-          "reclassifies Solnhofen as province-typical is a bug"),
+          r"EXCEPTION (\d+)", "ne", 11,
+          "the eleven localities the province model must never overwrite. A run that "
+          "reclassifies Solnhofen as province-typical is a bug. (Ten until 2026-09, "
+          "when Wallacea joined them: its whole meaning is what did NOT cross "
+          "Wallace's Line, and the crust code it shares with Sundaland would "
+          "otherwise put tigers and orangutans on it.)"),
     Check("curated biota · conflicts", os.path.join(MODELING, "audit_curated_biota.py"),
           r"CONFLICT (\d+)", "gt", 0,
           "a curated entry whose exception flag disagrees with what it looks like"),
@@ -85,6 +88,66 @@ CHECKS = [
           "every taxon the province model can name must have an icon, a rank and "
           "a sentence, or the card shows fewer organisms than the province has. "
           "This selftest existed and was correct and was never wired to the gate"),
+    # --- THE BIOTA CARDS (2026-09). audit_biota.py replays every card the app can
+    # show, from the SHIPPED life.json, against the taxon registry. The first
+    # eleven are zero and stay zero: each is a class of error a reader reported
+    # (an animal at an age it did not live, on crust it never reached, under a
+    # drawing of something else; a land card with plants and no animals), and the
+    # registry + composer make each one impossible to author rather than merely
+    # unlikely. The last is a ratchet: a "parent-form drawing" is a DECLARED
+    # approximation -- a brontothere drawn as a rhino -- and may only go down.
+    Check("biota · registry invalid", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA registry invalid entries: (\d+)", "gt", 0,
+          "a registry entry that breaks the schema in build/taxa/SCHEMA.md"),
+    Check("biota · unregistered names", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA unregistered names on cards: (\d+)", "gt", 0,
+          "an organism on a card that the registry does not know, so nothing "
+          "vouches for its age, its place or its drawing"),
+    Check("biota · no drawing", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA taxa with no drawing: (\d+)", "gt", 0,
+          "a taxon whose form resolves to no icon; there is no realm fallback"),
+    Check("biota · wrong form", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA form findings: (\d+)", "gt", 0,
+          "the classification contradicts the body form, so the drawing is of "
+          "something else -- how Ursus came to be a coyote"),
+    Check("biota · anachronisms", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA anachronisms: (\d+)", "gt", 0,
+          "a taxon on a card at an age it was not alive (Bison at 60 Ma)"),
+    Check("biota · misplaced", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA misplaced taxa: (\d+)", "gt", 0,
+          "a taxon on a card whose crust it never lived on (moose in Patagonia)"),
+    Check("biota · outside own range", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA taxa outside their own range within a region: (\d+)", "gt", 0,
+          "a narrow endemic shown across the whole continent-sized region that "
+          "contains it (alligators on the Great Lakes, edelweiss on the Urals)"),
+    Check("biota · land cards on drowned ground", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA land cards on drowned ground: (\d+)", "gt", 0,
+          "a present-day label the DEM puts under deep water whose card lists land "
+          "life (ants and crocodiles on the Shatsky Rise): add it to biota.SUBMERGED"),
+    Check("biota · curated conflicts", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA curated-vs-range conflicts: (\d+)", "gt", 0,
+          "a curated list claims a taxon for a label its registry range excludes; "
+          "one of the two is wrong and someone has to decide which"),
+    Check("biota · land cards, no fauna", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA land card-ages with no fauna: (\d+)", "gt", 0,
+          "a land card after 385 Ma that shows plants and no animals"),
+    Check("biota · land cards, no flora", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA land card-ages with no flora: (\d+)", "gt", 0,
+          "a land card after 385 Ma that shows animals and no plants"),
+    Check("biota · thin cards", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA thin card-ages \(under 4 organisms\): (\d+)", "gt", 0,
+          "a card with fewer than four organisms on it"),
+    Check("biota · no biota at all", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA card-ages with NO biota at all: (\d+)", "gt", 0,
+          "a label that should carry a biota panel and carries none at some age"),
+    Check("biota · homeless labels", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA homeless labels: (\d+)", "gt", 0,
+          "a card label with no home crust (add it to biota.LABEL_HOME): nothing "
+          "local can be placed on it"),
+    Check("biota · parent-form drawings", os.path.join(HERE, "audit_biota.py"),
+          r"^BIOTA drawn from a PARENT form \(declared approximation\): (\d+)", "gt", 30,
+          "taxa drawn with a parent form's icon because their own form has "
+          "nothing to trace. Declared, counted, and only allowed to fall"),
     Check("frame gate · true regressions", os.path.join(MODELING, "regression_gate.py"),
           r"^  TRUE\s+(\d+)", "gt", 0,
           "features the frame switch made worse with no other explanation",

@@ -1,0 +1,814 @@
+{
+ "taxa": {
+  "Anhinga": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "diver",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ca",
+    "na-e",
+    "sa",
+    "af",
+    "mg",
+    "in",
+    "as-se",
+    "au",
+    "ng"
+   ],
+   "note": "The darter, a spear-fishing bird of warm fresh waters that swims with only its snake-like neck above the surface.",
+   "pbdb": {
+    "oid": "txn:39686",
+    "matched": "Anhinga",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 44,
+    "fea": 27.3,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Suliformes",
+    "family": "Anhingidae",
+    "genus": "Anhinga",
+    "regions": {
+     "na-e": 9,
+     "af-n": 6,
+     "af-e": 6,
+     "sa-n": 7,
+     "eu": 4,
+     "ca": 2,
+     "au": 6,
+     "sa-s": 2,
+     "in": 1,
+     "mg": 1
+    }
+   },
+   "hab": [
+    "lake",
+    "river",
+    "wetland"
+   ]
+  },
+  "Aptenodytes forsteri": {
+   "rank": "species",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "The emperor penguin, the only bird that breeds through the Antarctic winter.",
+   "pbdb": {
+    "oid": "txn:372694",
+    "matched": "Aptenodytes forsteri",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 2,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae",
+    "genus": "Aptenodytes",
+    "regions": {
+     "an": 2
+    }
+   },
+   "hab": [
+    "ice",
+    "coast"
+   ],
+   "w": 3,
+   "realms": [
+    "land",
+    "sea"
+   ],
+   "pbdb_ok": true
+  },
+  "Archaeopteryx": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "earlybird",
+   "fad": 151,
+   "lad": 148,
+   "range": [
+    "eu"
+   ],
+   "note": "The Solnhofen 'first bird', a feathered dinosaur on a Bavarian lagoon at Laurasia's Tethyan edge.",
+   "sz": 0.5,
+   "dt": "carnivore / insectivore",
+   "hb": "arboreal or short-flight glider",
+   "pbdb": {
+    "oid": "txn:39240",
+    "matched": "Archaeopteryx",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 149.2,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Archaeopteryx",
+    "regions": {
+     "eu": 10
+    }
+   },
+   "w": 3,
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Aves",
+    "family": "Archaeopterygidae"
+   }
+  },
+  "Archaeopteryx lithographica": {
+   "rank": "species",
+   "realm": "air",
+   "form": "earlybird",
+   "fad": 147.1,
+   "lad": 147.1,
+   "range": [
+    "eu"
+   ],
+   "note": "Feathers, wings and a long bony tail with teeth: the fossil that made evolution's prediction of transitional forms concrete.",
+   "pbdb": {
+    "oid": "txn:55487",
+    "matched": "Archaeopteryx lithographica",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 6,
+    "fea": 149.2,
+    "lla": 145.06,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Archaeopteryx",
+    "regions": {
+     "eu": 6
+    }
+   }
+  },
+  "Balaeniceps rex": {
+   "rank": "species",
+   "realm": "air",
+   "form": "wader",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-w",
+    "af-s"
+   ],
+   "note": "The shoebill, ambushing lungfish in papyrus swamp.",
+   "pbdb": {
+    "oid": "txn:399812",
+    "matched": "Balaeniceps rex",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Balaenicipitiformes",
+    "family": "Balaenicipitidae",
+    "genus": "Balaeniceps",
+    "regions": {
+     "af-e": 1
+    }
+   },
+   "hab": [
+    "wetland",
+    "lake"
+   ],
+   "box": [
+    [
+     25,
+     35,
+     -15,
+     10
+    ]
+   ]
+  },
+  "Confuciusornis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "earlybird",
+   "fad": 122.7,
+   "lad": 117.3,
+   "range": [
+    "as-e"
+   ],
+   "note": "An early beaked bird known from thousands of specimens, many with long ornamental tail streamers.",
+   "pbdb": {
+    "oid": "txn:67260",
+    "matched": "Confuciusornis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 125.77,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Confuciusornithiformes",
+    "family": "Confuciusornithidae",
+    "genus": "Confuciusornis",
+    "regions": {
+     "as-e": 19
+    }
+   }
+  },
+  "Gastornis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 60.5,
+   "lad": 48,
+   "range": [
+    "eu",
+    "na-n"
+   ],
+   "note": "A large flightless bird once assumed to be a predator, now thought to have been a heavy-billed herbivore; the same lineage also reached Ellesmere Island in Arctic Canada.",
+   "pbdb": {
+    "oid": "txn:39557",
+    "matched": "Gastornis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 61.66,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Gastornithiformes",
+    "family": "Gastornithidae",
+    "genus": "Gastornis",
+    "regions": {
+     "eu": 12,
+     "na-n": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Extending lad from the robust-trimmed 52 toward the raw bound (48.07) and adding na-n to include the genuine Ellesmere Island, Arctic Canada occurrence (pbdb confirms eu + na-n, 61.66-48.07)."
+  },
+  "Gavia immer": {
+   "rank": "species",
+   "realm": "air",
+   "form": "diver",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na",
+    "gl",
+    "eu"
+   ],
+   "note": "The common loon or great northern diver, nesting on northern glacial lakes and wintering at sea.",
+   "pbdb": {
+    "oid": "txn:133767",
+    "matched": "Gavia immer",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 23,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Gaviiformes",
+    "family": "Gaviidae",
+    "genus": "Gavia",
+    "regions": {
+     "na-w": 15,
+     "na-e": 7,
+     "na-n": 1
+    }
+   },
+   "hab": [
+    "lake",
+    "coast"
+   ],
+   "lat": [
+    40,
+    80
+   ],
+   "box": [
+    [
+     -170,
+     -10,
+     40,
+     76
+    ]
+   ]
+  },
+  "Genyornis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 2.6,
+   "lad": 0.045,
+   "range": [
+    "au"
+   ],
+   "note": "A flightless bird twice the weight of an emu, whose eggshell in human campfires helps date people's arrival.",
+   "pbdb": {
+    "oid": "txn:159183",
+    "matched": "Genyornis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Dromornithiformes",
+    "family": "Dromornithidae",
+    "genus": "Genyornis",
+    "regions": {
+     "au": 3
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Gastornithiformes",
+    "family": "Dromornithidae"
+   },
+   "pbdb_ok": true
+  },
+  "Genyornis newtoni": {
+   "rank": "species",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 2.58,
+   "lad": 0.045,
+   "range": [
+    "au"
+   ],
+   "note": "A flightless Australian bird related to waterfowl, not the ratites it resembles; burnt eggshell dated by OSL/U-series to about 45,000 years ago is among the more direct evidence linking humans to the extinctions.",
+   "pbdb": {
+    "oid": "txn:159184",
+    "matched": "Genyornis newtoni",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Dromornithiformes",
+    "family": "Dromornithidae",
+    "genus": "Genyornis",
+    "regions": {
+     "au": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "PBDB carries a single occurrence dated to 0.0117 Ma; dedicated eggshell dating studies (Miller et al.) give a consensus extinction around 45-47 ka, which this uses instead."
+  },
+  "Gyps himalayensis": {
+   "rank": "species",
+   "realm": "air",
+   "form": "vulture",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "in"
+   ],
+   "note": "The Himalayan griffon, soaring the highest of any vulture.",
+   "pbdb": {
+    "oid": "txn:137194",
+    "matched": "Gyps",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 13,
+    "fea": 11.63,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae",
+    "genus": "Gyps",
+    "regions": {
+     "eu": 11,
+     "as-c": 1,
+     "af-n": 1
+    }
+   },
+   "hab": [
+    "alpine"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     68,
+     105,
+     26,
+     44
+    ]
+   ]
+  },
+  "Harpia harpyja": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The harpy eagle, taking sloths and monkeys out of the canopy.",
+   "pbdb": {
+    "oid": "txn:103974",
+    "matched": "Harpia harpyja",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae",
+    "genus": "Harpia",
+    "regions": {
+     "ca": 1
+    }
+   },
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "pbdb_ok": true
+  },
+  "Hesperornis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "diver",
+   "fad": 84,
+   "lad": 78,
+   "range": [
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A flightless, toothed diving bird that swam the seaway like a loon.",
+   "sz": 1.8,
+   "dt": "piscivore",
+   "hb": "flightless foot-propelled diver, toothed",
+   "pbdb": {
+    "oid": "txn:36620",
+    "matched": "Hesperornis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 65,
+    "fea": 89.8,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Hesperornithiformes",
+    "family": "Hesperornithidae",
+    "genus": "Hesperornis",
+    "regions": {
+     "na-w": 11,
+     "na-n": 10,
+     "na-e": 37,
+     "eu": 7
+    }
+   },
+   "w": 3
+  },
+  "Palaeeudyptes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 45,
+   "lad": 32,
+   "range": [
+    "an",
+    "nz",
+    "sa-s",
+    "au"
+   ],
+   "note": "A giant penguin, over 1.5 m tall, from the La Meseta beds before the ice arrived.",
+   "pbdb": {
+    "oid": "txn:92183",
+    "matched": "Palaeeudyptes",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 48.07,
+    "lla": 15.98,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae",
+    "genus": "Palaeeudyptes",
+    "regions": {
+     "sa-s": 2,
+     "nz": 8,
+     "au": 1,
+     "an": 22
+    }
+   },
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Phorusrhacids": {
+   "rank": "family",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 43,
+   "lad": 1.8,
+   "range": [
+    "sa",
+    {
+     "t": [
+      2.7,
+      1.8
+     ],
+     "in": [
+      "na-e",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Apex predators of isolated South America; possibly island-hopped north by ~5 Ma.",
+   "sz": 3.0,
+   "dt": "carnivore",
+   "hb": "flightless cursorial predator",
+   "w": 3,
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Cariamiformes",
+    "family": "Phorusrhacidae"
+   }
+  },
+  "Phorusrhacos": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 19,
+   "lad": 15,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A 'terror bird' - a two-metre flightless predator that was a top carnivore of the Miocene pampas.",
+   "pbdb": {
+    "oid": "txn:39467",
+    "matched": "Phorusrhacos",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 21,
+    "fea": 29,
+    "lla": 13.82,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Gruiformes",
+    "family": "Phorusrhacidae",
+    "genus": "Phorusrhacos",
+    "regions": {
+     "sa-s": 21
+    }
+   },
+   "w": 3
+  },
+  "Struthio": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 21,
+   "lad": 0,
+   "range": [
+    "af",
+    "ar",
+    {
+     "t": [
+      12,
+      0.011
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "in"
+     ]
+    }
+   ],
+   "note": "The ostrich: a flightless bird that answered open ground by running rather than hiding, and the largest bird alive.",
+   "pbdb": {
+    "oid": "txn:39278",
+    "matched": "Struthio",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 100,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Struthionidae",
+    "genus": "Struthio",
+    "regions": {
+     "af-s": 22,
+     "as-w": 8,
+     "af-n": 14,
+     "af-e": 27,
+     "ar": 1,
+     "as-c": 2,
+     "eu": 22,
+     "as-e": 2,
+     "as-n": 1,
+     "in": 1
+    }
+   },
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "pbdb_ok": true
+  },
+  "Titanis walleri": {
+   "rank": "species",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 4.47,
+   "lad": 2.19,
+   "range": [
+    "na-e"
+   ],
+   "note": "A terror bird moving north across the new isthmus -- the interchange ran both ways.",
+   "pbdb": {
+    "oid": "txn:53324",
+    "matched": "Titanis walleri",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 4,
+    "fea": 5.333,
+    "lla": 1.8,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Gruiformes",
+    "family": "Phorusrhacidae",
+    "genus": "Titanis",
+    "regions": {
+     "na-e": 4
+    }
+   }
+  },
+  "Vegavis iaai": {
+   "rank": "species",
+   "realm": "air",
+   "form": "waterfowl",
+   "fad": 72.2,
+   "lad": 66.0,
+   "range": [
+    "an"
+   ],
+   "note": "An Antarctic fossil placing modern bird lineages -- specifically waterfowl relatives -- before the extinction.",
+   "pbdb": {
+    "oid": "txn:81024",
+    "matched": "Vegavis iaai",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 2,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vegavis",
+    "regions": {
+     "an": 2
+    }
+   }
+  },
+  "Vultur gryphus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "vulture",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The Andean condor, riding ridge updraughts on a three-metre wingspan.",
+   "pbdb": {
+    "oid": "txn:103973",
+    "matched": "Vultur gryphus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 3,
+    "fea": 5,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Cathartiformes",
+    "family": "Cathartidae",
+    "genus": "Vultur",
+    "regions": {
+     "sa-s": 2,
+     "sa-n": 1
+    }
+   },
+   "hab": [
+    "alpine",
+    "coast"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -80,
+     -71.5,
+     -2,
+     11.5
+    ],
+    [
+     -81,
+     -75,
+     -10,
+     -2
+    ],
+    [
+     -78,
+     -63,
+     -24,
+     -10
+    ],
+    [
+     -74,
+     -66,
+     -40,
+     -24
+    ],
+    [
+     -76,
+     -66,
+     -56,
+     -40
+    ]
+   ]
+  },
+  "frugivorous birds": {
+   "rank": "informal",
+   "realm": "air",
+   "form": "fruitbird",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Fruit-eating birds -- hornbills, toucans, pigeons. Tropical trees largely depend on them to move seeds, so the forest needs them to regenerate.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Piciformes",
+    "family": "Ramphastidae"
+   }
+  }
+ }
+}

@@ -1,0 +1,6097 @@
+{
+ "taxa": {
+  "Acinonyx jubatus hecki": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1.5,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-n",
+    "af-s",
+    "as-c",
+    "as-w",
+    "eu"
+   ],
+   "note": "The critically endangered Saharan cheetah, ranging vast arid territories.",
+   "pbdb": {
+    "oid": "txn:41046",
+    "matched": "Acinonyx",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 35,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Acinonyx",
+    "regions": {
+     "af-e": 2,
+     "af-s": 5,
+     "af-n": 2,
+     "as-c": 2,
+     "eu": 21,
+     "as-w": 2,
+     "as-e": 1
+    }
+   }
+  },
+  "Addax nasomaculatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-n"
+   ],
+   "note": "The addax, an antelope that can live without drinking free water.",
+   "pbdb": {
+    "oid": "txn:388465",
+    "matched": "Addax nasomaculatus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Addax",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "hab": [
+    "desert"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -17,
+     35,
+     14,
+     30
+    ]
+   ]
+  },
+  "Aegyptopithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 33.9,
+   "lad": 27.3,
+   "range": [
+    "af-n"
+   ],
+   "note": "A Fayum catarrhine near the base of the Old World monkey and ape split.",
+   "pbdb": {
+    "oid": "txn:92594",
+    "matched": "Aegyptopithecus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 33.9,
+    "lla": 27.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Propliopithecidae",
+    "genus": "Aegyptopithecus",
+    "regions": {
+     "as-w": 2
+    }
+   }
+  },
+  "Aepycamelus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "camel",
+   "fad": 17.4,
+   "lad": 7.05,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "A giraffe-necked camel browsing the tall Miocene savanna of the plains.",
+   "pbdb": {
+    "oid": "txn:42514",
+    "matched": "Aepycamelus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 91,
+    "fea": 23.04,
+    "lla": 1.4,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae",
+    "genus": "Aepycamelus",
+    "regions": {
+     "na-w": 64,
+     "na-e": 27
+    }
+   }
+  },
+  "Alces": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "moose",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-n",
+    "as-e",
+    {
+     "t": [
+      0.015,
+      0
+     ],
+     "in": [
+      "na-n",
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "The moose: the largest deer, browsing willow and feeding in boreal lakes, its splayed hooves suited to bog and snow.",
+   "pbdb": {
+    "oid": "txn:42653",
+    "matched": "Alces",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 45,
+    "fea": 11.63,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Alces",
+    "regions": {
+     "na-n": 2,
+     "eu": 26,
+     "as-n": 3,
+     "na-e": 13,
+     "na-w": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland",
+    "lake"
+   ],
+   "lat": [
+    42,
+    75
+   ],
+   "pbdb_ok": true
+  },
+  "Alces alces": {
+   "rank": "species",
+   "realm": "land",
+   "form": "moose",
+   "fad": 0.2,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-n",
+    "as-e",
+    {
+     "t": [
+      0.015,
+      0
+     ],
+     "in": [
+      "na-n",
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "The moose: the largest deer, browsing willow and feeding in boreal lakes and bogs.",
+   "pbdb": {
+    "oid": "txn:45013",
+    "matched": "Alces alces",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 20,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Alces",
+    "regions": {
+     "eu": 8,
+     "as-n": 2,
+     "na-e": 8,
+     "na-w": 1,
+     "na-n": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland",
+    "lake"
+   ],
+   "lat": [
+    42,
+    75
+   ],
+   "pbdb_ok": true
+  },
+  "Ambulocetus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "archaeocete",
+   "fad": 48,
+   "lad": 46,
+   "range": [
+    "in"
+   ],
+   "note": "The 'walking whale' of Indo-Pakistani Eocene coasts, a crocodile-like stage in whale origins.",
+   "pbdb": {
+    "oid": "txn:36660",
+    "matched": "Ambulocetus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 48.07,
+    "lla": 41.03,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Ambulocetidae",
+    "genus": "Ambulocetus",
+    "regions": {
+     "in": 2
+    }
+   },
+   "w": 3
+  },
+  "Antilocapra": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "ca"
+   ],
+   "note": "The pronghorn: sole survivor of a family found nowhere but North America, and still fast enough to outrun a predator that has been extinct for 10,000 years.",
+   "pbdb": {
+    "oid": "txn:42721",
+    "matched": "Antilocapra",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 31,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Antilocapridae",
+    "genus": "Antilocapra",
+    "regions": {
+     "na-w": 28,
+     "ca": 3
+    }
+   },
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       -122,
+       -96,
+       22,
+       52
+      ]
+     ]
+    }
+   ]
+  },
+  "Antilocapra americana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 0.805,
+   "lad": 0,
+   "range": [
+    "ca",
+    "na-w"
+   ],
+   "note": "The pronghorn, still outrunning a predator that went extinct 12,000 years ago.",
+   "pbdb": {
+    "oid": "txn:44137",
+    "matched": "Antilocapra americana",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 21,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Antilocapridae",
+    "genus": "Antilocapra",
+    "regions": {
+     "na-w": 18,
+     "ca": 3
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 3,
+   "box": [
+    [
+     -122,
+     -96,
+     22,
+     52
+    ]
+   ]
+  },
+  "Archaeoceti": {
+   "rank": "suborder",
+   "realm": "sea",
+   "form": "archaeocete",
+   "fad": 53,
+   "lad": 34,
+   "range": [
+    "in",
+    "af-n",
+    "ar",
+    "eu",
+    "na-e",
+    "nz",
+    "sa-n",
+    "an",
+    "tet",
+    "atl"
+   ],
+   "note": "The early whales, from four-legged waders to the fully marine, serpent-bodied Basilosaurus of warm Eocene seas.",
+   "pbdb": {
+    "oid": "txn:42933",
+    "matched": "Archaeoceti",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": false,
+    "noc": 22,
+    "fea": 56,
+    "lla": 23.04,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "regions": {
+     "na-e": 4,
+     "eu": 7,
+     "nz": 3,
+     "in": 6,
+     "as-w": 1,
+     "an": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Arsinoitherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "embrithopod",
+   "fad": 37.5,
+   "lad": 27,
+   "range": [
+    "af-n",
+    "af-e",
+    "ar",
+    "as-w"
+   ],
+   "note": "A rhino-like herbivore with two enormous horns, endemic to the Fayum swamps.",
+   "pbdb": {
+    "oid": "txn:86175",
+    "matched": "Arsinoitherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 41.03,
+    "lla": 23.04,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Embrithopoda",
+    "family": "Arsinoitheriidae",
+    "genus": "Arsinoitherium",
+    "regions": {
+     "af-n": 1,
+     "as-w": 3,
+     "ar": 7,
+     "af-e": 1,
+     "af-w": 1,
+     "eu": 1
+    }
+   }
+  },
+  "Astrapotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "astrapothere",
+   "fad": 19.25,
+   "lad": 15.9,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A tapir-like endemic ungulate of the Santa Cruz beds of Patagonia.",
+   "pbdb": {
+    "oid": "txn:43462",
+    "matched": "Astrapotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 40,
+    "fea": 29,
+    "lla": 13.8,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Astrapotheria",
+    "family": "Astrapotheriidae",
+    "genus": "Astrapotherium",
+    "regions": {
+     "sa-s": 39,
+     "sa-n": 1
+    }
+   },
+   "w": 1
+  },
+  "Australopithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 4.47,
+   "lad": 2.0,
+   "range": [
+    "af-e",
+    "af-n",
+    "af-s"
+   ],
+   "note": "Small-brained, upright-walking hominins; the Laetoli trackway in Tanzania records them walking through volcanic ash 3.66 million years ago.",
+   "pbdb": {
+    "oid": "txn:40900",
+    "matched": "Australopithecus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 85,
+    "fea": 11.63,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Australopithecus",
+    "regions": {
+     "af-e": 76,
+     "af-n": 3,
+     "af-s": 6
+    }
+   },
+   "w": 3
+  },
+  "Australopithecus afarensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 4.47,
+   "lad": 3.09,
+   "range": [
+    "af-e"
+   ],
+   "note": "Lucy's species: bipedal, small-brained, and the maker of the Laetoli footprint trail.",
+   "pbdb": {
+    "oid": "txn:83055",
+    "matched": "Australopithecus afarensis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 41,
+    "fea": 7.246,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Australopithecus",
+    "regions": {
+     "af-n": 1,
+     "af-e": 40
+    }
+   }
+  },
+  "Balaena mysticetus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "arc"
+   ],
+   "note": "The bowhead whale, adapted to break sea ice, is the signature large animal of the modern Arctic.",
+   "pbdb": {
+    "oid": "txn:64683",
+    "matched": "Balaena mysticetus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 406,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenidae",
+    "genus": "Balaena",
+    "regions": {
+     "na-e": 13,
+     "eu": 67,
+     "na-n": 306,
+     "gl": 11,
+     "as-n": 4
+    }
+   },
+   "hab": [
+    "ice",
+    "pelagic"
+   ],
+   "lat": [
+    60,
+    90
+   ],
+   "pbdb_ok": true
+  },
+  "Balaenoptera musculus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 2.5,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou"
+   ],
+   "note": "The blue whale, the largest animal that has ever lived, reaching that size only in the productive oceans of the ice ages.",
+   "pbdb": {
+    "oid": "txn:70696",
+    "matched": "Balaenoptera musculus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 17,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenopteridae",
+    "genus": "Balaenoptera",
+    "regions": {
+     "sa-s": 2,
+     "ar": 1,
+     "as-e": 1,
+     "nz": 1,
+     "eu": 10,
+     "na-w": 1,
+     "af-s": 1
+    }
+   }
+  },
+  "Basilosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 39.4,
+   "lad": 35.8,
+   "range": [
+    "af-n",
+    "as-w",
+    "eu",
+    "na-e"
+   ],
+   "note": "An eighteen-metre fully aquatic archaeocete with vestigial hind limbs, preserved by the hundred at Wadi Al-Hitan.",
+   "sz": 18.0,
+   "dt": "apex predator",
+   "hb": "fully aquatic, serpentine, with vestigial hindlimbs",
+   "pbdb": {
+    "oid": "txn:36681",
+    "matched": "Basilosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 88,
+    "fea": 56,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Basilosauridae",
+    "genus": "Basilosaurus",
+    "regions": {
+     "as-w": 21,
+     "na-e": 55,
+     "ar": 1,
+     "eu": 3,
+     "af-n": 8
+    }
+   }
+  },
+  "Bison": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bison",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-n",
+    "as-c",
+    "as-e",
+    {
+     "t": [
+      2.6,
+      1
+     ],
+     "in": [
+      "in"
+     ]
+    },
+    {
+     "t": [
+      0.2,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n"
+     ]
+    }
+   ],
+   "note": "Bison: steppe grazers that arose in Eurasia and crossed Beringia in the Ice Age; they survive as the American bison and the European wisent.",
+   "pbdb": {
+    "oid": "txn:42751",
+    "matched": "Bison",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 322,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Bison",
+    "regions": {
+     "as-n": 7,
+     "as-w": 6,
+     "na-e": 77,
+     "na-w": 96,
+     "ca": 15,
+     "na-n": 13,
+     "eu": 93,
+     "as-c": 4,
+     "in": 1,
+     "as-e": 9
+    }
+   },
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       -160,
+       -75,
+       27,
+       68
+      ],
+      [
+       14,
+       40,
+       46,
+       56
+      ],
+      [
+       38,
+       48,
+       41,
+       45
+      ]
+     ]
+    }
+   ]
+  },
+  "Bison bison": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 0.2,
+   "lad": 0,
+   "range": [
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "The American bison, whose herds shaped the whole grassland before 1870.",
+   "pbdb": {
+    "oid": "txn:44607",
+    "matched": "Bison bison",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 18,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Bos",
+    "regions": {
+     "na-n": 1,
+     "na-e": 10,
+     "na-w": 7
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "pbdb_ok": true,
+   "conf_note": "PBDB-robust 1.3 Ma reflects the ancestral Asian Bison population; B. bison specifically crossed into North America only ~0.2 Ma.",
+   "w": 3,
+   "box": [
+    [
+     -160,
+     -75,
+     27,
+     68
+    ]
+   ]
+  },
+  "Bison priscus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 0.7,
+   "lad": 0.008,
+   "range": [
+    "eu",
+    "as-n",
+    "as-c",
+    "as-e",
+    {
+     "t": [
+      0.2,
+      0.008
+     ],
+     "in": [
+      "na-n",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "The steppe bison, ranging the land bridge between continents.",
+   "pbdb": {
+    "oid": "txn:52615",
+    "matched": "Bison priscus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 39,
+    "fea": 7.246,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Bison",
+    "regions": {
+     "as-w": 3,
+     "na-n": 5,
+     "na-w": 2,
+     "eu": 27,
+     "as-c": 1,
+     "as-n": 1
+    }
+   },
+   "hab": [
+    "grassland",
+    "tundra"
+   ],
+   "pbdb_ok": true
+  },
+  "Bos mutus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 1.5,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "The wild yak, dense-coated for the plateau's thin cold air.",
+   "pbdb": {
+    "oid": "txn:491310",
+    "matched": "Bos mutus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Bos"
+   },
+   "hab": [
+    "alpine"
+   ],
+   "box": [
+    [
+     78,
+     102,
+     29,
+     39
+    ]
+   ]
+  },
+  "Cambaytherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 55,
+   "lad": 53,
+   "range": [
+    "in"
+   ],
+   "note": "A Vastan lignite mammal near the root of odd-toed ungulates, recording India's brief faunal isolation.",
+   "pbdb": {
+    "oid": "txn:68278",
+    "matched": "Cambaytherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 56,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cambaytherium",
+    "regions": {
+     "in": 11
+    }
+   }
+  },
+  "Camelus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "camel",
+   "fad": 4.5,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "ar",
+    "af-n",
+    "af-e",
+    "in",
+    {
+     "t": [
+      4.5,
+      0.01
+     ],
+     "in": [
+      "eu",
+      "as-e"
+     ]
+    }
+   ],
+   "note": "Camels -- which evolved in North America and only later reached the deserts they are now the emblem of.",
+   "pbdb": {
+    "oid": "txn:42521",
+    "matched": "Camelus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 47,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae",
+    "genus": "Camelus",
+    "regions": {
+     "as-w": 5,
+     "af-e": 13,
+     "eu": 13,
+     "af-n": 5,
+     "as-c": 2,
+     "in": 6,
+     "as-n": 1,
+     "as-e": 1,
+     "na-w": 1
+    }
+   },
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "pbdb_ok": true
+  },
+  "Camelus ferus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "camel",
+   "fad": 1.1,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "The wild Bactrian camel, drinking salt water no other large mammal tolerates.",
+   "pbdb": {
+    "oid": "txn:42521",
+    "matched": "Camelus",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 47,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae",
+    "genus": "Camelus",
+    "regions": {
+     "as-w": 5,
+     "af-e": 13,
+     "eu": 13,
+     "af-n": 5,
+     "as-c": 2,
+     "in": 6,
+     "as-n": 1,
+     "as-e": 1,
+     "na-w": 1
+    }
+   },
+   "hab": [
+    "desert"
+   ],
+   "box": [
+    [
+     86,
+     105,
+     38.5,
+     45.5
+    ]
+   ]
+  },
+  "Canis dirus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 0.25,
+   "lad": 0.011,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w",
+    "sa-n"
+   ],
+   "note": "The dire wolf, the commonest large carnivore in the La Brea tar.",
+   "pbdb": {
+    "oid": "txn:44837",
+    "matched": "Canis (Aenocyon) dirus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 86,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Aenocyon"
+   }
+  },
+  "Canis lupus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 0.8,
+   "lad": 0,
+   "range": [
+    "holarctic",
+    "in",
+    "ar"
+   ],
+   "note": "The grey wolf, once the most widely distributed wild land mammal on Earth.",
+   "pbdb": {
+    "oid": "txn:44860",
+    "matched": "Canis lupus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 126,
+    "fea": 3.6,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Canis",
+    "regions": {
+     "ca": 2,
+     "na-n": 5,
+     "na-e": 13,
+     "na-w": 16,
+     "as-c": 3,
+     "eu": 75,
+     "as-w": 1,
+     "as-n": 3,
+     "as-e": 6,
+     "gl": 1,
+     "af-n": 1
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Canis simensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 1.8,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "The Ethiopian wolf, Africa's rarest carnivore, hunting Afroalpine rodents.",
+   "pbdb": {
+    "oid": "txn:433177",
+    "matched": "Canis simensis",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 1.8,
+    "lla": 0.774,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Canis",
+    "regions": {
+     "af-e": 1
+    }
+   },
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "box": [
+    [
+     36,
+     41,
+     6,
+     14
+    ]
+   ]
+  },
+  "Capra ibex": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1.3,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "The Alpine ibex, grazing near-vertical rock.",
+   "pbdb": {
+    "oid": "txn:104251",
+    "matched": "Capra ibex",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 21,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Capra",
+    "regions": {
+     "eu": 20,
+     "as-w": 1
+    }
+   },
+   "hab": [
+    "alpine"
+   ],
+   "box": [
+    [
+     5.5,
+     16.5,
+     43.5,
+     48.2
+    ]
+   ],
+   "avoid": [
+    "Apennines",
+    "Bohemian Massif",
+    "Massif Central"
+   ]
+  },
+  "Carpolestes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 59.2,
+   "lad": 56.8,
+   "range": [
+    "na-w"
+   ],
+   "note": "A small primate relative with a grasping foot and a nail in place of a claw: the beginning of primate hands.",
+   "pbdb": {
+    "oid": "txn:40744",
+    "matched": "Carpolestes",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 47,
+    "fea": 60.9,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Carpolestidae",
+    "genus": "Carpolestes",
+    "regions": {
+     "na-w": 47
+    }
+   }
+  },
+  "Castorocauda lutrasimilis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "smallmammal",
+   "fad": 165,
+   "lad": 159,
+   "range": [
+    "as-e"
+   ],
+   "note": "A beaver-tailed, swimming mammaliaform with preserved fur -- evidence Jurassic mammals were not all generic shrews.",
+   "pbdb": {
+    "oid": "txn:72329",
+    "matched": "Castorocauda lutrasimilis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 165.3,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Docodonta",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Castorocauda",
+    "regions": {
+     "as-e": 1
+    }
+   },
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "aka": [
+    "Castorocauda"
+   ]
+  },
+  "Cebus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A New World capuchin monkey, among the most familiar living platyrrhines.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ]
+  },
+  "Cervus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "deer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c",
+    "as-n",
+    "as-e",
+    "af-n",
+    {
+     "t": [
+      0.1,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "Red deer and their relatives, the characteristic large browsers of the Palearctic woodland and steppe.",
+   "pbdb": {
+    "oid": "txn:42666",
+    "matched": "Cervus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 486,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Cervus",
+    "regions": {
+     "as-w": 15,
+     "as-se": 39,
+     "in": 29,
+     "as-e": 43,
+     "na-w": 17,
+     "na-n": 5,
+     "na-e": 42,
+     "as-c": 9,
+     "sa-n": 4,
+     "eu": 273,
+     "as-n": 4,
+     "sa-s": 4,
+     "ca": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "grassland"
+   ],
+   "pbdb_ok": true
+  },
+  "Cetacea": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 53,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Whales and dolphins: hoofed mammals that returned to the sea in the Eocene and became its largest predators and filter-feeders.",
+   "pbdb": {
+    "oid": "txn:36652",
+    "matched": "Cetacea",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 6029,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea"
+   },
+   "pbdb_ok": true
+  },
+  "Chrysocyon brachyurus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The maned wolf, long-legged for seeing over cerrado grass.",
+   "pbdb": {
+    "oid": "txn:232947",
+    "matched": "Chrysocyon brachyurus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 8,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Chrysocyon",
+    "regions": {
+     "sa-s": 6,
+     "sa-n": 2
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -64,
+     -42,
+     -32,
+     -7
+    ]
+   ]
+  },
+  "Coelodonta antiquitatis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 0.3,
+   "lad": 0.014,
+   "range": [
+    "as-e",
+    "as-n",
+    "eu"
+   ],
+   "note": "The woolly rhinoceros, its appearance known from cave paintings as well as bones.",
+   "pbdb": {
+    "oid": "txn:54846",
+    "matched": "Coelodonta antiquitatis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 27,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae",
+    "genus": "Coelodonta",
+    "regions": {
+     "as-e": 4,
+     "as-c": 1,
+     "eu": 20,
+     "as-n": 2
+    }
+   },
+   "lat": [
+    40,
+    70
+   ],
+   "w": 3
+  },
+  "Condylarthra": {
+   "rank": "order",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 66,
+   "lad": 37,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "A wastebasket of archaic hoofed mammals from which most modern ungulate groups eventually emerge.",
+   "pbdb": {
+    "oid": "txn:42197",
+    "matched": "Condylarthra",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 1295,
+    "fea": 66,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "regions": {
+     "na-w": 1205,
+     "na-e": 2,
+     "ca": 1,
+     "af-w": 1,
+     "eu": 46,
+     "as-e": 16,
+     "as-w": 6,
+     "af-n": 4,
+     "sa-s": 13,
+     "as-c": 1
+    }
+   },
+   "rep": "Ectoconus"
+  },
+  "Connochaetes taurinus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s"
+   ],
+   "note": "The blue wildebeest, whose migration is the largest surviving land-mammal movement.",
+   "pbdb": {
+    "oid": "txn:133826",
+    "matched": "Connochaetes taurinus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 50,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Connochaetes",
+    "regions": {
+     "af-e": 37,
+     "af-n": 4,
+     "eu": 1,
+     "af-s": 8
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "pbdb_ok": true
+  },
+  "Cynomys ludovicianus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 0.805,
+   "lad": 0,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "Black-tailed prairie dogs, whose towns are the grassland's keystone.",
+   "pbdb": {
+    "oid": "txn:44288",
+    "matched": "Cynomys ludovicianus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 25,
+    "fea": 1.4,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Sciuridae",
+    "genus": "Cynomys",
+    "regions": {
+     "na-w": 15,
+     "na-e": 10
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "box": [
+    [
+     -113,
+     -96,
+     29,
+     50
+    ]
+   ]
+  },
+  "Darwinius masillae": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 48,
+   "lad": 47,
+   "range": [
+    "eu"
+   ],
+   "note": "An exquisitely complete Messel primate, gut contents and all, from near the base of the primate radiation.",
+   "pbdb": {
+    "oid": "txn:147600",
+    "matched": "Darwinius masillae",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 48.07,
+    "lla": 41.03,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Darwinius",
+    "regions": {
+     "eu": 1
+    }
+   }
+  },
+  "Deinotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 17.34,
+   "lad": 1.68,
+   "range": [
+    "af-e",
+    "as-w",
+    "eu",
+    "in"
+   ],
+   "note": "A proboscidean with downward-curving lower tusks, unrelated to any surviving elephant lineage.",
+   "pbdb": {
+    "oid": "txn:43280",
+    "matched": "Deinotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 182,
+    "fea": 23.04,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Deinotheriidae",
+    "genus": "Deinotherium",
+    "regions": {
+     "af-e": 85,
+     "eu": 54,
+     "as-w": 18,
+     "ar": 2,
+     "as-se": 2,
+     "as-n": 1,
+     "in": 17,
+     "af-s": 2,
+     "af-n": 1
+    }
+   }
+  },
+  "Diprotodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "diprotodont",
+   "fad": 2.67,
+   "lad": 0.044,
+   "range": [
+    "au"
+   ],
+   "note": "A three-tonne wombat relative, the largest marsupial ever, gone from Australia around 46,000 years ago.",
+   "pbdb": {
+    "oid": "txn:40187",
+    "matched": "Diprotodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 72,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Diprotodontidae",
+    "genus": "Diprotodon",
+    "regions": {
+     "au": 72
+    }
+   },
+   "w": 3
+  },
+  "Docodonta": {
+   "rank": "order",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 168,
+   "lad": 120,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-w"
+   ],
+   "note": "Small mammaliaforms with complex molars, exploiting insect and plant food in the dinosaurs' shadow.",
+   "pbdb": {
+    "oid": "txn:39772",
+    "matched": "Docodonta",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 58,
+    "fea": 184.2,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Docodonta",
+    "regions": {
+     "na-w": 15,
+     "eu": 19,
+     "as-c": 13,
+     "as-n": 7,
+     "as-e": 3,
+     "in": 1
+    }
+   }
+  },
+  "Doedicurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "glyptodont",
+   "fad": 1.07,
+   "lad": 0.011,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A glyptodont with a spiked tail-club, among the largest of the armoured Ice Age herbivores.",
+   "pbdb": {
+    "oid": "txn:43572",
+    "matched": "Doedicurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 5,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cingulata",
+    "family": "Glyptodontidae",
+    "genus": "Doedicurus",
+    "regions": {
+     "sa-s": 20
+    }
+   },
+   "box": [
+    [
+     -68,
+     -50,
+     -42,
+     -28
+    ]
+   ]
+  },
+  "Ectoconus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 65.0,
+   "lad": 63.8,
+   "range": [
+    "na-w"
+   ],
+   "note": "A sheep-sized archaic hoofed mammal typifying the Paleocene recovery fauna of the western basins.",
+   "pbdb": {
+    "oid": "txn:42272",
+    "matched": "Ectoconus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 66,
+    "lla": 61.66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Periptychidae",
+    "genus": "Ectoconus",
+    "regions": {
+     "na-w": 33,
+     "as-e": 1
+    }
+   },
+   "w": 1
+  },
+  "Elephas": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      5,
+      0.5
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-n"
+     ]
+    },
+    {
+     "t": [
+      3.6,
+      0
+     ],
+     "in": [
+      "in",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      3,
+      0.01
+     ],
+     "in": [
+      "as-e",
+      "as-w",
+      "eu"
+     ]
+    }
+   ],
+   "note": "The Asian elephant lineage, which arose in Africa about five million years ago and spread across southern Asia.",
+   "pbdb": {
+    "oid": "txn:43264",
+    "matched": "Elephas",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 126,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Elephas",
+    "regions": {
+     "as-se": 19,
+     "in": 30,
+     "af-e": 28,
+     "eu": 19,
+     "af-s": 3,
+     "af-n": 2,
+     "as-w": 4,
+     "as-e": 7,
+     "as-c": 1,
+     "na-w": 5,
+     "na-e": 7,
+     "ca": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Enaliarctos": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 25.2,
+   "lad": 17.4,
+   "range": [
+    "na-w"
+   ],
+   "note": "An early pinniped, at the transition of carnivorans into fully marine life.",
+   "pbdb": {
+    "oid": "txn:36916",
+    "matched": "Enaliarctos",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 27.3,
+    "lla": 15.98,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Enaliarctos",
+    "regions": {
+     "na-w": 11
+    }
+   }
+  },
+  "Entelodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "entelodont",
+   "fad": 46,
+   "lad": 16,
+   "range": [
+    "as-e",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "'Hell pigs': massive omnivorous artiodactyls with metre-long skulls, bony cheek flanges and bone-crushing jaws.",
+   "pbdb": {
+    "oid": "txn:42365",
+    "matched": "Entelodontidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 160,
+    "fea": 48.07,
+    "lla": 12.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Entelodontidae",
+    "regions": {
+     "as-e": 22,
+     "na-w": 109,
+     "na-e": 13,
+     "eu": 10,
+     "in": 1,
+     "as-c": 2,
+     "as-w": 1,
+     "as-se": 2
+    }
+   }
+  },
+  "Eohippus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 55.4,
+   "lad": 50.2,
+   "range": [
+    "na-w"
+   ],
+   "note": "The 'dawn horse', a dog-sized browser of Eocene woodlands, the base of the classic horse lineage.",
+   "pbdb": {
+    "oid": "txn:42994",
+    "matched": "Eohippus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 56,
+    "lla": 51.1,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Eohippus",
+    "regions": {
+     "na-w": 6
+    }
+   }
+  },
+  "Equus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 4.5,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      4.5,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca",
+      "na-n"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-n",
+      "as-e",
+      "in",
+      "ar",
+      "af"
+     ]
+    },
+    {
+     "t": [
+      2.5,
+      0.011
+     ],
+     "in": [
+      "sa"
+     ]
+    }
+   ],
+   "note": "Horses and zebras. Their high-crowned teeth and single toe are the standard example of an animal rebuilt by the spread of grass.",
+   "pbdb": {
+    "oid": "txn:42996",
+    "matched": "Equus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1677,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Equus",
+    "regions": {
+     "as-w": 38,
+     "in": 48,
+     "as-n": 13,
+     "af-e": 258,
+     "ca": 57,
+     "na-w": 480,
+     "na-e": 221,
+     "na-n": 20,
+     "as-c": 11,
+     "eu": 277,
+     "af-s": 105,
+     "af-n": 21,
+     "ar": 7,
+     "as-e": 17,
+     "sa-s": 56,
+     "sa-n": 45,
+     "as-se": 1,
+     "oc": 1
+    }
+   },
+   "hab": [
+    "grassland",
+    "desert",
+    "tundra"
+   ],
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Equus ferus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horse",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "eu"
+   ],
+   "note": "The wild horse, the steppe's defining grazer.",
+   "pbdb": {
+    "oid": "txn:42996",
+    "matched": "Equus",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1677,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Equus",
+    "regions": {
+     "as-w": 38,
+     "in": 48,
+     "as-n": 13,
+     "af-e": 258,
+     "ca": 57,
+     "na-w": 480,
+     "na-e": 221,
+     "na-n": 20,
+     "as-c": 11,
+     "eu": 277,
+     "af-s": 105,
+     "af-n": 21,
+     "ar": 7,
+     "as-e": 17,
+     "sa-s": 56,
+     "sa-n": 45,
+     "as-se": 1,
+     "oc": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 3
+  },
+  "Fennecus zerda": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-n"
+   ],
+   "note": "The fennec fox, radiating heat through outsized ears.",
+   "pbdb": {
+    "oid": "txn:232949",
+    "matched": "Fennecus zerda",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Vulpes"
+   },
+   "hab": [
+    "desert"
+   ]
+  },
+  "Glyptodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "glyptodont",
+   "fad": 2.5,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "An armoured, car-sized relative of armadillos, native to South America -- the interchange traveller into North America was its relative Glyptotherium.",
+   "pbdb": {
+    "oid": "txn:43568",
+    "matched": "Glyptodontidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 561,
+    "fea": 36,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cingulata",
+    "family": "Glyptodontidae"
+   },
+   "pbdb_ok": true,
+   "conf_note": "Draft raw range (36-0) is a bin artefact; NA/CA occurrences likely reflect Glyptotherium, not Glyptodon."
+  },
+  "Gorilla gorilla": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ape",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-w"
+   ],
+   "note": "The western gorilla, a folivore of dense secondary forest.",
+   "pbdb": {
+    "oid": "txn:231496",
+    "matched": "Gorilla gorilla",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Gorilla"
+   },
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     8,
+     19,
+     -6,
+     7
+    ]
+   ]
+  },
+  "Gulo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "mustelid",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "na-w",
+    "na-e",
+    "eu",
+    "as-n",
+    "as-e"
+   ],
+   "note": "The wolverine: a mustelid that kills prey many times its size and caches it in the frozen ground.",
+   "pbdb": {
+    "oid": "txn:41112",
+    "matched": "Gulo",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 30,
+    "fea": 11.63,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Mustelidae",
+    "genus": "Gulo",
+    "regions": {
+     "na-e": 5,
+     "na-w": 4,
+     "na-n": 6,
+     "eu": 13,
+     "as-n": 2
+    }
+   },
+   "hab": [
+    "forest",
+    "tundra",
+    "alpine"
+   ],
+   "lat": [
+    45,
+    80
+   ],
+   "pbdb_ok": true
+  },
+  "Gulo gulo": {
+   "rank": "species",
+   "realm": "land",
+   "form": "mustelid",
+   "fad": 1.68,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "The wolverine: a mustelid that kills prey many times its size and caches it in the frozen ground.",
+   "pbdb": {
+    "oid": "txn:48854",
+    "matched": "Gulo gulo",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 26,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Mustelidae",
+    "genus": "Gulo",
+    "regions": {
+     "na-e": 4,
+     "na-w": 4,
+     "na-n": 6,
+     "eu": 11,
+     "as-n": 1
+    }
+   },
+   "hab": [
+    "tundra",
+    "forest"
+   ],
+   "lat": [
+    40,
+    90
+   ],
+   "w": 3,
+   "box": [
+    [
+     5,
+     180,
+     58,
+     75
+    ],
+    [
+     -168,
+     -60,
+     48,
+     72
+    ],
+    [
+     -125,
+     -105,
+     37,
+     49
+    ]
+   ]
+  },
+  "Hipparion": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 12.8,
+   "lad": 1.29,
+   "range": [
+    {
+     "t": [
+      12.8,
+      4.9
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      11,
+      1.29
+     ],
+     "in": [
+      "af-e",
+      "as-c",
+      "as-e",
+      "as-w",
+      "eu",
+      "in"
+     ]
+    }
+   ],
+   "note": "A three-toed grazing horse whose rapid spread across the Old World is a datable event in its own right.",
+   "pbdb": {
+    "oid": "txn:43000",
+    "matched": "Hipparion",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 660,
+    "fea": 23.04,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Hipparion",
+    "regions": {
+     "as-e": 61,
+     "as-w": 52,
+     "in": 16,
+     "as-c": 21,
+     "na-e": 17,
+     "na-w": 40,
+     "af-e": 247,
+     "af-s": 12,
+     "ar": 2,
+     "eu": 173,
+     "af-n": 8,
+     "as-se": 4,
+     "as-n": 7
+    }
+   }
+  },
+  "Hippocamelus bisulcus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "deer",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The huemul, a stocky Andean deer of the southern forests.",
+   "pbdb": {
+    "oid": "txn:388552",
+    "matched": "Hippocamelus bisulcus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Hippocamelus"
+   },
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -74,
+     -70,
+     -54,
+     -34
+    ]
+   ]
+  },
+  "Hippopotamus amphibius": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hippo",
+   "fad": 2.19,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      2.19,
+      0.012
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w",
+      "ar",
+      "as-w",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      0.012,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    }
+   ],
+   "note": "The hippopotamus, whose nightly paths and wallows engineer the channels of African wetlands.",
+   "pbdb": {
+    "oid": "txn:77338",
+    "matched": "Hippopotamus amphibius",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 174,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Hippopotamidae",
+    "genus": "Hippopotamus",
+    "regions": {
+     "as-w": 37,
+     "af-e": 33,
+     "af-w": 1,
+     "eu": 70,
+     "af-s": 23,
+     "ar": 5,
+     "af-n": 5
+    }
+   },
+   "hab": [
+    "river",
+    "lake",
+    "wetland"
+   ],
+   "w": 3
+  },
+  "Homo erectus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 1.9,
+   "lad": 0.11,
+   "range": [
+    "af-e",
+    "af-n",
+    "as-w",
+    "as-e",
+    "as-se"
+   ],
+   "note": "The first truly wide-ranging human, out of Africa by about 1.8 million years ago and across southern Asia -- the hominin present through most of the Pleistocene, long before our own species.",
+   "pbdb": {
+    "oid": "txn:83084",
+    "matched": "Homo erectus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 41,
+    "fea": 5.333,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Homo",
+    "regions": {
+     "af-e": 30,
+     "eu": 2,
+     "af-n": 3,
+     "as-w": 1,
+     "as-se": 5
+    }
+   },
+   "w": 3,
+   "fill": false
+  },
+  "Homo habilis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 2.4,
+   "lad": 1.4,
+   "range": [
+    "af-e"
+   ],
+   "note": "Associated with the earliest widely accepted stone tool industries, right at the interval's close.",
+   "pbdb": {
+    "oid": "txn:83082",
+    "matched": "Homo habilis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 18,
+    "fea": 2.58,
+    "lla": 0.774,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Homo",
+    "regions": {
+     "af-e": 18
+    }
+   },
+   "fill": false
+  },
+  "Homo neanderthalensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 0.4,
+   "lad": 0.04,
+   "range": [
+    "eu",
+    "as-w",
+    "as-n"
+   ],
+   "note": "The cold-adapted human of Ice Age Europe and western Asia, from about 400,000 to 40,000 years ago, overlapping and interbreeding with our species before vanishing.",
+   "pbdb": {
+    "oid": "txn:83087",
+    "matched": "Homo neanderthalensis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 6,
+    "fea": 0.774,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Homo",
+    "regions": {
+     "eu": 6
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "PBDB lad (0.011) mismatches the real Neanderthal extinction ~40 ka; matches the existing note.",
+   "fill": false
+  },
+  "Homo sapiens": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 0.3,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      0.3,
+      0.07
+     ],
+     "in": [
+      "af-e",
+      "af-n",
+      "af-s"
+     ]
+    },
+    {
+     "t": [
+      0.07,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-n",
+      "af-s",
+      "as-e",
+      "as-se",
+      "as-w",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      0.065,
+      0
+     ],
+     "in": [
+      "au",
+      "oc"
+     ]
+    },
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "in": [
+      "ca",
+      "na-e",
+      "na-w",
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Our species. It arose in Africa around 300,000 years ago, spread across Eurasia after about 70,000, reached Australia by 65,000 and the Americas by 20,000 -- so before that it was nowhere, and the map should not show it.",
+   "sz": 1.7,
+   "dt": "omnivore",
+   "hb": "generalist, tool-using, globally dispersed",
+   "pbdb": {
+    "oid": "txn:83088",
+    "matched": "Homo sapiens",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 97,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Homo",
+    "regions": {
+     "as-se": 8,
+     "af-s": 24,
+     "af-e": 12,
+     "eu": 4,
+     "as-w": 4,
+     "na-e": 9,
+     "as-e": 2,
+     "af-n": 5,
+     "sa-s": 3,
+     "sa-n": 2,
+     "na-w": 7,
+     "oc": 3,
+     "au": 4,
+     "ca": 3,
+     "gl": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "PBDB fad (1.3 Ma) is a bin artefact; real origin ~300 ka in Africa, matching the existing note.",
+   "fill": false
+  },
+  "Hyaenodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyaenodont",
+   "fad": 42.9,
+   "lad": 18.21,
+   "range": [
+    "af-e",
+    "as-e",
+    "as-w",
+    "eu",
+    "na-w"
+   ],
+   "note": "A hypercarnivorous hyaenodont with slicing cheek teeth, a leading predator of the northern continents from the Eocene to the Miocene.",
+   "pbdb": {
+    "oid": "txn:40917",
+    "matched": "Hyaenodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 184,
+    "fea": 56,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Hyaenodonta",
+    "family": "Hyaenodontidae",
+    "genus": "Hyaenodon",
+    "regions": {
+     "na-w": 81,
+     "af-e": 12,
+     "as-e": 46,
+     "eu": 39,
+     "as-w": 4,
+     "as-c": 2
+    }
+   }
+  },
+  "Hyracotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 53.5,
+   "lad": 48.5,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "The dog-sized ancestral horse, browsing in closed forest on four toes.",
+   "pbdb": {
+    "oid": "txn:43004",
+    "matched": "Hyracotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 203,
+    "fea": 56,
+    "lla": 45.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Palaeotheriidae",
+    "genus": "Hyracotherium",
+    "regions": {
+     "na-w": 194,
+     "na-e": 1,
+     "eu": 8
+    }
+   }
+  },
+  "Icaronycteris": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "bat",
+   "fad": 55,
+   "lad": 46.9,
+   "range": [
+    "eu",
+    "in",
+    "na-w"
+   ],
+   "note": "An early bat from Green River with fully modern wings and evidence of echolocation.",
+   "pbdb": {
+    "oid": "txn:40632",
+    "matched": "Icaronycteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Icaronycteridae",
+    "genus": "Icaronycteris",
+    "regions": {
+     "na-w": 4,
+     "in": 1,
+     "eu": 3,
+     "as-e": 1
+    }
+   }
+  },
+  "Inia geoffrensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "dolphin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The Amazon river dolphin, pink-skinned and flexible enough to hunt in flooded forest.",
+   "pbdb": {
+    "oid": "txn:94011",
+    "matched": "Inia geoffrensis",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 2,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Iniidae",
+    "genus": "Inia",
+    "regions": {
+     "sa-n": 2
+    }
+   },
+   "hab": [
+    "river"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ],
+    [
+     -73,
+     -60,
+     3,
+     9
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Lemmus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rodent",
+   "fad": 2.5,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "eu",
+    "as-n"
+   ],
+   "note": "Lemmings, whose population cycles drive the whole tundra food web.",
+   "pbdb": {
+    "oid": "txn:41800",
+    "matched": "Lemmus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 48,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Cricetidae",
+    "genus": "Lemmus",
+    "regions": {
+     "na-n": 14,
+     "eu": 29,
+     "as-n": 2,
+     "na-e": 1,
+     "na-w": 1,
+     "gl": 1
+    }
+   },
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    85
+   ]
+  },
+  "Litopterna": {
+   "rank": "order",
+   "realm": "land",
+   "form": "litoptern",
+   "fad": 64,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      64,
+      34
+     ],
+     "in": [
+      "an",
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      34,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Endemic hoofed mammals, some convergent on horses and camels, unique to South America.",
+   "pbdb": {
+    "oid": "txn:43467",
+    "matched": "Litopterna",
+    "exact": true,
+    "rank": "suborder",
+    "extant": false,
+    "noc": 583,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Panameriungulata",
+    "regions": {
+     "sa-n": 103,
+     "sa-s": 467,
+     "an": 13
+    }
+   },
+   "rep": "Macrauchenia"
+  },
+  "Loxodonta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 7,
+   "lad": 0,
+   "range": [
+    "af"
+   ],
+   "note": "The African elephant, and the reason the Afrotropical realm still has an intact large-mammal fauna when every other realm lost one.",
+   "pbdb": {
+    "oid": "txn:43265",
+    "matched": "Loxodonta",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 149,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Loxodonta",
+    "regions": {
+     "af-e": 110,
+     "af-w": 2,
+     "as-w": 1,
+     "af-s": 21,
+     "af-n": 13,
+     "eu": 1,
+     "ar": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Loxodonta africana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 1.5,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-w"
+   ],
+   "note": "The African bush elephant, whose feeding keeps the savanna from closing to woodland.",
+   "pbdb": {
+    "oid": "txn:157817",
+    "matched": "Loxodonta africana",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 35,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Loxodonta",
+    "regions": {
+     "af-e": 11,
+     "af-w": 1,
+     "as-w": 1,
+     "af-s": 15,
+     "ar": 1,
+     "af-n": 6
+    }
+   },
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "w": 3,
+   "no_own_icon": true
+  },
+  "Macrauchenia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "litoptern",
+   "fad": 1.2,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A camel-bodied, trunk-nosed litoptern, one of the last of the endemic ungulates.",
+   "pbdb": {
+    "oid": "txn:43497",
+    "matched": "Macrauchenia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Panameriungulata",
+    "family": "Macraucheniidae",
+    "genus": "Macrauchenia",
+    "regions": {
+     "sa-s": 43,
+     "sa-n": 18
+    }
+   }
+  },
+  "Macropodidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 19.51,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "Kangaroos radiate as grasslands spread across the drying interior.",
+   "pbdb": {
+    "oid": "txn:40140",
+    "matched": "Macropodidae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 407,
+    "fea": 27.3,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Macropodidae",
+    "regions": {
+     "au": 400,
+     "ng": 5
+    }
+   }
+  },
+  "Mammut": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 12.73,
+   "lad": 0.011,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "The American mastodon, a forest browser arriving as Pliocene climate cooled.",
+   "pbdb": {
+    "oid": "txn:43274",
+    "matched": "Mammut",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 617,
+    "fea": 27.3,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Mammutidae",
+    "genus": "Mammut",
+    "regions": {
+     "na-w": 105,
+     "na-e": 386,
+     "ca": 7,
+     "na-n": 4,
+     "ar": 1,
+     "eu": 86,
+     "as-e": 3,
+     "af-w": 1,
+     "sa-n": 4,
+     "sa-s": 3,
+     "as-w": 5,
+     "as-n": 5,
+     "as-se": 3,
+     "in": 4
+    }
+   }
+  },
+  "Mammuthus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 5.0,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      5.0,
+      3.0
+     ],
+     "in": [
+      "af-e"
+     ]
+    },
+    {
+     "t": [
+      3.0,
+      1.5
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c"
+     ]
+    },
+    {
+     "t": [
+      1.5,
+      0.011
+     ],
+     "in": [
+      "eu",
+      "as-c",
+      "as-se",
+      "as-w",
+      "ca",
+      "na-e",
+      "na-n",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "Mammoths spread across the newly cold northern continents as the mammoth steppe forms.",
+   "pbdb": {
+    "oid": "txn:43266",
+    "matched": "Mammuthus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 693,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "regions": {
+     "as-n": 13,
+     "as-w": 16,
+     "ca": 27,
+     "na-w": 171,
+     "na-e": 187,
+     "na-n": 26,
+     "af-e": 16,
+     "af-s": 7,
+     "eu": 191,
+     "af-n": 1,
+     "as-c": 14,
+     "as-e": 9,
+     "in": 1,
+     "as-se": 14
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Africa 5 Ma -> Eurasia 3 Ma -> North America 1.5 Ma."
+  },
+  "Mammuthus columbi": {
+   "rank": "species",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 1.5,
+   "lad": 0.011,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w"
+   ],
+   "note": "The Columbian mammoth, the largest Ice Age grazer of the North American plains.",
+   "pbdb": {
+    "oid": "txn:46017",
+    "matched": "Mammuthus columbi",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 157,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "regions": {
+     "na-e": 69,
+     "na-w": 71,
+     "ca": 17
+    }
+   },
+   "w": 3
+  },
+  "Mammuthus primigenius": {
+   "rank": "species",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 0.4,
+   "lad": 0.004,
+   "range": [
+    {
+     "t": [
+      0.4,
+      0.011
+     ],
+     "in": [
+      "as-n",
+      "eu",
+      "na-e",
+      "na-n",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      0.011,
+      0.004
+     ],
+     "in": [
+      "as-n"
+     ]
+    }
+   ],
+   "note": "The woolly mammoth, keystone grazer of the mammoth steppe, surviving on Wrangel Island until about 4,000 years ago.",
+   "sz": 3.4,
+   "dt": "grazer",
+   "hb": "cold-adapted grazer of the mammoth steppe",
+   "pbdb": {
+    "oid": "txn:46027",
+    "matched": "Mammuthus primigenius",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 77,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Mammuthus",
+    "regions": {
+     "na-w": 8,
+     "na-e": 23,
+     "na-n": 10,
+     "eu": 27,
+     "as-c": 1,
+     "as-n": 6,
+     "ca": 1,
+     "as-e": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Species origin ~400 ka; PBDB fad reflects the ancestral trogontherii lineage. Wrangel Island survival to 4 ka matches the existing note."
+  },
+  "Marmota bobak": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-c"
+   ],
+   "note": "The bobak marmot, whose burrowing turns over the steppe soil.",
+   "pbdb": {
+    "oid": "txn:41502",
+    "matched": "Marmota",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 118,
+    "fea": 9.4,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Sciuridae",
+    "genus": "Marmota",
+    "regions": {
+     "na-e": 64,
+     "na-w": 26,
+     "na-n": 1,
+     "eu": 17,
+     "as-n": 3,
+     "as-w": 3,
+     "as-e": 3,
+     "ca": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 1,
+   "box": [
+    [
+     30,
+     80,
+     46,
+     56
+    ]
+   ]
+  },
+  "Marmota marmota": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 1.3,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "The Alpine marmot, hibernating eight months of the year.",
+   "pbdb": {
+    "oid": "txn:104200",
+    "matched": "Marmota marmota",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 8,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Sciuridae",
+    "genus": "Marmota",
+    "regions": {
+     "eu": 8
+    }
+   },
+   "hab": [
+    "alpine"
+   ],
+   "w": 1,
+   "box": [
+    [
+     5.5,
+     16.5,
+     43.5,
+     48.2
+    ],
+    [
+     19.5,
+     25.5,
+     45,
+     49.5
+    ],
+    [
+     -2,
+     3.2,
+     42,
+     43.3
+    ]
+   ]
+  },
+  "Megacerops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "brontothere",
+   "fad": 38.4,
+   "lad": 35.5,
+   "range": [
+    "na-w"
+   ],
+   "note": "A massive brontothere with a forked nasal horn, abundant in the White River badlands and extinct by the mid-Oligocene.",
+   "pbdb": {
+    "oid": "txn:43043",
+    "matched": "Megacerops",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 47,
+    "fea": 45.9,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Brontotheriidae",
+    "genus": "Megacerops",
+    "regions": {
+     "na-w": 46,
+     "na-e": 1
+    }
+   }
+  },
+  "Megalonyx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "groundsloth",
+   "fad": 9.0,
+   "lad": 0.011,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A ground sloth whose ancestors rafted into North America in the late Miocene, well before the Isthmus of Panama existed; gave rise to Megalonyx jeffersonii of the Ice Age.",
+   "pbdb": {
+    "oid": "txn:43603",
+    "matched": "Megalonyx",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 168,
+    "fea": 9.4,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Xenarthra",
+    "family": "Megalonychidae",
+    "genus": "Megalonyx",
+    "regions": {
+     "na-w": 80,
+     "na-e": 72,
+     "ca": 14,
+     "na-n": 2
+    }
+   }
+  },
+  "Megatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "groundsloth",
+   "fad": 5.3,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A ground sloth the size of an elephant, rearing up to pull down branches.",
+   "sz": 6.0,
+   "dt": "herbivore",
+   "hb": "terrestrial browser, able to rear on its hindlimbs",
+   "pbdb": {
+    "oid": "txn:43616",
+    "matched": "Megatherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 97,
+    "fea": 27.3,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Xenarthra",
+    "family": "Megatheriidae",
+    "genus": "Megatherium",
+    "regions": {
+     "sa-s": 63,
+     "sa-n": 26,
+     "na-e": 6,
+     "ca": 2
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "PBDB fad inflated by coarse bins; real fad ~5.3 Ma. NA/CA occurrences are likely Eremotherium, a different genus.",
+   "hab": [
+    "grassland",
+    "forest",
+    "alpine"
+   ]
+  },
+  "Merychippus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 17.4,
+   "lad": 10.95,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A three-toed grazing horse of the spreading Miocene Great Plains grasslands.",
+   "pbdb": {
+    "oid": "txn:43009",
+    "matched": "Merychippus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 147,
+    "fea": 23.04,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Merychippus",
+    "regions": {
+     "na-w": 92,
+     "na-e": 50,
+     "ca": 5
+    }
+   }
+  },
+  "Merycoidodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "oreodont",
+   "fad": 33.9,
+   "lad": 30.6,
+   "range": [
+    "na-w"
+   ],
+   "note": "The 'oreodont', a sheep-like cud-chewer so abundant it defines the White River badlands fauna.",
+   "pbdb": {
+    "oid": "txn:42502",
+    "matched": "Merycoidodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 186,
+    "fea": 41.03,
+    "lla": 18.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Merycoidodontidae",
+    "genus": "Merycoidodon",
+    "regions": {
+     "na-w": 185,
+     "ca": 1
+    }
+   }
+  },
+  "Mesohippus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 38.4,
+   "lad": 32.9,
+   "range": [
+    "na-w"
+   ],
+   "note": "A three-toed horse with teeth intermediate between browsing and grazing, tracking the opening landscape.",
+   "pbdb": {
+    "oid": "txn:43010",
+    "matched": "Mesohippus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 86,
+    "fea": 39.7,
+    "lla": 29.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae",
+    "genus": "Mesohippus",
+    "regions": {
+     "na-w": 86
+    }
+   }
+  },
+  "Moeritherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 37,
+   "lad": 32.5,
+   "range": [
+    "af-n",
+    "ar"
+   ],
+   "note": "A pig-sized, semi-aquatic early proboscidean - a distant, low-slung ancestor of elephants.",
+   "pbdb": {
+    "oid": "txn:43238",
+    "matched": "Moeritherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 25,
+    "fea": 48.07,
+    "lla": 27.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Moeritheriidae",
+    "genus": "Moeritherium",
+    "regions": {
+     "af-w": 1,
+     "af-n": 4,
+     "as-w": 20
+    }
+   },
+   "w": 1,
+   "place_ok": true
+  },
+  "Morganucodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 205,
+   "lad": 190,
+   "range": [
+    "as-e",
+    "eu"
+   ],
+   "note": "A shrew-sized nocturnal insectivore with a mammalian jaw joint -- close to the origin of mammals.",
+   "pbdb": {
+    "oid": "txn:39753",
+    "matched": "Morganucodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 205.7,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Morganucodonta",
+    "family": "Morganucodontidae",
+    "genus": "Morganucodon",
+    "regions": {
+     "as-e": 3,
+     "eu": 10,
+     "na-w": 1
+    }
+   }
+  },
+  "Multituberculata": {
+   "rank": "order",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 160,
+   "lad": 33.9,
+   "range": [
+    "as-e",
+    "eu",
+    "na-w"
+   ],
+   "note": "Rodent-like mammals that had thrived alongside dinosaurs and now briefly dominate, before rodents outcompete them.",
+   "pbdb": {
+    "oid": "txn:39779",
+    "matched": "Multituberculata",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 2126,
+    "fea": 205.7,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Multituberculata",
+    "regions": {
+     "as-e": 79,
+     "na-e": 14,
+     "na-w": 1817,
+     "na-n": 3,
+     "eu": 181,
+     "as-c": 18,
+     "au": 2,
+     "sa-s": 3,
+     "in": 2,
+     "af-e": 2,
+     "mg": 2,
+     "as-n": 3
+    }
+   },
+   "rep": "Ptilodus"
+  },
+  "Myrmecophaga tridactyla": {
+   "rank": "species",
+   "realm": "land",
+   "form": "anteater",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The giant anteater, tearing open termite mounds with its foreclaws and feeding with a sixty-centimetre tongue.",
+   "pbdb": {
+    "oid": "txn:48923",
+    "matched": "Myrmecophaga tridactyla",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 5,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Xenarthra",
+    "family": "Myrmecophagidae",
+    "genus": "Myrmecophaga",
+    "regions": {
+     "na-w": 1,
+     "sa-n": 4
+    }
+   },
+   "hab": [
+    "grassland",
+    "forest",
+    "rainforest"
+   ],
+   "pbdb_ok": true
+  },
+  "Mysticeti": {
+   "rank": "infraorder",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 25.2,
+   "lad": 0,
+   "range": [
+    "af-s",
+    "as-e",
+    "au",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w",
+    "nz",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Baleen whales reach modern size as intensified coastal upwelling concentrates their food into dense patches.",
+   "pbdb": {
+    "oid": "txn:42971",
+    "matched": "Mysticeti",
+    "exact": true,
+    "rank": "suborder",
+    "extant": true,
+    "noc": 2031,
+    "fea": 39.1,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "regions": {
+     "eu": 689,
+     "na-w": 189,
+     "na-e": 194,
+     "as-e": 208,
+     "nz": 74,
+     "sa-n": 54,
+     "ca": 28,
+     "sa-s": 66,
+     "as-w": 5,
+     "as-c": 6,
+     "au": 79,
+     "af-n": 2,
+     "af-s": 41,
+     "na-n": 313,
+     "in": 2,
+     "ar": 2,
+     "as-se": 18,
+     "an": 10,
+     "gl": 16,
+     "af-w": 2,
+     "as-n": 6
+    }
+   },
+   "rep": "Balaenoptera musculus"
+  },
+  "Nimbadon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "diprotodont",
+   "fad": 17,
+   "lad": 12,
+   "range": [
+    "au"
+   ],
+   "note": "A sheep-sized tree-dwelling marsupial herbivore, mass-preserved in Riversleigh cave pools.",
+   "pbdb": {
+    "oid": "txn:247891",
+    "matched": "Nimbadon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 27.3,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Diprotodontidae",
+    "genus": "Nimbadon",
+    "regions": {
+     "au": 4
+    }
+   }
+  },
+  "Notoryctes typhlops": {
+   "rank": "species",
+   "realm": "land",
+   "form": "marsupialmole",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The marsupial mole, blind and swimming through sand.",
+   "pbdb": {
+    "oid": "txn:430597",
+    "matched": "Notoryctes typhlops",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Notoryctemorphia",
+    "family": "Notoryctidae",
+    "genus": "Notoryctes"
+   },
+   "hab": [
+    "desert"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     118,
+     140,
+     -31,
+     -18
+    ]
+   ]
+  },
+  "Notoungulata": {
+   "rank": "order",
+   "realm": "land",
+   "form": "notoungulate",
+   "fad": 64,
+   "lad": 0.012,
+   "range": [
+    {
+     "t": [
+      64,
+      2.7
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0.012
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "ca",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "An endemic order of South American hoofed mammals that evolved in continental isolation.",
+   "pbdb": {
+    "oid": "txn:43320",
+    "matched": "Notoungulata",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 2019,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "regions": {
+     "sa-s": 1719,
+     "ca": 22,
+     "sa-n": 275,
+     "as-e": 2,
+     "na-e": 1
+    }
+   }
+  },
+  "Obdurodon": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "platypus",
+   "fad": 28.5,
+   "lad": 13.8,
+   "range": [
+    "au"
+   ],
+   "note": "A Riversleigh platypus that, unlike the living one, kept functional teeth as an adult.",
+   "pbdb": {
+    "oid": "txn:39739",
+    "matched": "Obdurodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 33.9,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Monotremata",
+    "family": "Ornithorhynchidae",
+    "genus": "Obdurodon",
+    "regions": {
+     "au": 7
+    }
+   }
+  },
+  "Okapia johnstoni": {
+   "rank": "species",
+   "realm": "land",
+   "form": "giraffe",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-w",
+    "af-e"
+   ],
+   "note": "The okapi, the giraffe family's last forest-dwelling member, confined to the Ituri rainforest of the Congo.",
+   "pbdb": {
+    "oid": "txn:149380",
+    "matched": "Okapia johnstoni",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Giraffidae",
+    "genus": "Okapia",
+    "regions": {
+     "af-e": 1
+    }
+   },
+   "hab": [
+    "rainforest"
+   ],
+   "box": [
+    [
+     24,
+     31,
+     -3,
+     4
+    ]
+   ]
+  },
+  "Oreamnos americanus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 0.805,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The mountain goat, on cliffs no predator can follow.",
+   "pbdb": {
+    "oid": "txn:51374",
+    "matched": "Oreamnos americanus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 4,
+    "fea": 1.4,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Oreamnos",
+    "regions": {
+     "na-w": 4
+    }
+   },
+   "hab": [
+    "alpine"
+   ],
+   "w": 3,
+   "box": [
+    [
+     -152,
+     -109,
+     44,
+     64
+    ]
+   ]
+  },
+  "Oryx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-n",
+    "ar"
+   ],
+   "note": "Desert antelope able to let their body temperature rise through the day rather than spend water cooling it.",
+   "pbdb": {
+    "oid": "txn:42814",
+    "matched": "Oryx",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 42,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Oryx",
+    "regions": {
+     "af-e": 26,
+     "af-n": 5,
+     "eu": 3,
+     "af-s": 3,
+     "as-w": 4,
+     "ar": 1
+    }
+   },
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "pbdb_ok": true
+  },
+  "Oryx gazella": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 3.09,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The gemsbok, tolerating body temperatures that would kill most mammals.",
+   "pbdb": {
+    "oid": "txn:104256",
+    "matched": "Oryx gazella",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 12,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Oryx",
+    "regions": {
+     "af-e": 5,
+     "eu": 2,
+     "af-s": 3,
+     "as-w": 1,
+     "af-n": 1
+    }
+   },
+   "hab": [
+    "desert"
+   ],
+   "box": [
+    [
+     11,
+     30,
+     -32,
+     -14
+    ]
+   ]
+  },
+  "Ovibos": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bison",
+   "fad": 1.5,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1.5,
+      0.01
+     ],
+     "in": [
+      "eu",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      0.3,
+      0
+     ],
+     "in": [
+      "na-n",
+      "gl"
+     ]
+    },
+    {
+     "t": [
+      0.3,
+      0.01
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "The muskox, a survivor of the Pleistocene mammoth steppe that rings its calves with horns against wolves.",
+   "pbdb": {
+    "oid": "txn:42815",
+    "matched": "Ovibos",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 86,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Ovibos",
+    "regions": {
+     "na-n": 39,
+     "na-w": 4,
+     "eu": 4,
+     "as-n": 1,
+     "na-e": 2,
+     "gl": 36
+    }
+   },
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "pbdb_ok": true
+  },
+  "Ovibos moschatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 0.4,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      0.4,
+      0.01
+     ],
+     "in": [
+      "eu",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      0.3,
+      0
+     ],
+     "in": [
+      "na-n",
+      "gl"
+     ]
+    },
+    {
+     "t": [
+      0.3,
+      0.01
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "The muskox, a survivor of the Pleistocene mammoth steppe.",
+   "pbdb": {
+    "oid": "txn:44613",
+    "matched": "Ovibos moschatus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 81,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Ovibos",
+    "regions": {
+     "na-w": 2,
+     "na-n": 38,
+     "eu": 3,
+     "na-e": 2,
+     "gl": 36
+    }
+   },
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "pbdb_ok": true
+  },
+  "Ovis nivicola": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1.5,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "The snow sheep, isolated on the range's high plateaus.",
+   "pbdb": {
+    "oid": "txn:149629",
+    "matched": "Ovis nivicola",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Ovis"
+   },
+   "hab": [
+    "alpine"
+   ],
+   "w": 1,
+   "box": [
+    [
+     88,
+     180,
+     52,
+     72
+    ]
+   ]
+  },
+  "Panthera": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cat",
+   "fad": 6,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      6,
+      0
+     ],
+     "in": [
+      "af",
+      "in",
+      "as-se",
+      "as-e",
+      "as-c",
+      "as-w",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0.011
+     ],
+     "in": [
+      "eu",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      0.8,
+      0
+     ],
+     "in": [
+      "sa"
+     ]
+    }
+   ],
+   "note": "The big roaring cats: lion, tiger, leopard, jaguar. Ambush predators that track the large herbivores of each continent.",
+   "pbdb": {
+    "oid": "txn:41066",
+    "matched": "Panthera",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 431,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "regions": {
+     "as-se": 17,
+     "in": 10,
+     "na-w": 22,
+     "ca": 10,
+     "na-e": 48,
+     "sa-n": 13,
+     "af-e": 46,
+     "af-s": 58,
+     "eu": 123,
+     "af-n": 12,
+     "as-c": 2,
+     "as-w": 11,
+     "as-e": 23,
+     "as-n": 6,
+     "ar": 1,
+     "sa-s": 29
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Panthera leo": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "af"
+     ]
+    },
+    {
+     "t": [
+      0.5,
+      0
+     ],
+     "in": [
+      "in",
+      "as-w",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      0.7,
+      0.011
+     ],
+     "in": [
+      "eu"
+     ]
+    }
+   ],
+   "note": "The lion, the only truly social big cat.",
+   "pbdb": {
+    "oid": "txn:46521",
+    "matched": "Panthera leo",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 129,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "regions": {
+     "in": 1,
+     "na-w": 15,
+     "ca": 5,
+     "na-e": 14,
+     "af-e": 12,
+     "af-s": 20,
+     "eu": 38,
+     "af-n": 7,
+     "as-c": 1,
+     "as-w": 3,
+     "as-n": 4,
+     "sa-n": 2,
+     "sa-s": 6,
+     "as-e": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Panthera onca": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "ca",
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      0.8,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "The jaguar, the Americas' largest cat and the forest's apex predator.",
+   "pbdb": {
+    "oid": "txn:46524",
+    "matched": "Panthera onca",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 72,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "regions": {
+     "ca": 4,
+     "na-e": 33,
+     "na-w": 6,
+     "sa-n": 9,
+     "sa-s": 20
+    }
+   },
+   "hab": [
+    "rainforest",
+    "forest",
+    "wetland"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       -112,
+       -34,
+       -40,
+       33
+      ]
+     ]
+    }
+   ]
+  },
+  "Panthera spelaea": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 0.6,
+   "lad": 0.013,
+   "range": [
+    "eu",
+    "as-n",
+    "as-c",
+    "na-n"
+   ],
+   "note": "The cave lion, hunting across Beringia's cold grassland.",
+   "pbdb": {
+    "oid": "txn:308748",
+    "matched": "Panthera spelaea",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 16,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "regions": {
+     "eu": 8,
+     "as-c": 1,
+     "as-n": 4,
+     "af-s": 1,
+     "as-e": 1,
+     "na-w": 1
+    }
+   },
+   "hab": [
+    "tundra",
+    "grassland"
+   ],
+   "pbdb_ok": true
+  },
+  "Panthera uncia": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 2.58,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "in",
+    "as-n"
+   ],
+   "note": "The snow leopard, hunting blue sheep across cliff and scree.",
+   "pbdb": {
+    "oid": "txn:224096",
+    "matched": "Panthera uncia",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Panthera",
+    "regions": {
+     "in": 1
+    }
+   },
+   "w": 3,
+   "box": [
+    [
+     66,
+     105,
+     26.5,
+     52
+    ]
+   ],
+   "hab": [
+    "alpine"
+   ]
+  },
+  "Pantholops hodgsonii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "The chiru, migrating hundreds of km across the plateau to calve.",
+   "pbdb": {
+    "oid": "txn:388538",
+    "matched": "Pantholops hodgsonii",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Pantholops"
+   },
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "w": 1,
+   "box": [
+    [
+     78,
+     98,
+     30,
+     38.5
+    ]
+   ]
+  },
+  "Paraceratherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "indricothere",
+   "fad": 34,
+   "lad": 23,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-w",
+    "eu",
+    "in"
+   ],
+   "note": "A hornless rhinocerotoid five metres at the shoulder and around twenty tonnes -- the largest land mammal known.",
+   "pbdb": {
+    "oid": "txn:43161",
+    "matched": "Paraceratherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 38,
+    "fea": 37.71,
+    "lla": 15.98,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Paraceratheriidae",
+    "genus": "Paraceratherium",
+    "regions": {
+     "as-c": 14,
+     "as-e": 14,
+     "in": 6,
+     "as-w": 2,
+     "eu": 2
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "EXTANT tag is a coarse-bin artefact; extinct by early Miocene."
+  },
+  "Paranthropus boisei": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 2.3,
+   "lad": 1.29,
+   "range": [
+    "af-e"
+   ],
+   "note": "A heavily-built, small-brained hominin of eastern Africa with huge grinding molars, sharing the early Pleistocene with the first members of Homo.",
+   "pbdb": {
+    "oid": "txn:83068",
+    "matched": "Paranthropus boisei",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 66,
+    "fea": 5.333,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Paranthropus",
+    "regions": {
+     "af-e": 66
+    }
+   }
+  },
+  "Platyrrhini": {
+   "rank": "parvorder",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 26,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "New World monkeys, arriving in South America by transatlantic rafting and radiating in isolation.",
+   "pbdb": {
+    "oid": "txn:40843",
+    "matched": "Platyrrhini",
+    "exact": true,
+    "rank": "infraorder",
+    "extant": true,
+    "noc": 158,
+    "fea": 33.9,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "regions": {
+     "sa-n": 83,
+     "ca": 14,
+     "sa-s": 61
+    }
+   },
+   "rep": "Cebus"
+  },
+  "Plesiadapiformes": {
+   "rank": "order",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 65.9,
+   "lad": 37,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "Squirrel-like early primate relatives, arboreal and probably nocturnal.",
+   "pbdb": {
+    "oid": "txn:40701",
+    "matched": "Plesiadapiformes",
+    "exact": true,
+    "rank": "suborder",
+    "extant": false,
+    "noc": 80,
+    "fea": 66,
+    "lla": 39.7,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "regions": {
+     "na-w": 71,
+     "eu": 9
+    }
+   },
+   "rep": "Carpolestes"
+  },
+  "Polydolopidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 60,
+   "lad": 30,
+   "range": [
+    "an",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Marsupials on Seymour Island, recording the old land connection between Antarctica, South America and Australia.",
+   "pbdb": {
+    "oid": "txn:40066",
+    "matched": "Polydolopidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 100,
+    "fea": 66,
+    "lla": 21,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Polydolopidae",
+    "regions": {
+     "sa-s": 84,
+     "sa-n": 2,
+     "an": 14
+    }
+   }
+  },
+  "Proconsul": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ape",
+   "fad": 21,
+   "lad": 14,
+   "range": [
+    "af-e"
+   ],
+   "note": "An early African ape without a tail, near the base of the hominoid radiation.",
+   "sz": 1.0,
+   "dt": "frugivore",
+   "hb": "arboreal quadruped",
+   "pbdb": {
+    "oid": "txn:40895",
+    "matched": "Proconsul",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 27.3,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Proconsulidae",
+    "genus": "Proconsul",
+    "regions": {
+     "af-e": 13
+    }
+   }
+  },
+  "Procoptodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 2.67,
+   "lad": 0.045,
+   "range": [
+    "au"
+   ],
+   "note": "A short-faced giant kangaroo browsing shrubs on one-toed feet.",
+   "pbdb": {
+    "oid": "txn:40161",
+    "matched": "Procoptodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 121,
+    "fea": 27.3,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Procoptodon",
+    "regions": {
+     "au": 121
+    }
+   }
+  },
+  "Propalaeotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 50,
+   "lad": 44,
+   "range": [
+    "eu"
+   ],
+   "note": "A small Eocene browsing horse relative, found at Messel with leaves still in its stomach.",
+   "pbdb": {
+    "oid": "txn:57540",
+    "matched": "Propalaeotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 69,
+    "fea": 56,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Palaeotheriidae",
+    "genus": "Propalaeotherium",
+    "regions": {
+     "eu": 68,
+     "as-e": 1
+    }
+   },
+   "w": 1
+  },
+  "Pseudois nayaur": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 2.5,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "in"
+   ],
+   "note": "The bharal, the snow leopard's principal prey.",
+   "pbdb": {
+    "oid": "txn:149661",
+    "matched": "Pseudois nayaur",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Pseudois"
+   },
+   "w": 1,
+   "box": [
+    [
+     73,
+     106,
+     26.5,
+     40
+    ]
+   ]
+  },
+  "Ptilodus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 60,
+   "lad": 56,
+   "range": [
+    "na-w"
+   ],
+   "note": "A Paleocene multituberculate with an enlarged shearing premolar and an opposable-like hind toe."
+  },
+  "Purgatorius": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 65.9,
+   "lad": 63,
+   "range": [
+    "na-w"
+   ],
+   "note": "A small mammal at or near the base of the primate lineage, appearing right at the boundary.",
+   "pbdb": {
+    "oid": "txn:40704",
+    "matched": "Purgatorius",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 66,
+    "lla": 57.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Purgatoriidae",
+    "genus": "Purgatorius",
+    "regions": {
+     "na-w": 12
+    }
+   }
+  },
+  "Pyrotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pyrothere",
+   "fad": 26,
+   "lad": 23,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "An elephant-like endemic ungulate of the Oligocene Salla and Deseado faunas.",
+   "pbdb": {
+    "oid": "txn:43520",
+    "matched": "Pyrotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 29,
+    "lla": 21,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pyrotheridae",
+    "genus": "Pyrotherium",
+    "regions": {
+     "sa-s": 13,
+     "sa-n": 4
+    }
+   },
+   "w": 1
+  },
+  "Rangifer": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "deer",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n",
+    {
+     "t": [
+      1,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "Reindeer: the only deer where both sexes carry antlers, and the large herbivore that makes tundra a grazed system rather than a frozen one.",
+   "pbdb": {
+    "oid": "txn:42688",
+    "matched": "Rangifer",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 139,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Rangifer",
+    "regions": {
+     "as-n": 8,
+     "na-w": 9,
+     "na-n": 45,
+     "na-e": 29,
+     "eu": 29,
+     "gl": 19
+    }
+   },
+   "hab": [
+    "tundra",
+    "forest"
+   ],
+   "lat": [
+    50,
+    90
+   ],
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Rangifer tarandus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "deer",
+   "fad": 1.68,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "eu",
+    "gl",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Reindeer or caribou, the only deer in which both sexes carry antlers, grazing lichen through the northern winter.",
+   "pbdb": {
+    "oid": "txn:45024",
+    "matched": "Rangifer tarandus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 116,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae",
+    "genus": "Rangifer",
+    "regions": {
+     "na-n": 40,
+     "na-w": 5,
+     "eu": 26,
+     "as-n": 6,
+     "na-e": 20,
+     "gl": 19
+    }
+   },
+   "lat": [
+    50,
+    90
+   ],
+   "w": 3
+  },
+  "Repenomamus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 125.77,
+   "lad": 119.57,
+   "range": [
+    "as-e"
+   ],
+   "note": "A badger-sized Jehol mammal found with a juvenile dinosaur in its stomach -- Mesozoic mammals were not all prey.",
+   "pbdb": {
+    "oid": "txn:67605",
+    "matched": "Repenomamus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Eutriconodonta",
+    "family": "Gobiconodontidae",
+    "genus": "Repenomamus",
+    "regions": {
+     "as-e": 2
+    }
+   }
+  },
+  "Sahelanthropus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 7.25,
+   "lad": 6.8,
+   "range": [
+    "af-n"
+   ],
+   "note": "A late-Miocene Chadian hominin near the split of the human and chimpanzee lines.",
+   "pbdb": {
+    "oid": "txn:77367",
+    "matched": "Sahelanthropus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 7.246,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Sahelanthropus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "w": 1
+  },
+  "Sahelanthropus tchadensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 7.2,
+   "lad": 6.8,
+   "range": [
+    "af-n"
+   ],
+   "note": "A Chadian skull around seven million years old, close to the chimpanzee-human split and arguably on our side of it.",
+   "pbdb": {
+    "oid": "txn:77368",
+    "matched": "Sahelanthropus tchadensis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 7.246,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Sahelanthropus",
+    "regions": {
+     "af-n": 1
+    }
+   }
+  },
+  "Saiga tatarica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1.8,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1.8,
+      0.012
+     ],
+     "in": [
+      "eu",
+      "as-c",
+      "as-n",
+      "na-n"
+     ]
+    },
+    {
+     "t": [
+      0.012,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "The saiga, its bulbous nose filtering dust and warming winter air.",
+   "pbdb": {
+    "oid": "txn:44912",
+    "matched": "Saiga tatarica",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 4,
+    "fea": 0.774,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae",
+    "genus": "Saiga",
+    "regions": {
+     "eu": 2,
+     "as-n": 1,
+     "na-n": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "pbdb_ok": true,
+   "conf_note": "PBDB-robust n=4 is thin; Saiga's Eurasian mammoth-steppe record starts in the Early Pleistocene, well before 0.452 Ma; living range split into a Pleistocene Beringian lobe (na-n, as-n) and the present Eurasian remnant (eu, as-c).",
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       42,
+       110,
+       42,
+       52
+      ]
+     ]
+    }
+   ]
+  },
+  "Sirenia": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "sirenian",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "tet",
+    "atl",
+    "ind",
+    "pac",
+    "ca",
+    "af-n",
+    "eu",
+    "in",
+    "na-e",
+    "sa-n",
+    "au"
+   ],
+   "note": "Dugongs and manatees: the only plant-eating marine mammals, grazing seagrass meadows of warm shallow shelves.",
+   "pbdb": {
+    "oid": "txn:36873",
+    "matched": "Sirenia",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 940,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Sirenia",
+    "regions": {
+     "ca": 32,
+     "na-e": 117,
+     "as-w": 65,
+     "sa-n": 45,
+     "na-w": 62,
+     "in": 31,
+     "eu": 443,
+     "af-n": 45,
+     "as-e": 35,
+     "ar": 12,
+     "af-w": 4,
+     "af-e": 8,
+     "as-se": 4,
+     "au": 3,
+     "mg": 5,
+     "as-n": 8,
+     "sa-s": 5,
+     "as-c": 3,
+     "na-n": 2,
+     "nz": 10,
+     "ng": 2
+    }
+   },
+   "hab": [
+    "coast",
+    "shelf",
+    "river"
+   ]
+  },
+  "Sivapithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ape",
+   "fad": 14.9,
+   "lad": 8.48,
+   "range": [
+    "af-e",
+    "as-e",
+    "as-w",
+    "in"
+   ],
+   "note": "A large Miocene ape from the Siwaliks, close to the ancestry of the orangutan.",
+   "pbdb": {
+    "oid": "txn:40898",
+    "matched": "Sivapithecus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 15.98,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae",
+    "genus": "Sivapithecus",
+    "regions": {
+     "in": 7,
+     "af-e": 5,
+     "as-e": 2,
+     "as-w": 2
+    }
+   }
+  },
+  "Smilodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sabertooth",
+   "fad": 2.5,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      2.5,
+      0.011
+     ],
+     "in": [
+      "ca",
+      "na-e",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      1.0,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "The sabre-toothed cat, moving south into a South America that had never seen anything like it.",
+   "pbdb": {
+    "oid": "txn:41079",
+    "matched": "Smilodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 137,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Smilodon",
+    "regions": {
+     "na-e": 45,
+     "na-w": 22,
+     "ca": 7,
+     "sa-s": 35,
+     "sa-n": 28
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "NA origin ~2.5 Ma; South America only after GABI, ~1 Ma."
+  },
+  "Smilodon fatalis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "sabertooth",
+   "fad": 1.6,
+   "lad": 0.011,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w",
+    "sa-n"
+   ],
+   "note": "The Rancho La Brea sabre-tooth, known from thousands of individuals trapped in asphalt seeps.",
+   "pbdb": {
+    "oid": "txn:46515",
+    "matched": "Smilodon fatalis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 39,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae",
+    "genus": "Smilodon",
+    "regions": {
+     "na-w": 12,
+     "ca": 3,
+     "na-e": 22,
+     "sa-n": 1,
+     "sa-s": 1
+    }
+   },
+   "w": 3
+  },
+  "Sparassodonta": {
+   "rank": "order",
+   "realm": "land",
+   "form": "sparassodont",
+   "fad": 64,
+   "lad": 3.0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Marsupial-relative carnivores that filled the cat-and-dog roles on the island continent.",
+   "pbdb": {
+    "oid": "txn:54053",
+    "matched": "Sparassodonta",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 330,
+    "fea": 66,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Sparassodonta",
+    "regions": {
+     "sa-n": 53,
+     "sa-s": 276,
+     "eu": 1
+    }
+   }
+  },
+  "Stegodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 11,
+   "lad": 0.012,
+   "range": [
+    "af-e",
+    "as-e",
+    "as-se",
+    "as-w",
+    "in"
+   ],
+   "note": "A large proboscidean with tusks set so close together that the trunk hung to one side; its dwarfed island forms reached Flores and Timor.",
+   "pbdb": {
+    "oid": "txn:43271",
+    "matched": "Stegodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 129,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae",
+    "genus": "Stegodon",
+    "regions": {
+     "in": 23,
+     "as-se": 49,
+     "as-w": 3,
+     "as-e": 33,
+     "af-e": 15,
+     "af-s": 1,
+     "af-n": 2,
+     "au": 2,
+     "eu": 1
+    }
+   }
+  },
+  "Teleoceras": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 17.4,
+   "lad": 7.05,
+   "range": [
+    "ca",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A hippo-like short-legged rhino that wallowed in Miocene rivers, mass-buried at Ashfall.",
+   "pbdb": {
+    "oid": "txn:43226",
+    "matched": "Teleoceras",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 348,
+    "fea": 23.04,
+    "lla": 1.4,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae",
+    "genus": "Teleoceras",
+    "regions": {
+     "na-w": 245,
+     "na-e": 82,
+     "ca": 19,
+     "eu": 1,
+     "as-w": 1
+    }
+   }
+  },
+  "Thalassocnus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "groundsloth",
+   "fad": 9.44,
+   "lad": 3.96,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A marine ground sloth that grazed seagrass off the Peruvian coast -- a lineage no one predicted.",
+   "pbdb": {
+    "oid": "txn:72041",
+    "matched": "Thalassocnus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 11.63,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Xenarthra",
+    "family": "Nothrotheriidae",
+    "genus": "Thalassocnus",
+    "regions": {
+     "sa-n": 7,
+     "sa-s": 8
+    }
+   }
+  },
+  "Theropithecus gelada": {
+   "rank": "species",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "The gelada, the last grass-eating primate, endemic to these escarpments.",
+   "pbdb": {
+    "oid": "txn:233449",
+    "matched": "Theropithecus gelada",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae",
+    "genus": "Theropithecus"
+   },
+   "hab": [
+    "grassland",
+    "alpine"
+   ],
+   "box": [
+    [
+     37,
+     40.5,
+     9,
+     14
+    ]
+   ]
+  },
+  "Thylacoleo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "marsupiallion",
+   "fad": 3.5,
+   "lad": 0.045,
+   "range": [
+    "au"
+   ],
+   "note": "Early marsupial 'lions' with bolt-cutter premolars appear in the Miocene rainforest fauna.",
+   "pbdb": {
+    "oid": "txn:40139",
+    "matched": "Thylacoleo",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 35,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Thylacoleonidae",
+    "genus": "Thylacoleo",
+    "regions": {
+     "au": 35
+    }
+   },
+   "w": 3
+  },
+  "Thylacoleo carnifex": {
+   "rank": "species",
+   "realm": "land",
+   "form": "marsupiallion",
+   "fad": 1.68,
+   "lad": 0.045,
+   "range": [
+    "au"
+   ],
+   "note": "The marsupial lion, a powerful ambush predator with the strongest bite of any known mammal for its size.",
+   "pbdb": {
+    "oid": "txn:166623",
+    "matched": "Thylacoleo carnifex",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 26,
+    "fea": 5.333,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Thylacoleonidae",
+    "genus": "Thylacoleo",
+    "regions": {
+     "au": 26
+    }
+   }
+  },
+  "Toxodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "notoungulate",
+   "fad": 3.6,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "One of the endemic South American ungulate orders that the interchange extinguished.",
+   "sz": 2.7,
+   "dt": "herbivore",
+   "hb": "heavy grazer, rhinoceros-like in build but unrelated",
+   "pbdb": {
+    "oid": "txn:43405",
+    "matched": "Toxodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 87,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "family": "Toxodontidae",
+    "genus": "Toxodon",
+    "regions": {
+     "sa-s": 68,
+     "sa-n": 18,
+     "ca": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 3
+  },
+  "Uintatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "uintathere",
+   "fad": 50,
+   "lad": 46,
+   "range": [
+    "na-w"
+   ],
+   "note": "A rhino-sized herbivore with six blunt horns and sabre-like canines, belonging to no surviving group.",
+   "sz": 4.0,
+   "dt": "herbivore",
+   "hb": "heavy browser with six blunt horns",
+   "pbdb": {
+    "oid": "txn:40606",
+    "matched": "Uintatherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 35,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Dinocerata",
+    "family": "Uintatheriidae",
+    "genus": "Uintatherium",
+    "regions": {
+     "na-w": 30,
+     "as-e": 4,
+     "as-c": 1
+    }
+   }
+  },
+  "Ursus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bear",
+   "fad": 5.3,
+   "lad": 0,
+   "range": [
+    "holarctic",
+    "as-se",
+    "in",
+    "af-n"
+   ],
+   "note": "Bears. Omnivorous, wide-ranging, and one of the few large carnivores that hibernates through a boreal winter.",
+   "pbdb": {
+    "oid": "txn:41331",
+    "matched": "Ursus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 535,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae",
+    "genus": "Ursus",
+    "regions": {
+     "as-se": 18,
+     "na-w": 30,
+     "na-e": 80,
+     "na-n": 62,
+     "eu": 247,
+     "af-n": 5,
+     "as-w": 13,
+     "as-c": 5,
+     "as-e": 22,
+     "as-n": 17,
+     "ca": 1,
+     "gl": 30,
+     "in": 2
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Ursus americanus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "ca"
+   ],
+   "note": "The American black bear, the range's largest surviving carnivore.",
+   "pbdb": {
+    "oid": "txn:52602",
+    "matched": "Ursus americanus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 72,
+    "fea": 4.7,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae",
+    "genus": "Ursus",
+    "regions": {
+     "na-w": 12,
+     "na-e": 56,
+     "na-n": 4
+    }
+   },
+   "hab": [
+    "forest"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -165,
+     -55,
+     20,
+     68
+    ]
+   ]
+  },
+  "Ursus arctos horribilis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 0.1,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "na-w"
+   ],
+   "note": "The grizzly, ranging from valley floor to alpine tundra.",
+   "pbdb": {
+    "oid": "txn:41331",
+    "matched": "Ursus",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 535,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae",
+    "genus": "Ursus",
+    "regions": {
+     "as-se": 18,
+     "na-w": 30,
+     "na-e": 80,
+     "na-n": 62,
+     "eu": 247,
+     "af-n": 5,
+     "as-w": 13,
+     "as-c": 5,
+     "as-e": 22,
+     "as-n": 17,
+     "ca": 1,
+     "gl": 30,
+     "in": 2
+    }
+   },
+   "w": 3,
+   "box": [
+    [
+     -168,
+     -95,
+     30,
+     70
+    ]
+   ],
+   "hab": [
+    "forest",
+    "alpine",
+    "tundra",
+    "grassland"
+   ]
+  },
+  "Ursus spelaeus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 0.4,
+   "lad": 0.024,
+   "range": [
+    "eu"
+   ],
+   "note": "The cave bear, whose bones fill Ice Age European caverns by the thousand.",
+   "pbdb": {
+    "oid": "txn:90654",
+    "matched": "Ursus spelaeus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 30,
+    "fea": 3.6,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae",
+    "genus": "Ursus",
+    "regions": {
+     "eu": 29,
+     "as-c": 1
+    }
+   },
+   "w": 3
+  },
+  "Vicugna vicugna": {
+   "rank": "species",
+   "realm": "land",
+   "form": "llama",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The vicuna, grazing the altiplano on the finest wool of any mammal.",
+   "pbdb": {
+    "oid": "txn:145835",
+    "matched": "Vicugna vicugna",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 3,
+    "fea": 0.4,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae",
+    "genus": "Vicugna",
+    "regions": {
+     "sa-s": 2,
+     "sa-n": 1
+    }
+   },
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -77,
+     -69,
+     -18,
+     -9
+    ],
+    [
+     -70.5,
+     -65,
+     -30,
+     -17
+    ]
+   ]
+  },
+  "Volaticotherium": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "smallmammal",
+   "fad": 165.3,
+   "lad": 161.5,
+   "range": [
+    "as-e"
+   ],
+   "note": "A gliding mammaliaform with a preserved membrane, roughly 100 million years before bats.",
+   "pbdb": {
+    "oid": "txn:91433",
+    "matched": "Volaticotherium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 165.3,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Eutriconodonta",
+    "family": "Triconodontidae",
+    "genus": "Volaticotherium",
+    "regions": {
+     "as-e": 1
+    }
+   }
+  },
+  "Vulpes lagopus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 0.4,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n"
+   ],
+   "note": "The Arctic fox, changing coat colour with the season.",
+   "pbdb": {
+    "oid": "txn:44853",
+    "matched": "Vulpes lagopus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 45,
+    "fea": 1.4,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae",
+    "genus": "Vulpes",
+    "regions": {
+     "na-n": 18,
+     "as-n": 5,
+     "na-w": 1,
+     "gl": 17,
+     "eu": 4
+    }
+   },
+   "hab": [
+    "tundra",
+    "ice"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "pbdb_ok": true
+  },
+  "primates": {
+   "rank": "order",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 56,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      56,
+      0
+     ],
+     "in": [
+      "af",
+      "as-se",
+      "in",
+      "as-e",
+      "mg"
+     ]
+    },
+    {
+     "t": [
+      56,
+      34
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      36,
+      0
+     ],
+     "in": [
+      "sa",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Grasping hands, forward-facing eyes and large brains -- a group built by and largely confined to closed forest canopy.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   }
+  }
+ }
+}

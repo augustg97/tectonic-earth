@@ -1,0 +1,676 @@
+{
+ "taxa": {
+  "African megafauna": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "af"
+   ],
+   "note": "Africa keeps the intact big-mammal community - elephants, rhinos, hippos - that other continents lost.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "rep": "Loxodonta africana"
+  },
+  "Burgess Shale biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 510,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "The 508-Ma community of British Columbia - the fullest window on Cambrian soft-bodied animals anywhere.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Anomalocaris"
+  },
+  "Cambay amber flora (Dipterocarpaceae)": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 55,
+   "lad": 50,
+   "range": [
+    "in"
+   ],
+   "note": "Fifty-million-year-old amber from Gujarat holds a dipterocarp rainforest, and insects with Asian relatives: India was already trading life across a narrowing sea.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "rainforest",
+    "forest"
+   ]
+  },
+  "Cathaysian flora": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 310,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se"
+   ],
+   "note": "The tropical coal-forest flora - Gigantopteris, Lobatannularia - that built the great Shanxi coals.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Gigantopteris"
+  },
+  "Cerrado flora": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Fire-adapted savanna woodland with thick corky bark and vast root systems.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "grassland"
+   ]
+  },
+  "Cerrejon rainforest": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 60,
+   "lad": 58,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The oldest neotropical rainforest known: palms, legumes and aroids in a structurally modern canopy only a few million years after the asteroid, and hot enough to support Titanoboa.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "rainforest"
+   ]
+  },
+  "Chengjiang Biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-e"
+   ],
+   "note": "An early Cambrian Lagerstatte in Yunnan, older than the Burgess Shale and just as detailed -- soft tissue, guts and nervous systems.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Anomalocaris",
+   "aka": [
+    "Chengjiang biota"
+   ]
+  },
+  "Chinchilla fauna": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 4.5,
+   "lad": 3.5,
+   "range": [
+    "au"
+   ],
+   "note": "The Chinchilla Local Fauna of the Darling Downs, Queensland -- a Pliocene assemblage recording Australia's rainforest-to-woodland shift, misfiled by name-collision with the South American rodent.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Macropodidae",
+   "w": 1
+  },
+  "Dachstein reef fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 217,
+   "lad": 201,
+   "range": [
+    "eu"
+   ],
+   "note": "The Late Triassic reef community of the Tethyan carbonate platforms -- scleractinian corals, calcareous sponges and encrusting problematica.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "reef"
+   ]
+  },
+  "Doushantuo biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 600,
+   "lad": 560,
+   "range": [
+    "as-e"
+   ],
+   "note": "Weng'an phosphorites preserving algae and controversial embryo-like fossils at cellular resolution, ~600 Ma.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Dwyka glacial fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 303,
+   "lad": 290,
+   "range": [
+    "af-s"
+   ],
+   "note": "Cold marine faunas in the seas around a Gondwana buried under Carboniferous ice.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Eurydesma"
+  },
+  "East Kirkton tetrapods": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "stemtetrapod",
+   "fad": 338,
+   "lad": 330,
+   "range": [
+    "eu"
+   ],
+   "note": "A Scottish Mississippian hot-spring site preserving early terrestrial tetrapods such as Westlothiana.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Ediacaran biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 575,
+   "lad": 539,
+   "range": [
+    "au",
+    "eu",
+    "na-e",
+    "af-s",
+    "as-n",
+    "as-e",
+    "in"
+   ],
+   "note": "A grab-bag of frondose, discoid and quilted organisms whose relationships to living animals are still argued about a century after their discovery.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Dickinsonia"
+  },
+  "Emu Bay Shale biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 515,
+   "lad": 511,
+   "range": [
+    "au"
+   ],
+   "note": "A South Australian Lagerstatte where Anomalocaris keeps its compound eyes - tens of thousands of lenses each.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Redlichia"
+  },
+  "Endemic trilobites": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 443,
+   "range": [
+    "as-n"
+   ],
+   "note": "Isolated on its own tropical craton, Siberia grows a distinctive Ordovician trilobite fauna.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Fezouata biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 485,
+   "lad": 470,
+   "range": [
+    "af-n"
+   ],
+   "note": "Moroccan mudstones extend Burgess-type soft-bodied preservation into the Ordovician of the Saharan shelf.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Glossopteris flora": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e",
+    "an",
+    "au",
+    "in",
+    "sa-s",
+    "sa-n",
+    "mg",
+    "nz"
+   ],
+   "note": "The whole cool-temperate seed-fern forest - Vertebraria roots, Gangamopteris - that defines Permian Gondwana.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Glossopteris"
+  },
+  "Gotland reef fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 433,
+   "lad": 423,
+   "range": [
+    "eu"
+   ],
+   "note": "Silurian Gotland is a fossilised barrier reef of tabulate and rugose corals and stromatoporoids.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "reef"
+   ],
+   "rep": "Halysites"
+  },
+  "Hirnantia fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 446,
+   "lad": 443,
+   "range": [
+    "eu",
+    "af-n",
+    "as-e",
+    "na-e",
+    "sa-s",
+    "ar"
+   ],
+   "note": "A cold-water brachiopod assemblage that spread worldwide as end-Ordovician ice gripped the Saharan pole.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Jehol Biota": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "earlybird",
+   "fad": 131,
+   "lad": 120,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Yixian and Jiufotang beds of Liaoning: volcanic ash falls that buried a whole forest ecosystem intact, feathers, stomach contents, colour-bearing melanosomes and all.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Confuciusornis",
+   "aka": [
+    "Jehol biota"
+   ]
+  },
+  "Karoo therapsids": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 265,
+   "lad": 235,
+   "range": [
+    "af-s"
+   ],
+   "note": "The Karoo Basin of South Africa preserves the mammal-like reptiles in unbroken sequence across the end-Permian extinction -- the best record anywhere of that catastrophe on land.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Lystrosaurus"
+  },
+  "Luoping biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 246,
+   "lad": 242,
+   "range": [
+    "as-e"
+   ],
+   "note": "A Middle Triassic marine Lagerstatte in Yunnan documenting the recovery of ocean life after the extinction.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Malvinokaffric fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 419,
+   "lad": 385,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "an"
+   ],
+   "note": "The Bokkeveld Group and Parana Basin preserve the cold-water Devonian brachiopod-trilobite province.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Burmeisteria"
+  },
+  "Malvinokaffric flora": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 419,
+   "lad": 359,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "an"
+   ],
+   "note": "Early sparse vegetation of horsetails and progymnosperms on the southern floodplains.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Mbuji-Mayi microbiota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 1065,
+   "lad": 950,
+   "range": [
+    "af-w"
+   ],
+   "note": "The Tonian Mbuji-Mayi Supergroup yields acritarchs and vase-shaped microfossils - genuine eukaryote fossils from the craton's cover.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Meishan fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 254,
+   "lad": 251,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Meishan section is the global boundary marker for the end-Permian extinction, in continuous marine limestone.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Messel biota": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "horse",
+   "fad": 48,
+   "lad": 47,
+   "range": [
+    "eu"
+   ],
+   "note": "An Eocene oil-shale lake in Germany preserving bats, early horses and gut contents in mirror detail.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Propalaeotherium"
+  },
+  "Morrison fauna": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 156,
+   "lad": 147,
+   "range": [
+    "na-w"
+   ],
+   "note": "The Late Jurassic Morrison Formation - Allosaurus, Stegosaurus, Apatosaurus, Diplodocus - the archetypal dinosaur bonebed.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Stegosaurus"
+  },
+  "Orsten fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 500,
+   "lad": 488,
+   "range": [
+    "eu"
+   ],
+   "note": "Alum-shale nodules of Sweden preserve millimetre crustaceans in uncrushed three-dimensional phosphate.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Agnostus"
+  },
+  "Orthoceratite fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 470,
+   "lad": 455,
+   "range": [
+    "eu"
+   ],
+   "note": "The red 'Orthoceras limestone' of Sweden and Estonia is a graveyard of straight-shelled cephalopods.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Permian tetrapods": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 272,
+   "lad": 252,
+   "range": [
+    "eu",
+    "as-n"
+   ],
+   "note": "Amphibians and early reptiles of the Permian rivers, the northern counterparts of the Karoo fauna.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Inostrancevia"
+  },
+  "Rhynie chert biota": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "A Scottish hot-spring deposit that silicified an entire Early Devonian land ecosystem where it stood.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Rhynia"
+  },
+  "Sahni's nests": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "in"
+   ],
+   "note": "Titanosaur nesting grounds across the Deccan, eggs laid on the flood basalt itself between eruptions.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Isisaurus"
+  },
+  "Siberian Traps flora": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 260,
+   "lad": 250,
+   "range": [
+    "as-n"
+   ],
+   "note": "The last forests before the Great Dying, buried under the largest volcanic eruption of the eon -- the coal seams of Tunguska are their remains.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Rufloria"
+  },
+  "Sinsk biota": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 518,
+   "lad": 514,
+   "range": [
+    "as-n"
+   ],
+   "note": "An Early Cambrian soft-bodied Lagerstatte in anoxic Siberian shelf muds, older than the Burgess Shale.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Small shelly fauna": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "hyolith",
+   "fad": 541,
+   "lad": 515,
+   "range": [
+    "as-n",
+    "as-e",
+    "as-c",
+    "au",
+    "eu",
+    "na-e",
+    "in"
+   ],
+   "note": "The Siberian Platform yields the type Tommotian assemblage - the first mineralised skeletons, mostly millimetre tubes and spines.",
+   "sz": 0.002,
+   "dt": "various",
+   "hb": "benthic, mostly millimetric",
+   "assemblage": true,
+   "fill": false
+  },
+  "Tendaguru fauna": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 155,
+   "lad": 145,
+   "range": [
+    "af-e"
+   ],
+   "note": "The Late Jurassic Tanzanian beds preserve Giraffatitan and Kentrosaurus - Africa's answer to the Morrison.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Giraffatitan"
+  },
+  "Tingamarra fauna": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 55,
+   "lad": 54,
+   "range": [
+    "au"
+   ],
+   "note": "The lone substantial early-Cenozoic Queensland site (~55 Ma), hinting at South American mammal links, then near silence.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Trilobite biomeres": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 500,
+   "lad": 485,
+   "range": [
+    "na"
+   ],
+   "note": "The shallow sea records repeated sudden trilobite mass-extinctions and rebounds - the classic 'biomere' pattern.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Trilobite provinces": {
+   "rank": "assemblage",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 485,
+   "range": [
+    "eu",
+    "na-e",
+    "gl"
+   ],
+   "note": "Trilobites so different on its two shores that the contrast first revealed the ocean's former existence.",
+   "assemblage": true,
+   "fill": false
+  },
+  "Yanliao Biota": {
+   "rank": "assemblage",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 166,
+   "lad": 157,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Daohugou beds: Middle-Late Jurassic lake deposits with salamanders, feathered dinosaurs and the earliest gliding mammals.",
+   "assemblage": true,
+   "fill": false,
+   "rep": "Anchiornis"
+  },
+  "cryoconite communities": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "microbe",
+   "fad": 717,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      717,
+      660
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      650,
+      635
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "an",
+      "gl",
+      "na-n",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "The best candidate refugium for photosynthetic life through the Sturtian and Marinoan glaciations.",
+   "assemblage": true,
+   "fill": false,
+   "hab": [
+    "ice"
+   ],
+   "cls": {
+    "phylum": "Bacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   }
+  }
+ }
+}

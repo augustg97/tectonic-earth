@@ -1,0 +1,937 @@
+{
+ "taxa": {
+  "Acaena magellanica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind",
+    "sa-s"
+   ],
+   "note": "The greater burnet of the far south, carpeting sheltered slopes from Patagonia to Kerguelen.",
+   "hab": [
+    "island",
+    "tundra",
+    "grassland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Rosaceae"
+   },
+   "box": [
+    [
+     -180,
+     180,
+     -56,
+     -45
+    ],
+    [
+     -76,
+     -64,
+     -56,
+     -40
+    ]
+   ]
+  },
+  "Aldabrachelys gigantea": {
+   "rank": "species",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Aldabra giant tortoise, last of the Indian Ocean's giant tortoises, a hundred thousand strong on one atoll.",
+   "hab": [
+    "island",
+    "grassland",
+    "coast"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae"
+   },
+   "box": [
+    [
+     46,
+     56.5,
+     -10,
+     -3.5
+    ]
+   ]
+  },
+  "Anas eatoni": {
+   "rank": "species",
+   "realm": "air",
+   "form": "waterfowl",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind"
+   ],
+   "note": "Eaton's pintail, a small duck found only on Kerguelen and the Crozet Islands.",
+   "hab": [
+    "island",
+    "coast",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "Anatidae"
+   },
+   "realms": [
+    "air",
+    "land"
+   ],
+   "box": [
+    [
+     50,
+     71,
+     -50.5,
+     -45.5
+    ]
+   ]
+  },
+  "Azorella selago": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind",
+    "sa-s"
+   ],
+   "note": "A cushion plant that builds hard green mounds a metre across on windswept subantarctic fellfield.",
+   "hab": [
+    "island",
+    "tundra",
+    "alpine",
+    "coast"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Apiales",
+    "family": "Apiaceae"
+   },
+   "box": [
+    [
+     -180,
+     180,
+     -56,
+     -45
+    ],
+    [
+     -76,
+     -64,
+     -56,
+     -40
+    ]
+   ]
+  },
+  "Bryophyta": {
+   "rank": "division",
+   "realm": "land",
+   "form": "moss",
+   "fad": 330,
+   "lad": 0,
+   "range": [
+    "cosmo",
+    "an"
+   ],
+   "note": "Mosses. They are most of Antarctica's land vegetation today, and beds of them lie freeze-dried in its Miocene tundra deposits.",
+   "hab": [
+    "tundra",
+    "forest",
+    "wetland",
+    "alpine",
+    "coast",
+    "ice",
+    "island"
+   ],
+   "cls": {
+    "class": "Bryopsida"
+   }
+  },
+  "Coracopsis barklyi": {
+   "rank": "species",
+   "realm": "air",
+   "form": "parrot",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Seychelles black parrot, a few hundred birds in the palm forest of Praslin.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Psittacidae"
+   },
+   "realms": [
+    "air",
+    "land"
+   ],
+   "box": [
+    [
+     55,
+     56.5,
+     -5.5,
+     -3.5
+    ]
+   ]
+  },
+  "Cupressaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo",
+    {
+     "t": [
+      34,
+      5
+     ],
+     "in": [
+      "sou"
+     ]
+    }
+   ],
+   "note": "Cypresses, junipers, redwoods and their kin; their fossil wood lies in the Miocene lavas of Kerguelen, now a treeless island.",
+   "hab": [
+    "forest",
+    "alpine",
+    "island"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cupressaceae"
+   }
+  },
+  "Cylindraspis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 8,
+   "lad": 0.0002,
+   "range": [
+    "ind"
+   ],
+   "note": "The giant tortoises of Mauritius, Reunion and Rodrigues, five species grazing in herds of thousands until the 1700s.",
+   "hab": [
+    "island",
+    "grassland",
+    "forest",
+    "coast"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae"
+   },
+   "box": [
+    [
+     55,
+     64,
+     -22,
+     -19
+    ]
+   ]
+  },
+  "Diospyros tessellaria": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "Mauritius ebony, the black-hearted timber the Dutch cut the island's forests for.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Ebenaceae"
+   },
+   "box": [
+    [
+     57.2,
+     57.9,
+     -20.6,
+     -19.9
+    ]
+   ]
+  },
+  "Eremotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "groundsloth",
+   "fad": 5,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      5,
+      2.7
+     ],
+     "in": [
+      "sa-n"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "ca",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "The tropical giant ground sloth, as big as Megatherium, ranging from Brazil through Panama to Florida.",
+   "hab": [
+    "rainforest",
+    "forest",
+    "grassland",
+    "wetland"
+   ],
+   "lat": [
+    0,
+    36
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pilosa",
+    "family": "Megatheriidae"
+   }
+  },
+  "Falco punctatus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Mauritius kestrel, reduced to four wild birds in 1974 and brought back by captive breeding.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Falconiformes",
+    "family": "Falconidae"
+   },
+   "realms": [
+    "air",
+    "land"
+   ],
+   "box": [
+    [
+     57.2,
+     57.9,
+     -20.6,
+     -19.9
+    ]
+   ]
+  },
+  "Latania": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 8,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "Latan palms, a fan-palm genus confined to the Mascarenes, one species to each island.",
+   "hab": [
+    "island",
+    "coast",
+    "forest"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   },
+   "box": [
+    [
+     55,
+     64,
+     -22,
+     -19
+    ]
+   ]
+  },
+  "Listroderini": {
+   "rank": "tribe",
+   "realm": "land",
+   "form": "beetle",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      40,
+      14
+     ],
+     "in": [
+      "an",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      14,
+      0
+     ],
+     "in": [
+      "sa-s",
+      "sou"
+     ]
+    }
+   ],
+   "note": "Weevils of southern South America whose fossils lie in the Meyer Desert beds, 500 km from the Pole: tundra insects that outlasted the first ice sheets.",
+   "hab": [
+    "tundra",
+    "grassland",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Curculionidae"
+   }
+  },
+  "Lodoicea maldivica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "palm",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The coco de mer of Praslin, bearing the largest seed of any plant, up to twenty-five kilograms.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   },
+   "box": [
+    [
+     55,
+     56.5,
+     -5.5,
+     -3.5
+    ]
+   ]
+  },
+  "Medusagyne oppositifolia": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The jellyfish tree of Mahe, sole member of its lineage, thought extinct until a few dozen were found in the 1970s.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Malpighiales"
+   },
+   "box": [
+    [
+     55,
+     56.5,
+     -5.5,
+     -3.5
+    ]
+   ]
+  },
+  "Mixotoxodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "notoungulate",
+   "fad": 1.8,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "ca",
+    "na-e"
+   ],
+   "note": "The one notoungulate to leave South America, a rhino-sized grazer that reached Texas in the Great American Interchange.",
+   "hab": [
+    "grassland",
+    "forest",
+    "rainforest"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "family": "Toxodontidae"
+   }
+  },
+  "Nepenthes pervillei": {
+   "rank": "species",
+   "realm": "land",
+   "form": "pitcherplant",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Seychelles pitcher plant, on bare granite summits; an early offshoot of a genus otherwise centred on Borneo.",
+   "hab": [
+    "island",
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Nepenthaceae"
+   },
+   "box": [
+    [
+     55,
+     56.5,
+     -5.5,
+     -3.5
+    ]
+   ]
+  },
+  "Oxyria digyna": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "arc",
+    "eu",
+    "gl",
+    "na-n",
+    "na-w",
+    "as-n",
+    "as-c"
+   ],
+   "note": "Mountain sorrel, circling the Arctic and climbing every northern range, a first coloniser of raw ground.",
+   "hab": [
+    "tundra",
+    "alpine",
+    "island"
+   ],
+   "lat": [
+    36,
+    84
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Polygonaceae"
+   }
+  },
+  "Phelsuma": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ind",
+    "mg"
+   ],
+   "note": "Day geckos, bright green nectar-feeders that spread from Madagascar to every island group of the western Indian Ocean.",
+   "hab": [
+    "island",
+    "forest",
+    "coast"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Gekkonidae"
+   },
+   "box": [
+    [
+     43,
+     64,
+     -26,
+     -3.5
+    ]
+   ]
+  },
+  "Poa cookii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "grass",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind"
+   ],
+   "note": "A tussock grass of Kerguelen, Heard and Marion Islands, thickest where seals and penguins manure the ground.",
+   "hab": [
+    "island",
+    "coast",
+    "tundra",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "box": [
+    [
+     37,
+     78,
+     -54.5,
+     -46
+    ],
+    [
+     158,
+     160,
+     -55,
+     -54
+    ]
+   ]
+  },
+  "Prasiola crispa": {
+   "rank": "species",
+   "realm": "land",
+   "form": "seaweed",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou",
+    "sa-s",
+    "arc",
+    "eu"
+   ],
+   "note": "A green alga that thrives on the guano-soaked ground of penguin rookeries, the most conspicuous plant life on the Antarctic coast.",
+   "hab": [
+    "coast",
+    "ice",
+    "tundra",
+    "island"
+   ],
+   "lat": [
+    50,
+    90
+   ],
+   "cls": {
+    "class": "Trebouxiophyceae"
+   }
+  },
+  "Pringlea antiscorbutica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind"
+   ],
+   "note": "Kerguelen cabbage, a wind-pollinated crucifer of the subantarctic islands; whalers ate it against scurvy.",
+   "hab": [
+    "island",
+    "coast",
+    "tundra"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Brassicales",
+    "family": "Brassicaceae"
+   },
+   "box": [
+    [
+     37,
+     78,
+     -54.5,
+     -46
+    ]
+   ]
+  },
+  "Pteropus niger": {
+   "rank": "species",
+   "realm": "air",
+   "form": "bat",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Mauritian flying fox, the island's last native mammal and the pollinator of its forest trees.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Pteropodidae"
+   },
+   "realms": [
+    "air",
+    "land"
+   ],
+   "box": [
+    [
+     55,
+     64,
+     -22,
+     -19
+    ]
+   ]
+  },
+  "Pteropus seychellensis": {
+   "rank": "species",
+   "realm": "air",
+   "form": "bat",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The Seychelles fruit bat, roosting by the hundred in the islands' takamaka and breadfruit trees.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Pteropodidae"
+   },
+   "realms": [
+    "air",
+    "land"
+   ],
+   "box": [
+    [
+     46,
+     56.5,
+     -10,
+     -3.5
+    ]
+   ]
+  },
+  "Racomitrium lanuginosum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "moss",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "arc",
+    "eu",
+    "gl",
+    "na-n",
+    "as-n",
+    "sou",
+    "sa-s",
+    "nz"
+   ],
+   "note": "Woolly fringe-moss, the grey carpet over the lava fields of Iceland and Jan Mayen.",
+   "hab": [
+    "tundra",
+    "alpine",
+    "island",
+    "coast"
+   ],
+   "lat": [
+    40,
+    84
+   ],
+   "cls": {
+    "class": "Bryopsida"
+   }
+  },
+  "Raphus cucullatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 8,
+   "lad": 0.0003,
+   "range": [
+    "ind"
+   ],
+   "note": "The dodo, a giant flightless pigeon of Mauritius, extinct within a century of the first ships.",
+   "hab": [
+    "island",
+    "forest",
+    "coast"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Columbiformes",
+    "family": "Columbidae"
+   },
+   "box": [
+    [
+     57.2,
+     57.9,
+     -20.6,
+     -19.9
+    ]
+   ]
+  },
+  "Salix herbacea": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "arc",
+    "eu",
+    "gl",
+    "na-n",
+    "na-e"
+   ],
+   "note": "The dwarf willow, a tree a few centimetres tall, creeping through Arctic and alpine snowbeds.",
+   "hab": [
+    "tundra",
+    "alpine",
+    "island"
+   ],
+   "lat": [
+    42,
+    84
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Malpighiales",
+    "family": "Salicaceae"
+   }
+  },
+  "Sideroxylon grandiflorum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The tambalacoque, long and wrongly said to need the dodo's gut to germinate; a slow canopy tree of Mauritius.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Sapotaceae"
+   },
+   "box": [
+    [
+     57.2,
+     57.9,
+     -20.6,
+     -19.9
+    ]
+   ]
+  },
+  "Sooglossidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "frog",
+   "fad": 63,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "Seychelles frogs, thumbnail-sized, whose nearest relative lives in India: they have ridden these granite islands since the two parted.",
+   "hab": [
+    "island",
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   },
+   "box": [
+    [
+     55,
+     56.5,
+     -5.5,
+     -3.5
+    ]
+   ],
+   "pic": "Sooglossus"
+  },
+  "Tardigrada": {
+   "rank": "phylum",
+   "realm": "land",
+   "form": "lobopod",
+   "fad": 530,
+   "lad": 0,
+   "range": [
+    "cosmo",
+    "an"
+   ],
+   "note": "Water bears, microscopic animals that survive freezing and drying alike; in Antarctica they are among the few permanent land animals.",
+   "hab": [
+    "tundra",
+    "ice",
+    "forest",
+    "wetland",
+    "alpine"
+   ],
+   "cls": {},
+   "pic": "Hypsibius"
+  }
+ }
+}

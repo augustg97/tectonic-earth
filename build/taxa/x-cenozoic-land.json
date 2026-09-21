@@ -1,0 +1,2392 @@
+{
+ "taxa": {
+  "Adapiformes": {
+   "rank": "infraorder",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 56,
+   "lad": 34,
+   "range": [
+    "na-w",
+    "eu",
+    "as-e",
+    "af-n",
+    "in"
+   ],
+   "note": "Lemur-like early primates that spread through the greenhouse forests of the Eocene right up to the Arctic.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Adapidae"
+   }
+  },
+  "Aepyornithidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 2.6,
+   "lad": 0.001,
+   "range": [
+    "mg"
+   ],
+   "note": "Elephant birds of Madagascar: up to 800 kg, laying the largest eggs of any animal, and closest kin to the kiwi.",
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Aepyornithidae"
+   }
+  },
+  "Ailuropoda": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bear",
+   "fad": 2.4,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      2.4,
+      0.01
+     ],
+     "in": [
+      "as-e",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      0.01,
+      0
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
+   ],
+   "note": "The giant panda, a bear turned bamboo specialist. In the Pleistocene it ranged from Beijing to Vietnam and Burma.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       102,
+       109,
+       28,
+       34.5
+      ]
+     ]
+    }
+   ]
+  },
+  "Amphicyonidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "carnivoran",
+   "fad": 45,
+   "lad": 8,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "as-e",
+    "as-c",
+    "af-e",
+    "af-n",
+    "in"
+   ],
+   "note": "Bear-dogs: neither bear nor dog, wolf- to bear-sized, and the dominant large carnivores of the northern continents through the Oligocene and Miocene.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Amphicyonidae"
+   }
+  },
+  "Andrewsarchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "mesonychid",
+   "fad": 45,
+   "lad": 36,
+   "range": [
+    "as-e",
+    "as-c"
+   ],
+   "note": "Known from one 83 cm skull from Inner Mongolia: possibly the largest land-living carnivorous mammal, and a hoofed one.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Mesonychia"
+   }
+  },
+  "Antarctodolops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 45,
+   "lad": 40,
+   "range": [
+    "an"
+   ],
+   "note": "A small marsupial from Seymour Island: proof that mammals crossed from South America to Australia through a forested Antarctica.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Polydolopimorphia",
+    "family": "Polydolopidae"
+   }
+  },
+  "Anthracotheriidae": {
+   "rank": "family",
+   "realm": "fresh",
+   "form": "hippo",
+   "fad": 45,
+   "lad": 2,
+   "range": [
+    "as-e",
+    "as-se",
+    "in",
+    "eu",
+    "af-n",
+    "af-e",
+    "na-w"
+   ],
+   "note": "Swamp-dwelling, pig-like artiodactyls of the Old World -- the stock from which hippos arose.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Anthracotheriidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Apterygidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "kiwi",
+   "fad": 19,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "Kiwi: nocturnal, flightless, nostrils at the tip of the bill, laying an egg a fifth of their own weight.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "family": "Apterygidae"
+   }
+  },
+  "Arctodus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bear",
+   "fad": 1.8,
+   "lad": 0.011,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "ca"
+   ],
+   "note": "The giant short-faced bear: long-legged, 900 kg, and the largest carnivoran of Ice Age North America.",
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   }
+  },
+  "Arctotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bear",
+   "fad": 2.5,
+   "lad": 0.011,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The South American giant short-faced bear: early arrivals after the interchange may have stood three metres tall and weighed over a tonne.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   }
+  },
+  "Ardipithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 5.8,
+   "lad": 4.4,
+   "range": [
+    "af-e"
+   ],
+   "note": "A woodland hominin from Ethiopia that walked upright on the ground yet kept a grasping big toe for the trees.",
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   }
+  },
+  "Astrapotheria": {
+   "rank": "order",
+   "realm": "land",
+   "form": "astrapothere",
+   "fad": 59,
+   "lad": 12,
+   "range": [
+    {
+     "t": [
+      59,
+      34
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "an"
+     ]
+    },
+    {
+     "t": [
+      34,
+      12
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Rhino-sized South American natives with tusks and probably a short trunk -- nothing to do with elephants or tapirs, only convergent on them.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Astrapotheria",
+    "family": "Astrapotheriidae"
+   }
+  },
+  "Bovidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w",
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "in",
+      "ar",
+      "as-se",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n"
+     ]
+    }
+   ],
+   "note": "Antelopes, cattle, sheep and goats: hollow-horned ruminants that radiated with the spread of Old World grassland. Only a handful ever crossed to the Americas.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Brontotheriidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "brontothere",
+   "fad": 56,
+   "lad": 34,
+   "range": [
+    "na-w",
+    "as-e",
+    "as-c",
+    "eu"
+   ],
+   "note": "'Thunder beasts': rhino-like browsers that grew from dog-sized to elephant-sized in twenty million years, then vanished as the Eocene forests dried.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Brontotheriidae"
+   }
+  },
+  "Camelidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "camel",
+   "fad": 45,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      45,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      7,
+      0
+     ],
+     "in": [
+      "as-c",
+      "as-w",
+      "ar",
+      "af-n",
+      "af-e",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      3,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Camels are a North American family. They crossed to Asia about 7 Ma and to South America about 3 Ma, then died out where they began.",
+   "hab": [
+    "grassland",
+    "desert",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae"
+   },
+   "avoid": [
+    "Tethyan Himalaya",
+    "Himalaya"
+   ]
+  },
+  "Camelops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "camel",
+   "fad": 4,
+   "lad": 0.011,
+   "range": [
+    "na-w",
+    "ca"
+   ],
+   "note": "The last North American camel, taller than a dromedary, gone around 11,000 years ago in the land where camels evolved.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae"
+   }
+  },
+  "Canidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "canid",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      40,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      7,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-n",
+      "in",
+      "af-n",
+      "af-e",
+      "af-s",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Dogs, wolves and foxes: another North American invention, confined there for thirty million years before spreading to every continent but Antarctica.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae"
+   }
+  },
+  "Castoridae": {
+   "rank": "family",
+   "realm": "fresh",
+   "form": "bigrodent",
+   "fad": 37,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "eu",
+    "as-n",
+    "as-e",
+    "as-c"
+   ],
+   "note": "Beavers. Most fossil ones were burrowers, not dam-builders; the Ice Age giant beaver was the size of a black bear.",
+   "hab": [
+    "river",
+    "lake",
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Castoridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Castoroides": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "bigrodent",
+   "fad": 3,
+   "lad": 0.011,
+   "range": [
+    "na-e",
+    "na-w",
+    "na-n"
+   ],
+   "note": "The giant beaver: 2.5 m and 100 kg, a swamp-dwelling grazer that did not fell trees.",
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Castoridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Casuariidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "Cassowaries and emus, the big flightless birds of Australia and New Guinea.",
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Casuariidae"
+   }
+  },
+  "Caviomorpha": {
+   "rank": "infraorder",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 41,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      41,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      30,
+      0
+     ],
+     "in": [
+      "ca"
+     ]
+    }
+   ],
+   "note": "Guinea pigs, capybaras, chinchillas, porcupines: descendants of rodents that rafted across the Atlantic from Africa in the Eocene.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Caviidae"
+   }
+  },
+  "Cercopithecidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    },
+    {
+     "t": [
+      10,
+      0
+     ],
+     "in": [
+      "as-w",
+      "in",
+      "as-se",
+      "as-e",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      10,
+      0.1
+     ],
+     "in": [
+      "eu"
+     ]
+    }
+   ],
+   "note": "Old World monkeys -- baboons, macaques, colobines. African until the late Miocene, then across Eurasia to Japan.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "grassland",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   }
+  },
+  "Cervidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "deer",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-se",
+      "as-n",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0
+     ],
+     "in": [
+      "af-n"
+     ]
+    }
+   ],
+   "note": "Deer, the antlered ruminants of the northern forests. They reached South America with the interchange and never got south of the Sahara.",
+   "hab": [
+    "forest",
+    "grassland",
+    "tundra",
+    "wetland",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   }
+  },
+  "Chalicotheriidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "chalicothere",
+   "fad": 46,
+   "lad": 1,
+   "range": [
+    "eu",
+    "as-e",
+    "as-c",
+    "in",
+    "af-e",
+    "na-w"
+   ],
+   "note": "Horse relatives with claws instead of hooves, knuckle-walking like gorillas and pulling branches down to browse.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Chalicotheriidae"
+   }
+  },
+  "Chalicotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "chalicothere",
+   "fad": 16,
+   "lad": 7.5,
+   "range": [
+    "eu",
+    "as-e",
+    "as-c",
+    "in"
+   ],
+   "note": "The gorilla-like chalicothere of Miocene Eurasia, walking on its knuckles to keep its hooked claws sharp.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Chalicotheriidae"
+   }
+  },
+  "Coryphodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pantodont",
+   "fad": 57,
+   "lad": 46,
+   "range": [
+    "na-w",
+    "na-n",
+    "eu",
+    "as-e"
+   ],
+   "note": "A hippo-like, tusked pantodont of the hothouse Eocene, found as far north as Ellesmere Island with a brain smaller than any mammal of its size.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pantodonta",
+    "family": "Coryphodontidae"
+   }
+  },
+  "Cryptoprocta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "carnivoran",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "The fossa, a puma-like mongoose relative and Madagascar's top predator; a giant form hunted the giant lemurs.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora"
+   }
+  },
+  "Daeodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "entelodont",
+   "fad": 29,
+   "lad": 19,
+   "range": [
+    "na-w"
+   ],
+   "note": "The largest 'hell pig', two metres at the shoulder, scavenging and bullying across the early Miocene plains.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Entelodontidae"
+   }
+  },
+  "Dasypodidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "armadillo",
+   "fad": 58,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      58,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "ca",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "Armadillos, the oldest surviving South American mammal lineage, and one of the few interchange migrants still pushing north.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cingulata",
+    "family": "Dasypodidae"
+   }
+  },
+  "Dasyuridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "dasyurid",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "Quolls, devils and marsupial mice: Australia's small and mid-sized hunters.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dasyuromorphia",
+    "family": "Dasyuridae"
+   }
+  },
+  "Didelphidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      60,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "ca",
+      "na-e",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "American opossums: small omnivorous marsupials of South America, one of which has walked as far north as Canada.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Didelphimorphia",
+    "family": "Didelphidae"
+   }
+  },
+  "Dinornithiformes": {
+   "rank": "order",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 19,
+   "lad": 0.0006,
+   "range": [
+    "nz"
+   ],
+   "note": "Moa: nine species of wingless birds, the largest 3.6 m tall, that were New Zealand's browsers in place of mammals until about 1400 CE.",
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Dinornithiformes",
+    "family": "Dinornithidae"
+   }
+  },
+  "Diprotodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "diprotodont",
+   "fad": 25,
+   "lad": 0.04,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "Wombat-like browsers that reached rhinoceros size -- the largest marsupials ever.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Diprotodontidae"
+   }
+  },
+  "Dromornithidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 50,
+   "lad": 0.03,
+   "range": [
+    "au"
+   ],
+   "note": "Mihirungs or 'thunder birds': flightless giant fowl to 600 kg, relatives of ducks rather than emus.",
+   "cls": {
+    "class": "Aves",
+    "order": "Gastornithiformes",
+    "family": "Dromornithidae"
+   }
+  },
+  "Elasmotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 2.6,
+   "lad": 0.039,
+   "range": [
+    "as-c",
+    "as-n",
+    "eu",
+    "as-e"
+   ],
+   "note": "The 'Siberian unicorn': a four-tonne steppe rhinoceros with a single enormous horn, which survived until about 39,000 years ago.",
+   "hab": [
+    "grassland"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae"
+   }
+  },
+  "Elephantidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 7,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      7,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w",
+      "af-n"
+     ]
+    },
+    {
+     "t": [
+      3.5,
+      0
+     ],
+     "in": [
+      "in",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      3.5,
+      0.004
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      1.5,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "ca"
+     ]
+    }
+   ],
+   "note": "True elephants and mammoths, with washboard grinding teeth built for grass. African in origin; mammoths carried the family to the Arctic and to Mexico.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae"
+   }
+  },
+  "Embolotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "brontothere",
+   "fad": 40,
+   "lad": 34,
+   "range": [
+    "as-e",
+    "as-c"
+   ],
+   "note": "An Asian brontothere with a tall bony 'battering ram' rising from its snout, hollow and perhaps used for calling.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Brontotheriidae"
+   }
+  },
+  "Equidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "horse",
+   "fad": 56,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      56,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      56,
+      45
+     ],
+     "in": [
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-n",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      11,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Horses: fifty million years of North American evolution, from four-toed forest browsers to one-toed grazers, exported to the Old World in pulses and then lost at home.",
+   "hab": [
+    "grassland",
+    "forest",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae"
+   }
+  },
+  "Felidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "cat",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      25,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-se",
+      "in",
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      18,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Cats arose in Eurasia, reached North America about 18 Ma and South America with the interchange. Ambush predators built around a killing bite.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae"
+   }
+  },
+  "Gigantopithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ape",
+   "fad": 2,
+   "lad": 0.3,
+   "range": [
+    "as-e",
+    "as-se",
+    "in"
+   ],
+   "note": "The largest ape that ever lived, a three-metre orangutan relative known almost entirely from teeth found in Chinese caves and apothecary shops.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   }
+  },
+  "Giraffidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "giraffe",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      20,
+      5
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "eu",
+      "as-w",
+      "in",
+      "as-c",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    }
+   ],
+   "note": "Giraffe relatives were once spread from Spain to China, many of them short-necked and moose-like; the giraffe and okapi are the African remnant.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Giraffidae"
+   }
+  },
+  "Glacialisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 190,
+   "lad": 183,
+   "range": [
+    "an"
+   ],
+   "note": "An early sauropodomorph from Mount Kirkpatrick, 4,000 m up in the Transantarctic Mountains.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Massospondylidae"
+   }
+  },
+  "Glyptodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "glyptodont",
+   "fad": 35,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      35,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0.011
+     ],
+     "in": [
+      "ca",
+      "na-e",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "Car-sized armadillo relatives under a rigid dome of bone, some with a spiked tail club. They walked north to Florida and Arizona after the interchange.",
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cingulata",
+    "family": "Glyptodontidae"
+   }
+  },
+  "Gomphotheriidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 25,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      25,
+      5
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s"
+     ]
+    },
+    {
+     "t": [
+      19,
+      2
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "in",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      16,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Four-tusked, long-jawed elephant relatives that walked out of Africa at about 19 Ma and eventually reached Patagonia.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Gomphotheriidae"
+   }
+  },
+  "Hieraaetus moorei": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 1.8,
+   "lad": 0.0006,
+   "range": [
+    "nz"
+   ],
+   "note": "Haast's eagle, the largest eagle known at up to 15 kg, which preyed on moa and died out with them.",
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae"
+   }
+  },
+  "Hippopotamidae": {
+   "rank": "family",
+   "realm": "fresh",
+   "form": "hippo",
+   "fad": 16,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      16,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    },
+    {
+     "t": [
+      6,
+      0.01
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "in",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0.001
+     ],
+     "in": [
+      "mg"
+     ]
+    }
+   ],
+   "note": "Hippos: the closest living relatives of whales. Out of Africa in the late Miocene as far as Britain and Java; dwarf species lived on Madagascar and the Mediterranean islands.",
+   "hab": [
+    "river",
+    "lake",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Hippopotamidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Hominidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ape",
+   "fad": 17,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      17,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-w",
+      "af-s"
+     ]
+    },
+    {
+     "t": [
+      16,
+      7
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "in",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      9,
+      0
+     ],
+     "in": [
+      "as-se"
+     ]
+    }
+   ],
+   "note": "The great apes. In the Miocene they ranged from Spain to China; the cooling and drying of Eurasia left them in African and South-East Asian forest.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   }
+  },
+  "Hyaenidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "hyena",
+   "fad": 22,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      22,
+      0.011
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      17,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w",
+      "ar",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      5,
+      1
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    }
+   ],
+   "note": "Hyenas began as civet-like tree-dwellers in Miocene Europe and became bone-crackers; one running form even reached North America.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Hyaenidae"
+   }
+  },
+  "Hyracoidea": {
+   "rank": "order",
+   "realm": "land",
+   "form": "hyrax",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w",
+      "ar"
+     ]
+    },
+    {
+     "t": [
+      25,
+      2
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e"
+     ]
+    }
+   ],
+   "note": "Hyraxes look like marmots and are cousins of elephants. In the Eocene and Oligocene they were Africa's main herbivores, some the size of a small rhino.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Hyracoidea"
+   }
+  },
+  "Josephoartigasia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 4,
+   "lad": 2,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The largest rodent known: a bull-sized relative of the pacarana from Uruguay, with incisors strong enough to be used like tusks.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Dinomyidae"
+   }
+  },
+  "Kelenken": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "terrorbird",
+   "fad": 15.5,
+   "lad": 14.5,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The largest-headed bird known: a terror bird with a 71 cm skull, running down prey on the Miocene Patagonian plain.",
+   "cls": {
+    "class": "Aves",
+    "order": "Cariamiformes",
+    "family": "Phorusrhacidae"
+   }
+  },
+  "Lemuriformes": {
+   "rank": "infraorder",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "Lemurs: primates that rafted to Madagascar and radiated alone there -- including, until about a thousand years ago, gorilla-sized ground lemurs.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Lemuridae"
+   }
+  },
+  "Mammutidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 27,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      27,
+      15
+     ],
+     "in": [
+      "af-n",
+      "af-e"
+     ]
+    },
+    {
+     "t": [
+      18,
+      2
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      16,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Mastodons: browsing proboscideans with cone-cusped teeth, a separate line from elephants and mammoths. The American mastodon lasted to the end of the Ice Age.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Mammutidae"
+   }
+  },
+  "Megaloceros giganteus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "moose",
+   "fad": 0.4,
+   "lad": 0.0077,
+   "range": [
+    "eu",
+    "as-n",
+    "as-c"
+   ],
+   "note": "The giant deer or 'Irish elk', carrying antlers 3.6 m across -- the largest of any deer.",
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   },
+   "aka": [
+    "Megaloceros"
+   ]
+  },
+  "Megalonychidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "groundsloth",
+   "fad": 35,
+   "lad": 0.004,
+   "range": [
+    {
+     "t": [
+      35,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      30,
+      0.004
+     ],
+     "in": [
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      9,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n"
+     ]
+    }
+   ],
+   "note": "The ground sloths that island-hopped: in the Caribbean by the Oligocene and in North America well before the land bridge; Megalonyx reached Alaska.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pilosa",
+    "family": "Megalonychidae"
+   }
+  },
+  "Meiolaniidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 50,
+   "lad": 0.003,
+   "range": [
+    "au",
+    "oc",
+    "nz",
+    "sa-s"
+   ],
+   "note": "Horned tortoises with clubbed tails: a Gondwanan family that survived on Lord Howe Island and Vanuatu until people reached them.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Meiolaniidae"
+   }
+  },
+  "Mekosuchinae": {
+   "rank": "subfamily",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 50,
+   "lad": 0.003,
+   "range": [
+    "au",
+    "ng",
+    "oc",
+    "nz"
+   ],
+   "note": "Australasia's own crocodiles, some of them land-going and some reaching Fiji and New Caledonia; the last died out after people arrived.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Crocodylidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Merycoidodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "oreodont",
+   "fad": 40,
+   "lad": 5,
+   "range": [
+    "na-w"
+   ],
+   "note": "Oreodonts: sheep-sized, pig-shaped ruminating artiodactyls, the commonest fossil mammals of the American badlands and found nowhere else.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Merycoidodontidae"
+   }
+  },
+  "Moropus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "chalicothere",
+   "fad": 23,
+   "lad": 13.6,
+   "range": [
+    "na-w"
+   ],
+   "note": "North America's chalicothere: a horse-headed, clawed browser rearing up against trees at Agate Fossil Beds.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Chalicotheriidae"
+   }
+  },
+  "Mylodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "groundsloth",
+   "fad": 28,
+   "lad": 0.011,
+   "range": [
+    {
+     "t": [
+      28,
+      0.011
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      5,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Ground sloths with pebbles of bone set in their skin. Mylodon's hide and dung survive in a Patagonian cave, fresh enough to have fooled explorers.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pilosa",
+    "family": "Mylodontidae"
+   }
+  },
+  "Nimravidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "sabertooth",
+   "fad": 40,
+   "lad": 7,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "as-e",
+    "as-c"
+   ],
+   "note": "The 'false sabre-tooths': cat-like carnivorans that evolved sabre canines long before true cats did.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Nimravidae"
+   }
+  },
+  "Orycteropodidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "aardvark",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    },
+    {
+     "t": [
+      15,
+      5
+     ],
+     "in": [
+      "eu",
+      "as-w"
+     ]
+    }
+   ],
+   "note": "Aardvarks: solitary termite-eaters with peg teeth, the only survivors of their order.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Tubulidentata"
+   }
+  },
+  "Palaeoloxodon antiquus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 0.8,
+   "lad": 0.03,
+   "range": [
+    "eu",
+    "as-w"
+   ],
+   "note": "The straight-tusked elephant of interglacial Europe, larger than any living elephant; its dwarfed descendants stood a metre tall on Mediterranean islands.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae"
+   }
+  },
+  "Phascolarctidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "koala",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "Koalas, once several genera in Miocene rainforest; one species remains, specialised on eucalypt leaves.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Phascolarctidae"
+   }
+  },
+  "Phenacodus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 60,
+   "lad": 48,
+   "range": [
+    "na-w",
+    "eu"
+   ],
+   "note": "A sheep-sized, five-toed early hoofed mammal close to the ancestry of horses and rhinos.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "family": "Phenacodontidae"
+   }
+  },
+  "Phiomia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 36,
+   "lad": 28,
+   "range": [
+    "af-n"
+   ],
+   "note": "An early Fayum proboscidean 2.5 m tall with short tusks in both jaws and the beginnings of a trunk.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea"
+   }
+  },
+  "Platybelodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 16,
+   "lad": 11,
+   "range": [
+    "as-e",
+    "as-c",
+    "af-e",
+    "eu"
+   ],
+   "note": "A 'shovel-tusker': a gomphothere whose lower jaw ends in a broad pair of flat tusks, used for stripping bark and cutting plants.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Gomphotheriidae"
+   }
+  },
+  "Rhinocerotidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      4.5
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      45,
+      0.01
+     ],
+     "in": [
+      "eu",
+      "as-c",
+      "as-n",
+      "as-w"
+     ]
+    },
+    {
+     "t": [
+      45,
+      0
+     ],
+     "in": [
+      "as-e",
+      "as-se",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "af-n",
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    }
+   ],
+   "note": "Rhinoceroses were once the commonest large herbivores of the northern continents, with hornless, hippo-like and woolly forms; five species remain.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae"
+   }
+  },
+  "Sebecidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 66,
+   "lad": 11,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Land-going crocodile relatives with deep skulls and serrated, dinosaur-like teeth, top predators in South America long after the dinosaurs.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Sebecidae"
+   }
+  },
+  "Sivatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "giraffe",
+   "fad": 5,
+   "lad": 1,
+   "range": [
+    "in",
+    "af-e",
+    "af-s",
+    "af-n"
+   ],
+   "note": "A moose-shaped giraffid with two pairs of horn-like ossicones, among the heaviest ruminants known.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Giraffidae"
+   }
+  },
+  "Sphenodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 19,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "The tuatara, last of the sphenodontians, with a 'third eye' on top of its head and a life span over a century.",
+   "hab": [
+    "island",
+    "forest",
+    "coast"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Rhynchocephalia",
+    "family": "Sphenodontidae"
+   }
+  },
+  "Suidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "pig",
+   "fad": 34,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "af-n",
+    "af-e",
+    "af-s",
+    "af-w"
+   ],
+   "note": "Pigs: Old World omnivores whose rapidly evolving teeth are used to date African hominin sites.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Suidae"
+   }
+  },
+  "Tachyglossidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "echidna",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "Echidnas: egg-laying, spiny ant-eaters, descended from a platypus-like ancestor that went back to land.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Monotremata",
+    "family": "Tachyglossidae"
+   }
+  },
+  "Tapiridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "tapir",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      3
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      3,
+      0
+     ],
+     "in": [
+      "ca",
+      "sa-n"
+     ]
+    },
+    {
+     "t": [
+      20,
+      0
+     ],
+     "in": [
+      "as-se"
+     ]
+    }
+   ],
+   "note": "Tapirs have barely changed since the Eocene. Today's odd range -- tropical America and Malaya -- is what is left of a family once spread across the north.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Tapiridae"
+   }
+  },
+  "Tayassuidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "pig",
+   "fad": 37,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      37,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
+   ],
+   "note": "Peccaries, the New World's answer to pigs: North American for thirty million years, South American only since the land bridge.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Tayassuidae"
+   }
+  },
+  "Teratornithidae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "vulture",
+   "fad": 25,
+   "lad": 0.011,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "na-w",
+    "na-e"
+   ],
+   "note": "Giant condor-like birds. Argentavis, with a seven-metre wingspan, is among the largest flying birds known.",
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Teratornithidae"
+   }
+  },
+  "Thylacinidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "thylacine",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      25,
+      0.003
+     ],
+     "in": [
+      "au",
+      "ng"
+     ]
+    },
+    {
+     "t": [
+      0.003,
+      0
+     ],
+     "in": [
+      "au"
+     ]
+    }
+   ],
+   "note": "Marsupial 'wolves'. A dozen Miocene species dwindled to the Tasmanian tiger, last seen alive in 1936.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dasyuromorphia",
+    "family": "Thylacinidae"
+   }
+  },
+  "Thylacosmilus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sparassodont",
+   "fad": 9,
+   "lad": 3,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A marsupial-relative sabre-tooth: South America's pouched answer to Smilodon, with canines that never stopped growing and bony scabbards on the jaw.",
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Sparassodonta",
+    "family": "Thylacosmilidae"
+   }
+  },
+  "Ursidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "bear",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      23,
+      0
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-n",
+      "na-w",
+      "na-e",
+      "na-n"
+     ]
+    },
+    {
+     "t": [
+      7,
+      0
+     ],
+     "in": [
+      "af-n",
+      "in",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      2.7,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Bears: big omnivorous carnivorans of the northern continents, reaching South America with the interchange, where the spectacled bear is the last of the giant short-faced line.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   }
+  },
+  "Vombatidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "diprotodont",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "Wombats: burrowing marsupial grazers with ever-growing teeth.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Vombatidae"
+   }
+  }
+ }
+}

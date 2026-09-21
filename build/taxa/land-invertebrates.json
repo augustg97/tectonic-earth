@@ -1,0 +1,516 @@
+{
+ "taxa": {
+  "Arthropleura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 345,
+   "lad": 290,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A two-metre millipede, the largest land arthropod that has ever existed, leaving trackways across swamp floors.",
+   "sz": 2.6,
+   "dt": "detritivore / herbivore",
+   "hb": "ground-dwelling",
+   "pbdb": {
+    "oid": "txn:238291",
+    "matched": "Arthropleura",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 346.7,
+    "lla": 290.1,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda",
+    "order": "Arthropleurida",
+    "family": "Arthropleuridae",
+    "genus": "Arthropleura",
+    "regions": {
+     "eu": 59,
+     "na-e": 2
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "w": 3
+  },
+  "Attercopus fimbriunguis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "spider",
+   "fad": 388,
+   "lad": 382,
+   "range": [
+    "na-e"
+   ],
+   "note": "An early arachnid that made silk from spigots set in plates rather than spinnerets: silk long before webs.",
+   "pbdb": {
+    "oid": "txn:55058",
+    "matched": "Attercopus fimbriunguis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 2,
+    "fea": 387.95,
+    "lla": 379,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Uraraneida",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Attercopus",
+    "regions": {
+     "na-e": 1,
+     "gl": 1
+    }
+   }
+  },
+  "Belgica antarctica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "fly",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "an"
+   ],
+   "note": "A flightless midge, the largest wholly terrestrial animal on the continent.",
+   "hab": [
+    "tundra",
+    "coast",
+    "ice"
+   ],
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Diptera",
+    "family": "Chironomidae"
+   }
+  },
+  "Eciton burchellii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ant",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "Army ants whose swarm raids drive the understorey's whole insect economy.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Hymenoptera",
+    "family": "Formicidae"
+   }
+  },
+  "Eoarthropleura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 415,
+   "lad": 372,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A Devonian relative of Arthropleura, an early millipede-grade detritivore of the first forest floors.",
+   "pbdb": {
+    "oid": "txn:63129",
+    "matched": "Eoarthropleura",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 410.62,
+    "lla": 372.15,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda",
+    "order": "Arthropleurida",
+    "family": "Arthropleuridae",
+    "genus": "Eoarthropleura",
+    "regions": {
+     "eu": 1,
+     "na-e": 1
+    }
+   }
+  },
+  "Kampecaris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 430,
+   "lad": 415,
+   "range": [
+    "eu"
+   ],
+   "note": "A stubby Silurian millipede of the earliest land litter, feeding on decaying plant matter beside water.",
+   "pbdb": {
+    "oid": "txn:294457",
+    "matched": "Kampecaris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 422.7,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kampecaris",
+    "regions": {
+     "eu": 7
+    }
+   }
+  },
+  "Meganeura": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 305,
+   "lad": 299,
+   "range": [
+    "eu"
+   ],
+   "note": "A dragonfly relative with a wingspan approaching three-quarters of a metre, possible only in a high-oxygen atmosphere.",
+   "sz": 0.7,
+   "dt": "predator on other insects",
+   "hb": "aerial predator, ~70 cm wingspan",
+   "pbdb": {
+    "oid": "txn:175803",
+    "matched": "Meganeura",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 303.7,
+    "lla": 298.9,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Meganisoptera",
+    "family": "Meganeuridae",
+    "genus": "Meganeura",
+    "regions": {
+     "eu": 7
+    }
+   },
+   "w": 3
+  },
+  "Melanopsis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "snail",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "af-n",
+    "nz"
+   ],
+   "note": "Brackish-water snails that radiated into dozens of endemic Lake Pannon species.",
+   "pbdb": {
+    "oid": "txn:103643",
+    "matched": "Melanopsis",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 232,
+    "fea": 83.6,
+    "lla": 0.0117,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Melanopsidae",
+    "genus": "Melanopsis",
+    "regions": {
+     "eu": 212,
+     "as-w": 17,
+     "nz": 2,
+     "na-e": 1
+    }
+   },
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "pbdb_ok": true
+  },
+  "Myriapoda": {
+   "rank": "class",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 428,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Millipede-grade arthropods, among the first animals to live permanently out of water.",
+   "pbdb": {
+    "oid": "txn:19057",
+    "matched": "Myriapoda",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 487,
+    "fea": 432.9,
+    "lla": 0,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda"
+   },
+   "pbdb_ok": true
+  },
+  "Onymacris unguicularis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "beetle",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The fog-basking beetle, standing head-down to drink condensation off its own back.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Tenebrionidae"
+   },
+   "box": [
+    [
+     11.5,
+     16,
+     -27,
+     -17
+    ]
+   ]
+  },
+  "Palaeocharinus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spider",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "A Rhynie chert trigonotarbid preserved in such detail that its book lungs and leg joints can be counted.",
+   "pbdb": {
+    "oid": "txn:155657",
+    "matched": "Palaeocharinus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Trigonotarbida",
+    "family": "Palaeocharinidae",
+    "genus": "Palaeocharinus",
+    "regions": {
+     "eu": 9
+    }
+   }
+  },
+  "Palaeodictyoptera": {
+   "rank": "order",
+   "realm": "land",
+   "form": "dragonfly",
+   "fad": 325,
+   "lad": 252,
+   "range": [
+    "as-n",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Extinct beaked insects with a third pair of winglets, sucking on Carboniferous plant reproductive organs.",
+   "pbdb": {
+    "oid": "txn:125754",
+    "matched": "Palaeodictyoptera",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 367,
+    "fea": 326.9,
+    "lla": 254.14,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "regions": {
+     "na-e": 64,
+     "au": 1,
+     "eu": 254,
+     "as-n": 31,
+     "as-e": 6,
+     "na-w": 10,
+     "sa-s": 1
+    }
+   }
+  },
+  "Pneumodesmus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 428,
+   "lad": 410,
+   "range": [
+    "eu"
+   ],
+   "note": "A millipede from ~425 Ma Scotland with open spiracles -- the oldest direct evidence of an animal breathing air.",
+   "pbdb": {
+    "oid": "txn:294454",
+    "matched": "Pneumodesmus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 432.9,
+    "lla": 426.7,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pneumodesmus",
+    "regions": {
+     "eu": 3
+    }
+   },
+   "pbdb_ok": true,
+   "aka": [
+    "Pneumodesmus newmani"
+   ]
+  },
+  "Rhyniella": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "springtail",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "A springtail from the Rhynie chert, ~410 Ma: the oldest known hexapod, and effectively a modern-looking one.",
+   "pbdb": {
+    "oid": "txn:133901",
+    "matched": "Rhyniella",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "Collembola",
+    "order": "Entomobryomorpha",
+    "family": "Isotomidae",
+    "genus": "Rhyniella",
+    "regions": {
+     "eu": 2
+    }
+   }
+  },
+  "Rhyniognatha": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "Rhynie chert jaws of disputed affinity, argued to be the oldest insect -- possibly even a winged one.",
+   "pbdb": {
+    "oid": "txn:133902",
+    "matched": "Rhyniognatha",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "Chilopoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rhyniognatha",
+    "regions": {
+     "eu": 1
+    }
+   },
+   "aka": [
+    "Rhyniognatha hirsti"
+   ]
+  },
+  "Trigonotarbida": {
+   "rank": "order",
+   "realm": "land",
+   "form": "spider",
+   "fad": 420,
+   "lad": 290,
+   "range": [
+    "euramerica"
+   ],
+   "note": "Spider-like arachnids among the first land predators -- there was already something worth hunting.",
+   "pbdb": {
+    "oid": "txn:55069",
+    "matched": "Trigonotarbida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 182,
+    "fea": 422.7,
+    "lla": 283.3,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Trigonotarbida",
+    "regions": {
+     "eu": 145,
+     "na-e": 35,
+     "na-w": 1,
+     "sa-s": 1
+    }
+   },
+   "aka": [
+    "trigonotarbids"
+   ]
+  },
+  "springtails and mites": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "springtail",
+   "fad": 34,
+   "lad": 0,
+   "range": [
+    "an"
+   ],
+   "note": "The entire Antarctic land fauna above the microscopic -- a few dozen species surviving in moss and under stones.",
+   "hab": [
+    "tundra",
+    "ice",
+    "coast"
+   ],
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Entognatha",
+    "order": "Collembola",
+    "family": ""
+   }
+  }
+ }
+}

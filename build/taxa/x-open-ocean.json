@@ -1,0 +1,1586 @@
+{
+ "taxa": {
+  "Alle alle": {
+   "rank": "species",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl"
+   ],
+   "note": "The little auk, nesting by the million in High Arctic scree and wintering on the open North Atlantic.",
+   "hab": [
+    "coast",
+    "island",
+    "ice",
+    "pelagic",
+    "tundra"
+   ],
+   "lat": [
+    50,
+    85
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Charadriiformes",
+    "family": "Alcidae"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ]
+  },
+  "Aptenodytes patagonicus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sou",
+    "sa-s"
+   ],
+   "note": "The king penguin, breeding in colonies of hundreds of thousands on the subantarctic islands.",
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "lat": [
+    44,
+    62
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Architeuthis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "squid",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou"
+   ],
+   "note": "The giant squid, reaching twelve metres and known for most of history only from carcasses and sperm-whale scars.",
+   "hab": [
+    "deep",
+    "pelagic"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Teuthida",
+    "family": "Architeuthidae"
+   }
+  },
+  "Avicennia marina": {
+   "rank": "species",
+   "realm": "land",
+   "form": "mangrove",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac",
+    "af-e",
+    "af-s",
+    "ar",
+    "in",
+    "as-se",
+    "as-e",
+    "au",
+    "ng",
+    "nz",
+    "mg"
+   ],
+   "note": "The grey mangrove, the most salt- and cold-tolerant of all, fringing desert coasts from the Red Sea to New Zealand.",
+   "hab": [
+    "coast",
+    "wetland"
+   ],
+   "lat": [
+    0,
+    39
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Acanthaceae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ],
+   "box": [
+    [
+     30,
+     180,
+     -35,
+     35
+    ],
+    [
+     -180,
+     -140,
+     -30,
+     30
+    ]
+   ]
+  },
+  "Carcharodon carcharias": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 6,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med"
+   ],
+   "note": "The great white shark, descended from broad-toothed makos about six million years ago.",
+   "hab": [
+    "pelagic",
+    "shelf",
+    "coast"
+   ],
+   "lat": [
+    15,
+    60
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Lamniformes",
+    "family": "Lamnidae"
+   }
+  },
+  "Ceratioidei": {
+   "rank": "suborder",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou"
+   ],
+   "note": "Deep-sea anglerfishes, luring prey with a glowing bait; in some, the dwarf male fuses to the female for life.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Lophiiformes"
+   },
+   "pic": "Melanocetus"
+  },
+  "Chaetodontidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "reeffish",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      30,
+      14
+     ],
+     "in": [
+      "tet",
+      "ind",
+      "pac",
+      "atl"
+     ]
+    },
+    {
+     "t": [
+      14,
+      0
+     ],
+     "in": [
+      "ind",
+      "pac",
+      "atl"
+     ]
+    }
+   ],
+   "note": "Butterflyfishes, coral-pickers whose numbers rise and fall with the reef itself.",
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": "Chaetodontidae"
+   }
+  },
+  "Cheloniidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "seaturtle",
+   "fad": 70,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "med",
+    "tet"
+   ],
+   "note": "Hard-shelled sea turtles: green, hawksbill, loggerhead and their Cretaceous forerunners.",
+   "hab": [
+    "pelagic",
+    "shelf",
+    "reef",
+    "coast"
+   ],
+   "lat": [
+    0,
+    50
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Cheloniidae"
+   },
+   "pic": "Chelonia"
+  },
+  "Delphinidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "dolphin",
+   "fad": 11,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "arc"
+   ],
+   "note": "Oceanic dolphins, from spinners to orcas; a late-Miocene radiation that now fills every sea.",
+   "hab": [
+    "pelagic",
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Delphinidae"
+   },
+   "pic": "Tursiops"
+  },
+  "Dermochelys coriacea": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seaturtle",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med"
+   ],
+   "note": "The leatherback, a half-tonne turtle that follows jellyfish from the tropics to subpolar water.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    65
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Dermochelyidae"
+   }
+  },
+  "Diomedea exulans": {
+   "rank": "species",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sou",
+    "ind",
+    "atl",
+    "pac"
+   ],
+   "note": "The wandering albatross, with the widest wingspan of any living bird, circling the Southern Ocean between breeding seasons.",
+   "hab": [
+    "pelagic",
+    "island"
+   ],
+   "lat": [
+    28,
+    68
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Procellariiformes",
+    "family": "Diomedeidae"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ],
+   "box": [
+    [
+     -180,
+     180,
+     -70,
+     -25
+    ]
+   ]
+  },
+  "Diomedeidae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "sou",
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Albatrosses, gliding the wind belts for years between landfalls on remote islands.",
+   "hab": [
+    "pelagic",
+    "island"
+   ],
+   "lat": [
+    20,
+    70
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Aves",
+    "order": "Procellariiformes",
+    "family": "Diomedeidae"
+   },
+   "rep": "Diomedea exulans",
+   "realms": [
+    "air",
+    "sea"
+   ]
+  },
+  "Dosidicus gigas": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "squid",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "The Humboldt or jumbo squid, hunting in shoals of thousands along the eastern Pacific.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Teuthida"
+   },
+   "box": [
+    [
+     -135,
+     -70,
+     -45,
+     45
+    ]
+   ]
+  },
+  "Dugong dugon": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "sirenian",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "note": "The dugong, the one strictly marine sea cow left, grazing seagrass from the Red Sea to the Coral Sea.",
+   "hab": [
+    "coast",
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Sirenia",
+    "family": "Dugongidae"
+   },
+   "box": [
+    [
+     30,
+     180,
+     -35,
+     35
+    ],
+    [
+     -180,
+     -140,
+     -30,
+     30
+    ]
+   ]
+  },
+  "Exocoetidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Flying fishes, gliding tens of metres on enlarged fins to escape tuna and dolphinfish.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Beloniformes"
+   },
+   "pic": "Cheilopogon"
+  },
+  "Fulmarus glacialis": {
+   "rank": "species",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl",
+    "pac"
+   ],
+   "note": "The northern fulmar, a cold-water petrel that nests on sea cliffs from Brittany to the High Arctic.",
+   "hab": [
+    "coast",
+    "island",
+    "pelagic",
+    "tundra"
+   ],
+   "lat": [
+    45,
+    85
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Procellariiformes"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ]
+  },
+  "Halophila stipulacea": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "A small seagrass of the Red Sea and western Indian Ocean, growing from the shallows to fifty metres down.",
+   "hab": [
+    "coast",
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Hydrocharitaceae"
+   },
+   "box": [
+    [
+     30,
+     80,
+     -30,
+     32
+    ]
+   ]
+  },
+  "Hexanchus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 100,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "tet"
+   ],
+   "note": "Sixgill sharks, a lineage little changed since the Jurassic, cruising the dark continental slopes.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Hexanchiformes",
+    "family": "Hexanchidae"
+   }
+  },
+  "Istiophoridae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Marlins and sailfish, the fastest fishes of the open tropical ocean.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Istiophoriformes",
+    "family": "Xiphiidae"
+   },
+   "pic": "Xiphias"
+  },
+  "Isurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "tet"
+   ],
+   "note": "Mako sharks, the fastest of all sharks and ocean-wide hunters of tuna and swordfish.",
+   "hab": [
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Lamniformes",
+    "family": "Lamnidae"
+   }
+  },
+  "Lophelia pertusa": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "atl",
+    "med",
+    "pac",
+    "ind"
+   ],
+   "note": "A cold-water coral building reefs in the dark, hundreds of metres down, along continental slopes and seamounts.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Scleractinia",
+    "family": "Caryophylliidae"
+   }
+  },
+  "Macrouridae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "arc"
+   ],
+   "note": "Grenadiers or rattails, the commonest fishes of the continental slope and the abyssal plain.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Gadiformes",
+    "family": "Macrouridae"
+   },
+   "pic": "Coryphaenoides"
+  },
+  "Mirounga leonina": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "sou",
+    "sa-s",
+    "an"
+   ],
+   "note": "The southern elephant seal, bulls of four tonnes hauling out on subantarctic beaches to fight and breed.",
+   "hab": [
+    "coast",
+    "island",
+    "ice"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ]
+  },
+  "Mobula": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ray",
+   "fad": 28,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Manta and devil rays, filter-feeders that leap clear of the water in schools of thousands.",
+   "hab": [
+    "pelagic",
+    "reef"
+   ],
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Myliobatiformes",
+    "family": "Mobulidae"
+   }
+  },
+  "Myctophidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 55,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "arc",
+    "tet"
+   ],
+   "note": "Lanternfishes, perhaps the most abundant vertebrates on Earth, rising hundreds of metres to the surface every night.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Myctophiformes",
+    "family": "Myctophidae"
+   },
+   "pic": "Myctophum"
+  },
+  "Octocorallia": {
+   "rank": "subclass",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 480,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "arc",
+    "tet",
+    "pan",
+    "iap",
+    "rhe"
+   ],
+   "note": "Soft corals, sea fans and bamboo corals; on seamounts they form forests that can be thousands of years old.",
+   "hab": [
+    "deep",
+    "reef",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Alcyonacea"
+   },
+   "pic": "Gorgonia"
+  },
+  "Onychoprion fuscatus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "The sooty tern, which stays on the wing for years at sea and breeds in vast colonies on tropical islets.",
+   "hab": [
+    "pelagic",
+    "island"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Charadriiformes",
+    "family": "Laridae"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ]
+  },
+  "Osedax": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "worm",
+   "fad": 100,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "tet"
+   ],
+   "note": "Bone-eating worms that bore into whale skeletons on the sea floor; their traces go back to plesiosaur bones.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Polychaeta",
+    "order": "Sabellida"
+   }
+  },
+  "Otariidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 12,
+   "lad": 0,
+   "range": [
+    "pac",
+    "sou",
+    "sa-s",
+    "af-s",
+    "au",
+    "nz",
+    "na-w"
+   ],
+   "note": "Sea lions and fur seals, a North Pacific family that crossed the equator about six million years ago.",
+   "hab": [
+    "coast",
+    "island",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Otariidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ]
+  },
+  "Phaethon": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Tropicbirds, plunge-divers of the warm open ocean that nest on the remotest islands.",
+   "hab": [
+    "pelagic",
+    "island"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Charadriiformes"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ]
+  },
+  "Phocidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "atl",
+    "arc",
+    "pac",
+    "sou",
+    "med",
+    "an"
+   ],
+   "note": "True seals, which arose in the North Atlantic and reached the Antarctic pack ice by the late Miocene.",
+   "hab": [
+    "coast",
+    "ice",
+    "shelf",
+    "island"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ]
+  },
+  "Phocoena sinus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "dolphin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "The vaquita, the smallest and rarest cetacean, confined to the turbid head of the Gulf of California.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Phocoenidae"
+   },
+   "box": [
+    [
+     -115.5,
+     -113.0,
+     29.5,
+     32.0
+    ]
+   ]
+  },
+  "Physalia physalis": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "jellyfish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "The Portuguese man o' war, a colony of specialised animals sailing under a gas-filled float.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Hydrozoa",
+    "order": "Siphonophorae"
+   }
+  },
+  "Physeter macrocephalus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med"
+   ],
+   "note": "The sperm whale, the largest toothed predator alive, diving past two kilometres to hunt squid in the dark.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Physeteridae"
+   }
+  },
+  "Physeteroidea": {
+   "rank": "superfamily",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 25,
+   "lad": 2.6,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "med",
+    "tet"
+   ],
+   "note": "Sperm whales in their Miocene variety, from dwarf forms to Livyatan, a raptorial hunter of other whales.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Physeteridae"
+   },
+   "rep": "Physeter macrocephalus"
+  },
+  "Procellariiformes": {
+   "rank": "order",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 45,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "arc",
+    "med"
+   ],
+   "note": "Petrels, shearwaters and storm-petrels: tube-nosed seabirds that come ashore only to breed.",
+   "hab": [
+    "pelagic",
+    "island",
+    "coast"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Procellariiformes"
+   },
+   "realms": [
+    "air",
+    "sea",
+    "land"
+   ],
+   "pic": "Puffinus"
+  },
+  "Prochlorococcus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 150,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "med",
+    "tet",
+    "pan"
+   ],
+   "note": "The smallest and most numerous photosynthesiser known, making a large share of the oxygen produced by the open ocean.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Cyanophyceae",
+    "order": "Synechococcales"
+   }
+  },
+  "Pyrosoma": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "jellyfish",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Pyrosomes: glowing colonial tunicates, hollow tubes that can grow longer than a whale.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Thaliacea"
+   }
+  },
+  "Rhincodon typus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 28,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "The whale shark, the largest fish alive, filtering plankton at the surface of warm seas.",
+   "hab": [
+    "pelagic",
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Orectolobiformes"
+   }
+  },
+  "Sargassum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "med"
+   ],
+   "note": "Sargassum weeds, attached on warm rocky shores and, in two Atlantic species, drifting free in mid-ocean.",
+   "hab": [
+    "coast",
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    42
+   ],
+   "cls": {
+    "class": "Phaeophyceae",
+    "order": "Fucales",
+    "family": "Sargassaceae"
+   }
+  },
+  "Sargassum natans": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "atl"
+   ],
+   "note": "Free-floating sargassum, the golden weed of the Sargasso Sea, carrying its own community of fish, crabs and turtles.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    42
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Phaeophyceae",
+    "order": "Fucales",
+    "family": "Sargassaceae"
+   }
+  },
+  "Somniosus microcephalus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl"
+   ],
+   "note": "The Greenland shark, the longest-lived vertebrate known; individuals are thought to reach four centuries.",
+   "hab": [
+    "deep",
+    "pelagic",
+    "ice"
+   ],
+   "lat": [
+    50,
+    90
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Squaliformes",
+    "family": "Squalidae"
+   }
+  },
+  "Spheniscidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 62,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      62,
+      34
+     ],
+     "in": [
+      "nz",
+      "an",
+      "sa-s",
+      "au"
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "in": [
+      "nz",
+      "an",
+      "sa-s",
+      "au",
+      "af-s",
+      "sou"
+     ]
+    }
+   ],
+   "note": "Penguins, flightless divers since the Paleocene; several Eocene and Oligocene species stood as tall as a person.",
+   "hab": [
+    "coast",
+    "island",
+    "ice",
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Stylophora pistillata": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "note": "A branching reef coral of the Indo-Pacific; its Red Sea populations tolerate unusually hot water.",
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Scleractinia",
+    "family": "Pocilloporidae"
+   },
+   "box": [
+    [
+     30,
+     180,
+     -35,
+     35
+    ],
+    [
+     -180,
+     -140,
+     -30,
+     30
+    ]
+   ]
+  },
+  "Thalassia testudinum": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "atl"
+   ],
+   "note": "Turtle grass, forming the great seagrass meadows of the Caribbean and the Gulf of Mexico.",
+   "hab": [
+    "coast",
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    8,
+    32
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Hydrocharitaceae"
+   },
+   "box": [
+    [
+     -98,
+     -58,
+     8,
+     32
+    ]
+   ]
+  },
+  "Thalassodendron ciliatum": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ind"
+   ],
+   "note": "The seagrass of Saya de Malha, a drowned bank in mid-ocean carrying the largest seagrass meadow on Earth.",
+   "hab": [
+    "shelf",
+    "reef",
+    "coast"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Cymodoceaceae"
+   },
+   "box": [
+    [
+     32,
+     75,
+     -30,
+     28
+    ]
+   ]
+  },
+  "Thunnus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "med"
+   ],
+   "note": "Tunas: warm-blooded, ocean-crossing predators built for sustained speed.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    60
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Scombriformes",
+    "family": "Scombridae"
+   }
+  },
+  "Totoaba macdonaldi": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "The totoaba, a two-metre drum found only in the Gulf of California, spawning at the Colorado River's mouth.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "family": "Sciaenidae"
+   },
+   "box": [
+    [
+     -115.5,
+     -109.0,
+     24.0,
+     32.0
+    ]
+   ]
+  },
+  "Trichodesmium erythraeum": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "'Sea sawdust', a nitrogen-fixing cyanobacterium whose rust-coloured blooms streak warm, nutrient-poor seas.",
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Cyanophyceae",
+    "order": "Oscillatoriales"
+   }
+  },
+  "Vampyroteuthis infernalis": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "squid",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "The vampire squid, last of an order older than the dinosaurs, drifting in the oxygen-minimum zone on marine snow.",
+   "hab": [
+    "deep"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Vampyromorpha"
+   }
+  },
+  "Xenophyophorea": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "foram",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou"
+   ],
+   "note": "Giant single-celled organisms of the abyssal plain, some the size of a fist, building shells from sediment.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Monothalamea"
+   }
+  },
+  "Zalophus californianus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "The California sea lion, breeding on the desert islands of the Gulf of California and the Pacific coast.",
+   "hab": [
+    "coast",
+    "island",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Otariidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ],
+   "box": [
+    [
+     -126,
+     -105,
+     18,
+     50
+    ]
+   ]
+  },
+  "Ziphiidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "dolphin",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind",
+    "sou"
+   ],
+   "note": "Beaked whales, the deepest-diving mammals: Cuvier's beaked whale has been logged at nearly three kilometres.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Ziphiidae"
+   },
+   "pic": "Mesoplodon"
+  },
+  "Zostera marina": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "atl",
+    "pac",
+    "arc",
+    "med"
+   ],
+   "note": "Eelgrass, the seagrass of cool northern shores, nursery to cod, scallops and brent geese.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    26,
+    72
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Zosteraceae"
+   }
+  }
+ }
+}

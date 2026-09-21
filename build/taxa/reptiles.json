@@ -1,0 +1,2623 @@
+{
+ "taxa": {
+  "Aetosauria": {
+   "rank": "order",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 232.2,
+   "lad": 201.4,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "Armoured, pig-snouted herbivorous archosaurs common in northern Triassic red beds; extinct at the end-Triassic mass extinction.",
+   "pbdb": {
+    "oid": "txn:38267",
+    "matched": "Aetosauria",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": true,
+    "noc": 503,
+    "fea": 237,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "regions": {
+     "na-w": 312,
+     "eu": 31,
+     "sa-s": 26,
+     "gl": 2,
+     "na-e": 111,
+     "af-s": 6,
+     "sa-n": 2,
+     "af-n": 3,
+     "as-e": 7,
+     "in": 2,
+     "af-w": 1
+    }
+   },
+   "rep": "Desmatosuchus",
+   "pbdb_ok": true,
+   "conf_note": "PBDB's EXTANT/lad=0 tag is a database error - no aetosaur is known past the end-Triassic. pbdb_raw's 119.57 Ma bound is also spurious; the group is exclusively Triassic."
+  },
+  "Allosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 152.0,
+   "lad": 146.1,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "The dominant Morrison predator, known from dozens of individuals at the Cleveland-Lloyd quarry.",
+   "sz": 9.0,
+   "dt": "carnivore",
+   "hb": "terrestrial apex predator",
+   "pbdb": {
+    "oid": "txn:38590",
+    "matched": "Allosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 147,
+    "fea": 161.5,
+    "lla": 137.05,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Allosaurus",
+    "regions": {
+     "na-w": 137,
+     "eu": 10
+    }
+   }
+  },
+  "Anchiornis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 160.2,
+   "lad": 158.2,
+   "range": [
+    "as-e"
+   ],
+   "note": "A small feathered paravian preserved well enough for its actual colour pattern to be reconstructed from melanosomes.",
+   "pbdb": {
+    "oid": "txn:155058",
+    "matched": "Anchiornis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 168.2,
+    "lla": 152.21,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Troodontidae",
+    "genus": "Anchiornis",
+    "regions": {
+     "as-e": 3
+    }
+   }
+  },
+  "Anhanguera": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 112,
+   "lad": 108,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A crested, toothed fishing pterosaur from Brazil's Santana Formation, known from beautifully preserved three-dimensional skulls that reveal the shape of its bony head crest.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Anhangueridae"
+   }
+  },
+  "Antarctopelta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 76,
+   "lad": 72,
+   "range": [
+    "an"
+   ],
+   "note": "The first ankylosaur from Antarctica, from the James Ross Basin of the still-forested Cretaceous continent.",
+   "pbdb": {
+    "oid": "txn:77202",
+    "matched": "Antarctopelta",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Antarctopelta",
+    "regions": {
+     "an": 1
+    }
+   }
+  },
+  "Archelon": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaturtle",
+   "fad": 80.5,
+   "lad": 74,
+   "range": [
+    "na-w"
+   ],
+   "note": "A four-metre sea turtle, the largest ever, cruising the warm inland sea.",
+   "pbdb": {
+    "oid": "txn:36327",
+    "matched": "Archelon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Protostegidae",
+    "genus": "Archelon",
+    "regions": {
+     "na-w": 3,
+     "na-e": 1
+    }
+   },
+   "w": 3
+  },
+  "Argentinosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 97,
+   "lad": 93.5,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A titanosaur among the largest land animals ever, from the Cretaceous of Patagonia.",
+   "pbdb": {
+    "oid": "txn:66645",
+    "matched": "Argentinosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 110.1,
+    "lla": 106.3,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Argentinosaurus",
+    "regions": {
+     "sa-s": 1
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Brachiosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 153.5,
+   "lad": 146.1,
+   "range": [
+    "na-w"
+   ],
+   "note": "A sauropod holding its neck high above the canopy, weighing perhaps thirty tonnes; the similar Tendaguru animal from Africa is now placed in its own genus, Giraffatitan.",
+   "sz": 22.0,
+   "dt": "herbivore",
+   "hb": "high browser with forelimbs longer than hindlimbs",
+   "pbdb": {
+    "oid": "txn:38677",
+    "matched": "Brachiosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 157.9,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Brachiosauridae",
+    "genus": "Brachiosaurus",
+    "regions": {
+     "na-w": 16,
+     "af-s": 1,
+     "af-e": 2,
+     "eu": 1
+    }
+   }
+  },
+  "Carbonemys": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "turtle",
+   "fad": 60,
+   "lad": 58,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A car-sized side-necked turtle sharing Titanoboa's steamy post-impact wetlands.",
+   "pbdb": {
+    "oid": "txn:253844",
+    "matched": "Carbonemys",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 61.66,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Podocnemididae",
+    "genus": "Carbonemys",
+    "regions": {
+     "sa-n": 1
+    }
+   }
+  },
+  "Carcharodontosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 112,
+   "lad": 94,
+   "range": [
+    "af-n"
+   ],
+   "note": "A shark-toothed giant predator of the mid-Cretaceous North African floodplains.",
+   "pbdb": {
+    "oid": "txn:38576",
+    "matched": "Carcharodontosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 44,
+    "fea": 143.1,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Carcharodontosauridae",
+    "genus": "Carcharodontosaurus",
+    "regions": {
+     "af-n": 38,
+     "as-w": 3,
+     "sa-n": 3
+    }
+   }
+  },
+  "Carnotaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 72,
+   "lad": 69,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A horned, tiny-armed abelisaur theropod endemic to Cretaceous South America.",
+   "pbdb": {
+    "oid": "txn:54533",
+    "matched": "Carnotaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Abelisauridae",
+    "genus": "Carnotaurus",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Cetiosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 168.4,
+   "lad": 164,
+   "range": [
+    "af-n",
+    "eu"
+   ],
+   "note": "An early large sauropod, originally mistaken for a giant marine reptile.",
+   "pbdb": {
+    "oid": "txn:38657",
+    "matched": "Cetiosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 174.7,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cetiosaurus",
+    "regions": {
+     "eu": 24,
+     "af-n": 6
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Valid Cetiosaurus material caps out in the Callovian; the Early Cretaceous tail in PBDB's robust bin reflects indeterminate sauropod fragments loosely assigned to the genus."
+  },
+  "Chaohusaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ichthyosaur",
+   "fad": 248.9,
+   "lad": 242.0,
+   "range": [
+    "as-e"
+   ],
+   "note": "One of the earliest ichthyosaurs: within a few million years of the extinction, reptiles are already back in the sea.",
+   "pbdb": {
+    "oid": "txn:36547",
+    "matched": "Chaohusaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 250.8,
+    "lla": 237,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Ichthyosauria",
+    "family": "Grippiidae",
+    "genus": "Chaohusaurus",
+    "regions": {
+     "as-e": 9
+    }
+   }
+  },
+  "Coelophysis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 221.3,
+   "lad": 200.4,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "A slender early theropod dinosaur, hundreds found together at Ghost Ranch in Pangaea's western deserts.",
+   "sz": 3.0,
+   "dt": "carnivore",
+   "hb": "gracile bipedal predator, gregarious",
+   "pbdb": {
+    "oid": "txn:38520",
+    "matched": "Coelophysis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 26,
+    "fea": 227.3,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Coelophysidae",
+    "genus": "Coelophysis",
+    "regions": {
+     "na-e": 2,
+     "na-w": 24
+    }
+   }
+  },
+  "Coelophysis bauri": {
+   "rank": "species",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 216.5,
+   "lad": 203.6,
+   "range": [
+    "na-w"
+   ],
+   "note": "A slender early theropod known from hundreds of individuals at Ghost Ranch, piled up in a single mass death assemblage.",
+   "pbdb": {
+    "oid": "txn:54212",
+    "matched": "Coelophysis bauri",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 6,
+    "fea": 227.3,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Coelophysidae",
+    "genus": "Coelophysis",
+    "regions": {
+     "na-w": 6
+    }
+   }
+  },
+  "Compsognathus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 151,
+   "lad": 148,
+   "range": [
+    "eu"
+   ],
+   "note": "A chicken-sized coelurosaur dinosaur washed into the lagoon, its last meal a lizard in its gut.",
+   "pbdb": {
+    "oid": "txn:38538",
+    "matched": "Compsognathus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 154.8,
+    "lla": 145.06,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Compsognathidae",
+    "genus": "Compsognathus",
+    "regions": {
+     "eu": 4
+    }
+   }
+  },
+  "Cryolophosaurus ellioti": {
+   "rank": "species",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 199.5,
+   "lad": 184.2,
+   "range": [
+    "an"
+   ],
+   "note": "A crested theropod from the Transantarctic Mountains, showing dinosaurs living at high southern latitudes.",
+   "pbdb": {
+    "oid": "txn:64372",
+    "matched": "Cryolophosaurus ellioti",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cryolophosaurus",
+    "regions": {
+     "an": 1
+    }
+   }
+  },
+  "Desmatosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 225,
+   "lad": 215,
+   "range": [
+    "na-w"
+   ],
+   "note": "A spike-shouldered aetosaur from the Late Triassic American Southwest, armoured along back and flanks and rooting through the soil with a pig-like snout.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Aetosauria",
+    "family": "Stagonolepididae"
+   }
+  },
+  "Dilophosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 197.2,
+   "lad": 188.6,
+   "range": [
+    "na-w"
+   ],
+   "note": "A crested early theropod, six metres long and nothing like its film portrayal.",
+   "pbdb": {
+    "oid": "txn:38522",
+    "matched": "Dilophosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 201.4,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Dilophosaurus",
+    "regions": {
+     "na-w": 13,
+     "in": 1
+    }
+   }
+  },
+  "Edmontosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 73,
+   "lad": 66,
+   "range": [
+    "na-n",
+    "na-w"
+   ],
+   "note": "A duck-billed hadrosaur that grazed the coastal plains beside the retreating Interior Seaway.",
+   "pbdb": {
+    "oid": "txn:38761",
+    "matched": "Edmontosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 85,
+    "fea": 89.8,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Edmontosaurus",
+    "regions": {
+     "na-w": 82,
+     "na-n": 2,
+     "na-e": 1
+    }
+   },
+   "w": 3
+  },
+  "Eudimorphodon": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 216.5,
+   "lad": 203.6,
+   "range": [
+    "eu"
+   ],
+   "note": "An early pterosaur with a complex tooth battery, already fully capable of powered flight.",
+   "pbdb": {
+    "oid": "txn:38467",
+    "matched": "Eudimorphodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 227.3,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Campylognathoididae",
+    "genus": "Eudimorphodon",
+    "regions": {
+     "eu": 13
+    }
+   }
+  },
+  "Giganotosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 100,
+   "lad": 97,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A giant carcharodontosaur, rivalling T. rex in size, hunting the Patagonian titanosaurs.",
+   "pbdb": {
+    "oid": "txn:54540",
+    "matched": "Giganotosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 113.2,
+    "lla": 106.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Carcharodontosauridae",
+    "genus": "Giganotosaurus",
+    "regions": {
+     "sa-s": 4
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Giraffatitan": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 150.8,
+   "lad": 143.1,
+   "range": [
+    "af-e"
+   ],
+   "note": "A towering sauropod from Tanzania's Tendaguru beds, long described as an African species of Brachiosaurus before differences in its skull and proportions placed it in its own genus.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Saurischia",
+    "family": "Brachiosauridae"
+   },
+   "w": 3
+  },
+  "Gryposuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "gharial",
+   "fad": 20,
+   "lad": 5,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A slender-snouted gharial up to ten metres long, a specialised fish-eater sharing the water with the giant caimans.",
+   "pbdb": {
+    "oid": "txn:38417",
+    "matched": "Gryposuchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 20.45,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Gavialidae",
+    "genus": "Gryposuchus",
+    "regions": {
+     "sa-s": 1,
+     "sa-n": 30
+    }
+   }
+  },
+  "Guanlong": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 160,
+   "lad": 158,
+   "range": [
+    "as-c"
+   ],
+   "note": "An early crested tyrannosauroid from the Jurassic of Xinjiang, small and long-armed, 90 million years before T. rex.",
+   "pbdb": {
+    "oid": "txn:71190",
+    "matched": "Guanlong",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 161.5,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Proceratosauridae",
+    "genus": "Guanlong",
+    "regions": {
+     "as-c": 1
+    }
+   }
+  },
+  "Hatzegopteryx": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "eu"
+   ],
+   "note": "A giraffe-sized pterosaur from the Cretaceous island of Hateg in what is now Romania, apex predator of a dwarf-dinosaur fauna.",
+   "pbdb": {
+    "oid": "txn:148380",
+    "matched": "Hatzegopteryx",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Azhdarchidae",
+    "genus": "Hatzegopteryx",
+    "regions": {
+     "eu": 4
+    }
+   }
+  },
+  "Hylonomus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 317.8,
+   "lad": 308.6,
+   "range": [
+    "na-e"
+   ],
+   "note": "One of the first true reptiles, sheltering in hollow lycophyte stumps in Nova Scotia.",
+   "sz": 0.25,
+   "dt": "insectivore",
+   "hb": "insectivore living in hollow lycopsid stumps",
+   "pbdb": {
+    "oid": "txn:37492",
+    "matched": "Hylonomus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 318.7,
+    "lla": 307.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Protorothyrididae",
+    "genus": "Hylonomus",
+    "regions": {
+     "na-e": 5,
+     "eu": 1
+    }
+   }
+  },
+  "Hylonomus lyelli": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 317.8,
+   "lad": 317.8,
+   "range": [
+    "na-e"
+   ],
+   "note": "A lizard-shaped animal found inside fossil tree stumps at Joggins, and the earliest well-established amniote.",
+   "pbdb": {
+    "oid": "txn:139093",
+    "matched": "Hylonomus lyelli",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 3,
+    "fea": 318.7,
+    "lla": 316.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Protorothyrididae",
+    "genus": "Hylonomus",
+    "regions": {
+     "na-e": 3
+    }
+   }
+  },
+  "Ichthyosauria": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "ichthyosaur",
+   "fad": 250,
+   "lad": 94,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Dolphin-shaped marine reptiles, from one to over twenty metres, bearing live young at sea from the Early Triassic on.",
+   "pbdb": {
+    "oid": "txn:36543",
+    "matched": "Ichthyosauria",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": false,
+    "noc": 675,
+    "fea": 251.902,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Ichthyosauria"
+   }
+  },
+  "Ichthyosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ichthyosaur",
+   "fad": 201.3,
+   "lad": 182.7,
+   "range": [
+    "eu"
+   ],
+   "note": "Streamlined, live-bearing marine reptiles; Mary Anning's Lyme Regis specimens are how the world learned they existed.",
+   "pbdb": {
+    "oid": "txn:36558",
+    "matched": "Ichthyosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 101,
+    "fea": 227.3,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Ichthyosauria",
+    "family": "Ichthyosauridae",
+    "genus": "Ichthyosaurus",
+    "regions": {
+     "na-w": 8,
+     "eu": 83,
+     "sa-s": 9,
+     "gl": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "The true genus Ichthyosaurus (type species I. communis) is a Hettangian-Pliensbachian English/west European taxon; PBDB's wider bin and na-w/sa-s occurrences reflect 19th-century material since reassigned to other ichthyosaur genera."
+  },
+  "Iguanodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 142.1,
+   "lad": 116.4,
+   "range": [
+    "eu"
+   ],
+   "note": "A large ornithopod with a thumb spike, and one of the first dinosaurs recognised as such.",
+   "pbdb": {
+    "oid": "txn:38749",
+    "matched": "Iguanodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 133,
+    "fea": 154.8,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Iguanodon",
+    "regions": {
+     "eu": 129,
+     "af-n": 1,
+     "na-w": 1,
+     "in": 1,
+     "as-e": 1
+    }
+   }
+  },
+  "Isisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "in"
+   ],
+   "note": "A titanosaur of latest-Cretaceous India whose nesting grounds are preserved as fossil egg clutches.",
+   "pbdb": {
+    "oid": "txn:64313",
+    "matched": "Isisaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Isisaurus",
+    "regions": {
+     "in": 7
+    }
+   }
+  },
+  "Keichousaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "nothosaur",
+   "fad": 242,
+   "lad": 237,
+   "range": [
+    "as-e"
+   ],
+   "note": "A small long-necked marine reptile found by the thousand in Guizhou Triassic shales.",
+   "pbdb": {
+    "oid": "txn:36436",
+    "matched": "Keichousaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 250.8,
+    "lla": 237,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Eosauropterygia",
+    "family": "Keichousauridae",
+    "genus": "Keichousaurus",
+    "regions": {
+     "as-e": 7
+    }
+   }
+  },
+  "Kronosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "pliosaur",
+   "fad": 120,
+   "lad": 100,
+   "range": [
+    "au",
+    "sa-n"
+   ],
+   "note": "A giant short-necked pliosaur, apex predator of the cold Cretaceous sea over central Australia.",
+   "pbdb": {
+    "oid": "txn:36482",
+    "matched": "Kronosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 121.4,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Plesiosauria",
+    "family": "Pliosauridae",
+    "genus": "Kronosaurus",
+    "regions": {
+     "au": 3,
+     "sa-n": 1
+    }
+   }
+  },
+  "Liopleurodon": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "pliosaur",
+   "fad": 166.1,
+   "lad": 163.5,
+   "range": [
+    "eu"
+   ],
+   "note": "A short-necked pliosaur with a skull well over a metre long, hunting other marine reptiles.",
+   "sz": 7.0,
+   "dt": "apex predator",
+   "hb": "pelagic pursuit predator",
+   "pbdb": {
+    "oid": "txn:36485",
+    "matched": "Liopleurodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 165.3,
+    "lla": 137.05,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Plesiosauria",
+    "family": "Pliosauridae",
+    "genus": "Liopleurodon",
+    "regions": {
+     "eu": 12,
+     "sa-s": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Diagnostic Liopleurodon ferox material is Callovian, France/England. Popular reconstructions (and PBDB's wider bin) inflate it with younger pliosaurid material historically misassigned to the genus."
+  },
+  "Mamenchisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 163,
+   "lad": 145,
+   "range": [
+    "as-e",
+    "as-c"
+   ],
+   "note": "A Chinese sauropod with a neck half its total length -- among the longest necks any animal has had.",
+   "pbdb": {
+    "oid": "txn:38670",
+    "matched": "Mamenchisaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 24,
+    "fea": 168.2,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Mamenchisauridae",
+    "genus": "Mamenchisaurus",
+    "regions": {
+     "as-e": 14,
+     "as-c": 8,
+     "as-se": 2
+    }
+   }
+  },
+  "Massospondylus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 197.2,
+   "lad": 188.1,
+   "range": [
+    "af-s"
+   ],
+   "note": "An early sauropodomorph from South African Jurassic red beds, known even from embryos in the egg.",
+   "pbdb": {
+    "oid": "txn:38642",
+    "matched": "Massospondylus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 80,
+    "fea": 237,
+    "lla": 174.7,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Massospondylidae",
+    "genus": "Massospondylus",
+    "regions": {
+     "af-s": 80
+    }
+   }
+  },
+  "Megalosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 166.1,
+   "lad": 163.5,
+   "range": [
+    "eu"
+   ],
+   "note": "The first dinosaur ever formally named, from Oxfordshire, decades before anyone had the concept of a dinosaur.",
+   "pbdb": {
+    "oid": "txn:38583",
+    "matched": "Megalosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 60,
+    "fea": 205.7,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Megalosauridae",
+    "genus": "Megalosaurus",
+    "regions": {
+     "eu": 56,
+     "af-e": 1,
+     "as-c": 2,
+     "in": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Diagnostic Megalosaurus bucklandii material is Bathonian, Oxfordshire only. Megalosaurus is the archetypal 19th-century wastebasket theropod genus; the wider PBDB bin and as-c occurrence reflect fragments elsewhere once dumped under the name."
+  },
+  "Mesosaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "mesosaur",
+   "fad": 290,
+   "lad": 274,
+   "range": [
+    "af-s",
+    "sa-s"
+   ],
+   "note": "A small aquatic reptile of Permian Gondwanan lakes, found on matching shores in Brazil and South Africa - Wegener's evidence for drift.",
+   "pbdb": {
+    "oid": "txn:36324",
+    "matched": "Mesosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 290.1,
+    "lla": 283.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Mesosauridae",
+    "genus": "Mesosaurus",
+    "regions": {
+     "af-s": 12,
+     "sa-n": 1,
+     "sa-s": 17
+    }
+   },
+   "w": 3
+  },
+  "Microraptor": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "smalltheropod",
+   "fad": 117.3,
+   "lad": 117.3,
+   "range": [
+    "as-e"
+   ],
+   "note": "A four-winged dromaeosaur with flight feathers on both fore and hind limbs, glossy black in life.",
+   "pbdb": {
+    "oid": "txn:68238",
+    "matched": "Microraptor",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 121.4,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Microraptor",
+    "regions": {
+     "as-e": 10
+    }
+   }
+  },
+  "Morrosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 72,
+   "lad": 66,
+   "range": [
+    "an"
+   ],
+   "note": "A small ornithopod of the high-latitude Cretaceous forests of the Antarctic Peninsula.",
+   "pbdb": {
+    "oid": "txn:334966",
+    "matched": "Morrosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Morrosaurus",
+    "regions": {
+     "an": 1
+    }
+   }
+  },
+  "Mosasauridae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "mosasaur",
+   "fad": 98,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Giant marine lizards, relatives of monitors and snakes, that took the top-predator role in every Late Cretaceous sea.",
+   "pbdb": {
+    "oid": "txn:38049",
+    "matched": "Mosasauridae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 849,
+    "fea": 100.5,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Mosasauridae"
+   }
+  },
+  "Mosasaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mosasaur",
+   "fad": 86.7,
+   "lad": 69.1,
+   "range": [
+    "af-n",
+    "an",
+    "as-e",
+    "as-w",
+    "eu",
+    "na-e",
+    "na-w",
+    "nz"
+   ],
+   "note": "A giant marine lizard, related to monitors and snakes, that takes over the sea in the last twenty million years of the era.",
+   "sz": 13.0,
+   "dt": "apex predator",
+   "hb": "pelagic and shelf predator",
+   "pbdb": {
+    "oid": "txn:36402",
+    "matched": "Mosasaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 130,
+    "fea": 100.5,
+    "lla": 61.66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Mosasauridae",
+    "genus": "Mosasaurus",
+    "regions": {
+     "na-e": 53,
+     "na-w": 10,
+     "eu": 34,
+     "as-w": 9,
+     "af-n": 5,
+     "nz": 4,
+     "as-e": 3,
+     "af-s": 2,
+     "af-w": 1,
+     "ar": 1,
+     "sa-s": 1,
+     "an": 3,
+     "ca": 2,
+     "sa-n": 2
+    }
+   }
+  },
+  "Mourasuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 16,
+   "lad": 6,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A bizarre caiman with a long, flat, duck-like snout, probably a filter-feeder straining small prey from the water.",
+   "pbdb": {
+    "oid": "txn:38449",
+    "matched": "Mourasuchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 23.04,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Alligatoridae",
+    "genus": "Mourasuchus",
+    "regions": {
+     "sa-s": 2,
+     "sa-n": 36
+    }
+   }
+  },
+  "Nothosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "nothosaur",
+   "fad": 244.2,
+   "lad": 232.2,
+   "range": [
+    "ar",
+    "as-e",
+    "eu"
+   ],
+   "note": "A long-necked, semi-aquatic fish-catcher representing an early stage of the sauropterygian move into the sea.",
+   "pbdb": {
+    "oid": "txn:36442",
+    "matched": "Nothosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 103,
+    "fea": 250.8,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Eosauropterygia",
+    "family": "Nothosauridae",
+    "genus": "Nothosaurus",
+    "regions": {
+     "eu": 90,
+     "ar": 8,
+     "as-e": 4,
+     "na-w": 1
+    }
+   }
+  },
+  "Ornithocheiridae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 140.1,
+   "lad": 86.3,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-e",
+    "as-n",
+    "au",
+    "eu",
+    "na-e",
+    "sa-n"
+   ],
+   "note": "Large fish-eating pterosaurs patrolling Cretaceous coastlines.",
+   "pbdb": {
+    "oid": "txn:38495",
+    "matched": "Ornithocheiridae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 61,
+    "fea": 145.06,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Ornithocheiridae",
+    "regions": {
+     "as-e": 2,
+     "af-n": 8,
+     "as-n": 5,
+     "eu": 30,
+     "na-e": 2,
+     "as-c": 6,
+     "sa-n": 5,
+     "au": 2,
+     "na-w": 1
+    }
+   },
+   "rep": "Anhanguera"
+  },
+  "Ouranosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 125,
+   "lad": 112,
+   "range": [
+    "af-n",
+    "af-w"
+   ],
+   "note": "A sail-backed iguanodont sharing the lush Cretaceous river deltas of what is now the desert.",
+   "pbdb": {
+    "oid": "txn:38751",
+    "matched": "Ouranosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 121.4,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Ouranosaurus",
+    "regions": {
+     "af-n": 6,
+     "af-w": 2
+    }
+   }
+  },
+  "Paralititan": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 99.6,
+   "lad": 93.5,
+   "range": [
+    "af-n"
+   ],
+   "note": "A colossal titanosaur from the mangrove coasts of Late Cretaceous Egypt (Bahariya).",
+   "pbdb": {
+    "oid": "txn:64373",
+    "matched": "Paralititan",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Paralititan",
+    "regions": {
+     "as-w": 1,
+     "af-n": 1
+    }
+   }
+  },
+  "Pareiasauria": {
+   "rank": "order",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 262.1,
+   "lad": 253.0,
+   "range": [
+    "af-e",
+    "af-n",
+    "af-s",
+    "as-e",
+    "eu",
+    "sa-s"
+   ],
+   "note": "Bulky armoured herbivorous reptiles, the cattle of the terminal Permian landscape.",
+   "pbdb": {
+    "oid": "txn:56750",
+    "matched": "Pareiasauria",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": false,
+    "noc": 144,
+    "fea": 274.4,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "regions": {
+     "af-s": 72,
+     "eu": 44,
+     "sa-s": 3,
+     "as-e": 13,
+     "af-n": 5,
+     "af-e": 7
+    }
+   },
+   "rep": "Scutosaurus"
+  },
+  "Phytosauria": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 232.2,
+   "lad": 203.6,
+   "range": [
+    "eu",
+    "in",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Crocodile-shaped archosaurs lurking in Late Triassic rivers before crocodiles proper existed.",
+   "pbdb": {
+    "oid": "txn:38292",
+    "matched": "Phytosauria",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": false,
+    "noc": 547,
+    "fea": 250.8,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "regions": {
+     "na-e": 47,
+     "na-w": 376,
+     "eu": 85,
+     "af-n": 9,
+     "as-se": 4,
+     "as-w": 1,
+     "mg": 3,
+     "sa-s": 1,
+     "in": 13,
+     "as-e": 2,
+     "gl": 2,
+     "af-s": 4
+    }
+   },
+   "rep": "Rutiodon"
+  },
+  "Placodontia": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "placodont",
+   "fad": 244.2,
+   "lad": 203.6,
+   "range": [
+    "ar",
+    "as-e",
+    "eu"
+   ],
+   "note": "Marine reptiles with flat crushing teeth and, in some, turtle-like armour, specialised on shellfish.",
+   "pbdb": {
+    "oid": "txn:36529",
+    "matched": "Placodontia",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 105,
+    "fea": 250.8,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Placodontia",
+    "regions": {
+     "ar": 19,
+     "eu": 80,
+     "as-e": 5,
+     "as-w": 1
+    }
+   },
+   "rep": "Placodus"
+  },
+  "Placodus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "placodont",
+   "fad": 247,
+   "lad": 235,
+   "range": [
+    "eu"
+   ],
+   "note": "A Triassic placodont with peg-like front teeth and flat crushing cheek teeth, foraging on shellfish in the shallow Germanic Basin sea without the shell-like armour of its later relatives.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Placodontia",
+    "family": "Placodontidae"
+   }
+  },
+  "Plateosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 216.5,
+   "lad": 203.6,
+   "range": [
+    "eu"
+   ],
+   "note": "An early long-necked sauropodomorph, and among the first genuinely large herbivorous dinosaurs.",
+   "pbdb": {
+    "oid": "txn:38644",
+    "matched": "Plateosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 36,
+    "fea": 227.3,
+    "lla": 199.5,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Plateosauridae",
+    "genus": "Plateosaurus",
+    "regions": {
+     "eu": 33,
+     "gl": 1,
+     "af-s": 1,
+     "sa-s": 1
+    }
+   }
+  },
+  "Platypterygius": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ichthyosaur",
+   "fad": 135,
+   "lad": 94,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A large, late ichthyosaur found world-wide in Early Cretaceous seas; some Australian specimens are preserved as opal.",
+   "pbdb": {
+    "oid": "txn:36569",
+    "matched": "Platypterygius",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 62,
+    "fea": 161.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Ichthyosauria",
+    "family": "Ophthalmosauridae",
+    "genus": "Platypterygius"
+   }
+  },
+  "Plesiosauria": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "plesiosaur",
+   "fad": 215,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Long-necked, four-flippered marine reptiles that 'flew' underwater, from coastal forms to open-ocean giants.",
+   "pbdb": {
+    "oid": "txn:36454",
+    "matched": "Plesiosauria",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 1172,
+    "fea": 227.5,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Plesiosauria"
+   }
+  },
+  "Plesiosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "plesiosaur",
+   "fad": 201.3,
+   "lad": 195,
+   "range": [
+    "eu"
+   ],
+   "note": "Long-necked, four-flippered marine reptiles rowing through shallow Jurassic seas.",
+   "pbdb": {
+    "oid": "txn:36504",
+    "matched": "Plesiosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 55,
+    "fea": 205.7,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Plesiosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Plesiosaurus",
+    "regions": {
+     "eu": 46,
+     "nz": 1,
+     "af-s": 1,
+     "na-e": 2,
+     "ca": 1,
+     "as-e": 1,
+     "sa-s": 1,
+     "na-w": 1,
+     "au": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Genus Plesiosaurus (P. dolichodeirus) is restricted to the Hettangian-Sinemurian of England. It is history's classic wastebasket plesiosaur name; the Cretaceous tail in PBDB's bin is old material long since moved to other genera."
+  },
+  "Postosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 221.3,
+   "lad": 203.6,
+   "range": [
+    "na-w"
+   ],
+   "note": "A large pseudosuchian predator that outranked every dinosaur of its day, and died out at the boundary.",
+   "pbdb": {
+    "oid": "txn:38264",
+    "matched": "Postosuchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 237,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Rauisuchidae",
+    "genus": "Postosuchus",
+    "regions": {
+     "na-w": 30,
+     "na-e": 1
+    }
+   }
+  },
+  "Proterosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 251.4,
+   "lad": 249.5,
+   "range": [
+    "af-s",
+    "as-c"
+   ],
+   "note": "An early archosaur, sprawling and crocodile-like, at the root of the lineage that will produce dinosaurs and birds.",
+   "pbdb": {
+    "oid": "txn:80904",
+    "matched": "Proterosuchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 251.902,
+    "lla": 247,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Proterosuchidae",
+    "genus": "Proterosuchus",
+    "regions": {
+     "af-s": 15,
+     "in": 1,
+     "as-c": 2
+    }
+   }
+  },
+  "Protoceratops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-e",
+    "as-c"
+   ],
+   "note": "The Gobi ceratopsian found with nests and eggs, and probably the origin of the griffin legend.",
+   "pbdb": {
+    "oid": "txn:38848",
+    "matched": "Protoceratops",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 121.4,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Protoceratopsidae",
+    "genus": "Protoceratops",
+    "regions": {
+     "as-e": 37,
+     "as-c": 1
+    }
+   }
+  },
+  "Psittacosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 126,
+   "lad": 101,
+   "range": [
+    "as-e",
+    "as-c",
+    "as-n"
+   ],
+   "note": "A parrot-beaked early ceratopsian, the most abundant dinosaur of the Jehol beds.",
+   "pbdb": {
+    "oid": "txn:38844",
+    "matched": "Psittacosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 70,
+    "fea": 137.05,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Psittacosaurus",
+    "regions": {
+     "as-e": 54,
+     "as-c": 6,
+     "as-n": 7,
+     "as-se": 2,
+     "na-w": 1
+    }
+   },
+   "w": 3
+  },
+  "Pterodactylus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 152.0,
+   "lad": 146.1,
+   "range": [
+    "eu"
+   ],
+   "note": "A small short-tailed pterosaur from Solnhofen, and the first pterosaur ever described.",
+   "pbdb": {
+    "oid": "txn:38494",
+    "matched": "Pterodactylus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 201.4,
+    "lla": 132.6,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pterodactylus",
+    "regions": {
+     "eu": 13,
+     "af-e": 2
+    }
+   }
+  },
+  "Purussaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 20,
+   "lad": 5.3,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "A giant caiman over ten metres long, ruling the vast Pebas wetland of Miocene Amazonia.",
+   "pbdb": {
+    "oid": "txn:194770",
+    "matched": "Purussaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 62,
+    "fea": 27.3,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Alligatoridae",
+    "genus": "Purussaurus",
+    "regions": {
+     "sa-n": 59,
+     "ca": 2,
+     "sa-s": 1
+    }
+   },
+   "w": 3
+  },
+  "Quetzalcoatlus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 69.1,
+   "lad": 69.1,
+   "range": [
+    "na-w"
+   ],
+   "note": "A pterosaur the size of a small aircraft, standing as tall as a giraffe and probably foraging on foot.",
+   "sz": 11.0,
+   "dt": "carnivore",
+   "hb": "terrestrial stalker and soaring flier, ~11 m wingspan",
+   "pbdb": {
+    "oid": "txn:38504",
+    "matched": "Quetzalcoatlus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Azhdarchidae",
+    "genus": "Quetzalcoatlus",
+    "regions": {
+     "na-w": 8
+    }
+   }
+  },
+  "Rajasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "in"
+   ],
+   "note": "A horned abelisaur theropod from the Lameta beds, hunting amid the erupting Deccan Traps.",
+   "pbdb": {
+    "oid": "txn:54432",
+    "matched": "Rajasaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Abelisauridae",
+    "genus": "Rajasaurus",
+    "regions": {
+     "in": 1
+    }
+   }
+  },
+  "Rhamphorhynchus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 155,
+   "lad": 148,
+   "range": [
+    "eu"
+   ],
+   "note": "A long-tailed pterosaur of the same lagoons, some specimens preserving the wing membrane and throat pouch.",
+   "pbdb": {
+    "oid": "txn:38476",
+    "matched": "Rhamphorhynchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 159,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Rhamphorhynchidae",
+    "genus": "Rhamphorhynchus",
+    "regions": {
+     "eu": 29,
+     "af-e": 1
+    }
+   }
+  },
+  "Rukwatitan": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 100,
+   "lad": 94,
+   "range": [
+    "af-e"
+   ],
+   "note": "A titanosaur from the East African rift sediments, part of a distinct southern fauna.",
+   "pbdb": {
+    "oid": "txn:320810",
+    "matched": "Rukwatitan",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 100.5,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rukwatitan",
+    "regions": {
+     "af-e": 1
+    }
+   }
+  },
+  "Rutiodon": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 225,
+   "lad": 210,
+   "range": [
+    "na-e"
+   ],
+   "note": "A slender, long-snouted phytosaur from the Late Triassic of the eastern United States, crocodile-like in build though unrelated, with nostrils set back near the eyes rather than the snout tip.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Phytosauria",
+    "family": "Phytosauridae"
+   }
+  },
+  "Scelidosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 200.4,
+   "lad": 188.1,
+   "range": [
+    "eu"
+   ],
+   "note": "An early armoured dinosaur, at the base of the lineage leading to stegosaurs and ankylosaurs.",
+   "pbdb": {
+    "oid": "txn:38801",
+    "matched": "Scelidosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 205.7,
+    "lla": 174.7,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Scelidosauridae",
+    "genus": "Scelidosaurus",
+    "regions": {
+     "eu": 12,
+     "as-c": 1
+    }
+   }
+  },
+  "Scutosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 262.1,
+   "lad": 260.5,
+   "range": [
+    "eu"
+   ],
+   "note": "A heavily built pareiasaur from the Russian Permian, knobbly-skulled and barrel-bodied.",
+   "pbdb": {
+    "oid": "txn:37565",
+    "matched": "Scutosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 264.28,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pareiasauridae",
+    "genus": "Scutosaurus",
+    "regions": {
+     "eu": 15
+    }
+   }
+  },
+  "Shonisaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ichthyosaur",
+   "fad": 230.4,
+   "lad": 203.6,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "A giant ichthyosaur reaching twenty metres, comparable to a modern large whale.",
+   "sz": 15.0,
+   "dt": "predator on cephalopods and fish",
+   "hb": "pelagic",
+   "pbdb": {
+    "oid": "txn:36572",
+    "matched": "Shonisaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 233.6,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Ichthyosauria",
+    "family": "Shastasauridae",
+    "genus": "Shonisaurus",
+    "regions": {
+     "eu": 2,
+     "na-w": 3
+    }
+   }
+  },
+  "Sinosauropteryx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 123.6,
+   "lad": 122.7,
+   "range": [
+    "as-e"
+   ],
+   "note": "The first dinosaur found with unambiguous filamentous feathers, and later with its ginger-and-white banded tail decoded.",
+   "pbdb": {
+    "oid": "txn:54548",
+    "matched": "Sinosauropteryx",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Sinosauropterygidae",
+    "genus": "Sinosauropteryx",
+    "regions": {
+     "as-e": 4
+    }
+   }
+  },
+  "Spinosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 100,
+   "lad": 94,
+   "range": [
+    "af-n"
+   ],
+   "note": "A sail-backed, semi-aquatic theropod larger than T. rex, from the Kem Kem rivers of the Sahara.",
+   "pbdb": {
+    "oid": "txn:38598",
+    "matched": "Spinosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 44,
+    "fea": 125.77,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Spinosauridae",
+    "genus": "Spinosaurus",
+    "regions": {
+     "as-w": 6,
+     "af-n": 37,
+     "af-e": 1
+    }
+   },
+   "w": 3,
+   "place_ok": true
+  },
+  "Spinosaurus aegyptiacus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "spinosaur",
+   "fad": 103.6,
+   "lad": 97.2,
+   "range": [
+    "af-n",
+    "as-w"
+   ],
+   "note": "A sail-backed, paddle-tailed theropod that hunted fish in North African river systems.",
+   "pbdb": {
+    "oid": "txn:53372",
+    "matched": "Spinosaurus aegyptiacus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 26,
+    "fea": 119.57,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Spinosauridae",
+    "genus": "Spinosaurus",
+    "regions": {
+     "as-w": 4,
+     "af-n": 22
+    }
+   }
+  },
+  "Stegosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 152.0,
+   "lad": 146.1,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "Plated, spike-tailed, and with a brain famously small relative to its bulk.",
+   "sz": 9.0,
+   "dt": "herbivore",
+   "hb": "low browser with dorsal plates and a spiked tail",
+   "pbdb": {
+    "oid": "txn:38814",
+    "matched": "Stegosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 86,
+    "fea": 161.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Stegosaurus",
+    "regions": {
+     "na-w": 83,
+     "eu": 2,
+     "as-e": 1
+    }
+   }
+  },
+  "Stupendemys": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "turtle",
+   "fad": 13,
+   "lad": 5,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The largest freshwater turtle ever, a side-neck with a shell over three metres across and horns on the front of it.",
+   "pbdb": {
+    "oid": "txn:37607",
+    "matched": "Stupendemys",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 13.8,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Podocnemididae",
+    "genus": "Stupendemys",
+    "regions": {
+     "sa-n": 12
+    }
+   }
+  },
+  "Tanystropheus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "protorosaur",
+   "fad": 244.2,
+   "lad": 203.6,
+   "range": [
+    "ar",
+    "eu"
+   ],
+   "note": "A reptile whose neck is longer than the rest of it combined, with only twelve vertebrae in it.",
+   "pbdb": {
+    "oid": "txn:38196",
+    "matched": "Tanystropheus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 247,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tanystropheidae",
+    "genus": "Tanystropheus",
+    "regions": {
+     "ar": 2,
+     "eu": 15,
+     "as-e": 1,
+     "na-e": 1
+    }
+   }
+  },
+  "Tarbosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 72,
+   "lad": 68,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "The Asian giant tyrannosaur of the Nemegt Formation, close kin to T. rex and nearly as large.",
+   "pbdb": {
+    "oid": "txn:53224",
+    "matched": "Tarbosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 56,
+    "fea": 89.8,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Tarbosaurus",
+    "regions": {
+     "as-c": 10,
+     "as-e": 46
+    }
+   }
+  },
+  "Titanoboa": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "snake",
+   "fad": 60,
+   "lad": 58,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A 13-metre snake from the Paleocene Cerrejon rainforest of Colombia - the largest snake known.",
+   "sz": 13.0,
+   "dt": "carnivore",
+   "hb": "semi-aquatic ambush predator",
+   "pbdb": {
+    "oid": "txn:179038",
+    "matched": "Titanoboa",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 61.66,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Boidae",
+    "genus": "Titanoboa",
+    "regions": {
+     "sa-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Titanoboa cerrejonensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "snake",
+   "fad": 61.66,
+   "lad": 56.0,
+   "range": [
+    "ca"
+   ],
+   "note": "A thirteen-metre, tonne-weight constrictor whose bulk is itself a thermometer for Paleocene tropical heat.",
+   "pbdb": {
+    "oid": "txn:179039",
+    "matched": "Titanoboa cerrejonensis",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 61.66,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Boidae",
+    "genus": "Titanoboa",
+    "regions": {
+     "sa-n": 1
+    }
+   }
+  },
+  "Triceratops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 69.1,
+   "lad": 69.1,
+   "range": [
+    "na-w"
+   ],
+   "note": "A horned, frilled ceratopsian and one of the most abundant large animals in the final Cretaceous ecosystems.",
+   "sz": 9.0,
+   "dt": "herbivore",
+   "hb": "low browser with a frill and three horns",
+   "pbdb": {
+    "oid": "txn:38862",
+    "matched": "Triceratops",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 166,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratopsidae",
+    "genus": "Triceratops",
+    "regions": {
+     "na-w": 166
+    }
+   }
+  },
+  "Tylosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mosasaur",
+   "fad": 90,
+   "lad": 75,
+   "range": [
+    "af-w",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A mosasaur over twelve metres long, the apex predator of the seaway that split North America.",
+   "pbdb": {
+    "oid": "txn:36418",
+    "matched": "Tylosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 67,
+    "fea": 93.9,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Mosasauridae",
+    "genus": "Tylosaurus",
+    "regions": {
+     "na-e": 24,
+     "na-w": 25,
+     "eu": 15,
+     "af-w": 2,
+     "ar": 1
+    }
+   }
+  },
+  "Tyrannosaurus rex": {
+   "rank": "species",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 69.1,
+   "lad": 69.1,
+   "range": [
+    "na-w"
+   ],
+   "note": "Twelve metres, bone-crushing bite, binocular vision, and among the last non-avian dinosaurs to exist.",
+   "pbdb": {
+    "oid": "txn:54833",
+    "matched": "Tyrannosaurus rex",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 70,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Tyrannosaurus",
+    "regions": {
+     "na-w": 70
+    }
+   }
+  },
+  "Varanus priscus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 4.47,
+   "lad": 0.011,
+   "range": [
+    "au"
+   ],
+   "note": "A seven-metre monitor lizard, Australia's largest terrestrial predator until the megafauna extinction.",
+   "pbdb": {
+    "oid": "txn:267209",
+    "matched": "Varanus priscus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 9,
+    "fea": 5.333,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Varanidae",
+    "genus": "Varanus",
+    "regions": {
+     "au": 9
+    }
+   },
+   "no_own_icon": true
+  },
+  "Velociraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "Turkey-sized and feathered, from the Gobi -- one specimen locked in combat with a Protoceratops, both buried by a collapsing dune.",
+   "pbdb": {
+    "oid": "txn:38564",
+    "matched": "Velociraptor",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 89.8,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Velociraptor",
+    "regions": {
+     "na-w": 1,
+     "as-e": 17,
+     "as-c": 2
+    }
+   },
+   "w": 3
+  },
+  "Vulcanodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 199.5,
+   "lad": 184.2,
+   "range": [
+    "af-s"
+   ],
+   "note": "One of the earliest true sauropods, from Zimbabwe, as Gondwana begins to break apart.",
+   "pbdb": {
+    "oid": "txn:38650",
+    "matched": "Vulcanodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vulcanodon",
+    "regions": {
+     "af-s": 1
+    }
+   }
+  }
+ }
+}

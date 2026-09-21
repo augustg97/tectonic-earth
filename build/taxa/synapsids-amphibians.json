@@ -1,0 +1,897 @@
+{
+ "taxa": {
+  "Acanthostega": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 365,
+   "lad": 360,
+   "range": [
+    "gl"
+   ],
+   "note": "An early tetrapod with eight fingers and internal gills -- limbs evolved in the water, not for walking on land.",
+   "w": 3,
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Tetrapoda",
+    "order": "Ichthyostegalia",
+    "family": "Acanthostegidae"
+   }
+  },
+  "Cynognathus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 247,
+   "lad": 242,
+   "range": [
+    "af-s",
+    "af-e",
+    "sa-s",
+    "an"
+   ],
+   "note": "A dog-sized cynodont with differentiated teeth and probably fur -- most of the way to a mammal.",
+   "sz": 1.2,
+   "dt": "carnivore",
+   "hb": "terrestrial predator",
+   "pbdb": {
+    "oid": "txn:39186",
+    "matched": "Cynognathus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 247,
+    "lla": 233.6,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cynognathus",
+    "regions": {
+     "af-s": 15,
+     "sa-s": 1,
+     "an": 1,
+     "af-e": 2
+    }
+   },
+   "w": 3,
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Cynognathidae"
+   }
+  },
+  "Dicynodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 259,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e"
+   ],
+   "note": "An abundant tusked herbivore whose disappearance defines the terrestrial extinction horizon in the Karoo.",
+   "pbdb": {
+    "oid": "txn:39019",
+    "matched": "Dicynodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 266.9,
+    "lla": 237,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Dicynodon",
+    "regions": {
+     "af-e": 5,
+     "sa-s": 1,
+     "af-s": 23,
+     "eu": 2
+    }
+   }
+  },
+  "Dicynodontia": {
+   "rank": "infraorder",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 270,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Beaked, tusked herbivorous therapsids that become the most abundant large land animals on Earth.",
+   "pbdb": {
+    "oid": "txn:38996",
+    "matched": "Dicynodontia",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 1092,
+    "fea": 274.4,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia"
+   },
+   "rep": "Lystrosaurus"
+  },
+  "Dimetrodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sailback",
+   "fad": 295,
+   "lad": 272,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "A sail-backed synapsid predator, more closely related to us than to any dinosaur, and routinely mis-sold as one.",
+   "sz": 4.6,
+   "dt": "carnivore",
+   "hb": "terrestrial apex predator with a tall neural-spine sail",
+   "pbdb": {
+    "oid": "txn:38904",
+    "matched": "Dimetrodon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 94,
+    "fea": 298.9,
+    "lla": 266.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Sphenacodontidae",
+    "genus": "Dimetrodon",
+    "regions": {
+     "na-e": 88,
+     "eu": 1,
+     "na-w": 5
+    }
+   },
+   "w": 3
+  },
+  "Dinocephalia": {
+   "rank": "suborder",
+   "realm": "land",
+   "form": "dinocephalian",
+   "fad": 272,
+   "lad": 260,
+   "range": [
+    "af-s",
+    "eu",
+    "as-e",
+    "sa-s"
+   ],
+   "note": "Massive, thick-skulled therapsids, likely head-butting, that go extinct at the end of the interval.",
+   "pbdb": {
+    "oid": "txn:38949",
+    "matched": "Dinocephalia",
+    "exact": true,
+    "rank": "suborder",
+    "extant": false,
+    "noc": 175,
+    "fea": 283.3,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "regions": {
+     "eu": 51,
+     "na-e": 2,
+     "as-c": 2,
+     "af-e": 1,
+     "af-s": 112,
+     "sa-s": 7
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Synapsida",
+    "order": "Dinocephalia"
+   }
+  },
+  "Diplocaulus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lepospondyl",
+   "fad": 300,
+   "lad": 255,
+   "range": [
+    "na-w",
+    "na-e",
+    "af-n"
+   ],
+   "note": "A boomerang-headed amphibian of Permian ponds, its skull drawn out into broad lateral horns.",
+   "pbdb": {
+    "oid": "txn:37264",
+    "matched": "Diplocaulus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 74,
+    "fea": 307.4,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Diplocaulidae",
+    "genus": "Diplocaulus",
+    "regions": {
+     "na-e": 68,
+     "af-n": 1,
+     "na-w": 5
+    }
+   }
+  },
+  "Edaphosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sailback",
+   "fad": 303,
+   "lad": 272,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "An early sail-backed synapsid, and one of the first large herbivorous land vertebrates.",
+   "pbdb": {
+    "oid": "txn:38911",
+    "matched": "Edaphosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 39,
+    "fea": 303.7,
+    "lla": 274.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Edaphosauridae",
+    "genus": "Edaphosaurus",
+    "regions": {
+     "na-e": 32,
+     "na-w": 6,
+     "eu": 1
+    }
+   }
+  },
+  "Eryops": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 301.3,
+   "lad": 278.9,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A heavy-bodied temnospondyl amphibian, effectively the crocodile of Permian rivers.",
+   "pbdb": {
+    "oid": "txn:37011",
+    "matched": "Eryops",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 88,
+    "fea": 323.4,
+    "lla": 266.9,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Eryopidae",
+    "genus": "Eryops",
+    "regions": {
+     "na-e": 69,
+     "na-w": 17,
+     "eu": 2
+    }
+   }
+  },
+  "Estemmenosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dinocephalian",
+   "fad": 268,
+   "lad": 265,
+   "range": [
+    "eu"
+   ],
+   "note": "A bull-sized Russian dinocephalian carrying horn-like bosses on its skull -- a signature Angaran animal.",
+   "pbdb": {
+    "oid": "txn:38965",
+    "matched": "Estemmenosuchus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 274.4,
+    "lla": 264.28,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Estemmenosuchidae",
+    "genus": "Estemmenosuchus",
+    "regions": {
+     "eu": 5
+    }
+   }
+  },
+  "Gorgonops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 260,
+   "lad": 254,
+   "range": [
+    "af-s",
+    "af-e"
+   ],
+   "note": "A sabre-toothed predator of the Late Permian Karoo, top of the food chain before the Great Dying.",
+   "pbdb": {
+    "oid": "txn:39118",
+    "matched": "Gorgonops",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 264.28,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Gorgonopidae",
+    "genus": "Gorgonops",
+    "regions": {
+     "af-s": 14,
+     "af-e": 2
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Synapsida",
+    "order": "Gorgonopsia",
+    "family": "Gorgonopsidae"
+   }
+  },
+  "Gorgonopsia": {
+   "rank": "suborder",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 265,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e",
+    "eu"
+   ],
+   "note": "Sabre-toothed therapsid predators with an erect gait -- the first mammal-line animals that hunt like mammals.",
+   "pbdb": {
+    "oid": "txn:39095",
+    "matched": "Gorgonopsia",
+    "exact": true,
+    "rank": "suborder",
+    "extant": false,
+    "noc": 290,
+    "fea": 283.3,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "regions": {
+     "af-s": 193,
+     "eu": 44,
+     "af-e": 43,
+     "in": 1,
+     "na-e": 4,
+     "af-n": 4,
+     "as-e": 1
+    }
+   },
+   "rep": "Inostrancevia",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Synapsida",
+    "order": "Gorgonopsia"
+   }
+  },
+  "Ichthyostega": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 365,
+   "lad": 360,
+   "range": [
+    "gl"
+   ],
+   "note": "A more robust tetrapod from East Greenland, able to haul itself but still tied to water.",
+   "sz": 1.5,
+   "dt": "predator",
+   "hb": "amphibious, with limbs but a fish-like tail",
+   "pbdb": {
+    "oid": "txn:36965",
+    "matched": "Ichthyostega",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 372.15,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ichthyostegidae",
+    "genus": "Ichthyostega",
+    "regions": {
+     "gl": 5,
+     "eu": 1
+    }
+   },
+   "w": 3
+  },
+  "Inostrancevia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 259,
+   "lad": 252,
+   "range": [
+    "eu",
+    "af-s"
+   ],
+   "note": "A bear-sized gorgonopsian with sabre teeth, the apex predator of the last Permian ecosystems.",
+   "sz": 3.5,
+   "dt": "carnivore",
+   "hb": "terrestrial apex predator with sabre canines",
+   "pbdb": {
+    "oid": "txn:39127",
+    "matched": "Inostrancevia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 264.28,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Inostranceviidae",
+    "genus": "Inostrancevia",
+    "regions": {
+     "eu": 11,
+     "af-e": 1
+    }
+   },
+   "w": 3
+  },
+  "Kotlassia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 259,
+   "lad": 252,
+   "range": [
+    "eu"
+   ],
+   "note": "A Late Permian reptiliomorph of the Angaran wetlands, close to the ancestry of amniotes.",
+   "pbdb": {
+    "oid": "txn:37218",
+    "matched": "Kotlassia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 264.28,
+    "lla": 256.8,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Kotlassidae",
+    "genus": "Kotlassia",
+    "regions": {
+     "eu": 3
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Seymouriamorpha",
+    "family": "Kotlassiidae"
+   }
+  },
+  "Lystrosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 255,
+   "lad": 247,
+   "range": [
+    "af-s",
+    "in",
+    "an",
+    "as-c",
+    "as-e",
+    "eu"
+   ],
+   "note": "A pig-sized dicynodont that survives the extinction and then makes up most of the land vertebrate fauna of the entire planet.",
+   "sz": 1.0,
+   "dt": "herbivore",
+   "hb": "burrowing herbivore",
+   "pbdb": {
+    "oid": "txn:39049",
+    "matched": "Lystrosaurus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 124,
+    "fea": 264.28,
+    "lla": 247,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia",
+    "family": "Lystrosauridae",
+    "genus": "Lystrosaurus",
+    "regions": {
+     "an": 4,
+     "in": 19,
+     "af-s": 91,
+     "as-c": 9,
+     "eu": 1
+    }
+   },
+   "w": 3
+  },
+  "Metoposauridae": {
+   "rank": "family",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 232.2,
+   "lad": 216.5,
+   "range": [
+    "eu",
+    "in",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Flat-headed giant amphibians that mass-died in drying Triassic lakes across Laurasia.",
+   "pbdb": {
+    "oid": "txn:37162",
+    "matched": "Metoposauridae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 252,
+    "fea": 244.4,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Metoposauridae",
+    "regions": {
+     "na-w": 205,
+     "af-n": 5,
+     "eu": 22,
+     "na-e": 7,
+     "in": 9,
+     "mg": 2,
+     "af-s": 1,
+     "ar": 1
+    }
+   },
+   "rep": "Metoposaurus"
+  },
+  "Metoposaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 230,
+   "lad": 210,
+   "range": [
+    "eu"
+   ],
+   "note": "A flat-skulled giant amphibian that packed drying Late Triassic lakes across Europe by the hundreds, the type genus for the metoposaurid family.",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Metoposauridae"
+   }
+  },
+  "Oreophrynella": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "frog",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "Pebble toads endemic to individual tepui tops, which roll away from predators.",
+   "hab": [
+    "alpine",
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Anura",
+    "family": "Bufonidae"
+   },
+   "box": [
+    [
+     -67.5,
+     -59,
+     1,
+     7
+    ]
+   ]
+  },
+  "Placerias": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 221,
+   "lad": 210,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "Heavy-bodied browser",
+   "sz": 3.5,
+   "dt": "herbivore",
+   "hb": "heavy-bodied browser",
+   "pbdb": {
+    "oid": "txn:39034",
+    "matched": "Placerias",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 237,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Kannemeyeriiformes",
+    "family": "Stahleckeriidae",
+    "genus": "Placerias",
+    "regions": {
+     "na-w": 11,
+     "na-e": 2
+    }
+   }
+  },
+  "Plethodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "salamander",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca",
+    "sa-n",
+    "eu"
+   ],
+   "note": "Lungless salamanders that breathe through their skin; the Appalachians hold their greatest diversity.",
+   "pbdb": {
+    "oid": "txn:37385",
+    "matched": "Plethodontidae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 39,
+    "fea": 93.9,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Urodela",
+    "family": "Plethodontidae",
+    "regions": {
+     "na-e": 26,
+     "na-w": 11,
+     "ca": 2
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland",
+    "cave"
+   ]
+  },
+  "Seymouria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 295,
+   "lad": 272,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "A tetrapod so close to the amphibian-amniote boundary that its placement has flipped repeatedly.",
+   "pbdb": {
+    "oid": "txn:37206",
+    "matched": "Seymouria",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 104,
+    "fea": 315.2,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "regions": {
+     "na-e": 17,
+     "as-c": 6,
+     "eu": 77,
+     "na-w": 4
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Seymouriamorpha",
+    "family": "Seymouriidae"
+   }
+  },
+  "Sinophoneus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dinocephalian",
+   "fad": 268,
+   "lad": 265,
+   "range": [
+    "as-c"
+   ],
+   "note": "A Chinese dinocephalian therapsid: the Cathaysian block's own big Middle Permian predator, on a landmass separated from the rest.",
+   "pbdb": {
+    "oid": "txn:137799",
+    "matched": "Sinophoneus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 274.4,
+    "lla": 264.28,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Anteosauridae",
+    "genus": "Sinophoneus",
+    "regions": {
+     "as-c": 2
+    }
+   }
+  },
+  "Telmatobius": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "frog",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Aquatic water frogs breathing through skin folds in cold high-altitude lakes.",
+   "pbdb": {
+    "oid": "txn:482251",
+    "matched": "Telmatobius",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1,
+    "fea": 13.82,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Anura",
+    "family": "Telmatobiidae",
+    "genus": "Telmatobius",
+    "regions": {
+     "sa-n": 1
+    }
+   },
+   "hab": [
+    "lake",
+    "river",
+    "alpine"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     -80,
+     -64,
+     -30,
+     0
+    ]
+   ]
+  },
+  "Tritylodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 210,
+   "lad": 110,
+   "range": [
+    "af-s",
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-w"
+   ],
+   "note": "Small mammal-like cynodonts, herbivorous survivors of the synapsid line into the dinosaur age.",
+   "pbdb": {
+    "oid": "txn:39208",
+    "matched": "Tritylodontidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 121,
+    "fea": 227.3,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Tritylodontidae",
+    "regions": {
+     "af-s": 27,
+     "eu": 26,
+     "as-e": 16,
+     "na-w": 33,
+     "as-n": 10,
+     "an": 1,
+     "na-e": 1,
+     "as-c": 7
+    }
+   }
+  },
+  "Westlothiana lizziae": {
+   "rank": "species",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 338,
+   "lad": 334,
+   "range": [
+    "eu"
+   ],
+   "note": "A small, slender East Kirkton tetrapod, close to the origin of fully terrestrial amniotes.",
+   "pbdb": {
+    "oid": "txn:179032",
+    "matched": "Westlothiana lizziae",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 335.9,
+    "lla": 330.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Westlothiana",
+    "regions": {
+     "eu": 1
+    }
+   },
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Reptiliomorpha"
+   }
+  }
+ }
+}

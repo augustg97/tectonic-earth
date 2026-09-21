@@ -317,6 +317,24 @@ def marker_taxon(name, realm):
     province marker cannot slip through undescribed.
     """
     default_realm = "sea" if realm == "marine" else "land"
+    # THE REGISTRY FIRST (2026-09). build/taxa/*.json is now the one place an
+    # organism is described -- kind, form, range in time, range in space, note --
+    # and biota.compose() decides from it whether this marker belongs on a given
+    # card at a given age. The tables below are what the registry was seeded
+    # from; they answer only for a marker nobody has registered yet, and
+    # audit_biota.py counts those as unregistered names.
+    try:
+        import biota                                       # noqa: PLC0415
+        e = biota.get(name)
+        if e is not None:
+            out = {"n": e["n"], "r": e.get("rank"), "realm": e["realm"],
+                   "note": e.get("note", "")}
+            for k in ("sz", "hb", "dt"):
+                if e.get(k):
+                    out[k] = e[k]
+            return out
+    except Exception:                                      # noqa: BLE001
+        pass
     rec = _TD.by_name(name) if _TD else None
     if rec is not None:
         note = rec.note or (rec.habit or "").capitalize()
@@ -444,6 +462,26 @@ def _block_at(lon, lat, age, tracks):
     return best if bd <= BLOCK_REACH_KM else None
 
 
+def _basin_hint(lab):
+    """Which modern tropical ocean a sea label belongs to, for the one split the
+    province model cannot make from latitude: Atlantic, East Pacific, or (None)
+    the Indo-West Pacific. Read from the label's authored home in biota."""
+    try:
+        import biota                                         # noqa: PLC0415
+    except ImportError:
+        return None
+    home = biota.label_home(lab) or set()
+    if "atl" in home and not ({"pac", "ind"} & set(home)):
+        return "Atlantic"
+    # the whole Pacific is mostly Indo-West Pacific; only a LOCAL label east of
+    # the East Pacific Barrier is the eastern realm
+    if "pac" in home and "ind" not in home and biota.label_reach(lab) is not None:
+        pt = biota.label_point(lab)
+        if pt and -150.0 <= pt[0] <= -70.0:
+            return "East Pacific"
+    return None
+
+
 def build(labels, step=5):
     """({province_id: record}, {label_name: [[a_lo, a_hi, id], ...]}).
 
@@ -484,6 +522,8 @@ def build(labels, step=5):
                 lon = _lon_at(lab, a)
                 if lon is not None:
                     block = _block_at(float(lon), float(lat), a, tracks)
+            if realm == "marine" and a <= 14:
+                block = _basin_hint(lab) or block
             try:
                 p = pb.province(float(a), float(lat), realm, block)
             except Exception:                              # noqa: BLE001
@@ -505,8 +545,14 @@ def build(labels, step=5):
                         continue
                     t["ic"] = _icon(t["n"], t["realm"])
                     mk.append(t)
+                # `markers` are the model's bare NAMES, in its own order. They
+                # are what biota.compose() consumes: the registry, not this
+                # module, now says when and where each of them lived, so a
+                # province can no longer list Bison for North America at 60 Ma
+                # merely because "Nearctic" lasts that long.
                 recs[pid] = {"n": p.name, "r": p.realm, "b": p.basis,
-                             "c": p.confidence, "note": p.note, "mk": mk}
+                             "c": p.confidence, "note": p.note, "mk": mk,
+                             "markers": list(p.markers)}
             if runs and runs[-1][2] == pid and abs(runs[-1][1] - (a - step)) < 1e-6:
                 runs[-1][1] = a
             else:
@@ -568,7 +614,10 @@ def _selftest():
                 # guesses from the name scored Picea, Quercus, Cooksonia and
                 # Archaeopteris as animals, which would have reported no problem
                 # exactly where the problem was worst.
-                if realm == "terrestrial" and p.markers:
+                # ...but only once there WERE land animals. The oldest body fossil
+                # of one is Silurian (Pneumodesmus); an Ordovician land province
+                # that named an animal would be the error, not the fix.
+                if realm == "terrestrial" and p.markers and age <= 430:
                     if not any(m in ANIMAL_MARKERS for m in p.markers):
                         floraonly[p.name] = tuple(p.markers)
     print(f"  markers: {len(total)} distinct across the whole model, "

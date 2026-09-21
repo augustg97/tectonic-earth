@@ -448,6 +448,24 @@ def _cenozoic_marine_extended(age, lat, block, habitat=None):
                             "~10 Ma. Before that, Atlantic and Indo-Pacific shallow "
                             "faunas are continuous.",
                             ("Porites", "Halimeda", "seagrass meadows"))
+        # The tropics have been three oceans, not one, since the Tethys closed and
+        # Panama rose. `block` carries the basin for a modern sea ("Atlantic",
+        # "East Pacific") because latitude alone cannot: before this every warm
+        # sea on Earth, the Caribbean included, was headed "Indo-Pacific Realm".
+        if block == "Atlantic":
+            return Province("Tropical Atlantic Realm", "marine", "both", "good",
+                            "The smaller, younger tropical fauna. Cut off from the "
+                            "Indo-Pacific when the Tethys closed and from the eastern "
+                            "Pacific when Panama rose, it lost many reef genera in the "
+                            "Pliocene and kept about a tenth of the Indo-Pacific's corals.",
+                            ("Acropora", "Thalassia testudinum", "Sargassum natans"))
+        if block == "East Pacific":
+            return Province("Tropical Eastern Pacific", "marine", "both", "good",
+                            "Isolated on both sides: five thousand kilometres of open "
+                            "water to the west - the East Pacific Barrier - and the "
+                            "Isthmus of Panama to the east. Few reefs, cold upwelling, "
+                            "and its closest relatives are in the Caribbean.",
+                            ("Porites", "Mobula", "Dosidicus gigas"))
         return Province("Indo-Pacific Realm", "marine", "both", "good",
                         "The world's richest shallow-marine fauna, cut off from the "
                         "Atlantic by the Tethys closure and then by Panama. The Coral "
@@ -463,6 +481,17 @@ def _silurian_devonian_flora(age, lat, block, habitat=None):
     """The land is being colonised, and the flora is COSMOPOLITAN because it is
     tiny, spore-dispersed and low-diversity. Provinciality on land needs forests,
     and forests do not exist yet."""
+    if age > 433:
+        # Cooksonia, the oldest vascular plant, is Wenlock (~433 Ma). Before it the
+        # land's plants are known only from their spores, and naming Cooksonia on
+        # an Ordovician card was an anachronism of nearly forty million years.
+        return Province("Cryptospore-plant crust", "terrestrial", "age", "good",
+                        "Liverwort-grade plants known only from their spores "
+                        "(cryptospores), in a thin living crust with fungi, lichens and "
+                        "cyanobacteria on damp ground. No roots, no stems, no vascular "
+                        "plants yet, and nothing taller than a thumbnail.",
+                        ("Marchantiophyta", "Glomeromycota", "lichens",
+                         "Cyanobacterial crust"))
     if age > 419:
         return Province("Early tracheophyte ground cover", "terrestrial", "latitude",
                         "good",

@@ -1,0 +1,591 @@
+{
+ "taxa": {
+  "Agaricomycetes": {
+   "rank": "class",
+   "realm": "land",
+   "form": "fungus",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The mushroom-forming fungi. Molecular clocks put the origin of their lignin-digesting white rot in the late Carboniferous; before it dead wood simply piled up, which is much of the reason most of the world's coal is older.",
+   "pbdb": {
+    "oid": "txn:351217",
+    "matched": "Agaricomycetes",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 18,
+    "fea": 119.57,
+    "lla": 1.8,
+    "phylum": "Basidiomycota",
+    "class": "Agaricomycetes"
+   },
+   "pbdb_ok": true
+  },
+  "Armillaria ostoyae": {
+   "rank": "species",
+   "realm": "land",
+   "form": "fungus",
+   "fad": 2.58,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "as-n",
+    "as-e"
+   ],
+   "note": "A single honey-fungus clone threads through nine square kilometres of Oregon forest soil. By area it is the largest organism known to be alive.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Basidiomycota",
+    "class": "Agaricomycetes",
+    "order": "Agaricales",
+    "family": "Physalacriaceae"
+   },
+   "w": 0
+  },
+  "Bangiomorpha": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1050,
+   "lad": 1000,
+   "range": [
+    "na-n"
+   ],
+   "note": "A filamentous red alga with differentiated cells - among the oldest fossils tied to a living group.",
+   "sz": 0.002,
+   "dt": "photosynthesis",
+   "hb": "filamentous, attached to shallow substrate",
+   "pbdb": {
+    "oid": "txn:462557",
+    "matched": "Bangiomorpha",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 1200,
+    "lla": 1000,
+    "phylum": "Rhodophyta",
+    "class": "Bangiophyceae",
+    "order": "Bangiales",
+    "family": "Bangiaceae",
+    "genus": "Bangiomorpha",
+    "regions": {
+     "na-n": 1
+    }
+   },
+   "pbdb_ok": true,
+   "aka": [
+    "Bangiomorpha pubescens"
+   ]
+  },
+  "Chlorophyta": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1000,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Green algae established in shallow water; the ancestors of every land plant are somewhere in this group.",
+   "pbdb": {
+    "oid": "txn:54811",
+    "matched": "Chlorophyta",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 4911,
+    "fea": 2050,
+    "lla": 0,
+    "phylum": "Chlorophyta"
+   },
+   "pbdb_ok": true,
+   "hab": [
+    "coast",
+    "shelf",
+    "reef",
+    "lake",
+    "river",
+    "wetland"
+   ]
+  },
+  "Cladonia rangiferina": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lichen",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "holarctic"
+   ],
+   "note": "Reindeer lichen, the tundra's dominant winter forage.",
+   "hab": [
+    "tundra",
+    "forest",
+    "alpine"
+   ],
+   "lat": [
+    45,
+    90
+   ],
+   "cls": {
+    "phylum": "Ascomycota",
+    "class": "Lecanoromycetes",
+    "order": "Lecanorales",
+    "family": "Cladoniaceae"
+   }
+  },
+  "Glomeromycota": {
+   "rank": "phylum",
+   "realm": "land",
+   "form": "hyphae",
+   "fad": 460,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Arbuscular mycorrhizal fungi, found inside the earliest land plants. Those plants had no roots, so the fungus was the root; the partnership still runs about eighty percent of plant species today.",
+   "pbdb": {
+    "oid": "txn:212610",
+    "matched": "Glomeromycota",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Glomeromycota"
+   },
+   "pbdb_ok": true
+  },
+  "Halimeda": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 100,
+   "lad": 0,
+   "range": [
+    "tet",
+    "ind",
+    "pac",
+    "atl",
+    "ca",
+    "med",
+    "eu",
+    "in",
+    "ar",
+    "af-n",
+    "af-e",
+    "au",
+    "oc"
+   ],
+   "note": "A calcified green alga that breaks down into carbonate sand -- much of a tropical beach is dead Halimeda.",
+   "pbdb": {
+    "oid": "txn:54450",
+    "matched": "Halimeda",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 279,
+    "fea": 227.3,
+    "lla": 0,
+    "phylum": "Chlorophyta",
+    "class": "Ulvophyceae",
+    "order": "Bryopsidales",
+    "family": "Halimedaceae",
+    "genus": "Halimeda",
+    "regions": {
+     "eu": 41,
+     "oc": 29,
+     "af-e": 16,
+     "af-n": 3,
+     "sa-n": 9,
+     "ca": 24,
+     "au": 16,
+     "as-e": 4,
+     "na-e": 3,
+     "as-w": 19,
+     "mg": 2,
+     "nz": 3,
+     "ar": 17,
+     "in": 80,
+     "as-se": 3
+    }
+   },
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "pbdb_ok": true
+  },
+  "Macrocystis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "kelp",
+   "fad": 14,
+   "lad": 0,
+   "range": [
+    "pac",
+    "sou",
+    "na-w",
+    "sa-s",
+    "af-s",
+    "au",
+    "nz"
+   ],
+   "note": "Giant kelp; kelp forests establish as a new nearshore biome in newly cool coastal waters.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    28,
+    62
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Ochrophyta",
+    "class": "Phaeophyceae",
+    "order": "Laminariales",
+    "family": "Laminariaceae"
+   },
+   "box": [
+    [
+     -135,
+     -108,
+     26,
+     60
+    ],
+    [
+     -82,
+     -55,
+     -57,
+     -5
+    ],
+    [
+     10,
+     35,
+     -38,
+     -28
+    ],
+    [
+     110,
+     180,
+     -56,
+     -30
+    ],
+    [
+     35,
+     80,
+     -56,
+     -45
+    ],
+    [
+     -45,
+     -25,
+     -56,
+     -50
+    ]
+   ]
+  },
+  "Ourasphaira giraldae": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "hyphae",
+   "fad": 1010,
+   "lad": 890,
+   "range": [
+    "na-n"
+   ],
+   "note": "Branching filaments with chitin-like walls from Arctic Canada, and the strongest candidate for the oldest fungus.",
+   "pbdb": {
+    "oid": "txn:473722",
+    "matched": "Ourasphaira giraldae",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 0,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Ourasphaira"
+   },
+   "pbdb_ok": true
+  },
+  "Palaeoagaracites antiquus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "fungus",
+   "fad": 100,
+   "lad": 98,
+   "range": [
+    "as-se"
+   ],
+   "note": "The oldest gilled mushroom known, in 99-million-year-old Burmese amber and already entirely modern in form.",
+   "pbdb": {
+    "oid": "txn:374071",
+    "matched": "Palaeoagaracites antiquus",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 1,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Basidiomycota",
+    "class": "Agaricomycetes",
+    "order": "Agaricales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Palaeoagaracites"
+   }
+  },
+  "Prototaxites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prototaxites",
+   "fad": 430,
+   "lad": 360,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "Tapering trunks up to eight metres tall standing over a landscape where nothing else reached the knee. Carbon isotopes point to a fungus rather than a plant, making it the largest organism on land for 40 million years.",
+   "sz": 8.0,
+   "dt": "saprotrophy / decay",
+   "hb": "free-standing column, the tallest organism of its day",
+   "pbdb": {
+    "oid": "txn:391166",
+    "matched": "Prototaxites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 41,
+    "fea": 443.1,
+    "lla": 358.86,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Prototaxites",
+    "regions": {
+     "na-e": 5,
+     "eu": 33,
+     "ar": 1
+    }
+   },
+   "w": 3,
+   "no_own_icon": true
+  },
+  "Reduviasporonites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyphae",
+   "fad": 254,
+   "lad": 250,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A worldwide fungal spike of filaments and spores at the extinction horizon itself, usually read as the rot of a collapsing land flora, though some workers argue the fossils are algae.",
+   "pbdb": {
+    "oid": "txn:277309",
+    "matched": "Reduviasporonites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 259.857,
+    "lla": 66,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Reduviasporonites"
+   },
+   "pbdb_ok": true
+  },
+  "Rhodophyta": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1050,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Red algae persist through the glaciations in shallow refugia.",
+   "pbdb": {
+    "oid": "txn:54808",
+    "matched": "Rhodophyta",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 8567,
+    "fea": 1200,
+    "lla": 0,
+    "phylum": "Rhodophyta"
+   },
+   "pbdb_ok": true,
+   "no_own_icon": true,
+   "hab": [
+    "coast",
+    "shelf",
+    "reef"
+   ]
+  },
+  "Termitomyces": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fungus",
+   "fad": 31,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-w",
+    "mg",
+    "in",
+    "as-se"
+   ],
+   "note": "A fungus farmed in gardens inside termite mounds -- an agriculture tens of millions of years older than our own.",
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Basidiomycota",
+    "class": "Agaricomycetes",
+    "order": "Agaricales",
+    "family": "Lyophyllaceae"
+   }
+  },
+  "Tortotubus protuberans": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hyphae",
+   "fad": 445,
+   "lad": 380,
+   "range": [
+    "eu",
+    "na-e",
+    "af-n",
+    "ar"
+   ],
+   "note": "The oldest fossil of a land organism with cord-forming mycelium. Fungi were rotting and binding the first soils before there were plant roots to put in them.",
+   "pbdb": {
+    "oid": "txn:337528",
+    "matched": "Tortotubus protuberans",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 0,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tortotubus"
+   },
+   "pbdb_ok": true
+  },
+  "Umbilicaria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lichen",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "holarctic",
+    "an",
+    "sa-s"
+   ],
+   "note": "Rock tripe: leathery lichens clinging to bare rock, among the dominant visible life of ice-free polar and alpine ground.",
+   "hab": [
+    "tundra",
+    "alpine",
+    "ice"
+   ],
+   "cls": {
+    "phylum": "Ascomycota",
+    "class": "Lecanoromycetes",
+    "order": "Umbilicariales",
+    "family": "Umbilicariaceae"
+   }
+  },
+  "kelp": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "kelp",
+   "fad": 14,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "sou",
+    "ind",
+    "arc"
+   ],
+   "note": "Large brown algae forming underwater forests on cool rocky coasts. A Neogene novelty, and the habitat sea otters and abalone depend on.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    30,
+    75
+   ],
+   "rep": "Macrocystis",
+   "cls": {
+    "phylum": "Ochrophyta",
+    "class": "Phaeophyceae",
+    "order": "Laminariales",
+    "family": ""
+   }
+  },
+  "lichens": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "lichen",
+   "fad": 400,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A fungus farming algae or cyanobacteria inside itself. Among the first things to colonise bare rock, and still the pioneer on newly exposed ground.",
+   "w": 1,
+   "cls": {
+    "phylum": "Ascomycota",
+    "class": "Lecanoromycetes",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Posidonia oceanica": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 5.3,
+   "lad": 0,
+   "range": [
+    "med"
+   ],
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Posidoniaceae"
+   },
+   "note": "Neptune grass: a flowering plant whose meadows anchor the Mediterranean's endemic shelf ecosystem; single clones are thought to be tens of thousands of years old."
+  }
+ }
+}

@@ -1,0 +1,4918 @@
+{
+ "taxa": {
+  "Acropora": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      60,
+      14
+     ],
+     "in": [
+      "eu",
+      "tet",
+      "med"
+     ]
+    },
+    {
+     "t": [
+      60,
+      0
+     ],
+     "in": [
+      "ind",
+      "pac",
+      "atl",
+      "ca",
+      "af-e",
+      "ar",
+      "as-se",
+      "au",
+      "oc"
+     ]
+    }
+   ],
+   "note": "The fast-growing staghorn and table corals that build most of the framework of a modern reef.",
+   "pbdb": {
+    "oid": "txn:6114",
+    "matched": "Acropora",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1624,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Scleractinia",
+    "family": "Acroporidae",
+    "genus": "Acropora",
+    "regions": {
+     "eu": 126,
+     "in": 14,
+     "ca": 464,
+     "oc": 103,
+     "ar": 64,
+     "as-w": 19,
+     "ng": 47,
+     "as-se": 151,
+     "as-e": 97,
+     "sa-n": 121,
+     "af-e": 60,
+     "na-e": 47,
+     "au": 233,
+     "mg": 6,
+     "nz": 21,
+     "as-c": 2
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      5,
+      0
+     ],
+     "box": [
+      [
+       30,
+       180,
+       -35,
+       35
+      ],
+      [
+       -180,
+       -140,
+       -30,
+       30
+      ],
+      [
+       -98,
+       -58,
+       8,
+       31
+      ]
+     ]
+    }
+   ]
+  },
+  "Agnostus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 505,
+   "lad": 485,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w",
+    "as-n",
+    "as-e",
+    "as-c"
+   ],
+   "note": "A tiny, blind agnostid trilobite, a few millimetres long and so widespread that it zones Cambrian rocks across several continents.",
+   "pbdb": {
+    "oid": "txn:19176",
+    "matched": "Agnostus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 105,
+    "fea": 515.3,
+    "lla": 445.2,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Agnostidae",
+    "genus": "Agnostus",
+    "regions": {
+     "na-w": 8,
+     "eu": 37,
+     "na-n": 5,
+     "as-n": 2,
+     "na-e": 4,
+     "as-e": 7,
+     "gl": 5,
+     "sa-s": 1,
+     "as-c": 34,
+     "as-se": 1,
+     "an": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Alvinella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "The 'Pompeii worm', living on chimney walls in some of the hottest water any animal endures.",
+   "hab": [
+    "vent"
+   ],
+   "cls": {
+    "phylum": "Annelida",
+    "class": "Polychaeta",
+    "order": "Terebellida",
+    "family": "Alvinellidae"
+   }
+  },
+  "Ammolite": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 75,
+   "lad": 72,
+   "range": [
+    "na-w"
+   ],
+   "note": "Not a taxon but a legacy: Bearpaw ammonite shells fossilised as the gem ammolite.",
+   "rep": "Placenticeras",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": ""
+   }
+  },
+  "Ammonoidea": {
+   "rank": "subclass",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 410,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Coiled cephalopods diversifying fast; they will become the single best index fossil of the Mesozoic.",
+   "pbdb": {
+    "oid": "txn:14505",
+    "matched": "Ammonoidea",
+    "exact": true,
+    "rank": "subclass",
+    "extant": true,
+    "noc": 94442,
+    "fea": 419.62,
+    "lla": 56,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonoidea"
+   },
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Amphipora": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "stromatoporoid",
+   "fad": 400,
+   "lad": 360,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-se",
+    "au",
+    "eu",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A rod-shaped stromatoporoid sponge that grew in dense thickets in the lagoons behind Devonian reefs.",
+   "pbdb": {
+    "oid": "txn:3346",
+    "matched": "Amphipora",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 380,
+    "fea": 443.1,
+    "lla": 358.86,
+    "phylum": "Porifera",
+    "class": "Stromatoporoidea",
+    "order": "Amphiporida",
+    "family": "Amphiporidae",
+    "genus": "Amphipora",
+    "regions": {
+     "na-n": 42,
+     "na-w": 59,
+     "eu": 160,
+     "na-e": 3,
+     "au": 15,
+     "as-c": 32,
+     "as-e": 6,
+     "as-se": 46,
+     "as-n": 7,
+     "af-n": 10
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    40
+   ]
+  },
+  "Ampyx": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 478,
+   "lad": 443,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-e",
+    "au",
+    "eu",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A blind trilobite with three long spines, sometimes fossilised walking in single-file 'conga lines' across the sea floor.",
+   "pbdb": {
+    "oid": "txn:19840",
+    "matched": "Ampyx",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 244,
+    "fea": 486.85,
+    "lla": 419.62,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Trinucleida",
+    "family": "Raphiophoridae",
+    "genus": "Ampyx",
+    "regions": {
+     "na-e": 28,
+     "na-n": 2,
+     "eu": 122,
+     "na-w": 15,
+     "au": 6,
+     "as-e": 24,
+     "sa-s": 13,
+     "as-c": 7,
+     "as-n": 2,
+     "af-n": 14,
+     "as-w": 3,
+     "as-se": 1
+    }
+   }
+  },
+  "Anomalocaris": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 518.5,
+   "lad": 500.8,
+   "range": [
+    "as-e",
+    "au",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A metre-long swimming predator with grasping appendages, and the first animal large enough to sit at the top of a food web.",
+   "sz": 1.0,
+   "dt": "predator",
+   "hb": "active nektonic swimmer with lateral flaps",
+   "pbdb": {
+    "oid": "txn:7370",
+    "matched": "Anomalocaris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Radiodonta",
+    "family": "Anomalocarididae",
+    "genus": "Anomalocaris",
+    "regions": {
+     "na-e": 9,
+     "na-w": 18,
+     "as-e": 4,
+     "au": 2,
+     "na-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Archaeocyatha": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "archaeocyath",
+   "fad": 523.2,
+   "lad": 512.1,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-e",
+    "as-n",
+    "au",
+    "eu",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Sponge-grade cone-shaped reef builders that made the first animal reef framework and were extinct within twenty million years.",
+   "pbdb": {
+    "oid": "txn:146770",
+    "matched": "Archaeocyatha",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 4655,
+    "fea": 635,
+    "lla": 497,
+    "phylum": "Porifera",
+    "class": "Archaeocyatha",
+    "regions": {
+     "na-e": 20,
+     "na-w": 172,
+     "na-n": 87,
+     "as-n": 2822,
+     "as-c": 139,
+     "as-e": 98,
+     "in": 1,
+     "eu": 278,
+     "au": 177,
+     "an": 62,
+     "gl": 4,
+     "af-n": 140
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "aka": [
+    "archaeocyaths"
+   ]
+  },
+  "Asaphidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 497,
+   "lad": 443,
+   "range": [
+    "as-c",
+    "as-e",
+    "au",
+    "eu",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "Large, smooth-shelled trilobites, some with eyes on stalks, that dominate many Ordovician carbonate platforms.",
+   "pbdb": {
+    "oid": "txn:82596",
+    "matched": "Asaphidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 4602,
+    "fea": 504.5,
+    "lla": 432.9,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Asaphidae",
+    "regions": {
+     "na-e": 1222,
+     "na-w": 516,
+     "eu": 1072,
+     "na-n": 72,
+     "au": 133,
+     "as-se": 9,
+     "as-e": 396,
+     "sa-s": 357,
+     "sa-n": 10,
+     "ca": 19,
+     "as-c": 141,
+     "as-n": 19,
+     "af-n": 20,
+     "nz": 1,
+     "gl": 1,
+     "as-w": 1
+    }
+   }
+  },
+  "Asaphus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 470,
+   "lad": 455,
+   "range": [
+    "eu"
+   ],
+   "note": "A large asaphid trilobite of the Baltic Ordovician, some species carrying their eyes on long stalks to see over soft mud.",
+   "pbdb": {
+    "oid": "txn:19864",
+    "matched": "Asaphus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 178,
+    "fea": 486.85,
+    "lla": 443.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Asaphidae",
+    "genus": "Asaphus",
+    "regions": {
+     "eu": 161,
+     "as-e": 8,
+     "sa-s": 1,
+     "as-c": 4,
+     "na-e": 1,
+     "as-n": 2
+    }
+   }
+  },
+  "Australocoelia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 410,
+   "lad": 385,
+   "range": [
+    "af-s",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Diagnostic of the cold high-latitude Gondwanan realm.",
+   "sz": 0.02,
+   "dt": "suspension feeding",
+   "hb": "benthic, cold-water shelf",
+   "pbdb": {
+    "oid": "txn:29792",
+    "matched": "Australocoelia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 81,
+    "fea": 419.62,
+    "lla": 372.15,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Rhynchonellida",
+    "family": "Leptocoeliidae",
+    "genus": "Australocoelia",
+    "regions": {
+     "sa-s": 35,
+     "sa-n": 32,
+     "af-s": 14
+    }
+   },
+   "lat": [
+    40,
+    90
+   ]
+  },
+  "Australospirifer": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 410,
+   "lad": 385,
+   "range": [
+    "af-s",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A spiriferide brachiopod of the cold Malvinokaffric shelves of southern Gondwana.",
+   "pbdb": {
+    "oid": "txn:29112",
+    "matched": "Australospirifer",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 86,
+    "fea": 419.62,
+    "lla": 372.15,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Spiriferida",
+    "family": "Hysterolitidae",
+    "genus": "Australospirifer",
+    "regions": {
+     "sa-s": 38,
+     "an": 1,
+     "af-s": 21,
+     "sa-n": 26
+    }
+   },
+   "lat": [
+    40,
+    90
+   ]
+  },
+  "Baculites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "heteromorph",
+   "fad": 94,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "af-s",
+    "af-n",
+    "as-e",
+    "in",
+    "an",
+    "sa-s",
+    "au"
+   ],
+   "note": "A straight-shelled ammonite so abundant it zones the entire seaway; the chalk records its coccolith plankton.",
+   "pbdb": {
+    "oid": "txn:14603",
+    "matched": "Baculites",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1127,
+    "fea": 137.05,
+    "lla": 56,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Baculitidae",
+    "genus": "Baculites",
+    "regions": {
+     "na-w": 566,
+     "eu": 134,
+     "na-e": 263,
+     "sa-s": 22,
+     "as-w": 12,
+     "nz": 10,
+     "af-s": 24,
+     "in": 1,
+     "as-e": 30,
+     "na-n": 4,
+     "af-w": 9,
+     "gl": 9,
+     "an": 16,
+     "au": 2,
+     "ca": 2,
+     "sa-n": 2,
+     "af-n": 1,
+     "ar": 10,
+     "as-c": 5
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Bathymodiolus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mussel",
+   "fad": 45,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Vent mussels living on sulphur-eating bacteria in their gills — no sunlight, no photosynthesis.",
+   "pbdb": {
+    "oid": "txn:89691",
+    "matched": "Bathymodiolus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 27,
+    "fea": 48.07,
+    "lla": 5.333,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Mytilida",
+    "family": "Mytilidae",
+    "genus": "Bathymodiolus",
+    "regions": {
+     "na-w": 20,
+     "as-e": 2,
+     "sa-n": 5
+    }
+   },
+   "hab": [
+    "vent"
+   ],
+   "pbdb_ok": true
+  },
+  "Belemnitida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "belemnite",
+   "fad": 201,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Squid-like cephalopods whose bullet-shaped guards are among the commonest Jurassic fossils.",
+   "pbdb": {
+    "oid": "txn:15832",
+    "matched": "Belemnitida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 2108,
+    "fea": 335.4,
+    "lla": 33.9,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Belemnitida"
+   },
+   "w": 3,
+   "aka": [
+    "belemnites"
+   ]
+  },
+  "Bigotina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 517,
+   "range": [
+    "eu",
+    "af-n"
+   ],
+   "note": "An early Cambrian trilobite of the West Gondwanan shelves, and the marker of the Bigotinid province.",
+   "pbdb": {
+    "oid": "txn:20348",
+    "matched": "Bigotina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 521,
+    "lla": 516,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Bigotinidae",
+    "genus": "Bigotina",
+    "regions": {
+     "eu": 3,
+     "af-n": 12
+    }
+   }
+  },
+  "Bivalvia": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 530,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Clams, mussels, oysters and scallops. They take over the shallow sea floor from brachiopods after the end-Permian and never give it back.",
+   "pbdb": {
+    "oid": "txn:16005",
+    "matched": "Bivalvia",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 211772,
+    "fea": 538.8,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia"
+   },
+   "pbdb_ok": true,
+   "aka": [
+    "bivalves"
+   ],
+   "no_own_icon": true
+  },
+  "Blastoidea": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "blastoid",
+   "fad": 460,
+   "lad": 252,
+   "range": [
+    "na-e",
+    "na-w",
+    "eu",
+    "au",
+    "as-se",
+    "as-c"
+   ],
+   "note": "Bud-shaped echinoderms, abundant now and destined to disappear at the end of the Permian.",
+   "pbdb": {
+    "oid": "txn:30820",
+    "matched": "Blastoidea",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 760,
+    "fea": 471.3,
+    "lla": 251.1,
+    "phylum": "Echinodermata",
+    "class": "Blastoidea",
+    "regions": {
+     "na-e": 513,
+     "na-n": 3,
+     "au": 44,
+     "as-c": 22,
+     "eu": 110,
+     "na-w": 33,
+     "as-se": 7,
+     "as-e": 5,
+     "af-s": 9,
+     "sa-n": 1,
+     "sa-s": 2,
+     "ar": 8,
+     "af-n": 2,
+     "as-n": 1
+    }
+   }
+  },
+  "Brachiopoda": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 538.8,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Shelled filter feeders that will dominate the shelf benthos for the next three hundred million years.",
+   "pbdb": {
+    "oid": "txn:26322",
+    "matched": "Brachiopoda",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 188304,
+    "fea": 538.8,
+    "lla": 0,
+    "phylum": "Brachiopoda"
+   },
+   "aka": [
+    "brachiopods"
+   ],
+   "no_own_icon": true
+  },
+  "Bradgatia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 575,
+   "lad": 560,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A bush-shaped rangeomorph, its fronds radiating from a common base rather than standing on a stalk.",
+   "pbdb": {
+    "oid": "txn:121424",
+    "matched": "Bradgatia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rangeomorpha",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Bradgatia",
+    "regions": {
+     "na-e": 24,
+     "eu": 4,
+     "na-w": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Bryozoa": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "bryozoan",
+   "fad": 521.0,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Colonial encrusters and branching forms that build much of the reef and hardground framework.",
+   "pbdb": {
+    "oid": "txn:24773",
+    "matched": "Bryozoa",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 31050,
+    "fea": 521,
+    "lla": 0,
+    "phylum": "Bryozoa"
+   },
+   "aka": [
+    "bryozoans"
+   ]
+  },
+  "Buchia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 160,
+   "lad": 130,
+   "range": [
+    "as-n",
+    "eu",
+    "gl",
+    "na-n",
+    "na-w",
+    "as-e"
+   ],
+   "note": "A small clam so abundant and fast-evolving it dates the whole boreal Jurassic-Cretaceous.",
+   "sz": 0.08,
+   "dt": "suspension feeding",
+   "hb": "cool-water shelf, gregarious",
+   "pbdb": {
+    "oid": "txn:16523",
+    "matched": "Buchia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1057,
+    "fea": 184.2,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Buchiidae",
+    "genus": "Buchia",
+    "regions": {
+     "gl": 141,
+     "mg": 1,
+     "as-n": 187,
+     "na-w": 240,
+     "na-n": 144,
+     "eu": 59,
+     "an": 3,
+     "as-e": 85,
+     "ca": 6,
+     "nz": 25,
+     "in": 17,
+     "ng": 6,
+     "au": 2,
+     "as-c": 3
+    }
+   },
+   "lat": [
+    35,
+    90
+   ]
+  },
+  "Burmeisteria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 419,
+   "lad": 385,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-s"
+   ],
+   "note": "A homalonotid trilobite of the Malvinokaffric Realm, heavy-shelled and adapted to cold siliciclastic bottoms.",
+   "pbdb": {
+    "oid": "txn:21474",
+    "matched": "Burmeisteria",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 43,
+    "fea": 432.9,
+    "lla": 387.95,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Homalonotidae",
+    "genus": "Burmeisteria",
+    "regions": {
+     "sa-n": 6,
+     "af-n": 4,
+     "af-s": 19,
+     "sa-s": 10,
+     "nz": 3,
+     "eu": 1
+    }
+   },
+   "lat": [
+    40,
+    90
+   ]
+  },
+  "Calyptogena": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    "pac",
+    "atl"
+   ],
+   "note": "Big white clams clustered in the warm sulphide flow around vents and seeps, fed by chemosynthetic bacteria in their gills.",
+   "pbdb": {
+    "oid": "txn:17433",
+    "matched": "Calyptogena",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 13,
+    "fea": 83.6,
+    "lla": 0.0117,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Vesicomyidae",
+    "genus": "Calyptogena",
+    "regions": {
+     "as-e": 3,
+     "as-n": 1,
+     "na-w": 6,
+     "na-n": 3
+    }
+   },
+   "hab": [
+    "vent"
+   ],
+   "pbdb_ok": true
+  },
+  "Cameroceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 477.4,
+   "lad": 447.5,
+   "range": [
+    "as-c",
+    "as-e",
+    "eu",
+    "na-e"
+   ],
+   "note": "A giant straight-shelled nautiloid, possibly six metres long, hunting the shelf seas.",
+   "sz": 6.0,
+   "dt": "apex predator",
+   "hb": "nektonic, with a long straight conical shell",
+   "pbdb": {
+    "oid": "txn:12713",
+    "matched": "Cameroceras",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 89,
+    "fea": 486.85,
+    "lla": 443.1,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Endocerida",
+    "family": "Endoceratidae",
+    "genus": "Cameroceras",
+    "regions": {
+     "na-e": 41,
+     "as-e": 23,
+     "as-c": 3,
+     "eu": 21
+    }
+   }
+  },
+  "Ceratites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 244,
+   "lad": 237,
+   "range": [
+    "eu"
+   ],
+   "note": "The ammonite that dates the German Muschelkalk so precisely its zones are named after it.",
+   "pbdb": {
+    "oid": "txn:14068",
+    "matched": "Ceratites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 160,
+    "fea": 250.8,
+    "lla": 227.3,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Ceratitidae",
+    "genus": "Ceratites",
+    "regions": {
+     "na-w": 3,
+     "eu": 111,
+     "as-se": 1,
+     "ar": 5,
+     "in": 24,
+     "as-n": 4,
+     "as-e": 2
+    }
+   },
+   "place_ok": true
+  },
+  "Ceratitida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 260,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Ammonoids with frilled-saddle sutures, radiating from a handful of end-Permian survivors to become the standard timekeepers of the Triassic.",
+   "pbdb": {
+    "oid": "txn:14000",
+    "matched": "Ceratitida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 20093,
+    "fea": 283.3,
+    "lla": 184.2,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida"
+   }
+  },
+  "Charnia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 575,
+   "lad": 555,
+   "range": [
+    "eu",
+    "na-e",
+    "au",
+    "as-n"
+   ],
+   "note": "Frond-shaped rangeomorphs anchored to the sea floor, feeding without a mouth or a gut.",
+   "sz": 1.0,
+   "dt": "osmotrophy or suspension feeding",
+   "hb": "sessile frond anchored by a holdfast, in the deep sea below the photic zone",
+   "pbdb": {
+    "oid": "txn:4729",
+    "matched": "Charnia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 57,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rangeomorpha",
+    "family": "Charniidae",
+    "genus": "Charnia",
+    "regions": {
+     "na-e": 32,
+     "eu": 14,
+     "as-n": 2,
+     "au": 3,
+     "na-n": 1,
+     "as-e": 3,
+     "as-c": 2
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true,
+   "aka": [
+    "Charnia masoni"
+   ]
+  },
+  "Claraia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 252,
+   "lad": 247,
+   "range": [
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "as-w",
+    "eu",
+    "gl",
+    "in",
+    "na-w"
+   ],
+   "note": "A thin-shelled bivalve that carpets post-extinction seafloors -- the classic disaster taxon.",
+   "pbdb": {
+    "oid": "txn:16556",
+    "matched": "Claraia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1185,
+    "fea": 266.9,
+    "lla": 154.8,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Claraiidae",
+    "genus": "Claraia",
+    "regions": {
+     "eu": 178,
+     "gl": 166,
+     "na-w": 44,
+     "as-e": 528,
+     "af-n": 3,
+     "as-se": 75,
+     "ar": 53,
+     "as-c": 28,
+     "au": 8,
+     "in": 29,
+     "as-w": 49,
+     "na-n": 2,
+     "as-n": 5,
+     "mg": 1
+    }
+   }
+  },
+  "Clarkeia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 438,
+   "lad": 402,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-s"
+   ],
+   "note": "An index brachiopod of the cool Silurian Malvinokaffric seas, unlike anything in the tropics.",
+   "pbdb": {
+    "oid": "txn:29809",
+    "matched": "Clarkeia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 26,
+    "fea": 443.1,
+    "lla": 387.95,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Rhynchonellida",
+    "family": "Eatoniidae",
+    "genus": "Clarkeia",
+    "regions": {
+     "eu": 6,
+     "sa-s": 11,
+     "af-w": 1,
+     "sa-n": 6,
+     "af-n": 1,
+     "af-s": 1
+    }
+   },
+   "lat": [
+    40,
+    90
+   ],
+   "place_ok": true
+  },
+  "Cloudina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 550,
+   "lad": 539,
+   "range": [
+    "af-s",
+    "ar",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-w",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Stacked calcareous cones that built the first animal reefs, and carry the first drill holes made by a predator.",
+   "sz": 0.04,
+   "dt": "suspension feeding",
+   "hb": "gregarious tube-dweller, reef-forming",
+   "pbdb": {
+    "oid": "txn:7338",
+    "matched": "Cloudina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 69,
+    "fea": 635,
+    "lla": 525.5,
+    "phylum": "Cnidaria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cloudinidae",
+    "genus": "Cloudina",
+    "regions": {
+     "af-s": 12,
+     "na-w": 12,
+     "ar": 5,
+     "as-e": 13,
+     "sa-s": 18,
+     "sa-n": 2,
+     "as-n": 2,
+     "eu": 5
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "pbdb_ok": true,
+   "conf_note": "Nama Group (Namibia) and correlative sections constrain Cloudina to ~550-539 Ma, ending at the Ediacaran-Cambrian boundary; the robust window is skewed old."
+  },
+  "Congeria": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "clam",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w"
+   ],
+   "note": "An endemic brackish-water mussel that swarmed the isolated, freshening Paratethyan basins.",
+   "pbdb": {
+    "oid": "txn:97797",
+    "matched": "Congeria",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 30,
+    "fea": 27.3,
+    "lla": 0.0117,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Dreissenidae",
+    "genus": "Congeria",
+    "regions": {
+     "eu": 22,
+     "as-w": 7,
+     "na-e": 1
+    }
+   },
+   "hab": [
+    "lake"
+   ],
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb_ok": true
+  },
+  "Crinoidea": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 508.2,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Stalked echinoderms in meadows so dense that entire limestone formations are made of their debris.",
+   "pbdb": {
+    "oid": "txn:31590",
+    "matched": "Crinoidea",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 14529,
+    "fea": 508.2,
+    "lla": 0,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea"
+   },
+   "aka": [
+    "crinoids"
+   ]
+  },
+  "Cucullaea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 183,
+   "lad": 0,
+   "range": [
+    "an",
+    "ar",
+    "as-e",
+    "eu",
+    "na-e",
+    "na-w",
+    "nz",
+    "sa-s"
+   ],
+   "note": "Robust ark clams, common on sandy sea floors from the Jurassic onward.",
+   "pbdb": {
+    "oid": "txn:16224",
+    "matched": "Cucullaea",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1454,
+    "fea": 365.2,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Arcida",
+    "family": "Cucullaeidae",
+    "genus": "Cucullaea",
+    "regions": {
+     "na-e": 483,
+     "an": 79,
+     "eu": 207,
+     "na-w": 217,
+     "as-n": 11,
+     "sa-s": 165,
+     "in": 8,
+     "sa-n": 20,
+     "ar": 30,
+     "af-e": 23,
+     "ca": 4,
+     "as-w": 24,
+     "af-w": 2,
+     "au": 22,
+     "nz": 90,
+     "as-e": 40,
+     "af-s": 6,
+     "as-c": 4,
+     "as-se": 7,
+     "gl": 4,
+     "af-n": 2
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Cyprideis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ostracod",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "as-w",
+    "eu",
+    "na-e",
+    "na-w",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "A brackish ostracod that boomed as the Mediterranean's chemistry swung wildly during the salinity crisis.",
+   "pbdb": {
+    "oid": "txn:24017",
+    "matched": "Cyprideis",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 43,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Arthropoda",
+    "class": "Ostracoda",
+    "order": "Podocopida",
+    "family": "Cytherideidae",
+    "genus": "Cyprideis",
+    "regions": {
+     "af-e": 12,
+     "eu": 8,
+     "na-w": 3,
+     "na-e": 2,
+     "sa-n": 9,
+     "as-w": 4,
+     "ca": 1,
+     "as-c": 1,
+     "sa-s": 3
+    }
+   }
+  },
+  "Cyrtospirifer": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 383,
+   "lad": 359,
+   "range": [
+    "af-n",
+    "ar",
+    "as-c",
+    "as-e",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A spiriferide brachiopod that spread almost worldwide in the Late Devonian, as the earlier provincial faunas merged.",
+   "pbdb": {
+    "oid": "txn:29213",
+    "matched": "Cyrtospirifer",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 449,
+    "fea": 393.47,
+    "lla": 259.857,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Spiriferida",
+    "family": "Cyrtospiriferidae",
+    "genus": "Cyrtospirifer",
+    "regions": {
+     "na-e": 116,
+     "na-w": 118,
+     "na-n": 7,
+     "eu": 92,
+     "as-c": 60,
+     "au": 4,
+     "af-n": 9,
+     "sa-n": 1,
+     "as-e": 16,
+     "ar": 10,
+     "sa-s": 1,
+     "as-se": 8,
+     "as-n": 7
+    }
+   }
+  },
+  "Daonella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 247,
+   "lad": 235,
+   "range": [
+    "as-e",
+    "as-n",
+    "as-se",
+    "as-w",
+    "eu",
+    "na-w",
+    "nz"
+   ],
+   "note": "A flat, paper-thin bivalve of Triassic deep-shelf muds, often found in mass-mortality pavements.",
+   "pbdb": {
+    "oid": "txn:16597",
+    "matched": "Daonella",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 622,
+    "fea": 393.47,
+    "lla": 205.7,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Halobiidae",
+    "genus": "Daonella",
+    "regions": {
+     "eu": 292,
+     "na-w": 67,
+     "as-c": 10,
+     "as-e": 40,
+     "nz": 26,
+     "in": 8,
+     "as-se": 35,
+     "na-e": 1,
+     "ar": 2,
+     "as-w": 12,
+     "as-n": 52,
+     "au": 9,
+     "ng": 3,
+     "na-n": 5,
+     "sa-s": 6,
+     "gl": 1
+    }
+   }
+  },
+  "Deltopecten": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "au",
+    "in",
+    "sa-s",
+    "af-s"
+   ],
+   "note": "A scallop-like bivalve of the cool Permian shelves of Gondwana, found with glacial dropstones in the same beds.",
+   "pbdb": {
+    "oid": "txn:16603",
+    "matched": "Deltopecten",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 108,
+    "fea": 342.9,
+    "lla": 251.902,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Deltopectinidae",
+    "genus": "Deltopecten",
+    "regions": {
+     "na-e": 7,
+     "in": 3,
+     "nz": 3,
+     "as-c": 2,
+     "au": 68,
+     "as-e": 1,
+     "as-n": 6,
+     "na-n": 2,
+     "na-w": 9,
+     "eu": 4,
+     "sa-s": 1
+    }
+   },
+   "lat": [
+    30,
+    90
+   ]
+  },
+  "Dickinsonia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 560,
+   "lad": 550,
+   "range": [
+    "au",
+    "eu"
+   ],
+   "note": "A flat, segmented, centimetre-to-metre oval that left feeding traces as it moved; cholesterol in its tissues shows it was an animal.",
+   "sz": 1.4,
+   "dt": "external digestion of the mat beneath it",
+   "hb": "flat on a microbial mat, possibly mobile",
+   "pbdb": {
+    "oid": "txn:4717",
+    "matched": "Dickinsonia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Dickinsonia",
+    "regions": {
+     "eu": 23,
+     "au": 29,
+     "in": 1,
+     "as-e": 1,
+     "as-n": 3,
+     "na-n": 4
+    }
+   },
+   "w": 3,
+   "cls": {
+    "class": "Dipleurozoa"
+   },
+   "pbdb_ok": true
+  },
+  "Dreissena": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "clam",
+   "fad": 12,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c"
+   ],
+   "note": "'Lago Mare' phase — brackish Paratethyan mussels flooding a Mediterranean nearly emptied and freshened before the Atlantic broke back in.",
+   "pbdb": {
+    "oid": "txn:60169",
+    "matched": "Dreissena",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 25,
+    "fea": 83.6,
+    "lla": 0.0117,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Dreissenidae",
+    "genus": "Dreissena",
+    "regions": {
+     "na-e": 2,
+     "eu": 13,
+     "as-w": 6,
+     "ca": 1,
+     "as-c": 3
+    }
+   },
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb_ok": true,
+   "no_own_icon": true,
+   "box": [
+    [
+     27,
+     62,
+     36,
+     50
+    ]
+   ]
+  },
+  "Encrinus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 247,
+   "lad": 235,
+   "range": [
+    "eu"
+   ],
+   "note": "Meadows of stalked crinoids ('sea lilies') whose disarticulated ossicles make crinoidal limestone.",
+   "pbdb": {
+    "oid": "txn:32698",
+    "matched": "Encrinus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 74,
+    "fea": 247,
+    "lla": 205.7,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea",
+    "order": "Encrinida",
+    "family": "Encrinidae",
+    "genus": "Encrinus",
+    "regions": {
+     "as-e": 24,
+     "eu": 42,
+     "nz": 5,
+     "na-w": 2,
+     "as-w": 1
+    }
+   },
+   "place_ok": true
+  },
+  "Endemic molluscs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 12,
+   "lad": 5,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c"
+   ],
+   "note": "Cut off from the world ocean, the sea evolved its own peculiar low-salinity mollusc faunas.",
+   "rep": "Congeria",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Endoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 470,
+   "lad": 445,
+   "range": [
+    "as-e",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A giant straight-shelled nautiloid, metres long, hunting the Ordovician carbonate platform.",
+   "pbdb": {
+    "oid": "txn:12734",
+    "matched": "Endoceras",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 222,
+    "fea": 486.85,
+    "lla": 419.62,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Endocerida",
+    "family": "Endoceratidae",
+    "genus": "Endoceras",
+    "regions": {
+     "na-e": 99,
+     "eu": 52,
+     "as-e": 10,
+     "sa-s": 6,
+     "na-w": 26,
+     "as-c": 2,
+     "na-n": 22,
+     "as-se": 2
+    }
+   },
+   "no_own_icon": true
+  },
+  "Eoredlichia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-e",
+    "au"
+   ],
+   "note": "An early redlichiid trilobite of South China, found in the Chengjiang Lagerstaette alongside soft-bodied animals.",
+   "pbdb": {
+    "oid": "txn:19382",
+    "matched": "Eoredlichia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 530.7,
+    "lla": 512.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Redlichiidae",
+    "genus": "Eoredlichia",
+    "regions": {
+     "au": 15,
+     "as-e": 41,
+     "af-n": 3,
+     "eu": 2
+    }
+   }
+  },
+  "Ernietta": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 550,
+   "lad": 539,
+   "range": [
+    "af-s",
+    "na-w"
+   ],
+   "note": "Partly buried, sack-like, in shifting sand",
+   "sz": 0.1,
+   "dt": "suspension feeding",
+   "hb": "partly buried, sack-like, in shifting sand",
+   "pbdb": {
+    "oid": "txn:4718",
+    "matched": "Ernietta",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "Erniettomorpha",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Erniettidae",
+    "genus": "Ernietta",
+    "regions": {
+     "af-s": 13,
+     "na-w": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Euphausiacea": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "shrimp",
+   "fad": 130,
+   "lad": 0,
+   "range": [
+    "sou",
+    "pac",
+    "atl",
+    "arc",
+    "ind"
+   ],
+   "note": "Krill: swarming shrimp-like crustaceans. In the Southern Ocean they are the single link between diatoms and everything larger -- whales, seals, penguins and fish all feed on them.",
+   "pbdb": {
+    "oid": "txn:133266",
+    "matched": "Euphausiacea",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 6,
+    "fea": 346.7,
+    "lla": 0,
+    "phylum": "Arthropoda",
+    "class": "Malacostraca",
+    "order": "Euphausiacea",
+    "regions": {
+     "na-e": 2,
+     "eu": 3,
+     "an": 1
+    }
+   },
+   "hab": [
+    "pelagic",
+    "ice"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "aka": [
+    "krill"
+   ]
+  },
+  "Eurydesma": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 299,
+   "lad": 280,
+   "range": [
+    "au",
+    "in",
+    "sa-s",
+    "af-s",
+    "an"
+   ],
+   "note": "A thick-shelled cold-water bivalve of the peri-glacial Gondwanan seas.",
+   "sz": 0.12,
+   "dt": "suspension feeding",
+   "hb": "cold-water shelf, often in glacial dropstone facies",
+   "pbdb": {
+    "oid": "txn:16650",
+    "matched": "Eurydesma",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 182,
+    "fea": 443.1,
+    "lla": 264.28,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Eurydesmatidae",
+    "genus": "Eurydesma",
+    "regions": {
+     "na-e": 1,
+     "af-s": 1,
+     "in": 39,
+     "au": 132,
+     "as-c": 1,
+     "sa-s": 8
+    }
+   },
+   "lat": [
+    40,
+    90
+   ]
+  },
+  "Euryhaline molluscs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 5.3,
+   "lad": 0,
+   "range": [
+    "med",
+    "eu",
+    "as-w",
+    "as-c"
+   ],
+   "note": "After the Messinian salinity crisis dried the basin, salt-tolerant survivors and Atlantic recolonisers rebuild the fauna.",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Eurypterida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 467,
+   "lad": 252,
+   "range": [
+    "euramerica",
+    "as-n",
+    "as-e",
+    "au",
+    "sa-n",
+    "af-s"
+   ],
+   "note": "Sea scorpions, in decline for a hundred million years, finally gone.",
+   "pbdb": {
+    "oid": "txn:18947",
+    "matched": "Eurypterida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 603,
+    "fea": 469.4,
+    "lla": 251.902,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "regions": {
+     "na-e": 212,
+     "eu": 287,
+     "na-n": 18,
+     "as-n": 22,
+     "sa-n": 4,
+     "af-n": 5,
+     "au": 10,
+     "as-e": 21,
+     "af-s": 2,
+     "na-w": 10,
+     "sa-s": 3,
+     "as-se": 4,
+     "as-w": 1,
+     "as-c": 1
+    }
+   },
+   "pbdb_ok": true,
+   "aka": [
+    "eurypterids"
+   ]
+  },
+  "Eurypterus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 432,
+   "lad": 418,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "Sea scorpions patrolling brackish lagoons, some large enough to take vertebrate prey.",
+   "pbdb": {
+    "oid": "txn:18968",
+    "matched": "Eurypterus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 47,
+    "fea": 443.1,
+    "lla": 307.4,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Eurypteridae",
+    "genus": "Eurypterus",
+    "regions": {
+     "na-e": 17,
+     "eu": 21,
+     "na-n": 4,
+     "as-e": 3,
+     "as-n": 1
+    }
+   },
+   "w": 3,
+   "realms": [
+    "sea",
+    "fresh"
+   ]
+  },
+  "Favosites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 455,
+   "lad": 360,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Colonial, honeycomb corallites",
+   "sz": 0.5,
+   "dt": "suspension feeder",
+   "hb": "colonial, honeycomb corallites",
+   "pbdb": {
+    "oid": "txn:4880",
+    "matched": "Favosites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1808,
+    "fea": 458.2,
+    "lla": 264.28,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Favositida",
+    "family": "Favositidae",
+    "genus": "Favosites"
+   },
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    42
+   ]
+  },
+  "Fenestrata": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "bryozoan",
+   "fad": 470,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Lacy, net-like bryozoans that built small reefs and meadows on Palaeozoic carbonate shelves.",
+   "pbdb": {
+    "oid": "txn:25510",
+    "matched": "Fenestrata",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 319,
+    "fea": 477.1,
+    "lla": 61.66,
+    "phylum": "Bryozoa",
+    "class": "Stenolaemata",
+    "order": "Fenestrata"
+   }
+  },
+  "Fractofusus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 571,
+   "lad": 560,
+   "range": [
+    "na-e"
+   ],
+   "note": "Shows evidence of reproduction by stolons.",
+   "sz": 0.4,
+   "dt": "osmotrophy",
+   "hb": "reclining on the sea floor, deep water",
+   "pbdb": {
+    "oid": "txn:121426",
+    "matched": "Fractofusus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rangeomorpha",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Fractofusus",
+    "regions": {
+     "na-e": 14,
+     "na-n": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Goniatitida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 390,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Palaeozoic ammonoids with zigzag sutures, abundant in the open water above Devonian to Permian shelves and basins.",
+   "pbdb": {
+    "oid": "txn:13602",
+    "matched": "Goniatitida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 8561,
+    "fea": 419.62,
+    "lla": 137.05,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Goniatitida"
+   },
+   "pbdb_ok": true
+  },
+  "Graptolithina": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "graptolite",
+   "fad": 508.2,
+   "lad": 339.9,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Colonial hemichordates drifting in open water, whose fast turnover makes them the timekeepers of the Ordovician.",
+   "pbdb": {
+    "oid": "txn:33534",
+    "matched": "Graptolithina",
+    "exact": true,
+    "rank": "subclass",
+    "extant": true,
+    "noc": 8119,
+    "fea": 508.2,
+    "lla": 339.9,
+    "phylum": "Hemichordata",
+    "class": "Pterobranchia"
+   },
+   "pbdb_ok": true,
+   "conf_note": "The branching graptolite rhabdosome (Graptoloidea+Dendroidea) dies out by the end-Mississippian; only the unrelated-looking crown pterobranchs survive, so the drawable form is not extant.",
+   "aka": [
+    "graptolites"
+   ]
+  },
+  "Gryphaea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "oyster",
+   "fad": 215,
+   "lad": 145,
+   "range": [
+    "ar",
+    "eu",
+    "gl",
+    "in",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "'Devil's toenails' — thick curved oysters strewn across the Jurassic seabed of western North America.",
+   "pbdb": {
+    "oid": "txn:16691",
+    "matched": "Gryphaea",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1214,
+    "fea": 241.464,
+    "lla": 33.9,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Gryphaeidae",
+    "genus": "Gryphaea",
+    "regions": {
+     "sa-n": 2,
+     "na-w": 112,
+     "na-e": 88,
+     "ca": 5,
+     "ar": 110,
+     "as-c": 7,
+     "na-n": 22,
+     "eu": 492,
+     "sa-s": 181,
+     "af-n": 10,
+     "in": 39,
+     "af-e": 18,
+     "as-n": 11,
+     "as-e": 10,
+     "as-w": 15,
+     "mg": 9,
+     "nz": 3,
+     "gl": 73,
+     "af-w": 1
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Hallucigenia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobopod",
+   "fad": 522.6,
+   "lad": 507.5,
+   "range": [
+    "as-e",
+    "na-w"
+   ],
+   "note": "A spined, stilt-legged lobopodian reconstructed upside-down and backwards for decades before anyone got it right.",
+   "sz": 0.035,
+   "dt": "possibly scavenging on sponges",
+   "hb": "benthic walker",
+   "pbdb": {
+    "oid": "txn:18884",
+    "matched": "Hallucigenia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 26,
+    "fea": 521,
+    "lla": 505.3,
+    "phylum": "Onychophora",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hallucigeniidae",
+    "genus": "Hallucigenia",
+    "regions": {
+     "as-e": 11,
+     "na-w": 15
+    }
+   },
+   "w": 3
+  },
+  "Halobia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 237,
+   "lad": 208,
+   "range": [
+    "as-e",
+    "as-n",
+    "as-se",
+    "au",
+    "eu",
+    "na-n",
+    "na-w",
+    "nz"
+   ],
+   "note": "A thin flat 'paper clam' blanketing deep Tethyan Triassic seafloors along the drifting blocks.",
+   "pbdb": {
+    "oid": "txn:16699",
+    "matched": "Halobia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 834,
+    "fea": 247,
+    "lla": 168.2,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Halobiidae",
+    "genus": "Halobia",
+    "regions": {
+     "as-e": 90,
+     "na-w": 217,
+     "na-n": 20,
+     "eu": 200,
+     "as-n": 110,
+     "nz": 24,
+     "as-se": 61,
+     "as-c": 12,
+     "au": 41,
+     "as-w": 9,
+     "ca": 2,
+     "in": 3,
+     "ar": 5,
+     "ng": 2
+    }
+   }
+  },
+  "Halysites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 447.6,
+   "lad": 424.7,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Chain coral, a diagnostic Silurian reef builder whose colonies form linked palisades.",
+   "sz": 0.3,
+   "dt": "suspension feeding",
+   "hb": "colonial reef builder, chain-like",
+   "pbdb": {
+    "oid": "txn:4897",
+    "matched": "Halysites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 352,
+    "fea": 471.3,
+    "lla": 413.02,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Halysitida",
+    "family": "Halysitidae",
+    "genus": "Halysites",
+    "regions": {
+     "na-e": 105,
+     "eu": 102,
+     "na-w": 37,
+     "na-n": 24,
+     "au": 2,
+     "as-e": 30,
+     "as-n": 30,
+     "as-c": 16,
+     "in": 4,
+     "as-w": 2
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "no_own_icon": true
+  },
+  "Hexactinellida": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 540,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Glass sponges building a reef belt along the Tethyan shelf larger than any reef system before or since.",
+   "pbdb": {
+    "oid": "txn:3841",
+    "matched": "Hexactinellida",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 2847,
+    "fea": 635,
+    "lla": 0,
+    "phylum": "Porifera",
+    "class": "Hexactinellida"
+   },
+   "hab": [
+    "deep",
+    "shelf",
+    "reef"
+   ]
+  },
+  "Hippurites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "rudist",
+   "fad": 93,
+   "lad": 66,
+   "range": [
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "ca"
+   ],
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Hippuritida",
+    "family": "Hippuritidae"
+   },
+   "note": "A rudist bivalve grown into a tall cone with a lid, packed upright in thickets that built the reefs of the Late Cretaceous Tethys in place of corals."
+  },
+  "Hirnantia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 445.2,
+   "lad": 443.8,
+   "range": [
+    "af-n",
+    "as-e",
+    "eu",
+    "na-e",
+    "na-n"
+   ],
+   "note": "The name-bearer of the cold-water brachiopod fauna that briefly took over the world's shelves during the glaciation.",
+   "pbdb": {
+    "oid": "txn:26804",
+    "matched": "Hirnantia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 164,
+    "fea": 463.3,
+    "lla": 430.6,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Orthida",
+    "family": "Draboviidae",
+    "genus": "Hirnantia",
+    "regions": {
+     "eu": 98,
+     "as-e": 20,
+     "sa-s": 2,
+     "na-e": 16,
+     "af-n": 6,
+     "as-se": 3,
+     "na-n": 4,
+     "au": 1,
+     "as-n": 1,
+     "as-c": 1,
+     "sa-n": 1,
+     "as-w": 3
+    }
+   },
+   "w": 1,
+   "pbdb_ok": true,
+   "conf_note": "Hirnantia is tied tightly to the Hirnantian Stage/glaciation (445.2-443.8 Ma); the robust PBDB window is broader than the genus's true stratigraphic tie."
+  },
+  "Holmia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 514,
+   "range": [
+    "eu"
+   ],
+   "note": "An olenellid trilobite of the early Cambrian Baltic and Laurentian shelves.",
+   "pbdb": {
+    "oid": "txn:19133",
+    "matched": "Holmia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 521,
+    "lla": 506.5,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Holmiidae",
+    "genus": "Holmia",
+    "regions": {
+     "eu": 11,
+     "af-n": 1,
+     "na-n": 1
+    }
+   }
+  },
+  "Inoceramidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "mussel",
+   "fad": 190,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w",
+    "nz",
+    "sa-n"
+   ],
+   "note": "Big flat clams littering Cretaceous seafloors, sometimes shells over a metre across.",
+   "pbdb": {
+    "oid": "txn:60714",
+    "matched": "Inoceramidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 4598,
+    "fea": 227.3,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Myalinida",
+    "family": "Inoceramidae",
+    "regions": {
+     "na-e": 238,
+     "na-w": 1018,
+     "sa-s": 23,
+     "as-e": 325,
+     "eu": 1228,
+     "mg": 17,
+     "af-w": 14,
+     "ar": 11,
+     "sa-n": 358,
+     "as-n": 186,
+     "gl": 21,
+     "nz": 228,
+     "as-c": 23,
+     "af-n": 8,
+     "in": 32,
+     "af-s": 25,
+     "as-w": 33,
+     "ca": 15,
+     "au": 17,
+     "af-e": 3,
+     "an": 56,
+     "na-n": 112,
+     "as-se": 4,
+     "ng": 4
+    }
+   }
+  },
+  "Inoceramus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mussel",
+   "fad": 183,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w",
+    "nz"
+   ],
+   "note": "A thick-shelled bivalve of Cretaceous shelf muds, some species reaching a metre across, and often the only large fossil in an otherwise barren chalk.",
+   "pbdb": {
+    "oid": "txn:16727",
+    "matched": "Inoceramus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2595,
+    "fea": 227.3,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Myalinida",
+    "family": "Inoceramidae",
+    "genus": "Inoceramus",
+    "regions": {
+     "na-e": 191,
+     "na-w": 692,
+     "sa-s": 25,
+     "as-e": 226,
+     "eu": 783,
+     "mg": 10,
+     "af-w": 17,
+     "ar": 9,
+     "sa-n": 47,
+     "as-n": 153,
+     "nz": 194,
+     "as-c": 18,
+     "af-n": 5,
+     "in": 22,
+     "af-s": 14,
+     "as-w": 18,
+     "ca": 7,
+     "au": 18,
+     "gl": 10,
+     "an": 24,
+     "na-n": 96,
+     "af-e": 2,
+     "ng": 3,
+     "as-se": 1
+    }
+   },
+   "w": 3
+  },
+  "Isotelus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 465,
+   "lad": 443,
+   "range": [
+    "na-e",
+    "na-w",
+    "na-n",
+    "gl"
+   ],
+   "note": "One of the largest trilobites.",
+   "sz": 0.7,
+   "dt": "predation and deposit feeding",
+   "hb": "benthic burrower",
+   "pbdb": {
+    "oid": "txn:20000",
+    "matched": "Isotelus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1142,
+    "fea": 488.9,
+    "lla": 432.9,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Asaphidae",
+    "genus": "Isotelus",
+    "regions": {
+     "na-e": 1028,
+     "na-n": 28,
+     "na-w": 27,
+     "au": 1,
+     "as-e": 3,
+     "as-n": 27,
+     "as-c": 1,
+     "eu": 26,
+     "sa-s": 1
+    }
+   },
+   "w": 3
+  },
+  "Kimberella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 560,
+   "lad": 550,
+   "range": [
+    "au",
+    "eu",
+    "ar"
+   ],
+   "note": "A bilaterally symmetrical grazer that scraped mats with a feeding structure -- the best candidate for an early mollusc relative.",
+   "sz": 0.05,
+   "dt": "grazing with a radula-like apparatus",
+   "hb": "mobile bottom-dweller",
+   "pbdb": {
+    "oid": "txn:4691",
+    "matched": "Kimberella",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 25,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kimberella",
+    "regions": {
+     "eu": 13,
+     "au": 5,
+     "in": 1,
+     "ar": 3,
+     "sa-n": 1,
+     "na-n": 1,
+     "as-e": 1
+    }
+   },
+   "w": 3,
+   "cls": {
+    "class": "Dipleurozoa"
+   },
+   "pbdb_ok": true
+  },
+  "Kjerulfia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 514,
+   "range": [
+    "eu"
+   ],
+   "note": "A large olenellid trilobite of the early Cambrian Scandinavian shelf.",
+   "pbdb": {
+    "oid": "txn:19138",
+    "matched": "Kjerulfia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 521,
+    "lla": 508.2,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Holmiidae",
+    "genus": "Kjerulfia",
+    "regions": {
+     "eu": 8,
+     "af-n": 1
+    }
+   }
+  },
+  "Lingula": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lingulid",
+   "fad": 520,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A burrowing brachiopod that survives everything and looks much the same today.",
+   "pbdb": {
+    "oid": "txn:26367",
+    "matched": "Lingula",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1046,
+    "fea": 506.5,
+    "lla": 0.0117,
+    "phylum": "Brachiopoda",
+    "class": "Lingulata",
+    "order": "Lingulida",
+    "family": "Lingulidae",
+    "genus": "Lingula"
+   },
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "pbdb_ok": true,
+   "lat": [
+    0,
+    50
+   ]
+  },
+  "Malvinokaffric brachiopods": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 443,
+   "lad": 385,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "an"
+   ],
+   "note": "A distinctive low-diversity cold-water shelly province across South America, South Africa and the Falklands.",
+   "lat": [
+    45,
+    90
+   ],
+   "rep": "Australospirifer",
+   "cls": {
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Megalodontidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 390,
+   "lad": 183,
+   "range": [
+    "as-c",
+    "as-se",
+    "eu",
+    "na-w"
+   ],
+   "note": "Thick heart-shaped bivalves crowding the Triassic Tethyan carbonate platforms.",
+   "pbdb": {
+    "oid": "txn:61080",
+    "matched": "Megalodontidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 319,
+    "fea": 443.1,
+    "lla": 145.06,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Megalodontida",
+    "family": "Megalodontidae",
+    "regions": {
+     "na-w": 8,
+     "eu": 269,
+     "af-n": 2,
+     "na-e": 3,
+     "as-n": 4,
+     "as-e": 4,
+     "as-c": 7,
+     "ar": 3,
+     "as-se": 7,
+     "au": 2,
+     "sa-n": 2,
+     "in": 3,
+     "ng": 1,
+     "as-w": 2
+    }
+   }
+  },
+  "Megistaspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 480,
+   "lad": 460,
+   "range": [
+    "eu"
+   ],
+   "note": "A big asaphid trilobite of the Baltoscandian Ordovician, common in the orthoceratite limestones.",
+   "pbdb": {
+    "oid": "txn:20055",
+    "matched": "Megistaspis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 234,
+    "fea": 488.9,
+    "lla": 445.2,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Asaphidae",
+    "genus": "Megistaspis",
+    "regions": {
+     "na-w": 8,
+     "au": 1,
+     "eu": 202,
+     "as-e": 4,
+     "sa-s": 11,
+     "sa-n": 1,
+     "as-c": 3,
+     "as-n": 2,
+     "as-se": 2
+    }
+   }
+  },
+  "Mesolimulus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "horseshoecrab",
+   "fad": 152,
+   "lad": 148,
+   "range": [
+    "eu"
+   ],
+   "note": "A horseshoe crab preserved at the end of its own death-track across the anoxic mud.",
+   "pbdb": {
+    "oid": "txn:18932",
+    "matched": "Mesolimulus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 239.48,
+    "lla": 93.9,
+    "phylum": "Arthropoda",
+    "class": "Xiphosura",
+    "order": "Xiphosurida",
+    "family": "Limulidae",
+    "genus": "Mesolimulus",
+    "regions": {
+     "eu": 12,
+     "af-n": 1,
+     "as-n": 1
+    }
+   }
+  },
+  "Monograptus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "graptolite",
+   "fad": 440,
+   "lad": 408,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Single-row graptolites that swarm Silurian seas, evolving so fast that they date the rocks they drift into.",
+   "pbdb": {
+    "oid": "txn:33698",
+    "matched": "Monograptus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 834,
+    "fea": 461,
+    "lla": 393.47,
+    "phylum": "Hemichordata",
+    "class": "Pterobranchia",
+    "order": "Graptoloidea",
+    "family": "Monograptidae",
+    "genus": "Monograptus"
+   },
+   "hab": [
+    "pelagic"
+   ]
+  },
+  "Mucrospirifer": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 393,
+   "lad": 383,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A winged spiriferide brachiopod of the Middle Devonian Appalachian seas, its hinge drawn out into long points.",
+   "pbdb": {
+    "oid": "txn:29445",
+    "matched": "Mucrospirifer",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 728,
+    "fea": 419.62,
+    "lla": 346.7,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Spiriferida",
+    "family": "Mucrospiriferidae",
+    "genus": "Mucrospirifer",
+    "regions": {
+     "na-e": 665,
+     "as-e": 12,
+     "eu": 20,
+     "af-n": 8,
+     "sa-n": 10,
+     "sa-s": 1,
+     "na-w": 3,
+     "as-se": 1,
+     "as-n": 7,
+     "as-c": 1
+    }
+   }
+  },
+  "Mytilus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mussel",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      30,
+      0
+     ],
+     "in": [
+      "pac",
+      "as-e",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      3.5,
+      0
+     ],
+     "in": [
+      "atl",
+      "arc",
+      "eu",
+      "na-e",
+      "gl",
+      "med"
+     ]
+    }
+   ],
+   "note": "The blue mussel, a Pacific native that crossed into the Atlantic when the Bering Strait opened.",
+   "pbdb": {
+    "oid": "txn:16392",
+    "matched": "Mytilus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 862,
+    "fea": 426.7,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Mytilida",
+    "family": "Mytilidae",
+    "genus": "Mytilus",
+    "regions": {
+     "eu": 273,
+     "na-e": 94,
+     "na-w": 204,
+     "af-w": 2,
+     "as-c": 6,
+     "af-n": 8,
+     "ar": 18,
+     "af-e": 26,
+     "na-n": 5,
+     "as-e": 39,
+     "an": 1,
+     "oc": 4,
+     "ca": 3,
+     "as-n": 61,
+     "in": 4,
+     "sa-n": 40,
+     "sa-s": 13,
+     "nz": 6,
+     "au": 4,
+     "gl": 27,
+     "as-se": 5,
+     "af-s": 4,
+     "mg": 5,
+     "ng": 2,
+     "as-w": 4
+    }
+   },
+   "hab": [
+    "coast"
+   ],
+   "lat": [
+    25,
+    75
+   ],
+   "pbdb_ok": true,
+   "no_own_icon": true
+  },
+  "Namacalathus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "goblet",
+   "fad": 550,
+   "lad": 539,
+   "range": [
+    "af-s",
+    "as-n",
+    "sa-s"
+   ],
+   "note": "A goblet-shaped skeletal organism from the Nama Group, part of the first mineralised reef community.",
+   "sz": 0.03,
+   "dt": "suspension feeding",
+   "hb": "stalked, attached to microbial reefs",
+   "pbdb": {
+    "oid": "txn:85940",
+    "matched": "Namacalathus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "Lophotrochozoa",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Namacalathus",
+    "regions": {
+     "af-s": 8,
+     "ar": 1,
+     "na-w": 1,
+     "as-n": 2,
+     "sa-s": 2
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "w": 1,
+   "pbdb_ok": true,
+   "conf_note": "Known only from the terminal Ediacaran Nama-type reef assemblage, ~550-539 Ma, matching Cloudina; not a hyolith (no conical shell)."
+  },
+  "Nautiloidea": {
+   "rank": "subclass",
+   "realm": "sea",
+   "form": "nautilus",
+   "fad": 247,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      247,
+      34
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-e",
+      "na-w",
+      "na-e",
+      "au"
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "in": [
+      "ind",
+      "pac"
+     ]
+    }
+   ],
+   "note": "Coiled cephalopods that radiated after the Permian extinction and still cruise Indo-Pacific reef slopes today as Nautilus.",
+   "pbdb": {
+    "oid": "txn:122460",
+    "matched": "Nautiloidea",
+    "exact": true,
+    "rank": "superfamily",
+    "extant": true,
+    "noc": 2467,
+    "fea": 306,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Nautilida",
+    "regions": {
+     "na-w": 203,
+     "eu": 1025,
+     "af-n": 43,
+     "ar": 81,
+     "na-e": 299,
+     "an": 36,
+     "sa-n": 53,
+     "as-e": 108,
+     "nz": 28,
+     "sa-s": 62,
+     "au": 110,
+     "af-w": 35,
+     "in": 60,
+     "as-w": 78,
+     "as-c": 86,
+     "ca": 22,
+     "gl": 3,
+     "mg": 30,
+     "af-s": 14,
+     "as-se": 10,
+     "af-e": 42,
+     "oc": 3,
+     "ng": 8,
+     "as-n": 14,
+     "na-n": 2
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true,
+   "conf_note": "form=nautilus (coiled Nautilida) is Triassic-Recent (~247-0 Ma); Early Palaeozoic straight-shelled nautiloids are covered separately by orthocone genera like Cameroceras.",
+   "aka": [
+    "nautiloids"
+   ]
+  },
+  "Nautilus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "nautilus",
+   "fad": 35,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "note": "The living Nautilus, a survivor of the once-vast shelled-cephalopod dynasties, still haunts these depths.",
+   "pbdb": {
+    "oid": "txn:13243",
+    "matched": "Nautilus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 110,
+    "fea": 306,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Nautilida",
+    "family": "Nautilidae",
+    "genus": "Nautilus",
+    "regions": {
+     "as-e": 10,
+     "na-w": 6,
+     "as-w": 5,
+     "na-e": 11,
+     "as-se": 8,
+     "ng": 5,
+     "au": 30,
+     "oc": 2,
+     "nz": 2,
+     "as-c": 3,
+     "in": 4,
+     "eu": 20,
+     "af-e": 1,
+     "sa-s": 1
+    }
+   },
+   "hab": [
+    "reef",
+    "deep"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "no_own_icon": true,
+   "box": [
+    [
+     90,
+     180,
+     -30,
+     20
+    ]
+   ]
+  },
+  "Neseuretus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 478,
+   "lad": 450,
+   "range": [
+    "eu",
+    "af-n",
+    "ar",
+    "sa-s",
+    "as-e"
+   ],
+   "note": "A calymenid trilobite of the cold, muddy shelves that ringed high-latitude Gondwana.",
+   "pbdb": {
+    "oid": "txn:21658",
+    "matched": "Neseuretus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 248,
+    "fea": 486.85,
+    "lla": 443.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Calymenidae",
+    "genus": "Neseuretus",
+    "regions": {
+     "na-e": 1,
+     "eu": 177,
+     "au": 1,
+     "as-se": 1,
+     "as-e": 32,
+     "sa-n": 4,
+     "sa-s": 15,
+     "as-c": 4,
+     "af-n": 9,
+     "ar": 4
+    }
+   }
+  },
+  "Olenellus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 509,
+   "range": [
+    "na",
+    "gl"
+   ],
+   "note": "A spiny olenellid trilobite that defines the Laurentian faunal province of the Cambrian tropics.",
+   "sz": 0.1,
+   "dt": "deposit feeding / predation",
+   "hb": "benthic",
+   "pbdb": {
+    "oid": "txn:19149",
+    "matched": "Olenellus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 353,
+    "fea": 521,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Olenellidae",
+    "genus": "Olenellus",
+    "regions": {
+     "na-n": 43,
+     "na-w": 214,
+     "na-e": 86,
+     "gl": 5,
+     "sa-s": 1
+    }
+   },
+   "w": 3
+  },
+  "Orthida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 520,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The earliest articulate brachiopods, ribbed and nearly symmetrical, abundant on Ordovician shelves.",
+   "pbdb": {
+    "oid": "txn:26648",
+    "matched": "Orthida",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 21419,
+    "fea": 525.5,
+    "lla": 165.3,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Orthida"
+   },
+   "pbdb_ok": true
+  },
+  "Ostracoda": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "ostracod",
+   "fad": 530.7,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Tiny bivalved crustaceans that become one of the most continuous fossil records of the entire Phanerozoic.",
+   "pbdb": {
+    "oid": "txn:22826",
+    "matched": "Ostracoda",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 31642,
+    "fea": 530.7,
+    "lla": 0,
+    "phylum": "Arthropoda",
+    "class": "Ostracoda"
+   }
+  },
+  "Otoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 252.5,
+   "lad": 251,
+   "range": [
+    "as-n",
+    "gl",
+    "in",
+    "na-n"
+   ],
+   "note": "The ammonoid whose first appearance defines the base of the Triassic.",
+   "pbdb": {
+    "oid": "txn:14276",
+    "matched": "Otoceras",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 129,
+    "fea": 254.14,
+    "lla": 247,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Otoceratidae",
+    "genus": "Otoceras",
+    "regions": {
+     "in": 37,
+     "na-n": 32,
+     "gl": 24,
+     "as-n": 26,
+     "as-e": 2,
+     "as-w": 2,
+     "au": 1
+    }
+   }
+  },
+  "Paradoxides": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 509,
+   "lad": 500,
+   "range": [
+    "eu",
+    "na-e",
+    "af-n"
+   ],
+   "note": "A large spiny trilobite of the Baltic-Avalonian 'Atlantic' province, unknown on Cambrian Laurentia.",
+   "pbdb": {
+    "oid": "txn:19422",
+    "matched": "Paradoxides",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 138,
+    "fea": 516.2,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Paradoxididae",
+    "genus": "Paradoxides",
+    "regions": {
+     "as-n": 7,
+     "na-n": 1,
+     "na-e": 20,
+     "eu": 93,
+     "as-w": 17
+    }
+   },
+   "place_ok": true
+  },
+  "Pebasian molluscs": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "clam",
+   "fad": 23,
+   "lad": 10,
+   "range": [
+    "sa-n"
+   ],
+   "note": "An endemic radiation of hundreds of snail and mussel species, found nowhere else, whose shells date the wetland bed by bed.",
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Pentacrinites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 208,
+   "lad": 150,
+   "range": [
+    "as-e",
+    "as-w",
+    "eu",
+    "gl",
+    "in",
+    "na-n",
+    "na-w",
+    "nz",
+    "sa-s"
+   ],
+   "note": "Stalked crinoids that rafted on driftwood over the open sea.",
+   "pbdb": {
+    "oid": "txn:32515",
+    "matched": "Pentacrinites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 152,
+    "fea": 247,
+    "lla": 33.9,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea",
+    "order": "Isocrinida",
+    "family": "Pentacrinitidae",
+    "genus": "Pentacrinites",
+    "regions": {
+     "gl": 7,
+     "eu": 83,
+     "na-e": 2,
+     "in": 3,
+     "na-w": 23,
+     "na-n": 3,
+     "nz": 5,
+     "as-w": 4,
+     "as-e": 4,
+     "sa-s": 10,
+     "as-se": 1,
+     "ng": 1,
+     "as-n": 2
+    }
+   }
+  },
+  "Pentamerus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 440,
+   "lad": 428,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A large Silurian brachiopod that formed dense shell banks across carbonate shelves.",
+   "pbdb": {
+    "oid": "txn:28266",
+    "matched": "Pentamerus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 201,
+    "fea": 443.1,
+    "lla": 399.5,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Pentamerida",
+    "family": "Pentameridae",
+    "genus": "Pentamerus",
+    "regions": {
+     "na-e": 107,
+     "eu": 47,
+     "ca": 1,
+     "na-w": 16,
+     "as-c": 9,
+     "as-e": 6,
+     "as-n": 9,
+     "na-n": 5,
+     "in": 1
+    }
+   }
+  },
+  "Placenticeras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 105,
+   "lad": 72,
+   "range": [
+    "af-s",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A large disc-shaped ammonite, some shells punctured by mosasaur tooth-marks.",
+   "pbdb": {
+    "oid": "txn:15403",
+    "matched": "Placenticeras",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 241,
+    "fea": 106.3,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Placenticeratidae",
+    "genus": "Placenticeras",
+    "regions": {
+     "na-w": 92,
+     "na-e": 64,
+     "eu": 56,
+     "in": 3,
+     "sa-s": 1,
+     "af-s": 19,
+     "as-c": 4,
+     "ng": 2
+    }
+   }
+  },
+  "Porifera": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 1000.0,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Sponges. Molecular clocks and disputed biomarkers place their origin in the Tonian or Cryogenian; unambiguous body fossils come later.",
+   "pbdb": {
+    "oid": "txn:2894",
+    "matched": "Porifera",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 24575,
+    "fea": 1000,
+    "lla": 0,
+    "phylum": "Porifera"
+   }
+  },
+  "Porites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      14
+     ],
+     "in": [
+      "eu",
+      "tet",
+      "med"
+     ]
+    },
+    {
+     "t": [
+      50,
+      0
+     ],
+     "in": [
+      "ind",
+      "pac",
+      "atl",
+      "ca",
+      "af-e",
+      "ar",
+      "as-se",
+      "au",
+      "oc"
+     ]
+    }
+   ],
+   "note": "A massive, slow-growing reef coral whose skeleton records annual bands like tree rings.",
+   "pbdb": {
+    "oid": "txn:6778",
+    "matched": "Porites",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 2005,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Scleractinia",
+    "family": "Poritidae",
+    "genus": "Porites",
+    "regions": {
+     "eu": 287,
+     "ca": 698,
+     "af-n": 31,
+     "in": 16,
+     "oc": 137,
+     "ar": 146,
+     "as-w": 27,
+     "sa-n": 107,
+     "as-se": 79,
+     "ng": 50,
+     "na-w": 29,
+     "as-e": 114,
+     "as-c": 2,
+     "af-e": 60,
+     "mg": 3,
+     "na-e": 78,
+     "au": 83,
+     "nz": 27
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      5,
+      0
+     ],
+     "box": [
+      [
+       30,
+       180,
+       -35,
+       35
+      ],
+      [
+       -180,
+       -140,
+       -30,
+       30
+      ],
+      [
+       -98,
+       -58,
+       8,
+       31
+      ],
+      [
+       -115,
+       -77,
+       -5,
+       30
+      ]
+     ]
+    }
+   ]
+  },
+  "Posidonia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 360,
+   "lad": 170,
+   "range": [
+    "as-e",
+    "as-n",
+    "as-se",
+    "eu",
+    "in",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A thin-shelled bivalve that paves the black, oxygen-poor shales of Jurassic Europe -- the 'Posidonia Shale' -- by the million.",
+   "pbdb": {
+    "oid": "txn:16941",
+    "matched": "Posidonia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 319,
+    "fea": 419.62,
+    "lla": 143.1,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Posidoniidae",
+    "genus": "Posidonia",
+    "regions": {
+     "na-e": 11,
+     "eu": 164,
+     "ar": 4,
+     "na-w": 20,
+     "as-e": 62,
+     "af-n": 1,
+     "na-n": 1,
+     "as-se": 12,
+     "in": 8,
+     "as-n": 11,
+     "af-e": 3,
+     "as-c": 2,
+     "sa-s": 10,
+     "as-w": 2
+    }
+   }
+  },
+  "Productida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 410,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Spiny, thick-shelled brachiopods resting on soft carbonate mud, the dominant shellfish of the late Paleozoic sea floor.",
+   "pbdb": {
+    "oid": "txn:55005",
+    "matched": "Productida",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 32995,
+    "fea": 458.2,
+    "lla": 227.3,
+    "phylum": "Brachiopoda",
+    "class": "Strophomenata",
+    "order": "Productida"
+   },
+   "pbdb_ok": true
+  },
+  "Pteridinium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 558,
+   "lad": 539,
+   "range": [
+    "af-s",
+    "au",
+    "eu",
+    "na-e"
+   ],
+   "note": "A quilted, vane-like Ediacaran organism of the terminal-Ediacaran Nama sandflats.",
+   "pbdb": {
+    "oid": "txn:4722",
+    "matched": "Pteridinium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 635,
+    "lla": 525.5,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "Erniettomorpha",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pteridinium",
+    "regions": {
+     "au": 4,
+     "af-s": 13,
+     "eu": 4,
+     "na-e": 4,
+     "na-n": 1,
+     "as-e": 3
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Pterygotus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 431.8,
+   "lad": 402.0,
+   "range": [
+    "af-n",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e"
+   ],
+   "note": "A giant eurypterid with grasping claws, one of the largest arthropods that ever lived.",
+   "sz": 1.7,
+   "dt": "apex predator",
+   "hb": "nektonic sea scorpion with crushing chelicerae",
+   "pbdb": {
+    "oid": "txn:18992",
+    "matched": "Pterygotus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 64,
+    "fea": 443.1,
+    "lla": 368.5,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Pterygotidae",
+    "genus": "Pterygotus",
+    "regions": {
+     "na-e": 17,
+     "eu": 37,
+     "af-n": 3,
+     "as-n": 2,
+     "au": 1,
+     "as-e": 2
+    }
+   }
+  },
+  "Rangea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 558,
+   "lad": 539,
+   "range": [
+    "af-s",
+    "au",
+    "eu"
+   ],
+   "note": "A fractal frondose Ediacaran of the Namibian shelf, type of the whole rangeomorph group.",
+   "pbdb": {
+    "oid": "txn:4733",
+    "matched": "Rangea",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rangeomorpha",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rangea",
+    "regions": {
+     "af-s": 10,
+     "eu": 4,
+     "au": 3,
+     "as-e": 2
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Rangeomorpha": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "frond",
+   "fad": 575,
+   "lad": 541,
+   "range": [
+    "na-e",
+    "eu",
+    "au",
+    "as-n",
+    "af-s",
+    "na-n"
+   ],
+   "note": "Fractal, self-similar fronds anchored in deep water at Mistaken Point -- a body plan with no modern counterpart.",
+   "pbdb": {
+    "oid": "txn:4728",
+    "matched": "Rangeomorpha",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 246,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rangeomorpha",
+    "regions": {
+     "af-s": 11,
+     "eu": 33,
+     "na-e": 168,
+     "na-n": 6,
+     "as-n": 4,
+     "as-e": 10,
+     "au": 9,
+     "na-w": 1,
+     "sa-n": 1,
+     "as-c": 2,
+     "in": 1
+    }
+   },
+   "rep": "Charnia",
+   "pbdb_ok": true
+  },
+  "Receptaculites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 480,
+   "lad": 360,
+   "range": [
+    "na",
+    "eu",
+    "as-c",
+    "au"
+   ],
+   "note": "Sessile on carbonate shelves",
+   "sz": 0.3,
+   "dt": "unknown",
+   "hb": "sessile on carbonate shelves",
+   "pbdb": {
+    "oid": "txn:108063",
+    "matched": "Receptaculites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 120,
+    "fea": 486.85,
+    "lla": 372.15,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Receptaculitidae",
+    "genus": "Receptaculites",
+    "regions": {
+     "eu": 8,
+     "na-e": 35,
+     "na-w": 20,
+     "as-c": 3,
+     "na-n": 48,
+     "au": 2,
+     "sa-n": 1,
+     "nz": 2
+    }
+   },
+   "cls": {
+    "class": "Receptaculitida",
+    "order": "Receptaculitida",
+    "family": "Receptaculitidae"
+   },
+   "pbdb_ok": true
+  },
+  "Redlichia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 509,
+   "range": [
+    "as-e",
+    "au",
+    "in",
+    "as-c",
+    "an"
+   ],
+   "note": "A large, spiny redlichiid trilobite that typifies the Cambrian shelves of Gondwana and China.",
+   "sz": 0.25,
+   "dt": "deposit feeding / predation",
+   "hb": "benthic",
+   "pbdb": {
+    "oid": "txn:19442",
+    "matched": "Redlichia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 137,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Redlichiidae",
+    "genus": "Redlichia",
+    "regions": {
+     "as-e": 105,
+     "as-c": 4,
+     "as-n": 1,
+     "au": 22,
+     "in": 3,
+     "an": 1,
+     "af-n": 1
+    }
+   }
+  },
+  "Riftia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "pac"
+   ],
+   "note": "Giant tube worms up to 2 m long, mouthless and gutless, fed by symbiotic bacteria — icons of the 1977 vent discovery.",
+   "hab": [
+    "vent"
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Annelida",
+    "class": "Polychaeta",
+    "order": "Sabellida",
+    "family": "Siboglinidae"
+   },
+   "no_own_icon": true
+  },
+  "Rimicaris": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shrimp",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "atl",
+    "ind"
+   ],
+   "note": "Swarming eyeless vent shrimp that crowd Atlantic and Indian Ocean chimneys, farming bacteria on their shells.",
+   "hab": [
+    "vent"
+   ],
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Malacostraca",
+    "order": "Decapoda",
+    "family": "Alvinocarididae"
+   }
+  },
+  "Rugosa": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "horncoral",
+   "fad": 470,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Solitary and colonial Palaeozoic corals, extinguished entirely; the corals that follow are a different lineage.",
+   "pbdb": {
+    "oid": "txn:5113",
+    "matched": "Rugosa",
+    "exact": true,
+    "rank": "subclass",
+    "extant": true,
+    "noc": 16728,
+    "fea": 488.9,
+    "lla": 7.246,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa"
+   },
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "pbdb_ok": true
+  },
+  "Schmidtiellus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 516,
+   "range": [
+    "eu"
+   ],
+   "note": "One of the oldest trilobites of Baltica, from the earliest Cambrian shelly faunas.",
+   "pbdb": {
+    "oid": "txn:19160",
+    "matched": "Schmidtiellus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 516,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Holmiidae",
+    "genus": "Schmidtiellus",
+    "regions": {
+     "eu": 2
+    }
+   }
+  },
+  "Scleractinia": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "coral",
+   "fad": 245,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Stone corals appear from nowhere and rebuild the reef ecosystem the Permian destroyed; every modern reef descends from them.",
+   "pbdb": {
+    "oid": "txn:6108",
+    "matched": "Scleractinia",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 38642,
+    "fea": 358.86,
+    "lla": 0,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Scleractinia"
+   },
+   "pbdb_ok": true
+  },
+  "Spriggina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 560,
+   "lad": 550,
+   "range": [
+    "au"
+   ],
+   "note": "A segmented Ediacaran form with a shield-like head end, argued over for decades as a possible early arthropod relative.",
+   "pbdb": {
+    "oid": "txn:4723",
+    "matched": "Spriggina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "Proarticulata",
+    "class": "Cephalozoa",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Spriggina",
+    "regions": {
+     "au": 9,
+     "eu": 2
+    }
+   },
+   "cls": {
+    "class": "Dipleurozoa"
+   },
+   "pbdb_ok": true
+  },
+  "Stringocephalus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 388,
+   "lad": 383,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-se",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A Middle Devonian index fossil of the Old World Realm.",
+   "sz": 0.1,
+   "dt": "suspension feeding",
+   "hb": "benthic, attached",
+   "pbdb": {
+    "oid": "txn:30555",
+    "matched": "Stringocephalus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 126,
+    "fea": 393.47,
+    "lla": 372.15,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Terebratulida",
+    "family": "Stringocephalidae",
+    "genus": "Stringocephalus",
+    "regions": {
+     "na-w": 27,
+     "na-e": 4,
+     "as-se": 8,
+     "as-e": 27,
+     "eu": 45,
+     "au": 2,
+     "na-n": 5,
+     "as-n": 2,
+     "as-c": 4,
+     "af-n": 2
+    }
+   }
+  },
+  "Stromatoporoidea": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "stromatoporoid",
+   "fad": 453.8,
+   "lad": 377.1,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-se",
+    "au",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Calcified sponges that are the principal reef framework builders of the Middle Palaeozoic.",
+   "pbdb": {
+    "oid": "txn:3338",
+    "matched": "Stromatoporoidea",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 5066,
+    "fea": 486.85,
+    "lla": 149.2,
+    "phylum": "Porifera",
+    "class": "Stromatoporoidea",
+    "regions": {
+     "na-e": 546,
+     "na-n": 282,
+     "na-w": 359,
+     "au": 248,
+     "eu": 1404,
+     "as-c": 360,
+     "as-e": 231,
+     "as-n": 358,
+     "gl": 1,
+     "nz": 4,
+     "in": 3,
+     "as-w": 6,
+     "ar": 20,
+     "af-n": 12,
+     "as-se": 162,
+     "af-e": 3
+    }
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ]
+  },
+  "Tabulata": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 488.9,
+   "lad": 251.902,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-n",
+    "eu",
+    "na-e",
+    "rhe",
+    "ura"
+   ],
+   "note": "Colonial corals with honeycomb skeletons, joining stromatoporoids as reef builders.",
+   "pbdb": {
+    "oid": "txn:81676",
+    "matched": "Tabulata",
+    "exact": true,
+    "rank": "subclass",
+    "extant": false,
+    "noc": 11879,
+    "fea": 488.9,
+    "lla": 251.902,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa"
+   },
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ]
+  },
+  "Tribrachidium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 560,
+   "lad": 550,
+   "range": [
+    "au",
+    "eu"
+   ],
+   "note": "A body plan with no counterpart in any living phylum.",
+   "sz": 0.04,
+   "dt": "suspension feeding",
+   "hb": "sessile, three-rayed symmetry",
+   "pbdb": {
+    "oid": "txn:4513",
+    "matched": "Tribrachidium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tribrachidium",
+    "regions": {
+     "au": 17,
+     "eu": 12,
+     "in": 1
+    }
+   },
+   "cls": {
+    "class": "Trilobozoa"
+   },
+   "pbdb_ok": true
+  },
+  "Tridacna": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "giantclam",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Cardiidae"
+   },
+   "note": "The giant clam: up to 1.3 m and 250 kg, fixed for life on an Indo-Pacific reef and fed largely by the algae it farms in its own mantle.",
+   "box": [
+    [
+     30,
+     180,
+     -35,
+     35
+    ],
+    [
+     -180,
+     -140,
+     -30,
+     30
+    ]
+   ]
+  },
+  "Trilobita": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The defining Cambrian arthropod: armoured, mobile, with compound eyes made of calcite crystals.",
+   "pbdb": {
+    "oid": "txn:19100",
+    "matched": "Trilobita",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 56390,
+    "fea": 538.8,
+    "lla": 251.902,
+    "phylum": "Arthropoda",
+    "class": "Trilobita"
+   },
+   "w": 3,
+   "pbdb_ok": true,
+   "conf_note": "Unambiguous mineralised trilobites first appear in Cambrian Stage 3 (~521 Ma); 538.8 Ma is the base-Cambrian bin edge, not the true FAD.",
+   "aka": [
+    "trilobites"
+   ]
+  },
+  "Tropidoleptus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 407,
+   "lad": 372,
+   "range": [
+    "af-n",
+    "na-e",
+    "sa-n"
+   ],
+   "note": "A brachiopod that marks the Devonian seas of the Americas, from the Appalachian basin to the cool southern shelves.",
+   "pbdb": {
+    "oid": "txn:30605",
+    "matched": "Tropidoleptus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 446,
+    "fea": 419.62,
+    "lla": 372.15,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tropidoleptidae",
+    "genus": "Tropidoleptus",
+    "regions": {
+     "na-e": 389,
+     "sa-s": 3,
+     "au": 1,
+     "eu": 7,
+     "af-s": 3,
+     "af-n": 13,
+     "sa-n": 30
+    }
+   }
+  },
+  "Waagenophyllidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "horncoral",
+   "fad": 300,
+   "lad": 252,
+   "range": [
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "as-w",
+    "in"
+   ],
+   "note": "Permian rugose corals of the rich Tethyan reefs as the ocean starts to close behind Cimmeria.",
+   "pbdb": {
+    "oid": "txn:107617",
+    "matched": "Waagenophyllidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 891,
+    "fea": 335.9,
+    "lla": 251.902,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Stauriida",
+    "family": "Waagenophyllidae",
+    "regions": {
+     "as-e": 420,
+     "ar": 54,
+     "as-se": 117,
+     "as-c": 113,
+     "eu": 10,
+     "na-w": 12,
+     "as-w": 90,
+     "in": 66,
+     "af-n": 4,
+     "as-n": 1,
+     "nz": 2,
+     "au": 1
+    }
+   }
+  },
+  "Waagenophyllum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "horncoral",
+   "fad": 272,
+   "lad": 252,
+   "range": [
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "as-w",
+    "in"
+   ],
+   "note": "A rugose coral of Permian Tethyan reefs, colonial and thickly walled.",
+   "pbdb": {
+    "oid": "txn:6046",
+    "matched": "Waagenophyllum",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 199,
+    "fea": 298.9,
+    "lla": 251.902,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Stauriida",
+    "family": "Waagenophyllidae",
+    "genus": "Waagenophyllum",
+    "regions": {
+     "as-e": 89,
+     "ar": 4,
+     "as-se": 19,
+     "eu": 3,
+     "as-w": 20,
+     "in": 42,
+     "as-c": 15,
+     "na-w": 5,
+     "af-n": 1,
+     "nz": 1
+    }
+   }
+  },
+  "Wiwaxia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 522.6,
+   "lad": 501.8,
+   "range": [
+    "as-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A scale-covered mat grazer whose affinities have been argued between molluscs and annelids for a century.",
+   "sz": 0.05,
+   "dt": "grazing",
+   "hb": "benthic, armoured with sclerites and spines",
+   "pbdb": {
+    "oid": "txn:7314",
+    "matched": "Wiwaxia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 42,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Mollusca",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Sachitida",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Wiwaxia",
+    "regions": {
+     "na-n": 5,
+     "na-w": 32,
+     "as-e": 4,
+     "as-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Yorgia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "quilt",
+   "fad": 560,
+   "lad": 550,
+   "range": [
+    "eu",
+    "au"
+   ],
+   "note": "Found with a trail of its own feeding impressions.",
+   "sz": 0.25,
+   "dt": "ciliary feeding",
+   "hb": "mobile grazer on microbial mats",
+   "pbdb": {
+    "oid": "txn:153194",
+    "matched": "Yorgia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "Proarticulata",
+    "class": "Cephalozoa",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Yorgia",
+    "regions": {
+     "eu": 11,
+     "au": 2
+    }
+   },
+   "cls": {
+    "class": "Dipleurozoa"
+   },
+   "pbdb_ok": true
+  },
+  "calymenid trilobites": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 480,
+   "lad": 360,
+   "range": [
+    "eu",
+    "af-n",
+    "ar",
+    "sa",
+    "na-e"
+   ],
+   "note": "Robust, strongly enrolling trilobites that dominate the cold high-latitude Ordovician shelves where reefs are absent.",
+   "cls": {
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Calymenidae"
+   }
+  },
+  "ceratitid ammonoids": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 252,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The ammonoid group that radiated through the Triassic from the handful of lineages that survived the end-Permian bottleneck.",
+   "rep": "Ceratites",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": ""
+   }
+  },
+  "giant clams": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "giantclam",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "note": "Tridacna and its relatives, which farm symbiotic algae inside their own mantle tissue on shallow tropical reefs.",
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "rep": "Tridacna",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Cardiidae"
+   },
+   "box": [
+    [
+     30,
+     180,
+     -35,
+     35
+    ],
+    [
+     -180,
+     -140,
+     -30,
+     30
+    ]
+   ]
+  },
+  "hyoliths": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "hyolith",
+   "fad": 535,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Small conical Cambrian shells with a lid and a pair of props. What they actually were was argued for 175 years -- probably relatives of brachiopods.",
+   "cls": {
+    "phylum": "Lophotrochozoa",
+    "class": "Hyolitha",
+    "order": "",
+    "family": ""
+   }
+  },
+  "orthoceratid nautiloids": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 480,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Straight-shelled cephalopods whose conchs pave the Baltic orthoceratite limestone -- the rock takes its name from them.",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Orthocerida",
+    "family": ""
+   }
+  },
+  "rudists": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "rudist",
+   "fad": 160,
+   "lad": 66,
+   "range": [
+    "eu",
+    "af-n",
+    "ar",
+    "as-w",
+    "as-c",
+    "in",
+    "as-se",
+    "ca",
+    "na-e",
+    "na-w",
+    "sa-n",
+    "tet"
+   ],
+   "note": "They displace corals as the main tropical reef builder for much of the Cretaceous, and die at the K-Pg.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "rep": "Hippurites",
+   "cls": {
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Hippuritida",
+    "family": ""
+   },
+   "aka": [
+    "Rudistes"
+   ]
+  },
+  "stromatoporoids": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "stromatoporoid",
+   "fad": 470,
+   "lad": 359,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Calcified sponges that built the reefs of the Ordovician through Devonian, in the long gap between the archaeocyaths and the modern corals.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    38
+   ],
+   "cls": {
+    "phylum": "Porifera",
+    "class": "Stromatoporoidea",
+    "order": "",
+    "family": ""
+   }
+  },
+  "tabulate corals": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 485,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Colonial corals built from stacked tubes with floors across them. Palaeozoic reef framework, extinct at the end-Permian.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    42
+   ],
+   "rep": "Favosites",
+   "cls": {
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Tabulata",
+    "family": ""
+   }
+  }
+ }
+}

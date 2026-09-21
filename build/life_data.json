@@ -6963,7 +6963,7 @@
     "a1": 66,
     "taxa": [
      [
-      "Basilosaurus",
+      "Archaeoceti",
       "genus",
       "sea",
       "A serpentine early whale, fully marine at last, cruising the warm Eocene seas."
@@ -7234,7 +7234,7 @@
       "After the Messinian salinity crisis dried the basin, salt-tolerant survivors and Atlantic recolonisers rebuild the fauna."
      ],
      [
-      "Posidonia",
+      "Posidonia oceanica",
       "genus",
       "sea",
       "Sea-grass meadows anchor the modern Mediterranean's endemic shelf ecosystem."
@@ -8530,7 +8530,7 @@
       "The lion, the only truly social big cat."
      ],
      [
-      "Acacia",
+      "Vachellia",
       "genus",
       "land",
       "Flat-topped thorn trees, browsed to their characteristic silhouette by giraffe."
@@ -9156,6 +9156,563 @@
      ]
     ]
    }
+  ],
+  "Wallacea": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "exception": true,
+    "shared": "Deep straits kept these islands apart from both Asia and Australia even at the lowest Ice Age sea levels: no tigers, rhinos or apes crossed Wallace's Line, and only a few marsupials crossed from the east.",
+    "taxa": [
+     [
+      "Babyrousa",
+      "genus",
+      "land",
+      "The babirusa of Sulawesi, whose upper tusks grow up through the snout and curl back toward the skull."
+     ],
+     [
+      "Bubalus depressicornis",
+      "species",
+      "land",
+      "The anoa, a dwarf forest buffalo barely a metre tall, found only on Sulawesi."
+     ],
+     [
+      "Tarsius",
+      "genus",
+      "land",
+      "Tarsiers: tiny nocturnal primates with eyes each as large as their brain."
+     ],
+     [
+      "Varanus komodoensis",
+      "species",
+      "land",
+      "The Komodo dragon, a three-metre monitor surviving on a handful of the Lesser Sunda Islands."
+     ],
+     [
+      "Macrocephalon maleo",
+      "species",
+      "land",
+      "The maleo, a megapode that buries its eggs in volcanically heated sand and leaves them."
+     ],
+     [
+      "Ailurops ursinus",
+      "species",
+      "land",
+      "The bear cuscus: a marsupial in Asia, one of the few mammals to cross from the Australian side."
+     ],
+     [
+      "Eucalyptus deglupta",
+      "species",
+      "land",
+      "The rainbow gum, the only eucalypt native north of the equator, its bark peeling in green, orange and purple strips."
+     ],
+     [
+      "Nepenthes",
+      "genus",
+      "land",
+      "Tropical pitcher plants; the largest hold litres and have caught rats."
+     ],
+     [
+      "Pandanus",
+      "genus",
+      "land",
+      "Screw pines on stilt roots, fringing Indo-Pacific shores."
+     ],
+     [
+      "Agathis dammara",
+      "species",
+      "land",
+      "The Sulawesi kauri, a towering araucarian conifer tapped for dammar resin."
+     ]
+    ]
+   }
+  ],
+  "Atacama Desert": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "taxa": [
+     [
+      "Copiapoa",
+      "genus",
+      "land",
+      "Globular cacti of the Atacama coast that live on fog: some stands see no rain for decades."
+     ],
+     [
+      "Tillandsia landbeckii",
+      "species",
+      "land",
+      "A rootless air plant forming banded 'lawns' on bare Atacama dunes, watered entirely by coastal fog."
+     ],
+     [
+      "Lama guanicoe",
+      "species",
+      "land",
+      "Guanacos come down to the fog oases of the coastal range, the only large grazers the desert supports."
+     ],
+     [
+      "Lycalopex culpaeus",
+      "species",
+      "land",
+      "The culpeo, the fox-like canid that hunts the desert's rodents and lizards."
+     ]
+    ]
+   }
+  ],
+  "Kerguelen Microcontinent": [
+   {
+    "a0": 0,
+    "a1": 2,
+    "shared": "The Kerguelen Islands are the part of this drowned plateau still above water. They have no native trees, land mammals, reptiles or amphibians: everything here flew, swam or drifted in.",
+    "taxa": [
+     [
+      "Aptenodytes patagonicus",
+      "species",
+      "land",
+      "King penguins breed here by the hundred thousand; the chicks stand through the subantarctic winter waiting to be fed."
+     ],
+     [
+      "Mirounga leonina",
+      "species",
+      "sea",
+      "Southern elephant seals haul out on the Kerguelen beaches to breed and moult, the second largest population in the world."
+     ],
+     [
+      "Diomedea exulans",
+      "species",
+      "air",
+      "Wandering albatrosses nest on the islands' windward slopes and forage across the whole Southern Ocean."
+     ],
+     [
+      "Anas eatoni",
+      "species",
+      "air",
+      "Eaton's pintail, the islands' only native duck."
+     ],
+     [
+      "Pringlea antiscorbutica",
+      "species",
+      "land",
+      "Kerguelen cabbage, pollinated by wind because there are almost no flying insects to do it."
+     ],
+     [
+      "Azorella selago",
+      "species",
+      "land",
+      "Cushions of Azorella, some centuries old, are the fellfield's main vegetation."
+     ],
+     [
+      "Acaena magellanica",
+      "species",
+      "land",
+      "Acaena covers the sheltered lower slopes, shared with Patagonia and carried here on seabirds' feathers."
+     ],
+     [
+      "Poa cookii",
+      "species",
+      "land",
+      "Tussock grass, growing tallest on ground fertilised by seals and penguins."
+     ]
+    ]
+   },
+   {
+    "a0": 3,
+    "a1": 33,
+    "shared": "Fossil wood and pollen between the islands' lava flows show conifer forest where there is now only cushion plant and tussock. The cooling of the last few million years cleared it.",
+    "taxa": [
+     [
+      "Spheniscidae",
+      "family",
+      "land",
+      "Penguins, already ocean-wide in the south, are the likeliest large animals of these shores."
+     ],
+     [
+      "Procellariiformes",
+      "order",
+      "air",
+      "Petrels and albatrosses, breeding on remote islands since the Eocene."
+     ],
+     [
+      "Phocidae",
+      "family",
+      "sea",
+      "True seals reach the Southern Ocean in the Miocene."
+     ],
+     [
+      "Cupressaceae",
+      "family",
+      "land",
+      "Cypress-family wood is preserved between the Miocene lava flows of the Kerguelen Islands."
+     ],
+     [
+      "Podocarpaceae",
+      "family",
+      "land",
+      "Podocarp pollen and wood: a cool southern conifer forest on what is now a treeless island."
+     ],
+     [
+      "Araucariaceae",
+      "family",
+      "land",
+      "Araucarian wood in the islands' lignites, relatives of the monkey puzzle."
+     ],
+     [
+      "Bryophyta",
+      "division",
+      "land",
+      "Mosses, then as now a large part of the ground cover."
+     ]
+    ]
+   }
+  ],
+  "Mauritia": [
+   {
+    "a0": 0,
+    "a1": 0,
+    "shared": "Mauritius, Reunion and Rodrigues are young volcanoes standing on this drowned continental sliver. Nothing walked here: bats, birds, tortoises and geckos arrived over water. The dodo and the giant tortoises were gone by about 1700.",
+    "taxa": [
+     [
+      "Pteropus niger",
+      "species",
+      "air",
+      "The Mauritian flying fox, the last native mammal, pollinating and seeding what is left of the upland forest."
+     ],
+     [
+      "Falco punctatus",
+      "species",
+      "air",
+      "The Mauritius kestrel, hunting day geckos through the forest canopy."
+     ],
+     [
+      "Phelsuma",
+      "genus",
+      "land",
+      "Day geckos, which pollinate several of the islands' endemic flowers."
+     ],
+     [
+      "Diospyros tessellaria",
+      "species",
+      "land",
+      "Mauritius ebony; the lowland ebony forest was felled within two centuries of settlement."
+     ],
+     [
+      "Sideroxylon grandiflorum",
+      "species",
+      "land",
+      "The tambalacoque or 'dodo tree' of the upland forest."
+     ],
+     [
+      "Latania",
+      "genus",
+      "land",
+      "Latan palms, one species each on Mauritius, Reunion and Rodrigues."
+     ],
+     [
+      "Pandanus",
+      "genus",
+      "land",
+      "Screw pines; Mauritius alone has some twenty endemic species, many in upland marsh."
+     ]
+    ]
+   },
+   {
+    "a0": 1,
+    "a1": 8,
+    "shared": "Mauritius rose from the sea about eight million years ago, on top of a buried fragment of continent. Everything on it arrived across open ocean, and with no mammals to compete with, birds and tortoises became the large animals.",
+    "taxa": [
+     [
+      "Raphus cucullatus",
+      "species",
+      "land",
+      "The dodo: a pigeon that reached Mauritius by air, then grew to twenty kilograms and gave up flight on an island with no predators."
+     ],
+     [
+      "Cylindraspis",
+      "genus",
+      "land",
+      "Giant tortoises, the islands' only large grazers, in herds that early visitors said one could walk across."
+     ],
+     [
+      "Phelsuma",
+      "genus",
+      "land",
+      "Day geckos, arriving from Madagascar on drifting vegetation."
+     ],
+     [
+      "Pteropus niger",
+      "species",
+      "air",
+      "Flying foxes, the only mammals to reach the islands unaided."
+     ],
+     [
+      "Latania",
+      "genus",
+      "land",
+      "Latan palms of the dry lowland palm savanna."
+     ],
+     [
+      "Diospyros tessellaria",
+      "species",
+      "land",
+      "Ebony forest covering the lowlands."
+     ],
+     [
+      "Sideroxylon grandiflorum",
+      "species",
+      "land",
+      "Tambalacoque in the upland forest; tortoises and dodos ate its fruit."
+     ],
+     [
+      "Pandanus",
+      "genus",
+      "land",
+      "Screw pines along coasts and in upland marsh."
+     ]
+    ]
+   }
+  ],
+  "Seychelles Microcontinent": [
+   {
+    "a0": 0,
+    "a1": 2,
+    "shared": "These are the only mid-ocean islands made of granite, a splinter of Gondwana. Frogs and caecilians cannot cross salt water, so theirs have been aboard since the islands parted from India.",
+    "taxa": [
+     [
+      "Aldabrachelys gigantea",
+      "species",
+      "land",
+      "Giant tortoises, once on every island of the group; the survivors are Aldabra's."
+     ],
+     [
+      "Sooglossidae",
+      "family",
+      "land",
+      "Thumbnail-sized frogs of the mist forest on Mahe and Silhouette, carrying their tadpoles on their backs."
+     ],
+     [
+      "Pteropus seychellensis",
+      "species",
+      "air",
+      "The Seychelles fruit bat."
+     ],
+     [
+      "Coracopsis barklyi",
+      "species",
+      "air",
+      "The black parrot of Praslin's palm forest."
+     ],
+     [
+      "Lodoicea maldivica",
+      "species",
+      "land",
+      "The coco de mer, in the Vallee de Mai, with the largest seed of any plant."
+     ],
+     [
+      "Nepenthes pervillei",
+      "species",
+      "land",
+      "A pitcher plant of the bare granite summits."
+     ],
+     [
+      "Medusagyne oppositifolia",
+      "species",
+      "land",
+      "The jellyfish tree, a few dozen individuals on Mahe's granite."
+     ],
+     [
+      "Pandanus",
+      "genus",
+      "land",
+      "Endemic screw pines on the granite slopes and shores."
+     ]
+    ]
+   }
+  ],
+  "Jan Mayen Microcontinent": [
+   {
+    "a0": 0,
+    "a1": 0,
+    "shared": "Only the young volcano Beerenberg stands above the sea. The rest of this sliver of Greenland's old margin lies about a kilometre down.",
+    "taxa": [
+     [
+      "Alle alle",
+      "species",
+      "air",
+      "Little auks nest in the scree below Beerenberg in tens of thousands."
+     ],
+     [
+      "Fulmarus glacialis",
+      "species",
+      "air",
+      "Northern fulmars, the island's commonest breeding bird, on every sea cliff."
+     ],
+     [
+      "Ursus maritimus",
+      "species",
+      "land",
+      "Polar bears reached Jan Mayen on the winter pack ice within living memory; the ice no longer comes this far."
+     ],
+     [
+      "Salix herbacea",
+      "species",
+      "land",
+      "Dwarf willow, the island's only 'tree', a few centimetres high."
+     ],
+     [
+      "Saxifraga oppositifolia",
+      "species",
+      "land",
+      "Purple saxifrage on the lava and gravel."
+     ],
+     [
+      "Racomitrium lanuginosum",
+      "species",
+      "land",
+      "Woolly fringe-moss, the grey-green carpet over the lava fields."
+     ],
+     [
+      "Oxyria digyna",
+      "species",
+      "land",
+      "Mountain sorrel, among the first plants onto new volcanic ground."
+     ]
+    ]
+   }
+  ],
+  "Lake Vostok": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "taxa": [
+     [
+      "Subglacial microbes",
+      "informal",
+      "fresh",
+      "Ice cored from just above the lake carries bacterial DNA. Whatever lives in the water below has been cut off from the surface for millions of years."
+     ],
+     [
+      "Bacteria",
+      "domain",
+      "sea",
+      "Chemical energy from the rock, and oxygen released from melting ice, are the only supplies there are."
+     ],
+     [
+      "Archaea",
+      "domain",
+      "sea",
+      "Methane-cycling archaea are found in other Antarctic subglacial lakes and are expected here."
+     ]
+    ],
+    "only": true
+   }
+  ],
+  "Gulf of California": [
+   {
+    "a0": 0,
+    "a1": 2,
+    "shared": "A sea about seven million years old, opened as Baja California tore away from the mainland. Tidal mixing and upwelling make it one of the most productive seas on Earth.",
+    "taxa": [
+     [
+      "Phocoena sinus",
+      "species",
+      "sea",
+      "The vaquita lives only at the head of this gulf; a few individuals remain."
+     ],
+     [
+      "Totoaba macdonaldi",
+      "species",
+      "sea",
+      "The totoaba, the gulf's giant drum, spawning where the Colorado River once reached the sea."
+     ],
+     [
+      "Zalophus californianus",
+      "species",
+      "sea",
+      "California sea lions breed on the gulf's desert islands."
+     ],
+     [
+      "Dosidicus gigas",
+      "species",
+      "sea",
+      "Humboldt squid rise from the deep basins at night in shoals of thousands."
+     ],
+     [
+      "Mobula",
+      "genus",
+      "sea",
+      "Devil rays gather here in the largest schools known, leaping clear of the water."
+     ],
+     [
+      "Rhincodon typus",
+      "species",
+      "sea",
+      "Whale sharks feed on the plankton blooms of the gulf's bays."
+     ],
+     [
+      "Sargassum",
+      "genus",
+      "sea",
+      "Forests of sargassum on the rocky reefs, the gulf's main seaweed habitat."
+     ],
+     [
+      "Zostera marina",
+      "species",
+      "sea",
+      "Eelgrass beds along the mainland coast, near the southern limit of the species."
+     ]
+    ]
+   }
+  ],
+  "Red Sea Rift": [
+   {
+    "a0": 0,
+    "a1": 5,
+    "shared": "A young ocean. Arabia has been pulling away from Africa for about 25 million years, and sea floor has been forming along the axis for the last five. Warm, very salty and nearly landlocked, it has many species found nowhere else.",
+    "taxa": [
+     [
+      "Stylophora pistillata",
+      "species",
+      "sea",
+      "A reef-building coral whose Red Sea populations withstand water several degrees hotter than most corals can."
+     ],
+     [
+      "Dugong dugon",
+      "species",
+      "sea",
+      "Dugongs graze the seagrass of the sheltered bays."
+     ],
+     [
+      "Chaetodontidae",
+      "family",
+      "sea",
+      "Butterflyfishes; about one in seven Red Sea reef fishes is found nowhere else."
+     ],
+     [
+      "Tridacna",
+      "genus",
+      "sea",
+      "Giant clams set in the reef flat."
+     ],
+     [
+      "Avicennia marina",
+      "species",
+      "land",
+      "Grey mangrove fringes a desert coast with no rivers."
+     ],
+     [
+      "Halophila stipulacea",
+      "species",
+      "sea",
+      "A small seagrass native here, growing from the shallows to fifty metres."
+     ],
+     [
+      "Trichodesmium erythraeum",
+      "species",
+      "sea",
+      "Rust-red blooms of this cyanobacterium are the likely source of the sea's name."
+     ]
+    ]
+   }
   ]
  },
  "sparse": {
@@ -9232,6 +9789,20 @@
     "a0": 720,
     "a1": 1000,
     "why": "A Neoproterozoic ocean with no animals - only microbes and algae. There is life, but nothing that leaves a conventional body-fossil record beyond stromatolites and acritarchs."
+   }
+  ],
+  "Seychelles Microcontinent": [
+   {
+    "a0": 3,
+    "a1": 62,
+    "why": "No fossils are known from the Seychelles. What can be said comes from the living: frogs and caecilians whose nearest relatives are in India mean there was land above water here the whole time."
+   }
+  ],
+  "Lake Vostok": [
+   {
+    "a0": 0,
+    "a1": 15,
+    "why": "Sealed beneath about four kilometres of ice for some fourteen million years. Microbes are all that is expected, and all that the ice cores show."
    }
   ]
  }

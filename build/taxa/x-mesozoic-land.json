@@ -1,0 +1,2253 @@
+{
+ "taxa": {
+  "Abelisauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 145,
+   "lad": 66,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-n",
+    "af-e",
+    "mg",
+    "in",
+    "eu"
+   ],
+   "note": "Short-faced predators with arms reduced almost to nothing: the top carnivores of the Cretaceous southern continents.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Abelisauridae"
+   },
+   "rep": "Carnotaurus"
+  },
+  "Acrocanthosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 116,
+   "lad": 110,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "A high-spined carcharodontosaur eleven metres long, the top predator of Early Cretaceous North America.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Carcharodontosauridae"
+   }
+  },
+  "Alamosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "The titanosaur that walked north: a thirty-metre giant that re-entered North America from the south after sauropods had been absent there for thirty million years.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   }
+  },
+  "Allosauroidea": {
+   "rank": "superfamily",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 165,
+   "lad": 93,
+   "range": [
+    "na-w",
+    "eu",
+    "af-n",
+    "af-e",
+    "sa-s",
+    "as-e",
+    "au"
+   ],
+   "note": "The big three-fingered predators of the Jurassic and mid-Cretaceous, from Allosaurus to the carcharodontosaurs.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Allosauridae"
+   },
+   "rep": "Allosaurus"
+  },
+  "Amargasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 129,
+   "lad": 122,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A short-necked sauropod with two rows of tall spines down its neck, perhaps carrying a sail or a display of horn.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Dicraeosauridae"
+   }
+  },
+  "Ankylosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 122,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "as-c",
+    "na-w"
+   ],
+   "note": "The club-tailed armoured dinosaurs: low, wide and plated to the eyelids.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Ankylosauridae"
+   },
+   "rep": "Ankylosaurus"
+  },
+  "Ankylosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 68,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "The last and largest ankylosaur, eight metres of fused armour ending in a tail club that could break a tyrannosaur's shin.",
+   "w": 3,
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Ankylosauridae"
+   }
+  },
+  "Anura": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "frog",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Frogs. The jumping body plan was in place by the Early Jurassic and has hardly changed.",
+   "w": 1,
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      85
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      70
+     ]
+    }
+   ]
+  },
+  "Apatosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 154,
+   "lad": 150,
+   "range": [
+    "na-w"
+   ],
+   "note": "The heavyweight of the Morrison plain -- a massively built diplodocid with a neck as deep as a horse's body.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Diplodocidae"
+   }
+  },
+  "Araneae": {
+   "rank": "order",
+   "realm": "land",
+   "form": "spider",
+   "fad": 315,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Spiders. Silk first for lining burrows; aerial webs came once there were flying insects worth catching.",
+   "w": 1,
+   "cls": {
+    "class": "Arachnida",
+    "order": "Araneae"
+   }
+  },
+  "Australovenator": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 96,
+   "lad": 93,
+   "range": [
+    "au"
+   ],
+   "note": "A lightly built six-metre megaraptoran with huge hand claws: Australia's best-known predatory dinosaur.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Megaraptora"
+   }
+  },
+  "Austroraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 78,
+   "lad": 66,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A five-metre, long-snouted Patagonian raptor with small arms -- South America ran its own line of dromaeosaurs.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   }
+  },
+  "Azhdarchidae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 110,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Giant toothless pterosaurs with stiff necks as long as a giraffe's, stalking prey on the ground like storks.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Azhdarchidae"
+   },
+   "rep": "Quetzalcoatlus"
+  },
+  "Baryonyx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 130,
+   "lad": 125,
+   "range": [
+    "eu"
+   ],
+   "note": "A fish-eating theropod from the English Wealden with a crocodile snout and a thirty-centimetre thumb claw; fish scales were found in its stomach.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Spinosauridae"
+   }
+  },
+  "Beelzebufo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "frog",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "The 'devil frog': a 40 cm horned frog relative from Madagascar, big enough to take hatchling dinosaurs.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   },
+   "realms": [
+    "land",
+    "fresh"
+   ]
+  },
+  "Blattodea": {
+   "rank": "order",
+   "realm": "land",
+   "form": "cockroach",
+   "fad": 320,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Cockroaches and their roachoid forerunners -- the commonest insects of the coal forests, and unhurried ever since.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "wetland"
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Blattodea"
+   },
+   "lat": [
+    {
+     "t": [
+      330,
+      34
+     ],
+     "lat": [
+      0,
+      85
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      58
+     ]
+    }
+   ]
+  },
+  "Brachiosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 160,
+   "lad": 100,
+   "range": [
+    "na-w",
+    "af-e",
+    "eu",
+    "af-n"
+   ],
+   "note": "Sauropods built like giraffes, front legs longer than hind, holding the head twelve metres up.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Brachiosauridae"
+   },
+   "rep": "Brachiosaurus"
+  },
+  "Camarasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 156,
+   "lad": 146,
+   "range": [
+    "na-w"
+   ],
+   "note": "The commonest sauropod of the Morrison Formation: a boxy skull, spoon-shaped teeth, and a build that browsed mid-height.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Camarasauridae"
+   }
+  },
+  "Camptosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 156,
+   "lad": 146,
+   "range": [
+    "na-w",
+    "eu"
+   ],
+   "note": "A mid-sized beaked plant-eater of the Morrison plain, walking on two legs or four.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Camptosauridae"
+   }
+  },
+  "Captorhinidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 300,
+   "lad": 252,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "af-n",
+    "af-s",
+    "as-e",
+    "in"
+   ],
+   "note": "Stocky lizard-shaped early reptiles, some with several rows of teeth for grinding plants -- among the first small herbivores on land.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Captorhinidae"
+   }
+  },
+  "Carcharodontosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 130,
+   "lad": 90,
+   "range": [
+    "af-n",
+    "sa-s",
+    "na-w",
+    "eu",
+    "as-e"
+   ],
+   "note": "Shark-toothed giants that rivalled Tyrannosaurus in size, hunting sauropods across the mid-Cretaceous world.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Carcharodontosauridae"
+   },
+   "rep": "Giganotosaurus"
+  },
+  "Caseidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "pelycosaur",
+   "fad": 300,
+   "lad": 265,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "Barrel-bodied synapsids with absurdly small heads: Cotylorhynchus reached four metres and was the first really large plant-eater on land.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Pelycosauria",
+    "family": "Caseidae"
+   }
+  },
+  "Ceratopsidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 83,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-n",
+    "as-e"
+   ],
+   "note": "The great horned dinosaurs -- a North American radiation, each genus with its own arrangement of horns and frill.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ceratopsia",
+    "family": "Ceratopsidae"
+   },
+   "rep": "Triceratops"
+  },
+  "Ceratosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 155,
+   "lad": 148,
+   "range": [
+    "na-w",
+    "eu",
+    "af-e"
+   ],
+   "note": "A horned, blade-toothed predator that shared the Morrison plain with the larger Allosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ceratosauridae"
+   },
+   "no_own_icon": true
+  },
+  "Coelophysoidea": {
+   "rank": "superfamily",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 228,
+   "lad": 190,
+   "range": [
+    "na-w",
+    "eu",
+    "af-s",
+    "as-e"
+   ],
+   "note": "Slender, hollow-boned early theropods two or three metres long: the first widespread predatory dinosaurs.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Coelophysidae"
+   },
+   "rep": "Coelophysis"
+  },
+  "Coleoptera": {
+   "rank": "order",
+   "realm": "land",
+   "form": "beetle",
+   "fad": 295,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Beetles. From the Permian on, the most species-rich order of animals there has ever been.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Coleoptera"
+   }
+  },
+  "Cotylorhynchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pelycosaur",
+   "fad": 279,
+   "lad": 272,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "The largest land animal of its day: a caseid with a body like a barrel and a head that looks borrowed from something a tenth its size.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Pelycosauria",
+    "family": "Caseidae"
+   }
+  },
+  "Crocodylia": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 85,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "True crocodiles, alligators and gharials. Their range is a thermometer: they reached the Arctic in the Eocene and are tropical now.",
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      78
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      36
+     ]
+    }
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Cynodontia": {
+   "rank": "order",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 260,
+   "lad": 100,
+   "range": [
+    {
+     "t": [
+      260,
+      145
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      145,
+      100
+     ],
+     "in": [
+      "as-e",
+      "as-n",
+      "eu",
+      "na-w",
+      "af-s"
+     ]
+    }
+   ],
+   "note": "The therapsids with a secondary palate, differentiated teeth and probably fur: the line that produces mammals in the Late Triassic.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia"
+   }
+  },
+  "Deinocheirus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 72,
+   "lad": 68,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "Known for fifty years only from its 2.4 m arms; the rest turned out to be a hump-backed, duck-billed giant ornithomimosaur.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ornithomimosauria"
+   }
+  },
+  "Deinonychus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 115,
+   "lad": 108,
+   "range": [
+    "na-w"
+   ],
+   "note": "The wolf-sized raptor whose discovery in 1964 overturned the image of dinosaurs as sluggish reptiles.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   }
+  },
+  "Deinosuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 82,
+   "lad": 73,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca"
+   ],
+   "note": "A ten-metre alligator relative from both shores of the Western Interior Seaway; bite marks show it ate dinosaurs.",
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Alligatoridae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ]
+  },
+  "Diamantinasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 96,
+   "lad": 93,
+   "range": [
+    "au"
+   ],
+   "note": "A stocky titanosaur from the Winton Formation of Queensland, found beside the predator that may have fed on it.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   }
+  },
+  "Diplodocidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 170,
+   "lad": 136,
+   "range": [
+    "na-w",
+    "eu",
+    "af-e",
+    "sa-s"
+   ],
+   "note": "The whip-tailed sauropods -- Diplodocus, Apatosaurus, Supersaurus: twenty-five metres and more of neck and tail on a comparatively light body.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Diplodocidae"
+   },
+   "rep": "Diplodocus"
+  },
+  "Diplodocus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 154,
+   "lad": 150,
+   "range": [
+    "na-w"
+   ],
+   "note": "Twenty-six metres long and most of it neck and tail; peg teeth at the front of the jaw raked leaves off branches it never chewed.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Diplodocidae"
+   }
+  },
+  "Diptera": {
+   "rank": "order",
+   "realm": "air",
+   "form": "fly",
+   "fad": 245,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "True flies -- midges, mosquitoes, hoverflies -- with the hind wings reduced to balancing knobs.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Diptera"
+   }
+  },
+  "Dromaeosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 145,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "as-e",
+    "as-c",
+    "eu",
+    "sa-s",
+    "mg",
+    "af-n"
+   ],
+   "note": "The sickle-clawed, feathered 'raptors', close cousins of birds, from crow-sized to six metres.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   },
+   "rep": "Velociraptor"
+  },
+  "Dryptosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 68,
+   "lad": 66,
+   "range": [
+    "na-e"
+   ],
+   "note": "A tyrannosauroid of Appalachia, the eastern island of Cretaceous North America, with long arms its western cousins had lost.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauroidea"
+   }
+  },
+  "Embolomeri": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "reptiliomorph",
+   "fad": 340,
+   "lad": 255,
+   "range": [
+    "euramerica",
+    "as-e"
+   ],
+   "note": "Long-bodied, eel-like reptiliomorphs of the coal-swamp pools -- fish-eating ambush predators close to the ancestry of amniotes.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Embolomeri"
+   }
+  },
+  "Enantiornithes": {
+   "rank": "clade",
+   "realm": "air",
+   "form": "earlybird",
+   "fad": 130,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The 'opposite birds': toothed, clawed-winged fliers that were the commonest birds of the Cretaceous and left no descendants.",
+   "cls": {
+    "class": "Aves",
+    "family": "Enantiornithes"
+   }
+  },
+  "Eoraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 233,
+   "lad": 229,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A metre-long, light-boned dinosaur from the dawn of the group, with teeth suited to both meat and plants.",
+   "cls": {
+    "class": "Saurischia",
+    "family": "Eoraptor"
+   }
+  },
+  "Europasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 154,
+   "lad": 152,
+   "range": [
+    "eu"
+   ],
+   "note": "A dwarf sauropod six metres long, shrunk by life on the islands of the Jurassic European archipelago.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Brachiosauridae"
+   }
+  },
+  "Eutriconodonta": {
+   "rank": "order",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 190,
+   "lad": 70,
+   "range": [
+    "as-e",
+    "as-c",
+    "na-w",
+    "eu",
+    "af-n",
+    "sa-s"
+   ],
+   "note": "Shearing-toothed Mesozoic mammals, the carnivores of their world -- including the one found with a dinosaur inside it.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Eutriconodonta"
+   }
+  },
+  "Exaeretodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 235,
+   "lad": 225,
+   "range": [
+    "sa-s",
+    "in"
+   ],
+   "note": "A boar-sized traversodont cynodont, the commonest herbivore of Ischigualasto -- and found in India too, across an unbroken Gondwana.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Traversodontidae"
+   }
+  },
+  "Formicidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ant",
+   "fad": 100,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Ants. Rare in Cretaceous amber, then from the Eocene on the dominant small predators and soil-movers of nearly every land habitat.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Hymenoptera",
+    "family": "Formicidae"
+   },
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      85
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      69
+     ]
+    }
+   ]
+  },
+  "Gallimimus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 72,
+   "lad": 68,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "The largest ostrich-mimic, six metres long, built to outrun Tarbosaurus across the Nemegt floodplain.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ornithomimidae"
+   }
+  },
+  "Gasparinisaura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 85,
+   "lad": 80,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A small Patagonian ornithopod known from many individuals, with gizzard stones still in its belly.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Elasmaria"
+   }
+  },
+  "Gondwanatheria": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 84,
+   "lad": 40,
+   "range": [
+    "sa-s",
+    "mg",
+    "in",
+    "an",
+    "af-e"
+   ],
+   "note": "Gnawing, high-toothed mammals unique to the southern continents; Madagascar's Adalatherium shows they could reach the size of a badger.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Gondwanatheria"
+   }
+  },
+  "Hadrosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 86,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "as-e",
+    "as-c",
+    "as-n",
+    "eu",
+    "sa-s",
+    "an",
+    "af-n"
+   ],
+   "note": "Duck-billed dinosaurs, chewing with hundreds of stacked teeth and travelling in herds from Alaska to Antarctica.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "rep": "Edmontosaurus"
+  },
+  "Herrerasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 233,
+   "lad": 229,
+   "range": [
+    "sa-s"
+   ],
+   "note": "One of the earliest dinosaurs of all: a three- to six-metre predator from Ischigualasto, when dinosaurs were still a minor part of the fauna.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "family": "Herrerasauridae"
+   }
+  },
+  "Heterodontosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 200,
+   "lad": 190,
+   "range": [
+    "af-s"
+   ],
+   "note": "A turkey-sized early ornithischian from the Karoo with three kinds of teeth, including tusks, in one jaw.",
+   "cls": {
+    "class": "Ornithischia",
+    "family": "Heterodontosauridae"
+   }
+  },
+  "Huayangosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 168,
+   "lad": 163,
+   "range": [
+    "as-e"
+   ],
+   "note": "One of the earliest stegosaurs, from Middle Jurassic Sichuan, still with teeth at the front of its jaws.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Huayangosauridae"
+   }
+  },
+  "Hymenoptera": {
+   "rank": "order",
+   "realm": "air",
+   "form": "ant",
+   "fad": 235,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Sawflies first, then wasps, bees and ants. Their rise tracks the flowering plants they came to pollinate.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Hymenoptera"
+   }
+  },
+  "Hypsilophodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 130,
+   "lad": 125,
+   "range": [
+    "eu"
+   ],
+   "note": "A two-metre sprinter from the Isle of Wight -- the small, fast plant-eater of the Wealden floodplain.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hypsilophodontidae"
+   }
+  },
+  "Iguanodontia": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 160,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The big beaked plant-eaters with grinding tooth batteries, from Camptosaurus to the duck-bills -- the commonest large herbivores of the Cretaceous.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Iguanodontidae"
+   },
+   "rep": "Iguanodon"
+  },
+  "Isoptera": {
+   "rank": "infraorder",
+   "realm": "land",
+   "form": "cockroach",
+   "fad": 130,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Termites: social cockroaches that digest wood with the microbes in their gut, and recycle most of a tropical forest's dead timber.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "grassland",
+    "desert"
+   ],
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      75
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      46
+     ]
+    }
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Blattodea",
+    "family": "Termitidae"
+   }
+  },
+  "Kannemeyeriiformes": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 247,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The big tusked dicynodonts of the Triassic -- ox-sized, beaked herbivores found on every part of Pangaea.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dicynodontia",
+    "family": "Kannemeyeriidae"
+   }
+  },
+  "Kentrosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 155,
+   "lad": 150,
+   "range": [
+    "af-e"
+   ],
+   "note": "Tendaguru's stegosaur: plates over the shoulders giving way to long paired spikes down the back and tail.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   }
+  },
+  "Koolasuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 125,
+   "lad": 120,
+   "range": [
+    "au"
+   ],
+   "note": "The last of the giant temnospondyls, five metres long, surviving in the cold rift-valley rivers of polar Australia where crocodiles could not live.",
+   "w": 3,
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Chigutisauridae"
+   }
+  },
+  "Kunbarrasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 105,
+   "lad": 100,
+   "range": [
+    "au"
+   ],
+   "note": "Australia's most complete dinosaur: a sheep-sized armoured ankylosaur preserved with its last meal of ferns and fruit.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria"
+   }
+  },
+  "Leaellynasaura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 118,
+   "lad": 110,
+   "range": [
+    "au"
+   ],
+   "note": "A small, big-eyed ornithopod from Dinosaur Cove, which lay inside the Antarctic Circle: it lived through months of winter darkness.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Elasmaria"
+   }
+  },
+  "Lepidoptera": {
+   "rank": "order",
+   "realm": "air",
+   "form": "butterfly",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Moths from the Jurassic, butterflies from the Cretaceous: scaled wings and, once flowers existed, a coiled tongue to reach nectar.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Lepidoptera"
+   }
+  },
+  "Lufengosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 201,
+   "lad": 190,
+   "range": [
+    "as-e"
+   ],
+   "note": "The common early sauropodomorph of Yunnan, six to nine metres long; embryos in its eggs preserve some of the oldest known organic remains in a dinosaur.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Massospondylidae"
+   }
+  },
+  "Majungasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "The top predator of Late Cretaceous Madagascar -- a short-snouted abelisaur whose tooth marks on its own kind are clear evidence of cannibalism.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Abelisauridae"
+   }
+  },
+  "Massospondylidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 210,
+   "lad": 183,
+   "range": [
+    "af-s",
+    "sa-s",
+    "an",
+    "na-w",
+    "in",
+    "as-e"
+   ],
+   "note": "Mid-sized early sauropodomorphs of Early Jurassic Gondwana and beyond; nests of Massospondylus eggs show the young hatched toothless and helpless.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Massospondylidae"
+   }
+  },
+  "Megalosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 170,
+   "lad": 145,
+   "range": [
+    "eu",
+    "na-w",
+    "af-n",
+    "as-e"
+   ],
+   "note": "Robust Jurassic predators seven to ten metres long -- the family of the first dinosaur ever named.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Megalosauridae"
+   },
+   "rep": "Megalosaurus"
+  },
+  "Moschops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dinocephalian",
+   "fad": 267,
+   "lad": 260,
+   "range": [
+    "af-s"
+   ],
+   "note": "A thick-skulled, barrel-chested dinocephalian of the Karoo: a three-metre herbivore built for head-butting.",
+   "w": 3,
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dinocephalia",
+    "family": "Tapinocephalidae"
+   }
+  },
+  "Muttaburrasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 112,
+   "lad": 100,
+   "range": [
+    "au"
+   ],
+   "note": "An eight-metre Australian ornithopod with an inflated, hollow snout -- probably for calling across the polar forests.",
+   "w": 3,
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Rhabdodontidae"
+   }
+  },
+  "Nigersaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 115,
+   "lad": 105,
+   "range": [
+    "af-n",
+    "af-w"
+   ],
+   "note": "A sauropod with a vacuum-cleaner mouth: five hundred teeth along the square front edge of a featherweight skull, cropping plants at ground level.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Rebbachisauridae"
+   }
+  },
+  "Nodosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 155,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "an",
+    "au"
+   ],
+   "note": "Armoured dinosaurs without tail clubs, relying on shoulder spikes; often found washed out to sea.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Nodosauridae"
+   }
+  },
+  "Notosuchia": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 130,
+   "lad": 11,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-n",
+    "af-e",
+    "mg",
+    "in",
+    "eu"
+   ],
+   "note": "Land-living crocodile relatives of the southern continents: long-legged runners, some with mammal-like teeth, some plant-eaters.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Notosuchia"
+   }
+  },
+  "Odonatoptera": {
+   "rank": "superorder",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 325,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Dragonflies, damselflies and their giant Palaeozoic cousins the griffinflies: aerial predators for 325 million years.",
+   "hab": [
+    "wetland",
+    "lake",
+    "river",
+    "forest"
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Odonata"
+   },
+   "lat": [
+    {
+     "t": [
+      330,
+      34
+     ],
+     "lat": [
+      0,
+      85
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      70
+     ]
+    }
+   ]
+  },
+  "Ornithomimosauria": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 140,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "as-c",
+    "na-w",
+    "eu",
+    "af-s"
+   ],
+   "note": "Ostrich-mimic dinosaurs: toothless, long-legged, fast, and probably omnivores.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ornithomimidae"
+   }
+  },
+  "Orthoptera": {
+   "rank": "order",
+   "realm": "land",
+   "form": "grasshopper",
+   "fad": 300,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Grasshoppers, crickets and katydids: the singing insects, and the great grazers of the insect world.",
+   "w": 1,
+   "cls": {
+    "class": "Insecta",
+    "order": "Orthoptera"
+   }
+  },
+  "Oviraptorosauria": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 130,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "as-c",
+    "na-w"
+   ],
+   "note": "Beaked, crested, feathered theropods -- found brooding on their nests like birds, which is what their name's 'egg thief' got wrong.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Oviraptoridae"
+   }
+  },
+  "Pachycephalosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "A bipedal plant-eater with a skull roof domed twenty-five centimetres thick, ringed with knobs and spikes.",
+   "cls": {
+    "class": "Ornithischia",
+    "family": "Pachycephalosauridae"
+   }
+  },
+  "Parasaurolophus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 77,
+   "lad": 73,
+   "range": [
+    "na-w"
+   ],
+   "note": "A duck-bill with a two-metre hollow crest swept back from its skull: a resonating tube for low-pitched calls.",
+   "w": 3,
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   }
+  },
+  "Patagotitan": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 102,
+   "lad": 100,
+   "range": [
+    "sa-s"
+   ],
+   "note": "Thirty-seven metres and some sixty tonnes: among the largest land animals known, from a single Patagonian quarry of six individuals.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   }
+  },
+  "Plateosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 228,
+   "lad": 201,
+   "range": [
+    "eu",
+    "gl"
+   ],
+   "note": "Long-necked, bipedal plant-eaters up to ten metres: the first dinosaurs to grow large, found in herds in Late Triassic Europe.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Plateosauridae"
+   },
+   "rep": "Plateosaurus"
+  },
+  "Procolophonidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 260,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Squat, spiny-cheeked parareptiles a hand or two long. They crossed the end-Permian extinction and were everywhere in the Triassic.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Procolophonidae"
+   }
+  },
+  "Pteranodon": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 88,
+   "lad": 80,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "A crested, toothless fish-eater with a seven-metre span, soaring over the seaway that split North America.",
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Pteranodontidae"
+   },
+   "realms": [
+    "air",
+    "sea"
+   ]
+  },
+  "Pterosauria": {
+   "rank": "order",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 228,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The flying reptiles: wings of skin stretched on one enormously long finger, from sparrow-sized to the span of a small aircraft.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria"
+   }
+  },
+  "Pulmonoscorpius": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "scorpion",
+   "fad": 336,
+   "lad": 330,
+   "range": [
+    "eu"
+   ],
+   "note": "A 70 cm scorpion of the Scottish coal-age forests, with compound eyes and book lungs -- a land hunter, not a swimmer.",
+   "cls": {
+    "class": "Arachnida",
+    "order": "Scorpiones"
+   }
+  },
+  "Rapetosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "Madagascar's titanosaur, known from one of the most complete sauropod skeletons of the Cretaceous.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   }
+  },
+  "Rauisuchia": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 250,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Crocodile-line archosaurs that walked upright on pillar legs: the top land predators of the Triassic, before dinosaurs had the role.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Rauisuchidae"
+   },
+   "rep": "Postosuchus"
+  },
+  "Rhoetosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 165,
+   "lad": 160,
+   "range": [
+    "au"
+   ],
+   "note": "Australia's Jurassic sauropod, about fifteen metres long -- one of very few windows on the continent's Jurassic land life.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   }
+  },
+  "Rhynchosauria": {
+   "rank": "order",
+   "realm": "land",
+   "form": "rhynchosaur",
+   "fad": 250,
+   "lad": 225,
+   "range": [
+    "sa-s",
+    "in",
+    "af-e",
+    "af-s",
+    "mg",
+    "eu",
+    "na-w",
+    "na-e"
+   ],
+   "note": "Pig-sized reptiles with a parrot beak and shearing tooth plates. In places they are half of all the fossils found -- then gone by the Norian.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Rhynchosauria"
+   }
+  },
+  "Riojasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 225,
+   "lad": 215,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A heavy ten-metre sauropodomorph of Late Triassic Argentina, already walking on all fours.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Riojasauridae"
+   }
+  },
+  "Saltasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A small titanosaur studded with bony armour plates -- the discovery that showed sauropods could be armoured at all.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Saltasauridae"
+   }
+  },
+  "Sanajeh": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "snake",
+   "fad": 68,
+   "lad": 66,
+   "range": [
+    "in"
+   ],
+   "note": "A 3.5 m snake fossilised coiled around a titanosaur egg in a nest, waiting for the hatchling.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Madtsoiidae"
+   }
+  },
+  "Sarcosuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 133,
+   "lad": 112,
+   "range": [
+    "af-n",
+    "af-w",
+    "sa-n"
+   ],
+   "note": "'SuperCroc': a twelve-metre, eight-tonne crocodile relative of the Cretaceous rivers of the Sahara and Brazil.",
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "family": "Pholidosauridae"
+   }
+  },
+  "Saurosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 233,
+   "lad": 229,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A seven-metre rauisuchian, the apex predator of Ischigualasto while the first dinosaurs ran about its feet.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Prestosuchidae"
+   }
+  },
+  "Scorpiones": {
+   "rank": "order",
+   "realm": "land",
+   "form": "scorpion",
+   "fad": 340,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Scorpions: among the first arachnids ashore, and scarcely changed in outline since the Carboniferous.",
+   "lat": [
+    0,
+    50
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Arachnida",
+    "order": "Scorpiones"
+   }
+  },
+  "Serpentes": {
+   "rank": "suborder",
+   "realm": "land",
+   "form": "snake",
+   "fad": 110,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Snakes: limbless lizards that swallow prey whole. They diversify after the Cretaceous, alongside the small mammals they eat.",
+   "lat": [
+    0,
+    60
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Serpentes"
+   }
+  },
+  "Shantungosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 78,
+   "lad": 74,
+   "range": [
+    "as-e"
+   ],
+   "note": "The largest ornithischian known: a flat-headed duck-bill fifteen metres long from Shandong.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   }
+  },
+  "Simosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "A pug-nosed, plant-eating crocodile relative from Madagascar, less than a metre long and armoured like an armadillo.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Notosuchia"
+   }
+  },
+  "Sphenodontia": {
+   "rank": "order",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 240,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      240,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      56
+     ],
+     "in": [
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      66,
+      0
+     ],
+     "in": [
+      "nz"
+     ]
+    }
+   ],
+   "note": "Lizard-like but not lizards. Worldwide in the Mesozoic; today one species, the tuatara, survives on New Zealand's offshore islands.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Rhynchocephalia",
+    "family": "Sphenodontidae"
+   }
+  },
+  "Spinosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 140,
+   "lad": 93,
+   "range": [
+    "af-n",
+    "af-w",
+    "eu",
+    "sa-n",
+    "as-se"
+   ],
+   "note": "Crocodile-snouted, fish-eating theropods of river deltas and coasts.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Spinosauridae"
+   },
+   "rep": "Spinosaurus"
+  },
+  "Stegosauria": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 170,
+   "lad": 113,
+   "range": [
+    "na-w",
+    "eu",
+    "af-e",
+    "as-e",
+    "as-c",
+    "sa-s"
+   ],
+   "note": "The plated dinosaurs: small heads, tall back plates and a spiked tail.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "rep": "Stegosaurus"
+  },
+  "Steropodon": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "platypus",
+   "fad": 108,
+   "lad": 100,
+   "range": [
+    "au"
+   ],
+   "note": "A Cretaceous monotreme known from an opalised jaw at Lightning Ridge -- platypus relatives are at least this old.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Monotremata"
+   }
+  },
+  "Suchomimus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 125,
+   "lad": 112,
+   "range": [
+    "af-n",
+    "af-w"
+   ],
+   "note": "An eleven-metre spinosaur of the Sahara's Cretaceous rivers, with a long, narrow, fish-trap snout.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Spinosauridae"
+   }
+  },
+  "Tapejara": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 115,
+   "lad": 108,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A Brazilian pterosaur carrying a tall sail-like crest on a short, parrot-beaked skull.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Tapejaridae"
+   }
+  },
+  "Temnospondyli": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 330,
+   "lad": 120,
+   "range": [
+    {
+     "t": [
+      330,
+      201
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      201,
+      120
+     ],
+     "in": [
+      "au",
+      "as-e",
+      "as-c",
+      "sa-s",
+      "af-s"
+     ]
+    }
+   ],
+   "note": "Crocodile-shaped amphibians, from newt-sized to five metres, that ruled rivers and swamps for 200 million years before crocodiles took the job.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Tenontosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 115,
+   "lad": 108,
+   "range": [
+    "na-w"
+   ],
+   "note": "A long-tailed ornithopod found again and again with the shed teeth of Deinonychus around it.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Iguanodontia"
+   }
+  },
+  "Testudines": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "turtle",
+   "fad": 210,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Turtles: ribs turned into a box. On land, in rivers and at sea since the Late Triassic.",
+   "lat": [
+    0,
+    60
+   ],
+   "w": 1,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Therizinosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 72,
+   "lad": 68,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "A pot-bellied, ten-metre plant-eating theropod with the longest claws of any animal -- up to a metre each.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Therizinosauridae"
+   }
+  },
+  "Therocephalia": {
+   "rank": "order",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 265,
+   "lad": 240,
+   "range": [
+    "af-s",
+    "eu",
+    "as-e",
+    "an"
+   ],
+   "note": "Weasel- to wolf-sized therapsid predators. Unlike the gorgonopsians they got through the end-Permian extinction and hunted the Early Triassic.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therocephalia"
+   }
+  },
+  "Titanosauria": {
+   "rank": "clade",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 140,
+   "lad": 66,
+   "range": [
+    {
+     "t": [
+      140,
+      66
+     ],
+     "in": [
+      "sa",
+      "af",
+      "mg",
+      "in",
+      "au",
+      "an",
+      "eu",
+      "as-e",
+      "as-c",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      70,
+      66
+     ],
+     "in": [
+      "na-w"
+     ]
+    }
+   ],
+   "note": "The last and largest sauropods, wide-hipped and often armoured. They are the big herbivores of every southern continent until the end of the Cretaceous.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   }
+  },
+  "Traversodontidae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 247,
+   "lad": 205,
+   "range": [
+    "sa-s",
+    "af-s",
+    "af-e",
+    "mg",
+    "in",
+    "na-e",
+    "eu"
+   ],
+   "note": "Plant-eating cynodonts with broad grinding cheek teeth -- the commonest herbivores of many Gondwanan Triassic faunas.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Traversodontidae"
+   }
+  },
+  "Tyrannosauridae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 81,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-n",
+    "as-e",
+    "as-c"
+   ],
+   "note": "The tyrant dinosaurs: huge heads, bone-crushing bites and two-fingered arms. Confined to western North America and Asia, the two halves of one land mass.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "rep": "Tyrannosaurus"
+  },
+  "Tyrannosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 68,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "Twelve metres, eight tonnes, and the hardest bite of any land animal known. It lived only on Laramidia, the western island of a divided North America.",
+   "w": 3,
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   }
+  },
+  "Utahraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 135,
+   "lad": 130,
+   "range": [
+    "na-w"
+   ],
+   "note": "The largest dromaeosaur: six metres long, with a slashing claw the length of a hand.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   }
+  },
+  "Yangchuanosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 165,
+   "lad": 155,
+   "range": [
+    "as-e"
+   ],
+   "note": "The apex predator of Jurassic Sichuan, ten metres long, hunting Mamenchisaurus and the local stegosaurs.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Allosauroidea"
+   }
+  },
+  "Yutyrannus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 126,
+   "lad": 122,
+   "range": [
+    "as-e"
+   ],
+   "note": "A nine-metre early tyrannosauroid covered in long filament feathers -- the largest feathered animal known.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauroidea"
+   }
+  }
+ }
+}

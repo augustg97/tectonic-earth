@@ -314,6 +314,12 @@ input[type=range].mini::-moz-range-thumb{width:12px;height:12px;border:none;bord
 .lifeicon.land{background:rgba(150,190,120,.13);color:#c2debb}
 .lifeicon.air{background:rgba(226,178,90,.13);color:#eed6a6}
 .lifeicon.fresh{background:rgba(120,190,190,.13);color:#a9e0dc}
+/* Fauna / Flora sub-headings inside a biota panel. Quieter than .ihead, which
+   separates whole sections: these only sort one list into its two halves. */
+.lsub{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);margin:11px 0 6px;display:flex;align-items:center;gap:8px}
+.lsub::after{content:"";flex:1;height:1px;background:var(--line);opacity:.7}
+.ihead+.lsub,.desc+.lsub{margin-top:4px}
+#infoExtra .desc+.desc{margin-top:7px}
 .lifetxt{min-width:0}
 .lifetxt .ln2{font-size:11px;color:var(--ink);letter-spacing:.02em;line-height:1.3}
 .lifetxt .lr{font-size:8.5px;color:var(--dim2);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}

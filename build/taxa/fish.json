@@ -1,0 +1,1079 @@
+{
+ "taxa": {
+  "Acanthodii": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "acanthodian",
+   "fad": 440,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Spiny 'sharks' -- among the earliest jawed fish, and the point where vertebrates start eating things that fight back.",
+   "pbdb": {
+    "oid": "txn:34849",
+    "matched": "Acanthodii",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 681,
+    "fea": 438.6,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Acanthodii"
+   },
+   "pbdb_ok": true
+  },
+  "Actinopterygii": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 425,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Ray-finned fishes -- half of all living vertebrate species, and the commonest vertebrate fossils in most marine shales since the Devonian.",
+   "pbdb": {
+    "oid": "txn:265718",
+    "matched": "Actinopterygii",
+    "exact": true,
+    "rank": "subclass",
+    "extant": true,
+    "noc": 24659,
+    "fea": 410.62,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes"
+   },
+   "pbdb_ok": true
+  },
+  "Arapaima gigas": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "bigfish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "One of the world's largest freshwater fish, an air-breather in oxygen-poor floodplain water.",
+   "pbdb": {
+    "oid": "txn:356120",
+    "matched": "Arapaima gigas",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 15.98,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteoglossiformes",
+    "family": "Arapaimidae",
+    "genus": "Arapaima",
+    "regions": {
+     "sa-n": 1
+    }
+   },
+   "hab": [
+    "river",
+    "lake"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Boreogadus saida": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "arc"
+   ],
+   "note": "Polar cod: it lives in and under the sea ice and is the link between Arctic plankton and everything larger.",
+   "hab": [
+    "ice",
+    "pelagic",
+    "shelf"
+   ],
+   "lat": [
+    60,
+    90
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Actinopterygii",
+    "order": "Gadiformes",
+    "family": "Gadidae"
+   }
+  },
+  "Bothriolepis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "antiarch",
+   "fad": 387,
+   "lad": 360,
+   "range": [
+    "an",
+    "as-e",
+    "as-n",
+    "au",
+    "eu",
+    "gl",
+    "na-e",
+    "na-w"
+   ],
+   "note": "An antiarch placoderm so abundant and widespread it is effectively the index fossil of Devonian fresh water.",
+   "pbdb": {
+    "oid": "txn:176322",
+    "matched": "Bothriolepis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 138,
+    "fea": 410.62,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Placodermi",
+    "order": "Bothriolepidiformes",
+    "family": "Bothriolepididae",
+    "genus": "Bothriolepis",
+    "regions": {
+     "na-e": 8,
+     "na-w": 6,
+     "as-e": 8,
+     "as-n": 10,
+     "eu": 62,
+     "sa-n": 2,
+     "af-s": 1,
+     "au": 19,
+     "na-n": 1,
+     "as-se": 2,
+     "an": 16,
+     "gl": 3
+    }
+   },
+   "w": 3
+  },
+  "Carcharocles": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 55,
+   "lad": 3.6,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The megatooth sharks, a lineage of giant whale-hunting predators running from the Eocene to Otodus megalodon.",
+   "pbdb": {
+    "oid": "txn:34603",
+    "matched": "Otodus (Carcharocles)",
+    "exact": true,
+    "rank": "subgenus",
+    "extant": false,
+    "noc": 124,
+    "fea": 56,
+    "lla": 2.58,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Lamniformes",
+    "family": "Otodontidae",
+    "genus": "Otodus"
+   },
+   "hab": [
+    "pelagic",
+    "shelf"
+   ]
+  },
+  "Cephalaspis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "ostracoderm",
+   "fad": 419,
+   "lad": 400,
+   "range": [
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "A bony-shielded jawless fish of Old Red Sandstone rivers and lakes.",
+   "pbdb": {
+    "oid": "txn:150011",
+    "matched": "Cephalaspis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 42,
+    "fea": 422.7,
+    "lla": 393.47,
+    "phylum": "Chordata",
+    "class": "Osteostraci",
+    "order": "Cephalaspidiformes",
+    "family": "Cephalaspididae",
+    "genus": "Cephalaspis",
+    "regions": {
+     "na-e": 8,
+     "na-w": 2,
+     "eu": 19,
+     "na-n": 5
+    }
+   }
+  },
+  "Chondrichthyes": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 440,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Early sharks spreading through marine and freshwater habitats.",
+   "pbdb": {
+    "oid": "txn:34422",
+    "matched": "Chondrichthyes",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 27616,
+    "fea": 469.4,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes"
+   },
+   "pbdb_ok": true,
+   "no_own_icon": true
+  },
+  "Conodonta": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "conodont",
+   "fad": 520,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Eel-like chordates known mostly from their tooth elements, which become the finest stratigraphic tool in the Palaeozoic.",
+   "pbdb": {
+    "oid": "txn:33816",
+    "matched": "Conodonta",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 41445,
+    "fea": 538.8,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Conodonta"
+   }
+  },
+  "Dunkleosteus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "placoderm",
+   "fad": 382,
+   "lad": 358,
+   "range": [
+    "na-e",
+    "eu",
+    "af-n"
+   ],
+   "note": "A six-metre placoderm that sheared prey with self-sharpening bony blades instead of teeth.",
+   "sz": 4.0,
+   "dt": "apex predator",
+   "hb": "nektonic apex predator with bladed jaw plates instead of teeth",
+   "pbdb": {
+    "oid": "txn:34328",
+    "matched": "Dunkleosteus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 387.95,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Placodermi",
+    "order": "Phlyctaeniiformes",
+    "family": "Dunkleosteidae",
+    "genus": "Dunkleosteus",
+    "regions": {
+     "na-e": 5,
+     "na-w": 1,
+     "eu": 1
+    }
+   },
+   "w": 3
+  },
+  "Enchodus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 100,
+   "lad": 40,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The 'saber-toothed herring', a fanged predatory fish found in Late Cretaceous seas world-wide.",
+   "pbdb": {
+    "oid": "txn:35564",
+    "matched": "Enchodus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 317,
+    "fea": 165.3,
+    "lla": 15.98,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Aulopiformes",
+    "family": "Enchodontidae",
+    "genus": "Enchodus"
+   }
+  },
+  "Eusthenopteron": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 385,
+   "lad": 375,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "A lobe-finned fish with the limb bone arrangement of a tetrapod already inside its fin.",
+   "pbdb": {
+    "oid": "txn:34918",
+    "matched": "Eusthenopteron",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 393.47,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteolepidiformes",
+    "family": "Tristichopteridae",
+    "genus": "Eustenopteron",
+    "regions": {
+     "na-e": 1,
+     "eu": 9,
+     "na-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Haikouichthys": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lamprey",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-e"
+   ],
+   "note": "A jawless Cambrian fish-like chordate, preserved well enough to show its dorsal fin and segmented muscle blocks.",
+   "sz": 0.025,
+   "dt": "filter feeder",
+   "hb": "nektonic, with a skull and rudimentary vertebral elements",
+   "pbdb": {
+    "oid": "txn:91608",
+    "matched": "Haikouichthys",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 516,
+    "phylum": "Chordata",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Myllokunmingiiformes",
+    "family": "Myllokunmingiidae",
+    "genus": "Haikouichthys",
+    "regions": {
+     "as-e": 2
+    }
+   },
+   "w": 3,
+   "aka": [
+    "Haikouichthys ercaicunensis"
+   ]
+  },
+  "Helicoprion": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 290,
+   "lad": 270,
+   "range": [
+    "na-w",
+    "eu",
+    "as-e",
+    "as-c",
+    "au",
+    "na-n"
+   ],
+   "note": "A shark relative with a buzzsaw whorl of teeth in its lower jaw, whose function took a century to work out.",
+   "sz": 4.0,
+   "dt": "predator on soft prey",
+   "hb": "nektonic, with a spiral tooth whorl in the lower jaw",
+   "pbdb": {
+    "oid": "txn:34459",
+    "matched": "Helicoprion",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 35,
+    "fea": 298.9,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Eugeneodontiformes",
+    "family": "Helicoprionidae",
+    "genus": "Helicoprion",
+    "regions": {
+     "na-w": 26,
+     "na-n": 2,
+     "ca": 1,
+     "au": 1,
+     "eu": 2,
+     "as-e": 3
+    }
+   },
+   "w": 3
+  },
+  "Hyneria": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 365,
+   "lad": 360,
+   "range": [
+    "na-e"
+   ],
+   "note": "A large predatory lobe-fin hunting in the same rivers as the first tetrapods, and eating them.",
+   "pbdb": {
+    "oid": "txn:377246",
+    "matched": "Hyneria",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 372.15,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteolepidiformes",
+    "family": "Tristichopteridae",
+    "genus": "Hyneria",
+    "regions": {
+     "na-e": 1,
+     "af-s": 1
+    }
+   }
+  },
+  "Knightia": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "cod",
+   "fad": 53,
+   "lad": 46,
+   "range": [
+    "na-w"
+   ],
+   "note": "The herring of the Green River lakes, fossilised by the million in Eocene lake varves.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Actinopterygii",
+    "order": "Clupeiformes",
+    "family": "Clupeidae"
+   },
+   "no_own_icon": true
+  },
+  "Latimeria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "coelacanth",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ind",
+    "pac"
+   ],
+   "note": "The coelacanth, a living lobe-finned fish, survives in deep refugia off the Comoros.",
+   "pbdb": {
+    "oid": "txn:320869",
+    "matched": "Latimeria",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Coelacanthiformes",
+    "family": "Latimeriidae",
+    "genus": "Latimeria"
+   },
+   "hab": [
+    "deep",
+    "reef"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    [
+     38,
+     52,
+     -35,
+     -2
+    ],
+    [
+     118,
+     128,
+     -3,
+     5
+    ]
+   ]
+  },
+  "Myllokunmingia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lamprey",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-e"
+   ],
+   "note": "One of the oldest known vertebrates, from Chengjiang: a few centimetres long, with a head, gills and a notochord.",
+   "sz": 0.028,
+   "dt": "filter feeding",
+   "hb": "nektonic",
+   "pbdb": {
+    "oid": "txn:91605",
+    "matched": "Myllokunmingia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 516,
+    "phylum": "Chordata",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Myllokunmingiiformes",
+    "family": "Myllokunmingiidae",
+    "genus": "Myllokunmingia",
+    "regions": {
+     "as-e": 2
+    }
+   }
+  },
+  "Notothenioidei": {
+   "rank": "suborder",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "sou"
+   ],
+   "note": "Antarctic icefish carrying antifreeze glycoproteins in their blood, a radiation that tracks the freezing of the Southern Ocean.",
+   "pbdb": {
+    "oid": "txn:266358",
+    "matched": "Notothenioidei",
+    "exact": true,
+    "rank": "suborder",
+    "extant": true,
+    "noc": 3,
+    "fea": 18.7,
+    "lla": 1.8,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Perciformes",
+    "regions": {
+     "nz": 1,
+     "sa-s": 2
+    }
+   },
+   "hab": [
+    "ice",
+    "shelf",
+    "pelagic",
+    "deep"
+   ],
+   "lat": [
+    50,
+    90
+   ],
+   "pbdb_ok": true,
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": "Nototheniidae"
+   },
+   "aka": [
+    "notothenioid fish"
+   ]
+  },
+  "Osteichthyes": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 425,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Bony fishes, which split early into ray-fins and lobe-fins; one branch of the lobe-fins leads to everything with four limbs.",
+   "pbdb": {
+    "oid": "txn:34881",
+    "matched": "Osteichthyes",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 240864,
+    "fea": 443.1,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes"
+   },
+   "realms": [
+    "sea",
+    "fresh"
+   ],
+   "pbdb_ok": true
+  },
+  "Osteostraci": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "ostracoderm",
+   "fad": 433,
+   "lad": 372,
+   "range": [
+    "as-n",
+    "eu",
+    "na-e",
+    "na-n"
+   ],
+   "note": "Jawless fish with a solid bony head shield and sensory fields along its edges -- close relatives of the first jawed vertebrates.",
+   "pbdb": {
+    "oid": "txn:117965",
+    "matched": "Osteostraci",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 331,
+    "fea": 443.1,
+    "lla": 372.15,
+    "phylum": "Chordata",
+    "class": "Osteostraci",
+    "regions": {
+     "eu": 204,
+     "na-e": 12,
+     "as-n": 9,
+     "na-w": 3,
+     "na-n": 16
+    }
+   }
+  },
+  "Ostracoderms": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "ostracoderm",
+   "fad": 470,
+   "lad": 359,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Jawless armoured fish, bottom-feeding and slow, and the only vertebrates in the water.",
+   "rep": "Cephalaspis"
+  },
+  "Otodus megalodon": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 23,
+   "lad": 3.6,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A macropredatory shark perhaps sixteen metres long, known almost entirely from its teeth.",
+   "sz": 16.0,
+   "dt": "apex predator on marine mammals",
+   "hb": "pelagic macropredator",
+   "pbdb": {
+    "oid": "txn:80603",
+    "matched": "Otodus megalodon",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 347,
+    "fea": 66,
+    "lla": 0.34,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Lamniformes",
+    "family": "Otodontidae",
+    "genus": "Otodus"
+   },
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    60
+   ],
+   "w": 3
+  },
+  "Palaeoniscum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 265,
+   "lad": 252,
+   "range": [
+    "eu",
+    "gl"
+   ],
+   "note": "A ray-finned fish of the Kupferschiefer copper-shale, preserved as the sea first flooded then stagnated.",
+   "pbdb": {
+    "oid": "txn:35032",
+    "matched": "Palaeoniscum",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 67,
+    "fea": 358.86,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Actinopterygii",
+    "order": "Palaeonisciformes",
+    "family": "Palaeoniscidae",
+    "genus": "Palaeoniscum",
+    "regions": {
+     "eu": 54,
+     "af-s": 3,
+     "as-w": 1,
+     "na-e": 5,
+     "as-n": 2,
+     "au": 2
+    }
+   },
+   "pbdb_ok": true
+  },
+  "Placodermi": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "placoderm",
+   "fad": 438,
+   "lad": 359,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Jawed fish encased in articulated bony armour; for sixty million years they run the seas, then vanish completely.",
+   "pbdb": {
+    "oid": "txn:34249",
+    "matched": "Placodermi",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 1034,
+    "fea": 438.6,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Placodermi"
+   },
+   "pbdb_ok": true
+  },
+  "Protopterus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lungfish",
+   "fad": 90,
+   "lad": 0,
+   "range": [
+    "af"
+   ],
+   "note": "African lungfish, surviving the dry season encased in mud.",
+   "pbdb": {
+    "oid": "txn:91688",
+    "matched": "Protopterus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 64,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Ceratodontiformes",
+    "family": "Lepidosirenidae",
+    "genus": "Protopterus",
+    "regions": {
+     "af-e": 47,
+     "as-w": 3,
+     "af-n": 13,
+     "ar": 1
+    }
+   },
+   "hab": [
+    "river",
+    "wetland",
+    "lake"
+   ],
+   "no_own_icon": true
+  },
+  "Rhizodont fish": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 377,
+   "lad": 310,
+   "range": [
+    "euramerica",
+    "au"
+   ],
+   "note": "Giant predatory lobe-finned fish of the Carboniferous rivers of Laurussia.",
+   "hab": [
+    "river",
+    "lake"
+   ],
+   "rep": "Rhizodus",
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Rhizodontida",
+    "family": "Rhizodontidae"
+   }
+  },
+  "Rhizodus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 345,
+   "lad": 310,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A seven-metre freshwater lobe-finned predator, the largest freshwater fish known.",
+   "pbdb": {
+    "oid": "txn:34950",
+    "matched": "Rhizodus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 358.86,
+    "lla": 298.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Rhizodontida",
+    "family": "Rhizodontidae",
+    "genus": "Rhizodus",
+    "regions": {
+     "eu": 9
+    }
+   }
+  },
+  "Selachii": {
+   "rank": "superorder",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Modern sharks. Their constantly shed teeth are the commonest vertebrate fossils of many shallow seas.",
+   "pbdb": {
+    "oid": "txn:80574",
+    "matched": "Selachii",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": true,
+    "noc": 120,
+    "fea": 312.8,
+    "lla": 0.129,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Selachii"
+   },
+   "pbdb_ok": true,
+   "no_own_icon": true
+  },
+  "Tiktaalik roseae": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 380,
+   "lad": 375,
+   "range": [
+    "na-n"
+   ],
+   "note": "A flat-headed predator with a neck, wrists and lungs, found in Arctic Canada exactly where and when the rocks predicted it would be.",
+   "pbdb": {
+    "oid": "txn:77136",
+    "matched": "Tiktaalik roseae",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 2,
+    "fea": 382.31,
+    "lla": 372.15,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteolepidiformes",
+    "family": "Panderichthyidae",
+    "genus": "Tiktaalik",
+    "regions": {
+     "na-n": 2
+    }
+   },
+   "w": 3,
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Sarcopterygii",
+    "order": "Elpistostegalia"
+   }
+  },
+  "Tullimonstrum gregarium": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "lamprey",
+   "fad": 311,
+   "lad": 307,
+   "range": [
+    "na-e"
+   ],
+   "note": "The Mazon Creek 'Tully monster' -- eyes on a bar, jaws on a proboscis, and no settled classification.",
+   "pbdb": {
+    "oid": "txn:189485",
+    "matched": "Tullimonstrum gregarium",
+    "exact": true,
+    "rank": "species",
+    "extant": false,
+    "noc": 2,
+    "fea": 312.8,
+    "lla": 306,
+    "phylum": "Chordata",
+    "class": "Petromyzontida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tullimonstrum",
+    "regions": {
+     "na-e": 2
+    }
+   },
+   "w": 3
+  },
+  "Xiphactinus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 100,
+   "lad": 66,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "au",
+    "sa-n"
+   ],
+   "note": "A ferocious bony fish, sometimes fossilised with an entire swallowed fish inside it.",
+   "pbdb": {
+    "oid": "txn:35308",
+    "matched": "Xiphactinus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 59,
+    "fea": 121.4,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Ichthyodectiformes",
+    "family": "Ichthyodectidae",
+    "genus": "Xiphactinus",
+    "regions": {
+     "na-e": 43,
+     "na-w": 13,
+     "na-n": 1,
+     "sa-n": 1,
+     "eu": 1
+    }
+   },
+   "w": 3
+  },
+  "reef fish radiation": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "reeffish",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      0
+     ],
+     "in": [
+      "ind",
+      "pac",
+      "atl"
+     ]
+    },
+    {
+     "t": [
+      50,
+      14
+     ],
+     "in": [
+      "tet",
+      "med"
+     ]
+    }
+   ],
+   "note": "The Cenozoic diversification of the fish families that live on and around coral -- wrasses, damselfish, butterflyfish.",
+   "hab": [
+    "reef"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "phylum": "Chordata",
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": ""
+   }
+  }
+ }
+}

@@ -1,0 +1,6139 @@
+{
+ "taxa": {
+  "Abies alba": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "The silver fir of the European mountain forests.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     -2,
+     3.2,
+     42,
+     43.3
+    ],
+    [
+     2,
+     27,
+     40,
+     51
+    ],
+    [
+     13,
+     16.5,
+     38,
+     43
+    ]
+   ]
+  },
+  "Acacia aneura": {
+   "rank": "species",
+   "realm": "land",
+   "form": "acacia",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "Mulga, the wattle whose upswept leaves funnel rain to its own trunk; it covers a fifth of the continent.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Fabales",
+    "family": "Fabaceae"
+   },
+   "box": [
+    [
+     114,
+     150,
+     -33,
+     -19
+    ]
+   ]
+  },
+  "Acanthogammarus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "shrimp",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "Armoured, spiny amphipods: part of a species flock of over 350 amphipods found only in Lake Baikal.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Malacostraca",
+    "order": "Amphipoda"
+   },
+   "box": [
+    [
+     103,
+     110.5,
+     51,
+     56.2
+    ]
+   ]
+  },
+  "Acer saccharum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-e"
+   ],
+   "note": "The sugar maple, which with beech forms the climax forest of the north-eastern hills.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Sapindales",
+    "family": "Sapindaceae"
+   },
+   "box": [
+    [
+     -96,
+     -60,
+     35,
+     49
+    ]
+   ]
+  },
+  "Acinonyx jubatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-n",
+      "as-w"
+     ]
+    },
+    {
+     "t": [
+      1,
+      0.01
+     ],
+     "in": [
+      "in",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "The cheetah, fastest land animal, a sprinter of open ground.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae"
+   }
+  },
+  "Acipenser fulvescens": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "bigfish",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-e",
+    "na-n"
+   ],
+   "note": "The lake sturgeon: armoured, bottom-feeding, living past a hundred years in the Great Lakes and Hudson Bay rivers.",
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Acipenseriformes",
+    "family": "Acipenseridae"
+   },
+   "box": [
+    [
+     -108,
+     -70,
+     33,
+     58
+    ]
+   ]
+  },
+  "Adansonia grandidieri": {
+   "rank": "species",
+   "realm": "land",
+   "form": "baobab",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "Grandidier's baobab, the smooth grey giants of the Avenue of the Baobabs. Six of the eight baobab species are Madagascan.",
+   "hab": [
+    "forest",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Malvales",
+    "family": "Malvaceae"
+   }
+  },
+  "Agathis australis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "Kauri, the giant of the northern New Zealand forest, its trunks five metres through.",
+   "hab": [
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   }
+  },
+  "Agave": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "ca",
+    "na-w"
+   ],
+   "note": "Century plants: rosette succulents that flower once, on a mast several metres tall, and die.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Asparagales",
+    "family": "Asparagaceae"
+   }
+  },
+  "Alcolapia": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "Soda tilapias living in 40-degree, pH 10 springs at the edge of Lakes Natron and Magadi.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Cichliformes",
+    "family": "Cichlidae"
+   },
+   "box": [
+    [
+     35.5,
+     36.8,
+     -3,
+     -1.5
+    ]
+   ]
+  },
+  "Allactaga": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rodent",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "af-n"
+   ],
+   "note": "Jerboas: hopping desert rodents with kangaroo legs and tufted tails.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Dipodidae"
+   }
+  },
+  "Alligator mississippiensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-e"
+   ],
+   "note": "The American alligator, engineer of the south-eastern swamps, whose 'gator holes' hold water through drought.",
+   "hab": [
+    "wetland",
+    "river",
+    "lake"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Alligatoridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "box": [
+    [
+     -99,
+     -75,
+     25,
+     37
+    ]
+   ]
+  },
+  "Aloidendron dichotomum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The quiver tree: a giant tree-aloe of the Namib edge, now dying back at the hot end of its range.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Asparagales",
+    "family": "Asphodelaceae"
+   },
+   "box": [
+    [
+     15,
+     22,
+     -31.5,
+     -21
+    ]
+   ]
+  },
+  "Alouatta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Howler monkeys, whose dawn roar carries five kilometres through the forest.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Atelidae"
+   }
+  },
+  "Amblyrhynchus cristatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "oc"
+   ],
+   "note": "The marine iguana, the only lizard that forages in the sea, grazing algae off Galapagos reefs.",
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Iguanidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Ammotragus lervia": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-n"
+   ],
+   "note": "The Barbary sheep or aoudad of the Saharan massifs and the Atlas.",
+   "hab": [
+    "alpine",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Andrias davidianus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "salamander",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Chinese giant salamander, up to 1.8 m, the largest living amphibian.",
+   "hab": [
+    "river"
+   ],
+   "cls": {
+    "class": "Amphibia",
+    "order": "Caudata",
+    "family": "Cryptobranchidae"
+   },
+   "box": [
+    [
+     100,
+     120,
+     22,
+     36
+    ]
+   ]
+  },
+  "Antidorcas marsupialis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The springbok, once migrating across the Karoo and Kalahari in herds of millions.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     11,
+     30,
+     -34,
+     -14
+    ]
+   ]
+  },
+  "Aphanius": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "ar",
+    "as-w",
+    "af-n",
+    "eu"
+   ],
+   "note": "Killifish of salt springs and desert pools around the Mediterranean and Arabia, tolerant of brine saltier than the sea.",
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Cyprinodontiformes",
+    "family": "Aphaniidae"
+   },
+   "box": [
+    [
+     -10,
+     60,
+     12,
+     46
+    ]
+   ]
+  },
+  "Aquila chrysaetos": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "holarctic",
+    "af-n"
+   ],
+   "note": "The golden eagle, hunting open mountain country around the whole northern hemisphere.",
+   "hab": [
+    "alpine",
+    "grassland",
+    "tundra"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae"
+   }
+  },
+  "Ara": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "parrot",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "Macaws, the great long-tailed parrots that gather at riverbank clay licks.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Psittacidae"
+   }
+  },
+  "Araucaria araucana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The monkey puzzle of the southern Andes, a Jurassic-looking conifer that can live a thousand years.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "box": [
+    [
+     -73.5,
+     -70.2,
+     -40.5,
+     -37
+    ]
+   ]
+  },
+  "Artemisia tridentata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "Big sagebrush, the grey-green shrub that defines the cold deserts of the intermountain West.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Asteraceae"
+   },
+   "box": [
+    [
+     -123,
+     -103,
+     32,
+     50
+    ]
+   ]
+  },
+  "Arthrospira": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "cyano",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "ca"
+   ],
+   "note": "Spirulina: the coiled cyanobacterium that turns soda lakes green and the flamingos pink.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Cyanophyceae",
+    "order": "Oscillatoriales"
+   }
+  },
+  "Babyrousa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pig",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "note": "The babirusa of Sulawesi, whose upper tusks grow up through the snout and curl back toward the skull.",
+   "hab": [
+    "island",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Suidae"
+   },
+   "box": [
+    [
+     119,
+     128,
+     -3.5,
+     2
+    ]
+   ]
+  },
+  "Bertholletia excelsa": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The Brazil nut tree, a fifty-metre emergent that only one large bee can pollinate and only the agouti can plant.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Lecythidaceae"
+   },
+   "box": [
+    [
+     -72,
+     -46,
+     -13,
+     6
+    ]
+   ]
+  },
+  "Birgus latro": {
+   "rank": "species",
+   "realm": "land",
+   "form": "crab",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "oc",
+    "ind",
+    "as-se"
+   ],
+   "note": "The coconut crab, a metre across: the largest land arthropod, a hermit crab that gave up its shell.",
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "cls": {
+    "class": "Malacostraca",
+    "order": "Decapoda"
+   },
+   "lat": [
+    0,
+    26
+   ]
+  },
+  "Bison bonasus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w"
+   ],
+   "note": "The wisent, Europe's forest bison, saved from a dozen zoo animals.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     14,
+     40,
+     46,
+     56
+    ],
+    [
+     38,
+     48,
+     41,
+     45
+    ]
+   ],
+   "avoid": [
+    "Alps",
+    "Apennines",
+    "Pontide Arc"
+   ]
+  },
+  "Bootherium bombifrons": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 0.5,
+   "lad": 0.011,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n"
+   ],
+   "note": "The helmeted muskox, a taller, woodland relative of the living muskox, found only in Ice Age North America.",
+   "hab": [
+    "forest",
+    "grassland",
+    "tundra"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Bos gaurus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "in",
+    "as-se"
+   ],
+   "note": "The gaur, largest of wild cattle, of Indian and Indochinese hill forest.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     73,
+     108,
+     2,
+     29
+    ]
+   ]
+  },
+  "Boselaphus tragocamelus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "The nilgai or blue bull, the largest Asian antelope.",
+   "hab": [
+    "grassland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     68,
+     89,
+     12,
+     32
+    ]
+   ]
+  },
+  "Boswellia sacra": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ar",
+    "af-e"
+   ],
+   "note": "The frankincense tree of Dhofar and Somalia, growing from bare rock and bled for its resin for five thousand years.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Sapindales",
+    "family": "Burseraceae"
+   }
+  },
+  "Bradypus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treesloth",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "Three-toed sloths, hanging in the canopy and descending once a week.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pilosa",
+    "family": "Bradypodidae"
+   }
+  },
+  "Bubo scandiacus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "owl",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n"
+   ],
+   "note": "The snowy owl, a daytime hunter of lemmings on open tundra.",
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Strigiformes",
+    "family": "Strigidae"
+   }
+  },
+  "Buceros": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "fruitbird",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-se",
+    "in"
+   ],
+   "note": "The great hornbills, seed-dispersers of the Asian rainforest, the female sealed into the nest hole.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Bucerotiformes",
+    "family": "Bucerotidae"
+   },
+   "box": [
+    [
+     73,
+     127,
+     -9,
+     28
+    ]
+   ]
+  },
+  "Cacatua galerita": {
+   "rank": "species",
+   "realm": "air",
+   "form": "parrot",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "The sulphur-crested cockatoo.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Cacatuidae"
+   }
+  },
+  "Camelus dromedarius": {
+   "rank": "species",
+   "realm": "land",
+   "form": "camel",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ar",
+    "af-n",
+    "af-e"
+   ],
+   "note": "The one-humped camel of Arabia and the Sahara, able to lose a third of its body water and drink it back in minutes.",
+   "hab": [
+    "desert"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae"
+   }
+  },
+  "Capra aegagrus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-w",
+    "ar",
+    "as-c"
+   ],
+   "note": "The bezoar or wild goat of the Zagros and Taurus, ancestor of the domestic goat.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     26,
+     70,
+     25,
+     44
+    ]
+   ]
+  },
+  "Capra caucasica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "as-w"
+   ],
+   "note": "The Caucasian tur, a heavy-horned ibex found only on the Greater Caucasus.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     40.5,
+     48.5,
+     41,
+     44.5
+    ]
+   ]
+  },
+  "Carnegiea gigantea": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "ca"
+   ],
+   "note": "The saguaro: a column cactus of the Sonoran Desert that takes seventy years to grow its first arm.",
+   "hab": [
+    "desert"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Cactaceae"
+   },
+   "box": [
+    [
+     -114.6,
+     -109,
+     27.5,
+     35
+    ]
+   ]
+  },
+  "Castor canadensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "bigrodent",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n"
+   ],
+   "note": "The North American beaver, whose dams engineered the continent's stream valleys.",
+   "hab": [
+    "lake",
+    "river",
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Castoridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "box": [
+    [
+     -165,
+     -55,
+     27,
+     69
+    ]
+   ]
+  },
+  "Casuarius casuarius": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng"
+   ],
+   "note": "The southern cassowary, a helmeted rainforest bird that swallows fruit whole and plants the forest.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Casuariidae"
+   },
+   "box": [
+    [
+     130,
+     150,
+     -20,
+     0
+    ]
+   ]
+  },
+  "Cedrus atlantica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-n"
+   ],
+   "note": "The Atlas cedar, forming the high forests of Morocco and Algeria.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     -7,
+     7,
+     32,
+     37
+    ]
+   ]
+  },
+  "Centrocercus urophasianus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The greater sage-grouse, displaying on ancestral leks in the sagebrush sea.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes",
+    "family": "Phasianidae"
+   },
+   "box": [
+    [
+     -122,
+     -102,
+     37,
+     50
+    ]
+   ]
+  },
+  "Cervalces scotti": {
+   "rank": "species",
+   "realm": "land",
+   "form": "moose",
+   "fad": 0.2,
+   "lad": 0.011,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "The stag-moose: a moose-sized deer with elaborate palmate antlers, living in the spruce bogs at the ice margin.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   }
+  },
+  "Chelonoidis niger": {
+   "rank": "species",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "oc"
+   ],
+   "note": "The Galapagos giant tortoise, each island with its own shell shape -- one of the observations that started Darwin thinking.",
+   "hab": [
+    "island"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae"
+   }
+  },
+  "Chinchilla": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "Chinchillas of the high, dry Andes, carrying the densest fur of any land mammal.",
+   "hab": [
+    "alpine",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Chinchillidae"
+   },
+   "box": [
+    [
+     -71.5,
+     -66.5,
+     -33,
+     -14
+    ]
+   ]
+  },
+  "Chionochloa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "grass",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "Snow tussocks, the tall bunch grasses of the New Zealand high country.",
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   }
+  },
+  "Cocos nucifera": {
+   "rank": "species",
+   "realm": "land",
+   "form": "palm",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "oc",
+    "as-se",
+    "in",
+    "ng"
+   ],
+   "note": "The coconut palm, spread by its own floating seeds to every tropical shore.",
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "lat": [
+    0,
+    28
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   }
+  },
+  "Colobanthus quitensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "an",
+    "sa-s"
+   ],
+   "note": "Antarctic pearlwort, one of only two flowering plants native to Antarctica.",
+   "hab": [
+    "tundra",
+    "coast"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Caryophyllaceae"
+   }
+  },
+  "Comephorus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "Golomyanka: translucent, scaleless Baikal fish, a third oil by weight, bearing live young in open water.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Scorpaeniformes",
+    "family": "Comephoridae"
+   },
+   "box": [
+    [
+     103,
+     110.5,
+     51,
+     56.2
+    ]
+   ]
+  },
+  "Copiapoa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "Globular cacti of the Atacama coast that live on fog: some stands see no rain for decades.",
+   "hab": [
+    "desert",
+    "coast"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Cactaceae"
+   },
+   "fill": false
+  },
+  "Coregonus migratorius": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "The omul, the whitefish on which Lake Baikal's fishery has always rested.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Salmoniformes",
+    "family": "Salmonidae"
+   },
+   "box": [
+    [
+     103,
+     110.5,
+     51,
+     56.2
+    ]
+   ]
+  },
+  "Cortaderia selloana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "grass",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "Pampas grass, three-metre tussocks with silver plumes.",
+   "hab": [
+    "grassland",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "box": [
+    [
+     -65,
+     -48,
+     -42,
+     -25
+    ]
+   ]
+  },
+  "Crocodylus niloticus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-w",
+    "af-s",
+    "af-n",
+    "mg"
+   ],
+   "note": "The Nile crocodile, top predator of African rivers and lakes.",
+   "hab": [
+    "river",
+    "lake",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Crocodylidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ]
+  },
+  "Crocodylus porosus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 4,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng",
+    "as-se",
+    "in",
+    "oc"
+   ],
+   "note": "The saltwater crocodile, largest living reptile, crossing open sea between estuaries.",
+   "hab": [
+    "coast",
+    "river",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Crocodylidae"
+   },
+   "realms": [
+    "fresh",
+    "sea",
+    "land"
+   ],
+   "lat": [
+    0,
+    25
+   ]
+  },
+  "Crocuta crocuta": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hyena",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w"
+     ]
+    },
+    {
+     "t": [
+      1,
+      0.011
+     ],
+     "in": [
+      "eu",
+      "as-w",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "The spotted hyena: a hunter as much as a scavenger, living in female-led clans. Ice Age Europe had it too, as the cave hyena.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Hyaenidae"
+   }
+  },
+  "Crotalus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "snake",
+   "fad": 8,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca",
+    "sa-n"
+   ],
+   "note": "Rattlesnakes, a New World invention: pit vipers with a warning rattle of interlocking keratin.",
+   "hab": [
+    "desert",
+    "grassland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Viperidae"
+   }
+  },
+  "Cyathea dealbata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "The silver fern, a tree fern whose fronds shine white beneath.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Cyatheales",
+    "family": "Cyatheaceae"
+   }
+  },
+  "Dacrydium cupressinum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "Rimu, the weeping podocarp that towers over New Zealand's lowland rainforest.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Podocarpaceae"
+   }
+  },
+  "Daubentonia madagascariensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "The aye-aye, tapping on wood and fishing out grubs with one skeletal finger -- Madagascar's woodpecker.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Lemuridae"
+   }
+  },
+  "Davidia involucrata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "The dove tree, a relict of the Tertiary forests of the northern hemisphere surviving in the mountains of Sichuan.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Cornales",
+    "family": "Nyssaceae"
+   },
+   "box": [
+    [
+     98,
+     112,
+     25,
+     33
+    ]
+   ]
+  },
+  "Deinacrida": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "grasshopper",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "Giant weta: flightless crickets heavier than a sparrow, filling the role mice play elsewhere.",
+   "hab": [
+    "forest",
+    "island",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Insecta",
+    "order": "Orthoptera"
+   }
+  },
+  "Dendrolagus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ng",
+    "au"
+   ],
+   "note": "Tree-kangaroos: kangaroos that went back up into the rainforest canopy.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Macropodidae"
+   },
+   "box": [
+    [
+     130,
+     150,
+     -19,
+     0
+    ]
+   ]
+  },
+  "Dendrosenecio": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "Giant groundsels, tree-sized daisies of the East African summits, each mountain with its own species.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Asteraceae"
+   },
+   "box": [
+    [
+     29,
+     38.5,
+     -4.5,
+     2
+    ]
+   ]
+  },
+  "Diceros bicornis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s"
+   ],
+   "note": "The black rhinoceros, a hook-lipped browser of thorn scrub.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae"
+   }
+  },
+  "Dolichotis patagonum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The mara: a long-legged, hare-like cavy of the Patagonian scrub that pairs for life.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Caviidae"
+   },
+   "box": [
+    [
+     -71,
+     -62,
+     -50,
+     -28
+    ]
+   ]
+  },
+  "Drepanidinae": {
+   "rank": "subfamily",
+   "realm": "air",
+   "form": "songbird",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "oc"
+   ],
+   "note": "Hawaiian honeycreepers: one finch colonist radiated into over fifty species with bills for every job. Most are now extinct.",
+   "hab": [
+    "forest",
+    "island"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Passeriformes"
+   }
+  },
+  "Dromaius novaehollandiae": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The emu, nomadic across the whole continent, walking hundreds of kilometres after rain.",
+   "hab": [
+    "grassland",
+    "desert",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Casuariidae"
+   }
+  },
+  "Dryas octopetala": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n",
+    "na-w"
+   ],
+   "note": "Mountain avens, the tundra mat-plant whose leaves in lake mud named the Younger Dryas cold snap.",
+   "hab": [
+    "tundra",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Rosaceae"
+   }
+  },
+  "Elaphurus davidianus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "deer",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "Pere David's deer, a swamp deer of the Chinese lowlands, extinct in the wild and saved in an English park.",
+   "hab": [
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   },
+   "box": [
+    [
+     110,
+     122,
+     28,
+     40
+    ]
+   ]
+  },
+  "Equus hemionus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horse",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "in",
+    "ar"
+   ],
+   "note": "The onager or kulan, the wild ass of the Asian deserts, able to run at 70 km/h.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae"
+   }
+  },
+  "Equus kiang": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horse",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "The kiang, the wild ass of the Tibetan Plateau.",
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae"
+   },
+   "box": [
+    [
+     77,
+     104,
+     27.5,
+     39.5
+    ]
+   ]
+  },
+  "Equus quagga": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horse",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s"
+   ],
+   "note": "The plains zebra, migrating with the wildebeest.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae"
+   }
+  },
+  "Equus zebra": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horse",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The mountain zebra of the Cape ranges and the Namibian escarpment.",
+   "hab": [
+    "alpine",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Equidae"
+   },
+   "box": [
+    [
+     12,
+     27,
+     -34.5,
+     -15
+    ]
+   ]
+  },
+  "Eriophorum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sedge",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "holarctic"
+   ],
+   "note": "Cottongrass, whitening Arctic bogs in summer and building the tussocks of the tundra.",
+   "hab": [
+    "tundra",
+    "wetland"
+   ],
+   "lat": [
+    45,
+    90
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae"
+   }
+  },
+  "Espeletia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "Frailejones, the woolly giant rosettes of the paramo, wrapped in their own dead leaves against nightly frost.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Asteraceae"
+   },
+   "box": [
+    [
+     -79,
+     -69,
+     -1,
+     11.5
+    ]
+   ]
+  },
+  "Eunectes murinus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "snake",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The green anaconda, heaviest of all snakes, an ambush hunter of swamp and slow river.",
+   "hab": [
+    "wetland",
+    "river",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Boidae"
+   },
+   "realms": [
+    "land",
+    "fresh"
+   ],
+   "box": [
+    [
+     -80,
+     -40,
+     -25,
+     11
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Ficus benghalensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "The banyan, a strangler fig that spreads on aerial roots until one tree is a grove.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Moraceae"
+   },
+   "box": [
+    [
+     68,
+     93,
+     8,
+     30
+    ]
+   ]
+  },
+  "Fitzroya cupressoides": {
+   "rank": "species",
+   "realm": "land",
+   "form": "redwood",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The alerce, a giant cypress of the Valdivian rainforest; one tree is over 3,600 years old.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cupressaceae"
+   },
+   "box": [
+    [
+     -74.5,
+     -71,
+     -43.5,
+     -39.5
+    ]
+   ]
+  },
+  "Furcifer": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "Chameleons: half of all species live on Madagascar.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Chamaeleonidae"
+   }
+  },
+  "Gavialis gangeticus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "gharial",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "The gharial, a fish-eating crocodilian of the Ganges and Indus systems with a snout like a pair of pliers.",
+   "hab": [
+    "river"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Gavialidae"
+   },
+   "box": [
+    [
+     67,
+     96,
+     20,
+     32
+    ]
+   ]
+  },
+  "Gazella": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ar",
+    "af-n",
+    "af-e",
+    "as-w",
+    "as-c",
+    "in"
+   ],
+   "note": "Gazelles: small, fast antelopes of open arid country from Morocco to India.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Gazella subgutturosa": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "ar"
+   ],
+   "note": "The goitered gazelle of the Gobi and the Iranian plateau.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Giraffa camelopardalis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "giraffe",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-w"
+   ],
+   "note": "The giraffe, browsing acacia crowns five metres up.",
+   "hab": [
+    "grassland"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Giraffidae"
+   }
+  },
+  "Goliathus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "beetle",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-w",
+    "af-e"
+   ],
+   "note": "Goliath beetles, among the heaviest insects, feeding on sap and fruit in African forest canopies.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Scarabaeidae"
+   }
+  },
+  "Gopherus agassizii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The desert tortoise, digging burrows that dozens of other desert animals depend on.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae"
+   },
+   "box": [
+    [
+     -118,
+     -112,
+     33,
+     38
+    ]
+   ]
+  },
+  "Gypaetus barbatus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "vulture",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c",
+    "af-e",
+    "af-n",
+    "in"
+   ],
+   "note": "The bearded vulture or lammergeier, which lives on bones and drops them on rocks to break them.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae"
+   }
+  },
+  "Hagenia abyssinica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "The kosso tree of the African mountain forests, up to the edge of the moorland.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Rosaceae"
+   },
+   "box": [
+    [
+     29,
+     42,
+     -15,
+     15
+    ]
+   ]
+  },
+  "Haliaeetus leucocephalus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n"
+   ],
+   "note": "The bald eagle, a fish eagle of North American lakes, rivers and coasts.",
+   "hab": [
+    "lake",
+    "river",
+    "coast",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Accipitridae"
+   },
+   "box": [
+    [
+     -170,
+     -55,
+     25,
+     70
+    ]
+   ]
+  },
+  "Haloxylon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "ar"
+   ],
+   "note": "Saxaul: leafless, salt-tolerant small trees that are the only woodland the Central Asian deserts have.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Amaranthaceae"
+   },
+   "box": [
+    [
+     44,
+     112,
+     28,
+     48
+    ]
+   ]
+  },
+  "Haplochromine cichlids": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "Hundreds of cichlid species evolved inside single African lakes -- in Lake Victoria, in perhaps fifteen thousand years.",
+   "hab": [
+    "lake"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Cichliformes",
+    "family": "Cichlidae"
+   }
+  },
+  "Heloderma suspectum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "ca"
+   ],
+   "note": "The Gila monster, a venomous lizard that spends nine tenths of its life underground.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Helodermatidae"
+   },
+   "box": [
+    [
+     -116,
+     -107,
+     26,
+     38
+    ]
+   ]
+  },
+  "Homo floresiensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hominin",
+   "fad": 0.19,
+   "lad": 0.05,
+   "range": [
+    "as-se"
+   ],
+   "note": "The 'hobbit' of Flores: a metre-tall hominin with a chimpanzee-sized brain, making stone tools beside dwarf elephants.",
+   "hab": [
+    "island"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   }
+  },
+  "Huso huso": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "bigfish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "eu"
+   ],
+   "note": "The beluga sturgeon of the Caspian and Black Sea basins, up to a tonne and a century old.",
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Acipenseriformes",
+    "family": "Acipenseridae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "box": [
+    [
+     27,
+     54.5,
+     36.5,
+     48
+    ]
+   ]
+  },
+  "Hyaena hyaena": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hyena",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-n",
+    "af-e",
+    "ar",
+    "as-w",
+    "in",
+    "as-c"
+   ],
+   "note": "The striped hyena, a solitary scavenger of dry country from the Sahel to India.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Hyaenidae"
+   }
+  },
+  "Hydrochoerus hydrochaeris": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bigrodent",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "The capybara, the largest living rodent, grazing in herds at the water's edge.",
+   "hab": [
+    "wetland",
+    "river",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Caviidae"
+   },
+   "realms": [
+    "land",
+    "fresh"
+   ],
+   "box": [
+    [
+     -80,
+     -40,
+     -38,
+     11
+    ]
+   ]
+  },
+  "Lagopus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n",
+    "na-w",
+    "as-c"
+   ],
+   "note": "Ptarmigan: grouse with feathered feet, white in winter and mottled in summer.",
+   "hab": [
+    "tundra",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes",
+    "family": "Phasianidae"
+   }
+  },
+  "Lama guanicoe": {
+   "rank": "species",
+   "realm": "land",
+   "form": "llama",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "The guanaco, wild ancestor of the llama, from sea-level Patagonian steppe to the high Atacama.",
+   "hab": [
+    "desert",
+    "grassland",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae"
+   },
+   "box": [
+    [
+     -76,
+     -62,
+     -55,
+     -8
+    ]
+   ]
+  },
+  "Larrea": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 8,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "na-w",
+    "ca"
+   ],
+   "note": "Creosote bush and jarilla: resinous desert shrubs of both Americas, whose clonal rings in the Mojave are among the oldest living things.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Zygophyllales",
+    "family": "Zygophyllaceae"
+   }
+  },
+  "Lates niloticus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "bigfish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "af-w",
+    "af-e",
+    "af-n"
+   ],
+   "note": "The Nile perch, a two-metre predator of the Nile, Chad and Congo systems.",
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": "Latidae"
+   },
+   "box": [
+    [
+     -17,
+     40,
+     -3,
+     32
+    ]
+   ]
+  },
+  "Lavigeria": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "snail",
+   "fad": 7,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "Heavily armoured Tanganyikan snails that look marine, shaped by an arms race with shell-crushing crabs.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "order": "Caenogastropoda"
+   },
+   "box": [
+    [
+     29,
+     31.5,
+     -9,
+     -3
+    ]
+   ]
+  },
+  "Leiopelma": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "frog",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "New Zealand's native frogs: no eardrums, no croak, no tadpoles -- little changed since the Jurassic.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   }
+  },
+  "Leontopodium nivale": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "Edelweiss, felted white against ultraviolet light on Alpine limestone.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Asteraceae"
+   },
+   "box": [
+    [
+     -2,
+     3.2,
+     42,
+     43.3
+    ],
+    [
+     5.5,
+     16.5,
+     43.5,
+     48.2
+    ],
+    [
+     17.5,
+     27,
+     44.8,
+     49.8
+    ],
+    [
+     13,
+     14.5,
+     41.8,
+     42.8
+    ],
+    [
+     20,
+     24,
+     41,
+     43
+    ]
+   ]
+  },
+  "Leptonychotes weddellii": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "The Weddell seal, the southernmost mammal, keeping breathing holes open in fast ice with its teeth.",
+   "hab": [
+    "ice",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ]
+  },
+  "Lepus arcticus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "rabbit",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "gl",
+    "na-n"
+   ],
+   "note": "The Arctic hare, white year-round in the far north, gathering in flocks of hundreds.",
+   "hab": [
+    "tundra"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Lagomorpha",
+    "family": "Leporidae"
+   },
+   "box": [
+    [
+     -130,
+     -15,
+     55,
+     84
+    ]
+   ]
+  },
+  "Leucogeranus leucogeranus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "wader",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "The Siberian crane, breeding on Arctic wetlands and wintering five thousand kilometres south.",
+   "hab": [
+    "wetland",
+    "tundra"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Gruiformes",
+    "family": "Gruidae"
+   },
+   "box": [
+    [
+     60,
+     160,
+     55,
+     73
+    ]
+   ]
+  },
+  "Liolaemus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "Over 250 species of small lizards from Patagonia to the high Andes -- one of the largest lizard radiations anywhere.",
+   "hab": [
+    "desert",
+    "alpine",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Iguanidae"
+   },
+   "box": [
+    [
+     -78,
+     -56,
+     -55,
+     -9
+    ]
+   ]
+  },
+  "Loxodonta cyclotis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-w"
+   ],
+   "note": "The forest elephant, smaller and straighter-tusked, whose trails and seed dispersal shape the Congo forest.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Elephantidae"
+   },
+   "box": [
+    [
+     -15,
+     30,
+     -6,
+     9
+    ]
+   ]
+  },
+  "Lubomirskia baicalensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "sponge",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "A branching green freshwater sponge forming metre-high underwater forests on Baikal's rocky slopes.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Demospongiae",
+    "family": "Lubomirskiidae"
+   },
+   "box": [
+    [
+     103,
+     110.5,
+     51,
+     56.2
+    ]
+   ]
+  },
+  "Lycalopex culpaeus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "canid",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "The culpeo, a fox-like South American canid of the Andes and the Patagonian steppe.",
+   "hab": [
+    "alpine",
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Canidae"
+   },
+   "box": [
+    [
+     -80,
+     -71.5,
+     -2,
+     11.5
+    ],
+    [
+     -81,
+     -75,
+     -10,
+     -2
+    ],
+    [
+     -78,
+     -63,
+     -24,
+     -10
+    ],
+    [
+     -74,
+     -66,
+     -40,
+     -24
+    ],
+    [
+     -76,
+     -66,
+     -56,
+     -40
+    ],
+    [
+     -74,
+     -62,
+     -55,
+     -36
+    ]
+   ]
+  },
+  "Lynx lynx": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-n",
+    "as-c",
+    "as-w"
+   ],
+   "note": "The Eurasian lynx, ambush hunter of roe deer in forest and mountain.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae"
+   },
+   "box": [
+    [
+     5,
+     180,
+     40,
+     72
+    ],
+    [
+     26,
+     60,
+     30,
+     45
+    ]
+   ]
+  },
+  "Macaca fuscata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Japanese macaque, the northernmost-living monkey, warming itself in hot springs.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   },
+   "box": [
+    [
+     129,
+     142,
+     30,
+     41.6
+    ]
+   ]
+  },
+  "Macaca sylvanus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      5,
+      0
+     ],
+     "in": [
+      "af-n"
+     ]
+    },
+    {
+     "t": [
+      5,
+      0.03
+     ],
+     "in": [
+      "eu"
+     ]
+    }
+   ],
+   "note": "The Barbary macaque of the Atlas cedar forests, the only monkey north of the Sahara; in the Pleistocene it ranged to England.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       -9.5,
+       9.5,
+       30.5,
+       37
+      ]
+     ]
+    }
+   ]
+  },
+  "Mandrillus sphinx": {
+   "rank": "species",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-w"
+   ],
+   "note": "The mandrill, the largest monkey, of the rainforests around the Gulf of Guinea.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   },
+   "box": [
+    [
+     8.5,
+     15,
+     -4.5,
+     4
+    ]
+   ]
+  },
+  "Martes zibellina": {
+   "rank": "species",
+   "realm": "land",
+   "form": "mustelid",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "as-e"
+   ],
+   "note": "The sable, whose fur drove the Russian conquest of Siberia.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Mustelidae"
+   },
+   "box": [
+    [
+     55,
+     160,
+     46,
+     70
+    ]
+   ]
+  },
+  "Megadyptes antipodes": {
+   "rank": "species",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "The yellow-eyed penguin, nesting alone in coastal forest rather than in colonies.",
+   "hab": [
+    "coast"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Melanosuchus niger": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The black caiman, five metres long, the largest predator of the Amazon basin.",
+   "hab": [
+    "river",
+    "wetland",
+    "lake"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Alligatoridae"
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Moloch horridus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The thorny devil: an ant-eating lizard whose skin channels dew to its mouth.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Agamidae"
+   },
+   "box": [
+    [
+     113,
+     142,
+     -33,
+     -18
+    ]
+   ]
+  },
+  "Monodon monoceros": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "dolphin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "arc"
+   ],
+   "note": "The narwhal, whose spiral tusk is a single tooth carrying millions of nerve endings.",
+   "hab": [
+    "ice",
+    "pelagic"
+   ],
+   "lat": [
+    62,
+    90
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Monodontidae"
+   }
+  },
+  "Moschus moschiferus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "deer",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "as-e",
+    "as-c"
+   ],
+   "note": "The Siberian musk deer: antlerless, with sabre-like canines.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Moschidae"
+   },
+   "box": [
+    [
+     85,
+     145,
+     43,
+     68
+    ]
+   ]
+  },
+  "Mulinum spinosum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "Neneo, the spiny cushion shrub that dots the wind-scoured Patagonian steppe.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Apiales",
+    "family": "Apiaceae"
+   },
+   "box": [
+    [
+     -73,
+     -64,
+     -52,
+     -32
+    ]
+   ]
+  },
+  "Nepenthes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pitcherplant",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "as-se",
+    "mg",
+    "au",
+    "in",
+    "ng"
+   ],
+   "note": "Tropical pitcher plants; the largest hold litres and have caught rats.",
+   "hab": [
+    "rainforest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Nepenthaceae"
+   },
+   "box": [
+    [
+     92,
+     160,
+     -15,
+     26
+    ],
+    [
+     43,
+     51,
+     -26,
+     -12
+    ],
+    [
+     79,
+     82,
+     5.5,
+     10
+    ],
+    [
+     55,
+     56,
+     -5,
+     -4
+    ]
+   ],
+   "avoid": [
+    "Tethyan Himalaya",
+    "Himalaya"
+   ]
+  },
+  "Nestor notabilis": {
+   "rank": "species",
+   "realm": "air",
+   "form": "parrot",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "The kea, the world's only alpine parrot, and one of its cleverest birds.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Strigopidae"
+   }
+  },
+  "Nipponia nippon": {
+   "rank": "species",
+   "realm": "air",
+   "form": "wader",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "The crested ibis, down to seven birds in the Qinling foothills in 1981 and since recovered.",
+   "hab": [
+    "wetland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Pelecaniformes",
+    "family": "Threskiornithidae"
+   },
+   "box": [
+    [
+     103,
+     142,
+     30,
+     46
+    ]
+   ]
+  },
+  "Ochotona princeps": {
+   "rank": "species",
+   "realm": "land",
+   "form": "rabbit",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The American pika, haying all summer on talus slopes and retreating uphill as the mountains warm.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Lagomorpha",
+    "family": "Ochotonidae"
+   },
+   "box": [
+    [
+     -125,
+     -104,
+     35,
+     56
+    ]
+   ]
+  },
+  "Odobenus rosmarus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "arc",
+    "na-n",
+    "gl",
+    "as-n",
+    "eu"
+   ],
+   "note": "The walrus, raking clams from the Arctic shelf and hauling out on ice with its tusks.",
+   "hab": [
+    "ice",
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Odobenidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ]
+  },
+  "Odocoileus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "deer",
+   "fad": 4,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "ca",
+    "sa-n"
+   ],
+   "note": "White-tailed and mule deer, the New World's own deer and its commonest large mammals.",
+   "hab": [
+    "forest",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   }
+  },
+  "Oncorhynchus clarkii": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The cutthroat trout, whose Bonneville and Lahontan forms are what is left of the fish of the great pluvial lakes.",
+   "hab": [
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Salmoniformes",
+    "family": "Salmonidae"
+   },
+   "box": [
+    [
+     -135,
+     -103,
+     38.5,
+     60
+    ]
+   ]
+  },
+  "Oreotragus oreotragus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-s",
+    "af-e"
+   ],
+   "note": "The klipspringer, a small antelope that walks on the tips of its hooves on bare rock.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Orestias": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Andean pupfish: a species flock of the high-altitude lakes, centred on Titicaca.",
+   "hab": [
+    "lake",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Cyprinodontiformes",
+    "family": "Cyprinodontidae"
+   },
+   "box": [
+    [
+     -72,
+     -66,
+     -23,
+     -13
+    ]
+   ]
+  },
+  "Ornithoptera alexandrae": {
+   "rank": "species",
+   "realm": "air",
+   "form": "butterfly",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "ng"
+   ],
+   "note": "Queen Alexandra's birdwing, the largest butterfly, with a wingspan of 28 cm.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Insecta",
+    "order": "Lepidoptera",
+    "family": "Papilionidae"
+   },
+   "box": [
+    [
+     147.5,
+     149,
+     -9.5,
+     -8
+    ]
+   ]
+  },
+  "Ornithorhynchus anatinus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "platypus",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The platypus: egg-laying, venomous, and hunting with its eyes shut by sensing the electric fields of its prey.",
+   "hab": [
+    "river",
+    "lake"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Monotremata",
+    "family": "Ornithorhynchidae"
+   },
+   "box": [
+    [
+     138,
+     154,
+     -44,
+     -15
+    ]
+   ]
+  },
+  "Oryx leucoryx": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "ar"
+   ],
+   "note": "The Arabian oryx, white against the sand; extinct in the wild by 1972 and returned from captive herds.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Osphranter rufus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The red kangaroo, largest living marsupial, following rain across the arid interior.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Macropodidae"
+   },
+   "box": [
+    [
+     114,
+     150,
+     -35,
+     -17
+    ]
+   ]
+  },
+  "Ovis ammon": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "The argali, largest of wild sheep, its horns spiralling to nearly two metres.",
+   "hab": [
+    "alpine",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     66,
+     112,
+     28,
+     52
+    ]
+   ]
+  },
+  "Ovis canadensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "ca"
+   ],
+   "note": "The bighorn sheep, on desert ranges and Rocky Mountain crags alike.",
+   "hab": [
+    "desert",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     -125,
+     -100,
+     24,
+     56
+    ]
+   ]
+  },
+  "Pan troglodytes": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ape",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-w",
+    "af-e"
+   ],
+   "note": "The chimpanzee, our closest living relative, a tool-maker of forest and forest edge.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   },
+   "box": [
+    [
+     -16,
+     32,
+     -9,
+     13
+    ]
+   ]
+  },
+  "Pandanus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "oc",
+    "as-se",
+    "ng",
+    "au",
+    "mg",
+    "in",
+    "af-e",
+    "ind"
+   ],
+   "note": "Screw pines on stilt roots, fringing Indo-Pacific shores.",
+   "hab": [
+    "coast",
+    "island"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Pandanales",
+    "family": "Pandanaceae"
+   }
+  },
+  "Panthera pardus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      1,
+      0
+     ],
+     "in": [
+      "af-e",
+      "af-s",
+      "af-w",
+      "af-n",
+      "ar",
+      "as-w",
+      "as-c",
+      "in",
+      "as-se",
+      "as-e",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      1,
+      0.02
+     ],
+     "in": [
+      "eu"
+     ]
+    }
+   ],
+   "note": "The leopard, the most adaptable big cat, from rainforest to desert mountain.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae"
+   }
+  },
+  "Panthera tigris": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cat",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      2,
+      0
+     ],
+     "in": [
+      "as-e",
+      "as-n",
+      "as-se",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0.0001
+     ],
+     "in": [
+      "as-c",
+      "as-w"
+     ]
+    }
+   ],
+   "note": "The tiger, from Siberian taiga to Sumatran rainforest.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "wetland"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Felidae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       68,
+       122,
+       -9,
+       32
+      ],
+      [
+       125,
+       142,
+       40,
+       54
+      ]
+     ]
+    }
+   ]
+  },
+  "Paradisaeidae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "songbird",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "ng",
+    "au"
+   ],
+   "note": "Birds-of-paradise: crows' cousins that, with no predators to fear, turned entirely to display.",
+   "hab": [
+    "rainforest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Passeriformes",
+    "family": "Paradisaeidae"
+   }
+  },
+  "Parahyaena brunnea": {
+   "rank": "species",
+   "realm": "land",
+   "form": "hyena",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The brown hyena, a shaggy scavenger of the Kalahari and the Namib coast, where it takes seal pups.",
+   "hab": [
+    "desert",
+    "grassland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Hyaenidae"
+   },
+   "box": [
+    [
+     11,
+     33,
+     -34,
+     -15
+    ]
+   ]
+  },
+  "Pavo cristatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "The Indian peafowl.",
+   "hab": [
+    "forest",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes",
+    "family": "Phasianidae"
+   },
+   "box": [
+    [
+     68,
+     90,
+     6,
+     32
+    ]
+   ]
+  },
+  "Pharomachrus mocinno": {
+   "rank": "species",
+   "realm": "air",
+   "form": "fruitbird",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "ca"
+   ],
+   "note": "The resplendent quetzal of the Mesoamerican cloud forest, its tail coverts a metre long.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Trogoniformes",
+    "family": "Trogonidae"
+   },
+   "box": [
+    [
+     -98,
+     -80,
+     8,
+     18
+    ]
+   ]
+  },
+  "Phascolarctos cinereus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "koala",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The koala, living on eucalypt leaves too poor and too toxic for almost anything else.",
+   "hab": [
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Phascolarctidae"
+   },
+   "box": [
+    [
+     138,
+     154,
+     -39,
+     -15
+    ]
+   ]
+  },
+  "Phoeniconaias minor": {
+   "rank": "species",
+   "realm": "air",
+   "form": "wader",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "in"
+   ],
+   "note": "The lesser flamingo, filtering cyanobacteria from soda lakes caustic enough to burn skin.",
+   "hab": [
+    "lake"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Phoenicopteriformes",
+    "family": "Phoenicopteridae"
+   }
+  },
+  "Phoenix dactylifera": {
+   "rank": "species",
+   "realm": "land",
+   "form": "palm",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ar",
+    "af-n",
+    "as-w"
+   ],
+   "note": "The date palm, the tree that makes an oasis: feet in groundwater, head in the desert sun.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   }
+  },
+  "Phragmites australis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "sedge",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The common reed, walling lake margins and deltas on every continent but Antarctica.",
+   "hab": [
+    "wetland",
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "lat": [
+    0,
+    68
+   ]
+  },
+  "Phrynocephalus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w"
+   ],
+   "note": "Toad-headed agamas, the small lizards of Central Asian sand and gravel desert up to 5,000 m.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Agamidae"
+   }
+  },
+  "Phyllostachys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "bamboo",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "as-e",
+    "as-se"
+   ],
+   "note": "The timber bamboos of China, mass-flowering and dying back in cycles decades long.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "box": [
+    [
+     97,
+     123,
+     18,
+     38
+    ]
+   ]
+  },
+  "Picea glauca": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "na-e",
+    "na-w"
+   ],
+   "note": "White spruce, the tree that followed the retreating Laurentide ice north.",
+   "hab": [
+    "forest"
+   ],
+   "lat": [
+    40,
+    72
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     -165,
+     -53,
+     43,
+     69
+    ]
+   ]
+  },
+  "Picea schrenkiana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "as-c"
+   ],
+   "note": "Schrenk's spruce, which forms the dark forest belt on the north slopes of the Tien Shan.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     69,
+     95,
+     40.5,
+     45.5
+    ]
+   ]
+  },
+  "Pinus longaeva": {
+   "rank": "species",
+   "realm": "land",
+   "form": "pine",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The Great Basin bristlecone pine; individuals close to five thousand years old still stand on dolomite ridges above 3,000 m.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     -119.5,
+     -110.5,
+     36,
+     41.5
+    ]
+   ]
+  },
+  "Pinus sibirica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "pine",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "as-c"
+   ],
+   "note": "The Siberian stone pine, whose nuts feed the taiga from nutcrackers to bears.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     55,
+     125,
+     48.5,
+     67
+    ]
+   ]
+  },
+  "Pongo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ape",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      2,
+      0
+     ],
+     "in": [
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      2,
+      0.01
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
+   ],
+   "note": "Orangutans, the red apes of Borneo and Sumatra, once found north to China.",
+   "hab": [
+    "rainforest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Hominidae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       95,
+       119,
+       -5,
+       7
+      ]
+     ]
+    }
+   ]
+  },
+  "Procapra gutturosa": {
+   "rank": "species",
+   "realm": "land",
+   "form": "antelope",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-e"
+   ],
+   "note": "The Mongolian gazelle, still migrating in herds of tens of thousands across the eastern steppe.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     95,
+     125,
+     42,
+     52
+    ]
+   ]
+  },
+  "Propithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "Sifakas: large lemurs that cross open ground in sideways leaps.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Indriidae"
+   }
+  },
+  "Prosopis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "acacia",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "na-w",
+    "ca"
+   ],
+   "note": "Mesquite and algarrobo: thorny legume trees with taproots reaching tens of metres to groundwater.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Fabales",
+    "family": "Fabaceae"
+   }
+  },
+  "Protea": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "Sugarbushes: the emblem of the Cape fynbos, a fire-dependent heathland with more plant species than any rainforest of its size.",
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Proteales",
+    "family": "Proteaceae"
+   },
+   "box": [
+    [
+     17,
+     33,
+     -35,
+     -22
+    ]
+   ]
+  },
+  "Pseudotsuga menziesii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The Douglas-fir, to ninety metres -- the great tree of the Pacific slope.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "box": [
+    [
+     -130,
+     -103,
+     19,
+     55
+    ]
+   ]
+  },
+  "Psittacus erithacus": {
+   "rank": "species",
+   "realm": "air",
+   "form": "parrot",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-w"
+   ],
+   "note": "The grey parrot of the Congo and Guinea forests.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Psittacidae"
+   },
+   "box": [
+    [
+     -10,
+     35,
+     -8,
+     10
+    ]
+   ]
+  },
+  "Pteronura brasiliensis": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "mustelid",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The giant otter, two metres long, hunting Amazonian rivers in noisy family groups.",
+   "hab": [
+    "river",
+    "lake",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Mustelidae"
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ],
+    [
+     -62,
+     -45,
+     -28,
+     -16
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Pudu puda": {
+   "rank": "species",
+   "realm": "land",
+   "form": "deer",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The southern pudu, the world's smallest deer, in the bamboo thickets of the Valdivian forest.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Cervidae"
+   },
+   "box": [
+    [
+     -75,
+     -70.5,
+     -47,
+     -35
+    ]
+   ]
+  },
+  "Pusa caspica": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "seal",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w"
+   ],
+   "note": "The Caspian seal, stranded in an inland sea since the Paratethys broke up.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "box": [
+    [
+     46.5,
+     54.5,
+     36.5,
+     47.2
+    ]
+   ]
+  },
+  "Pusa sibirica": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "seal",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-n"
+   ],
+   "note": "The nerpa, the world's only wholly freshwater seal, two thousand kilometres from the nearest sea.",
+   "hab": [
+    "lake"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "box": [
+    [
+     103,
+     110.5,
+     51,
+     56.2
+    ]
+   ]
+  },
+  "Puya raimondii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bromeliad",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The queen of the Andes: a bromeliad that grows for eighty years at 4,000 m, flowers once on a ten-metre spike, and dies.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Bromeliaceae"
+   },
+   "box": [
+    [
+     -78.5,
+     -66,
+     -18,
+     -8
+    ]
+   ]
+  },
+  "Pygoscelis adeliae": {
+   "rank": "species",
+   "realm": "land",
+   "form": "penguin",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "The Adelie penguin, nesting on the few ice-free Antarctic shores and feeding on krill under the pack.",
+   "hab": [
+    "ice",
+    "coast"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Rafflesia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "flower",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "note": "A parasite with no leaves, stem or roots, producing the largest single flower on Earth, a metre across and smelling of carrion.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Malpighiales",
+    "family": "Rafflesiaceae"
+   },
+   "box": [
+    [
+     95,
+     127,
+     -9,
+     19
+    ]
+   ]
+  },
+  "Ravenala madagascariensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "palm",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "The traveller's tree, a giant fan of banana-like leaves pollinated by lemurs.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Zingiberales",
+    "family": "Strelitziaceae"
+   }
+  },
+  "Rhea americana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "The greater rhea of the pampas and cerrado.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Rheidae"
+   },
+   "box": [
+    [
+     -66,
+     -35,
+     -40,
+     -5
+    ]
+   ]
+  },
+  "Rhea pennata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "ratite",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "Darwin's rhea, the flightless runner of Patagonian steppe and Andean puna.",
+   "hab": [
+    "grassland",
+    "desert",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Struthioniformes",
+    "family": "Rheidae"
+   },
+   "box": [
+    [
+     -73,
+     -63,
+     -54,
+     -35
+    ],
+    [
+     -71,
+     -65,
+     -28,
+     -14
+    ]
+   ]
+  },
+  "Rhinoceros unicornis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "The Indian rhinoceros, armour-plated in folds, of the tall-grass floodplains below the Himalaya.",
+   "hab": [
+    "grassland",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae"
+   },
+   "box": [
+    [
+     67,
+     96,
+     23,
+     32
+    ]
+   ]
+  },
+  "Rhinopithecus roxellana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-e"
+   ],
+   "note": "The golden snub-nosed monkey of the Qinling, living through snowbound winters on lichen and bark.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   },
+   "box": [
+    [
+     102,
+     112,
+     28,
+     35
+    ]
+   ]
+  },
+  "Rollandia microptera": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "diver",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The Titicaca grebe, flightless and found on this one lake system.",
+   "hab": [
+    "lake",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Podicipediformes",
+    "family": "Podicipedidae"
+   },
+   "box": [
+    [
+     -70.5,
+     -66,
+     -20,
+     -14.5
+    ]
+   ]
+  },
+  "Rupicapra rupicapra": {
+   "rank": "species",
+   "realm": "land",
+   "form": "caprine",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w"
+   ],
+   "note": "The chamois, goat-antelope of the Alps, Carpathians and Caucasus.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "box": [
+    [
+     5,
+     27,
+     41,
+     50
+    ],
+    [
+     36,
+     48,
+     40,
+     44
+    ]
+   ]
+  },
+  "Sagittarius serpentarius": {
+   "rank": "species",
+   "realm": "air",
+   "form": "raptor",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-w"
+   ],
+   "note": "The secretarybird, a long-legged raptor that hunts snakes on foot.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Accipitriformes",
+    "family": "Sagittariidae"
+   }
+  },
+  "Salvelinus namaycush": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "The lake trout, a cold-water char of the deep glacial lakes left by the Laurentide ice.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Salmoniformes",
+    "family": "Salmonidae"
+   },
+   "box": [
+    [
+     -165,
+     -60,
+     41,
+     72
+    ]
+   ]
+  },
+  "Sarcophilus harrisii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "dasyurid",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The Tasmanian devil, largest surviving marsupial carnivore; on the mainland until about 3,000 years ago.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dasyuromorphia",
+    "family": "Dasyuridae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       144.5,
+       148.5,
+       -43.7,
+       -40.5
+      ]
+     ]
+    }
+   ]
+  },
+  "Saxifraga oppositifolia": {
+   "rank": "species",
+   "realm": "land",
+   "form": "flower",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n",
+    "arc"
+   ],
+   "note": "Purple saxifrage, flowering at the northernmost point of land on Earth.",
+   "hab": [
+    "tundra",
+    "alpine"
+   ],
+   "lat": [
+    45,
+    90
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Saxifragaceae"
+   }
+  },
+  "Schoenoplectus californicus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "sedge",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "na-w",
+    "ca"
+   ],
+   "note": "Totora, the giant bulrush of Lake Titicaca from which the Uros build boats and floating islands.",
+   "hab": [
+    "lake",
+    "wetland",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae"
+   }
+  },
+  "Semnopithecus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "Grey langurs, leaf-eating monkeys from Sri Lanka to 4,000 m in the Himalaya.",
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Cercopithecidae"
+   },
+   "box": [
+    [
+     66,
+     95,
+     6,
+     35
+    ]
+   ]
+  },
+  "Shorea robusta": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "in"
+   ],
+   "note": "Sal, the dipterocarp that forms the forests of the Himalayan foothills and central India.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Malvales",
+    "family": "Dipterocarpaceae"
+   },
+   "box": [
+    [
+     76,
+     94,
+     17,
+     32
+    ]
+   ]
+  },
+  "Solenodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca"
+   ],
+   "note": "A venomous, shrew-like relict of Cuba and Hispaniola whose lineage goes back to the age of dinosaurs.",
+   "hab": [
+    "forest",
+    "island"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Eulipotyphla",
+    "family": "Solenodontidae"
+   },
+   "box": [
+    [
+     -85,
+     -68,
+     17.5,
+     23.5
+    ]
+   ]
+  },
+  "Stercorarius maccormicki": {
+   "rank": "species",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "The south polar skua, pirate and predator of the penguin colonies, recorded at the Pole itself.",
+   "hab": [
+    "coast",
+    "ice"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Charadriiformes",
+    "family": "Laridae"
+   }
+  },
+  "Strigops habroptila": {
+   "rank": "species",
+   "realm": "land",
+   "form": "parrot",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "nz"
+   ],
+   "note": "The kakapo: flightless, nocturnal, the heaviest parrot, breeding only when the rimu trees mast.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Strigopidae"
+   }
+  },
+  "Subglacial microbes": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "microbe",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "an"
+   ],
+   "note": "Bacteria and archaea living in lakes sealed beneath four kilometres of ice, without light, on minerals ground from the bedrock.",
+   "hab": [
+    "lake",
+    "ice"
+   ],
+   "cls": {
+    "class": "Bacteria"
+   }
+  },
+  "Suricata suricatta": {
+   "rank": "species",
+   "realm": "land",
+   "form": "carnivoran",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The meerkat: a small mongoose of the Kalahari living in co-operative mobs with sentries.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Herpestidae"
+   },
+   "box": [
+    [
+     14,
+     30,
+     -34,
+     -17
+    ]
+   ]
+  },
+  "Sus scrofa": {
+   "rank": "species",
+   "realm": "land",
+   "form": "pig",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "af-n"
+   ],
+   "note": "The wild boar, ploughing forest floors from Portugal to Japan.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Suidae"
+   }
+  },
+  "Swietenia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "Mahogany, the emergent timber tree of the Neotropical forest.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Sapindales",
+    "family": "Meliaceae"
+   }
+  },
+  "Syncerus caffer": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "af-w"
+   ],
+   "note": "The African buffalo, in herds of a thousand on the floodplains.",
+   "hab": [
+    "grassland",
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   }
+  },
+  "Tapirus bairdii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "tapir",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n"
+   ],
+   "note": "Baird's tapir, the largest native land mammal of Central America.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Tapiridae"
+   },
+   "box": [
+    [
+     -98,
+     -75,
+     0,
+     20
+    ]
+   ]
+  },
+  "Tapirus indicus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "tapir",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "note": "The Malayan tapir, black and white, the only Old World tapir left.",
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Tapiridae"
+   },
+   "box": [
+    {
+     "t": [
+      0.02,
+      0
+     ],
+     "box": [
+      [
+       95,
+       106,
+       -6,
+       18
+      ]
+     ]
+    }
+   ]
+  },
+  "Tarsius": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "note": "Tarsiers: tiny nocturnal primates with eyes each as large as their brain, and the only wholly carnivorous primates.",
+   "hab": [
+    "rainforest",
+    "island"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Tarsiidae"
+   },
+   "box": [
+    [
+     104,
+     128,
+     -7,
+     12
+    ]
+   ]
+  },
+  "Taxidea taxus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "mustelid",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca"
+   ],
+   "note": "The American badger, digging out ground squirrels across the prairie.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Mustelidae"
+   },
+   "box": [
+    [
+     -125,
+     -82,
+     18,
+     56
+    ]
+   ]
+  },
+  "Taxodium distichum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "redwood",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-e"
+   ],
+   "note": "The bald cypress, a deciduous conifer standing in blackwater swamps on buttressed trunks and 'knees'.",
+   "hab": [
+    "wetland"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cupressaceae"
+   },
+   "box": [
+    [
+     -99,
+     -74,
+     25,
+     40
+    ]
+   ]
+  },
+  "Tectona grandis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "in",
+    "as-se"
+   ],
+   "note": "Teak, the great timber tree of the monsoon forests, leafless through the dry season.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Lamiaceae"
+   },
+   "box": [
+    [
+     73,
+     105,
+     9,
+     26
+    ]
+   ]
+  },
+  "Tenrec ecaudatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "mg"
+   ],
+   "note": "The tailless tenrec, one of a Madagascan radiation that has filled the roles of shrews, hedgehogs and otters.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Afrosoricida",
+    "family": "Tenrecidae"
+   }
+  },
+  "Tetrao urogallus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-n"
+   ],
+   "note": "The capercaillie, the turkey-sized grouse of old conifer forest.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes",
+    "family": "Phasianidae"
+   },
+   "box": [
+    [
+     -7,
+     1,
+     42,
+     43.5
+    ],
+    [
+     5,
+     27,
+     43,
+     51
+    ],
+    [
+     4,
+     140,
+     55,
+     70
+    ]
+   ]
+  },
+  "Themeda triandra": {
+   "rank": "species",
+   "realm": "land",
+   "form": "grass",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-s",
+    "au",
+    "in",
+    "as-se"
+   ],
+   "note": "Red oat grass or kangaroo grass, the fire-adapted dominant of savannas from Africa to Australia.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   }
+  },
+  "Tillandsia landbeckii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bromeliad",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A rootless air plant forming banded 'lawns' on bare Atacama dunes, watered entirely by coastal fog.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Bromeliaceae"
+   },
+   "fill": false
+  },
+  "Tremarctos ornatus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The spectacled bear of the Andean cloud forest, last of the short-faced bears.",
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   },
+   "box": [
+    [
+     -80,
+     -71.5,
+     -2,
+     11.5
+    ],
+    [
+     -81,
+     -75,
+     -10,
+     -2
+    ],
+    [
+     -78,
+     -63,
+     -24,
+     -10
+    ]
+   ]
+  },
+  "Triodia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "grass",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "Spinifex: needle-leaved hummock grasses covering a quarter of Australia, and shelter for most of its desert reptiles.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   }
+  },
+  "Uromastyx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "ar",
+    "af-n",
+    "as-w"
+   ],
+   "note": "Spiny-tailed lizards: plant-eating desert agamids that block their burrows with a clubbed tail.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Agamidae"
+   }
+  },
+  "Ursus arctos": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-c",
+    "as-n",
+    "as-e",
+    "na-w",
+    "na-n"
+   ],
+   "note": "The brown bear, from Spanish mountains across Siberia to Alaska.",
+   "hab": [
+    "forest",
+    "alpine",
+    "tundra"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   }
+  },
+  "Ursus maritimus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bear",
+   "fad": 0.5,
+   "lad": 0,
+   "range": [
+    "arc",
+    "na-n",
+    "gl",
+    "as-n",
+    "eu"
+   ],
+   "note": "The polar bear, a brown-bear offshoot that became a marine mammal, hunting seals from the sea ice.",
+   "hab": [
+    "ice",
+    "coast",
+    "tundra"
+   ],
+   "lat": [
+    58,
+    90
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Ursidae"
+   },
+   "realms": [
+    "land",
+    "sea"
+   ]
+  },
+  "Usnea antarctica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lichen",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "an",
+    "sa-s"
+   ],
+   "note": "A bushy beard lichen, among the largest land organisms of the Antarctic Peninsula.",
+   "hab": [
+    "tundra",
+    "ice",
+    "coast"
+   ],
+   "cls": {
+    "class": "Lecanoromycetes",
+    "order": "Lecanorales",
+    "family": "Parmeliaceae"
+   }
+  },
+  "Vachellia erioloba": {
+   "rank": "species",
+   "realm": "land",
+   "form": "acacia",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "The camel thorn, the Kalahari's great shade tree, rooted sixty metres down.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Fabales",
+    "family": "Fabaceae"
+   },
+   "box": [
+    [
+     14,
+     29,
+     -30,
+     -16
+    ]
+   ]
+  },
+  "Varanus giganteus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The perentie, Australia's largest living lizard at over two metres, a hunter of the rocky deserts.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Varanidae"
+   },
+   "box": [
+    [
+     114,
+     142,
+     -30,
+     -17
+    ]
+   ]
+  },
+  "Varanus komodoensis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 4,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      4,
+      0
+     ],
+     "in": [
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      4,
+      0.05
+     ],
+     "in": [
+      "au"
+     ]
+    }
+   ],
+   "note": "The Komodo dragon, a three-metre monitor that evolved in Australia and survives on a few Indonesian islands.",
+   "hab": [
+    "island",
+    "grassland",
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Varanidae"
+   },
+   "box": [
+    {
+     "t": [
+      0.05,
+      0
+     ],
+     "box": [
+      [
+       118.5,
+       123.5,
+       -9.5,
+       -8
+      ]
+     ]
+    }
+   ]
+  },
+  "Victoria amazonica": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "waterlily",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The giant water lily, its ribbed leaves three metres across.",
+   "hab": [
+    "lake",
+    "river",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Nymphaeales",
+    "family": "Nymphaeaceae"
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Vombatus ursinus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "diprotodont",
+   "fad": 1,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The common wombat, a burrowing grazer with a backward-facing pouch.",
+   "hab": [
+    "forest",
+    "alpine",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Vombatidae"
+   },
+   "box": [
+    [
+     140,
+     154,
+     -44,
+     -27
+    ]
+   ]
+  },
+  "Wollemia nobilis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "The Wollemi pine, known only as a fossil until a hundred trees were found in one canyon near Sydney in 1994.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       150,
+       150.8,
+       -33.5,
+       -32.5
+      ]
+     ]
+    }
+   ]
+  },
+  "Yucca brevifolia": {
+   "rank": "species",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The Joshua tree of the Mojave, pollinated by a single species of moth; its seeds were once spread by ground sloths.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Asparagales",
+    "family": "Asparagaceae"
+   },
+   "box": [
+    [
+     -118.5,
+     -113,
+     33.5,
+     38
+    ]
+   ]
+  },
+  "Zaedyus pichiy": {
+   "rank": "species",
+   "realm": "land",
+   "form": "armadillo",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "sa-s"
+   ],
+   "note": "The pichi, a small armadillo of cold Patagonian steppe and the only one known to hibernate.",
+   "hab": [
+    "desert",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cingulata",
+    "family": "Dasypodidae"
+   },
+   "box": [
+    [
+     -72,
+     -60,
+     -52,
+     -32
+    ]
+   ]
+  },
+  "Zaglossus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "echidna",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "ng"
+   ],
+   "note": "Long-beaked echidnas, worm-eating monotremes of New Guinea's mountain forests.",
+   "hab": [
+    "rainforest",
+    "alpine"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Monotremata",
+    "family": "Tachyglossidae"
+   },
+   "box": [
+    [
+     130,
+     148,
+     -9,
+     0
+    ]
+   ]
+  },
+  "Zizania palustris": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "grass",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "na-e"
+   ],
+   "note": "Wild rice, the aquatic grass of Great Lakes shallows.",
+   "hab": [
+    "lake",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "box": [
+    [
+     -100,
+     -64,
+     40,
+     53
+    ]
+   ]
+  },
+  "Bubalus depressicornis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "bison",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "hab": [
+    "rainforest",
+    "island",
+    "forest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Bovidae"
+   },
+   "fill": false,
+   "note": "The anoa, a dwarf forest buffalo barely a metre tall, found only on Sulawesi."
+  },
+  "Macrocephalon maleo": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gamebird",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "hab": [
+    "rainforest",
+    "island",
+    "coast"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes",
+    "family": "Megapodiidae"
+   },
+   "fill": false,
+   "note": "The maleo, a megapode that buries its eggs in volcanically heated sand and leaves them."
+  },
+  "Ailurops ursinus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 2,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "hab": [
+    "rainforest",
+    "island"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Phalangeridae"
+   },
+   "fill": false,
+   "form_ok": true,
+   "note": "The bear cuscus: a marsupial in Asia, one of the few mammals to cross Wallacea from the Australian side."
+  },
+  "Eucalyptus deglupta": {
+   "rank": "species",
+   "realm": "land",
+   "form": "eucalypt",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "as-se",
+    "ng"
+   ],
+   "hab": [
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Myrtales",
+    "family": "Myrtaceae"
+   },
+   "note": "The rainbow gum, the only eucalypt native north of the equator, its bark peeling in green, orange and purple strips.",
+   "box": [
+    [
+     120,
+     153,
+     -8,
+     9
+    ]
+   ]
+  },
+  "Agathis dammara": {
+   "rank": "species",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-se"
+   ],
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "note": "The Sulawesi kauri, a towering araucarian conifer tapped for dammar resin.",
+   "box": [
+    [
+     115,
+     132,
+     -10,
+     20
+    ]
+   ]
+  }
+ }
+}

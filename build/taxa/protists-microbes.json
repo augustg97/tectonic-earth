@@ -1,0 +1,1005 @@
+{
+ "taxa": {
+  "Acanthomorph acritarchs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 635,
+   "lad": 560,
+   "range": [
+    "as-e",
+    "au",
+    "in",
+    "eu",
+    "as-n"
+   ],
+   "note": "Spiny organic-walled microfossils that make the Doushantuo a global Ediacaran reference.",
+   "cls": {
+    "phylum": "",
+    "class": "Acritarcha",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Acritarcha": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 1800,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Organic-walled cysts of algae, too poorly understood to classify but abundant enough to date rocks with.",
+   "pbdb": {
+    "oid": "txn:141161",
+    "matched": "Acritarcha",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": true,
+    "noc": 1405,
+    "fea": 2050,
+    "lla": 0
+   },
+   "pbdb_ok": true,
+   "conf_note": "Simple leiosphaerid acritarchs are known from the Palaeoproterozoic (~1800 Ma); the PBDB-robust window undercounts sparse early occurrences.",
+   "aka": [
+    "acritarchs",
+    "Acritarchs"
+   ]
+  },
+  "Arcellinida": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "testate",
+   "fad": 760,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Vase-shaped microfossils -- testate amoebae that built shells and, by implication, had something to hide from.",
+   "pbdb": {
+    "oid": "txn:484994",
+    "matched": "Arcellinida",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 3,
+    "fea": 0.129,
+    "lla": 0,
+    "phylum": "Lobosa",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Arcellinida"
+   },
+   "pbdb_ok": true
+  },
+  "Archaea": {
+   "rank": "domain",
+   "realm": "sea",
+   "form": "microbe",
+   "fad": 3500,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Heat- and sulphur-loving microbes at the base of food webs run entirely on chemistry, not light.",
+   "cls": {
+    "class": "Archaea"
+   },
+   "no_own_icon": true,
+   "realms": [
+    "sea",
+    "fresh",
+    "land"
+   ]
+  },
+  "Bacteria": {
+   "rank": "domain",
+   "realm": "sea",
+   "form": "microbe",
+   "fad": 3500,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Single-celled prokaryotes with no nucleus, forming the mats and stromatolites that dominate the fossil record for most of Earth's history.",
+   "pbdb": {
+    "oid": "txn:288515",
+    "matched": "Bacteria",
+    "exact": true,
+    "rank": "unranked clade",
+    "extant": true,
+    "noc": 2824,
+    "fea": 3600,
+    "lla": 0.774
+   },
+   "pbdb_ok": true,
+   "conf_note": "Oldest undisputed microfossils/stromatolites (Pilbara, Dresser Fm) are ~3500 Ma; PBDB-robust reflects only well-sampled Proterozoic collections.",
+   "no_own_icon": true,
+   "realms": [
+    "sea",
+    "fresh",
+    "land"
+   ]
+  },
+  "Calpionellida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "foram",
+   "fad": 150,
+   "lad": 132,
+   "range": [
+    "eu",
+    "ca",
+    "af-n",
+    "tet"
+   ],
+   "note": "Tiny vase-shaped plankton that zone the Tethyan latest-Jurassic to Early Cretaceous.",
+   "pbdb": {
+    "oid": "txn:745",
+    "matched": "Calpionellida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 257,
+    "fea": 149.2,
+    "lla": 12.8,
+    "phylum": "Ciliophora",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Calpionellida",
+    "regions": {
+     "eu": 240,
+     "na-e": 1,
+     "ca": 13,
+     "af-n": 3
+    }
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    42
+   ]
+  },
+  "Coccolithophyceae": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "coccolith",
+   "fad": 215,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Microscopic plated algae that take over the open ocean and start building chalk.",
+   "pbdb": {
+    "oid": "txn:418920",
+    "matched": "Coccolithophyceae",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 83718,
+    "fea": 303.7,
+    "lla": 0,
+    "phylum": "Haptophyta",
+    "class": "Coccolithophyceae"
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Cryptoendolithic community": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "microbe",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "an"
+   ],
+   "note": "Microbes living INSIDE sandstone grains, the driest-limit ecosystem on Earth.",
+   "hab": [
+    "desert",
+    "ice",
+    "tundra"
+   ],
+   "cls": {
+    "phylum": "Bacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Cyanobacteria": {
+   "rank": "phylum",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 3500,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The engine of the whole biosphere: oxygen producers and the builders of stromatolite reefs for well over a billion years.",
+   "pbdb": {
+    "oid": "txn:67023",
+    "matched": "Cyanobacteria",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 2778,
+    "fea": 3600,
+    "lla": 0.774,
+    "phylum": "Cyanobacteria"
+   },
+   "w": 3,
+   "pbdb_ok": true,
+   "aka": [
+    "cyanobacteria"
+   ]
+  },
+  "Cyanobacterial crust": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "cyano",
+   "fad": 3000,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Biological soil crust binding sand between rains, the desert's living skin.",
+   "hab": [
+    "desert",
+    "tundra"
+   ],
+   "w": 1,
+   "cls": {
+    "phylum": "Cyanobacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Diatomea": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "diatom",
+   "fad": 120,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Single-celled algae in glass shells. From the Oligocene on their blooms feed the cold oceans and their remains pile up as diatomite.",
+   "cls": {
+    "phylum": "Bacillariophyta",
+    "class": "Bacillariophyceae",
+    "order": "",
+    "family": ""
+   },
+   "aka": [
+    "diatoms",
+    "Bacillariophyta"
+   ]
+  },
+  "Discoaster": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "coccolith",
+   "fad": 60,
+   "lad": 1.9,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Star-shaped calcareous nannoplankton whose extinction near 1.9 million years ago is used to close out the warm Pliocene ocean.",
+   "pbdb": {
+    "oid": "txn:87682",
+    "matched": "Discoaster",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 15772,
+    "fea": 93.9,
+    "lla": 0,
+    "phylum": "Haptophyta",
+    "class": "Coccolithophyceae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Prymnesiophycidae",
+    "genus": "Discoaster"
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    50
+   ],
+   "pbdb_ok": true
+  },
+  "Discocyclina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 60,
+   "lad": 34,
+   "range": [
+    "as-c",
+    "as-w",
+    "eu",
+    "in",
+    "sa-n"
+   ],
+   "note": "A large disc-shaped foraminifer of Palaeogene tropical shelves, whose tests build limestone.",
+   "pbdb": {
+    "oid": "txn:1281",
+    "matched": "Discocyclina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 342,
+    "fea": 106.3,
+    "lla": 11.63,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Discocyclinidae",
+    "genus": "Discocyclina",
+    "regions": {
+     "in": 111,
+     "eu": 168,
+     "na-e": 4,
+     "sa-n": 8,
+     "af-n": 5,
+     "af-s": 2,
+     "as-c": 8,
+     "as-w": 22,
+     "af-w": 1,
+     "oc": 1,
+     "as-e": 4,
+     "ca": 5,
+     "ar": 3
+    }
+   },
+   "lat": [
+    0,
+    45
+   ],
+   "hab": [
+    "shelf"
+   ]
+  },
+  "Foraminifera": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "foram",
+   "fad": 540,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Larger benthic forams diversify and become key shelf-carbonate contributors.",
+   "pbdb": {
+    "oid": "txn:71228",
+    "matched": "Foraminifera",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 196771,
+    "fea": 635,
+    "lla": 0,
+    "phylum": "Foraminifera",
+    "order": "Foraminifera"
+   },
+   "pbdb_ok": true,
+   "no_own_icon": true
+  },
+  "Fusulinida": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 330,
+   "lad": 252,
+   "range": [
+    "eu",
+    "as-e",
+    "as-se",
+    "as-c",
+    "as-w",
+    "ar",
+    "na-w",
+    "na-e",
+    "sa-n",
+    "tet",
+    "pan",
+    "ura"
+   ],
+   "note": "Rice-grain foraminifera, abundant and fast-evolving enough to date the Carboniferous limestones they largely consist of.",
+   "pbdb": {
+    "oid": "txn:72069",
+    "matched": "Fusulinida",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 50,
+    "fea": 315.2,
+    "lla": 264.28,
+    "phylum": "Foraminifera",
+    "class": "Fusulinata",
+    "order": "Fusulinida",
+    "regions": {
+     "na-w": 5,
+     "ca": 4,
+     "na-e": 35,
+     "eu": 6
+    }
+   },
+   "hab": [
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    0,
+    42
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "aka": [
+    "Fusulinids"
+   ]
+  },
+  "Globigerinina": {
+   "rank": "suborder",
+   "realm": "sea",
+   "form": "foram",
+   "fad": 175,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Planktic foraminifera colonise the open water column, becoming a permanent part of the ocean's carbon cycle.",
+   "pbdb": {
+    "oid": "txn:112183",
+    "matched": "Globigerinina",
+    "exact": true,
+    "rank": "suborder",
+    "extant": true,
+    "noc": 7150,
+    "fea": 137.05,
+    "lla": 0,
+    "phylum": "Foraminifera",
+    "class": "Globothalamea",
+    "order": "Rotaliida"
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "pbdb_ok": true
+  },
+  "Globotruncanidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "foram",
+   "fad": 94,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Keeled planktonic foraminifera raining onto the Cretaceous ocean floor.",
+   "pbdb": {
+    "oid": "txn:155904",
+    "matched": "Globotruncanidae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 2101,
+    "fea": 113.2,
+    "lla": 3.6,
+    "phylum": "Foraminifera",
+    "class": "Globothalamea",
+    "order": "Rotaliida",
+    "family": "Globotruncanidae"
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "lat": [
+    0,
+    55
+   ]
+  },
+  "Nummulites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 62,
+   "lad": 28,
+   "range": [
+    "af-e",
+    "af-n",
+    "ar",
+    "as-c",
+    "as-w",
+    "ca",
+    "eu",
+    "in"
+   ],
+   "note": "Coin-sized benthic foraminifera beginning the bank-building that will define Tethyan shelf carbonates.",
+   "sz": 0.1,
+   "dt": "symbiont-bearing heterotrophy",
+   "hb": "benthic on warm carbonate shelves",
+   "pbdb": {
+    "oid": "txn:1972",
+    "matched": "Nummulites",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 649,
+    "fea": 85.7,
+    "lla": 0,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Nummulitidae",
+    "genus": "Nummulites",
+    "regions": {
+     "eu": 295,
+     "sa-n": 8,
+     "in": 102,
+     "ar": 14,
+     "ca": 26,
+     "as-w": 68,
+     "af-n": 31,
+     "af-w": 3,
+     "af-e": 32,
+     "na-e": 9,
+     "af-s": 1,
+     "as-c": 46,
+     "as-se": 3,
+     "mg": 3,
+     "au": 2
+    }
+   },
+   "hab": [
+    "shelf"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "w": 3,
+   "pbdb_ok": true
+  },
+  "Nummulitidae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 62,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-n",
+    "as-c",
+    "as-w",
+    "au",
+    "ca",
+    "eu",
+    "in",
+    "ind",
+    "pac"
+   ],
+   "note": "Coin-shaped large foraminifera build carbonate banks on Paleogene tropical shelves.",
+   "pbdb": {
+    "oid": "txn:103799",
+    "matched": "Nummulitidae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 1708,
+    "fea": 323.4,
+    "lla": 0,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Nummulitidae",
+    "regions": {
+     "na-e": 13,
+     "eu": 715,
+     "sa-n": 19,
+     "in": 287,
+     "na-w": 3,
+     "ar": 23,
+     "ca": 50,
+     "as-w": 135,
+     "af-s": 4,
+     "as-se": 26,
+     "as-e": 4,
+     "af-n": 60,
+     "af-e": 47,
+     "af-w": 8,
+     "oc": 10,
+     "au": 49,
+     "as-c": 210,
+     "ng": 12,
+     "nz": 3,
+     "mg": 8
+    }
+   },
+   "hab": [
+    "shelf",
+    "reef"
+   ],
+   "pbdb_ok": true,
+   "lat": [
+    0,
+    35
+   ]
+  },
+  "Palaeofusulina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 254,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se",
+    "as-w",
+    "eu"
+   ],
+   "note": "A latest-Permian fusulinid whose disappearance pinpoints the marine mass extinction.",
+   "pbdb": {
+    "oid": "txn:2028",
+    "matched": "Palaeofusulina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 170,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Boultoniidae",
+    "genus": "Palaeofusulina",
+    "regions": {
+     "as-e": 152,
+     "eu": 5,
+     "as-se": 12,
+     "as-c": 1
+    }
+   },
+   "lat": [
+    0,
+    40
+   ]
+  },
+  "Radiolaria": {
+   "rank": "class",
+   "realm": "sea",
+   "form": "radiolarian",
+   "fad": 530,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Silica-shelled plankton whose ooze hardens into the deep-sea cherts that record vanished ocean floors.",
+   "pbdb": {
+    "oid": "txn:4",
+    "matched": "Radiolaria",
+    "exact": true,
+    "rank": "subclass",
+    "extant": true,
+    "noc": 13017,
+    "fea": 508,
+    "lla": 0,
+    "phylum": "Radiolaria",
+    "class": "NO_CLASS_SPECIFIED"
+   },
+   "hab": [
+    "pelagic"
+   ],
+   "pbdb_ok": true
+  },
+  "Stromatolites": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "stromatolite",
+   "fad": 3500,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      3500,
+      450
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      450,
+      0
+     ],
+     "in": [
+      "au",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Layered mounds built by microbial mats trapping and binding sediment: the dominant reef of the first three billion years, and often the only fossil a Precambrian shelf preserves.",
+   "hab": [
+    "shelf",
+    "coast",
+    "reef"
+   ],
+   "w": 2,
+   "cls": {
+    "phylum": "Cyanobacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   },
+   "aka": [
+    "stromatolites"
+   ]
+  },
+  "Thrombolite reefs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "stromatolite",
+   "fad": 530,
+   "lad": 480,
+   "range": [
+    "na",
+    "gl",
+    "as-n",
+    "au"
+   ],
+   "note": "Clotted microbial mounds build reefs across the vast, nearly flat epicontinental sea.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "cls": {
+    "phylum": "Cyanobacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   }
+  },
+  "Vase-shaped microfossils": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "testate",
+   "fad": 790,
+   "lad": 730,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Testate amoebae from the Chuar Group and elsewhere - the oldest fossils of shelled, predatory eukaryotes.",
+   "cls": {
+    "phylum": "Amoebozoa",
+    "class": "Tubulinea",
+    "order": "Arcellinida",
+    "family": ""
+   }
+  },
+  "Verbeekina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 272,
+   "lad": 260,
+   "range": [
+    "ar",
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-se",
+    "as-w",
+    "eu"
+   ],
+   "note": "A large spherical fusulinid foraminifer, up to a centimetre across, and an index fossil of the warm Permian Tethyan shelves.",
+   "pbdb": {
+    "oid": "txn:2786",
+    "matched": "Verbeekina",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 96,
+    "fea": 277.3,
+    "lla": 259.857,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Verbeekinidae",
+    "genus": "Verbeekina",
+    "regions": {
+     "as-w": 8,
+     "as-c": 22,
+     "as-e": 25,
+     "eu": 4,
+     "as-se": 5,
+     "ar": 17,
+     "na-w": 1,
+     "as-n": 3,
+     "ca": 1
+    }
+   },
+   "lat": [
+    0,
+    40
+   ]
+  },
+  "banded iron formation": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "strata",
+   "fad": 717,
+   "lad": 635,
+   "range": [
+    {
+     "t": [
+      717,
+      660
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      650,
+      635
+     ],
+     "in": [
+      "cosmo"
+     ]
+    }
+   ],
+   "note": "Alternating iron-rich and silica-rich layers precipitated from a ferruginous ocean. They largely stop forming by 1.85 Ga, once the deep sea holds oxygen."
+  },
+  "cap carbonates": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "strata",
+   "fad": 662,
+   "lad": 630,
+   "range": [
+    {
+     "t": [
+      662,
+      656
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      637,
+      630
+     ],
+     "in": [
+      "cosmo"
+     ]
+    }
+   ],
+   "note": "Sheets of carbonate laid straight on top of glacial debris as a snowball Earth ended, under an atmosphere carrying hundreds of times today's CO2."
+  },
+  "diatom ooze": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "strata",
+   "fad": 34,
+   "lad": 0,
+   "range": [
+    "sou",
+    "pac",
+    "atl",
+    "ind"
+   ],
+   "note": "Sea-floor sediment made of siliceous diatom skeletons, under the high-productivity belts of the Southern Ocean and the North Pacific.",
+   "hab": [
+    "deep",
+    "pelagic"
+   ]
+  },
+  "microbialites": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "stromatolite",
+   "fad": 3500,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      3500,
+      450
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      450,
+      0
+     ],
+     "in": [
+      "au",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Sediment bound by microbial mats. They come back in force after every mass extinction, when the grazers that normally crop them are gone.",
+   "hab": [
+    "shelf",
+    "coast",
+    "reef"
+   ],
+   "cls": {
+    "phylum": "Cyanobacteria",
+    "class": "",
+    "order": "",
+    "family": ""
+   }
+  },
+  "orbitolinids": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 130,
+   "lad": 94,
+   "range": [
+    "eu",
+    "af-n",
+    "ar",
+    "as-w",
+    "ca",
+    "tet"
+   ],
+   "note": "Large conical foraminifera of Cretaceous carbonate platforms, big enough to see without a lens.",
+   "hab": [
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "phylum": "Foraminifera",
+    "class": "Globothalamea",
+    "order": "Loftusiida",
+    "family": "Orbitolinidae"
+   }
+  },
+  "sea-ice algae": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "diatom",
+   "fad": 34,
+   "lad": 0,
+   "range": [
+    "arc",
+    "sou"
+   ],
+   "note": "Diatoms growing in brine channels within the ice itself, which bloom months before the open water does and start the polar year.",
+   "hab": [
+    "ice"
+   ],
+   "lat": [
+    58,
+    90
+   ],
+   "cls": {
+    "phylum": "Bacillariophyta",
+    "class": "Bacillariophyceae",
+    "order": "",
+    "family": ""
+   }
+  }
+ }
+}

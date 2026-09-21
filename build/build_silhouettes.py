@@ -214,6 +214,118 @@ def run(do_groups, do_taxa):
           f"{len(credits)} credited")
 
 
+# ---------------------------------------------------------------------------
+# THE REGISTRY PASSES (2026-09). The two passes above read life_data.json, so
+# every organism that reached a card by any other road -- a province marker, a
+# present-day regional list added after the silhouettes were fetched -- never
+# got looked up at all, and drew its realm's fallback: Bison, Picea and Gorilla
+# as a monitor lizard, kelp and krill as a fish. These read the REGISTRY
+# (build/taxa/*.json), which is by construction everything a card can show.
+#
+#   forms     one drawing per body FORM in use (biota_forms.FORMS), fetched from
+#             the form's own search terms. A form with nothing to trace keeps
+#             its PARENT's drawing, which the audit counts as an approximation.
+#   registry  every genus- and species-rank taxon, and every `rep`, looked up by
+#             name for a silhouette of its own.
+#
+# A taxon-level match has to BE that taxon. PhyloPic's name filter is fuzzy and
+# its general node answers higher-rank queries, which is right for "Odonata" and
+# wrong for a genus: the accepted silhouette's own title must start with the
+# genus asked for, or it is not taken.
+def _own_match(name, cand):
+    genus = name.split()[0].lower()
+    got = (cand.get("taxon") or "").lower()
+    return got.split()[0] == genus if got else False
+
+
+def run_forms():
+    import biota                                           # noqa: PLC0415
+    from biota_forms import FORMS, chain                   # noqa: PLC0415
+    build = phylopic.build_number()
+    icons, credits = load(ICONS, {}), load(CREDITS, {})
+    reg = biota.load()["taxa"]
+    in_use = set()
+    for e in reg.values():
+        in_use.update(chain(e["form"]))
+    hit = miss = have = 0
+    for form in sorted(in_use):
+        key = FORMS[form]["icon"] or form
+        if key in icons:
+            have += 1
+            continue
+        for term in FORMS[form]["terms"]:
+            path, cand = phylopic.silhouette(term, build)
+            if path:
+                icons[key] = path
+                credits[key] = {k: cand[k] for k in ("attribution", "licence",
+                                                     "licence_url", "uuid", "taxon")}
+                print(f"  {form:18s} <- {cand['taxon']:30s} {cand['licence']}")
+                hit += 1
+                break
+        else:
+            miss += 1
+            print(f"  {form:18s} .. nothing to trace; falls to parent "
+                  f"{FORMS[form]['parent']!r}")
+    json.dump(icons, open(ICONS, "w"))
+    json.dump(credits, open(CREDITS, "w"), indent=1, sort_keys=True)
+    print(f"forms: {have} already drawn, {hit} traced, {miss} on a parent")
+
+
+def run_registry():
+    import biota                                           # noqa: PLC0415
+    build = phylopic.build_number()
+    icons, credits = load(ICONS, {}), load(CREDITS, {})
+    reg = biota.load()["taxa"]
+    want = {}
+    for name, e in reg.items():
+        if e.get("assemblage") or e.get("no_own_icon"):
+            continue
+        # `pic` names the PhyloPic taxon to trace for an entry that is not itself a
+        # genus or species: the anglerfishes are drawn from Melanocetus
+        if e.get("rank") in ("genus", "species", "subspecies", "subgenus") or e.get("pic"):
+            want[name] = e
+    for e in reg.values():
+        r = e.get("rep")
+        if r and r in reg:
+            want[r] = reg[r]
+    hit = had = 0
+    names = sorted(want)
+    for i, name in enumerate(names):
+        key = "t:" + slug(name)
+        if key in icons:
+            had += 1
+            continue
+        pic = want[name].get("pic")
+        if not pic and (NOT_A_TAXON.search(name) or not re.match(r"^[A-Z][a-z]+", name)):
+            continue
+        for term in ([pic] if pic else search_terms(name)):
+            cands = phylopic.search(term, build)
+            pick = next((j for j, c in enumerate(cands) if _own_match(term, c)), None)
+            if pick is None:
+                continue
+            path, cand = phylopic.silhouette(term, build, pick=pick)
+            if path:
+                icons[key] = path
+                credits[key] = {k: cand[k] for k in ("attribution", "licence",
+                                                     "licence_url", "uuid", "taxon")}
+                hit += 1
+                print(f"  [{i+1}/{len(names)}] {name:34s} <- {cand['taxon']:26s} "
+                      f"{cand['licence']}")
+                break
+        if i % 50 == 0:
+            json.dump(icons, open(ICONS, "w"))
+            json.dump(credits, open(CREDITS, "w"), indent=1, sort_keys=True)
+    json.dump(icons, open(ICONS, "w"))
+    json.dump(credits, open(CREDITS, "w"), indent=1, sort_keys=True)
+    print(f"registry: {had} already had their own silhouette, {hit} new, of "
+          f"{len(names)} genus/species-rank taxa")
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
-    run(what in ("groups", "all"), what in ("taxa", "all"))
+    if what == "forms":
+        run_forms()
+    elif what == "registry":
+        run_registry()
+    else:
+        run(what in ("groups", "all"), what in ("taxa", "all"))

@@ -1,0 +1,5215 @@
+{
+ "taxa": {
+  "Acacia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "acacia",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "au",
+    "ng",
+    "as-se"
+   ],
+   "note": "Flat-topped thorn trees, browsed to their characteristic silhouette by giraffe.",
+   "pbdb": {
+    "oid": "txn:53524",
+    "matched": "Acacia",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 126,
+    "fea": 48.07,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fabales",
+    "family": "Fabaceae",
+    "genus": "Acacia",
+    "regions": {
+     "af-e": 54,
+     "na-w": 3,
+     "sa-s": 6,
+     "sa-n": 1,
+     "ca": 5,
+     "au": 45,
+     "in": 10,
+     "as-e": 1
+    }
+   },
+   "hab": [
+    "grassland",
+    "desert",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fabales",
+    "family": "Fabaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Adansonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "baobab",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "af",
+    "mg",
+    "au"
+   ],
+   "note": "The baobab, storing water in a massively swollen trunk -- the signature tree of seasonally arid Africa.",
+   "pbdb": {
+    "oid": "txn:512960",
+    "matched": "Adansonia",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1,
+    "fea": 1.8,
+    "lla": 0.774,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Adansonia",
+    "regions": {
+     "af-e": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malvales",
+    "family": "Malvaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Aglaophyton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "From the Rhynie chert, and the earliest clear evidence of arbuscular mycorrhizal symbiosis - land plants have always been partly fungal.",
+   "sz": 0.18,
+   "dt": "photosynthesis",
+   "hb": "rootless, in a hot-spring wetland",
+   "pbdb": {
+    "oid": "txn:55149",
+    "matched": "Aglaophyton",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 0,
+    "phylum": "Polysporangiomorpha",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Aglaophyton"
+   },
+   "aka": [
+    "Aglaophyton majus"
+   ]
+  },
+  "Araucaria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 170,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      170,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      0
+     ],
+     "in": [
+      "sa-s",
+      "sa-n",
+      "au",
+      "ng",
+      "nz",
+      "oc"
+     ]
+    },
+    {
+     "t": [
+      66,
+      30
+     ],
+     "in": [
+      "an"
+     ]
+    }
+   ],
+   "note": "Still living - monkey puzzle and Norfolk Island pine are the same genus that dominated Jurassic forests.",
+   "sz": 60.0,
+   "dt": "photosynthesis",
+   "hb": "emergent canopy tree",
+   "pbdb": {
+    "oid": "txn:56175",
+    "matched": "Araucaria",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 132,
+    "fea": 192.9,
+    "lla": 0,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Araucariaceae",
+    "genus": "Araucaria",
+    "regions": {
+     "af-s": 8,
+     "au": 69,
+     "eu": 2,
+     "sa-s": 23,
+     "in": 7,
+     "na-w": 8,
+     "ca": 1,
+     "an": 4,
+     "nz": 2,
+     "na-e": 8
+    }
+   },
+   "hab": [
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Araucariaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 230,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      230,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      0
+     ],
+     "in": [
+      "sa",
+      "au",
+      "ng",
+      "nz",
+      "oc",
+      "as-se"
+     ]
+    },
+    {
+     "t": [
+      66,
+      30
+     ],
+     "in": [
+      "an"
+     ]
+    },
+    {
+     "t": [
+      30,
+      5
+     ],
+     "in": [
+      "sou"
+     ]
+    },
+    {
+     "t": [
+      34,
+      5
+     ],
+     "in": [
+      "sou"
+     ]
+    }
+   ],
+   "note": "Monkey-puzzle and kauri relatives: worldwide in the Mesozoic, southern-hemisphere survivors today.",
+   "pbdb": {
+    "oid": "txn:54789",
+    "matched": "Araucariaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 2461,
+    "fea": 393.47,
+    "lla": 0,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Araucariaceae",
+    "regions": {
+     "na-w": 224,
+     "na-e": 63,
+     "af-s": 14,
+     "sa-s": 312,
+     "au": 293,
+     "eu": 352,
+     "gl": 2,
+     "na-n": 12,
+     "ca": 7,
+     "sa-n": 196,
+     "as-c": 102,
+     "an": 89,
+     "as-e": 83,
+     "as-se": 3,
+     "af-n": 6,
+     "as-w": 198,
+     "in": 267,
+     "ar": 32,
+     "as-n": 39,
+     "mg": 3,
+     "nz": 55,
+     "af-e": 28,
+     "af-w": 79
+    }
+   },
+   "rep": "Araucaria",
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Araucarioxylon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "araucaria",
+   "fad": 230,
+   "lad": 200,
+   "range": [
+    "na-w"
+   ],
+   "note": "The conifer whose logs make the Petrified Forest, transported and buried in seasonal river systems.",
+   "pbdb": {
+    "oid": "txn:161941",
+    "matched": "Araucarioxylon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 70,
+    "fea": 358.86,
+    "lla": 5.333,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Araucariaceae",
+    "genus": "Araucarioxylon",
+    "regions": {
+     "au": 6,
+     "eu": 3,
+     "na-w": 20,
+     "na-n": 1,
+     "ca": 4,
+     "sa-s": 3,
+     "as-w": 2,
+     "in": 31
+    }
+   },
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Araucariaceae"
+   },
+   "pbdb_ok": true,
+   "place_ok": true
+  },
+  "Archaefructus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "flower",
+   "fad": 125,
+   "lad": 121,
+   "range": [
+    "as-e"
+   ],
+   "note": "An aquatic Jehol plant that is among the earliest fossils confidently identified as a flowering plant.",
+   "sz": 0.5,
+   "dt": "photosynthesis",
+   "hb": "aquatic herb",
+   "pbdb": {
+    "oid": "txn:52852",
+    "matched": "Archaefructus",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Archaefructaceae",
+    "genus": "Archaefructus",
+    "regions": {
+     "as-e": 2
+    }
+   },
+   "hab": [
+    "lake",
+    "wetland"
+   ],
+   "w": 3
+  },
+  "Archaeocalamites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 360,
+   "lad": 320,
+   "range": [
+    "eu",
+    "in",
+    "na-e",
+    "sa-n"
+   ],
+   "note": "An early horsetail of the Mississippian wetlands, ancestral to the giant Calamites that would build the coal swamps.",
+   "pbdb": {
+    "oid": "txn:405339",
+    "matched": "Archaeocalamites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 358.86,
+    "lla": 298.9,
+    "phylum": "Sphenophyta",
+    "class": "Sphenopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Archaeocalamites",
+    "regions": {
+     "eu": 14,
+     "na-e": 2,
+     "na-w": 1,
+     "sa-n": 3,
+     "in": 2
+    }
+   }
+  },
+  "Archaeopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "progymnosperm",
+   "fad": 383,
+   "lad": 359,
+   "range": [
+    "euramerica",
+    "as-n",
+    "as-e",
+    "au",
+    "af-n",
+    "sa-n"
+   ],
+   "note": "The first plant with a woody trunk and a true leafy canopy -- effectively the first modern-looking tree.",
+   "sz": 30.0,
+   "dt": "photosynthesis",
+   "hb": "the first true forest tree: real wood, roots to ~1 m, a spreading crown",
+   "pbdb": {
+    "oid": "txn:249678",
+    "matched": "Archaeopteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 129,
+    "fea": 387.95,
+    "lla": 358.86,
+    "phylum": "Aneurophytophyta",
+    "class": "Archaeopteridopsida",
+    "order": "Archaeopteridales",
+    "family": "Archaeopteridaceae",
+    "genus": "Archaeopteris",
+    "regions": {
+     "na-e": 103,
+     "na-n": 4,
+     "na-w": 2,
+     "eu": 19,
+     "af-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Arecaceae (palms)": {
+   "rank": "family",
+   "realm": "land",
+   "form": "palm",
+   "fad": 95,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Palms. In the Eocene hothouse they grew at fifty degrees north beside crocodiles; their limit has been a frost line ever since.",
+   "pbdb": {
+    "oid": "txn:53807",
+    "matched": "Arecaceae",
+    "exact": false,
+    "rank": "family",
+    "extant": true,
+    "noc": 1679,
+    "fea": 237,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Arecaceae"
+   },
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   },
+   "pbdb_ok": true,
+   "lat": [
+    {
+     "t": [
+      95,
+      34
+     ],
+     "lat": [
+      0,
+      78
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      40
+     ]
+    }
+   ]
+  },
+  "Asteroxylon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 411,
+   "lad": 393,
+   "range": [
+    "eu"
+   ],
+   "note": "An early lycophyte with leaf-like enations along a branching stem, and rooting structures that are not yet true roots.",
+   "pbdb": {
+    "oid": "txn:405582",
+    "matched": "Asteroxylon",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 413.02,
+    "lla": 382.31,
+    "phylum": "Lycopodophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Asteroxylon",
+    "regions": {
+     "eu": 2,
+     "na-e": 1
+    }
+   }
+  },
+  "Azolla": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fern",
+   "fad": 80,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A floating freshwater fern whose Arctic Ocean blooms buried enough carbon to help end the Eocene hothouse.",
+   "pbdb": {
+    "oid": "txn:55880",
+    "matched": "Azolla",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 292,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Salviniales",
+    "family": "Salviniaceae",
+    "genus": "Azolla"
+   },
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      90
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      48
+     ]
+    }
+   ]
+  },
+  "Banksia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 56,
+   "lad": 0,
+   "range": [
+    "au"
+   ],
+   "note": "Banksias of the kwongan heath, one of the world's richest floras on the poorest soil.",
+   "pbdb": {
+    "oid": "txn:319966",
+    "matched": "Banksia",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 57,
+    "fea": 56,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Proteales",
+    "family": "Proteaceae",
+    "genus": "Banksia",
+    "regions": {
+     "au": 53,
+     "nz": 1,
+     "as-e": 3
+    }
+   },
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Proteales",
+    "family": "Proteaceae"
+   },
+   "pbdb_ok": true,
+   "hab": [
+    "forest",
+    "coast"
+   ]
+  },
+  "Baragwanathia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 427,
+   "lad": 393,
+   "range": [
+    "au",
+    "na-e"
+   ],
+   "note": "A lycophyte with real leaves, appearing surprisingly early in Australia and complicating every tidy story about plant evolution.",
+   "sz": 0.3,
+   "dt": "photosynthesis",
+   "hb": "creeping and upright shoots with true microphylls",
+   "pbdb": {
+    "oid": "txn:405708",
+    "matched": "Baragwanathia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 426.7,
+    "lla": 393.47,
+    "phylum": "Lycopodophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Baragwanathia",
+    "regions": {
+     "na-e": 4,
+     "as-se": 1,
+     "au": 4
+    }
+   }
+  },
+  "Bennettitales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "cycad",
+   "fad": 250,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Cycad-like plants with tight, flower-like cones that were probably insect pollinated. An independent Mesozoic run at the flower that left no descendants.",
+   "pbdb": {
+    "oid": "txn:55214",
+    "matched": "Bennettitales",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 3193,
+    "fea": 303.7,
+    "lla": 27.3,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Bennettitales"
+   }
+  },
+  "Betula": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "holarctic"
+   ],
+   "note": "Birch: a pioneer tree that follows retreating ice, and one of the first to colonise ground left bare by a glacier.",
+   "pbdb": {
+    "oid": "txn:55294",
+    "matched": "Betula",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 313,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fagales",
+    "family": "Betulaceae",
+    "genus": "Betula",
+    "regions": {
+     "na-w": 88,
+     "as-e": 27,
+     "eu": 74,
+     "as-n": 25,
+     "na-n": 4,
+     "na-e": 52,
+     "as-c": 4,
+     "as-w": 1,
+     "in": 32
+    }
+   },
+   "hab": [
+    "forest",
+    "tundra"
+   ],
+   "lat": [
+    35,
+    80
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fagales",
+    "family": "Betulaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Botrychiopsis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 300,
+   "lad": 280,
+   "range": [
+    "af-s",
+    "in",
+    "sa-s"
+   ],
+   "note": "A cold-climate seed plant of the floras that recolonised bare ground as the Karoo ice sheets melted.",
+   "pbdb": {
+    "oid": "txn:405930",
+    "matched": "Botrychiopsis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 23,
+    "fea": 326.9,
+    "lla": 254.14,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Filicales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Botrychiopsis",
+    "regions": {
+     "af-s": 2,
+     "sa-s": 12,
+     "in": 8,
+     "as-w": 1
+    }
+   }
+  },
+  "Bouteloua gracilis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "grass",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca"
+   ],
+   "note": "Blue grama, the shortgrass prairie's dominant sod-former.",
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "box": [
+    [
+     -118,
+     -92,
+     20,
+     54
+    ]
+   ]
+  },
+  "Bromeliaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "bromeliad",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "sa-s",
+    "na-e"
+   ],
+   "note": "Epiphytic bromeliads holding tank-pools in the canopy, each its own small ecosystem.",
+   "pbdb": {
+    "oid": "txn:55818",
+    "matched": "Bromeliaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 1,
+    "fea": 66,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Bromeliaceae",
+    "regions": {
+     "in": 1
+    }
+   },
+   "hab": [
+    "rainforest",
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Bromeliaceae"
+   },
+   "pbdb_ok": true
+  },
+  "C4 grasses": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "grass",
+   "fad": 8,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Grasses using the C4 photosynthetic pathway, which is efficient in warm, dry, low-CO2 air. They build tropical savanna from about 8 Ma.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "aka": [
+    "Poaceae (C4 grasses)",
+    "Poaceae (C4 lineages)",
+    "Poaceae (C4)"
+   ]
+  },
+  "Calamites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 345,
+   "lad": 252,
+   "range": [
+    "euramerica",
+    "as-e",
+    "as-c",
+    "as-se",
+    "af-n",
+    "sa-n"
+   ],
+   "note": "Tree-sized horsetails forming dense stands along channel margins.",
+   "sz": 12.0,
+   "dt": "photosynthesis",
+   "hb": "clonal thickets on levees and channel margins",
+   "pbdb": {
+    "oid": "txn:125728",
+    "matched": "Calamites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 349,
+    "fea": 330.3,
+    "lla": 170.9,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Equisetales",
+    "family": "Calamitaceae",
+    "genus": "Calamites",
+    "regions": {
+     "na-w": 24,
+     "na-e": 151,
+     "eu": 53,
+     "ar": 3,
+     "af-s": 16,
+     "ca": 3,
+     "as-w": 1,
+     "as-c": 16,
+     "as-e": 70,
+     "as-n": 3,
+     "as-se": 5,
+     "af-n": 2,
+     "na-n": 1,
+     "an": 1
+    }
+   },
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "w": 3
+  },
+  "Calamophyton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 395,
+   "lad": 380,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "A cladoxylopsid tree from the oldest forest floors known. It shed whole branches rather than leaves, and its roots began cracking rock into soil and drawing CO2 out of the air.",
+   "pbdb": {
+    "oid": "txn:249932",
+    "matched": "Calamophyton",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 419.62,
+    "lla": 358.86,
+    "phylum": "Tracheophyta",
+    "class": "Cladoxylopsida",
+    "order": "Pseudosporochnales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Calamophyton",
+    "regions": {
+     "na-e": 2,
+     "eu": 10
+    }
+   }
+  },
+  "Callipteris (Autunia)": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 300,
+   "lad": 270,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "The seed fern that marks the Permian red beds across Euramerica: the flora of a continent that had lost its swamps.",
+   "pbdb": {
+    "oid": "txn:404040",
+    "matched": "Callipteris",
+    "exact": false,
+    "rank": "genus",
+    "extant": false,
+    "noc": 366,
+    "fea": 323.4,
+    "lla": 251.902,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae",
+    "genus": "Callipteris",
+    "regions": {
+     "na-w": 21,
+     "na-e": 26,
+     "eu": 196,
+     "ca": 1,
+     "as-c": 27,
+     "as-e": 37,
+     "as-w": 1,
+     "af-n": 11,
+     "as-n": 46
+    }
+   }
+  },
+  "Calluna vulgaris": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "Heather: the low evergreen shrub that makes the moorland of Atlantic Europe, on poor, acid, often burnt ground.",
+   "pbdb": {
+    "oid": "txn:434787",
+    "matched": "Calluna",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 2,
+    "fea": 5.333,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "Dicotyledoneae",
+    "order": "Ericales",
+    "family": "Ericaceae",
+    "genus": "Calluna",
+    "regions": {
+     "eu": 2
+    }
+   },
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Ericaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     -10,
+     40,
+     40,
+     71
+    ]
+   ],
+   "hab": [
+    "coast",
+    "alpine",
+    "forest"
+   ]
+  },
+  "Cathaysiodendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 300,
+   "lad": 252,
+   "range": [
+    "as-e"
+   ],
+   "note": "A lycopsid tree of the Cathaysian coal forests of South China -- the rainforests that kept growing after the Euramerican ones collapsed.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Lycophyta",
+    "class": "Lycopsida",
+    "order": "Lepidodendrales",
+    "family": ""
+   }
+  },
+  "Ceiba pentandra": {
+   "rank": "species",
+   "realm": "land",
+   "form": "baobab",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "af-w"
+   ],
+   "note": "The kapok, an emergent tree standing above the canopy with buttress roots metres tall.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malvales",
+    "family": "Malvaceae"
+   },
+   "no_own_icon": true
+  },
+  "Cheirolepidiaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 230,
+   "lad": 60,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A drought-tolerant conifer family whose Classopollis pollen swamps Jurassic and Cretaceous lowland sediments: the canopy many sauropods fed in.",
+   "pbdb": {
+    "oid": "txn:56316",
+    "matched": "Cheirolepidiaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 1074,
+    "fea": 259.857,
+    "lla": 33.9,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cheirolepidiaceae"
+   },
+   "lat": [
+    0,
+    55
+   ]
+  },
+  "Cooksonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 433,
+   "lad": 393,
+   "range": [
+    "eu",
+    "na-e",
+    "sa-s"
+   ],
+   "note": "A few centimetres of leafless forking stem with a spore capsule on top: the first vascular plant, and the ancestor of every forest.",
+   "sz": 0.06,
+   "dt": "photosynthesis",
+   "hb": "tiny dichotomising axes in damp lowlands",
+   "pbdb": {
+    "oid": "txn:391161",
+    "matched": "Cooksonia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 65,
+    "fea": 443.1,
+    "lla": 382.31,
+    "phylum": "Psilophytophyta",
+    "class": "Psilophytopsida",
+    "order": "Psilophytales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cooksonia",
+    "regions": {
+     "eu": 46,
+     "na-n": 1,
+     "sa-s": 11,
+     "na-e": 5,
+     "na-w": 1,
+     "af-n": 1
+    }
+   },
+   "w": 3
+  },
+  "Cordaites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 325,
+   "lad": 252,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "in",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "Strap-leaved coniferophytes up to thirty metres tall on the drier ground beyond the mires: the first vegetation that would read as forest rather than swamp.",
+   "sz": 30.0,
+   "dt": "photosynthesis",
+   "hb": "tree with strap-shaped leaves; coastal and upland",
+   "pbdb": {
+    "oid": "txn:125753",
+    "matched": "Cordaites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 620,
+    "fea": 382.31,
+    "lla": 168.2,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Cordaitanthales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cordaites",
+    "regions": {
+     "na-w": 13,
+     "na-e": 74,
+     "ar": 3,
+     "eu": 73,
+     "af-s": 8,
+     "au": 10,
+     "as-e": 195,
+     "ca": 6,
+     "gl": 1,
+     "as-w": 2,
+     "sa-s": 15,
+     "as-c": 31,
+     "in": 67,
+     "as-se": 10,
+     "af-n": 4,
+     "as-n": 107,
+     "sa-n": 1
+    }
+   }
+  },
+  "Cyperus papyrus": {
+   "rank": "species",
+   "realm": "fresh",
+   "form": "sedge",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "af-e",
+    "af-w",
+    "af-s",
+    "af-n",
+    "mg"
+   ],
+   "note": "Papyrus sedge, forming floating swamps along African rivers and lake margins.",
+   "pbdb": {
+    "oid": "txn:488180",
+    "matched": "Cyperus papyrus",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Cyperaceae",
+    "genus": "Cyperus"
+   },
+   "hab": [
+    "wetland",
+    "lake",
+    "river"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Deschampsia antarctica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "grass",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "an",
+    "sa-s"
+   ],
+   "note": "Antarctic hairgrass, one of just two flowering plants on the continent.",
+   "hab": [
+    "tundra",
+    "coast"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   }
+  },
+  "Dicroidium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 252,
+   "lad": 201,
+   "range": [
+    "af-s",
+    "an",
+    "ar",
+    "au",
+    "in",
+    "sa-s"
+   ],
+   "note": "The forked-leaf seed fern that defines Gondwanan Triassic forest and marks the end of the coal gap.",
+   "sz": 10.0,
+   "dt": "photosynthesis",
+   "hb": "forked-frond tree and shrub",
+   "pbdb": {
+    "oid": "txn:157218",
+    "matched": "Dicroidium",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 190,
+    "fea": 266.9,
+    "lla": 143.1,
+    "phylum": "Tracheophyta",
+    "class": "Gymnospermopsida",
+    "order": "Corystospermales",
+    "family": "Corystospermaceae",
+    "genus": "Dicroidium",
+    "regions": {
+     "af-s": 55,
+     "as-w": 1,
+     "an": 12,
+     "sa-s": 63,
+     "au": 22,
+     "as-e": 1,
+     "in": 30,
+     "mg": 1,
+     "as-n": 1,
+     "ar": 4
+    }
+   },
+   "w": 3
+  },
+  "Dipterocarpaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 55,
+   "lad": 0,
+   "range": [
+    "in",
+    "as-se",
+    "as-e",
+    "ng"
+   ],
+   "note": "Dipterocarps, which dominate South-East Asian rainforest to a degree no family manages anywhere else, and mast-fruit across whole regions at once.",
+   "pbdb": {
+    "oid": "txn:55595",
+    "matched": "Dipterocarpaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 106,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Malvales",
+    "family": "Dipterocarpaceae",
+    "regions": {
+     "as-se": 16,
+     "in": 81,
+     "as-e": 1
+    }
+   },
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malvales",
+    "family": "Dipterocarpaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Elkinsia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 372,
+   "lad": 359,
+   "range": [
+    "na-e"
+   ],
+   "note": "One of the earliest seed plants; the seed is what eventually lets vegetation leave the water's edge.",
+   "sz": 1.0,
+   "dt": "photosynthesis",
+   "hb": "small woody plant",
+   "pbdb": {
+    "oid": "txn:249673",
+    "matched": "Elkinsia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 372.15,
+    "lla": 358.86,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Elkinsia",
+    "regions": {
+     "na-e": 1
+    }
+   }
+  },
+  "Eospermatopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 388,
+   "lad": 380,
+   "range": [
+    "na-e"
+   ],
+   "note": "The tree of the Gilboa 'forest' in New York - the oldest known forest, of fern-like Wattieza trees.",
+   "pbdb": {
+    "oid": "txn:249925",
+    "matched": "Eospermatopteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 393.47,
+    "lla": 372.15,
+    "phylum": "Tracheophyta",
+    "class": "Cladoxylopsida",
+    "order": "Pseudosporochnales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Eospermatopteris",
+    "regions": {
+     "na-e": 16
+    }
+   }
+  },
+  "Eucalyptus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "eucalypt",
+   "fad": 52,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      52,
+      40
+     ],
+     "in": [
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      45,
+      0
+     ],
+     "in": [
+      "au"
+     ]
+    },
+    {
+     "t": [
+      10,
+      0
+     ],
+     "in": [
+      "ng",
+      "as-se"
+     ]
+    }
+   ],
+   "note": "Gum trees. Eucalypts and charcoal rise together through the Miocene record: fire and aridity remaking a rainforest continent. Their oldest fossils, oddly, are from Patagonia.",
+   "pbdb": {
+    "oid": "txn:261144",
+    "matched": "Eucalyptus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 100,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "Dicotyledoneae",
+    "order": "Myrtales",
+    "family": "Myrtaceae",
+    "genus": "Eucalyptus",
+    "regions": {
+     "na-w": 1,
+     "sa-s": 18,
+     "au": 62,
+     "eu": 1,
+     "na-e": 9,
+     "in": 5,
+     "as-c": 2,
+     "as-e": 2
+    }
+   },
+   "w": 3,
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Myrtales",
+    "family": "Myrtaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Fagus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "as-e",
+    "na-e",
+    {
+     "t": [
+      50,
+      5
+     ],
+     "in": [
+      "na-w",
+      "as-n",
+      "gl"
+     ]
+    }
+   ],
+   "note": "Beech, a dominant temperate deciduous tree casting shade too deep for most competitors.",
+   "pbdb": {
+    "oid": "txn:55969",
+    "matched": "Fagus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 161,
+    "fea": 106.3,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fagales",
+    "family": "Fagaceae",
+    "genus": "Fagus",
+    "regions": {
+     "as-e": 40,
+     "eu": 80,
+     "as-n": 7,
+     "na-w": 14,
+     "na-e": 8,
+     "sa-s": 8,
+     "ca": 1,
+     "as-w": 1
+    }
+   },
+   "hab": [
+    "forest"
+   ],
+   "lat": [
+    30,
+    65
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fagales",
+    "family": "Fagaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       100,
+       123,
+       23,
+       33.5
+      ],
+      [
+       127,
+       146,
+       30,
+       43.5
+      ],
+      [
+       -10,
+       52,
+       36,
+       60
+      ],
+      [
+       -98,
+       -60,
+       28,
+       48
+      ],
+      [
+       -101,
+       -96,
+       18,
+       24
+      ]
+     ]
+    }
+   ]
+  },
+  "Gangamopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 299,
+   "lad": 270,
+   "range": [
+    "af-s",
+    "an",
+    "au",
+    "in",
+    "sa-s"
+   ],
+   "note": "As glossopteris but with non-midribbed leaves",
+   "sz": 15.0,
+   "dt": "photosynthesis",
+   "hb": "as Glossopteris but with non-midribbed leaves",
+   "pbdb": {
+    "oid": "txn:408669",
+    "matched": "Gangamopteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 326,
+    "fea": 315.2,
+    "lla": 247,
+    "phylum": "Peltaspermophyta",
+    "class": "Dictyopteridiopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Gangamopteris",
+    "regions": {
+     "ca": 1,
+     "in": 191,
+     "an": 20,
+     "sa-s": 61,
+     "au": 28,
+     "as-e": 4,
+     "mg": 4,
+     "af-s": 10,
+     "sa-n": 1,
+     "af-e": 5,
+     "af-w": 1
+    }
+   }
+  },
+  "Gigantopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 285,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se"
+   ],
+   "note": "A Cathaysian seed plant with broad net-veined leaves that look startlingly like an angiosperm's, 150 million years early.",
+   "sz": 3.0,
+   "dt": "photosynthesis",
+   "hb": "climbing or scrambling, with large net-veined leaves",
+   "pbdb": {
+    "oid": "txn:280710",
+    "matched": "Gigantopteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 97,
+    "fea": 323.4,
+    "lla": 251.1,
+    "phylum": "Embryophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Gigantopteridales",
+    "family": "Gigantopteridaceae",
+    "genus": "Gigantopteris",
+    "regions": {
+     "na-e": 19,
+     "ca": 1,
+     "as-w": 1,
+     "as-c": 3,
+     "as-e": 67,
+     "as-se": 5,
+     "ar": 1
+    }
+   },
+   "place_ok": true
+  },
+  "Ginkgo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ginkgo",
+   "fad": 170,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      170,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      2.6
+     ],
+     "in": [
+      "holarctic"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
+   ],
+   "note": "One species survives; the genus was near-global in the Jurassic and Cretaceous.",
+   "sz": 35.0,
+   "dt": "photosynthesis",
+   "hb": "deciduous tree",
+   "pbdb": {
+    "oid": "txn:55067",
+    "matched": "Ginkgo",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 616,
+    "fea": 251.902,
+    "lla": 0.774,
+    "phylum": "Ginkgophyta",
+    "class": "Ginkgoopsida",
+    "order": "Ginkgoales",
+    "family": "Ginkgoaceae",
+    "genus": "Ginkgo",
+    "regions": {
+     "na-w": 71,
+     "gl": 2,
+     "na-n": 23,
+     "eu": 55,
+     "as-e": 61,
+     "as-c": 153,
+     "au": 9,
+     "as-n": 205,
+     "as-w": 17,
+     "in": 14,
+     "sa-s": 1
+    }
+   },
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       104,
+       122,
+       26,
+       32
+      ]
+     ]
+    }
+   ]
+  },
+  "Ginkgoales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "ginkgo",
+   "fad": 270,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      270,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      2.6
+     ],
+     "in": [
+      "holarctic"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
+   ],
+   "note": "The ginkgo lineage at its widest, in mid-latitude forests on nearly every continent. One species, Ginkgo biloba, is still alive.",
+   "pbdb": {
+    "oid": "txn:56138",
+    "matched": "Ginkgoales",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 1670,
+    "fea": 298.9,
+    "lla": 0.774,
+    "phylum": "Ginkgophyta",
+    "class": "Ginkgoopsida",
+    "order": "Ginkgoales",
+    "regions": {
+     "na-w": 85,
+     "na-e": 5,
+     "af-s": 63,
+     "eu": 235,
+     "gl": 20,
+     "na-n": 31,
+     "as-e": 290,
+     "as-c": 352,
+     "sa-s": 28,
+     "au": 16,
+     "as-n": 457,
+     "as-w": 34,
+     "in": 32,
+     "ar": 3,
+     "mg": 2,
+     "af-n": 3,
+     "af-e": 1,
+     "af-w": 1,
+     "nz": 2,
+     "ca": 1
+    }
+   },
+   "rep": "Ginkgo",
+   "pbdb_ok": true
+  },
+  "Glossopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e",
+    "an",
+    "au",
+    "in",
+    "sa-s",
+    "sa-n",
+    "mg",
+    "nz"
+   ],
+   "note": "A tongue-leaved seed fern blanketing Gondwana, whose distribution across five now-separate continents was early evidence for continental drift.",
+   "sz": 30.0,
+   "dt": "photosynthesis",
+   "hb": "woody tree in very wet soils, like a modern bald cypress; conical, widely spaced crowns to exploit low-angle polar light",
+   "pbdb": {
+    "oid": "txn:157151",
+    "matched": "Glossopteris",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 1329,
+    "fea": 315.2,
+    "lla": 143.1,
+    "phylum": "Peltaspermophyta",
+    "class": "Arberiopsida",
+    "order": "Arberiales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Glossopteris",
+    "regions": {
+     "af-s": 90,
+     "ca": 1,
+     "as-w": 2,
+     "an": 76,
+     "sa-s": 145,
+     "au": 195,
+     "sa-n": 1,
+     "as-e": 12,
+     "as-se": 1,
+     "in": 748,
+     "mg": 12,
+     "af-e": 30,
+     "ar": 9,
+     "ng": 3,
+     "af-w": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "w": 3
+  },
+  "Heliamphora": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pitcherplant",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "Sun-pitcher plants trapping insects on nutrient-starved sandstone summits.",
+   "hab": [
+    "alpine",
+    "wetland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Sarraceniaceae"
+   },
+   "box": [
+    [
+     -67.5,
+     -59,
+     1,
+     7
+    ]
+   ]
+  },
+  "Kobresia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sedge",
+   "fad": 15,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "in",
+    "as-n",
+    "eu",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Tough, mat-forming sedges whose turf makes the vast alpine meadows of high Asia and the Arctic.",
+   "hab": [
+    "alpine",
+    "tundra",
+    "grassland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae"
+   },
+   "box": [
+    [
+     66,
+     106,
+     26,
+     52
+    ],
+    [
+     -180,
+     180,
+     58,
+     84
+    ],
+    [
+     -125,
+     -104,
+     36,
+     58
+    ],
+    [
+     5,
+     27,
+     42,
+     49
+    ]
+   ]
+  },
+  "Larix": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "na-e",
+    "na-w",
+    "eu",
+    "as-n",
+    "as-e",
+    "as-c"
+   ],
+   "note": "Larch -- the deciduous conifer, dropping its needles to survive the extreme continental winters of interior Siberia.",
+   "pbdb": {
+    "oid": "txn:83628",
+    "matched": "Larix",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 30,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Larix",
+    "regions": {
+     "na-n": 4,
+     "na-w": 10,
+     "na-e": 7,
+     "eu": 1,
+     "as-e": 1,
+     "in": 7
+    }
+   },
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "lat": [
+    40,
+    75
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Larix decidua": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "eu"
+   ],
+   "note": "The European larch, a deciduous conifer at the timberline.",
+   "pbdb": {
+    "oid": "txn:83628",
+    "matched": "Larix",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 30,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Larix",
+    "regions": {
+     "na-n": 4,
+     "na-w": 10,
+     "na-e": 7,
+     "eu": 1,
+     "as-e": 1,
+     "in": 7
+    }
+   },
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     5.5,
+     16.5,
+     43.5,
+     48.2
+    ],
+    [
+     17,
+     26,
+     45.5,
+     50.5
+    ]
+   ]
+  },
+  "Larix gmelinii": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "as-e"
+   ],
+   "note": "Dahurian larch, the only tree that forms forest on continuous permafrost.",
+   "pbdb": {
+    "oid": "txn:83628",
+    "matched": "Larix",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 30,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Larix",
+    "regions": {
+     "na-n": 4,
+     "na-w": 10,
+     "na-e": 7,
+     "eu": 1,
+     "as-e": 1,
+     "in": 7
+    }
+   },
+   "hab": [
+    "forest",
+    "tundra"
+   ],
+   "lat": [
+    50,
+    75
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     95,
+     165,
+     47,
+     73
+    ]
+   ]
+  },
+  "Lepidodendrales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 360,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "eu",
+    "na-e",
+    "na-n",
+    "na-w"
+   ],
+   "note": "Scale trees beginning their takeover of coastal mires -- the coal machine is warming up.",
+   "pbdb": {
+    "oid": "txn:157277",
+    "matched": "Lepidodendrales",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 491,
+    "fea": 393.47,
+    "lla": 205.7,
+    "phylum": "Lycophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Lepidodendrales",
+    "regions": {
+     "na-e": 263,
+     "eu": 74,
+     "na-w": 17,
+     "af-s": 1,
+     "as-w": 4,
+     "au": 3,
+     "as-c": 9,
+     "as-e": 96,
+     "as-se": 4,
+     "as-n": 1,
+     "ar": 1,
+     "na-n": 10,
+     "sa-s": 2,
+     "ca": 1,
+     "in": 2
+    }
+   }
+  },
+  "Lepidodendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 345,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se",
+    {
+     "t": [
+      345,
+      295
+     ],
+     "in": [
+      "euramerica",
+      "as-c",
+      "af-n"
+     ]
+    }
+   ],
+   "note": "A thirty-metre lycopsid that grew fast, reproduced once and toppled -- the principal ingredient of coal.",
+   "sz": 50.0,
+   "dt": "photosynthesis",
+   "hb": "unbranched pole with a crown, DETERMINATE growth - grew, reproduced once, died",
+   "pbdb": {
+    "oid": "txn:125629",
+    "matched": "Lepidodendron",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 313,
+    "fea": 387.95,
+    "lla": 205.7,
+    "phylum": "Lycophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Lepidodendrales",
+    "family": "Lepidodendraceae",
+    "genus": "Lepidodendron",
+    "regions": {
+     "na-e": 145,
+     "eu": 41,
+     "na-w": 11,
+     "af-s": 1,
+     "as-w": 2,
+     "au": 3,
+     "as-c": 9,
+     "as-e": 86,
+     "as-se": 4,
+     "ar": 1,
+     "na-n": 6,
+     "sa-s": 2,
+     "in": 2
+    }
+   },
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "w": 3
+  },
+  "Lobatannularia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 290,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se",
+    "as-c"
+   ],
+   "note": "A horsetail relative with whorls of broad leaves, characteristic of the Cathaysian flora.",
+   "pbdb": {
+    "oid": "txn:404563",
+    "matched": "Lobatannularia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 177,
+    "fea": 298.9,
+    "lla": 168.2,
+    "phylum": "Sphenophyta",
+    "class": "Sphenopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Lobatannularia",
+    "regions": {
+     "ar": 2,
+     "as-e": 129,
+     "na-e": 1,
+     "ca": 1,
+     "gl": 8,
+     "eu": 2,
+     "as-w": 4,
+     "as-c": 11,
+     "as-se": 7,
+     "in": 8,
+     "as-n": 4
+    }
+   }
+  },
+  "Lobelia rhynchopetalum": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-e"
+   ],
+   "note": "Giant rosette lobelias of the Afroalpine moorland.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Campanulaceae"
+   },
+   "box": [
+    [
+     36,
+     42,
+     6,
+     14.5
+    ]
+   ]
+  },
+  "Magnoliopsida": {
+   "rank": "class",
+   "realm": "land",
+   "form": "flower",
+   "fad": 135,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Flowering plants go from rare to dominant inside forty million years, pulling pollinating insects, fruit-eating birds and the modern structure of forests along with them.",
+   "pbdb": {
+    "oid": "txn:55217",
+    "matched": "Magnoliopsida",
+    "exact": true,
+    "rank": "class",
+    "extant": true,
+    "noc": 2799,
+    "fea": 121.4,
+    "lla": 0.129,
+    "phylum": "Spermatophyta",
+    "class": "Magnoliopsida"
+   },
+   "pbdb_ok": true,
+   "aka": [
+    "Magnoliopsida (flowering plants)"
+   ]
+  },
+  "Marchantiophyta": {
+   "rank": "phylum",
+   "realm": "land",
+   "form": "moss",
+   "fad": 470,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Liverwort-grade plants -- the first land vegetation, known from cryptospores rather than bodies.",
+   "pbdb": {
+    "oid": "txn:55120",
+    "matched": "Marchantiophyta",
+    "exact": true,
+    "rank": "phylum",
+    "extant": true,
+    "noc": 295,
+    "fea": 247,
+    "lla": 13.82,
+    "phylum": "Marchantiophyta"
+   },
+   "pbdb_ok": true
+  },
+  "Mauritia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The moriche palm, forming swamp stands across lowland tropical South America; its pollen marks the great Miocene wetland of western Amazonia.",
+   "hab": [
+    "wetland",
+    "rainforest",
+    "river"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   },
+   "no_own_icon": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -80,
+       -40,
+       -20,
+       11
+      ]
+     ]
+    }
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
+  },
+  "Medullosa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 325,
+   "lad": 290,
+   "range": [
+    "eu",
+    "na-e"
+   ],
+   "note": "Produced the largest pollen grains known.",
+   "sz": 10.0,
+   "dt": "photosynthesis",
+   "hb": "scrambling or self-supporting, with very large fronds",
+   "pbdb": {
+    "oid": "txn:410787",
+    "matched": "Medullosa",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 25,
+    "fea": 318.7,
+    "lla": 306,
+    "phylum": "Tracheophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Medullosaceae",
+    "genus": "Medullosa",
+    "regions": {
+     "na-e": 16,
+     "eu": 9
+    }
+   }
+  },
+  "Medullosales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 340,
+   "lad": 255,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-se",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Seed ferns with enormous fronds and the largest seeds of the Palaeozoic.",
+   "pbdb": {
+    "oid": "txn:157238",
+    "matched": "Medullosales",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 288,
+    "fea": 382.31,
+    "lla": 143.1,
+    "phylum": "Cycadophyta",
+    "class": "Cycadopsida",
+    "order": "Trigonocarpales",
+    "regions": {
+     "na-w": 14,
+     "na-e": 107,
+     "eu": 45,
+     "na-n": 2,
+     "ca": 1,
+     "as-w": 4,
+     "as-c": 11,
+     "as-e": 56,
+     "as-se": 6,
+     "af-n": 2,
+     "as-n": 35,
+     "sa-n": 2,
+     "ar": 1,
+     "in": 2
+    }
+   }
+  },
+  "Metasequoia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "redwood",
+   "fad": 100,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      100,
+      2.6
+     ],
+     "in": [
+      "na-w",
+      "na-n",
+      "na-e",
+      "gl",
+      "eu",
+      "as-n",
+      "as-e"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
+   ],
+   "note": "The dawn redwood, a conifer that drops its needles: it grew inside the Arctic Circle in the Paleocene warmth, and was thought extinct until living trees were found in central China in the 1940s.",
+   "sz": 45.0,
+   "dt": "photosynthesis",
+   "hb": "deciduous canopy tree, forming high-latitude forests",
+   "pbdb": {
+    "oid": "txn:55255",
+    "matched": "Metasequoia",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 235,
+    "fea": 100.5,
+    "lla": 2.58,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": "Metasequoia",
+    "regions": {
+     "na-w": 183,
+     "as-e": 41,
+     "as-n": 6,
+     "na-n": 2,
+     "eu": 1,
+     "as-c": 2
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       107,
+       110.5,
+       29,
+       31.5
+      ]
+     ]
+    }
+   ]
+  },
+  "Neocalamites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 252,
+   "lad": 165,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-w",
+    "eu",
+    "gl",
+    "na-e",
+    "sa-s"
+   ],
+   "note": "A large Triassic and Jurassic horsetail, successor to the Calamites of the Carboniferous swamps.",
+   "pbdb": {
+    "oid": "txn:288242",
+    "matched": "Neocalamites",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 550,
+    "fea": 298.9,
+    "lla": 143.1,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Equisetales",
+    "family": "Calamitaceae",
+    "genus": "Neocalamites",
+    "regions": {
+     "na-w": 2,
+     "na-e": 11,
+     "gl": 11,
+     "na-n": 2,
+     "eu": 47,
+     "as-c": 146,
+     "an": 4,
+     "sa-s": 14,
+     "au": 4,
+     "as-e": 223,
+     "as-n": 40,
+     "as-se": 8,
+     "af-n": 1,
+     "as-w": 27,
+     "ar": 2,
+     "in": 1
+    }
+   }
+  },
+  "Noeggerathiopsis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "in",
+    "au",
+    "af-s",
+    "sa-s",
+    "an"
+   ],
+   "note": "A strap-leaved cordaitalean of the Glossopteris flora, growing beside the seed ferns in the cool-temperate forests of Permian Gondwana.",
+   "pbdb": {
+    "oid": "txn:404014",
+    "matched": "Noeggerathiopsis",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 336,
+    "fea": 323.4,
+    "lla": 205.7,
+    "phylum": "Gymnospermae",
+    "class": "Cordaitopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cordaitaceae",
+    "genus": "Noeggerathiopsis",
+    "regions": {
+     "af-s": 11,
+     "na-w": 3,
+     "an": 6,
+     "sa-s": 26,
+     "au": 17,
+     "as-e": 34,
+     "as-c": 32,
+     "as-n": 148,
+     "in": 21,
+     "mg": 4,
+     "eu": 25,
+     "af-e": 7,
+     "af-w": 2
+    }
+   },
+   "place_ok": true
+  },
+  "Nothofagus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 83,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      83,
+      0
+     ],
+     "in": [
+      "sa-s",
+      "au",
+      "nz",
+      "ng"
+     ]
+    },
+    {
+     "t": [
+      83,
+      14
+     ],
+     "in": [
+      "an"
+     ]
+    }
+   ],
+   "note": "Southern beech forest growing on Antarctica at high southern latitudes -- forest on a continent now under ice.",
+   "sz": 40.0,
+   "dt": "photosynthesis",
+   "hb": "canopy tree of cool temperate rainforest",
+   "pbdb": {
+    "oid": "txn:250689",
+    "matched": "Nothofagus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 370,
+    "fea": 83.6,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fagales",
+    "family": "Nothofagaceae",
+    "genus": "Nothofagus",
+    "regions": {
+     "an": 249,
+     "sa-s": 33,
+     "au": 80,
+     "nz": 8
+    }
+   },
+   "hab": [
+    "alpine",
+    "forest",
+    "tundra"
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fagales",
+    "family": "Nothofagaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Nymphaeales": {
+   "rank": "order",
+   "realm": "fresh",
+   "form": "waterlily",
+   "fad": 125,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Water lilies -- one of the earliest-branching flowering plant lineages, and among the first angiosperms in the record.",
+   "pbdb": {
+    "oid": "txn:54894",
+    "matched": "Nymphaeales",
+    "exact": true,
+    "rank": "order",
+    "extant": true,
+    "noc": 355,
+    "fea": 125.77,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Nymphaeales"
+   },
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "pbdb_ok": true,
+   "lat": [
+    {
+     "t": [
+      250,
+      34
+     ],
+     "lat": [
+      0,
+      85
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      66
+     ]
+    }
+   ]
+  },
+  "Nypa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 70,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      70,
+      34
+     ],
+     "in": [
+      "eu",
+      "na-e",
+      "ca",
+      "sa-n",
+      "af-n",
+      "in",
+      "as-se",
+      "au"
+     ]
+    },
+    {
+     "t": [
+      70,
+      20
+     ],
+     "in": [
+      "af-w"
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "in": [
+      "in",
+      "as-se",
+      "ng",
+      "au"
+     ]
+    }
+   ],
+   "note": "A mangrove palm whose pollen turns up in Eocene England and Belgium. For a while the tropics reached far enough north to put mangroves in the North Sea.",
+   "pbdb": {
+    "oid": "txn:317380",
+    "matched": "Nypa",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 50,
+    "fea": 72.2,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Arecaceae",
+    "genus": "Nypa",
+    "regions": {
+     "eu": 33,
+     "au": 2,
+     "af-n": 1,
+     "in": 9,
+     "na-e": 4
+    }
+   },
+   "hab": [
+    "coast",
+    "wetland"
+   ],
+   "pbdb_ok": true
+  },
+  "Olea laperrinei": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "af-n"
+   ],
+   "note": "The Laperrine's olive, a relict of wetter Sahara clinging to the massif's heights.",
+   "pbdb": {
+    "oid": "txn:319869",
+    "matched": "Olea",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 79,
+    "fea": 48.07,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Lamiales",
+    "family": "Oleaceae",
+    "genus": "Olea",
+    "regions": {
+     "eu": 42,
+     "af-e": 10,
+     "af-s": 3,
+     "au": 21,
+     "in": 3
+    }
+   },
+   "hab": [
+    "alpine",
+    "desert"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Oleaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     3,
+     10,
+     18,
+     27
+    ]
+   ]
+  },
+  "Picea": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "eu",
+    "as-w",
+    "as-c",
+    "as-e",
+    "as-n",
+    {
+     "t": [
+      60,
+      2.6
+     ],
+     "in": [
+      "gl"
+     ]
+    }
+   ],
+   "note": "Spruce, a defining conifer of the boreal forest.",
+   "pbdb": {
+    "oid": "txn:83629",
+    "matched": "Picea",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 346,
+    "fea": 168.2,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Picea",
+    "regions": {
+     "as-e": 17,
+     "eu": 46,
+     "na-w": 58,
+     "as-n": 38,
+     "na-n": 126,
+     "na-e": 30,
+     "as-c": 4,
+     "as-w": 1,
+     "in": 22
+    }
+   },
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "lat": [
+    35,
+    75
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Picea mariana": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Black spruce, the tree of cold, wet North American muskeg, able to root into sphagnum.",
+   "pbdb": {
+    "oid": "txn:450997",
+    "matched": "Picea mariana",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 2,
+    "fea": 7.246,
+    "lla": 0.0117,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Picea",
+    "regions": {
+     "na-e": 1,
+     "na-n": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     -165,
+     -53,
+     41,
+     69
+    ]
+   ]
+  },
+  "Picea obovata": {
+   "rank": "species",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-n",
+    "eu"
+   ],
+   "note": "Siberian spruce, the taiga's dominant tree across the range.",
+   "pbdb": {
+    "oid": "txn:83629",
+    "matched": "Picea",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 346,
+    "fea": 168.2,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Picea",
+    "regions": {
+     "as-e": 17,
+     "eu": 46,
+     "na-w": 58,
+     "as-n": 38,
+     "na-n": 126,
+     "na-e": 30,
+     "as-c": 4,
+     "as-w": 1,
+     "in": 22
+    }
+   },
+   "hab": [
+    "forest"
+   ],
+   "lat": [
+    50,
+    72
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     40,
+     160,
+     55,
+     70
+    ]
+   ]
+  },
+  "Pinus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pine",
+   "fad": 130,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "ca",
+    "eu",
+    "as-w",
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-se",
+    "af-n",
+    {
+     "t": [
+      130,
+      2.6
+     ],
+     "in": [
+      "gl"
+     ]
+    }
+   ],
+   "note": "Pine: the most widespread conifer genus, holding poor soils and fire-prone ground since the Cretaceous.",
+   "pbdb": {
+    "oid": "txn:55062",
+    "matched": "Pinus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 615,
+    "fea": 201.4,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Pinus",
+    "regions": {
+     "na-w": 104,
+     "as-e": 32,
+     "eu": 260,
+     "as-n": 37,
+     "af-e": 1,
+     "na-n": 73,
+     "af-s": 2,
+     "na-e": 45,
+     "as-c": 7,
+     "as-w": 1,
+     "as-se": 1,
+     "in": 44,
+     "ca": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Pinus contorta": {
+   "rank": "species",
+   "realm": "land",
+   "form": "pine",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-n"
+   ],
+   "note": "Lodgepole pine, whose cones open only in fire.",
+   "pbdb": {
+    "oid": "txn:55062",
+    "matched": "Pinus",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 615,
+    "fea": 201.4,
+    "lla": 0,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae",
+    "genus": "Pinus",
+    "regions": {
+     "na-w": 104,
+     "as-e": 32,
+     "eu": 260,
+     "as-n": 37,
+     "af-e": 1,
+     "na-n": 73,
+     "af-s": 2,
+     "na-e": 45,
+     "as-c": 7,
+     "as-w": 1,
+     "as-se": 1,
+     "in": 44,
+     "ca": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Pinaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    [
+     -140,
+     -104,
+     31,
+     64
+    ]
+   ]
+  },
+  "Platanaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 110,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca",
+    "eu",
+    "as-w",
+    "as-se",
+    {
+     "t": [
+      110,
+      5
+     ],
+     "in": [
+      "gl",
+      "na-n",
+      "as-n",
+      "as-e",
+      "as-c"
+     ]
+    }
+   ],
+   "note": "The plane-tree family, among the first flowering plants to become common in Cretaceous floras.",
+   "pbdb": {
+    "oid": "txn:52917",
+    "matched": "Platanaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 542,
+    "fea": 113.2,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Proteales",
+    "family": "Platanaceae",
+    "regions": {
+     "na-w": 468,
+     "eu": 18,
+     "as-e": 7,
+     "na-n": 6,
+     "na-e": 30,
+     "as-n": 9,
+     "as-c": 3,
+     "as-w": 1
+    }
+   },
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Proteales",
+    "family": "Platanaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Pleuromeia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "clubmoss",
+   "fad": 252,
+   "lad": 242,
+   "range": [
+    "eu",
+    "as-n",
+    "as-e",
+    "as-c",
+    "au",
+    "in",
+    "af-s",
+    "sa-s",
+    "na-w"
+   ],
+   "note": "A metre-tall unbranched lycopod that stands in for an entire vanished forest flora.",
+   "sz": 2.0,
+   "dt": "photosynthesis",
+   "hb": "unbranched, in disturbed coastal ground",
+   "pbdb": {
+    "oid": "txn:377231",
+    "matched": "Pleuromeia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 50,
+    "fea": 251.902,
+    "lla": 227.3,
+    "phylum": "Lycopodiophyta",
+    "class": "Lycopodiopsida",
+    "order": "Isoetales",
+    "family": "Pleuromeiaceae",
+    "genus": "Pleuromeia",
+    "regions": {
+     "eu": 20,
+     "sa-s": 1,
+     "as-e": 22,
+     "as-c": 3,
+     "as-n": 2,
+     "as-w": 1,
+     "au": 1
+    }
+   }
+  },
+  "Poaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "grass",
+   "fad": 70,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The grasses. Present from the Late Cretaceous, and ecologically almost invisible until about 40 Ma, when open grassland begins.",
+   "pbdb": {
+    "oid": "txn:53546",
+    "matched": "Poaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 490,
+    "fea": 125.77,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Poaceae (C3 grasslands)": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "grass",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Open grassy country spreads as the world cools and dries after the Eocene, and grazing mammals begin evolving the tall, cement-filled teeth that silica-rich grass demands.",
+   "pbdb": {
+    "oid": "txn:53546",
+    "matched": "Poaceae",
+    "exact": false,
+    "rank": "family",
+    "extant": true,
+    "noc": 490,
+    "fea": 125.77,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Poaceae (prairie)": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "grass",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "The Great Plains grassland spreads through the Miocene, which is why its horses evolve tall, ever-growing teeth.",
+   "pbdb": {
+    "oid": "txn:53546",
+    "matched": "Poaceae",
+    "exact": false,
+    "rank": "family",
+    "extant": true,
+    "noc": 490,
+    "fea": 125.77,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Poaceae",
+    "regions": {
+     "eu": 90,
+     "as-e": 57,
+     "na-w": 20,
+     "af-s": 4,
+     "af-e": 20,
+     "na-e": 42,
+     "sa-n": 23,
+     "ca": 9,
+     "an": 6,
+     "sa-s": 34,
+     "ar": 1,
+     "au": 52,
+     "na-n": 1,
+     "as-c": 5,
+     "af-w": 2,
+     "as-w": 2,
+     "in": 112,
+     "as-se": 1,
+     "gl": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Podocarpaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 240,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      240,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      0
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "af-e",
+      "af-s",
+      "af-w",
+      "mg",
+      "au",
+      "ng",
+      "nz",
+      "oc",
+      "as-se",
+      "as-e",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      66,
+      30
+     ],
+     "in": [
+      "an"
+     ]
+    },
+    {
+     "t": [
+      66,
+      20
+     ],
+     "in": [
+      "an"
+     ]
+    },
+    {
+     "t": [
+      30,
+      5
+     ],
+     "in": [
+      "sou"
+     ]
+    },
+    {
+     "t": [
+      34,
+      5
+     ],
+     "in": [
+      "sou"
+     ]
+    }
+   ],
+   "note": "Southern conifers -- podocarps, rimu, totara -- that clothed warm-temperate Gondwana and still dominate many southern and tropical-mountain forests.",
+   "pbdb": {
+    "oid": "txn:54795",
+    "matched": "Podocarpaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": true,
+    "noc": 4319,
+    "fea": 312.8,
+    "lla": 0,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Podocarpaceae",
+    "regions": {
+     "na-e": 79,
+     "na-w": 116,
+     "af-s": 22,
+     "eu": 304,
+     "au": 682,
+     "af-e": 13,
+     "gl": 26,
+     "na-n": 39,
+     "as-e": 409,
+     "ca": 8,
+     "as-w": 94,
+     "as-c": 263,
+     "an": 268,
+     "sa-s": 806,
+     "as-se": 6,
+     "as-n": 232,
+     "af-n": 3,
+     "in": 255,
+     "ar": 135,
+     "mg": 3,
+     "nz": 134,
+     "sa-n": 88,
+     "af-w": 4
+    }
+   },
+   "cls": {
+    "phylum": "Pinophyta",
+    "class": "Pinopsida",
+    "order": "Araucariales",
+    "family": "Podocarpaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Polylepis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Paper-bark trees forming the highest true forests on Earth, above 4,000 m.",
+   "hab": [
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Rosaceae"
+   },
+   "box": [
+    [
+     -80,
+     -63,
+     -33,
+     11
+    ]
+   ]
+  },
+  "Populus euphratica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "as-c",
+    "as-w",
+    "ar",
+    "af-n"
+   ],
+   "note": "The desert poplar, surviving on groundwater along dry river courses.",
+   "pbdb": {
+    "oid": "txn:55955",
+    "matched": "Populus",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 344,
+    "fea": 113.2,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Malpighiales",
+    "family": "Salicaceae",
+    "genus": "Populus",
+    "regions": {
+     "na-w": 201,
+     "as-e": 34,
+     "eu": 73,
+     "af-e": 3,
+     "na-n": 1,
+     "na-e": 7,
+     "as-c": 10,
+     "in": 14
+    }
+   },
+   "hab": [
+    "desert",
+    "river"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malpighiales",
+    "family": "Salicaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Progymnospermopsida": {
+   "rank": "class",
+   "realm": "land",
+   "form": "progymnosperm",
+   "fad": 393,
+   "lad": 340,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Wood-producing plants that still reproduce by spores -- the structural revolution before the reproductive one.",
+   "pbdb": {
+    "oid": "txn:249675",
+    "matched": "Progymnospermopsida",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 59,
+    "fea": 387.95,
+    "lla": 358.86,
+    "phylum": "Tracheophyta",
+    "class": "Progymnospermopsida"
+   },
+   "rep": "Archaeopteris"
+  },
+  "Psaronius": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 318,
+   "lad": 255,
+   "range": [
+    "euramerica",
+    "as-e",
+    "sa-s"
+   ],
+   "note": "A tree fern whose trunk was a mantle of adventitious roots rather than wood. It took over the mires as the giant lycopsids faltered.",
+   "sz": 10.0,
+   "dt": "photosynthesis",
+   "hb": "tree fern with a mantle of adventitious roots",
+   "pbdb": {
+    "oid": "txn:408441",
+    "matched": "Psaronius",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 330.3,
+    "lla": 254.14,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Marattiales",
+    "family": "Marattiaceae",
+    "genus": "Psaronius",
+    "regions": {
+     "na-e": 11,
+     "as-e": 1,
+     "as-se": 1,
+     "eu": 3
+    }
+   },
+   "hab": [
+    "wetland",
+    "forest"
+   ]
+  },
+  "Ptilophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cycad",
+   "fad": 230,
+   "lad": 100,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-w",
+    "ca",
+    "eu",
+    "in",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A bennettitalean with stiff fern-like fronds, common through Jurassic and Cretaceous floras.",
+   "pbdb": {
+    "oid": "txn:56226",
+    "matched": "Ptilophyllum",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 508,
+    "fea": 227.3,
+    "lla": 27.3,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Bennettitales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Ptilophyllum",
+    "regions": {
+     "sa-s": 21,
+     "gl": 6,
+     "na-n": 1,
+     "eu": 94,
+     "ca": 18,
+     "na-w": 15,
+     "as-c": 62,
+     "an": 10,
+     "au": 3,
+     "as-e": 55,
+     "as-se": 3,
+     "sa-n": 4,
+     "as-w": 36,
+     "in": 169,
+     "ar": 3,
+     "as-n": 7,
+     "nz": 1
+    }
+   }
+  },
+  "Quercus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 56,
+   "lad": 0,
+   "range": [
+    "na-w",
+    "na-e",
+    "ca",
+    "eu",
+    "as-w",
+    "as-c",
+    "as-e",
+    "af-n",
+    "as-se",
+    "in",
+    {
+     "t": [
+      56,
+      5
+     ],
+     "in": [
+      "gl",
+      "na-n",
+      "as-n"
+     ]
+    }
+   ],
+   "note": "Oaks. With beech, the backbone of northern-hemisphere temperate forest, from Mexico's cloud forests to the Himalaya.",
+   "pbdb": {
+    "oid": "txn:54594",
+    "matched": "Quercus",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 685,
+    "fea": 106.3,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fagales",
+    "family": "Fagaceae",
+    "genus": "Quercus",
+    "regions": {
+     "na-w": 229,
+     "as-e": 130,
+     "as-c": 8,
+     "eu": 173,
+     "na-e": 42,
+     "af-s": 1,
+     "as-n": 5,
+     "ca": 1,
+     "as-w": 1,
+     "as-se": 27,
+     "in": 44
+    }
+   },
+   "hab": [
+    "forest"
+   ],
+   "w": 3,
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fagales",
+    "family": "Fagaceae"
+   },
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -125,
+       -60,
+       8,
+       50
+      ],
+      [
+       -10,
+       60,
+       28,
+       62
+      ],
+      [
+       98,
+       146,
+       5,
+       52
+      ],
+      [
+       70,
+       98,
+       25,
+       33
+      ]
+     ]
+    }
+   ],
+   "avoid": [
+    "Kunlun Belt",
+    "Qilian Belt",
+    "Tibetan Plateau"
+   ]
+  },
+  "Rapateaceae": {
+   "rank": "family",
+   "realm": "land",
+   "form": "sedge",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "sa-n"
+   ],
+   "note": "An ancient plant family largely confined to the shield, radiating on the tepui summits.",
+   "pbdb": {
+    "oid": "txn:55805",
+    "matched": "Rapateaceae",
+    "exact": true,
+    "rank": "family",
+    "extant": false,
+    "noc": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Rapateaceae"
+   },
+   "hab": [
+    "wetland",
+    "alpine"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Rapateaceae"
+   }
+  },
+  "Raphia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "af-w",
+    "af-e",
+    "mg",
+    "ca",
+    "sa-n"
+   ],
+   "note": "Swamp palms bearing the longest leaves of any plant, along the flooded interior.",
+   "hab": [
+    "wetland",
+    "rainforest",
+    "river"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   }
+  },
+  "Rhizophora": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "mangrove",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "ca",
+    "sa-n",
+    "af-w",
+    "af-e",
+    "mg",
+    "in",
+    "as-se",
+    "au",
+    "ng",
+    "oc",
+    "na-e"
+   ],
+   "note": "Mangrove is the one forest that shows up as coastline rather than as interior vegetation, and it is a Cenozoic feature.",
+   "sz": 30.0,
+   "dt": "photosynthesis",
+   "hb": "intertidal tree on stilt roots, salt-excluding",
+   "pbdb": {
+    "oid": "txn:424606",
+    "matched": "Rhizophora",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 60,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Malpighiales",
+    "family": "Rhizophoraceae",
+    "genus": "Rhizophora",
+    "regions": {
+     "ca": 44,
+     "sa-n": 4,
+     "in": 8,
+     "na-e": 3
+    }
+   },
+   "hab": [
+    "coast",
+    "wetland"
+   ],
+   "lat": [
+    0,
+    32
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malpighiales",
+    "family": "Rhizophoraceae"
+   },
+   "pbdb_ok": true
+  },
+  "Rhododendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 55,
+   "lad": 0,
+   "range": [
+    "as-e",
+    "as-c",
+    "in",
+    "as-se",
+    "ng",
+    "eu",
+    "as-w",
+    "na-w",
+    "na-e",
+    "as-n"
+   ],
+   "note": "Rhododendrons: evergreen shrubs and small trees that band wet mountain slopes by altitude, with their greatest diversity in the Sino-Himalaya.",
+   "pbdb": {
+    "oid": "txn:157353",
+    "matched": "Rhododendron",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 25,
+    "fea": 59.24,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "Dicotyledoneae",
+    "order": "Ericales",
+    "family": "Ericaceae",
+    "genus": "Rhododendron",
+    "regions": {
+     "as-e": 8,
+     "eu": 2,
+     "na-w": 3,
+     "in": 8,
+     "as-c": 3,
+     "as-se": 1
+    }
+   },
+   "hab": [
+    "alpine",
+    "forest"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Ericaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Rhynia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu"
+   ],
+   "note": "A leafless, rootless Rhynie chert plant preserved cell by cell, and the closest thing we have to a photograph of the first land ecosystem.",
+   "pbdb": {
+    "oid": "txn:414039",
+    "matched": "Rhynia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Psilophytophyta",
+    "class": "Psilophytopsida",
+    "order": "Psilophytales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rhynia",
+    "regions": {
+     "eu": 2
+    }
+   }
+  },
+  "Rufloria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 315,
+   "lad": 252,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu"
+   ],
+   "note": "The characteristic Angaran leaf - cool temperate, seasonal, deciduous.",
+   "sz": 25.0,
+   "dt": "photosynthesis",
+   "hb": "deciduous tree with strong growth rings",
+   "pbdb": {
+    "oid": "txn:157268",
+    "matched": "Rufloria",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 224,
+    "fea": 323.4,
+    "lla": 251.902,
+    "phylum": "Peltaspermophyta",
+    "class": "Arberiopsida",
+    "order": "Vojnovskyales",
+    "family": "Vojnovskyaceae",
+    "genus": "Rufloria",
+    "regions": {
+     "as-c": 22,
+     "as-e": 72,
+     "as-n": 86,
+     "eu": 43,
+     "na-n": 1
+    }
+   }
+  },
+  "Salix arctica": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "na-n",
+    "gl",
+    "eu",
+    "as-n"
+   ],
+   "note": "Arctic willow, a centuries-old tree growing flat against the ground.",
+   "pbdb": {
+    "oid": "txn:54580",
+    "matched": "Salix",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 378,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Malpighiales",
+    "family": "Salicaceae",
+    "genus": "Salix",
+    "regions": {
+     "na-w": 166,
+     "as-e": 69,
+     "eu": 51,
+     "as-n": 8,
+     "af-e": 2,
+     "na-n": 2,
+     "na-e": 40,
+     "ca": 2,
+     "as-c": 6,
+     "sa-s": 1,
+     "in": 23,
+     "gl": 2,
+     "as-w": 1
+    }
+   },
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Malpighiales",
+    "family": "Salicaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Sequoia sempervirens": {
+   "rank": "species",
+   "realm": "land",
+   "form": "redwood",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "na-w"
+   ],
+   "note": "The coast redwood, the tallest tree on Earth, in the fog belt.",
+   "pbdb": {
+    "oid": "txn:396683",
+    "matched": "Sequoia sempervirens",
+    "exact": true,
+    "rank": "species",
+    "extant": true,
+    "noc": 3,
+    "fea": 23.04,
+    "lla": 3.6,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": "Sequoia",
+    "regions": {
+     "as-e": 3
+    }
+   },
+   "hab": [
+    "forest",
+    "coast"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -124.6,
+       -121.3,
+       35.8,
+       42.4
+      ]
+     ]
+    }
+   ]
+  },
+  "Sequoiadendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "redwood",
+   "fad": 40,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      40,
+      5
+     ],
+     "in": [
+      "na-w",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "in": [
+      "na-w"
+     ]
+    }
+   ],
+   "note": "The giant sequoia, largest tree on Earth by volume and a relict of a family once spread across the northern continents.",
+   "pbdb": {
+    "oid": "txn:396373",
+    "matched": "Sequoiadendron",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 22,
+    "fea": 83.6,
+    "lla": 2.58,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": "Sequoiadendron",
+    "regions": {
+     "eu": 5,
+     "na-w": 16,
+     "as-n": 1
+    }
+   },
+   "hab": [
+    "forest",
+    "alpine"
+   ],
+   "w": 3,
+   "pbdb_ok": true,
+   "aka": [
+    "Sequoiadendron giganteum"
+   ],
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -121.5,
+       -117.8,
+       35.3,
+       40.5
+      ]
+     ]
+    }
+   ],
+   "avoid": [
+    "Basin and Range",
+    "Rocky Mountains",
+    "Colorado Plateau",
+    "Rio Grande Rift"
+   ]
+  },
+  "Sigillaria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 330,
+   "lad": 270,
+   "range": [
+    "as-e",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "Tall, usually unbranched, in coal swamps",
+   "sz": 30.0,
+   "dt": "photosynthesis",
+   "hb": "tall, usually unbranched, in coal swamps",
+   "pbdb": {
+    "oid": "txn:157272",
+    "matched": "Sigillaria",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 132,
+    "fea": 387.95,
+    "lla": 251.902,
+    "phylum": "Lycophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Sigillariaceae",
+    "genus": "Sigillaria",
+    "regions": {
+     "na-e": 103,
+     "na-w": 7,
+     "eu": 14,
+     "as-e": 4,
+     "as-w": 1,
+     "af-e": 1,
+     "af-s": 1,
+     "ar": 1
+    }
+   }
+  },
+  "Stipa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "grass",
+   "fad": 25,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-c",
+    "as-w",
+    "as-n",
+    "as-e",
+    "af-n"
+   ],
+   "note": "Feather grasses whose awns drill their own seed into the soil.",
+   "pbdb": {
+    "oid": "txn:452353",
+    "matched": "Stipa",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 1,
+    "fea": 37,
+    "lla": 33.9,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Poales",
+    "family": "Poaceae",
+    "genus": "Stipa",
+    "regions": {
+     "na-w": 1
+    }
+   },
+   "hab": [
+    "grassland"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Poaceae"
+   },
+   "pbdb_ok": true
+  },
+  "Tamarix": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "af-n",
+    "af-e",
+    "af-s",
+    "ar",
+    "as-w",
+    "as-c",
+    "in",
+    "eu",
+    "as-e"
+   ],
+   "note": "Salt-excreting shrubs holding the fringes of oases and wadis.",
+   "pbdb": {
+    "oid": "txn:434786",
+    "matched": "Tamarix",
+    "exact": true,
+    "rank": "genus",
+    "extant": true,
+    "noc": 6,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Caryophyllales",
+    "family": "Tamaricaceae",
+    "genus": "Tamarix",
+    "regions": {
+     "in": 5,
+     "eu": 1
+    }
+   },
+   "hab": [
+    "desert",
+    "river",
+    "coast"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Tamaricaceae"
+   },
+   "pbdb_ok": true,
+   "lat": [
+    12,
+    50
+   ]
+  },
+  "Umkomasia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 250,
+   "lad": 201,
+   "range": [
+    "af-s",
+    "au",
+    "sa-s",
+    "an",
+    "in"
+   ],
+   "note": "The seed-bearing organ of Dicroidium, the seed fern that dominated Triassic Gondwana.",
+   "pbdb": {
+    "oid": "txn:157156",
+    "matched": "Umkomasia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 251.902,
+    "lla": 201.4,
+    "phylum": "Tracheophyta",
+    "class": "Gymnospermopsida",
+    "order": "Corystospermales",
+    "family": "Corystospermaceae",
+    "genus": "Umkomasia",
+    "regions": {
+     "af-s": 21,
+     "au": 7,
+     "eu": 1,
+     "sa-s": 1
+    }
+   }
+  },
+  "Vachellia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "acacia",
+   "fad": 20,
+   "lad": 0,
+   "range": [
+    "af",
+    "ar",
+    "in",
+    "as-w",
+    "mg",
+    "ca",
+    "sa-n"
+   ],
+   "note": "The flat-topped thorn trees of African savanna, whose spread tracks the Miocene expansion of grassland.",
+   "hab": [
+    "grassland",
+    "desert"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fabales",
+    "family": "Fabaceae"
+   }
+  },
+  "Vertebraria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e",
+    "an",
+    "au",
+    "in",
+    "sa-s",
+    "sa-n",
+    "mg",
+    "nz"
+   ],
+   "note": "The segmented root of the Glossopteris trees, preserved in Antarctic peat and Indian coal: the plumbing of a forest that grew in polar light.",
+   "dt": "-",
+   "hb": "septate, air-filled roots in waterlogged soil",
+   "pbdb": {
+    "oid": "txn:263957",
+    "matched": "Vertebraria",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 148,
+    "fea": 298.9,
+    "lla": 247,
+    "phylum": "Peltaspermophyta",
+    "class": "Arberiopsida",
+    "order": "Arberiales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vertebraria",
+    "regions": {
+     "au": 36,
+     "an": 10,
+     "sa-s": 3,
+     "in": 87,
+     "ng": 1,
+     "af-s": 8,
+     "af-e": 3
+    }
+   }
+  },
+  "Vojnovskya": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 290,
+   "lad": 260,
+   "range": [
+    "as-e",
+    "as-n"
+   ],
+   "note": "A gymnosperm of the Angaran flora, from a Permian Siberia too cold for the coal swamps of the tropics.",
+   "pbdb": {
+    "oid": "txn:157264",
+    "matched": "Vojnovskya",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 298.9,
+    "lla": 259.857,
+    "phylum": "Peltaspermophyta",
+    "class": "Arberiopsida",
+    "order": "Vojnovskyales",
+    "family": "Vojnovskyaceae",
+    "genus": "Vojnovskya",
+    "regions": {
+     "as-e": 9,
+     "as-n": 12,
+     "na-n": 1
+    }
+   }
+  },
+  "Voltzia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 260,
+   "lad": 230,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-n",
+    "as-se",
+    "eu",
+    "in",
+    "mg",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A conifer of Triassic river plains, part of the flora that recolonised the land after the end-Permian coal gap.",
+   "pbdb": {
+    "oid": "txn:164617",
+    "matched": "Voltzia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 95,
+    "fea": 290.1,
+    "lla": 201.4,
+    "phylum": "Spermatophyta",
+    "class": "Voltziopsida",
+    "order": "Voltziales",
+    "family": "Voltziaceae",
+    "genus": "Voltzia",
+    "regions": {
+     "na-w": 5,
+     "eu": 64,
+     "na-e": 3,
+     "sa-s": 3,
+     "as-e": 2,
+     "as-c": 4,
+     "as-se": 3,
+     "af-e": 1,
+     "mg": 4,
+     "sa-n": 1,
+     "as-n": 3,
+     "in": 2
+    }
+   }
+  },
+  "Voltziales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 300,
+   "lad": 200,
+   "range": [
+    "af-s",
+    "as-c",
+    "as-e",
+    "eu",
+    "mg",
+    "na-e",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "Conifers spreading through the dry Triassic interior: the first forests built by plants that could survive a real dry season.",
+   "pbdb": {
+    "oid": "txn:263774",
+    "matched": "Voltziales",
+    "exact": true,
+    "rank": "order",
+    "extant": false,
+    "noc": 160,
+    "fea": 290.1,
+    "lla": 201.4,
+    "phylum": "Spermatophyta",
+    "class": "Voltziopsida",
+    "order": "Voltziales",
+    "regions": {
+     "na-w": 5,
+     "na-e": 4,
+     "af-s": 18,
+     "eu": 98,
+     "sa-s": 6,
+     "as-e": 7,
+     "as-c": 4,
+     "as-se": 3,
+     "af-e": 1,
+     "mg": 4,
+     "sa-n": 1,
+     "as-n": 3,
+     "ar": 2,
+     "as-w": 1,
+     "nz": 1,
+     "in": 2
+    }
+   }
+  },
+  "Walchia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 310,
+   "lad": 280,
+   "range": [
+    "af-n",
+    "as-c",
+    "as-e",
+    "as-n",
+    "eu",
+    "na-e",
+    "na-w"
+   ],
+   "note": "An early conifer in drier upland settings -- the beginning of forest that is not a swamp.",
+   "pbdb": {
+    "oid": "txn:389061",
+    "matched": "Walchia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 143,
+    "fea": 323.4,
+    "lla": 251.902,
+    "phylum": "Coniferophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Walchia",
+    "regions": {
+     "na-w": 33,
+     "na-e": 27,
+     "eu": 51,
+     "ca": 2,
+     "as-c": 5,
+     "as-e": 3,
+     "af-n": 15,
+     "as-n": 4,
+     "as-se": 2,
+     "na-n": 1
+    }
+   }
+  },
+  "Wattieza": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 390,
+   "lad": 380,
+   "range": [
+    "na-e",
+    "eu",
+    "sa-n"
+   ],
+   "note": "The Gilboa tree: a trunk topped by a frond crown, and the oldest known forest stand.",
+   "sz": 8.0,
+   "dt": "photosynthesis",
+   "hb": "palm-like crown of frond-like branches",
+   "pbdb": {
+    "oid": "txn:249923",
+    "matched": "Wattieza",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 393.47,
+    "lla": 379,
+    "phylum": "Psilophytophyta",
+    "class": "Psilophytopsida",
+    "order": "Psilophytales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Wattieza",
+    "regions": {
+     "sa-n": 1,
+     "eu": 1
+    }
+   },
+   "w": 3,
+   "cls": {
+    "class": "Cladoxylopsida",
+    "order": "Pseudosporochnales"
+   }
+  },
+  "Weichselia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 170,
+   "lad": 94,
+   "range": [
+    "af-n",
+    "as-w",
+    "eu",
+    "in",
+    "na-w",
+    "sa-n"
+   ],
+   "note": "A fire- and drought-tolerant fern that carpeted Cretaceous floodplains and coastal flats, often the commonest plant fossil beside the dinosaurs.",
+   "pbdb": {
+    "oid": "txn:204510",
+    "matched": "Weichselia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 23,
+    "fea": 241.464,
+    "lla": 113.2,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Filicales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Weichselia",
+    "regions": {
+     "eu": 8,
+     "af-n": 2,
+     "as-w": 2,
+     "sa-n": 2,
+     "na-w": 5,
+     "ar": 1,
+     "in": 3
+    }
+   }
+  },
+  "Welwitschia mirabilis": {
+   "rank": "species",
+   "realm": "land",
+   "form": "gnetophyte",
+   "fad": 10,
+   "lad": 0,
+   "range": [
+    "af-s"
+   ],
+   "note": "A two-leaved gymnosperm that lives a thousand years on fog alone.",
+   "pbdb": {
+    "oid": "txn:461244",
+    "matched": "Welwitschia",
+    "exact": false,
+    "rank": "genus",
+    "extant": true,
+    "noc": 0,
+    "phylum": "Gnetophyta",
+    "class": "Gnetopsida",
+    "order": "Gnetales",
+    "family": "Welwitschiaceae",
+    "genus": "Welwitschia"
+   },
+   "hab": [
+    "desert"
+   ],
+   "pbdb_ok": true,
+   "box": [
+    [
+     11.5,
+     16,
+     -24,
+     -14
+    ]
+   ]
+  },
+  "Williamsonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cycad",
+   "fad": 230,
+   "lad": 100,
+   "range": [
+    "an",
+    "as-c",
+    "as-e",
+    "as-n",
+    "ca",
+    "eu",
+    "in",
+    "na-w"
+   ],
+   "note": "Bennettitales look like cycads and are not; their bisexual cones long confused the search for the origin of flowers.",
+   "sz": 3.0,
+   "dt": "photosynthesis",
+   "hb": "stout trunk with a crown of pinnate leaves and flower-like cones",
+   "pbdb": {
+    "oid": "txn:56244",
+    "matched": "Williamsonia",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 124,
+    "fea": 247,
+    "lla": 100.5,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Bennettitales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Williamsonia",
+    "regions": {
+     "na-w": 8,
+     "eu": 29,
+     "na-e": 2,
+     "ca": 20,
+     "as-c": 14,
+     "an": 3,
+     "sa-s": 2,
+     "au": 1,
+     "as-e": 4,
+     "as-w": 2,
+     "in": 35,
+     "ar": 1,
+     "as-n": 3
+    }
+   }
+  },
+  "Zosterophyllopsida": {
+   "rank": "class",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 425,
+   "lad": 360,
+   "range": [
+    "as-c",
+    "eu",
+    "na-e",
+    "na-n"
+   ],
+   "note": "Sprawling, rhizomatous vascular plants that built the first vegetation dense enough to change how rivers behave.",
+   "pbdb": {
+    "oid": "txn:55161",
+    "matched": "Zosterophyllopsida",
+    "exact": true,
+    "rank": "class",
+    "extant": false,
+    "noc": 44,
+    "fea": 426.7,
+    "lla": 358.86,
+    "phylum": "Zosterophyllophyta",
+    "class": "Zosterophyllopsida",
+    "regions": {
+     "as-c": 5,
+     "na-n": 14,
+     "eu": 5,
+     "na-e": 17,
+     "au": 1,
+     "as-n": 1
+    }
+   },
+   "rep": "Zosterophyllum"
+  },
+  "Zosterophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 425,
+   "lad": 390,
+   "range": [
+    "as-c",
+    "as-e",
+    "as-se",
+    "eu",
+    "na-n"
+   ],
+   "note": "An early vascular plant carrying sporangia along the sides of its stems, on the line that leads to the lycophytes.",
+   "pbdb": {
+    "oid": "txn:55154",
+    "matched": "Zosterophyllum",
+    "exact": true,
+    "rank": "genus",
+    "extant": false,
+    "noc": 98,
+    "fea": 443.1,
+    "lla": 382.31,
+    "phylum": "Tracheophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Zosterophyllum",
+    "regions": {
+     "na-n": 50,
+     "eu": 28,
+     "as-se": 4,
+     "as-e": 7,
+     "as-c": 3,
+     "au": 1,
+     "af-s": 1,
+     "na-e": 1,
+     "as-n": 1
+    }
+   },
+   "cls": {
+    "class": "Zosterophyllopsida",
+    "family": "Zosterophyllaceae"
+   }
+  },
+  "angiosperm canopy trees": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Flowering trees closing a canopy overhead. That structure is what makes a rainforest a rainforest, and it does not exist before the Late Cretaceous.",
+   "hab": [
+    "rainforest",
+    "forest"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "",
+    "family": ""
+   }
+  },
+  "dwarf birch": {
+   "rank": "species",
+   "realm": "land",
+   "form": "shrub",
+   "fad": 3,
+   "lad": 0,
+   "range": [
+    "holarctic"
+   ],
+   "note": "A low, ground-hugging birch of tundra and the ragged edge of the boreal forest.",
+   "hab": [
+    "tundra"
+   ],
+   "lat": [
+    55,
+    90
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Fagales",
+    "family": "Betulaceae"
+   }
+  },
+  "epiphytes": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "bromeliad",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Plants growing on other plants: orchids, bromeliads, ferns. They need a canopy to live in, so they date it.",
+   "hab": [
+    "rainforest"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Asparagales",
+    "family": "Orchidaceae"
+   }
+  },
+  "lianas": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "vine",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Woody climbers using trees as scaffolding to reach the light. Like epiphytes, they exist only where there is a canopy.",
+   "hab": [
+    "rainforest"
+   ],
+   "lat": [
+    0,
+    30
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Vitales",
+    "family": "Vitaceae"
+   }
+  },
+  "seagrass meadows": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seagrass",
+   "fad": 80,
+   "lad": 0,
+   "range": [
+    "tet",
+    "atl",
+    "pac",
+    "ind",
+    "med"
+   ],
+   "note": "Flowering plants that returned to the sea in the Cretaceous, binding shallow sediment and nursing juvenile fish and turtles.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    62
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Alismatales",
+    "family": "Zosteraceae"
+   }
+  },
+  "sedges": {
+   "rank": "family",
+   "realm": "land",
+   "form": "sedge",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Cyperaceae: grass-like plants of wet ground, marsh and tundra, where true grasses do less well.",
+   "hab": [
+    "tundra",
+    "wetland",
+    "grassland",
+    "alpine",
+    "lake"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae"
+   }
+  },
+  "succulents": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "cactus",
+   "fad": 30,
+   "lad": 0,
+   "range": [
+    "new-world",
+    "af",
+    "mg",
+    "ar",
+    "in"
+   ],
+   "note": "Water-storing plants of arid ground -- cacti in the Americas, euphorbias and aloes in Africa and Arabia, two unrelated answers to the same problem. They spread as the deserts did, from about 30 Ma.",
+   "hab": [
+    "desert"
+   ],
+   "cls": {
+    "phylum": "Angiospermae",
+    "class": "Magnoliopsida",
+    "order": "Caryophyllales",
+    "family": "Cactaceae"
+   }
+  }
+ }
+}

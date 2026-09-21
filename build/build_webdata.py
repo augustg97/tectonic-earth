@@ -1302,7 +1302,9 @@ def build_updatelog():
         d = json.load(fh)
     d.pop("_note", None)
     json.dump(d, open(f"{WEB}/updatelog.json", "w"), separators=(",", ":"))
-    n = sum(len(sec["items"]) for r in d["releases"] for sec in r["sections"])
+    # the 2.3-3.0 releases carry a flat "items" list and no sections
+    n = sum(len(sec["items"]) for r in d["releases"] for sec in r.get("sections", [])) + \
+        sum(len(r.get("items", [])) for r in d["releases"])
     print(f"update log: {len(d['releases'])} releases, {n} entries")
 
 
@@ -1321,6 +1323,31 @@ def build_eras():
 
 
 # ---------- biomes, life through time, regional fossil record ----------
+def _registry_continents(name):
+    """Coarse continent tags for a taxon, from its registry range, or None if it
+    is cosmopolitan or unregistered. The interval-wide fallback list is filtered
+    by these, so Tyrannosaurus cannot be offered for Australia merely because a
+    label there has no card of its own; the hand-kept ENDEMIC table it replaces
+    covered forty taxa and the registry covers all of them."""
+    try:
+        import biota
+        e = biota.get(name)
+    except Exception:                                      # noqa: BLE001
+        return None
+    if not e:
+        return None
+    tags = set()
+    for _o, _y, codes in e["_slices"]:
+        if "*" in codes:
+            return None
+        for c in codes:
+            top = c.split("-")[0]
+            tags.add({"ca": "na", "gl": "na", "mg": "af", "ar": "as", "in": "as",
+                      "ng": "au", "nz": "au", "oc": "au"}.get(top, top))
+    tags &= {"na", "sa", "eu", "af", "as", "au", "an"}
+    return sorted(tags) or None
+
+
 def build_life():
     # Tag the global list with what was NOT global, so the app's fallback can
     # stop listing an African ape under North America.
@@ -1328,7 +1355,8 @@ def build_life():
     tagged = 0
     for e in gl:
         for t in e.get("taxa", []):
-            en = life.endemic(t.get("n") or t.get("name", ""))
+            en = _registry_continents(t.get("n") or t.get("name", "")) \
+                or life.endemic(t.get("n") or t.get("name", ""))
             if en:
                 t["en"] = en
                 tagged += 1
@@ -1410,12 +1438,48 @@ def build_life():
     except Exception as e:                                     # noqa: BLE001
         print(f"  note: taxon attributes unavailable ({e})")
 
-    json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
+    # THE COMPOSED CARDS. Everything above says which taxa are characteristic of
+    # a place; none of it could say when or where a taxon actually lived, so a
+    # province that lasts 60 Myr listed the same animals for all 60 and a
+    # latitude band listed them on every continent. biota.py composes each
+    # label's card at each age from ONE registry (build/taxa/*.json) in which
+    # every organism declares its kind, its body form, its range in time and its
+    # range in space -- so the card is filtered by when and where, balanced
+    # between fauna and flora on purpose, and replayed by audit_biota.py.
+    # The curated lists and province markers are INPUTS to that now, not what
+    # the app reads, so they are no longer shipped.
     spans = sum(len(v) for v in out["regionTaxa"].values())
+    n_regions = len(out["regionTaxa"])
+    import biota
+    labs = json.load(open(f"{WEB}/labels.json"))
+    table, cards, _stats = biota.build_cards(
+        labs, out.get("provinces", {}), out.get("labelProvince", {}),
+        life._DATA.get("region_taxa", {}), life.icons(), features)
+    out["taxa"] = table
+    out["cards"] = cards
+    out["provinces"] = {pid: {k: v for k, v in rec.items() if k not in ("mk", "markers")}
+                        for pid, rec in out.get("provinces", {}).items()}
+    for k in ("regionTaxa", "labelProvince", "labelRegion"):
+        out.pop(k, None)
+    # Ship only the drawings something points at. The icon file holds every
+    # silhouette ever traced; the page needs the ones on a card.
+    used = {t["ic"] for t in table if t.get("ic")}
+    for e in out["life"]:
+        used.update(t["ic"] for t in e["taxa"] if t.get("ic"))
+    out["icons"] = {k: v for k, v in out["icons"].items() if k in used}
+    out["credits"] = {k: v for k, v in out["credits"].items() if k in used}
+    missing = sorted({t["n"] for t in table if not t.get("ic")}
+                     | {t["n"] for e in out["life"] for t in e["taxa"] if not t.get("ic")})
+    if missing:
+        raise SystemExit(f"  {len(missing)} card taxa have NO drawing (no realm fallback "
+                         f"exists any more, by design): {missing[:12]} -- run "
+                         f"build_silhouettes.py forms, or give the form an icon")
+
+    json.dump(out, open(f"{WEB}/life.json", "w"), separators=(",", ":"))
     print(f"life: {len(out['biomes'])} biome samples, {len(out['life'])} intervals, "
           f"{len(out['regional'])} regions, {len(out['icons'])} illustrations, "
-          f"{len(out['regionTaxa'])} regions x {spans} spans of local biota, "
-          f"{len(out['credits'])} credited")
+          f"{n_regions} regions x {spans} spans of curated biota feeding "
+          f"{len(cards)} composed cards, {len(out['credits'])} credited")
     # The global list is thin on marine taxa in the Cenozoic, which is exactly
     # where the old code used to cross realms. Surface that as a build warning
     # so it is visible rather than only showing up as land animals in an ocean.
