@@ -18,9 +18,12 @@ Paste this whole file as the first message of a new session.
 
 The user asked for the feature cards' flora and fauna to be fixed **systematically**: every card
 rich, accurate, diverse, with the right icon, the right organisms for that place and time, and a
-tracking system so it cannot decay. That system shipped in release 3.6. What remains is DEPTH
-(the work queue below), not mechanism. There is no open loop; the standing rule applies — every
-round ends deployed and verified live.
+tracking system so it cannot decay. The system shipped in 3.6; 3.7 (2026-09-22) added depth —
+164 taxa for the seas, Palaeozoic land and the Precambrian — read the placement listing at
+eight ages, re-anchored eight mislaid labels, hand-drew the last seventeen forms, and closed
+the five 404s. The user's last instruction was "keep going until completion": the work queue
+below is what completion still wants. There is no open loop; every round ends deployed and
+verified live.
 
 ## How the system works, in one paragraph
 
@@ -52,21 +55,39 @@ cd build
 Every defect of the second half of this round
 was found that way. Do the same for 1–5 Ma, 50 Ma and 150 Ma next.
 
-New organisms: add `E(...)` lines to a batch in `build/taxa_src/`, run it, then ALWAYS re-run
-`taxa_src/ranges_within_regions.py` (the batch scripts regenerate their JSON and would drop its
-refinements otherwise), then `build_silhouettes.py registry` for own drawings.
+New organisms: add `E(...)` lines to a batch in `build/taxa_src/`, run it, then
+`taxa_src/fetch_evidence.py <file>` (PBDB cross-check; resolve findings in the batch SOURCE, never
+the JSON), then ALWAYS re-run `taxa_src/ranges_within_regions.py`, then `build_silhouettes.py
+registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260921-2222`**, release 3.6, commit `e76651ff`.
-- Nothing uncommitted that matters; `build/verify/` (1.3 GB of proof PNGs) and `data/pbdb/` (the
-  PBDB cache) are gitignored on purpose.
+- Last live deploy: **`DATA_V=20260922-0016`**, release 3.7, commit `a7027135`.
+- Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
+  cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
-  drawings **30** (ratchet, may only fall). The frame gate is skipped under `--quick`.
-- Registry: **1,156 taxa** in 16 files; 1,039 of them reach a card. 668 illustrations shipped.
-  `web/life.json` is 1.96 MB raw, ~450 KB gzipped.
+  drawings **0** (ratchet at 0); curated exceptions **12**. The frame gate is skipped under `--quick`.
+- Registry: **1,320 taxa** in 22 files; 1,181 reach a card; 714 illustrations shipped. 261 taxa
+  carry a box, avoid list, sliced latitude or dated habitat.
+- Marine card slots at class/order level: Cz 37%, Mz 51%, late Pz 44%, early Pz 45%, Pc 96%.
 
-## What this round found
+## What the second round found (3.7)
+
+1. **Depth changed the composer's job.** With genera available, curated class-level names
+   ("Brachiopoda", "Ichthyosauria") were still filling the cards; they now keep one slot when
+   four genera are at hand. Genericness on Palaeozoic sea cards nearly halved.
+2. **The placement listing at deep time finds a different class of error**: a lineage shown
+   before it reached a continent (Rhododendron on Eocene India, Nothofagus on Miocene Parana),
+   a cosmopolitan Palaeozoic plant that was really provincial (Lepidodendron, Cordaites,
+   Calamites on Gondwana; Rufloria in China), a Solnhofen animal on every Jurassic European
+   label. Boxes and time-sliced ranges fixed them; the polar rule needed the LPIA.
+3. **Six labels rode the wrong continent** because a palaeo coordinate happened to be land
+   today (README §7.24). The home-crust detector in `audit_label_plate.py` catches this class.
+4. **Overlapping curated spans lost taxa silently**; **a province name shared across schemes
+   swapped descriptions** (§7.25); **a batch writer regenerating its file discarded what tools
+   attached** (§7.26). All three fixed structurally.
+
+## What the first round found (3.6)
 
 1. The three reported defects had one shape: **a value with no declared lifetime, place or form
    cannot be wrong in any way a script can see**, and a fallback that always succeeds hides the
@@ -90,7 +111,10 @@ refinements otherwise), then `build_silhouettes.py registry` for own drawings.
   compact `E(...)` batches directly was far cheaper and better. If agents are used at all: ≤25
   items per sheet, an explicit output budget, patches only.
 - PBDB and PhyloPic homonyms (§7.21). Match classification, not just the name.
-- The batch scripts overwrite their own JSON: re-run `ranges_within_regions.py` after any of them.
+- The batch scripts regenerate their own JSON: re-run `ranges_within_regions.py` after any of them,
+  and put every authored edit in the batch source (the writer preserves only tool-attached keys).
+- `build_site.py` refuses when the timeline changed and the preview atlas was not rebuilt: run
+  `build_timeline_preview.py` and bump `IMAGERY_V` in BOTH `web/app.js` and `web/ambient.html`.
 - Headless Chrome: no spaces in `file://` paths; `--headless=new` never exits after a
   screenshot — wait for the file and kill the PID (§7.23).
 - Git on this repo is slow; a timed-out `git add` leaves `.git/index.lock`.
@@ -102,28 +126,21 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
 
 ## The work queue, ranked by how much of the remaining gap each closes
 
-1. **Deep-time placement review.** Run the "taxon → labels" listing at 1–5 Ma, 20, 50, 100, 150,
-   250, 300 and 400 Ma and read it, as was done for 0 Ma. Expect the same classes: endemics
-   leaking across a coarse code, notes naming a place, lowland taxa on high ground.
-2. **Palaeozoic and Mesozoic marine depth.** Open-ocean and many shelf cards before the
-   Cretaceous lean on class- and order-level entries. `pbdb.py --top <code> <old> <young> <clade>`
-   lists what is actually found, and the menus from this round are kept in
-   `build/taxa_src/pbdb_menus/` (top genera per region × era). Target: genus-level fauna for every Sloss sea, the Tethys and Panthalassa
-   margins by stage.
-3. **Devonian–Carboniferous land fauna outside Euramerica**, and regional Palaeozoic floras
-   (Cathaysian, Angaran) at genus level.
-4. **Reduce the 30 parent-form drawings** — hand-draw the forms PhyloPic lacks (belemnite,
-   conodont animal, blastoid, bryozoan colony, rudist, stromatoporoid, horn coral, agnostid,
-   zosterophyll, progymnosperm, astrapothere, embrithopod, mesosaur, ostracod, heteromorph,
-   bamboo, goblet). `fix_form_icons.py` `HAND` shows the format; the ratchet then tightens.
-5. **Palaeo-frame labels drawn on the wrong crust** (Gilboa Forest at 84.5°S at 385 Ma, Acadian
-   Belt, Oslo Rift, Rotliegend Desert, Zechstein Sea, Solnhofen Lagoon…). Biota is already right
-   via `LABEL_HOME`; the label POSITION is wrong and `audit_label_plate.py` misses it. A task
-   chip was spawned for this ("Fix labels tracked along the wrong crust").
-6. **Seventeen Tonian–Cryogenian land labels share one identical list.** Honest, dull. Block-level
-   microfossil assemblages (Bitter Springs, Chuar, Svanbergfjellet, Doushantuo) would differentiate them.
-7. Optional: finer region codes (split `as-se` Sundaland/Wallacea, `sa-s` Atacama/Patagonia,
-   `na-w` by latitude) — only if the box mechanism proves too fiddly to maintain.
+1. **Placement review at the ages not yet read**: 10, 35, 66, 80, 120, 200, 230, 280, 350, 450,
+   500, 600 Ma. `audit_biota.py --placements AGE`, read it, fix in `ranges_within_regions.py`.
+   Each pass so far took ~40 minutes and found 10–20 things.
+2. **Mesozoic marine at 51% generic**: the Triassic and Early Cretaceous shelves are thinner than
+   the Jurassic and Late Cretaceous. `pbdb_menus/*.md` list the genera; the Tethyan reef faunas
+   (Dachstein, Urgonian), the Boreal Sea and Panthalassa's margins by stage.
+3. **Cenozoic marine outside the tropics**: the Southern Ocean, the Paratethys and the Arctic at
+   genus level (Cz marine is 37% generic, and most of that is the polar seas).
+4. **Curated lists that are still class-level** (Laurentia's Ordovician, Baltica's, Siberia's):
+   rewrite them with the genera now in the registry, so the "c" tier leads with them.
+5. **Region codes remain continent-sized** where no box has been authored. The listing finds
+   them; splitting `sa-s` (Atacama/Patagonia) or `na-w` by latitude is the alternative if boxes
+   prove too fiddly.
+6. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
+   as long as README §9 says so.
 
 ## Commands to ship
 

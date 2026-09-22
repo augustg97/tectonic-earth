@@ -11,7 +11,22 @@ subsystem it would change. **This was the handover surface between research and 
 | the province model's modern tropics | `_cenozoic_marine_extended` splits the post-14 Ma tropics by basin (`block="Atlantic"` / `"East Pacific"`, passed by `provinces._basin_hint`); a pre-433 Ma "Cryptospore-plant crust" province stops Cooksonia appearing on Ordovician cards | every warm sea had been headed "Indo-Pacific Realm", the Caribbean and the Mid-Atlantic Ridge included; **63 provinces** now, all 211 markers describable |
 | label SETTING, which the type field cannot say | `SUBMERGED` (dated), time-sliced `LABEL_HOME`, `HABITAT_SINCE`, the polar rule, and a present-day DEM check in the gate | **16 labels** typed as land are drawn under >200 m of water; their cards listed ants, termites and crocodiles. 0 now, and the check is permanent |
 
-Open after this round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
+### Round 2, 2026-09-22 (release 3.7)
+
+| item | what shipped | measured |
+|---|---|---|
+| depth: the seas and Palaeozoic land | 164 taxa in six batches (`x-marine-depth`, `x-palaeozoic-land`, `x-marine-algae`, `x-glacial-gondwana`, `x-precambrian-blocks`, `x-ferns-plankton`), each cross-examined against the PBDB by `taxa_src/fetch_evidence.py`; genera outrank curated class-level names when four are available | class/order-level marine card slots **82% → 45%** (early Palaeozoic), **79% → 44%** (late), **63% → 51%** (Mesozoic); the seventeen-label identical Tonian list is gone, and the one that remains (541–521 Ma) is the real small-shelly uniformity |
+| the deep-time placement review | `audit_biota.py --placements AGE`, read at 3, 20, 50, 100, 150, 250, 300, 400 Ma | ~60 placements fixed by box, dated latitude, habitat, `avoid` or range; the Late Palaeozoic Ice Age added to the polar rule; overlapping curated spans merged; curated cross-realm life given its own headings |
+| **B14** palaeo-frame labels on the wrong crust | Gilboa Forest, Acadian Belt, Oslo Rift, Rotliegend Desert, Zechstein Sea, Solnhofen Lagoon, Hun Superterrane, Central Pangaean Mts re-anchored at present-day coordinates; `audit_label_plate.py` gains a home-crust detector | **6 findings → 0** on the old coordinates; Gilboa at 387 Ma moves from 85°S to 38°S, beside the Catskill Delta |
+| the parent-form drawings | seventeen forms hand-drawn (`fix_form_icons.HAND`) | **30 → 0**, ratchet at 0 |
+| the five 404s | future foreland fields baked (`build_foreland.py` handles `fut_`), the one absent field declared in timeline and manifest, `build_site` checks every derived field name | 0 missing of 2,258 derived names |
+
+Open after this round: the placement review at ages not yet read (500 Ma, 600 Ma, the Mesozoic
+stages between the samples); Ordovician–Silurian marine depth outside Laurentia and Baltica;
+Cenozoic marine fauna of the Southern Ocean and the Paratethys at genus level; region codes
+that remain continent-sized where no box has been authored.
+
+Open after the first round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
 level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time
 ages (`audit_biota.py --placements 50` already shows Rhododendron reaching Eocene Kerguelen
 through its Indian-crust code); 30 forms with no traceable drawing; and the palaeo-frame labels

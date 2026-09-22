@@ -262,6 +262,9 @@ Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the ge
   - **Finer than a region code.** The codes are continent-sized (`na-w` is Alaska to Baja), so a narrow endemic carries a `box` in present-day lon/lat and a label carries a footprint (`biota.label_point` + `label_reach`, anisotropic for long ranges). Continents and whole oceans ignore boxes; everything local obeys them. `avoid` names labels outright where a point and a reach cannot separate neighbours. `build/taxa_src/ranges_within_regions.py` holds all of these refinements in one reviewable table.
   - **The label's SETTING is dated.** `SUBMERGED` makes sea cards of labels typed for their tectonics whose surface is water (oceanic plateaus; the Red Sea from 20 Ma, the Gulf of California from 7, Mauritius before its volcano at 8). `LABEL_HOME` may be time-sliced: a microcontinent is its parent's crust until it leaves and an ocean island after. `HABITAT_SINCE` gives blocks and basins the climate they have had only recently (the Tarim Block is desert since ~5 Ma). Ice-age ground poleward of 70° is tundra and ice whatever the type says.
   - **Three rules about "everywhere".** A land taxon ranged `cosmo` does not reach a home that is ocean basin only; after 34 Ma nothing reaches Antarctica unless its author named `an`; polar cards take no taxon on trust. See SCHEMA.md.
+  - **The placement review.** `audit_biota.py --placements <age>` prints every composer-chosen taxon → the labels it lands on at that age. Read by eye at 0, 3, 20, 50, 100, 150, 250, 300 and 400 Ma it found what no rule could: endemics leaking across a continent-sized code, lineages shown before they reached a continent, lowland forms on the ice. Run it after any large registry change.
+  - **Curated lists that cross a realm.** Overlapping curated spans are merged (`curated_at`). A curated land or air taxon on a sea card (Archaeopteryx at Solnhofen) shows under "On its shores and in the air above it"; a curated sea taxon on a land card after 385 Ma (Basilosaurus in the Fayum) under "In the seas across it". The model never invents either.
+- `taxa_src/fetch_evidence.py` — attaches the PBDB's record (classification, robust dates, occurrence regions) to every entry lacking one, so `biota.py --check` cross-examines a new batch and not only itself. The batch writer preserves what it attaches.
 - `pbdb.py` — a cached Paleobiology Database client: classification, first/last appearance (4th–96th percentile of occurrence midpoints; the raw extremes are outliers and coarse bins) and occurrence regions for every registry name, used by `biota.review()` to cross-check form, range and place.
 - `audit_biota.py` — replays every card the app can show (38,036 label-ages) from the SHIPPED `life.json` against the registry, plus a present-day DEM check that no label drawn under deep water lists land life. Wired into `audit_all.py` (§6). `--ledger` and `--sheets` write review documents to `build/verify/`.
 - `verify_cards.py`, `verify_icons.py` — render real cards and icon contact sheets to PNG under headless Chrome by lifting the app's OWN card functions out of `app.js` verbatim, so the check is of the shipped source text without a ten-minute software-WebGL boot.
@@ -534,7 +537,9 @@ python audit_all.py --quick   # skip the pyGPlates ones (~2 min)
 | `audit_label_windows` | 2 | a label drawn when the entity it names did not exist |
 | `audit_curated_biota` | 11 exceptions, 0 conflicts | a curated locality the province model would overwrite, or one whose flag disagrees with what it is |
 | `audit_biota` — 14 hard checks | 0 each | per card-age: an organism outside its lifetime, off its crust, outside its own range within a region, under a drawing its classification contradicts, unregistered, or undrawn; a land card with fauna and no flora or the reverse; fewer than four organisms without a stated reason; a label with no home crust; a card missing; land life on ground the DEM draws as deep sea |
-| `audit_biota` — parent-form drawings | 30, may only fall | a taxon drawn with its parent form's icon because its own has nothing to trace: declared, counted, ratcheted |
+| `audit_biota` — parent-form drawings | 0, may only fall | a taxon drawn with its parent form's icon because its own has nothing to trace: 33 in 3.5, 0 since the last seventeen forms were drawn by hand (`fix_form_icons.HAND`) |
+| `audit_label_plate` | 0 | a plate-tracked label whose coordinate is on a different continent from the one its text names — or, since 3.7, from the home crust the biota registry gives it (`biota.LABEL_HOME`), which needs no text: six palaeo-frame labels on modern land were riding the wrong continent |
+| `build_site` fetch targets | refuses | every file the pages fetch by name, every script tag, and every per-keyframe field the app derives from the timeline (2,258 names), unless the entry declares it absent (`timeline[i].no`) |
 | `climate_audit` | 1 (an INFO check that PASSES) | the GMST/CO₂/O₂ table against PhanDA and Krause |
 | `ice_audit` | 0 of 23 outside range | drawn ice area against the literature, per keyframe |
 | `regression_gate` | 0 true regressions | a feature the frame switch made worse |
@@ -888,6 +893,32 @@ DOM panel costs ten minutes of software GL; lifting the app's own functions out 
 by name and running them against the real JSON and CSS proves the same source text in seconds
 (`verify_cards.py`).
 
+### 7.24 A palaeo coordinate on modern land is tracked on the wrong continent
+
+`build_labels` plate-tracks any coordinate that is land today. A label authored where its
+feature sat in its own era — the Gilboa Forest at its Devonian position, which is Brazil now —
+passes that test and rides South America to 85°S. Nothing complains: the label draws, moves,
+and looks plausible. `audit_label_plate.py` caught eleven by reading continent names out of the
+descriptions; eight more had descriptions that named no continent. The second detector needs no
+text: the biota registry already records each palaeo-frame label's present-day home crust
+(`biota.LABEL_HOME`), and a tracked coordinate outside its own home is the defect. **Two
+independent statements of the same fact, kept for different reasons, are a check on each other.**
+
+### 7.25 Two provinces with one name are one province
+
+`provinces.py` keys provinces by name. The Late Palaeozoic and Mesozoic marine schemes both
+produced a "Tethyan Realm", and whichever was registered first supplied the paragraph for both:
+the Pennsylvanian Absaroka Sea was headed with Cretaceous rudist reefs. A name that is a key must
+be unique across every scheme that can emit it.
+
+### 7.26 A batch writer that regenerates its file throws away what tools attached
+
+`taxa_src/*.py` write their registry file from scratch, which is what makes them the source of
+truth — and what silently discarded the PBDB evidence, the reviewer's `pbdb_ok`/`place_ok`
+verdicts and every hand edit on the next run. The writer now carries a whitelist of
+tool-attached keys forward from the previous file, and every authored change goes back into the
+batch source, never into the JSON alone.
+
 ## 8. Sources
 
 | role | source |
@@ -925,12 +956,12 @@ by name and running them against the real JSON and CSS proves the same source te
 
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **The biota cards are composed from a registry, and these are their limits.** (The three-tier panel — exception-curated → province assemblage → global list — is gone; §5.6.) All 38,036 card-ages pass the gate, which means no organism is outside its lifetime, its crust or its declared range, and none is under the wrong body form. It does not mean every card is the best card:
-  - *Depth is uneven.* The registry holds ~1,150 taxa. Cenozoic land, the living world and the Mesozoic are well served; Palaeozoic open-ocean cards and much of the Precambrian still lean on class- and phylum-level entries, and Devonian–Carboniferous land fauna outside Euramerica is mostly cosmopolitan clades. Seventeen Tonian–Cryogenian land labels share one identical microbial list, which is honest and dull.
-  - *Region codes are continent-sized.* About 250 taxa carry a finer `box`, latitude band, habitat or `avoid`; the rest are as precise as their code. A living species with none of these can still appear anywhere in its region. The placement listing in §7.20 is how to find them.
+  - *Depth is uneven, and measured.* The registry holds 1,320 taxa. Class- and order-level entries on marine cards: 37% of Cenozoic, 51% of Mesozoic, 44% of late Palaeozoic, 45% of early Palaeozoic card slots (82% and 79% before 3.7), 96% of Precambrian — where the honest list is microbial. The earliest Cambrian shelf (541–521 Ma) is one list on every continent, because the small shelly fauna was. Cenozoic and Mesozoic land are well served; Ordovician–Silurian land is cryptospore crust by design.
+  - *Region codes are continent-sized.* 261 taxa carry a finer `box`, `avoid` list, sliced latitude band or dated habitat; the rest are as precise as their code. The placement listing (`audit_biota.py --placements`) has been read at nine ages; a living species with none of these can still appear anywhere in its region at an age not yet read.
   - *A label is a point with a reach.* Long or irregular features (the Cordillera, the Central Asian Orogenic Belt) are approximated by an ellipse round one coordinate.
-  - *30 taxa are drawn with a parent form's icon* (agnostids, astrapotheres, belemnites, blastoids, bryozoans, conodonts, rudists, stromatoporoids, zosterophylls…) because nothing traceable exists for their own. Declared, counted, and ratcheted in `audit_all`.
+  - *Twenty-six body forms are hand-drawn* (belemnite, conodont, blastoid, bryozoan, horn coral, rudist, stromatoporoid, zosterophyll, progymnosperm, astrapothere, embrithopod, mesosaur, ostracod, uncoiled ammonite, bamboo, Namacalathus, agnostid, and the nine from 3.6) because no silhouette library holds them. They name the group at 46×31 px; they are not specimens.
   - *Ocean-island deep time is inference.* The Seychelles have no fossil record; their 3–62 Ma cards show the lineages phylogeny says were aboard and print a note saying so. Kerguelen's Miocene conifers are from wood in its lavas; its fauna then is inferred.
-  - *Palaeo-frame labels that are land today ride the wrong crust on the globe* (Gilboa Forest, Acadian Belt, Oslo Rift, Rotliegend Desert, Zechstein Sea, Solnhofen Lagoon). Their BIOTA is right — `LABEL_HOME` gives each its true crust — but the label itself is drawn in the wrong place, and `audit_label_plate.py` does not see it. Open.
+  - *A label is a point with a reach, and the future has forelands it never had.* The fifty future keyframes' foreland fields are baked from the synthesised belts, like the rest of the future series: illustrative.
 
 - **Eleven curated localities are flagged `exception`** and the province model must never speak over them — Solnhofen, the Zechstein, Muschelkalk and Nama seas, the Messinian salt basin, the Paratethys, Lake Pannon, the Mid-Atlantic Ridge and East Pacific Rise vent faunas, the Beringian steppe-tundra, and Wallacea. Being atypical for their province is the entire point of each. `audit_curated_biota.py` checks the flag against a reading of the name, so a new curated entry has to declare itself.
 
