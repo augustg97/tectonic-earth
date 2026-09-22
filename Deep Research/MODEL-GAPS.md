@@ -21,10 +21,17 @@ subsystem it would change. **This was the handover surface between research and 
 | the parent-form drawings | seventeen forms hand-drawn (`fix_form_icons.HAND`) | **30 → 0**, ratchet at 0 |
 | the five 404s | future foreland fields baked (`build_foreland.py` handles `fut_`), the one absent field declared in timeline and manifest, `build_site` checks every derived field name | 0 missing of 2,258 derived names |
 
-Open after this round: the placement review at ages not yet read (500 Ma, 600 Ma, the Mesozoic
-stages between the samples); Ordovician–Silurian marine depth outside Laurentia and Baltica;
-Cenozoic marine fauna of the Southern Ocean and the Paratethys at genus level; region codes
-that remain continent-sized where no box has been authored.
+### Round 3, 2026-09-22 (release 3.8)
+
+| item | what shipped | measured |
+|---|---|---|
+| the remaining placement ages | `--placements` read at 10, 35, 80, 120, 200, 230, 280, 350, 450, 500, 600 Ma | ~50 placements fixed; Wrangellia and pre-Pliocene Wallacea made sea cards; the Caledonides' home sliced at the Atlantic's opening |
+| the Triassic, Early Cretaceous and polar seas | 62 genera (`x-mesozoic-polar-seas`); the Arctic Ocean's curated list rewritten at species level; the Paratethys given its Sarmatian fauna | marine slots at class/order level: early Palaeozoic **45% → 36%**, Mesozoic **51% → 40%**, Cenozoic **37% → 33%** |
+| class-level curated lists | Laurentia's, Baltica's, Siberia's and Avalonia's Ordovician–Silurian spans rewritten with the genera now registered | 'Brachiopoda, Crinoidea, Bryozoa' gone from the "c" tier |
+
+Open after this round: nothing that changes the mechanism. Depth can always go further —
+the Precambrian is microbial by nature (77% generic), and every card is only as good as
+the most recent reading of the placement listing.
 
 Open after the first round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
 level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time

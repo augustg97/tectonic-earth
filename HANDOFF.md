@@ -18,12 +18,13 @@ Paste this whole file as the first message of a new session.
 
 The user asked for the feature cards' flora and fauna to be fixed **systematically**: every card
 rich, accurate, diverse, with the right icon, the right organisms for that place and time, and a
-tracking system so it cannot decay. The system shipped in 3.6; 3.7 (2026-09-22) added depth —
-164 taxa for the seas, Palaeozoic land and the Precambrian — read the placement listing at
-eight ages, re-anchored eight mislaid labels, hand-drew the last seventeen forms, and closed
-the five 404s. The user's last instruction was "keep going until completion": the work queue
-below is what completion still wants. There is no open loop; every round ends deployed and
-verified live.
+tracking system so it cannot decay. The system shipped in 3.6; 3.7 and 3.8 (2026-09-22) added depth — 226 taxa for the seas,
+Palaeozoic land and the Precambrian — read the placement listing at twenty ages, re-anchored
+eight mislaid labels, hand-drew the last forms, closed the five 404s, and rewrote the
+class-level curated lists. The user's instruction was "keep going until completion" and then
+"keep going with the remaining placement ages and the Mesozoic seas, and any other remaining
+items": those are done. What is left is in the work queue below, and all of it is depth. There
+is no open loop; every round ends deployed and verified live.
 
 ## How the system works, in one paragraph
 
@@ -62,14 +63,31 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260922-0016`**, release 3.7, commit `a7027135`.
+- Last live deploy: **`DATA_V=20260922-0339`**, release 3.8, commit `5c94cdf9`.
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
   drawings **0** (ratchet at 0); curated exceptions **12**. The frame gate is skipped under `--quick`.
-- Registry: **1,320 taxa** in 22 files; 1,181 reach a card; 714 illustrations shipped. 261 taxa
+- Registry: **1,382 taxa** in 23 files; 1,229 reach a card; 724 illustrations shipped. ~330 taxa
   carry a box, avoid list, sliced latitude or dated habitat.
-- Marine card slots at class/order level: Cz 37%, Mz 51%, late Pz 44%, early Pz 45%, Pc 96%.
+- Marine card slots at class/order level: Cz 33%, Mz 40%, late Pz 43%, early Pz 36%, Pc 77%.
+- Placement listing read at: 0, 3, 10, 20, 35, 50, 80, 100, 120, 150, 200, 230, 250, 280, 300,
+  350, 400, 450, 500, 600 Ma.
+
+## What the third round found (3.8)
+
+1. The later placement ages found fewer, and different, things: lineages shown before they
+   reached a continent (ceratopsids in Asia, hadrosaurs in the south), an animal of one
+   Lagerstätte on every label of its continent (Scelidosaurus, the Jehol fauna), provincial
+   floras leaking across `as-e`/`as-se`/`eu` (Angara, Cathaysia), and a warm Laurentian shelf
+   fauna reaching the cold Gondwanan margin through the ocean codes. `avoid` and latitude
+   bands did most of the work; boxes need present-day points that palaeo labels lack.
+2. A region code can be two provinces at once (`as-e` = North and South China; `as-se` =
+   Indochina and Sibumasu). `avoid` by label name is the honest tool where no box can separate them.
+3. An oceanic terrane (Wrangellia) typed "island" was a land card with dicynodonts. SUBMERGED
+   with a reef/shelf habitat is the setting for an arc.
+4. The PBDB's "sea" pseudo-region (collections on no continent) counted against every authored
+   range; a basin code now answers it.
 
 ## What the second round found (3.7)
 
@@ -126,19 +144,18 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
 
 ## The work queue, ranked by how much of the remaining gap each closes
 
-1. **Placement review at the ages not yet read**: 10, 35, 66, 80, 120, 200, 230, 280, 350, 450,
-   500, 600 Ma. `audit_biota.py --placements AGE`, read it, fix in `ranges_within_regions.py`.
-   Each pass so far took ~40 minutes and found 10–20 things.
-2. **Mesozoic marine at 51% generic**: the Triassic and Early Cretaceous shelves are thinner than
-   the Jurassic and Late Cretaceous. `pbdb_menus/*.md` list the genera; the Tethyan reef faunas
-   (Dachstein, Urgonian), the Boreal Sea and Panthalassa's margins by stage.
-3. **Cenozoic marine outside the tropics**: the Southern Ocean, the Paratethys and the Arctic at
-   genus level (Cz marine is 37% generic, and most of that is the polar seas).
-4. **Curated lists that are still class-level** (Laurentia's Ordovician, Baltica's, Siberia's):
-   rewrite them with the genera now in the registry, so the "c" tier leads with them.
-5. **Region codes remain continent-sized** where no box has been authored. The listing finds
-   them; splitting `sa-s` (Atacama/Patagonia) or `na-w` by latitude is the alternative if boxes
-   prove too fiddly.
+1. **Late Palaeozoic seas at 43%**: the Carboniferous–Permian shelves outside North America
+   (the Ural Ocean, the Cathaysian and Gondwanan shelves) and the Devonian reef faunas of
+   Australia and the Rhenish shelf. `pbdb_menus/*.md` for as-e, au, eu.
+2. **Precambrian at 77%**: microbial by nature. Only the Ediacaran can go further (the White
+   Sea and Avalon assemblages at genus level are curated already; the rest is acritarchs).
+3. **Placement at the ages between** (the review sampled every ~25–50 Myr): a pass at 5, 15,
+   40, 60, 90, 110, 170, 190, 215, 265, 320, 375, 420, 480 Ma would find a handful each.
+4. **Curated spans that are still generic** on smaller labels (the province markers are
+   class-level by design; the "c" tier is now genus-level on the continents).
+5. **Region codes remain continent-sized** where no box or avoid has been authored; the
+   listing is how to find them. Splitting `as-e` (North/South China) and `as-se`
+   (Indochina/Sibumasu) would retire a dozen `avoid` lists.
 6. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
 
