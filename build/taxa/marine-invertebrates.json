@@ -3481,7 +3481,13 @@
      "na-e": 1,
      "au-e": 1
     }
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Olenellus": {
    "rank": "genus",

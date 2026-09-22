@@ -668,7 +668,13 @@
     },
     "fea_r": 474.2,
     "lla_r": 453.85
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Conocoryphe": {
    "rank": "genus",
@@ -1158,7 +1164,13 @@
     },
     "fea_r": 472.55,
     "lla_r": 455.25
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Ellipsocephalus": {
    "rank": "genus",
@@ -2585,7 +2597,13 @@
     },
     "fea_r": 460.25,
     "lla_r": 447.0
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Orthis": {
    "rank": "genus",
@@ -2929,7 +2947,13 @@
     },
     "fea_r": 472.55,
     "lla_r": 454.9
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Prasopora": {
    "rank": "genus",
@@ -3183,7 +3207,13 @@
     },
     "fea_r": 472.55,
     "lla_r": 446.3
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Shaanxilithes": {
    "rank": "genus",
@@ -3663,7 +3693,13 @@
     },
     "fea_r": 464.55,
     "lla_r": 447.35
-   }
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
   },
   "Vendia": {
    "rank": "genus",

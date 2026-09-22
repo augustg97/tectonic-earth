@@ -1,0 +1,2231 @@
+{
+ "taxa": {
+  "Abadiella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 514,
+   "range": [
+    "au-e",
+    "an",
+    "as-s"
+   ],
+   "note": "Australia's first trilobite: Abadiella huoi of the Flinders Ranges and the Stansbury basin, a redlichiid at the base of the Australian trilobite record.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Abadiellidae"
+   },
+   "pbdb": {
+    "asked": "Abadiella",
+    "matched": "Abadiella",
+    "exact": true,
+    "oid": "txn:19347",
+    "rank": "genus",
+    "extant": false,
+    "noc": 46,
+    "fea": 521,
+    "lla": 514.5,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Abadiellidae",
+    "genus": "Abadiella",
+    "regions": {
+     "as-ne": 22,
+     "au-e": 20,
+     "as-s": 3,
+     "af-n": 1
+    },
+    "fea_r": 522.65,
+    "lla_r": 517.75
+   }
+  },
+  "Agnostotes orientalis": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 494,
+   "lad": 492,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The agnostoid whose first appearance at Duibian in Zhejiang defines the base of the Jiangshanian stage, found from Kazakhstan and Siberia to Laurentia.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Agnostidae"
+   },
+   "pbdb": {
+    "asked": "Agnostotes orientalis",
+    "matched": "Agnostotes orientalis",
+    "exact": true,
+    "oid": "txn:439147",
+    "rank": "species",
+    "extant": false,
+    "noc": 20,
+    "fea": 497,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Diplagnostidae",
+    "genus": "Agnostotes",
+    "regions": {
+     "as-s": 8,
+     "as-n": 6,
+     "as-c": 4,
+     "as-ne": 1,
+     "na-w": 1
+    },
+    "fea_r": 495.6,
+    "lla_r": 491.02
+   }
+  },
+  "Alum Shale fauna": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 500,
+   "lad": 480,
+   "range": [
+    "eu-n"
+   ],
+   "note": "The black Alum Shale of Scandinavia: olenid trilobites and agnostoids by the million in an oxygen-starved sea over Baltica, from the late Cambrian into the Ordovician, the source of the Furongian standard.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Olenus",
+   "assemblage": true
+  },
+  "Balcoracania": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 515,
+   "lad": 511,
+   "range": [
+    "au-e"
+   ],
+   "note": "A trilobite of the Emu Bay Shale with more thoracic segments than almost any other -- over a hundred -- the record-holder among all trilobites.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Emuellidae"
+   },
+   "pbdb": {
+    "asked": "Balcoracania",
+    "matched": "Balcoracania",
+    "exact": true,
+    "oid": "txn:19355",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 512.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Emuellidae",
+    "genus": "Balcoracania",
+    "regions": {
+     "au-e": 2
+    }
+   }
+  },
+  "Bathyuriscus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 512,
+   "lad": 500,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n"
+   ],
+   "note": "A smooth-shelled corynexochid of the Laurentian outer shelf, in the Burgess Shale, the Wheeler Shale and the limestones between them.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dolichometopidae"
+   },
+   "pbdb": {
+    "asked": "Bathyuriscus",
+    "matched": "Bathyuriscus",
+    "exact": true,
+    "oid": "txn:19500",
+    "rank": "genus",
+    "extant": false,
+    "noc": 72,
+    "fea": 515.3,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dolichometopidae",
+    "genus": "Bathyuriscus",
+    "regions": {
+     "na-w": 37,
+     "na-e": 25,
+     "na-n": 7,
+     "as-c": 2,
+     "au-e": 1
+    },
+    "fea_r": 507.5,
+    "lla_r": 499.75
+   }
+  },
+  "Bavlinella faveolata": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "microbe",
+   "fad": 720,
+   "lad": 635,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Clusters of tiny cells packed into a mulberry-shaped colony, the commonest fossil of the Cryogenian interglacial shales on every continent; a cyanobacterium or a stressed eukaryote, either way the plankton of the seas between the snowballs.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Bavlinella faveolata",
+    "matched": "Bavlinella faveolata",
+    "exact": true,
+    "oid": "txn:405741",
+    "rank": "species",
+    "extant": false,
+    "noc": 8,
+    "fea": 1000,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Bavlinella",
+    "regions": {
+     "eu-n": 4,
+     "sa-s": 4
+    },
+    "fea_r": 769.4,
+    "lla_r": 522.65
+   }
+  },
+  "Bergeroniellus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 518,
+   "lad": 512,
+   "range": [
+    "as-n"
+   ],
+   "note": "A Siberian trilobite of the Botomian stage, the zone fossil of the Lena and Aldan shelves in the middle of the early Cambrian.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Bergeroniellidae"
+   },
+   "pbdb": {
+    "asked": "Bergeroniellus",
+    "matched": "Bergeroniellus",
+    "exact": true,
+    "oid": "txn:20339",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 516,
+    "lla": 512.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Ellipsocephalidae",
+    "genus": "Bergeroniellus",
+    "regions": {
+     "as-n": 2
+    }
+   }
+  },
+  "Callavia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 517,
+   "lad": 512,
+   "range": [
+    "na-av",
+    "eu-n"
+   ],
+   "note": "The large olenelloid of the Avalonian shelves -- the Brigus Formation of Newfoundland, the Comley limestones of Shropshire, the Braintree slates of Massachusetts -- Avalonia's own first trilobite.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Callaviidae"
+   },
+   "pbdb": {
+    "asked": "Callavia",
+    "matched": "Callavia",
+    "exact": true,
+    "oid": "txn:19120",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 506.5,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Holmiidae",
+    "genus": "Callavia",
+    "regions": {
+     "na-av": 2
+    }
+   }
+  },
+  "Chuangia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 497,
+   "lad": 490,
+   "range": [
+    "as-ne",
+    "as-s",
+    "as-c",
+    "as-n"
+   ],
+   "note": "A smooth-shelled trilobite of the late Cambrian of North China, Korea and Kazakhstan, the zone fossil of the Changshanian on the North China platform.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Chuangiidae"
+   },
+   "pbdb": {
+    "asked": "Chuangia",
+    "matched": "Chuangia",
+    "exact": true,
+    "oid": "txn:19528",
+    "rank": "genus",
+    "extant": false,
+    "noc": 44,
+    "fea": 504.5,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Leiostegiidae",
+    "genus": "Schantungia",
+    "regions": {
+     "as-ne": 24,
+     "as-s": 13,
+     "as-c": 6,
+     "as-w": 1
+    },
+    "fea_r": 495.6,
+    "lla_r": 491.02
+   }
+  },
+  "Coleoloides": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 535,
+   "lad": 515,
+   "range": [
+    "na-av",
+    "eu-n",
+    "as-n"
+   ],
+   "note": "Calcareous tubes standing in dense stands on the earliest Cambrian shelves of Avalonia -- the Bonavista Peninsula, Massachusetts, Shropshire -- and Siberia.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Coleoloides",
+    "matched": "Coleoloides",
+    "exact": true,
+    "oid": "txn:7425",
+    "rank": "genus",
+    "extant": false,
+    "noc": 48,
+    "fea": 635,
+    "lla": 504.5,
+    "phylum": "Problematica",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Coleoloides",
+    "regions": {
+     "eu-n": 16,
+     "na-av": 14,
+     "as-n": 5,
+     "na-e": 4,
+     "as-s": 4,
+     "in": 3,
+     "na-w": 1,
+     "gl": 1
+    },
+    "fea_r": 532.15,
+    "lla_r": 511.35
+   },
+   "form_ok": true
+  },
+  "Conotubus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 551,
+   "lad": 541,
+   "range": [
+    "as-ne",
+    "na-w"
+   ],
+   "note": "A tube of nested cones from the Gaojiashan biota of Shaanxi, pyritised and preserved whole: the organic-walled kin of Cloudina, and one of the first animals to build a tube to live in.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Conotubus",
+    "matched": "Conotubus",
+    "exact": true,
+    "oid": "txn:416592",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 635,
+    "lla": 520,
+    "phylum": "Cnidaria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cloudinidae",
+    "genus": "Conotubus",
+    "regions": {
+     "na-w": 4,
+     "as-s": 3,
+     "eu-n": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 529.4
+   }
+  },
+  "Corumbella werneri": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 545,
+   "lad": 541,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "na-w"
+   ],
+   "note": "A four-sided organic tube with a mineral coat from the Tamengo Formation of Brazil, also in Nevada: read as a stalked cnidarian, a scyphozoan polyp fixed to the last Ediacaran sea floor.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Corumbella werneri",
+    "matched": "Corumbella werneri",
+    "exact": true,
+    "oid": "txn:152408",
+    "rank": "species",
+    "extant": false,
+    "noc": 12,
+    "fea": 635,
+    "lla": 538.8,
+    "phylum": "Cnidaria",
+    "class": "Scyphozoa",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Corumbellidae",
+    "genus": "Corumbella",
+    "regions": {
+     "sa-s": 8,
+     "sa-n": 2,
+     "ar": 1,
+     "af-s": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 586.9
+   },
+   "form_ok": true
+  },
+  "Datangpo microfossils": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 663,
+   "lad": 654,
+   "range": [
+    "as-s"
+   ],
+   "note": "Organic-walled microfossils and Bavlinella colonies in the manganese-bearing black shales of the Datangpo Formation of South China: life in the ten-million-year interglacial between the Sturtian and Marinoan ice.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "rep": "Bavlinella faveolata",
+   "assemblage": true
+  },
+  "Dikelocephalus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 492,
+   "lad": 486,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "A broad trilobite the size of a hand from the late Cambrian sandstones of Wisconsin and Minnesota, the largest animal of the Laurentian shallows of its day.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Dikelocephalidae"
+   },
+   "pbdb": {
+    "asked": "Dikelocephalus",
+    "matched": "Dikelocephalus",
+    "exact": true,
+    "oid": "txn:19933",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 497,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Dikelocephalidae",
+    "genus": "Dikelocephalus",
+    "regions": {
+     "na-e": 10,
+     "na-w": 5,
+     "eu-n": 1
+    },
+    "fea_r": 491.93,
+    "lla_r": 481.98
+   }
+  },
+  "Elvinia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 494,
+   "lad": 490,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "The Laurentian trilobite of the Elvinia zone, the standard of the late Cambrian across the Great Basin and the Appalachian shelf.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Elviniidae"
+   },
+   "pbdb": {
+    "asked": "Elvinia",
+    "matched": "Elvinia",
+    "exact": true,
+    "oid": "txn:20484",
+    "rank": "genus",
+    "extant": false,
+    "noc": 117,
+    "fea": 497,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Elviniidae",
+    "genus": "Elvinia",
+    "regions": {
+     "na-e": 86,
+     "na-w": 28,
+     "na-n": 2,
+     "sa-s": 1
+    },
+    "fea_r": 495.25,
+    "lla_r": 488.52
+   }
+  },
+  "Estaingia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 515,
+   "lad": 511,
+   "range": [
+    "au-e",
+    "as-s"
+   ],
+   "note": "The commonest animal of the Emu Bay Shale of Kangaroo Island, a small trilobite preserved by the thousand, some with the bite marks of Anomalocaris.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Estaingiidae"
+   },
+   "pbdb": {
+    "asked": "Estaingia",
+    "matched": "Estaingia",
+    "exact": true,
+    "oid": "txn:155355",
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 521,
+    "lla": 506.5,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Estaingiidae",
+    "genus": "Estaingia",
+    "regions": {
+     "au-e": 8,
+     "as-s": 7,
+     "as-ne": 6,
+     "an": 1
+    },
+    "fea_r": 517.75,
+    "lla_r": 513.75
+   }
+  },
+  "Fallotaspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 517,
+   "range": [
+    "af-n",
+    "na-w"
+   ],
+   "note": "Among the first trilobites anywhere: a flat, wide-headed olenelloid of the Anti-Atlas of Morocco and the Fallotaspis zone of Nevada and California, at the base of the trilobite record.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Fallotaspididae"
+   },
+   "pbdb": {
+    "asked": "Fallotaspis",
+    "matched": "Fallotaspis",
+    "exact": true,
+    "oid": "txn:19129",
+    "rank": "genus",
+    "extant": false,
+    "noc": 21,
+    "fea": 530.7,
+    "lla": 515.3,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Fallotaspididae",
+    "genus": "Fallotaspis",
+    "regions": {
+     "af-n": 16,
+     "na-w": 3,
+     "as-n": 2
+    },
+    "fea_r": 518.5,
+    "lla_r": 517.65
+   }
+  },
+  "Fifteenmile scale microfossils": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 811,
+   "lad": 740,
+   "range": [
+    "na-n"
+   ],
+   "note": "Mineralised scales a few microns across, of a dozen shapes, from the Fifteenmile Group of the Yukon: the armour of Tonian eukaryotes, the first biomineralisation known, laid down in the shallow sea of Laurentia's western edge before the Sturtian ice.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "rep": "Trachyhystrichosphaera",
+   "assemblage": true
+  },
+  "Gaojiashania": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "worm",
+   "fad": 551,
+   "lad": 541,
+   "range": [
+    "as-ne",
+    "as-s",
+    "na-w"
+   ],
+   "note": "A segmented ribbon of the Gaojiashan biota of Shaanxi, a few centimetres long, pyritised in three dimensions: an animal of the last Ediacaran sea floor whose kind is still argued.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Gaojiashania",
+    "matched": "Gaojiashania",
+    "exact": true,
+    "oid": "txn:499719",
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 635,
+    "lla": 521,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Gaojiashania",
+    "regions": {
+     "na-w": 7,
+     "as-s": 4,
+     "eu-n": 1,
+     "af-s": 1,
+     "as-n": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 529.9
+   }
+  },
+  "Glyptagnostus reticulatus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 497,
+   "lad": 495,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A net-patterned agnostoid whose first appearance in Hunan defines the base of the Paibian and the Furongian series; found on every continent, the standard of the late Cambrian.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Glyptagnostidae"
+   },
+   "pbdb": {
+    "asked": "Glyptagnostus reticulatus",
+    "matched": "Glyptagnostus reticulatus",
+    "exact": true,
+    "oid": "txn:203564",
+    "rank": "species",
+    "extant": false,
+    "noc": 68,
+    "fea": 504.5,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Glyptagnostus",
+    "regions": {
+     "as-s": 37,
+     "as-n": 8,
+     "na-w": 5,
+     "as-c": 5,
+     "eu-n": 4,
+     "na-n": 3,
+     "na-e": 3,
+     "as-ne": 1,
+     "sa-s": 1,
+     "au-e": 1
+    },
+    "fea_r": 500.75,
+    "lla_r": 491.93
+   }
+  },
+  "Halkieria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 525,
+   "lad": 510,
+   "range": [
+    "gl",
+    "eu-n",
+    "as-n",
+    "au-e",
+    "as-s"
+   ],
+   "note": "A slug-shaped animal armoured with two thousand sclerites and a shell at each end, known whole from Sirius Passet in Greenland and from its scattered sclerites on most early Cambrian shelves.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "family": "Halkieriidae"
+   },
+   "pbdb": {
+    "asked": "Halkieria",
+    "matched": "Halkieria",
+    "exact": true,
+    "oid": "txn:7301",
+    "rank": "genus",
+    "extant": false,
+    "noc": 153,
+    "fea": 538.8,
+    "lla": 506.5,
+    "phylum": "Mollusca",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Halkieriidae",
+    "genus": "Halkieria",
+    "regions": {
+     "as-s": 65,
+     "as-n": 33,
+     "as-c": 27,
+     "na-av": 16,
+     "au-e": 4,
+     "gl": 2,
+     "na-e": 2,
+     "eu-s": 2,
+     "as-w": 1,
+     "as-ne": 1
+    },
+    "fea_r": 532.15,
+    "lla_r": 514.05
+   }
+  },
+  "Hyolithellus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 535,
+   "lad": 500,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A slender phosphatic tube a few millimetres long, once taken for a hyolith and now for the dwelling of a worm, on Cambrian shelves everywhere.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Hyolithellus",
+    "matched": "Hyolithellus",
+    "exact": true,
+    "oid": "txn:7442",
+    "rank": "genus",
+    "extant": false,
+    "noc": 365,
+    "fea": 538.8,
+    "lla": 486.85,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Hyolithelminthida",
+    "family": "Hyolithellidae",
+    "genus": "Hyolithellus",
+    "regions": {
+     "as-n": 90,
+     "as-s": 55,
+     "au-e": 46,
+     "as-c": 41,
+     "gl": 41,
+     "na-e": 22,
+     "eu-n": 22,
+     "na-w": 18,
+     "na-av": 9,
+     "as-ne": 6,
+     "na-n": 4,
+     "af-n": 3,
+     "eu-s": 3,
+     "in": 3,
+     "an": 2
+    },
+    "fea_r": 532.15,
+    "lla_r": 510.15
+   }
+  },
+  "Irvingella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 494,
+   "lad": 490,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A late Cambrian trilobite with long genal spines and a narrow body, from Laurentia, Siberia, Kazakhstan, Australia and China; a zone fossil across the Jiangshanian.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Elviniidae"
+   },
+   "pbdb": {
+    "asked": "Irvingella",
+    "matched": "Irvingella",
+    "exact": true,
+    "oid": "txn:20587",
+    "rank": "genus",
+    "extant": false,
+    "noc": 162,
+    "fea": 497,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Elviniidae",
+    "genus": "Irvingella",
+    "regions": {
+     "na-e": 58,
+     "na-w": 29,
+     "as-ne": 23,
+     "as-c": 23,
+     "as-n": 12,
+     "as-s": 9,
+     "na-n": 3,
+     "sa-s": 3,
+     "eu-n": 2
+    },
+    "fea_r": 495.25,
+    "lla_r": 491.02
+   }
+  },
+  "Judomia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-n",
+    "gl",
+    "na-n"
+   ],
+   "note": "An Atdabanian trilobite of the Siberian platform, with a pygidium of many segments, from the shelves that ringed the Siberian craton at the equator.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Judomiidae"
+   },
+   "pbdb": {
+    "asked": "Judomia",
+    "matched": "Judomia",
+    "exact": true,
+    "oid": "txn:19136",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 530.7,
+    "lla": 508.2,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Judomiidae",
+    "genus": "Judomia",
+    "regions": {
+     "as-n": 7,
+     "na-n": 5,
+     "na-w": 4
+    },
+    "fea_r": 525.85,
+    "lla_r": 512.1
+   }
+  },
+  "Kaili biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 508,
+   "lad": 504,
+   "range": [
+    "as-s"
+   ],
+   "note": "The Kaili Formation of Guizhou: a Burgess Shale-type fauna of soft-bodied arthropods, sponges, echinoderms and algae, at the base of the Miaolingian in South China.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Olenoides",
+   "assemblage": true
+  },
+  "Kaolishania": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 492,
+   "lad": 488,
+   "range": [
+    "as-ne",
+    "au-e"
+   ],
+   "note": "A late Cambrian trilobite of Shandong and the North China platform, whose pustular shell names a zone of the Chinese Furongian.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Kaolishaniidae"
+   },
+   "pbdb": {
+    "asked": "Kaolishania",
+    "matched": "Kaolishania",
+    "exact": true,
+    "oid": "txn:19587",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 504.5,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Kaolishaniidae",
+    "genus": "Kaolishania",
+    "regions": {
+     "au-e": 5,
+     "as-c": 1,
+     "as-ne": 1,
+     "in": 1
+    },
+    "fea_r": 492.6,
+    "lla_r": 491.02
+   }
+  },
+  "Kootenia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 512,
+   "lad": 500,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "gl",
+    "as-n",
+    "au-e"
+   ],
+   "note": "A corynexochid with a spiny pygidium of the Cambrian shelves of Laurentia, Siberia and Australia, common in the Burgess Shale and the limestones around it.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dorypygidae"
+   },
+   "pbdb": {
+    "asked": "Kootenia",
+    "matched": "Kootenia",
+    "exact": true,
+    "oid": "txn:134224",
+    "rank": "genus",
+    "extant": false,
+    "noc": 214,
+    "fea": 521,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dorypygidae",
+    "genus": "Kootenia",
+    "regions": {
+     "na-w": 72,
+     "as-s": 29,
+     "as-n": 25,
+     "na-n": 22,
+     "na-e": 18,
+     "as-c": 16,
+     "as-ne": 11,
+     "sa-s": 10,
+     "gl": 5,
+     "au-e": 4,
+     "an": 2
+    },
+    "fea_r": 522.65,
+    "lla_r": 500.75
+   }
+  },
+  "Lapworthella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 530,
+   "lad": 510,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Conical phosphatic sclerites with ribbed sides, the armour of a tommotiid, a lophophorate that wore a coat of them; among the commonest small shelly fossils of the early Cambrian.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "order": "Tommotiida"
+   },
+   "pbdb": {
+    "asked": "Lapworthella",
+    "matched": "Lapworthella",
+    "exact": true,
+    "oid": "txn:7420",
+    "rank": "genus",
+    "extant": false,
+    "noc": 192,
+    "fea": 538.8,
+    "lla": 504.5,
+    "phylum": "Brachiopoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Tommotiida",
+    "family": "Lapworthellidae",
+    "genus": "Lapworthella",
+    "regions": {
+     "au-e": 111,
+     "as-n": 21,
+     "eu-n": 18,
+     "as-s": 17,
+     "na-av": 14,
+     "na-e": 4,
+     "as-c": 3,
+     "an": 1,
+     "af-n": 1,
+     "as-ne": 1,
+     "in": 1
+    },
+    "fea_r": 525.85,
+    "lla_r": 511.35
+   },
+   "form_ok": true
+  },
+  "Leiosphaeridia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 1800,
+   "lad": 250,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Smooth-walled spheres without ornament, a form genus that holds the resting cysts of countless Proterozoic and Palaeozoic algae; in the Cryogenian, after the spiny acritarchs died back, they are most of what the seas left.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "order": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Leiosphaeridia",
+    "matched": "Leiosphaeridia",
+    "exact": true,
+    "oid": "txn:141164",
+    "rank": "genus",
+    "extant": false,
+    "noc": 357,
+    "fea": 2050,
+    "lla": 0.0117,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "Volvocales",
+    "family": "Chlorococcaceae",
+    "genus": "Leiosphaeridia",
+    "regions": {
+     "eu-n": 107,
+     "au-e": 78,
+     "an": 43,
+     "sa-s": 35,
+     "na-w": 30,
+     "na-e": 14,
+     "as-n": 13,
+     "na-n": 12,
+     "af-e": 6,
+     "as-ne": 4,
+     "in": 3,
+     "as-c": 3,
+     "ar": 2,
+     "af-w": 2,
+     "as-s": 2,
+     "mg": 1,
+     "eu-s": 1,
+     "sa-n": 1
+    },
+    "fea_r": 1700.0,
+    "lla_r": 3.96
+   }
+  },
+  "Lotagnostus americanus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 491,
+   "lad": 489,
+   "range": [
+    "cosmo"
+   ],
+   "note": "An agnostoid of the last Cambrian stage, proposed to define its base, from Quebec and Nevada to Kazakhstan, Australia and China.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Agnostidae"
+   },
+   "pbdb": {
+    "asked": "Lotagnostus americanus",
+    "matched": "Lotagnostus americanus",
+    "exact": true,
+    "oid": "txn:381819",
+    "rank": "species",
+    "extant": false,
+    "noc": 4,
+    "fea": 493.5,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Agnostidae",
+    "genus": "Lotagnostus",
+    "regions": {
+     "na-e": 4
+    }
+   }
+  },
+  "Ogygopsis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 510,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "The trilobite of the Mount Stephen beds above Field, British Columbia, which lie thick with its moults: found before the Burgess Shale, and the reason Walcott came.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dolichometopidae"
+   },
+   "pbdb": {
+    "asked": "Ogygopsis",
+    "matched": "Ogygopsis",
+    "exact": true,
+    "oid": "txn:19628",
+    "rank": "genus",
+    "extant": false,
+    "noc": 37,
+    "fea": 515.3,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dorypygidae",
+    "genus": "Ogygopsis",
+    "regions": {
+     "na-w": 25,
+     "na-e": 5,
+     "na-n": 3,
+     "gl": 2,
+     "an": 1,
+     "as-c": 1
+    },
+    "fea_r": 512.5,
+    "lla_r": 491.93
+   }
+  },
+  "Olenoides": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 512,
+   "lad": 500,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "gl",
+    "as-n",
+    "as-s"
+   ],
+   "note": "The big trilobite of the Burgess Shale, a hand long, preserved with its legs, gills and antennae: the animal that showed what a trilobite carried under its shield.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dorypygidae"
+   },
+   "pbdb": {
+    "asked": "Olenoides",
+    "matched": "Olenoides",
+    "exact": true,
+    "oid": "txn:19629",
+    "rank": "genus",
+    "extant": false,
+    "noc": 148,
+    "fea": 516,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Dorypygidae",
+    "genus": "Olenoides",
+    "regions": {
+     "na-w": 45,
+     "as-s": 44,
+     "as-c": 24,
+     "na-e": 18,
+     "gl": 7,
+     "as-n": 4,
+     "na-n": 3,
+     "an": 1,
+     "sa-s": 1,
+     "nz": 1
+    },
+    "fea_r": 510.5,
+    "lla_r": 499.75
+   }
+  },
+  "Oryctocephalus indicus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 509,
+   "lad": 505,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A spiny-tailed trilobite whose first appearance at Balang in Guizhou defines the base of the Wuliuan and the Miaolingian series, found from India and Siberia to Nevada.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Oryctocephalidae"
+   },
+   "pbdb": {
+    "asked": "Oryctocephalus indicus",
+    "matched": "Oryctocephalus indicus",
+    "exact": true,
+    "oid": "txn:237519",
+    "rank": "species",
+    "extant": false,
+    "noc": 45,
+    "fea": 509.7,
+    "lla": 504.5,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Oryctocephalidae",
+    "genus": "Oryctocephalus",
+    "regions": {
+     "as-s": 29,
+     "na-w": 16
+    },
+    "fea_r": 507.5,
+    "lla_r": 505.5
+   }
+  },
+  "Pagetia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 512,
+   "lad": 500,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A tiny eodiscid with eyes, a spine on its head and a spine on its tail, of the middle Cambrian on every shelf from Laurentia to Australia.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Eodiscidae"
+   },
+   "pbdb": {
+    "asked": "Pagetia",
+    "matched": "Pagetia",
+    "exact": true,
+    "oid": "txn:19287",
+    "rank": "genus",
+    "extant": false,
+    "noc": 142,
+    "fea": 515.3,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Eodiscidae",
+    "genus": "Pagetia",
+    "regions": {
+     "na-w": 51,
+     "as-s": 49,
+     "na-e": 23,
+     "au-e": 6,
+     "in": 3,
+     "na-n": 2,
+     "as-n": 2,
+     "as-ne": 2,
+     "sa-s": 2,
+     "an": 1,
+     "eu-n": 1
+    },
+    "fea_r": 510.5,
+    "lla_r": 501.75
+   }
+  },
+  "Peronopsis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 510,
+   "lad": 497,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A blind agnostoid a few millimetres long, head and tail nearly identical, drifting or crawling on Cambrian sea floors worldwide; in the Wheeler Shale it is the commonest fossil of all.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Peronopsidae"
+   },
+   "pbdb": {
+    "asked": "Peronopsis",
+    "matched": "Peronopsis",
+    "exact": true,
+    "oid": "txn:19293",
+    "rank": "genus",
+    "extant": false,
+    "noc": 246,
+    "fea": 516.2,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Peronopsidae",
+    "genus": "Peronopsis",
+    "regions": {
+     "as-c": 54,
+     "na-w": 51,
+     "na-e": 40,
+     "eu-s": 19,
+     "eu-n": 17,
+     "as-n": 12,
+     "as-s": 11,
+     "gl": 10,
+     "as-ne": 10,
+     "in": 7,
+     "au-e": 4,
+     "na-n": 4,
+     "as-w": 4,
+     "an": 1,
+     "af-n": 1,
+     "sa-s": 1
+    },
+    "fea_r": 511.35,
+    "lla_r": 498.25
+   }
+  },
+  "Proceratopyge": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 497,
+   "lad": 488,
+   "range": [
+    "as-s",
+    "as-ne",
+    "as-c",
+    "au-e",
+    "as-n"
+   ],
+   "note": "A late Cambrian trilobite of the outer shelves of Cathaysia, Kazakhstan, Australia and Siberia, with a broad flat pygidium; a zone fossil of the Furongian on the Gondwanan and Asian side.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Ceratopygidae"
+   },
+   "pbdb": {
+    "asked": "Proceratopyge",
+    "matched": "Proceratopyge",
+    "exact": true,
+    "oid": "txn:20136",
+    "rank": "genus",
+    "extant": false,
+    "noc": 323,
+    "fea": 504.5,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Ceratopygidae",
+    "genus": "Proceratopyge",
+    "regions": {
+     "as-s": 135,
+     "as-c": 122,
+     "as-ne": 38,
+     "as-n": 10,
+     "au-e": 8,
+     "na-w": 3,
+     "na-n": 2,
+     "sa-s": 2,
+     "eu-n": 2,
+     "eu-s": 1
+    },
+    "fea_r": 498.75,
+    "lla_r": 491.02
+   }
+  },
+  "Profallotaspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 521,
+   "lad": 518,
+   "range": [
+    "as-n"
+   ],
+   "note": "Siberia's first trilobite, from the lower Atdabanian of the Lena river: a fallotaspidoid at the very start of the Siberian trilobite record.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Fallotaspididae"
+   },
+   "pbdb": {
+    "asked": "Profallotaspis",
+    "matched": "Profallotaspis",
+    "exact": true,
+    "oid": "txn:19158",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 538.8,
+    "lla": 516,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Fallotaspididae",
+    "genus": "Profallotaspis",
+    "regions": {
+     "as-n": 2,
+     "na-w": 1
+    }
+   }
+  },
+  "Protohertzina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "conodont",
+   "fad": 541,
+   "lad": 530,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Curved phosphatic spines a millimetre long, the grasping teeth of an arrow-worm-like animal, and the first tooth-shaped fossils of the Cambrian: Protohertzina anabarica marks the Fortunian on every continent.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Protohertzina",
+    "matched": "Protohertzina",
+    "exact": true,
+    "oid": "txn:30738",
+    "rank": "genus",
+    "extant": false,
+    "noc": 163,
+    "fea": 538.8,
+    "lla": 506.5,
+    "phylum": "Chaetognatha",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Protohertzina",
+    "regions": {
+     "as-s": 116,
+     "as-c": 22,
+     "as-n": 14,
+     "in": 5,
+     "na-av": 3,
+     "au-e": 2,
+     "eu-n": 1
+    },
+    "fea_r": 534.75,
+    "lla_r": 522.65
+   },
+   "form_ok": true
+  },
+  "Pseudagnostus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 500,
+   "lad": 485,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A long-lived agnostoid of the late Cambrian and earliest Ordovician, on shelves everywhere; the last common agnostoid before the group dwindled.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Pseudagnostidae"
+   },
+   "pbdb": {
+    "asked": "Pseudagnostus",
+    "matched": "Pseudagnostus",
+    "exact": true,
+    "oid": "txn:19302",
+    "rank": "genus",
+    "extant": false,
+    "noc": 855,
+    "fea": 506.5,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Diplagnostidae",
+    "genus": "Pseudagnostus",
+    "regions": {
+     "as-c": 267,
+     "as-s": 138,
+     "au-e": 101,
+     "as-ne": 95,
+     "na-w": 88,
+     "na-e": 82,
+     "na-n": 43,
+     "as-n": 33,
+     "sa-s": 3,
+     "ca": 2,
+     "eu-n": 2,
+     "eu-s": 1
+    },
+    "fea_r": 498.75,
+    "lla_r": 488.93
+   }
+  },
+  "Rhombocorniculum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 525,
+   "lad": 515,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Slender phosphatic spines with a rhombic cross-section, the sclerites of an unknown animal, whose first appearance marks Cambrian Stage 3 from Siberia and Avalonia to China and Australia.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Rhombocorniculum",
+    "matched": "Rhombocorniculum",
+    "exact": true,
+    "oid": "txn:7592",
+    "rank": "genus",
+    "extant": false,
+    "noc": 35,
+    "fea": 538.8,
+    "lla": 506.5,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rhombocorniculum",
+    "regions": {
+     "eu-n": 10,
+     "na-av": 10,
+     "as-n": 4,
+     "as-c": 4,
+     "as-s": 3,
+     "au-e": 3,
+     "as-ne": 1
+    },
+    "fea_r": 527.5,
+    "lla_r": 511.35
+   }
+  },
+  "Saukia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 492,
+   "lad": 485,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n",
+    "as-ne"
+   ],
+   "note": "A large late Cambrian trilobite of the Laurentian carbonate shelf, the zone fossil of the last Cambrian stage in North America from Wisconsin to Texas.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Saukiidae"
+   },
+   "pbdb": {
+    "asked": "Saukia",
+    "matched": "Saukia",
+    "exact": true,
+    "oid": "txn:20184",
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 495.2,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Dikelocephalidae",
+    "genus": "Saukia",
+    "regions": {
+     "na-e": 10,
+     "as-s": 10,
+     "na-w": 5,
+     "ca": 3,
+     "au-e": 2,
+     "as-ne": 1
+    },
+    "fea_r": 491.2,
+    "lla_r": 481.75
+   }
+  },
+  "Serrodiscus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 518,
+   "lad": 510,
+   "range": [
+    "na-av",
+    "eu-n",
+    "eu-s",
+    "as-n",
+    "na-w"
+   ],
+   "note": "A tiny eodiscid a few millimetres long with a serrated tail, of the early Cambrian of Avalonia, Siberia, Spain and Laurentia: small, blind and everywhere.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Agnostida",
+    "family": "Eodiscidae"
+   },
+   "pbdb": {
+    "asked": "Serrodiscus",
+    "matched": "Serrodiscus",
+    "exact": true,
+    "oid": "txn:19314",
+    "rank": "genus",
+    "extant": false,
+    "noc": 40,
+    "fea": 521,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "Agnostida",
+    "family": "Weymouthiidae",
+    "genus": "Serrodiscus",
+    "regions": {
+     "as-n": 9,
+     "na-e": 7,
+     "eu-n": 7,
+     "na-n": 5,
+     "na-av": 4,
+     "au-e": 4,
+     "eu-s": 2,
+     "as-c": 1,
+     "gl": 1
+    },
+    "fea_r": 518.5,
+    "lla_r": 491.93
+   }
+  },
+  "Shackleton Limestone reefs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "archaeocyath",
+   "fad": 525,
+   "lad": 510,
+   "range": [
+    "an"
+   ],
+   "note": "Archaeocyath reefs of the Shackleton Limestone in the Transantarctic Mountains: the Cambrian sea over the edge of East Antarctica, at the equator, building the first animal reefs beside Australia's.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "rep": "Archaeocyathus",
+   "assemblage": true
+  },
+  "Sinotubulites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 550,
+   "lad": 539,
+   "range": [
+    "as-s",
+    "as-ne",
+    "na-w",
+    "sa-s"
+   ],
+   "note": "A tube of nested layers, a centimetre long, from the last Ediacaran of South China, Nevada and Brazil: one of the first animals with a mineral skeleton, beside Cloudina.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Sinotubulites",
+    "matched": "Sinotubulites",
+    "exact": true,
+    "oid": "txn:7602",
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 635,
+    "lla": 529,
+    "phylum": "Cnidaria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cloudinidae",
+    "genus": "Sinotubulites",
+    "regions": {
+     "as-s": 8,
+     "na-w": 7,
+     "af-s": 2,
+     "eu-s": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 582.0
+   }
+  },
+  "Sirius Passet fauna": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 518,
+   "lad": 516,
+   "range": [
+    "gl"
+   ],
+   "note": "The Sirius Passet locality of North Greenland: Halkieria whole, the earliest lobopods and arthropods, and the first animals with gut contents preserved, five million years before Chengjiang's twin in the west.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Halkieria",
+   "assemblage": true
+  },
+  "Sunnaginia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 530,
+   "lad": 521,
+   "range": [
+    "as-n",
+    "eu-n",
+    "na-av"
+   ],
+   "note": "A tommotiid of the Tommotian of Siberia and the Avalonian shelves of England and Newfoundland, known from its sclerites; a zone fossil of the stage that first showed the Cambrian had begun before the trilobites.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "order": "Tommotiida"
+   },
+   "pbdb": {
+    "asked": "Sunnaginia",
+    "matched": "Sunnaginia",
+    "exact": true,
+    "oid": "txn:7422",
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 538.8,
+    "lla": 506.5,
+    "phylum": "Brachiopoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Tommotiida",
+    "family": "Sunnaginiidae",
+    "genus": "Sunnaginia",
+    "regions": {
+     "na-av": 21,
+     "eu-n": 7,
+     "as-n": 7,
+     "au-e": 3
+    },
+    "fea_r": 527.5,
+    "lla_r": 511.35
+   },
+   "form_ok": true
+  },
+  "Tommotia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sclerite",
+   "fad": 530,
+   "lad": 521,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The tommotiid that named the Tommotian stage of Siberia: asymmetric phosphatic caps, paired left and right, that armoured a sessile animal on the earliest Cambrian sea floor.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "order": "Tommotiida"
+   },
+   "pbdb": {
+    "asked": "Tommotia",
+    "matched": "Tommotia",
+    "exact": true,
+    "oid": "txn:122811",
+    "rank": "genus",
+    "extant": false,
+    "noc": 99,
+    "fea": 538.8,
+    "lla": 512.1,
+    "phylum": "Brachiopoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Tommotiida",
+    "family": "Tommotiidae",
+    "genus": "Camenella",
+    "regions": {
+     "as-n": 67,
+     "au-e": 11,
+     "na-av": 10,
+     "eu-n": 6,
+     "as-c": 5
+    },
+    "fea_r": 523.25,
+    "lla_r": 514.05
+   },
+   "form_ok": true
+  },
+  "Twitya discs": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "jellyfish",
+   "fad": 650,
+   "lad": 640,
+   "range": [
+    "na-n"
+   ],
+   "note": "Simple discs and rings a centimetre across in the Twitya Formation of the Mackenzie Mountains, laid down between the two Cryogenian glaciations: the oldest candidates for the Ediacaran kind of large body, ten million years before the Marinoan ice.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Cyclomedusa",
+   "assemblage": true
+  },
+  "Vendotaenia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 580,
+   "lad": 541,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Ribbon-shaped carbonaceous compressions a millimetre wide and centimetres long, on Ediacaran bedding planes from the White Sea to South China: an alga or a sulphur bacterium, and among the commonest fossils of the age.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Vendotaenia",
+    "matched": "Vendotaenia",
+    "exact": true,
+    "oid": "txn:418850",
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 635,
+    "lla": 471.3,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "Algae",
+    "order": "Vendotaeniales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vendotaenia",
+    "regions": {
+     "as-s": 6,
+     "na-w": 5,
+     "af-s": 3,
+     "eu-n": 3,
+     "as-n": 2,
+     "sa-s": 2,
+     "eu-s": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 474.2
+   }
+  },
+  "Watsonella crosbyi": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 535,
+   "lad": 528,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A tiny laterally compressed shell, a mollusc near the root of the bivalves and rostroconchs, whose first appearance is the candidate marker for the second stage of the Cambrian from Siberia to Newfoundland and China.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Watsonella crosbyi",
+    "matched": "Watsonella crosbyi",
+    "exact": true,
+    "oid": "txn:68888",
+    "rank": "species",
+    "extant": false,
+    "noc": 78,
+    "fea": 538.8,
+    "lla": 512.1,
+    "phylum": "Mollusca",
+    "class": "Helcionelloida",
+    "order": "Helcionellida",
+    "family": "Stenothecidae",
+    "genus": "Watsonella",
+    "regions": {
+     "as-s": 36,
+     "na-av": 22,
+     "as-n": 13,
+     "au-e": 3,
+     "eu-s": 3,
+     "na-e": 1
+    },
+    "fea_r": 525.85,
+    "lla_r": 523.25
+   },
+   "form_ok": true
+  },
+  "Wheeler Shale fauna": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "agnostid",
+   "fad": 507,
+   "lad": 504,
+   "range": [
+    "na-w"
+   ],
+   "note": "The Wheeler Shale of the House Range of Utah: Elrathia and Peronopsis by the thousand, and a Burgess Shale-type soft-bodied fauna in the deeper beds, the commonest trilobites ever sold.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Peronopsis",
+   "assemblage": true
+  },
+  "Xystridura": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 510,
+   "lad": 504,
+   "range": [
+    "au-e",
+    "an"
+   ],
+   "note": "A large flat trilobite of the middle Cambrian of Queensland and the Northern Territory, the zone fossil of the Australian Templetonian.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Xystriduridae"
+   },
+   "pbdb": {
+    "asked": "Xystridura",
+    "matched": "Xystridura",
+    "exact": true,
+    "oid": "txn:22063",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 511.2,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Xystriduridae",
+    "genus": "Xystridura",
+    "regions": {
+     "au-e": 5,
+     "as-s": 2,
+     "an": 2
+    },
+    "fea_r": 506.35,
+    "lla_r": 501.75
+   }
+  },
+  "Yunnanocephalus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 520,
+   "lad": 515,
+   "range": [
+    "as-s",
+    "au-e"
+   ],
+   "note": "A small trilobite of the Chengjiang beds of Yunnan, preserved with its limbs and antennae, among the animals with which South China's trilobite record begins.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Yunnanocephalidae"
+   },
+   "pbdb": {
+    "asked": "Yunnanocephalus",
+    "matched": "Yunnanocephalus",
+    "exact": true,
+    "oid": "txn:22064",
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 521,
+    "lla": 512.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Yunnanocephalidae",
+    "genus": "Yunnanocephalus",
+    "regions": {
+     "as-s": 29,
+     "au-e": 6,
+     "an": 3
+    },
+    "fea_r": 522.65,
+    "lla_r": 514.05
+   }
+  },
+  "Zacanthoides": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 510,
+   "lad": 500,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "A spiny trilobite of the middle Cambrian of Laurentia, its pleurae drawn out into long points, from the Wheeler Shale of Utah to the Rockies.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Zacanthoididae"
+   },
+   "pbdb": {
+    "asked": "Zacanthoides",
+    "matched": "Zacanthoides",
+    "exact": true,
+    "oid": "txn:19718",
+    "rank": "genus",
+    "extant": false,
+    "noc": 89,
+    "fea": 515.3,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Zacanthoididae",
+    "genus": "Zacanthoides",
+    "regions": {
+     "na-w": 58,
+     "na-e": 24,
+     "sa-s": 4,
+     "na-n": 3
+    },
+    "fea_r": 507.5,
+    "lla_r": 500.75
+   }
+  }
+ }
+}

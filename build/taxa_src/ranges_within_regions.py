@@ -48,6 +48,8 @@ CARIB = [-98, -58, 8, 31]
 #: Mongolia shares the as-ne code with North China but was Angaran ground in
 #: the Permian: the Cathaysian flora stops at the Solonker suture.
 _NOT_CATHAYSIA = ["Amuria", "Central Asian Orogenic Belt", "Mongol-Okhotsk Ocean"]
+#: Baltica's own labels, for the Avalonian trilobites that share its code.
+_NOT_BALTICA = ["Baltica", "Fennoscandian Shield", "Tornquist Sea", "Oslo Rift"]
 #: The Avalon Peninsula: the Carolina slate belt shares na-av and had no deep-water fronds.
 _AVALON = [[-56, -52.5, 46.3, 48.5]]
 
@@ -740,10 +742,23 @@ PATCH = {
     "Cameroceras": {"range": ["as-c", "as-e", "eu-n", "na-e"], "lat": [0, 50]},
     "Receptaculites": {"lat": [0, 55]},
     "Neseuretus": {"range": ["eu", "af-n", "ar", "sa-s", "as-s"]},
+    # the mirror of the Baltic list: Avalonia's and the Mediterranean province's
+    # Ordovician trilobites do not reach Baltica, which shares eu-n's code
+    "Trinucleus": {"avoid": _NOT_BALTICA}, "Selenopeltis": {"avoid": _NOT_BALTICA},
+    "Placoparia": {"avoid": _NOT_BALTICA}, "Colpocoryphe": {"avoid": _NOT_BALTICA},
+    "Ectillaenus": {"avoid": _NOT_BALTICA}, "Onnia": {"avoid": _NOT_BALTICA},
+    "Neseuretus": {"avoid": _NOT_BALTICA},
+    # warm-water larger forams and rudists stop where the Tethyan platforms did
+    "Orbitolina": {"lat": [0, 35]}, "Nummulites": {"lat": [0, 43]}, "Durania": {"lat": [0, 35]},
     # sponges: the Cryogenian sterane biomarkers are the oldest evidence anyone
     # accepts; body fossils are Ediacaran at the earliest. Not the Tonian.
     "Porifera": {"fad": 660},
     "Cyclomedusa": {"form_ok": True},
+    # sclerites, tubes and protoconodonts: the PBDB's classes for these are
+    # Problematica, Scyphozoa and Chaetognatha, drawn as anything
+    "Coleoloides": {"form_ok": True}, "Corumbella werneri": {"form_ok": True},
+    "Lapworthella": {"form_ok": True}, "Sunnaginia": {"form_ok": True}, "Tommotia": {"form_ok": True},
+    "Protohertzina": {"form_ok": True}, "Watsonella crosbyi": {"form_ok": True},
     "Megasphaera": {"form_ok": True}, "Shaanxilithes": {"form_ok": True},
 }
 

@@ -4695,6 +4695,12 @@
       "Spider-like arachnids from the Rhynie litter - among the oldest known land predators."
      ],
      [
+      "Palaeocharinus",
+      "genus",
+      "land",
+      "A Rhynie chert trigonotarbid preserved in such detail that its book lungs and leg joints can be counted."
+     ],
+     [
       "Cephalaspis",
       "genus",
       "fresh",
@@ -4726,10 +4732,16 @@
       "Giant predatory eurypterids in the near-shore seas of the Old Red continent."
      ],
      [
-      "Placodermi",
-      "class",
+      "Coccosteus",
+      "genus",
       "fresh",
       "Armoured fish diversifying in Middle Devonian rivers and deltas."
+     ],
+     [
+      "Bothriolepis",
+      "genus",
+      "fresh",
+      "An antiarch placoderm so abundant and widespread it is effectively the index fossil of Devonian fresh water."
      ],
      [
       "Archaeopteris",
@@ -4866,16 +4878,34 @@
     "a1": 273,
     "taxa": [
      [
-      "Gorgonopsia",
-      "order",
+      "Inostrancevia",
+      "genus",
       "land",
       "Sabre-toothed therapsid predators dominating the late Permian across the whole supercontinent."
      ],
      [
-      "Pareiasauria",
-      "order",
+      "Gorgonops",
+      "genus",
+      "land",
+      "A sabre-toothed predator of the Late Permian Karoo, top of the food chain before the Great Dying."
+     ],
+     [
+      "Bradysaurus",
+      "genus",
       "land",
       "Bulky armoured herbivorous reptiles, the cattle of the terminal Permian landscape."
+     ],
+     [
+      "Deltavjatia",
+      "genus",
+      "land",
+      "The pareiasaur of Kotelnich, known from dozens of skeletons, a plant-eater the size of a cow."
+     ],
+     [
+      "Shihtienfenia",
+      "genus",
+      "land",
+      "A pareiasaur of the Late Permian of Shanxi, a barrel-bodied plant-eater armoured with bony studs."
      ],
      [
       "Scutosaurus",
@@ -4906,6 +4936,12 @@
       "order",
       "fresh",
       "Crocodile-shaped archosaurs lurking in Late Triassic rivers before crocodiles proper existed."
+     ],
+     [
+      "Rutiodon",
+      "genus",
+      "fresh",
+      "A slender, long-snouted phytosaur from the Late Triassic of the eastern United States, crocodile-like in build though unrelated, with nostrils set back near the eyes rather than the snout tip."
      ]
     ]
    }
@@ -5734,6 +5770,12 @@
       "order",
       "land",
       "Ginkgo and its relatives at their peak across Laurasia, in a diversity now reduced to one surviving species."
+     ],
+     [
+      "Ginkgo",
+      "genus",
+      "land",
+      "One species survives; the genus was near-global in the Jurassic and Cretaceous."
      ]
     ]
    },
@@ -6191,10 +6233,28 @@
       "Rice-grain foraminifera crowding the Permian carbonate shelves of the Cimmerian blocks."
      ],
      [
-      "Productida",
-      "order",
+      "Verbeekina",
+      "genus",
+      "sea",
+      "A large spherical fusulinid foraminifer, up to a centimetre across, and an index fossil of the warm Permian Tethyan shelves."
+     ],
+     [
+      "Terrakea",
+      "genus",
       "sea",
       "Spiny brachiopods of the Tethyan Permian margins as the terranes rift from Gondwana."
+     ],
+     [
+      "Spinomarginifera",
+      "genus",
+      "sea",
+      "A spiny productid brachiopod, the commonest shell of the Permian Tethys from Transcaucasia to South China; its last species die at the boundary."
+     ],
+     [
+      "Leptodus",
+      "genus",
+      "sea",
+      "A brachiopod so modified for reef life it looks like an oyster: cemented, with a comb of internal ridges; one of the odd forms of the Permian reefs of Texas and the Tethys."
      ]
     ],
     "shared": "The Cimmerian blocks carry a cool-water Gondwanan-derived flora on land, but the fossils that survive are overwhelmingly their marine shelf faunas."
@@ -6210,16 +6270,28 @@
       "A thin flat 'paper clam' blanketing deep Tethyan Triassic seafloors along the drifting blocks."
      ],
      [
-      "Ceratitida",
-      "order",
+      "Cladiscites",
+      "genus",
       "sea",
       "Ammonoids with frilled sutures, the standard Triassic timekeepers of the Tethyan shelves."
+     ],
+     [
+      "Flexoptychites",
+      "genus",
+      "sea",
+      "A smooth, globular ceratitid ammonoid of the Middle Triassic Tethys, in the Alpine limestones by the thousand."
      ],
      [
       "Conodonta",
       "class",
       "sea",
       "Recovering conodont faunas zoning the Triassic carbonate ramps of the Cimmerian margin."
+     ],
+     [
+      "Gondolella",
+      "genus",
+      "sea",
+      "A conodont whose platform elements zone the Permian and Triassic worldwide; the last of the conodonts went with its family at the end of the Triassic."
      ]
     ]
    }
@@ -6353,10 +6425,16 @@
       "A small long-necked marine reptile found by the thousand in Guizhou Triassic shales."
      ],
      [
-      "Ichthyosauria",
-      "order",
+      "Mixosaurus",
+      "genus",
       "sea",
       "Dolphin-shaped marine reptiles, including huge Guanling forms, patrolling the Triassic Tethyan shelf."
+     ],
+     [
+      "Chaohusaurus",
+      "genus",
+      "sea",
+      "One of the earliest ichthyosaurs: within a few million years of the extinction, reptiles are already back in the sea."
      ]
     ]
    },
@@ -6393,6 +6471,12 @@
       "order",
       "sea",
       "Large foraminifera flourishing on the Lopingian carbonate platform right up to their extinction."
+     ],
+     [
+      "Verbeekina",
+      "genus",
+      "sea",
+      "A large spherical fusulinid foraminifer, up to a centimetre across, and an index fossil of the warm Permian Tethyan shelves."
      ],
      [
       "Palaeofusulina",
@@ -6503,10 +6587,16 @@
       "The Tonian Mbuji-Mayi Supergroup yields acritarchs and vase-shaped microfossils - genuine eukaryote fossils from the craton's cover."
      ],
      [
-      "Cyanobacteria",
-      "phylum",
+      "Eoentophysalis",
+      "genus",
       "sea",
       "Mat-building cyanobacteria and stromatolites of the shallow Tonian shelves on the craton margin."
+     ],
+     [
+      "Siphonophycus",
+      "genus",
+      "sea",
+      "Sheaths of a filamentous cyanobacterium, the mat-builder of Proterozoic tidal flats, preserved in chert on every craton."
      ]
     ]
    }
@@ -6568,10 +6658,22 @@
       "Testate amoebae from the Chuar Group and elsewhere - the oldest fossils of shelled, predatory eukaryotes."
      ],
      [
-      "Acritarcha",
-      "class",
+      "Chuaria",
+      "genus",
       "sea",
       "Organic-walled algal cysts diversifying on the shelves of the supercontinent, abundant enough to date rock."
+     ],
+     [
+      "Leiosphaeridia",
+      "genus",
+      "sea",
+      "Smooth-walled spheres without ornament, a form genus that holds the resting cysts of countless Proterozoic and Palaeozoic algae; in the Cryogenian, after the spiny acritarchs died back, they are most of what the seas left."
+     ],
+     [
+      "Tawuia",
+      "genus",
+      "sea",
+      "A sausage-shaped carbonaceous compression a centimetre long, found with Chuaria in Tonian and Ediacaran shales worldwide; read as a macroalga or a coenocytic organism."
      ],
      [
       "Bangiomorpha",
@@ -6580,10 +6682,16 @@
       "A filamentous red alga with differentiated cells - among the oldest fossils tied to a living group."
      ],
      [
-      "Cyanobacteria",
-      "phylum",
+      "Eoentophysalis",
+      "genus",
       "sea",
       "Stromatolite-building cyanobacteria still run the Tonian biosphere across every warm Rodinian shelf."
+     ],
+     [
+      "Siphonophycus",
+      "genus",
+      "sea",
+      "Sheaths of a filamentous cyanobacterium, the mat-builder of Proterozoic tidal flats, preserved in chert on every craton."
      ],
      [
       "Ourasphaira giraldae",
@@ -6607,6 +6715,12 @@
       "Rice-grain foraminifera built reefs on mid-ocean seamounts, now accreted into the rocks of Japan."
      ],
      [
+      "Verbeekina",
+      "genus",
+      "sea",
+      "A large spherical fusulinid foraminifer, up to a centimetre across, and an index fossil of the warm Permian Tethyan shelves."
+     ],
+     [
       "Radiolaria",
       "class",
       "sea",
@@ -6617,6 +6731,12 @@
       "order",
       "sea",
       "Ammonoids swimming the open Panthalassic water above the drowned seamount chains."
+     ],
+     [
+      "Timorites",
+      "genus",
+      "sea",
+      "A Late Permian ammonoid with complex sutures on the road to the ammonites proper, from the Tethyan reefs of Timor."
      ]
     ],
     "shared": "Almost all Panthalassic seafloor has been subducted; what survives is scraped-off seamount caps and radiolarian chert."
@@ -6632,10 +6752,22 @@
       "A school-bus-sized ichthyosaur from the Panthalassic margin of Nevada, among the largest marine reptiles."
      ],
      [
-      "Ceratitida",
-      "order",
+      "Cladiscites",
+      "genus",
       "sea",
       "Frill-sutured ammonoids leading the recovery of open-ocean life after the end-Permian collapse."
+     ],
+     [
+      "Flexoptychites",
+      "genus",
+      "sea",
+      "A smooth, globular ceratitid ammonoid of the Middle Triassic Tethys, in the Alpine limestones by the thousand."
+     ],
+     [
+      "Trachyceras",
+      "genus",
+      "sea",
+      "A knobbly ceratitid ammonoid of the Carnian, in the Alps and the Tethys; its extinction near the Carnian Pluvial Episode."
      ],
      [
       "Radiolaria",
@@ -6656,6 +6788,12 @@
       "True ammonites diversify as free-swimming hunters across the Jurassic superocean."
      ],
      [
+      "Dactylioceras",
+      "genus",
+      "sea",
+      "The Whitby ammonite, ribbed and evolute, once carved with snakes' heads and sold as the serpents St Hilda turned to stone."
+     ],
+     [
       "Belemnitida",
       "order",
       "sea",
@@ -6670,16 +6808,40 @@
     "a1": 540,
     "taxa": [
      [
-      "Graptolithina",
-      "class",
+      "Didymograptus",
+      "genus",
       "sea",
       "Colonial plankton drifting the open Palaeozoic ocean, their remains zoning its black muds."
      ],
      [
-      "Conodonta",
-      "class",
+      "Dicellograptus",
+      "genus",
+      "sea",
+      "Two stipes curving up like horns, the Late Ordovician graptolite of the black shales from Scotland to Kazakhstan and Australia."
+     ],
+     [
+      "Tetragraptus",
+      "genus",
+      "sea",
+      "Four stipes from one point, a Floian graptolite of the open ocean whose species date the early Ordovician worldwide."
+     ],
+     [
+      "Cordylodus",
+      "genus",
       "sea",
       "Jawless chordates whose teeth are the main fossils of this largely subducted ocean."
+     ],
+     [
+      "Protohertzina",
+      "genus",
+      "sea",
+      "Curved phosphatic spines a millimetre long, the grasping teeth of an arrow-worm-like animal, and the first tooth-shaped fossils of the Cambrian: Protohertzina anabarica marks the Fortunian on every continent."
+     ],
+     [
+      "Iapetognathus fluctivagus",
+      "species",
+      "sea",
+      "The conodont whose first appearance at Green Point, Newfoundland, defines the base of the Ordovician."
      ],
      [
       "Radiolaria",
@@ -6695,16 +6857,40 @@
     "a1": 443,
     "taxa": [
      [
-      "Ammonoidea",
-      "subclass",
+      "Anarcestes",
+      "genus",
       "sea",
       "The first ammonoids appear and spread through the open Devonian ocean."
      ],
      [
-      "Conodonta",
-      "class",
+      "Sporadoceras",
+      "genus",
+      "sea",
+      "A globular Late Devonian goniatite of the open shelf, from the Canning Basin of Australia to the Rhenish Massif."
+     ],
+     [
+      "Cymaclymenia",
+      "genus",
+      "sea",
+      "A clymeniid ammonoid, its siphuncle on the inside of the coil, of the last Devonian stage: the group appeared and vanished within the Famennian."
+     ],
+     [
+      "Icriodus",
+      "genus",
       "sea",
       "Conodont faunas provide the finest timescale for this otherwise fossil-poor ocean."
+     ],
+     [
+      "Polygnathus",
+      "genus",
+      "sea",
+      "A conodont genus of a hundred species that carries the Devonian time scale, from the Rhenish shelf to Guangxi."
+     ],
+     [
+      "Panderodus",
+      "genus",
+      "sea",
+      "A long-lived conodont whose cone-shaped elements are in almost every Ordovician and Silurian limestone; the animal itself was a small eel-like swimmer."
      ]
     ]
    },
@@ -6739,16 +6925,40 @@
       "Trilobites so different on its two shores that the contrast first revealed the ocean's former existence."
      ],
      [
-      "Graptolithina",
-      "class",
+      "Didymograptus",
+      "genus",
       "sea",
       "Planktic graptolites drifting the widening Iapetus, their zones correlating its opposite margins."
      ],
      [
-      "Conodonta",
-      "class",
+      "Tetragraptus",
+      "genus",
+      "sea",
+      "Four stipes from one point, a Floian graptolite of the open ocean whose species date the early Ordovician worldwide."
+     ],
+     [
+      "Rhabdinopora",
+      "genus",
+      "sea",
+      "The first graptolite to leave the sea floor: a conical net of branches hanging from a float, drifting over every Tremadocian sea."
+     ],
+     [
+      "Cordylodus",
+      "genus",
       "sea",
       "Conodont faunas record distinct warm and cool water masses across the ocean."
+     ],
+     [
+      "Protohertzina",
+      "genus",
+      "sea",
+      "Curved phosphatic spines a millimetre long, the grasping teeth of an arrow-worm-like animal, and the first tooth-shaped fossils of the Cambrian: Protohertzina anabarica marks the Fortunian on every continent."
+     ],
+     [
+      "Iapetognathus fluctivagus",
+      "species",
+      "sea",
+      "The conodont whose first appearance at Green Point, Newfoundland, defines the base of the Ordovician."
      ]
     ],
     "shared": "The 'Pacific' (Laurentian) and 'Atlantic' (Baltic-Avalonian) trilobite realms are the classic biogeographic fingerprint of Iapetus."
@@ -6758,10 +6968,22 @@
     "a1": 458,
     "taxa": [
      [
-      "Brachiopoda",
-      "phylum",
+      "Pentamerus",
+      "genus",
       "sea",
       "As Iapetus narrows, once-separate shelly faunas begin to mingle across the closing seaway."
+     ],
+     [
+      "Lingula",
+      "genus",
+      "sea",
+      "A burrowing brachiopod that survives everything and looks much the same today."
+     ],
+     [
+      "Eospirifer",
+      "genus",
+      "sea",
+      "The first spiriferide: a brachiopod with a coiled internal support for its feeding organ, from the last Ordovician to the Early Devonian, the start of a line that ran to the Jurassic."
      ],
      [
       "Monograptus",
@@ -6778,16 +7000,40 @@
     "a1": 490,
     "taxa": [
      [
-      "Graptolithina",
-      "class",
+      "Climacograptus",
+      "genus",
       "sea",
       "Planktic graptolites open the record of the Rheic as it widens behind drifting Avalonia."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Didymograptus",
+      "genus",
+      "sea",
+      "The tuning-fork graptolite, two branches hanging from a float; a colonial drifter whose fossils zone the Early Ordovician worldwide."
+     ],
+     [
+      "Dicellograptus",
+      "genus",
+      "sea",
+      "Two stipes curving up like horns, the Late Ordovician graptolite of the black shales from Scotland to Kazakhstan and Australia."
+     ],
+     [
+      "Sowerbyella",
+      "genus",
       "sea",
       "Cool Gondwanan and warmer northern shelly faunas face each other across the young ocean."
+     ],
+     [
+      "Strophomena",
+      "genus",
+      "sea",
+      "A wide, gently curved strophomenide with a straight hinge, resting on the sediment on its convex valve, on every Ordovician and Silurian shelf."
+     ],
+     [
+      "Lingulella",
+      "genus",
+      "sea",
+      "A small tongue-shaped phosphatic brachiopod of Cambrian and Ordovician shelves, burrowing like its living cousin Lingula."
      ]
     ]
    },
@@ -6796,10 +7042,22 @@
     "a1": 419,
     "taxa": [
      [
-      "Ammonoidea",
-      "subclass",
+      "Sporadoceras",
+      "genus",
       "sea",
       "Ammonoids swim the widest Rheic, an ocean now spanning the Devonian tropics."
+     ],
+     [
+      "Cymaclymenia",
+      "genus",
+      "sea",
+      "A clymeniid ammonoid, its siphuncle on the inside of the coil, of the last Devonian stage: the group appeared and vanished within the Famennian."
+     ],
+     [
+      "Anarcestes",
+      "genus",
+      "sea",
+      "One of the first ammonoids, a small coiled goniatite of the Emsian seas of Morocco and the Rhenish shelf: the beginning of a lineage that lasted 340 million years."
      ],
      [
       "Tabulata",
@@ -6814,10 +7072,22 @@
     "a1": 359,
     "taxa": [
      [
-      "Goniatitida",
-      "order",
+      "Dombarites",
+      "genus",
       "sea",
       "Goniatite ammonoids zone the closing Rheic as Gondwana and Laurussia converge in the Variscan collision."
+     ],
+     [
+      "Pericyclus",
+      "genus",
+      "sea",
+      "A ribbed goniatite of the Tournaisian, in the black shales of the Sahara and the Rhenish shelf."
+     ],
+     [
+      "Goniatites",
+      "genus",
+      "sea",
+      "The goniatite that names its group: a globular ammonoid with zigzag sutures, a swimmer of Mississippian seas on every continent."
      ],
      [
       "Foraminifera",
@@ -6846,10 +7116,16 @@
       "Thin flat bivalves blanketing deep Tethyan Triassic seafloors."
      ],
      [
-      "Conodonta",
-      "class",
+      "Gondolella",
+      "genus",
       "sea",
       "Conodonts zone the Tethyan Triassic, then dwindle toward their end-Triassic extinction."
+     ],
+     [
+      "Neospathodus",
+      "genus",
+      "sea",
+      "An Early Triassic conodont whose elements date the recovery from the end-Permian extinction, stage by stage, in Pakistan, China and Nevada alike."
      ]
     ]
    },
@@ -6858,22 +7134,46 @@
     "a1": 201,
     "taxa": [
      [
-      "Ammonoidea",
-      "subclass",
+      "Perisphinctes",
+      "genus",
       "sea",
       "Jurassic ammonites are so widespread and fast-evolving they are the global clock for the period."
      ],
      [
-      "Ichthyosauria",
-      "order",
+      "Dactylioceras",
+      "genus",
+      "sea",
+      "The Whitby ammonite, ribbed and evolute, once carved with snakes' heads and sold as the serpents St Hilda turned to stone."
+     ],
+     [
+      "Ichthyosaurus",
+      "genus",
       "sea",
       "Streamlined marine reptiles hunting fish and squid across the warm Tethyan water."
      ],
      [
-      "Plesiosauria",
-      "order",
+      "Ophthalmosaurus",
+      "genus",
+      "sea",
+      "An ichthyosaur with eyes the size of dinner plates, the largest of any vertebrate relative to its body, for hunting squid in the dark."
+     ],
+     [
+      "Rhomaleosaurus",
+      "genus",
       "sea",
       "Long-necked marine reptiles patrolling the Tethyan shelves and its Boreal borders."
+     ],
+     [
+      "Plesiosaurus",
+      "genus",
+      "sea",
+      "Long-necked, four-flippered marine reptiles rowing through shallow Jurassic seas."
+     ],
+     [
+      "Cryptoclidus",
+      "genus",
+      "sea",
+      "A long-necked plesiosaur of the Oxford Clay with a hundred needle teeth, netting small fish and squid."
      ]
     ],
     "shared": "Jurassic ammonites are genuinely cosmopolitan - the same genera turn up around the whole Tethys and beyond."
@@ -6965,16 +7265,34 @@
     "a1": 1000,
     "taxa": [
      [
-      "Cyanobacteria",
-      "phylum",
+      "Eoentophysalis",
+      "genus",
       "sea",
       "Oxygen-producing mat-builders run the Tonian ocean, raising stromatolite reefs on every warm shelf."
      ],
      [
-      "Acritarcha",
-      "class",
+      "Siphonophycus",
+      "genus",
+      "sea",
+      "Sheaths of a filamentous cyanobacterium, the mat-builder of Proterozoic tidal flats, preserved in chert on every craton."
+     ],
+     [
+      "Chuaria",
+      "genus",
       "sea",
       "Organic-walled algal cysts are the ocean's plankton - no animals swim it yet."
+     ],
+     [
+      "Leiosphaeridia",
+      "genus",
+      "sea",
+      "Smooth-walled spheres without ornament, a form genus that holds the resting cysts of countless Proterozoic and Palaeozoic algae; in the Cryogenian, after the spiny acritarchs died back, they are most of what the seas left."
+     ],
+     [
+      "Tawuia",
+      "genus",
+      "sea",
+      "A sausage-shaped carbonaceous compression a centimetre long, found with Chuaria in Tonian and Ediacaran shales worldwide; read as a macroalga or a coenocytic organism."
      ],
      [
       "Rhodophyta",
@@ -7004,10 +7322,22 @@
       "Keeled planktonic foraminifera raining onto the Cretaceous ocean floor."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Tropaeum",
+      "genus",
       "sea",
       "Ammonites remain the dominant open-ocean predators until their end-Cretaceous extinction."
+     ],
+     [
+      "Placenticeras",
+      "genus",
+      "sea",
+      "A large disc-shaped ammonite, some shells punctured by mosasaur tooth-marks."
+     ],
+     [
+      "Baculites",
+      "genus",
+      "sea",
+      "A straight-shelled ammonite so abundant it zones the entire seaway; the chalk records its coccolith plankton."
      ]
     ],
     "shared": "Cretaceous planktonic foraminifera and coccolithophores are cosmopolitan - the same plankton fills every ocean of the age."
@@ -7057,6 +7387,12 @@
       "class",
       "sea",
       "Calcareous nannoplankton continue to floor the ocean with their microscopic plates."
+     ],
+     [
+      "Discoaster",
+      "genus",
+      "sea",
+      "Star-shaped calcareous nannoplankton whose extinction near 1.9 million years ago is used to close out the warm Pliocene ocean."
      ]
     ]
    }
@@ -7071,6 +7407,12 @@
       "subclass",
       "sea",
       "Ammonites of the Hispanic Corridor colonise the narrow young Central Atlantic rift-ocean."
+     ],
+     [
+      "Perisphinctes",
+      "genus",
+      "sea",
+      "A large evolute ammonite with forked ribs, common enough in the Oxfordian to be found in Europe, East Africa, Cuba and Japan."
      ],
      [
       "Belemnitida",
@@ -7110,10 +7452,22 @@
     "a1": 66,
     "taxa": [
      [
-      "Cetacea",
-      "order",
+      "Balaenoptera",
+      "genus",
       "sea",
       "Whales become the great predators and grazers of the maturing Atlantic."
+     ],
+     [
+      "Megaptera",
+      "genus",
+      "sea",
+      "The humpback whale, with flippers a third of its length, migrating between polar feeding grounds and tropical calving waters."
+     ],
+     [
+      "Orcinus",
+      "genus",
+      "sea",
+      "The orca, the ocean's top predator, hunting from the pack ice to the tropics in family pods that pass their hunting techniques down the generations."
      ],
      [
       "Bacillariophyta",
@@ -7142,16 +7496,34 @@
       "Belemnites shoal in the young ocean opening between drifting India, Madagascar and Antarctica."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Placenticeras",
+      "genus",
       "sea",
       "Ammonites colonise the widening Cretaceous seaways of the fragmenting southern continents."
      ],
      [
-      "Plesiosauria",
-      "order",
+      "Baculites",
+      "genus",
+      "sea",
+      "A straight-shelled ammonite so abundant it zones the entire seaway; the chalk records its coccolith plankton."
+     ],
+     [
+      "Pachydiscus",
+      "genus",
+      "sea",
+      "A late ammonite that grew shells a metre across, among the last of its kind, in the seas of the final Cretaceous stages worldwide."
+     ],
+     [
+      "Kronosaurus",
+      "genus",
       "sea",
       "Long-necked marine reptiles hunt the new high-latitude waters of the opening ocean."
+     ],
+     [
+      "Umoonasaurus",
+      "genus",
+      "sea",
+      "A small plesiosaur of the cold Eromanga sea, found in the opal mines of Coober Pedy with crests on its skull."
      ]
     ]
    },
@@ -7182,6 +7554,12 @@
       "order",
       "sea",
       "Reef corals build the rich tropical province of the modern Indian Ocean."
+     ],
+     [
+      "Lophelia pertusa",
+      "species",
+      "sea",
+      "A cold-water coral building reefs in the dark, hundreds of metres down, along continental slopes and seamounts."
      ],
      [
       "Latimeria",
@@ -7216,10 +7594,22 @@
       "Antarctic krill swarm on the diatom bloom, feeding whales, seals and penguins."
      ],
      [
-      "Notothenioidei",
-      "suborder",
+      "Euphausia superba",
+      "species",
+      "sea",
+      "Antarctic krill: swarms of hundreds of millions of tonnes on which the whole Southern Ocean food web rests."
+     ],
+     [
+      "Dissostichus mawsoni",
+      "species",
       "sea",
       "Icefish evolve antifreeze proteins to fill the freezing waters other fish cannot survive."
+     ],
+     [
+      "Pleuragramma antarctica",
+      "species",
+      "sea",
+      "The Antarctic silverfish, the herring of the Southern Ocean, the link between the krill and the penguins, seals and whales."
      ],
      [
       "Mysticeti",
@@ -7438,16 +7828,40 @@
     "a1": 160,
     "taxa": [
      [
-      "Foraminifera",
-      "class",
+      "Nummulites",
+      "genus",
       "sea",
       "Shallow-shelf foraminifera of the epicontinental seaway that flooded western Siberia for a hundred million years."
      ],
      [
-      "Bivalvia",
-      "class",
+      "Discocyclina",
+      "genus",
+      "sea",
+      "A large disc-shaped foraminifer of Palaeogene tropical shelves, whose tests build limestone."
+     ],
+     [
+      "Globotruncana",
+      "genus",
+      "sea",
+      "A planktonic foraminifer with a double keel, the zone fossil of the Late Cretaceous ocean; the K-Pg boundary clay is full of its broken shells."
+     ],
+     [
+      "Inoceramus",
+      "genus",
       "sea",
       "Molluscan faunas of the strait that kept European and Asian land mammals apart until it drained."
+     ],
+     [
+      "Limopsis",
+      "genus",
+      "sea",
+      "A small, hairy-shelled clam of cool and deep water, one of the commonest bivalves of the Antarctic and subantarctic shelves."
+     ],
+     [
+      "Panopea",
+      "genus",
+      "sea",
+      "The geoduck, a deep-burrowing clam with a siphon longer than its shell, in cool shelf sands from the Cretaceous to the present; the commonest fossil shell of Antarctica's Miocene."
      ]
     ],
     "shared": "The strait's closure around 29 Ma triggered the 'Grande Coupure' - a wave of faunal exchange as Europe and Asia joined by land."
@@ -7471,10 +7885,22 @@
       "An ichthyosaur of the Eromanga, some specimens preserved as shimmering opal."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Oxytropidoceras",
+      "genus",
       "sea",
       "Ammonites of the high-latitude inland sea, their shells among the opalised fossils of Coober Pedy."
+     ],
+     [
+      "Tropaeum",
+      "genus",
+      "sea",
+      "A giant open-coiled Aptian ammonite, over a metre across in the Eromanga sea of Australia, whose shell was a slow spiral of separate whorls."
+     ],
+     [
+      "Douvilleiceras",
+      "genus",
+      "sea",
+      "A knobbed, thick-ribbed Albian ammonite found on every continent, in the Western Interior Seaway and the Tethys alike."
      ]
     ]
    }
@@ -7537,16 +7963,34 @@
     "a1": 800,
     "taxa": [
      [
-      "Cyanobacteria",
-      "phylum",
+      "Siphonophycus",
+      "genus",
       "sea",
       "Microbial mats and stromatolites are essentially the only record of an ocean that closed before animals were common."
      ],
      [
-      "Acritarcha",
-      "class",
+      "Eoentophysalis",
+      "genus",
+      "sea",
+      "A colonial coccoid cyanobacterium of Proterozoic cherts, all but identical to the living Entophysalis of tropical tidal flats."
+     ],
+     [
+      "Leiosphaeridia",
+      "genus",
       "sea",
       "Sparse organic-walled plankton in the few unmetamorphosed sediments of the vanished ocean."
+     ],
+     [
+      "Chuaria",
+      "genus",
+      "sea",
+      "A carbonaceous disc a few millimetres across, among the commonest large fossils of the Proterozoic, from the Grand Canyon to the Vindhyan of India: the compressed remains of a large-celled eukaryote or a colony."
+     ],
+     [
+      "Tawuia",
+      "genus",
+      "sea",
+      "A sausage-shaped carbonaceous compression a centimetre long, found with Chuaria in Tonian and Ediacaran shales worldwide; read as a macroalga or a coenocytic organism."
      ]
     ],
     "shared": "This ocean was consumed in the Pan-African/Kuunga collision; its deep-water crust is subducted or metamorphosed, so the record is nearly blank."
@@ -7579,16 +8023,40 @@
     "a1": 490,
     "taxa": [
      [
-      "Graptolithina",
-      "class",
+      "Climacograptus",
+      "genus",
       "sea",
       "Planktic graptolites of the island-arc seas of the Ordovician-Silurian Ural ocean."
      ],
      [
-      "Tabulata",
-      "order",
+      "Didymograptus",
+      "genus",
+      "sea",
+      "The tuning-fork graptolite, two branches hanging from a float; a colonial drifter whose fossils zone the Early Ordovician worldwide."
+     ],
+     [
+      "Dicellograptus",
+      "genus",
+      "sea",
+      "Two stipes curving up like horns, the Late Ordovician graptolite of the black shales from Scotland to Kazakhstan and Australia."
+     ],
+     [
+      "Favosites",
+      "genus",
       "sea",
       "Tabulate corals and brachiopods on the shelves of the ocean between Baltica and Siberia."
+     ],
+     [
+      "Catenipora",
+      "genus",
+      "sea",
+      "A chain coral: tubes joined side by side into ranks that wander across the rock like chain-link, on Late Ordovician and Silurian shelves everywhere."
+     ],
+     [
+      "Lichenaria",
+      "genus",
+      "sea",
+      "The first tabulate coral: small colonies of prismatic tubes in Early Ordovician limestones of Laurentia and Siberia, before reefs had corals."
      ]
     ]
    },
@@ -7597,10 +8065,22 @@
     "a1": 419,
     "taxa": [
      [
-      "Ammonoidea",
-      "subclass",
+      "Sporadoceras",
+      "genus",
       "sea",
       "Devonian ammonoids and reef faunas along the still-open Uralian seaway."
+     ],
+     [
+      "Cymaclymenia",
+      "genus",
+      "sea",
+      "A clymeniid ammonoid, its siphuncle on the inside of the coil, of the last Devonian stage: the group appeared and vanished within the Famennian."
+     ],
+     [
+      "Manticoceras",
+      "genus",
+      "sea",
+      "A Late Devonian goniatite whose disappearance marks the Frasnian-Famennian extinction, one of the five great ones."
      ],
      [
       "Stromatoporoidea",
@@ -7621,10 +8101,28 @@
       "Fusulinid foraminifera pack the carbonate shelves as the ocean closes in the Uralian orogeny."
      ],
      [
-      "Productida",
-      "order",
+      "Verbeekina",
+      "genus",
+      "sea",
+      "A large spherical fusulinid foraminifer, up to a centimetre across, and an index fossil of the warm Permian Tethyan shelves."
+     ],
+     [
+      "Marginifera",
+      "genus",
       "sea",
       "The type Permian marine faunas of the Ural foreland - the very rocks the Permian period is named for."
+     ],
+     [
+      "Neochonetes",
+      "genus",
+      "sea",
+      "A small chonetid brachiopod with spines along the hinge, on Permian sea floors by the thousand, in South China above all."
+     ],
+     [
+      "Waagenoconcha",
+      "genus",
+      "sea",
+      "A spiny productid brachiopod that anchored itself in soft mud with hair-fine spines, a Permian shell of cool and warm seas alike."
      ]
     ],
     "shared": "The Perm region's marine sections are the global reference for the Permian; the closing Ural Ocean is where they formed."
@@ -7636,10 +8134,22 @@
     "a1": 600,
     "taxa": [
      [
-      "Graptolithina",
-      "class",
+      "Didymograptus",
+      "genus",
       "sea",
       "Drifting graptolites zone the black shales of the seaway separating Baltica from Avalonia."
+     ],
+     [
+      "Tetragraptus",
+      "genus",
+      "sea",
+      "Four stipes from one point, a Floian graptolite of the open ocean whose species date the early Ordovician worldwide."
+     ],
+     [
+      "Rhabdinopora",
+      "genus",
+      "sea",
+      "The first graptolite to leave the sea floor: a conical net of branches hanging from a float, drifting over every Tremadocian sea."
      ],
      [
       "Trilobite provinces",
@@ -7648,10 +8158,22 @@
       "Distinct Baltic and Avalonian-Gondwanan trilobites on the two shores mark the sea's width."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Lingula",
+      "genus",
       "sea",
       "Cool-water shelly faunas of the shelves flanking the Cambrian-Ordovician seaway."
+     ],
+     [
+      "Lingulella",
+      "genus",
+      "sea",
+      "A small tongue-shaped phosphatic brachiopod of Cambrian and Ordovician shelves, burrowing like its living cousin Lingula."
+     ],
+     [
+      "Billingsella",
+      "genus",
+      "sea",
+      "An early hinged brachiopod of the late Cambrian, found on every continent's shelf, from a family near the root of the orthides."
      ]
     ],
     "shared": "As Avalonia drifted across the Tornquist Sea to dock with Baltica in the Late Ordovician, the once-separate faunas of the two margins merged."
@@ -7735,10 +8257,16 @@
     "a1": 103,
     "taxa": [
      [
-      "Actinopterygii",
-      "class",
+      "Xiphactinus",
+      "genus",
       "sea",
       "The Mowry Shale is paved with fish scales — a bloom-and-death sea of small ray-finned fish."
+     ],
+     [
+      "Enchodus",
+      "genus",
+      "sea",
+      "The 'saber-toothed herring', a fanged predatory fish found in Late Cretaceous seas world-wide."
      ],
      [
       "Radiolaria",
@@ -7767,16 +8295,34 @@
       "Bullet-shaped squid relatives swarming the cool northern seas; their guards litter Arctic shales."
      ],
      [
-      "Ichthyosauria",
-      "order",
+      "Platypterygius",
+      "genus",
       "sea",
       "Dolphin-shaped reptiles cruising the boreal water column."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Ophthalmosaurus",
+      "genus",
+      "sea",
+      "An ichthyosaur with eyes the size of dinner plates, the largest of any vertebrate relative to its body, for hunting squid in the dark."
+     ],
+     [
+      "Neocomites",
+      "genus",
       "sea",
       "Cold-water ammonite faunas distinct from the warm Tethyan realm to the south."
+     ],
+     [
+      "Oxytropidoceras",
+      "genus",
+      "sea",
+      "A sharp-keeled Albian ammonite of the Gulf Coast, Peru, Venezuela and Africa: the fauna of a tropical Atlantic that had just been made."
+     ],
+     [
+      "Crioceratites",
+      "genus",
+      "sea",
+      "An open-coiled ammonite, whorls not touching, ribbed and spined, of the Hauterivian seas of the Tethys and Neuquen."
      ],
      [
       "Buchia",
@@ -7964,6 +8510,12 @@
       "Ichthyosaurs hunting the epicontinental sea that reached down from the Arctic."
      ],
      [
+      "Ophthalmosaurus",
+      "genus",
+      "sea",
+      "An ichthyosaur with eyes the size of dinner plates, the largest of any vertebrate relative to its body, for hunting squid in the dark."
+     ],
+     [
       "Pentacrinites",
       "genus",
       "sea",
@@ -7978,22 +8530,52 @@
     "a1": 490,
     "taxa": [
      [
-      "Bryozoa",
-      "phylum",
+      "Hallopora",
+      "genus",
       "sea",
       "Lace and twig colonies encrusting the vast, warm Ordovician-Silurian carbonate shelf."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Constellaria",
+      "genus",
+      "sea",
+      "A branching bryozoan whose colonies are dotted with star-shaped mounds; in the Cincinnatian it is a rock-forming fossil."
+     ],
+     [
+      "Prasopora",
+      "genus",
+      "sea",
+      "A gumdrop-shaped trepostome bryozoan of the Trenton and Cincinnatian limestones, and of Baltica: the bryozoan that built the Late Ordovician sea floor's small mounds."
+     ],
+     [
+      "Platystrophia",
+      "genus",
       "sea",
       "Strophomenid and orthid lamp-shells dominating the shelly benthos."
+     ],
+     [
+      "Rafinesquina",
+      "genus",
+      "sea",
+      "A wide, flat strophomenid brachiopod that lay on the mud like a dropped coin, the most abundant shell in the Ordovician limestones of the American Midwest."
+     ],
+     [
+      "Lingula",
+      "genus",
+      "sea",
+      "A burrowing brachiopod that survives everything and looks much the same today."
      ],
      [
       "Rugosa",
       "order",
       "sea",
       "Solitary 'horn corals' and colonial tabulates building the first big Paleozoic reefs."
+     ],
+     [
+      "Streptelasma",
+      "genus",
+      "sea",
+      "A solitary horn coral, the simplest of the rugose corals, standing on its tip in the Ordovician mud."
      ],
      [
       "Crinoidea",
@@ -8016,22 +8598,58 @@
       "Layered sponge-grade reef-builders raising the great Devonian reef complexes."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Amphipora",
+      "genus",
+      "sea",
+      "A rod-shaped stromatoporoid sponge that grew in dense thickets in the lagoons behind Devonian reefs."
+     ],
+     [
+      "Mucrospirifer",
+      "genus",
       "sea",
       "Spiriferid brachiopods with their broad winged hinges, the Devonian shelf standard."
      ],
      [
-      "Placodermi",
-      "class",
+      "Tropidoleptus",
+      "genus",
+      "sea",
+      "A brachiopod that marks the Devonian seas of the Americas, from the Appalachian basin to the cool southern shelves."
+     ],
+     [
+      "Athyris",
+      "genus",
+      "sea",
+      "A smooth spiral-brachidium brachiopod with frilled growth lamellae, common in the Rhenish Devonian and the Ural Ocean's shelves."
+     ],
+     [
+      "Coccosteus",
+      "genus",
       "sea",
       "Armoured fish — including giant Dunkleosteus-kin — the apex predators of the Devonian sea."
+     ],
+     [
+      "Groenlandaspis",
+      "genus",
+      "sea",
+      "A small placoderm with a tall crest on its trunk armour, in fresh water from Greenland to Antarctica and Australia: the first fish genus shown to span both hemispheres."
+     ],
+     [
+      "Dunkleosteus",
+      "genus",
+      "sea",
+      "A six-metre placoderm that sheared prey with self-sharpening bony blades instead of teeth."
      ],
      [
       "Rugosa",
       "order",
       "sea",
       "Colonial and horn corals flanking the stromatoporoid reefs."
+     ],
+     [
+      "Hexagonaria",
+      "genus",
+      "sea",
+      "The Petoskey stone: a colonial rugose coral of Devonian reefs whose six-sided corallites turn up as pebbles on Lake Michigan beaches."
      ]
     ]
    }
@@ -8054,16 +8672,34 @@
       "The 'age of crinoids' — Carboniferous seafloors were forests of stalked echinoderms."
      ],
      [
-      "Productida",
-      "order",
+      "Marginifera",
+      "genus",
       "sea",
       "Spiny, one-valve-cemented brachiopods carpeting the shelf."
      ],
      [
-      "Chondrichthyes",
-      "class",
+      "Neochonetes",
+      "genus",
+      "sea",
+      "A small chonetid brachiopod with spines along the hinge, on Permian sea floors by the thousand, in South China above all."
+     ],
+     [
+      "Waagenoconcha",
+      "genus",
+      "sea",
+      "A spiny productid brachiopod that anchored itself in soft mud with hair-fine spines, a Permian shell of cool and warm seas alike."
+     ],
+     [
+      "Helicoprion",
+      "genus",
       "sea",
       "Bizarre Carboniferous sharks and chimaeras — Helicoprion's tooth-whorl among them."
+     ],
+     [
+      "Edestus",
+      "genus",
+      "sea",
+      "The 'scissor-tooth shark', with a single blade of teeth in each jaw that never shed; a Pennsylvanian predator the size of a great white."
      ]
     ]
    }
@@ -8074,10 +8710,16 @@
     "a1": 40,
     "taxa": [
      [
-      "Scleractinia",
-      "order",
+      "Acropora",
+      "genus",
       "sea",
       "Caribbean coral reefs before the Isthmus of Panama split them from the Pacific."
+     ],
+     [
+      "Porites",
+      "genus",
+      "sea",
+      "A massive, slow-growing reef coral whose skeleton records annual bands like tree rings."
      ],
      [
       "Carcharocles",
@@ -8166,10 +8808,16 @@
       "Thick clams on the floor of the vast shallow sea flooding the West Siberian basin."
      ],
      [
-      "Selachii",
-      "superorder",
+      "Squalicorax",
+      "genus",
       "sea",
       "Sharks whose shed teeth are the commonest vertebrate fossil of the epeiric sea."
+     ],
+     [
+      "Ptychodus",
+      "genus",
+      "sea",
+      "A shark with pavement teeth for crushing clams, ten metres long, a Cretaceous durophage whose teeth litter the chalk seas of two hemispheres."
      ],
      [
       "Diatomea",
@@ -8192,10 +8840,22 @@
       "Mosasaurs of the shallow sea that split Africa, known from superb Moroccan and Malian skeletons."
      ],
      [
-      "Selachii",
-      "superorder",
+      "Squalicorax",
+      "genus",
       "sea",
       "A dazzling shark and ray fauna — the phosphate beds of Morocco are built from their teeth."
+     ],
+     [
+      "Cretoxyrhina",
+      "genus",
+      "sea",
+      "The 'Ginsu shark', seven metres long, whose bite marks are on the bones of mosasaurs and plesiosaurs from Kansas to Europe."
+     ],
+     [
+      "Ptychodus",
+      "genus",
+      "sea",
+      "A shark with pavement teeth for crushing clams, ten metres long, a Cretaceous durophage whose teeth litter the chalk seas of two hemispheres."
      ],
      [
       "Archaeoceti",
@@ -8212,10 +8872,22 @@
     "a1": 33,
     "taxa": [
      [
-      "Scleractinia",
-      "order",
+      "Acropora",
+      "genus",
       "sea",
       "Coral reefs of the Coral Triangle — the most biodiverse marine region on Earth today."
+     ],
+     [
+      "Porites",
+      "genus",
+      "sea",
+      "A massive, slow-growing reef coral whose skeleton records annual bands like tree rings."
+     ],
+     [
+      "Stylophora pistillata",
+      "species",
+      "sea",
+      "A branching reef coral of the Indo-Pacific; its Red Sea populations tolerate unusually hot water."
      ],
      [
       "Foraminifera",
@@ -8224,10 +8896,16 @@
       "Larger reef foraminifera building carbonate sands across the tropical shelf."
      ],
      [
-      "Actinopterygii",
-      "class",
+      "Thunnus",
+      "genus",
       "sea",
       "The richest reef-fish fauna anywhere, radiating through the young sea."
+     ],
+     [
+      "Diaphus",
+      "genus",
+      "sea",
+      "A lanternfish genus of a hundred living species, whose otoliths are the commonest fish fossils of Neogene deep-water sediments from New Zealand to Italy."
      ]
     ]
    }
@@ -8238,16 +8916,34 @@
     "a1": 85,
     "taxa": [
      [
-      "Cetacea",
-      "order",
+      "Balaenoptera",
+      "genus",
       "sea",
       "Whales and dolphins of the cool temperate sea opening between Australia and Zealandia."
+     ],
+     [
+      "Megaptera",
+      "genus",
+      "sea",
+      "The humpback whale, with flippers a third of its length, migrating between polar feeding grounds and tropical calving waters."
+     ],
+     [
+      "Orcinus",
+      "genus",
+      "sea",
+      "The orca, the ocean's top predator, hunting from the pack ice to the tropics in family pods that pass their hunting techniques down the generations."
      ],
      [
       "Bryozoa",
       "phylum",
       "sea",
       "Cool-water bryozoan and shell gravels rather than tropical coral — the temperate carbonate style."
+     ],
+     [
+      "Cellaria",
+      "genus",
+      "sea",
+      "A jointed, bushy bryozoan of cool shelf seas; in the Southern Ocean bryozoans build the sea-floor thickets that a reef's corals build in the tropics."
      ],
      [
       "Nautilus",
@@ -8264,10 +8960,16 @@
     "a1": 170,
     "taxa": [
      [
-      "Rudistes",
-      "order",
+      "Durania",
+      "genus",
       "sea",
       "Rudist bivalves built the great Cretaceous reef rim (the El Abra / Golden Lane banks) around the young Gulf."
+     ],
+     [
+      "Hippurites",
+      "genus",
+      "sea",
+      "A rudist bivalve grown into a tall cone with a lid, packed upright in thickets that built the reefs of the Late Cretaceous Tethys in place of corals."
      ],
      [
       "Globotruncanidae",
@@ -8276,10 +8978,22 @@
       "Keeled planktonic foraminifera raining onto the deep Gulf floor and into its oil-source chalks."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Placenticeras",
+      "genus",
       "sea",
       "Ammonites over the open Gulf, ended abruptly by the Chicxulub impact on its own southeastern rim."
+     ],
+     [
+      "Baculites",
+      "genus",
+      "sea",
+      "A straight-shelled ammonite so abundant it zones the entire seaway; the chalk records its coccolith plankton."
+     ],
+     [
+      "Pachydiscus",
+      "genus",
+      "sea",
+      "A late ammonite that grew shells a metre across, among the last of its kind, in the seas of the final Cretaceous stages worldwide."
      ]
     ]
    },
@@ -8294,10 +9008,28 @@
       "Deep-water foraminifera whose ooze became the source rock for the Gulf's vast oil and gas."
      ],
      [
-      "Bivalvia",
-      "class",
+      "Nummulites",
+      "genus",
+      "sea",
+      "Coin-sized benthic foraminifera beginning the bank-building that will define Tethyan shelf carbonates."
+     ],
+     [
+      "Cucullaea",
+      "genus",
       "sea",
       "Rich molluscan shelf faunas along the subsiding northern Gulf margin."
+     ],
+     [
+      "Mactra",
+      "genus",
+      "sea",
+      "Trough shells, burrowing clams of sandy shores; the Paratethys of the late Miocene was so full of them that its beds are called the Mactra limestones."
+     ],
+     [
+      "Panopea",
+      "genus",
+      "sea",
+      "The geoduck, a deep-burrowing clam with a siphon longer than its shell, in cool shelf sands from the Cretaceous to the present; the commonest fossil shell of Antarctica's Miocene."
      ],
      [
       "Carcharocles",
@@ -8400,10 +9132,16 @@
       "Belemnites of the North Sea seaway that let boreal and Tethyan faunas mingle."
      ],
      [
-      "Ammonoidea",
-      "subclass",
+      "Perisphinctes",
+      "genus",
       "sea",
       "Ammonites whose mixing across this strait is how the boreal and Tethyan Jurassic are correlated."
+     ],
+     [
+      "Dactylioceras",
+      "genus",
+      "sea",
+      "The Whitby ammonite, ribbed and evolute, once carved with snakes' heads and sold as the serpents St Hilda turned to stone."
      ],
      [
       "Gryphaea",
@@ -8426,10 +9164,28 @@
       "The corridor itself is defined by ammonites — their sudden trans-Pangaean spread marks the seaway opening."
      ],
      [
-      "Bivalvia",
-      "class",
+      "Perisphinctes",
+      "genus",
+      "sea",
+      "A large evolute ammonite with forked ribs, common enough in the Oxfordian to be found in Europe, East Africa, Cuba and Japan."
+     ],
+     [
+      "Inoceramus",
+      "genus",
       "sea",
       "Bivalves dispersing between the eastern Pacific and western Tethys through the narrow tropical strait."
+     ],
+     [
+      "Posidonia",
+      "genus",
+      "sea",
+      "A thin-shelled bivalve that paves the black, oxygen-poor shales of Jurassic Europe -- the 'Posidonia Shale' -- by the million."
+     ],
+     [
+      "Gryphaea",
+      "genus",
+      "sea",
+      "'Devil's toenails' — thick curved oysters strewn across the Jurassic seabed of western North America."
      ]
     ]
    }

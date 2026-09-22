@@ -2,6 +2,36 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.11",
+   "date": "22 September 2026",
+   "title": "The curated seas at genus level, and the Cryogenian and Cambrian by block",
+   "summary": "The sixth flora-and-fauna pass, and the last of the handoff's queue. The curated record of the seas -- written before the registry had genera -- said 'Ammonoidea', 'Fusulinida', 'Graptolithina' on sixty-three spans; each is replaced by two or three genera of that group that lived there then, chosen by the same place rules every card obeys, with the curated prose kept on the first of them. Fifty-four new names fill the Cryogenian interglacials, the last Ediacaran tubes, the ten million years of small shelly fossils before the trilobites, and the Cambrian of each block from its first trilobite to the Furongian. Class-level names on the curated cards fell by more than half; the Precambrian's generic share from 42 to 38 per cent.",
+   "sections": [
+    {
+     "name": "In the seas",
+     "items": [
+      "The curated oceans by name: the Ural Ocean's Devonian is Sporadoceras, Cymaclymenia and Manticoceras, its Permian Marginifera and Waagenoconcha; the Iapetus and Tornquist seas carry Didymograptus, Tetragraptus and Rhabdinopora; the Rheic Ocean's Carboniferous is Dombarites, Pericyclus and Goniatites; the Tethys of the Jurassic Perisphinctes and Dactylioceras, Ichthyosaurus and Ophthalmosaurus, Rhomaleosaurus, Plesiosaurus and Cryptoclidus; the Gulf of Mexico's rudist rim is Durania and Hippurites, its open water Placenticeras, Baculites and Pachydiscus; the Kaskaskia Sea's placoderms are Coccosteus, Groenlandaspis and Dunkleosteus; Pangaea's gorgonopsians Inostrancevia and Gorgonops.",
+      "The Cryogenian between the snowballs: Bavlinella and Leiosphaeridia, the Datangpo microfossils, the Twitya discs, the Fifteenmile scale microfossils. The last Ediacaran tubes: Vendotaenia, Sinotubulites, Corumbella, Gaojiashania, Conotubus. The first ten million years of the Cambrian: Protohertzina, Watsonella, Lapworthella, Sunnaginia, Tommotia, Hyolithellus, Coleoloides, Rhombocorniculum, Halkieria, the Shackleton Limestone reefs.",
+      "The first trilobite of each block -- Fallotaspis in Morocco and Nevada, Profallotaspis in Siberia, Callavia in Avalonia, Abadiella in Australia, Yunnanocephalus at Chengjiang -- then Kootenia, Olenoides, Ogygopsis and Bathyuriscus of Laurentia, Estaingia and Balcoracania of Emu Bay, Xystridura, the agnostoids Peronopsis, Pagetia, Glyptagnostus, Agnostotes and Lotagnostus that date the late Cambrian everywhere, Saukia, Dikelocephalus and Elvinia of Laurentia, Chuangia and Kaolishania of North China, Proceratopyge; the Alum Shale, Kaili, Wheeler Shale and Sirius Passet faunas."
+     ]
+    },
+    {
+     "name": "The right place",
+     "items": [
+      "Avalonia's and the Mediterranean province's Ordovician trilobites -- Trinucleus, Selenopeltis, Placoparia, Colpocoryphe, Ectillaenus, Onnia, Neseuretus -- stay off Baltica, the mirror of last release's rule that kept Baltica's off Avalonia.",
+      "The warm-water larger foraminifera and rudists stop where the Tethyan platforms did: the Turgai Strait no longer offers Orbitolina."
+     ]
+    },
+    {
+     "name": "Keeping it right",
+     "items": [
+      "taxa_src/upgrade_curated.py is the tool: it reads every curated span, finds the registry's genera of each class-level name that were alive and at home there, and replaces the name -- so the next batch of genera improves the curated cards too, by re-running it.",
+      "Measured by build/measure_generic.py: Cenozoic 20, Mesozoic 25, late Palaeozoic 25, early Palaeozoic 22, Precambrian 38 per cent; class-level curated slot-ages 6,188 to 2,840."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.10",
    "date": "22 September 2026",
    "title": "Europe and eastern North America by crust, and the first seas at genus level",

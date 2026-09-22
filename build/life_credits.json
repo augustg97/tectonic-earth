@@ -2953,6 +2953,13 @@
   "taxon": "Falco tinnunculus",
   "uuid": "0bb80a57-d918-428f-a874-8c54f1bc403d"
  },
+ "t:fallotaspis": {
+  "attribution": "Sam Gon III",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Fallotaspis longa",
+  "uuid": "f73e5698-3cbe-4921-86fb-42a070918b41"
+ },
  "t:ficus-benghalensis": {
   "attribution": "(unattributed)",
   "licence": "CC0",
@@ -3141,6 +3148,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Haliaeetus leucocephalus",
   "uuid": "80064052-3255-4b19-9125-5a0c79dec5bf"
+ },
+ "t:halkieria": {
+  "attribution": "Martin R. Smith",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Halkieria evangelista",
+  "uuid": "10afd257-9549-4fa6-967a-f9317b5f765f"
  },
  "t:halysites": {
   "attribution": "Mark A. Wilson (photograph)",
@@ -4100,6 +4114,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Ornithorhynchus anatinus",
   "uuid": "3ca524e8-74c5-45ad-a267-9f599ab7d751"
+ },
+ "t:oryctocephalus-indicus": {
+  "attribution": "Qohelet12",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Oryctocephalus",
+  "uuid": "3c497a41-4a2c-4165-a1f2-e1d4d898d77c"
  },
  "t:oryx": {
   "attribution": "Jan A. Venter, Herbert H. T. Prins, David A. Balfour & Rob Slotow (vectorized by T. Michael Keesey)",
