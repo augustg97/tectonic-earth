@@ -18,17 +18,18 @@ Paste this whole file as the first message of a new session.
 
 The user asked for the feature cards' flora and fauna to be fixed **systematically**: every card
 rich, accurate, diverse, with the right icon, the right organisms for that place and time, and a
-tracking system so it cannot decay. The system shipped in 3.6; 3.7–3.10 (2026-09-22) added
-depth — 355 taxa for the seas, Palaeozoic land and the Precambrian — read the placement
+tracking system so it cannot decay. The system shipped in 3.6; 3.7–3.11 (2026-09-22) added
+depth — 409 taxa for the seas, Palaeozoic land and the Precambrian — read the placement
 listing at thirty-four ages and re-read it after every batch, re-anchored nine mislaid
 labels, hand-drew the last forms, closed the five 404s, rewrote the class-level curated
-lists, and split every region code that was two crusts (East Asia into four blocks, Australia
-into two, Europe into two, eastern North America into two). The user's instructions were
-"keep going until completion", then "the remaining placement ages and the Mesozoic seas",
-then "the late Palaeozoic shelves and the in-between ages, Precambrian, region codes", then
-"the eu split and the early Palaeozoic seas, and Ediacaran, and the re-read": all done. What
-is left is in the work queue below, and all of it is depth. There is no open loop; every
-round ends deployed and verified live.
+lists by tool, and split every region code that was two crusts (East Asia into four blocks,
+Australia into two, Europe into two, eastern North America into two). The user's
+instructions were "keep going until completion", then "the remaining placement ages and the
+Mesozoic seas", then "the late Palaeozoic shelves and the in-between ages, Precambrian,
+region codes", then "the eu split and the early Palaeozoic seas, and Ediacaran, and the
+re-read", then "address all remaining next round/handoff items": all done; the queue below
+is what depth remains, and none of it was asked for. There is no open loop; every round ends
+deployed and verified live.
 
 ## How the system works, in one paragraph
 
@@ -67,17 +68,19 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260922-1608`**, release 3.10, commit `f26b056a` (the record —
-  README, HANDOFF, MODEL-GAPS, TRAPS — is the commit after it).
+- Last live deploy: **`DATA_V=20260922-1642`**, release 3.11, commit `da86a95c` (the record —
+  README, HANDOFF, MODEL-GAPS — is the commit after it).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
   drawings **0** (ratchet at 0); curated exceptions **12**. The frame gate is skipped under `--quick`.
-- Registry: **1,511 taxa** in 25 files; 739 illustrations shipped. ~540 taxa carry a box,
-  avoid list, sliced latitude, dated habitat or block-level range.
+- Registry: **1,565 taxa** in 26 files; 744 illustrations shipped. ~560 taxa carry a box,
+  avoid list, sliced latitude, dated habitat or block-level range. The curated record
+  (`life_data.json`, 212 spans) is genus-level wherever the registry can be: 63 class-level
+  names replaced by `taxa_src/upgrade_curated.py`; class-level curated slot-ages 6,188 → 2,840.
 - Marine slot-ages at class/order level, by `build/measure_generic.py` (run it on two
   `life.json` files side by side; the 3.7–3.8 figures used an unrecorded counting and are not
-  comparable): Cz 22%, Mz 26%, late Pz 27%, early Pz 21%, Pc 42%.
+  comparable): Cz 20%, Mz 25%, late Pz 25%, early Pz 22%, Pc 38%.
 - Placement listing read at: 0, 3, 5, 10, 15, 20, 35, 40, 50, 60, 80, 90, 100, 110, 120, 150,
   170, 190, 200, 215, 230, 250, 265, 280, 300, 320, 350, 375, 400, 420, 450, 480, 500, 600 Ma.
 - Region codes: `as-ne as-s as-ic as-sb` (East Asia by block), `au-w au-e`, `eu-n eu-s`
@@ -86,6 +89,28 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
   `na-av` while `laurentia` does not. `pbdb.REGIONS` is first-match boxes;
   `biota.LAND_CODES`/`ALIASES`; after any change run `taxa_src/recode_regions.py` so the
   PBDB evidence on every entry is binned under the new table (offline, from the cache).
+
+## What the sixth round found (3.11)
+
+1. **The curated record was the last class-level layer**, and it is fixable by tool: a curated
+   name has authority over place, so the upgrader applies the composer's own place rules
+   (at_home, in_reach, latitude, habitat, at three ages the genus is alive) before it lets a
+   genus in, and keeps the curated prose on the first genus because the prose is about the
+   place. 49 names stay: the Tonian oceans' acritarchs and cyanobacteria (the honest answer),
+   vent Archaea, the Arctic's cold bivalves (a KEEP list with reasons).
+2. **A two-realm genus must be written in the realm the span asked for**: Groenlandaspis is
+   `fresh` first and `sea` too; written as `fresh` on the Kaskaskia Sea it tripped the
+   realm-lock validator. The upgrader writes the curated realm.
+3. **A group is matched by classification tokens AND form**, and forms lie: an edrioasteroid
+   drawn as a crinoid matched "Crinoidea"; an anaspid drawn as an ostracoderm matched
+   "Osteostraci"; a tommotiid's PBDB phylum is Brachiopoda. `GROUPS` names the tokens and
+   `EXCLUDE_FORMS` the exceptions; read the report before `--apply`.
+4. The Cryogenian record is thin but not empty (Bavlinella, Leiosphaeridia, the Datangpo and
+   Twitya beds); the stage-marker agnostoids are cosmopolitan by nature, so the early
+   Palaeozoic's generic share does not fall further from them.
+5. A proof sheet composes a card for a label at an age the label does not exist (Avalonia at
+   515 Ma): the composer answers, the shipped data has no run, the sheet shows an empty card.
+   Choose ages inside the label's span.
 
 ## What the fifth round found (3.10)
 
@@ -206,19 +231,17 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
 
 ## The work queue, ranked by how much of the remaining gap each closes
 
-1. **The Cryogenian and the Cambrian Series 2 are the generic remainder** (Pc 42%, ePz 21%):
-   the Cryogenian record is thin by nature (Tindir, Kingston Peak, the Sturtian–Marinoan
-   interlude's acritarchs); the 541–521 Ma small-shelly interval is one list by nature. Only
-   the Ediacaran Doushantuo–Lantian and the Furongian by block can still go further.
-2. **Curated spans that are still generic** on smaller labels (the province markers are
-   class-level by design; the "c" tier is genus-level on the continents).
-3. **Sub-leaf structure carried by `avoid`**: Avalonia vs Baltica in `eu-n` (a split along
-   the Iapetus/Tornquist suture would cut Britain in two), Mongolia vs North China in
-   `as-ne` (`_NOT_CATHAYSIA`), Carolina vs Avalon in `na-av` (`_AVALON` boxes). Split a code
-   only when the listing shows a card wrong because of it.
-4. **Read the listing again** after any batch of more than ~20 taxa: `--placements` at a few
-   ages near the batch's span. It is the check that finds what no rule can.
-5. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
+1. **After any batch**: `--placements` at a few ages near its span, read; then
+   `taxa_src/upgrade_curated.py` (report, read, `--apply`) so the curated cards take the new
+   genera too. These two are the maintenance loop; nothing else in the queue is owed.
+2. **What is still class-level is honestly so**: the Tonian and Cryogenian oceans' plankton
+   (acritarchs, cyanobacteria), the vent Archaea, the small-shelly interval's list. A further
+   Ediacaran Doushantuo–Lantian batch (Weng'an embryos, Lantian macroalgae by genus) would
+   move the Precambrian a point or two.
+3. **Sub-leaf structure stays on `avoid` lists** (Avalonia/Baltica, Mongolia/North China,
+   Carolina/Avalon) until the listing shows a card wrong because of it; none did at fifteen
+   ages after the mirrored lists.
+4. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
 
 ## Commands to ship

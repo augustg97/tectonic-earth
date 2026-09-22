@@ -50,10 +50,20 @@ subsystem it would change. **This was the handover surface between research and 
 | the refinement table's repeated keys | `_patch_merged()` reads the table with `ast` and merges names written in two rounds field by field | 51 names had lost an earlier field (Quercus's box, Streptelasma's latitude band) |
 | the re-read | `--placements` at 1000, 660, 565, 548, 515, 495, 475, 455, 440, 425, 400, 300, 150, 50, 0 Ma after the batch | warm-water algae and corals given latitude bands; Cameroceras, Megistaspis, Neseuretus narrowed |
 
-Open after this round: within `eu-n`, Avalonia and Baltica share a code (the Iapetus/Tornquist
-suture runs through Britain and the North Sea); within `as-ne`, Mongolia and North China. Both
-are `avoid` lists for now. The Precambrian's 42% is mostly the Cryogenian, whose record is
-thin by nature. Every card is only as good as the most recent reading of the placement listing.
+### Round 6, 2026-09-22 (release 3.11) — the handoff's queue closed
+
+| item | what shipped | measured |
+|---|---|---|
+| curated spans still class-level | `taxa_src/upgrade_curated.py`: for each class-level curated name, the registry's genera of that group (by classification tokens and form) alive across the span and passing at_home / in_reach / latitude / habitat at three ages, up to three, the curated prose carried onto the first; a KEEP list with reasons; two-realm genera written in the span's realm | 63 names replaced, 21 kept with one genus beside them, 49 kept (Tonian acritarchs and cyanobacteria, vent Archaea, cold Arctic bivalves); class-level curated slot-ages **6,188 → 2,840** |
+| the Cryogenian and the Cambrian by block | 54 names (`x-cryogenian-cambrian`): Bavlinella, Leiosphaeridia, the Datangpo and Fifteenmile microfossils, the Twitya discs; the last Ediacaran tubes; the small-shelly interval's sclerites and tubes; the first trilobite of each block; Laurentian, Australian and Cathaysian Miaolingian–Furongian genera and the agnostoid stage markers | Precambrian **42% → 38%**; early Palaeozoic 21 → 22% (the stage markers are cosmopolitan by nature) |
+| sub-leaf structure inside `eu-n` | `_NOT_BALTICA` avoid lists for the Avalonian and Mediterranean-province trilobites, the mirror of 3.10's Baltic list | Trinucleus off Baltica; no card wrong because of Avalonia-vs-Baltica in the re-read at 15 ages |
+| the re-read | `--placements` at 700, 650, 535, 525, 505, 495, 480, 460, 380, 300, 150, 60, 20 Ma | warm-water forams and rudists given latitude bands (Orbitolina off the Turgai Strait); nothing else found |
+
+Open after this round: nothing from the handoff's queue. The generic remainder is the
+Cryogenian (the record is thin: the interglacial shales and cap carbonates are what there is)
+and the Tonian oceans' plankton, which are honestly class-level. Every card is only as good
+as the most recent reading of the placement listing, and every curated card as good as the
+last run of `upgrade_curated.py` after a batch.
 
 Open after the first round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
 level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time
