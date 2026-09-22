@@ -39,11 +39,21 @@ subsystem it would change. **This was the handover surface between research and 
 | **B15** a label on the right crust today riding the wrong plate | the Tethyan Himalaya moved 30 km south of the suture onto plate 501; third detector in `audit_label_plate.py` (home codes → continent vs plate block) | 1 finding → fixed; Anatolide-Tauride accepted with a reason (Gondwana-derived, numbered with Arabia) |
 | **B16** a label's block resolved by nearest anchor | `provinces.LABEL_BLOCK` for the fifteen labels named differently from the model's blocks | Amuria's banner Cathaysian → Angaran, matching its list |
 
-Open after this round: the `eu` code still spans Baltica and the peri-Gondwanan terranes
-(Armorica, Iberia, Bohemia), so early Palaeozoic Laurussian taxa need `avoid` lists to stay
-off them — the next code split is `eu-n`/`eu-s`. Depth can always go further; the
-Precambrian is microbial by nature (51% generic on the new measure), and every card is
-only as good as the most recent reading of the placement listing.
+### Round 5, 2026-09-22 (release 3.10)
+
+| item | what shipped | measured |
+|---|---|---|
+| `eu` was two crusts | `eu-n` (Baltica, Avalonia, the Russian platform, Svalbard) / `eu-s` (Iberia, France, S Germany, Bohemia, the Alps, Italy, the Balkans, Romania); `eu` an alias; 60 pre-Carboniferous entries narrowed by their PBDB collections (≥5 in one half, ≤2 in the other) plus the one-locality names; Baltica's endemics `avoid` Avalonia | Armorica at 420 Ma no longer lists Scotland's myriapods; Perunica at 460 shows Ectillaenus, not Megistaspis; the `_PERI_GONDWANA` avoid lists retired |
+| `na-e` was two crusts | `na-av` (the Avalon Peninsula, Nova Scotia, the Boston basin, the Carolina slate belt); the Mistaken Point genera boxed to the Avalon Peninsula | Laurentia at 565 Ma shows the Mackenzie Mountains' rangeomorphs and nothing from Newfoundland; Carolina shows Bradgatia and Aspidella, not the deep-water fronds |
+| evidence under a new code | `taxa_src/recode_regions.py` re-bins every entry's PBDB collections under the current `REGIONS` from the cache, offline | 833 entries, 0 without cached occurrences; Svalbard given a code (three "sea" findings were Spitsbergen) |
+| the early Palaeozoic seas and the Precambrian | 82 genera (`x-early-palaeozoic-seas`): Tonian cratons, Ediacaran assemblages, Cambrian-Silurian shelves by block, zone graptolites and conodonts, calcareous algae with latitude bands | early Palaeozoic marine slot-ages at class/order level **38% → 21%**, Precambrian **51% → 42%** (sponges dated to the Cryogenian biomarkers) |
+| the refinement table's repeated keys | `_patch_merged()` reads the table with `ast` and merges names written in two rounds field by field | 51 names had lost an earlier field (Quercus's box, Streptelasma's latitude band) |
+| the re-read | `--placements` at 1000, 660, 565, 548, 515, 495, 475, 455, 440, 425, 400, 300, 150, 50, 0 Ma after the batch | warm-water algae and corals given latitude bands; Cameroceras, Megistaspis, Neseuretus narrowed |
+
+Open after this round: within `eu-n`, Avalonia and Baltica share a code (the Iapetus/Tornquist
+suture runs through Britain and the North Sea); within `as-ne`, Mongolia and North China. Both
+are `avoid` lists for now. The Precambrian's 42% is mostly the Cryogenian, whose record is
+thin by nature. Every card is only as good as the most recent reading of the placement listing.
 
 Open after the first round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
 level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time
