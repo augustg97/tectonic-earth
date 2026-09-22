@@ -4096,10 +4096,10 @@
       "A spiny olenellid trilobite that defines the Laurentian faunal province of the Cambrian tropics."
      ],
      [
-      "Archaeocyatha",
-      "class",
+      "Archaeocyathus",
+      "genus",
       "sea",
-      "Sponge-grade reef-builders that fringed the Laurentian shelf before vanishing mid-Cambrian."
+      "A cup-shaped reef builder that fringed the Laurentian shelf before vanishing mid-Cambrian."
      ]
     ],
     "shared": "Burgess-type body plans also occur in South China (Chengjiang) and Gondwana (Emu Bay); the fauna was near-global, the preservation is what is local."
@@ -4109,22 +4109,28 @@
     "a1": 485,
     "taxa": [
      [
-      "Conodonta",
-      "class",
+      "Panderodus",
+      "genus",
       "sea",
-      "Eel-like jawless chordates whose phosphatic teeth flood Ibex-section limestones and date the rock."
+      "Conodont elements by the million in Laurentia's Early Ordovician limestones; the animals were small eel-like swimmers over a shelf the width of a continent."
      ],
      [
-      "Nautiloidea",
-      "subclass",
+      "Cameroceras",
+      "genus",
       "sea",
-      "Straight-shelled cephalopods diversifying explosively as the Sauk Sea drowns the craton."
+      "A straight-shelled nautiloid several metres long, the largest animal of the Ordovician, cruising the shallow sea over Laurentia."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Receptaculites",
+      "genus",
       "sea",
-      "Articulate lamp-shells opening the Ordovician radiation across a clean carbonate seafloor."
+      "The 'sunflower coral', a calcified alga or sponge-grade animal in the Early Ordovician limestones of the Laurentian platform."
+     ],
+     [
+      "Isotelus",
+      "genus",
+      "sea",
+      "A large, smooth asaphid trilobite of Laurentia's shelf, later the state fossil of Ohio."
      ]
     ]
    },
@@ -4136,19 +4142,31 @@
       "Endoceras",
       "genus",
       "sea",
-      "A giant straight-shelled nautiloid, metres long, hunting the Ordovician carbonate platform."
+      "A straight-shelled nautiloid several metres long: the largest animal of the Ordovician, cruising the Laurentian shelf."
      ],
      [
-      "Bryozoa",
-      "phylum",
+      "Flexicalymene",
+      "genus",
       "sea",
-      "Colonial filter-feeders that, with crinoids, carpet the Cincinnatian seafloor of Ohio and Kentucky."
+      "The enrolled trilobite of the Cincinnati hills, found curled into a ball by the thousand in the mud of the Laurentian shelf."
      ],
      [
-      "Crinoidea",
-      "class",
+      "Rafinesquina",
+      "genus",
       "sea",
-      "Stalked echinoderm 'sea lilies' at their Ordovician peak on the drowned Laurentian shelf."
+      "A wide, flat brachiopod that lay on the mud like a dropped coin, the most abundant shell of the Late Ordovician limestones."
+     ],
+     [
+      "Constellaria",
+      "genus",
+      "sea",
+      "A branching bryozoan dotted with star-shaped mounds, one of the rock-formers of the Cincinnatian sea."
+     ],
+     [
+      "Isorophus",
+      "genus",
+      "sea",
+      "An edrioasteroid, a disc of an echinoderm cemented to shells on the Ordovician sea floor, with no living relatives."
      ]
     ]
    },
@@ -4157,28 +4175,28 @@
     "a1": 443,
     "taxa": [
      [
-      "Eurypterida",
-      "order",
+      "Eurypterus",
+      "genus",
       "sea",
-      "Sea scorpions patrolling Silurian lagoons; the Bertie waterlimes of New York preserve them whole."
+      "The sea scorpion of New York's Bertie waterlime, in a salty lagoon on Laurentia's shore, found by the thousand."
      ],
      [
       "Halysites",
       "genus",
       "sea",
-      "The 'chain coral', a tabulate that helped build Silurian reefs across the Great Lakes basin."
+      "The chain coral, a tabulate whose tubes link like a chain, in the Silurian reefs of the Laurentian shelf."
      ],
      [
       "Cooksonia",
       "genus",
       "land",
-      "A few-centimetre forked stem with terminal sporangia - among the first vascular plants to creep onto Laurentia's coasts."
+      "The oldest vascular plant: forking stems a few centimetres tall with spore capsules at the tips, on wet ground at the water's edge."
      ],
      [
       "Pneumodesmus newmani",
       "species",
       "land",
-      "A millipede from Stonehaven in Scotland with open spiracles, among the earliest animals known to have breathed air."
+      "A millipede from Scotland with spiracles for breathing air: the oldest air-breathing land animal known."
      ]
     ]
    }
@@ -4215,21 +4233,27 @@
     "taxa": [
      [
       "Orthoceratite fauna",
-      "class",
+      "informal",
       "sea",
-      "The red 'Orthoceras limestone' of Sweden and Estonia is a graveyard of straight-shelled cephalopods."
+      "The Baltic 'Orthoceras limestone': straight-shelled nautiloids in pale grey limestone that paves the floors of Swedish churches."
      ],
      [
-      "Asaphidae",
-      "family",
+      "Asaphus",
+      "genus",
       "sea",
-      "Large smooth-shelled trilobites that dominate the Baltoscandian Ordovician platform."
+      "A large asaphid trilobite of the Baltic Ordovician, some species carrying their eyes on long stalks to see over soft mud."
      ],
      [
-      "Conodonta",
-      "class",
+      "Orthoceras",
+      "genus",
       "sea",
-      "Baltoscandian conodont zones are the global standard for dividing Ordovician time."
+      "The straight-shelled nautiloid of the Baltic limestone itself, a metre-long swimmer over the Baltica shelf."
+     ],
+     [
+      "Panderodus",
+      "genus",
+      "sea",
+      "Conodont elements in every Baltic Ordovician limestone; the eel-like animals that shed them swam over the whole shelf."
      ]
     ]
    },
@@ -4239,27 +4263,27 @@
     "taxa": [
      [
       "Gotland reef fauna",
-      "order",
+      "informal",
       "sea",
-      "Silurian Gotland is a fossilised barrier reef of tabulate and rugose corals and stromatoporoids."
+      "The Silurian reefs of Gotland: stromatoporoids, tabulate and rugose corals, crinoids and brachiopods in a warm, clear tropical sea."
      ],
      [
-      "Stromatoporoidea",
-      "order",
+      "Halysites",
+      "genus",
       "sea",
-      "Layered calcareous sponges that built the framework of the Baltic Silurian reefs."
+      "The chain coral of Gotland's reefs, its tubes linked side by side like a chain."
      ],
      [
       "Osteostraci",
-      "class",
+      "order",
       "sea",
-      "Bony-headed jawless fish appearing in Baltic near-shore sediments as vertebrates take hold."
+      "Armoured jawless fishes of the Silurian shores of Baltica, among the first vertebrates with paired fins."
      ],
      [
       "Tortotubus protuberans",
       "species",
       "land",
-      "From Gotland: cord-forming fungal filaments binding soil on bare Silurian ground, before plants had roots."
+      "Fungal filaments on Silurian land, among the oldest fossils of land fungi, building the first soils."
      ]
     ]
    }
@@ -4288,16 +4312,28 @@
     "a1": 443,
     "taxa": [
      [
-      "Rugosa",
-      "order",
+      "Heliolites",
+      "genus",
       "sea",
-      "Solitary and colonial 'horn corals' on Siberian Silurian carbonate banks."
+      "A 'sun coral', its tubes standing in a honeycomb of finer ones, building the Silurian reefs of the Siberian platform."
      ],
      [
-      "Stromatoporoidea",
+      "Halysites",
+      "genus",
+      "sea",
+      "The chain coral in the Silurian reefs over Siberia."
+     ],
+     [
+      "Atrypa",
+      "genus",
+      "sea",
+      "A round, finely ribbed brachiopod with a spiral feeding organ, in nearly every Silurian shelf sea."
+     ],
+     [
+      "Osteostraci",
       "order",
       "sea",
-      "Reef-building sponges continuing the long carbonate history of the isolated craton."
+      "Armoured jawless fishes, common in the Silurian and Devonian of Siberia."
      ]
     ]
    },
@@ -4307,21 +4343,27 @@
     "taxa": [
      [
       "Endemic trilobites",
-      "order",
+      "informal",
       "sea",
-      "Isolated on its own tropical craton, Siberia grows a distinctive Ordovician trilobite fauna."
+      "Siberia's own Cambrian and Ordovician trilobites, provincial enough to mark the craton as a separate continent in the tropics."
      ],
      [
-      "Tabulata",
-      "order",
+      "Favosites",
+      "genus",
       "sea",
-      "Colonial tabulate corals build reefs on the warm, isolated Siberian carbonate shelf."
+      "The honeycomb coral, a tabulate of the Ordovician reefs of the Siberian platform."
      ],
      [
-      "Brachiopoda",
-      "phylum",
+      "Leptaena",
+      "genus",
       "sea",
-      "Shelly brachiopod communities of a shelf sea that faced the open Panthalassic ocean."
+      "A wrinkled, flat-lying brachiopod with a sharp bend at the edge, a long-lived shell of the Siberian shelf."
+     ],
+     [
+      "Orthoceras",
+      "genus",
+      "sea",
+      "A straight-shelled nautiloid swimming over the Ordovician shelf of Siberia."
      ]
     ]
    },
@@ -4331,21 +4373,27 @@
     "taxa": [
      [
       "Small shelly fauna",
-      "phylum",
+      "informal",
       "sea",
-      "The Siberian Platform yields the type Tommotian assemblage - the first mineralised skeletons, mostly millimetre tubes and spines."
+      "The small shelly fossils of the earliest Cambrian, first found and named on the Siberian platform, where the stage names come from."
      ],
      [
-      "Archaeocyatha",
-      "class",
+      "Archaeocyathus",
+      "genus",
       "sea",
-      "Siberian archaeocyath reefs are the largest and best-dated of the Early Cambrian world."
+      "A cup-shaped reef builder of the early Cambrian; Siberia's archaeocyath reefs were the first animal reefs on Earth."
+     ],
+     [
+      "Anabarites",
+      "genus",
+      "sea",
+      "A three-lobed tube a few millimetres long, among the first mineralised skeletons of the Cambrian, named from the Anabar of Siberia."
      ],
      [
       "Sinsk biota",
-      "class",
+      "informal",
       "sea",
-      "An Early Cambrian soft-bodied Lagerstatte in anoxic Siberian shelf muds, older than the Burgess Shale."
+      "A Cambrian Lagerstatte of the Lena river with soft-bodied animals preserved: sponges, arthropods and the first known chordate-like forms of Siberia."
      ]
     ]
    }
@@ -4356,22 +4404,28 @@
     "a1": 490,
     "taxa": [
      [
-      "Graptolithina",
-      "class",
+      "Didymograptus",
+      "genus",
       "sea",
-      "Colonial plankton whose flattened rhabdosomes zone the black shales of Wales and Newfoundland."
+      "The tuning-fork graptolite of the Welsh and Avalonian black shales, the plankton of a cool sea off Gondwana."
      ],
      [
       "Ampyx",
       "genus",
       "sea",
-      "A long-spined trilobite of the cool Avalonian shelf, sometimes fossilised in single-file 'conga lines'."
+      "A trinucleid trilobite with a long spine forward, in the deep Ordovician muds of Avalonia."
      ],
      [
-      "Orthida",
-      "order",
+      "Neseuretus",
+      "genus",
       "sea",
-      "Cool-water brachiopods of a shelf still tied to the Gondwanan margin."
+      "A calymenid trilobite of the cold, muddy shelves that ringed high-latitude Gondwana, Avalonia among them."
+     ],
+     [
+      "Climacograptus",
+      "genus",
+      "sea",
+      "A single-stemmed graptolite with square-cut cups, the drifting plankton of Late Ordovician black shales."
      ]
     ],
     "shared": "Avalonia's cold-water fauna groups it with Gondwana and Baltica, across the Iapetus from Laurentia."
@@ -4410,19 +4464,19 @@
       "Emu Bay Shale biota",
       "class",
       "sea",
-      "A South Australian Lagerstatte where Anomalocaris keeps its compound eyes - tens of thousands of lenses each."
+      "The Cambrian Lagerstatte of Kangaroo Island: Anomalocaris eyes, trilobites and soft-bodied animals on the shore of Gondwana."
      ],
      [
       "Redlichia",
       "genus",
       "sea",
-      "A large redlichiid trilobite typifying the Cambrian shelves of Australia and Antarctica."
+      "A large, spiny redlichiid trilobite that typifies the Cambrian shelves of Gondwana."
      ],
      [
-      "Archaeocyatha",
-      "class",
+      "Archaeocyathus",
+      "genus",
       "sea",
-      "Reef sponges fringing the Australian and Transantarctic margins of early Gondwana."
+      "Cup-shaped reef builders of the early Cambrian; the Flinders Ranges hold some of the largest archaeocyath reefs known."
      ]
     ]
    },
@@ -6270,13 +6324,13 @@
       "Redlichia",
       "genus",
       "sea",
-      "A large redlichiid trilobite of the Cambrian carbonate platform of the North China Block."
+      "A large, spiny redlichiid trilobite that typifies the Cambrian shelves of China."
      ],
      [
-      "Archaeocyatha",
-      "class",
+      "Archaeocyathus",
+      "genus",
       "sea",
-      "Early Cambrian reef sponges on the flooded margin of the isolated craton."
+      "Cup-shaped reef builders of the early Cambrian on the North China platform."
      ]
     ]
    }
@@ -7180,7 +7234,57 @@
   "Arctic Ocean": [
    {
     "a0": 0,
+    "a1": 2.6,
+    "shared": "Young and species-poor: the Arctic basin was only connected to the Pacific when the Bering Strait opened at 5.5-5.3 Ma, and the trans-Arctic interchange followed.",
+    "taxa": [
+     [
+      "Balaena mysticetus",
+      "species",
+      "sea",
+      "The bowhead whale, adapted to break sea ice, the signature large animal of the modern Arctic."
+     ],
+     [
+      "Monodon monoceros",
+      "species",
+      "sea",
+      "The narwhal, whose spiral tusk is a single tooth, wintering in the pack ice of Baffin Bay."
+     ],
+     [
+      "Boreogadus saida",
+      "species",
+      "sea",
+      "Polar cod, the fish under the sea ice that links the Arctic plankton to everything larger."
+     ],
+     [
+      "Odobenus rosmarus",
+      "species",
+      "sea",
+      "The walrus, raking clams from the shelf and hauling out on the ice with its tusks."
+     ],
+     [
+      "Pagophilus groenlandicus",
+      "species",
+      "sea",
+      "Harp seals whelping on the pack ice of the Atlantic gateway."
+     ],
+     [
+      "Limacina helicina",
+      "species",
+      "sea",
+      "The sea butterfly, a swimming snail a few millimetres across, the Arctic cod's staple."
+     ],
+     [
+      "sea-ice algae",
+      "informal",
+      "sea",
+      "Diatoms growing on the underside of the sea ice, the first bloom of the Arctic spring."
+     ]
+    ]
+   },
+   {
+    "a0": 2.6,
     "a1": 55,
+    "shared": "Around 49 Ma a freshwater Azolla fern bloom carpeted a nearly enclosed Arctic - a famous event, but a freshwater one, not part of this marine list.",
     "taxa": [
      [
       "Foraminifera",
@@ -7198,10 +7302,9 @@
       "Balaena mysticetus",
       "species",
       "sea",
-      "The bowhead whale, adapted to break sea ice, is the signature large animal of the modern Arctic."
+      "The bowhead whale, adapted to break sea ice, the signature large animal of the modern Arctic."
      ]
-    ],
-    "shared": "Around 49 Ma a freshwater Azolla fern bloom carpeted a nearly enclosed Arctic - a famous event, but a freshwater one, not part of this marine list."
+    ]
    }
   ],
   "Mediterranean": [
@@ -7398,6 +7501,30 @@
       "class",
       "sea",
       "Dwarfed, stress-tolerant foraminifera track the sea's swings between marine and near-freshwater."
+     ],
+     [
+      "Sarmatian fauna",
+      "informal",
+      "sea",
+      "The brackish Sarmatian sea: no corals, no urchins, but cockles, trough shells and horn snails in beds a hundred metres thick."
+     ],
+     [
+      "Cerastoderma",
+      "genus",
+      "sea",
+      "Cockles, whose brackish-water species ran riot in the Sarmatian."
+     ],
+     [
+      "Mactra",
+      "genus",
+      "sea",
+      "Trough shells in such numbers that the Sarmatian's beds are the Mactra limestones."
+     ],
+     [
+      "Cerithium",
+      "genus",
+      "sea",
+      "Horn snails of the Sarmatian shallows, by the million."
      ]
     ],
     "shared": "The Paratethys is the shrunken relic of Tethys; isolation made its fauna strange and endemic, ancestral to the Caspian and Black Sea life of today.",
@@ -9160,7 +9287,7 @@
   "Wallacea": [
    {
     "a0": 0,
-    "a1": 15,
+    "a1": 5,
     "exception": true,
     "shared": "Deep straits kept these islands apart from both Asia and Australia even at the lowest Ice Age sea levels: no tigers, rhinos or apes crossed Wallace's Line, and only a few marsupials crossed from the east.",
     "taxa": [

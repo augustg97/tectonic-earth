@@ -89,7 +89,27 @@
     "order": "Malvales",
     "family": "Malvaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     -18,
+     52,
+     -30,
+     20
+    ],
+    [
+     42,
+     51,
+     -26,
+     -12
+    ],
+    [
+     122,
+     132,
+     -19,
+     -13
+    ]
+   ]
   },
   "Aglaophyton": {
    "rank": "genus",
@@ -1139,7 +1159,12 @@
     "class": "Lycopsida",
     "order": "Lepidodendrales",
     "family": ""
-   }
+   },
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Ceiba pentandra": {
    "rank": "species",
@@ -1530,7 +1555,7 @@
     },
     {
      "t": [
-      10,
+      3,
       0
      ],
      "in": [
@@ -1767,7 +1792,12 @@
      "ar": 1
     }
    },
-   "place_ok": true
+   "place_ok": true,
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Ginkgo": {
    "rank": "genus",
@@ -2456,7 +2486,12 @@
      "in": 8,
      "as-n": 4
     }
-   }
+   },
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Lobelia rhynchopetalum": {
    "rank": "species",
@@ -4435,7 +4470,15 @@
      "eu": 43,
      "na-n": 1
     }
-   }
+   },
+   "box": [
+    [
+     45,
+     130,
+     40,
+     75
+    ]
+   ]
   },
   "Salix arctica": {
    "rank": "species",
@@ -4587,6 +4630,20 @@
    "box": [
     {
      "t": [
+      40,
+      2.6
+     ],
+     "box": [
+      [
+       -125,
+       -105,
+       35,
+       48
+      ]
+     ]
+    },
+    {
+     "t": [
       2.6,
       0
      ],
@@ -4604,7 +4661,9 @@
     "Basin and Range",
     "Rocky Mountains",
     "Colorado Plateau",
-    "Rio Grande Rift"
+    "Rio Grande Rift",
+    "Gulf of California",
+    "Williston Basin"
    ]
   },
   "Sigillaria": {
@@ -4889,7 +4948,15 @@
      "as-n": 12,
      "na-n": 1
     }
-   }
+   },
+   "box": [
+    [
+     45,
+     130,
+     40,
+     75
+    ]
+   ]
   },
   "Voltzia": {
    "rank": "genus",

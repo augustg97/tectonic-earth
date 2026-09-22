@@ -1,0 +1,3127 @@
+{
+ "taxa": {
+  "Antarctodarwinella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 55,
+   "lad": 34,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "A struthiolariid sea snail of Eocene Antarctica, a lineage that survives in New Zealand's ostrich-foot shells.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "order": "Sorbeoconcha",
+    "family": "Struthiolariidae"
+   },
+   "pbdb": {
+    "asked": "Antarctodarwinella",
+    "matched": "Antarctodarwinella",
+    "exact": true,
+    "oid": "txn:9481",
+    "rank": "genus",
+    "extant": false,
+    "noc": 54,
+    "fea": 66,
+    "lla": 15.98,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "Sorbeoconcha",
+    "family": "Struthiolariidae",
+    "genus": "Antarctodarwinella",
+    "regions": {
+     "an": 53,
+     "sa-s": 1
+    },
+    "fea_r": 44.55,
+    "lla_r": 35.8
+   }
+  },
+  "Austrochlamys": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 12,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou",
+    "sa-s"
+   ],
+   "note": "A cold-water scallop of the Antarctic shelf since the Miocene; its relative Adamussium colbecki grows under the sea ice today.",
+   "hab": [
+    "shelf",
+    "ice"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Pectinidae"
+   },
+   "pbdb": {
+    "asked": "Austrochlamys",
+    "matched": "Austrochlamys",
+    "exact": true,
+    "oid": "txn:278943",
+    "rank": "genus",
+    "extant": true,
+    "noc": 12,
+    "fea": 11.63,
+    "lla": 2.58,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Pectinidae",
+    "genus": "Austrochlamys",
+    "regions": {
+     "an": 9,
+     "sea": 3
+    },
+    "fea_r": 8.48,
+    "lla_r": 3.09
+   }
+  },
+  "Bakevellia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "mussel",
+   "fad": 260,
+   "lad": 100,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A wing-shelled bivalve of lagoons and shallow shelves, in the Permian, Triassic and Jurassic of every continent.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Bakevelliidae"
+   },
+   "pbdb": {
+    "asked": "Bakevellia",
+    "matched": "Bakevellia",
+    "exact": true,
+    "oid": "txn:16510",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1057,
+    "fea": 330.3,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Bakevelliidae",
+    "genus": "Bakevellia",
+    "regions": {
+     "eu": 425,
+     "na-w": 177,
+     "as-e": 164,
+     "as-c": 104,
+     "as-n": 66,
+     "sa-s": 23,
+     "in": 23,
+     "as-se": 16,
+     "gl": 14,
+     "sea": 13,
+     "na-n": 8,
+     "ng": 6,
+     "ar": 5,
+     "au": 5,
+     "af-e": 3,
+     "sa-n": 1,
+     "as-w": 1,
+     "mg": 1,
+     "ca": 1,
+     "nz": 1
+    },
+    "fea_r": 278.85,
+    "lla_r": 166.75
+   }
+  },
+  "Balaenoptera": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 11,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The rorquals -- blue, fin, minke and humpback's kin -- lunge-feeders on krill and shoaling fish since the late Miocene.",
+   "hab": [
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenopteridae"
+   },
+   "pbdb": {
+    "asked": "Balaenoptera",
+    "matched": "Balaenoptera",
+    "exact": true,
+    "oid": "txn:36678",
+    "rank": "genus",
+    "extant": true,
+    "noc": 184,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenopteridae",
+    "genus": "Balaenoptera",
+    "regions": {
+     "eu": 69,
+     "as-e": 25,
+     "na-e": 20,
+     "na-w": 15,
+     "sa-s": 10,
+     "sea": 9,
+     "as-se": 9,
+     "nz": 6,
+     "au": 5,
+     "af-s": 4,
+     "sa-n": 3,
+     "af-n": 2,
+     "an": 2,
+     "na-n": 2,
+     "gl": 2,
+     "ar": 1
+    },
+    "fea_r": 12.73,
+    "lla_r": 0.01
+   }
+  },
+  "Cassianella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "oyster",
+   "fad": 242,
+   "lad": 227,
+   "range": [
+    "tet",
+    "eu",
+    "as-e",
+    "as-se"
+   ],
+   "note": "A small pearl-oyster relative of the Cassian beds of the Dolomites, where a whole Triassic reef community is preserved shell by shell.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Cassianellidae"
+   },
+   "pbdb": {
+    "asked": "Cassianella",
+    "matched": "Cassianella",
+    "exact": true,
+    "oid": "txn:16540",
+    "rank": "genus",
+    "extant": false,
+    "noc": 400,
+    "fea": 247,
+    "lla": 72.2,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Ostreida",
+    "family": "Cassianellidae",
+    "genus": "Cassianella",
+    "regions": {
+     "eu": 203,
+     "as-e": 125,
+     "na-w": 29,
+     "as-c": 9,
+     "as-se": 9,
+     "ar": 8,
+     "na-n": 5,
+     "as-n": 3,
+     "sa-s": 3,
+     "in": 1,
+     "as-w": 1,
+     "nz": 1,
+     "ng": 1,
+     "au": 1,
+     "sea": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 203.55
+   }
+  },
+  "Cellaria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bryozoan",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A jointed, bushy bryozoan of cool shelf seas; in the Southern Ocean bryozoans build the sea-floor thickets that a reef's corals build in the tropics.",
+   "hab": [
+    "shelf"
+   ],
+   "lat": [
+    30,
+    80
+   ],
+   "cls": {
+    "class": "Gymnolaemata",
+    "order": "Cheilostomata",
+    "family": "Cellariidae"
+   },
+   "pbdb": {
+    "asked": "Cellaria",
+    "matched": "Cellaria",
+    "exact": true,
+    "oid": "txn:25792",
+    "rank": "genus",
+    "extant": true,
+    "noc": 248,
+    "fea": 66,
+    "lla": 0.0117,
+    "phylum": "Bryozoa",
+    "class": "Gymnolaemata",
+    "order": "Cheilostomata",
+    "family": "Cellariidae",
+    "genus": "Cellaria",
+    "regions": {
+     "au": 118,
+     "eu": 46,
+     "nz": 27,
+     "na-w": 20,
+     "an": 11,
+     "ca": 9,
+     "as-w": 6,
+     "af-n": 5,
+     "sea": 4,
+     "oc": 1,
+     "sa-s": 1
+    },
+    "fea_r": 35.8,
+    "lla_r": 0.45
+   }
+  },
+  "Cerastoderma": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "eu",
+    "as-w",
+    "af-n",
+    "med",
+    "atl",
+    "arc"
+   ],
+   "note": "The cockle, a shallow-burrowing clam of estuaries and brackish lagoons; the Paratethys's low salinity suited it, and its species there ran riot.",
+   "hab": [
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Cardiidae"
+   },
+   "pbdb": {
+    "asked": "Cerastoderma",
+    "matched": "Cerastoderma",
+    "exact": true,
+    "oid": "txn:17455",
+    "rank": "genus",
+    "extant": true,
+    "noc": 174,
+    "fea": 66,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Cardiidae",
+    "genus": "Cerastoderma",
+    "regions": {
+     "eu": 73,
+     "na-e": 64,
+     "na-w": 15,
+     "as-w": 9,
+     "af-n": 5,
+     "gl": 3,
+     "as-se": 2,
+     "in": 1,
+     "af-e": 1,
+     "as-e": 1
+    },
+    "fea_r": 30.6,
+    "lla_r": 0.07
+   }
+  },
+  "Cerithium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A tall-spired horn snail of warm shallow water, in vast numbers in the brackish Sarmatian sea of the Paratethys.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    50
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "order": "Caenogastropoda",
+    "family": "Cerithiidae"
+   },
+   "pbdb": {
+    "asked": "Cerithium",
+    "matched": "Cerithium",
+    "exact": true,
+    "oid": "txn:9632",
+    "rank": "genus",
+    "extant": true,
+    "noc": 1144,
+    "fea": 237,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cerithiidae",
+    "genus": "Cerithium",
+    "regions": {
+     "eu": 303,
+     "ca": 188,
+     "na-e": 166,
+     "as-se": 72,
+     "sa-n": 62,
+     "ar": 58,
+     "in": 49,
+     "na-w": 47,
+     "as-w": 42,
+     "af-e": 29,
+     "as-e": 28,
+     "oc": 28,
+     "mg": 20,
+     "au": 13,
+     "af-s": 10,
+     "sa-s": 8,
+     "an": 5,
+     "af-w": 5,
+     "as-c": 4,
+     "sea": 3,
+     "af-n": 3,
+     "ng": 1
+    },
+    "fea_r": 123.59,
+    "lla_r": 0.07
+   }
+  },
+  "Cladiscites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 237,
+   "lad": 208,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "au",
+    "pan"
+   ],
+   "note": "A smooth, involute Late Triassic ammonoid of the Tethys and Timor, with fine spiral lines and sutures like lace.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Cladiscitidae"
+   },
+   "pbdb": {
+    "asked": "Cladiscites",
+    "matched": "Cladiscites",
+    "exact": true,
+    "oid": "txn:14073",
+    "rank": "genus",
+    "extant": false,
+    "noc": 131,
+    "fea": 241.464,
+    "lla": 201.4,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Cladiscitidae",
+    "genus": "Cladiscites",
+    "regions": {
+     "eu": 89,
+     "au": 24,
+     "in": 4,
+     "as-n": 4,
+     "nz": 3,
+     "ar": 1,
+     "as-c": 1,
+     "sa-s": 1,
+     "as-se": 1,
+     "sea": 1,
+     "as-w": 1,
+     "na-w": 1
+    },
+    "fea_r": 235.3,
+    "lla_r": 208.44
+   }
+  },
+  "Clione limacina": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "arc",
+    "sou",
+    "an",
+    "atl",
+    "pac"
+   ],
+   "note": "The sea angel, a shell-less swimming snail of the polar oceans that hunts sea butterflies with hooked tentacles.",
+   "hab": [
+    "pelagic",
+    "ice"
+   ],
+   "lat": [
+    45,
+    90
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "order": "Gymnosomata",
+    "family": "Clionidae"
+   }
+  },
+  "Coelorinchus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A grenadier of the continental slope, its otoliths in New Zealand's Miocene mudstones by the hundred.",
+   "hab": [
+    "deep"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Gadiformes",
+    "family": "Macrouridae"
+   },
+   "pbdb": {
+    "asked": "Coelorinchus",
+    "matched": "Coelorinchus",
+    "exact": true,
+    "oid": "txn:246636",
+    "rank": "genus",
+    "extant": true,
+    "noc": 102,
+    "fea": 41.03,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Gadiformes",
+    "family": "Macrouridae",
+    "genus": "Coelorinchus",
+    "regions": {
+     "nz": 65,
+     "eu": 16,
+     "sa-s": 10,
+     "as-se": 3,
+     "an": 2,
+     "ca": 2,
+     "sa-n": 2,
+     "as-w": 1,
+     "na-w": 1
+    },
+    "fea_r": 26.25,
+    "lla_r": 1.29
+   }
+  },
+  "Coelostylina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 252,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A tall-spired sea snail of Triassic shelves, common enough in the Cassian and Muschelkalk faunas to be the Triassic's ordinary snail.",
+   "hab": [
+    "shelf",
+    "reef"
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "family": "Coelostylinidae"
+   },
+   "pbdb": {
+    "asked": "Coelostylina",
+    "matched": "Coelostylina",
+    "exact": true,
+    "oid": "txn:9669",
+    "rank": "genus",
+    "extant": false,
+    "noc": 397,
+    "fea": 259.857,
+    "lla": 154.8,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Coelostylinidae",
+    "genus": "Coelostylina",
+    "regions": {
+     "eu": 286,
+     "as-e": 47,
+     "na-w": 32,
+     "sa-n": 13,
+     "ar": 7,
+     "af-e": 4,
+     "as-c": 3,
+     "in": 2,
+     "ng": 1,
+     "as-se": 1,
+     "au": 1
+    },
+    "fea_r": 257.0,
+    "lla_r": 188.55
+   }
+  },
+  "Crioceratites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "heteromorph",
+   "fad": 133,
+   "lad": 125,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "atl",
+    "sa-s",
+    "na-w",
+    "pac"
+   ],
+   "note": "An open-coiled ammonite, whorls not touching, ribbed and spined, of the Hauterivian seas of the Tethys and Neuquen.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Crioceratitidae"
+   },
+   "pbdb": {
+    "asked": "Crioceratites",
+    "matched": "Crioceratites",
+    "exact": true,
+    "oid": "txn:14733",
+    "rank": "genus",
+    "extant": false,
+    "noc": 406,
+    "fea": 149.2,
+    "lla": 93.9,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Crioceratitidae",
+    "genus": "Crioceratites",
+    "regions": {
+     "eu": 267,
+     "sa-s": 66,
+     "na-w": 17,
+     "as-w": 14,
+     "af-n": 13,
+     "af-s": 9,
+     "na-n": 7,
+     "sa-n": 5,
+     "ca": 3,
+     "sea": 2,
+     "ar": 1,
+     "an": 1,
+     "as-e": 1
+    },
+    "fea_r": 134.82,
+    "lla_r": 123.59
+   }
+  },
+  "Cyrtina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 420,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A small spiriferide brachiopod with a high flat beak, from the Silurian to the last Triassic sea floors.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Rhynchonellata",
+    "order": "Spiriferida",
+    "family": "Cyrtinidae"
+   },
+   "pbdb": {
+    "asked": "Cyrtina",
+    "matched": "Cyrtina",
+    "exact": true,
+    "oid": "txn:29207",
+    "rank": "genus",
+    "extant": false,
+    "noc": 639,
+    "fea": 443.1,
+    "lla": 201.4,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Spiriferinida",
+    "family": "Cyrtinidae",
+    "genus": "Cyrtina",
+    "regions": {
+     "na-e": 293,
+     "eu": 102,
+     "na-w": 93,
+     "na-n": 70,
+     "as-e": 20,
+     "sa-n": 17,
+     "au": 15,
+     "as-n": 10,
+     "as-c": 9,
+     "as-se": 6,
+     "af-n": 2,
+     "nz": 1,
+     "sea": 1
+    },
+    "fea_r": 418.21,
+    "lla_r": 343.3
+   }
+  },
+  "Deshayesites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 125,
+   "lad": 121,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "atl",
+    "eu",
+    "arc",
+    "sa-n"
+   ],
+   "note": "The ammonite that defines the base of the Aptian, in the seas that widened as the Atlantic opened south.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Deshayesitidae"
+   },
+   "pbdb": {
+    "asked": "Deshayesites",
+    "matched": "Deshayesites",
+    "exact": true,
+    "oid": "txn:14761",
+    "rank": "genus",
+    "extant": false,
+    "noc": 280,
+    "fea": 121.4,
+    "lla": 100.5,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Deshayesitidae",
+    "genus": "Deshayesites",
+    "regions": {
+     "as-c": 134,
+     "eu": 129,
+     "as-w": 5,
+     "sa-n": 4,
+     "gl": 3,
+     "na-w": 1,
+     "in": 1,
+     "na-n": 1,
+     "mg": 1,
+     "af-e": 1
+    },
+    "fea_r": 120.48,
+    "lla_r": 117.3
+   }
+  },
+  "Diaphus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A lanternfish genus of a hundred living species, whose otoliths are the commonest fish fossils of Neogene deep-water sediments from New Zealand to Italy.",
+   "hab": [
+    "pelagic",
+    "deep"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Myctophiformes",
+    "family": "Myctophidae"
+   },
+   "pbdb": {
+    "asked": "Diaphus",
+    "matched": "Diaphus",
+    "exact": true,
+    "oid": "txn:35614",
+    "rank": "genus",
+    "extant": true,
+    "noc": 732,
+    "fea": 56,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Myctophiformes",
+    "family": "Myctophidae",
+    "genus": "Diaphus",
+    "regions": {
+     "eu": 358,
+     "nz": 101,
+     "ca": 98,
+     "as-e": 53,
+     "sa-n": 41,
+     "as-w": 28,
+     "sa-s": 19,
+     "na-w": 12,
+     "as-se": 10,
+     "af-n": 5,
+     "na-e": 3,
+     "an": 1,
+     "au": 1,
+     "af-w": 1,
+     "sea": 1
+    },
+    "fea_r": 30.95,
+    "lla_r": 1.3
+   }
+  },
+  "Dissostichus mawsoni": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "sou",
+    "an"
+   ],
+   "note": "The Antarctic toothfish, a two-metre notothenioid with antifreeze in its blood, top fish predator under the Ross Sea ice.",
+   "hab": [
+    "deep",
+    "shelf",
+    "ice"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": "Nototheniidae"
+   }
+  },
+  "Douvilleiceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 113,
+   "lad": 106,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A knobbed, thick-ribbed Albian ammonite found on every continent, in the Western Interior Seaway and the Tethys alike.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Douvilleiceratidae"
+   },
+   "pbdb": {
+    "asked": "Douvilleiceras",
+    "matched": "Douvilleiceras",
+    "exact": true,
+    "oid": "txn:14797",
+    "rank": "genus",
+    "extant": false,
+    "noc": 202,
+    "fea": 125.77,
+    "lla": 89.8,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Douvilleiceratidae",
+    "genus": "Douvilleiceras",
+    "regions": {
+     "eu": 67,
+     "na-w": 53,
+     "mg": 31,
+     "af-s": 17,
+     "sa-n": 16,
+     "na-e": 10,
+     "as-w": 3,
+     "ca": 1,
+     "na-n": 1,
+     "as-e": 1,
+     "ar": 1,
+     "in": 1
+    },
+    "fea_r": 116.38,
+    "lla_r": 103.4
+   }
+  },
+  "Encrinus liliiformis": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 245,
+   "lad": 237,
+   "range": [
+    "eu",
+    "tet",
+    "as-e"
+   ],
+   "note": "The sea lily of the Muschelkalk, whose stem ossicles make whole beds of the German Middle Triassic; the crinoid gardens of a shallow inland sea.",
+   "hab": [
+    "shelf"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Crinoidea",
+    "order": "Encrinida",
+    "family": "Encrinidae"
+   },
+   "pbdb": {
+    "asked": "Encrinus liliiformis",
+    "matched": "Encrinus liliiformis",
+    "exact": true,
+    "oid": "txn:387782",
+    "rank": "species",
+    "extant": false,
+    "noc": 36,
+    "fea": 247,
+    "lla": 227.3,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea",
+    "order": "Encrinida",
+    "family": "Encrinidae",
+    "genus": "Encrinus",
+    "regions": {
+     "as-e": 24,
+     "eu": 11,
+     "as-w": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 238.24
+   }
+  },
+  "Eumorphotis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 252,
+   "lad": 240,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A ribbed scallop-like bivalve that crowded the sea floors of the earliest Triassic with Claraia, one of the few shells that thrived in the aftermath of the extinction.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Aviculopectinidae"
+   },
+   "pbdb": {
+    "asked": "Eumorphotis",
+    "matched": "Eumorphotis",
+    "exact": true,
+    "oid": "txn:16647",
+    "rank": "genus",
+    "extant": false,
+    "noc": 609,
+    "fea": 259.857,
+    "lla": 201.4,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Aviculopectinidae",
+    "genus": "Eumorphotis",
+    "regions": {
+     "eu": 176,
+     "as-e": 170,
+     "na-w": 140,
+     "as-c": 44,
+     "sea": 21,
+     "in": 18,
+     "as-se": 13,
+     "ar": 11,
+     "as-w": 7,
+     "gl": 6,
+     "na-n": 1,
+     "as-n": 1,
+     "af-n": 1
+    },
+    "fea_r": 253.02,
+    "lla_r": 244.23
+   }
+  },
+  "Euphausia superba": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "shrimp",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "sou",
+    "an"
+   ],
+   "note": "Antarctic krill: swarms of hundreds of millions of tonnes on which the whole Southern Ocean food web rests.",
+   "hab": [
+    "pelagic",
+    "ice"
+   ],
+   "w": 3,
+   "cls": {
+    "class": "Malacostraca",
+    "order": "Euphausiacea",
+    "family": "Euphausiidae"
+   }
+  },
+  "Eurhomalea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou",
+    "sa-s",
+    "nz",
+    "au"
+   ],
+   "note": "A venus clam of the cold southern shelves, in Antarctic sediments from the Palaeocene onward and on Patagonian shores today.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Veneridae"
+   },
+   "pbdb": {
+    "asked": "Eurhomalea",
+    "matched": "Eurhomalea",
+    "exact": true,
+    "oid": "txn:17643",
+    "rank": "genus",
+    "extant": true,
+    "noc": 136,
+    "fea": 48.07,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Veneridae",
+    "genus": "Eurhomalea",
+    "regions": {
+     "an": 111,
+     "sa-s": 16,
+     "sa-n": 9
+    },
+    "fea_r": 44.55,
+    "lla_r": 0.07
+   }
+  },
+  "Flexoptychites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 247,
+   "lad": 237,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "pan",
+    "na-w"
+   ],
+   "note": "A smooth, globular ceratitid ammonoid of the Middle Triassic Tethys, in the Alpine limestones by the thousand.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Ptychitidae"
+   },
+   "pbdb": {
+    "asked": "Flexoptychites",
+    "matched": "Flexoptychites",
+    "exact": true,
+    "oid": "txn:14136",
+    "rank": "genus",
+    "extant": false,
+    "noc": 234,
+    "fea": 247,
+    "lla": 227.3,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Ptychitidae",
+    "genus": "Flexoptychites",
+    "regions": {
+     "eu": 224,
+     "as-w": 8,
+     "af-n": 1,
+     "as-e": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 242.0
+   }
+  },
+  "Gadus morhua": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 3.6,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl"
+   ],
+   "note": "The Atlantic cod, the fish that fed and built the North Atlantic's coasts, from the Grand Banks to Lofoten.",
+   "hab": [
+    "shelf",
+    "pelagic"
+   ],
+   "lat": [
+    40,
+    82
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Gadiformes",
+    "family": "Gadidae"
+   },
+   "pbdb": {
+    "asked": "Gadus morhua",
+    "matched": "Gadus",
+    "exact": false,
+    "oid": "txn:35714",
+    "rank": "genus",
+    "extant": true,
+    "noc": 42,
+    "fea": 61.66,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Gadiformes",
+    "family": "Gadidae",
+    "genus": "Gadus",
+    "regions": {
+     "eu": 26,
+     "gl": 6,
+     "na-e": 4,
+     "na-w": 4,
+     "nz": 1,
+     "as-w": 1
+    },
+    "fea_r": 28.47,
+    "lla_r": 0.01
+   }
+  },
+  "Glyphea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobster",
+   "fad": 200,
+   "lad": 100,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A burrowing lobster of Jurassic and Cretaceous sea floors, whose Thalassinoides-type burrows outnumber its bodies by millions.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Malacostraca",
+    "order": "Decapoda",
+    "family": "Glypheidae"
+   },
+   "pbdb": {
+    "asked": "Glyphea",
+    "matched": "Glyphea",
+    "exact": true,
+    "oid": "txn:22452",
+    "rank": "genus",
+    "extant": false,
+    "noc": 86,
+    "fea": 237,
+    "lla": 37.71,
+    "phylum": "Arthropoda",
+    "class": "Malacostraca",
+    "order": "Decapoda",
+    "family": "Glypheidae",
+    "genus": "Glyphea",
+    "regions": {
+     "eu": 52,
+     "au": 9,
+     "gl": 6,
+     "an": 5,
+     "as-e": 3,
+     "nz": 3,
+     "na-w": 3,
+     "sa-s": 2,
+     "af-n": 1,
+     "na-e": 1,
+     "as-c": 1
+    },
+    "fea_r": 200.45,
+    "lla_r": 44.55
+   }
+  },
+  "Gondolella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "conodont",
+   "fad": 300,
+   "lad": 200,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A conodont whose platform elements zone the Permian and Triassic worldwide; the last of the conodonts went with its family at the end of the Triassic.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Conodonta",
+    "order": "Ozarkodinida",
+    "family": "Gondolellidae"
+   },
+   "pbdb": {
+    "asked": "Gondolella",
+    "matched": "Gondolella",
+    "exact": true,
+    "oid": "txn:33930",
+    "rank": "genus",
+    "extant": false,
+    "noc": 370,
+    "fea": 315.2,
+    "lla": 211.18,
+    "phylum": "Chordata",
+    "class": "Conodonta",
+    "order": "Ozarkodinida",
+    "family": "Gondolellidae",
+    "genus": "Gondolella",
+    "regions": {
+     "eu": 286,
+     "as-e": 17,
+     "as-w": 17,
+     "na-w": 12,
+     "in": 12,
+     "ar": 7,
+     "na-e": 5,
+     "nz": 4,
+     "sea": 4,
+     "as-se": 3,
+     "as-c": 2,
+     "as-n": 1
+    },
+    "fea_r": 272.95,
+    "lla_r": 226.35
+   }
+  },
+  "Gymnotoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 245,
+   "lad": 237,
+   "range": [
+    "na-w",
+    "pan",
+    "as-n",
+    "as-e"
+   ],
+   "note": "The Anisian ammonoid of Nevada's Fossil Hill and of Arctic Siberia, a ceratitid of the open Panthalassan and Boreal seas.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Ceratitidae"
+   },
+   "pbdb": {
+    "asked": "Gymnotoceras",
+    "matched": "Gymnotoceras",
+    "exact": true,
+    "oid": "txn:14150",
+    "rank": "genus",
+    "extant": false,
+    "noc": 210,
+    "fea": 250.8,
+    "lla": 237,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ceratitida",
+    "family": "Ceratitidae",
+    "genus": "Gymnotoceras",
+    "regions": {
+     "na-w": 132,
+     "as-n": 43,
+     "sea": 30,
+     "as-e": 2,
+     "as-se": 1,
+     "as-c": 1,
+     "eu": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 242.45
+   }
+  },
+  "Henodus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "placodont",
+   "fad": 237,
+   "lad": 227,
+   "range": [
+    "eu",
+    "tet"
+   ],
+   "note": "A placodont with a turtle-like shell wider than long and a toothless beak, in a brackish lagoon of Late Triassic Germany.",
+   "hab": [
+    "coast"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Placodontia",
+    "family": "Henodontidae"
+   },
+   "pbdb": {
+    "asked": "Henodus",
+    "matched": "Henodus",
+    "exact": true,
+    "oid": "txn:36533",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 237,
+    "lla": 227.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Placodontia",
+    "family": "Henodontidae",
+    "genus": "Henodus",
+    "regions": {
+     "eu": 1
+    }
+   }
+  },
+  "Hypsocormus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bigfish",
+   "fad": 170,
+   "lad": 145,
+   "range": [
+    "eu",
+    "tet",
+    "atl"
+   ],
+   "note": "A tuna-shaped pachycormid fish of the Jurassic sea, a fast predator of the same family as the giant filter-feeder Leedsichthys.",
+   "hab": [
+    "pelagic"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Pachycormiformes",
+    "family": "Pachycormidae"
+   },
+   "pbdb": {
+    "asked": "Hypsocormus",
+    "matched": "Hypsocormus",
+    "exact": true,
+    "oid": "txn:35261",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 205.7,
+    "lla": 145.06,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Pachycormiformes",
+    "family": "Pachycormidae",
+    "genus": "Hypsocormus",
+    "regions": {
+     "eu": 5,
+     "sa-s": 1
+    }
+   }
+  },
+  "Lahillia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 70,
+   "lad": 34,
+   "range": [
+    "an",
+    "sa-s",
+    "sou",
+    "nz"
+   ],
+   "note": "A thick-shelled clam of Seymour Island, in the Antarctic shelf sands from the last Cretaceous stage through the Eocene, before the ice.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Lahilliidae"
+   },
+   "pbdb": {
+    "asked": "Lahillia",
+    "matched": "Lahillia",
+    "exact": true,
+    "oid": "txn:17788",
+    "rank": "genus",
+    "extant": false,
+    "noc": 104,
+    "fea": 86.1,
+    "lla": 15.98,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Lahillidae",
+    "genus": "Lahillia",
+    "regions": {
+     "an": 57,
+     "sa-s": 25,
+     "nz": 17,
+     "au": 3,
+     "sea": 2
+    },
+    "fea_r": 84.85,
+    "lla_r": 19.51
+   }
+  },
+  "Limacina helicina": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "arc",
+    "sou",
+    "an",
+    "atl",
+    "pac"
+   ],
+   "note": "The sea butterfly, a swimming snail a few millimetres across that feeds Arctic cod and whales, and whose thin shell dissolves first as the ocean acidifies.",
+   "hab": [
+    "pelagic",
+    "ice"
+   ],
+   "lat": [
+    45,
+    90
+   ],
+   "cls": {
+    "class": "Gastropoda",
+    "order": "Pteropoda",
+    "family": "Limacinidae"
+   },
+   "pbdb": {
+    "asked": "Limacina helicina",
+    "matched": "Limacina",
+    "exact": false,
+    "oid": "txn:12247",
+    "rank": "genus",
+    "extant": true,
+    "noc": 154,
+    "fea": 56,
+    "lla": 0.0117,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "Thecosomata",
+    "family": "Limacinidae",
+    "genus": "Limacina",
+    "regions": {
+     "eu": 103,
+     "ca": 22,
+     "na-e": 13,
+     "as-e": 8,
+     "na-w": 3,
+     "nz": 2,
+     "sea": 2,
+     "as-w": 1
+    },
+    "fea_r": 52.03,
+    "lla_r": 3.09
+   }
+  },
+  "Limopsis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 145,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A small, hairy-shelled clam of cool and deep water, one of the commonest bivalves of the Antarctic and subantarctic shelves.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "lat": [
+    30,
+    80
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Arcida",
+    "family": "Limopsidae"
+   },
+   "pbdb": {
+    "asked": "Limopsis",
+    "matched": "Limopsis",
+    "exact": true,
+    "oid": "txn:16260",
+    "rank": "genus",
+    "extant": true,
+    "noc": 703,
+    "fea": 201.4,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Arcida",
+    "family": "Limopsidae",
+    "genus": "Limopsis",
+    "regions": {
+     "eu": 324,
+     "na-e": 113,
+     "nz": 54,
+     "au": 45,
+     "as-e": 43,
+     "ca": 28,
+     "na-w": 24,
+     "sa-s": 20,
+     "an": 9,
+     "as-se": 9,
+     "sa-n": 7,
+     "in": 7,
+     "af-n": 5,
+     "as-w": 4,
+     "ng": 3,
+     "gl": 2,
+     "ar": 2,
+     "as-n": 2,
+     "af-e": 2
+    },
+    "fea_r": 166.75,
+    "lla_r": 3.09
+   }
+  },
+  "Lobodon carcinophaga": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "an",
+    "sou"
+   ],
+   "note": "The crabeater seal, the most numerous large mammal on Earth after us, sieving krill through lobed teeth on the Antarctic pack ice.",
+   "hab": [
+    "ice",
+    "pelagic",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Lobodon carcinophaga",
+    "matched": "Lobodon carcinophaga",
+    "exact": true,
+    "oid": "txn:94090",
+    "rank": "species",
+    "extant": true,
+    "noc": 7,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae",
+    "genus": "Lobodon",
+    "regions": {
+     "af-s": 4,
+     "an": 3
+    }
+   }
+  },
+  "Mactra": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Trough shells, burrowing clams of sandy shores; the Paratethys of the late Miocene was so full of them that its beds are called the Mactra limestones.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Mactridae"
+   },
+   "pbdb": {
+    "asked": "Mactra",
+    "matched": "Mactra",
+    "exact": true,
+    "oid": "txn:17859",
+    "rank": "genus",
+    "extant": true,
+    "noc": 296,
+    "fea": 199.5,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Venerida",
+    "family": "Mactridae",
+    "genus": "Mactra",
+    "regions": {
+     "eu": 62,
+     "sa-s": 42,
+     "an": 30,
+     "na-e": 25,
+     "na-w": 19,
+     "as-e": 17,
+     "au": 17,
+     "nz": 16,
+     "sa-n": 14,
+     "af-s": 12,
+     "in": 11,
+     "as-w": 9,
+     "as-se": 7,
+     "as-c": 7,
+     "af-e": 3,
+     "af-n": 2,
+     "ar": 2,
+     "na-n": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 0.01
+   }
+  },
+  "Magasella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "nz",
+    "sou",
+    "au"
+   ],
+   "note": "A terebratulid brachiopod of New Zealand's shelves, where lamp-shells are still abundant in the cool south.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Rhynchonellata",
+    "order": "Terebratulida",
+    "family": "Terebratellidae"
+   },
+   "pbdb": {
+    "asked": "Magasella",
+    "matched": "Magasella",
+    "exact": true,
+    "oid": "txn:30311",
+    "rank": "genus",
+    "extant": true,
+    "noc": 66,
+    "fea": 27.3,
+    "lla": 0.0117,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Terebratulida",
+    "family": "Terebratellidae",
+    "genus": "Magasella",
+    "regions": {
+     "nz": 66
+    },
+    "fea_r": 26.25,
+    "lla_r": 13.8
+   }
+  },
+  "Mallotus villosus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "fish",
+   "fad": 5,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl",
+    "pac"
+   ],
+   "note": "The capelin, the small silver fish that cod, whales and seabirds of the North Atlantic and Arctic all depend on.",
+   "hab": [
+    "pelagic",
+    "coast"
+   ],
+   "lat": [
+    45,
+    85
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Osmeriformes",
+    "family": "Osmeridae"
+   },
+   "pbdb": {
+    "asked": "Mallotus villosus",
+    "matched": "Mallotus villosus",
+    "exact": true,
+    "oid": "txn:263570",
+    "rank": "species",
+    "extant": true,
+    "noc": 3,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Actinopterygii",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mallotus",
+    "regions": {
+     "na-e": 3
+    }
+   }
+  },
+  "Megaptera": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "whale",
+   "fad": 5.3,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The humpback whale, with flippers a third of its length, migrating between polar feeding grounds and tropical calving waters.",
+   "hab": [
+    "pelagic",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenopteridae"
+   },
+   "pbdb": {
+    "asked": "Megaptera",
+    "matched": "Megaptera",
+    "exact": true,
+    "oid": "txn:36760",
+    "rank": "genus",
+    "extant": true,
+    "noc": 46,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Balaenopteridae",
+    "genus": "Megaptera",
+    "regions": {
+     "eu": 10,
+     "as-e": 9,
+     "na-e": 8,
+     "au": 5,
+     "sea": 2,
+     "as-se": 2,
+     "sa-n": 2,
+     "na-w": 2,
+     "sa-s": 1,
+     "nz": 1,
+     "ar": 1,
+     "af-w": 1,
+     "in": 1,
+     "an": 1
+    },
+    "fea_r": 6.29,
+    "lla_r": 0.01
+   }
+  },
+  "Mortoniceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 106,
+   "lad": 100,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A large keeled Albian ammonite of the Tethys, Africa and the Americas, the last zone fossil of the Early Cretaceous.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Brancoceratidae"
+   },
+   "pbdb": {
+    "asked": "Mortoniceras",
+    "matched": "Mortoniceras",
+    "exact": true,
+    "oid": "txn:15216",
+    "rank": "genus",
+    "extant": false,
+    "noc": 302,
+    "fea": 113.2,
+    "lla": 93.9,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Brancoceratidae",
+    "genus": "Mortoniceras",
+    "regions": {
+     "af-s": 84,
+     "eu": 73,
+     "sa-n": 38,
+     "af-w": 26,
+     "mg": 23,
+     "na-w": 22,
+     "na-e": 15,
+     "as-w": 7,
+     "as-c": 6,
+     "ca": 4,
+     "as-e": 3,
+     "au": 1
+    },
+    "fea_r": 106.85,
+    "lla_r": 103.4
+   }
+  },
+  "Neithea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 145,
+   "lad": 66,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A ribbed, unequal-valved scallop of Cretaceous shelves, one of the commonest bivalves of the chalk seas.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Neitheidae"
+   },
+   "pbdb": {
+    "asked": "Neithea",
+    "matched": "Neithea",
+    "exact": true,
+    "oid": "txn:16842",
+    "rank": "genus",
+    "extant": false,
+    "noc": 494,
+    "fea": 143.1,
+    "lla": 61.66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Pectinida",
+    "family": "Neitheidae",
+    "genus": "Neithea",
+    "regions": {
+     "eu": 160,
+     "na-e": 90,
+     "sa-n": 79,
+     "ar": 38,
+     "as-e": 22,
+     "mg": 14,
+     "na-w": 14,
+     "af-s": 13,
+     "as-w": 13,
+     "as-c": 10,
+     "ca": 10,
+     "af-n": 9,
+     "in": 8,
+     "nz": 3,
+     "af-e": 3,
+     "as-n": 2,
+     "af-w": 2,
+     "sa-s": 1,
+     "au": 1,
+     "an": 1,
+     "sea": 1
+    },
+    "fea_r": 129.19,
+    "lla_r": 69.1
+   }
+  },
+  "Neocomites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 140,
+   "lad": 130,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "atl",
+    "sa-s",
+    "sa-n",
+    "ca",
+    "pac"
+   ],
+   "note": "A ribbed Valanginian ammonite of the Tethys and the young Atlantic, the standard fossil of the Neocomian.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Neocomitidae"
+   },
+   "pbdb": {
+    "asked": "Neocomites",
+    "matched": "Neocomites",
+    "exact": true,
+    "oid": "txn:15232",
+    "rank": "genus",
+    "extant": false,
+    "noc": 663,
+    "fea": 161.5,
+    "lla": 113.2,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Neocomitidae",
+    "genus": "Neocomites",
+    "regions": {
+     "eu": 582,
+     "af-n": 48,
+     "na-w": 12,
+     "sa-s": 8,
+     "in": 5,
+     "ca": 4,
+     "as-w": 3,
+     "ar": 1
+    },
+    "fea_r": 134.82,
+    "lla_r": 129.19
+   }
+  },
+  "Neoschizodus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 252,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A trigoniid clam, ribbed and triangular, that burrowed the Triassic sands of the Tethys and the Muschelkalk sea.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Myophoriidae"
+   },
+   "pbdb": {
+    "asked": "Neoschizodus",
+    "matched": "Neoschizodus",
+    "exact": true,
+    "oid": "txn:17244",
+    "rank": "genus",
+    "extant": false,
+    "noc": 530,
+    "fea": 266.9,
+    "lla": 201.4,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Myophoriidae",
+    "genus": "Neoschizodus",
+    "regions": {
+     "eu": 243,
+     "as-e": 129,
+     "as-c": 60,
+     "na-w": 48,
+     "as-n": 24,
+     "ar": 7,
+     "as-se": 6,
+     "sea": 4,
+     "na-n": 2,
+     "in": 2,
+     "ng": 2,
+     "sa-s": 2,
+     "af-n": 1
+    },
+    "fea_r": 252.62,
+    "lla_r": 232.15
+   }
+  },
+  "Neospathodus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "conodont",
+   "fad": 252,
+   "lad": 245,
+   "range": [
+    "cosmo"
+   ],
+   "note": "An Early Triassic conodont whose elements date the recovery from the end-Permian extinction, stage by stage, in Pakistan, China and Nevada alike.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Conodonta",
+    "order": "Ozarkodinida",
+    "family": "Gondolellidae"
+   },
+   "pbdb": {
+    "asked": "Neospathodus",
+    "matched": "Neospathodus",
+    "exact": true,
+    "oid": "txn:33989",
+    "rank": "genus",
+    "extant": false,
+    "noc": 419,
+    "fea": 254.14,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Conodonta",
+    "order": "Ozarkodinida",
+    "family": "Gondolellidae",
+    "genus": "Neospathodus",
+    "regions": {
+     "eu": 192,
+     "as-w": 74,
+     "as-e": 67,
+     "as-se": 39,
+     "in": 21,
+     "sea": 17,
+     "as-n": 3,
+     "na-w": 2,
+     "as-c": 2,
+     "ng": 1,
+     "na-n": 1
+    },
+    "fea_r": 250.95,
+    "lla_r": 203.55
+   }
+  },
+  "Nothosauridae": {
+   "rank": "family",
+   "realm": "sea",
+   "form": "nothosaur",
+   "fad": 247,
+   "lad": 227,
+   "range": [
+    "tet",
+    "eu",
+    "as-e",
+    "as-w",
+    "af-n",
+    "as-se",
+    "pan",
+    "na-w"
+   ],
+   "note": "Nothosaurs: long-necked, paddle-limbed reptiles of Triassic shores, seal-like in habit, from the Muschelkalk to Guizhou.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Sauropterygia",
+    "family": "Nothosauridae"
+   },
+   "pbdb": {
+    "asked": "Nothosauridae",
+    "matched": "Nothosauridae",
+    "exact": true,
+    "oid": "txn:38170",
+    "rank": "family",
+    "extant": false,
+    "noc": 150,
+    "fea": 250.8,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Eosauropterygia",
+    "family": "Nothosauridae",
+    "genus": null,
+    "regions": {
+     "eu": 127,
+     "as-e": 13,
+     "ar": 9,
+     "na-w": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 232.15
+   }
+  },
+  "Notosaria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 23,
+   "lad": 0,
+   "range": [
+    "nz",
+    "sou",
+    "an",
+    "au"
+   ],
+   "note": "A rhynchonellid brachiopod of New Zealand and the Southern Ocean, a lamp-shell lineage still common where the water is cold.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Rhynchonellata",
+    "order": "Rhynchonellida",
+    "family": "Notosariidae"
+   },
+   "pbdb": {
+    "asked": "Notosaria",
+    "matched": "Notosaria",
+    "exact": true,
+    "oid": "txn:28723",
+    "rank": "genus",
+    "extant": true,
+    "noc": 85,
+    "fea": 56,
+    "lla": 0.0117,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Rhynchonellida",
+    "family": "Notosariidae",
+    "genus": "Notosaria",
+    "regions": {
+     "nz": 78,
+     "an": 4,
+     "eu": 3
+    },
+    "fea_r": 26.25,
+    "lla_r": 4.47
+   }
+  },
+  "Olcostephanus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 137,
+   "lad": 130,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A globular, strongly ribbed ammonite of the Valanginian, known from Europe to Argentina, Mexico and South Africa.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Olcostephanidae"
+   },
+   "pbdb": {
+    "asked": "Olcostephanus",
+    "matched": "Olcostephanus",
+    "exact": true,
+    "oid": "txn:15281",
+    "rank": "genus",
+    "extant": false,
+    "noc": 656,
+    "fea": 161.5,
+    "lla": 121.4,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Olcostephanidae",
+    "genus": "Olcostephanus",
+    "regions": {
+     "eu": 451,
+     "sa-s": 91,
+     "na-w": 45,
+     "af-n": 40,
+     "sa-n": 10,
+     "na-e": 7,
+     "in": 4,
+     "ca": 3,
+     "as-w": 2,
+     "af-s": 2,
+     "an": 1
+    },
+    "fea_r": 134.82,
+    "lla_r": 129.19
+   }
+  },
+  "Orbitolina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 125,
+   "lad": 90,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "ca",
+    "atl",
+    "sa-n",
+    "pac"
+   ],
+   "note": "A cone-shaped larger foraminifer of the Urgonian reefs and platforms, the rock-former of the Aptian-Albian Tethys.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Globothalamea",
+    "order": "Loftusiida",
+    "family": "Orbitolinidae"
+   },
+   "pbdb": {
+    "asked": "Orbitolina",
+    "matched": "Orbitolina",
+    "exact": true,
+    "oid": "txn:1997",
+    "rank": "genus",
+    "extant": false,
+    "noc": 124,
+    "fea": 161.5,
+    "lla": 5.333,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Orbitolinidae",
+    "genus": "Orbitolina",
+    "regions": {
+     "eu": 67,
+     "as-w": 36,
+     "as-c": 9,
+     "na-w": 4,
+     "ar": 3,
+     "in": 2,
+     "as-e": 2,
+     "as-se": 1
+    },
+    "fea_r": 120.48,
+    "lla_r": 97.2
+   }
+  },
+  "Orcinus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "dolphin",
+   "fad": 5.3,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The orca, the ocean's top predator, hunting from the pack ice to the tropics in family pods that pass their hunting techniques down the generations.",
+   "hab": [
+    "pelagic",
+    "coast",
+    "ice"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Delphinidae"
+   },
+   "pbdb": {
+    "asked": "Orcinus",
+    "matched": "Orcinus",
+    "exact": true,
+    "oid": "txn:36787",
+    "rank": "genus",
+    "extant": true,
+    "noc": 47,
+    "fea": 7.246,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Delphinidae",
+    "genus": "Orcinus",
+    "regions": {
+     "eu": 21,
+     "as-e": 8,
+     "na-w": 4,
+     "nz": 3,
+     "sea": 2,
+     "an": 2,
+     "na-e": 1,
+     "af-s": 1,
+     "sa-n": 1,
+     "af-e": 1,
+     "in": 1,
+     "sa-s": 1,
+     "gl": 1
+    },
+    "fea_r": 4.01,
+    "lla_r": 0.01
+   }
+  },
+  "Oxytropidoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 110,
+   "lad": 100,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A sharp-keeled Albian ammonite of the Gulf Coast, Peru, Venezuela and Africa: the fauna of a tropical Atlantic that had just been made.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Mojsisovicsiidae"
+   },
+   "pbdb": {
+    "asked": "Oxytropidoceras",
+    "matched": "Oxytropidoceras",
+    "exact": true,
+    "oid": "txn:15304",
+    "rank": "genus",
+    "extant": false,
+    "noc": 249,
+    "fea": 113.2,
+    "lla": 85.7,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Mojsisovicsiidae",
+    "genus": "Oxytropidoceras",
+    "regions": {
+     "na-e": 85,
+     "sa-n": 75,
+     "mg": 32,
+     "af-s": 23,
+     "na-w": 22,
+     "af-w": 6,
+     "eu": 2,
+     "as-w": 2,
+     "af-n": 1,
+     "ca": 1
+    },
+    "fea_r": 108.2,
+    "lla_r": 103.4
+   }
+  },
+  "Pagophilus groenlandicus": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "seal",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "arc",
+    "atl"
+   ],
+   "note": "The harp seal, whelping on the pack ice of the North Atlantic and following the ice edge through the year.",
+   "hab": [
+    "ice",
+    "pelagic",
+    "coast"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae"
+   },
+   "realms": [
+    "sea",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Pagophilus groenlandicus",
+    "matched": "Pagophilus groenlandicus",
+    "exact": true,
+    "oid": "txn:104977",
+    "rank": "species",
+    "extant": true,
+    "noc": 43,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Phocidae",
+    "genus": "Pagophilus",
+    "regions": {
+     "eu": 16,
+     "gl": 12,
+     "na-e": 8,
+     "na-n": 4,
+     "sea": 2,
+     "na-w": 1
+    },
+    "fea_r": 1.3,
+    "lla_r": 0.01
+   }
+  },
+  "Panopea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 145,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The geoduck, a deep-burrowing clam with a siphon longer than its shell, in cool shelf sands from the Cretaceous to the present; the commonest fossil shell of Antarctica's Miocene.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "lat": [
+    25,
+    80
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Adapedonta",
+    "family": "Hiatellidae"
+   },
+   "pbdb": {
+    "asked": "Panopea",
+    "matched": "Panopea",
+    "exact": true,
+    "oid": "txn:61583",
+    "rank": "genus",
+    "extant": true,
+    "noc": 1214,
+    "fea": 247,
+    "lla": 0,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Adapedonta",
+    "family": "Hiatellidae",
+    "genus": "Panopea",
+    "regions": {
+     "na-w": 249,
+     "na-e": 226,
+     "eu": 226,
+     "sa-s": 202,
+     "nz": 56,
+     "an": 48,
+     "as-e": 38,
+     "as-n": 24,
+     "sa-n": 23,
+     "ca": 18,
+     "mg": 16,
+     "af-s": 13,
+     "in": 12,
+     "au": 12,
+     "as-w": 12,
+     "sea": 11,
+     "as-c": 9,
+     "na-n": 7,
+     "af-n": 5,
+     "gl": 3,
+     "ar": 2,
+     "af-e": 1,
+     "af-w": 1
+    },
+    "fea_r": 129.19,
+    "lla_r": 1.68
+   }
+  },
+  "Pleuragramma antarctica": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cod",
+   "fad": 2.6,
+   "lad": 0,
+   "range": [
+    "sou",
+    "an"
+   ],
+   "note": "The Antarctic silverfish, the herring of the Southern Ocean, the link between the krill and the penguins, seals and whales.",
+   "hab": [
+    "pelagic",
+    "ice",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes",
+    "family": "Nototheniidae"
+   }
+  },
+  "Polyptychites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 137,
+   "lad": 133,
+   "range": [
+    "arc",
+    "eu",
+    "as-n",
+    "na-n",
+    "na-w",
+    "gl",
+    "atl"
+   ],
+   "note": "A Boreal Valanginian ammonite of the northern seas, from England to Siberia and Canada, marking the province the Tethyan forms did not reach.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Polyptychitidae"
+   },
+   "pbdb": {
+    "asked": "Polyptychites",
+    "matched": "Polyptychites",
+    "exact": true,
+    "oid": "txn:15430",
+    "rank": "genus",
+    "extant": false,
+    "noc": 224,
+    "fea": 143.1,
+    "lla": 125.77,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Polyptychitidae",
+    "genus": "Polyptychites",
+    "regions": {
+     "as-n": 87,
+     "gl": 46,
+     "na-n": 42,
+     "eu": 23,
+     "sea": 19,
+     "na-w": 7
+    },
+    "fea_r": 134.82,
+    "lla_r": 134.82
+   }
+  },
+  "Psiloceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 201.4,
+   "lad": 199,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The smooth ammonite whose first appearance defines the base of the Jurassic, in the first seas after the end-Triassic extinction.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Psiloceratidae"
+   },
+   "pbdb": {
+    "asked": "Psiloceras",
+    "matched": "Psiloceras",
+    "exact": true,
+    "oid": "txn:15548",
+    "rank": "genus",
+    "extant": false,
+    "noc": 189,
+    "fea": 205.7,
+    "lla": 174.7,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Psiloceratidae",
+    "genus": "Psiloceras",
+    "regions": {
+     "sa-s": 64,
+     "eu": 50,
+     "na-w": 45,
+     "sa-n": 19,
+     "in": 5,
+     "na-n": 3,
+     "nz": 3
+    },
+    "fea_r": 200.45,
+    "lla_r": 200.45
+   }
+  },
+  "Pterotrigonia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 140,
+   "lad": 66,
+   "range": [
+    "as-e",
+    "na-e",
+    "na-w",
+    "pac",
+    "atl",
+    "eu",
+    "in",
+    "au"
+   ],
+   "note": "A winged trigoniid clam of Cretaceous shores, common in Japan and the American Gulf Coast.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Megatrigoniidae"
+   },
+   "pbdb": {
+    "asked": "Pterotrigonia",
+    "matched": "Pterotrigonia",
+    "exact": true,
+    "oid": "txn:17266",
+    "rank": "genus",
+    "extant": false,
+    "noc": 643,
+    "fea": 165.3,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Megatrigoniidae",
+    "genus": "Pterotrigonia",
+    "regions": {
+     "as-e": 153,
+     "na-e": 152,
+     "na-w": 150,
+     "eu": 55,
+     "af-s": 26,
+     "as-w": 25,
+     "sa-s": 20,
+     "sa-n": 16,
+     "ar": 14,
+     "an": 11,
+     "in": 7,
+     "af-n": 4,
+     "ca": 4,
+     "mg": 1,
+     "af-w": 1,
+     "as-c": 1,
+     "sea": 1,
+     "nz": 1,
+     "au": 1
+    },
+    "fea_r": 140.07,
+    "lla_r": 69.1
+   }
+  },
+  "Ptyktoptychion": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 118,
+   "lad": 100,
+   "range": [
+    "au",
+    "pan"
+   ],
+   "note": "A chimaera of the Eromanga sea, known from its tooth plates in the opal fields of South Australia.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Chimaeriformes",
+    "family": "Callorhinchidae"
+   },
+   "pbdb": {
+    "asked": "Ptyktoptychion",
+    "matched": "Ptyktoptychion",
+    "exact": true,
+    "oid": "txn:34783",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 106.3,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Chimaeriformes",
+    "family": "Callorhinchidae",
+    "genus": "Ptyktoptychion",
+    "regions": {
+     "au": 5
+    }
+   }
+  },
+  "Sarmatian fauna": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 12.7,
+   "lad": 11.6,
+   "range": [
+    "tet",
+    "eu",
+    "as-w",
+    "as-c"
+   ],
+   "note": "The brackish Sarmatian sea of the Paratethys: no corals, no sea urchins, no ammonite kin, but cockles, trough shells and horn snails in beds a hundred metres thick.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "rep": "Cerastoderma",
+   "assemblage": true
+  },
+  "Spondylospira": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 237,
+   "lad": 201,
+   "range": [
+    "pan",
+    "sa-s",
+    "na-w",
+    "tet"
+   ],
+   "note": "A Late Triassic spiriferinid brachiopod of the Panthalassan shelves, from Nevada to Peru.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Rhynchonellata",
+    "order": "Spiriferinida",
+    "family": "Spondylospiridae"
+   },
+   "pbdb": {
+    "asked": "Spondylospira",
+    "matched": "Spondylospira",
+    "exact": true,
+    "oid": "txn:29649",
+    "rank": "genus",
+    "extant": false,
+    "noc": 66,
+    "fea": 237,
+    "lla": 201.4,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Spiriferinida",
+    "family": "Spondylospiridae",
+    "genus": "Spondylospira",
+    "regions": {
+     "na-w": 28,
+     "sa-n": 24,
+     "na-n": 14
+    },
+    "fea_r": 230.45,
+    "lla_r": 208.44
+   }
+  },
+  "Steinmanella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "bivalve",
+   "fad": 140,
+   "lad": 92,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "pac",
+    "as-e",
+    "af-s"
+   ],
+   "note": "A large, heavily ribbed trigoniid clam, the shell that paves the Early Cretaceous shores of Argentina, and known too from Japan and South Africa.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Steinmanellidae"
+   },
+   "pbdb": {
+    "asked": "Steinmanella",
+    "matched": "Steinmanella",
+    "exact": true,
+    "oid": "txn:17284",
+    "rank": "genus",
+    "extant": false,
+    "noc": 81,
+    "fea": 149.2,
+    "lla": 66,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Trigoniida",
+    "family": "Steinmanellidae",
+    "genus": "Steinmanella",
+    "regions": {
+     "sa-s": 61,
+     "as-e": 11,
+     "af-s": 3,
+     "as-c": 3,
+     "na-w": 2,
+     "in": 1
+    },
+    "fea_r": 146.15,
+    "lla_r": 91.85
+   }
+  },
+  "Toxaster": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaurchin",
+   "fad": 140,
+   "lad": 100,
+   "range": [
+    "tet",
+    "eu",
+    "af-n",
+    "as-w",
+    "ar",
+    "as-c",
+    "as-e",
+    "as-se",
+    "in",
+    "med",
+    "atl",
+    "sa-s",
+    "sa-n",
+    "ca"
+   ],
+   "note": "A heart urchin of Early Cretaceous shelf marls, the ancestor of Micraster's line, burrowing in the Tethyan mud.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Echinoidea",
+    "order": "Spatangoida",
+    "family": "Toxasteridae"
+   },
+   "pbdb": {
+    "asked": "Toxaster",
+    "matched": "Toxaster",
+    "exact": true,
+    "oid": "txn:33490",
+    "rank": "genus",
+    "extant": false,
+    "noc": 203,
+    "fea": 141,
+    "lla": 100.5,
+    "phylum": "Echinodermata",
+    "class": "Echinoidea",
+    "order": "Spatangoida",
+    "family": "Toxasteridae",
+    "genus": "Toxaster",
+    "regions": {
+     "eu": 179,
+     "af-n": 7,
+     "as-w": 7,
+     "mg": 5,
+     "as-c": 2,
+     "na-w": 2,
+     "sa-n": 1
+    },
+    "fea_r": 134.82,
+    "lla_r": 108.2
+   },
+   "lat": [
+    0,
+    55
+   ]
+  },
+  "Tropaeum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "heteromorph",
+   "fad": 121,
+   "lad": 113,
+   "range": [
+    "au",
+    "eu",
+    "arc",
+    "na-n",
+    "sa-s"
+   ],
+   "note": "A giant open-coiled Aptian ammonite, over a metre across in the Eromanga sea of Australia, whose shell was a slow spiral of separate whorls.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Ancyloceratidae"
+   },
+   "pbdb": {
+    "asked": "Tropaeum",
+    "matched": "Tropaeum",
+    "exact": true,
+    "oid": "txn:15763",
+    "rank": "genus",
+    "extant": false,
+    "noc": 116,
+    "fea": 137.05,
+    "lla": 100.5,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Ammonitida",
+    "family": "Ancyloceratidae",
+    "genus": "Tropaeum",
+    "regions": {
+     "eu": 54,
+     "au": 21,
+     "af-s": 11,
+     "sa-s": 9,
+     "an": 4,
+     "sea": 4,
+     "na-w": 3,
+     "af-n": 2,
+     "as-w": 2,
+     "in": 2,
+     "as-c": 2,
+     "mg": 1,
+     "af-e": 1
+    },
+    "fea_r": 120.48,
+    "lla_r": 106.85
+   }
+  },
+  "Umoonasaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "plesiosaur",
+   "fad": 118,
+   "lad": 113,
+   "range": [
+    "au"
+   ],
+   "note": "A small plesiosaur of the cold Eromanga sea, found in the opal mines of Coober Pedy with crests on its skull.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Plesiosauria",
+    "family": "Leptocleididae"
+   },
+   "pbdb": {
+    "asked": "Umoonasaurus",
+    "matched": "Umoonasaurus",
+    "exact": true,
+    "oid": "txn:175195",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 121.4,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Plesiosauria",
+    "family": "Leptocleididae",
+    "genus": "Umoonasaurus",
+    "regions": {
+     "au": 4
+    }
+   }
+  },
+  "Unionites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 252,
+   "lad": 201,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A small, plain clam of low-oxygen Triassic muds, tolerant enough to be almost the only shell in some Early Triassic beds.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Anthracosiidae"
+   },
+   "pbdb": {
+    "asked": "Unionites",
+    "matched": "Unionites",
+    "exact": true,
+    "oid": "txn:17175",
+    "rank": "genus",
+    "extant": false,
+    "noc": 779,
+    "fea": 266.9,
+    "lla": 149.2,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Cardiida",
+    "family": "Anthracosiidae",
+    "genus": "Unionites",
+    "regions": {
+     "eu": 291,
+     "na-w": 185,
+     "as-e": 118,
+     "gl": 47,
+     "sea": 45,
+     "as-n": 23,
+     "as-c": 22,
+     "ar": 16,
+     "as-se": 12,
+     "in": 7,
+     "nz": 4,
+     "ng": 3,
+     "af-n": 2,
+     "sa-n": 2,
+     "au": 1,
+     "sa-s": 1
+    },
+    "fea_r": 253.02,
+    "lla_r": 168.4
+   }
+  }
+ }
+}

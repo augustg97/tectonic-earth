@@ -12,7 +12,9 @@
     "na-w",
     "as-n",
     "af-n",
-    "an"
+    "an",
+    "as-e",
+    "eu"
    ],
    "note": "A cup-shaped reef builder of the early Cambrian, sponge-grade animals that made the first animal reefs and were gone by the middle of the period.",
    "hab": [
@@ -139,7 +141,11 @@
     },
     "fea_r": 453.85,
     "lla_r": 447.55
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Atrypa": {
    "rank": "genus",
@@ -258,8 +264,7 @@
    "lad": 84,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A deep-bodied plethodid fish of the Niobrara sea with a fan-like dorsal fin the length of its back.",
    "hab": [
@@ -340,7 +345,11 @@
     },
     "fea_r": 84.65,
     "lla_r": 69.1
-   }
+   },
+   "lat": [
+    30,
+    72
+   ]
   },
   "Bellerophon": {
    "rank": "genus",
@@ -807,7 +816,11 @@
     },
     "fea_r": 464.3,
     "lla_r": 447.55
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Cretoxyrhina": {
    "rank": "genus",
@@ -1279,8 +1292,7 @@
    "lad": 80,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A plesiosaur with seventy-two neck vertebrae and a neck seven metres long, from the Kansas chalk; its first describer put the head on the tail.",
    "hab": [
@@ -1407,7 +1419,11 @@
     },
     "fea_r": 507.5,
     "lla_r": 491.93
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Exogyra": {
    "rank": "genus",
@@ -1521,7 +1537,11 @@
     },
     "fea_r": 459.65,
     "lla_r": 447.0
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Girtyocoelia": {
    "rank": "genus",
@@ -1895,8 +1915,7 @@
    "lad": 83,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A tern-sized seabird with teeth, skimming the Western Interior Seaway; among the closest known relatives of modern birds.",
    "hab": [
@@ -1979,7 +1998,11 @@
     },
     "fea_r": 453.45,
     "lla_r": 446.35
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Kockelella": {
    "rank": "genus",
@@ -2384,7 +2407,11 @@
     },
     "fea_r": 507.5,
     "lla_r": 501.75
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Metriorhynchus": {
    "rank": "genus",
@@ -2653,8 +2680,7 @@
    "lad": 84,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A small pterosaur of the Kansas chalk with an antler-like crest half again as long as its skull.",
    "hab": [
@@ -2782,7 +2808,11 @@
      "na-w": 2,
      "eu": 1
     }
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Ophthalmosaurus": {
    "rank": "genus",
@@ -2842,6 +2872,7 @@
     "ura",
     "af-n",
     "as-c",
+    "as-n",
     "na-e",
     "na-w"
    ],
@@ -2935,7 +2966,11 @@
     },
     "fea_r": 512.5,
     "lla_r": 498.75
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Pachydiscus": {
    "rank": "genus",
@@ -3239,7 +3274,11 @@
     "regions": {
      "na-w": 6
     }
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Platecarpus": {
    "rank": "genus",
@@ -3250,7 +3289,6 @@
    "range": [
     "na-w",
     "na-e",
-    "arc",
     "eu",
     "af-n",
     "atl"
@@ -3394,7 +3432,11 @@
     },
     "fea_r": 457.7,
     "lla_r": 438.0
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Pleurotomaria": {
    "rank": "genus",
@@ -3464,8 +3506,7 @@
    "lad": 80,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A three-metre sea turtle of the Western Interior Seaway, ancestor in form to Archelon, with a shell reduced to struts.",
    "hab": [
@@ -3661,7 +3702,11 @@
     },
     "fea_r": 463.1,
     "lla_r": 447.05
-   }
+   },
+   "lat": [
+    0,
+    50
+   ]
   },
   "Rhaetavicula": {
    "rank": "genus",
@@ -4013,7 +4058,11 @@
     },
     "fea_r": 457.2,
     "lla_r": 427.8
-   }
+   },
+   "lat": [
+    0,
+    45
+   ]
   },
   "Tentaculites": {
    "rank": "genus",
@@ -4247,8 +4296,7 @@
    "lad": 72,
    "range": [
     "na-w",
-    "na-e",
-    "arc"
+    "na-e"
    ],
    "note": "A metre-long sea turtle of the Niobrara chalk, close to the stem of the living sea turtles.",
    "hab": [
@@ -4461,7 +4509,6 @@
    "range": [
     "na-w",
     "na-e",
-    "arc",
     "eu"
    ],
    "note": "A stalkless crinoid that drifted in colonies of hundreds and sank together, leaving slabs of the Kansas chalk covered in its arms.",

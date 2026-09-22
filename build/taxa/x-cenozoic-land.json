@@ -102,14 +102,30 @@
    "fad": 45,
    "lad": 8,
    "range": [
-    "na-w",
-    "na-e",
-    "eu",
-    "as-e",
-    "as-c",
-    "af-e",
-    "af-n",
-    "in"
+    {
+     "t": [
+      45,
+      8
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu",
+      "as-e",
+      "as-c"
+     ]
+    },
+    {
+     "t": [
+      23,
+      8
+     ],
+     "in": [
+      "af-e",
+      "af-n",
+      "in"
+     ]
+    }
    ],
    "note": "Bear-dogs: neither bear nor dog, wolf- to bear-sized, and the dominant large carnivores of the northern continents through the Oligocene and Miocene.",
    "cls": {
@@ -1533,7 +1549,41 @@
     "class": "Mammalia",
     "order": "Primates",
     "family": "Hominidae"
-   }
+   },
+   "box": [
+    {
+     "t": [
+      23,
+      7
+     ],
+     "box": [
+      [
+       28,
+       42,
+       -5,
+       15
+      ],
+      [
+       -10,
+       30,
+       35,
+       50
+      ],
+      [
+       65,
+       80,
+       28,
+       35
+      ],
+      [
+       98,
+       125,
+       20,
+       35
+      ]
+     ]
+    }
+   ]
   },
   "Hyaenidae": {
    "rank": "family",
@@ -2122,7 +2172,29 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Rhinocerotidae"
-   }
+   },
+   "lat": [
+    {
+     "t": [
+      46,
+      23
+     ],
+     "lat": [
+      0,
+      58
+     ]
+    },
+    {
+     "t": [
+      23,
+      0
+     ],
+     "lat": [
+      0,
+      75
+     ]
+    }
+   ]
   },
   "Sebecidae": {
    "rank": "family",

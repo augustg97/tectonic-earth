@@ -1031,7 +1031,10 @@
     "regions": {
      "as-e": 7
     }
-   }
+   },
+   "avoid": [
+    "North China"
+   ]
   },
   "Kronosaurus": {
    "rank": "genus",
@@ -1257,7 +1260,15 @@
     "regions": {
      "as-e": 10
     }
-   }
+   },
+   "box": [
+    [
+     110,
+     126,
+     38,
+     47
+    ]
+   ]
   },
   "Morrosaurus": {
    "rank": "genus",
@@ -1394,7 +1405,33 @@
      "sa-s": 2,
      "sa-n": 36
     }
-   }
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ],
+    [
+     -73,
+     -60,
+     3,
+     11
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
   },
   "Nothosaurus": {
    "rank": "genus",
@@ -1974,7 +2011,21 @@
      "sa-s": 1
     }
    },
-   "w": 3
+   "w": 3,
+   "box": [
+    [
+     -82,
+     -45,
+     -15,
+     12
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
   },
   "Quetzalcoatlus": {
    "rank": "genus",
@@ -2141,7 +2192,25 @@
      "eu": 12,
      "as-c": 1
     }
-   }
+   },
+   "box": [
+    [
+     -6,
+     2,
+     49,
+     52
+    ]
+   ],
+   "avoid": [
+    "Caledonides",
+    "Ural Mountains",
+    "Bohemian Massif",
+    "Massif Central",
+    "Iberian Massif",
+    "Rhodope Massif",
+    "Fennoscandian Shield",
+    "Greater Adria"
+   ]
   },
   "Scutosaurus": {
    "rank": "genus",
@@ -2233,7 +2302,15 @@
     "regions": {
      "as-e": 4
     }
-   }
+   },
+   "box": [
+    [
+     110,
+     126,
+     38,
+     47
+    ]
+   ]
   },
   "Spinosaurus": {
    "rank": "genus",
@@ -2375,7 +2452,33 @@
     "regions": {
      "sa-n": 12
     }
-   }
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ],
+    [
+     -73,
+     -60,
+     3,
+     11
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
   },
   "Tanystropheus": {
    "rank": "genus",

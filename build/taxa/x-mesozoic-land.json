@@ -7,13 +7,29 @@
    "fad": 145,
    "lad": 66,
    "range": [
-    "sa-n",
-    "sa-s",
-    "af-n",
-    "af-e",
-    "mg",
-    "in",
-    "eu"
+    {
+     "t": [
+      145,
+      66
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "af-n",
+      "af-e",
+      "mg",
+      "in"
+     ]
+    },
+    {
+     "t": [
+      75,
+      66
+     ],
+     "in": [
+      "eu"
+     ]
+    }
    ],
    "note": "Short-faced predators with arms reduced almost to nothing: the top carnivores of the Cretaceous southern continents.",
    "cls": {
@@ -472,9 +488,26 @@
    "fad": 83,
    "lad": 66,
    "range": [
-    "na-w",
-    "na-n",
-    "as-e"
+    {
+     "t": [
+      83,
+      66
+     ],
+     "in": [
+      "na-w",
+      "na-n",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      74,
+      72
+     ],
+     "in": [
+      "as-e"
+     ]
+    }
    ],
    "note": "The great horned dinosaurs -- a North American radiation, each genus with its own arrangement of horns and frill.",
    "cls": {
@@ -642,15 +675,34 @@
     {
      "t": [
       201,
-      100
+      180
+     ],
+     "in": [
+      "af-s",
+      "an",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      201,
+      130
      ],
      "in": [
       "as-e",
       "as-c",
-      "as-n",
       "na-w",
-      "eu",
-      "af-s"
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      130,
+      100
+     ],
+     "in": [
+      "as-e",
+      "as-n"
      ]
     }
    ],
@@ -993,7 +1045,15 @@
     "class": "Ornithischia",
     "order": "Ornithopoda",
     "family": "Elasmaria"
-   }
+   },
+   "box": [
+    [
+     -72,
+     -62,
+     -45,
+     -35
+    ]
+   ]
   },
   "Gondwanatheria": {
    "rank": "clade",
@@ -1038,16 +1098,33 @@
    "fad": 86,
    "lad": 66,
    "range": [
-    "na-w",
-    "na-e",
-    "na-n",
-    "as-e",
-    "as-c",
-    "as-n",
-    "eu",
-    "sa-s",
-    "an",
-    "af-n"
+    {
+     "t": [
+      86,
+      66
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "as-e",
+      "as-c",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      72,
+      66
+     ],
+     "in": [
+      "eu",
+      "sa-s",
+      "sa-n",
+      "an",
+      "af-n"
+     ]
+    }
    ],
    "note": "Duck-billed dinosaurs, chewing with hundreds of stacked teeth and travelling in herds from Alaska to Antarctica.",
    "cls": {
@@ -1245,7 +1322,15 @@
     "class": "Amphibia",
     "order": "Temnospondyli",
     "family": "Chigutisauridae"
-   }
+   },
+   "box": [
+    [
+     140,
+     150,
+     -40,
+     -35
+    ]
+   ]
   },
   "Kunbarrasaurus": {
    "rank": "genus",
@@ -1316,7 +1401,15 @@
     "class": "Saurischia",
     "order": "Sauropodomorpha",
     "family": "Massospondylidae"
-   }
+   },
+   "box": [
+    [
+     98,
+     112,
+     22,
+     32
+    ]
+   ]
   },
   "Majungasaurus": {
    "rank": "genus",
@@ -1575,11 +1668,27 @@
    "fad": 140,
    "lad": 66,
    "range": [
-    "as-e",
-    "as-c",
-    "na-w",
-    "eu",
-    "af-s"
+    {
+     "t": [
+      140,
+      66
+     ],
+     "in": [
+      "as-e",
+      "as-c",
+      "na-w",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      140,
+      125
+     ],
+     "in": [
+      "af-s"
+     ]
+    }
    ],
    "note": "Ostrich-mimic dinosaurs: toothless, long-legged, fast, and probably omnivores.",
    "cls": {

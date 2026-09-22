@@ -3637,8 +3637,7 @@
    "fad": 37,
    "lad": 32.5,
    "range": [
-    "af-n",
-    "ar"
+    "af-n"
    ],
    "note": "A pig-sized, semi-aquatic early proboscidean - a distant, low-slung ancestor of elephants.",
    "pbdb": {
@@ -5182,7 +5181,15 @@
     "regions": {
      "as-e": 2
     }
-   }
+   },
+   "box": [
+    [
+     110,
+     126,
+     38,
+     47
+    ]
+   ]
   },
   "Sahelanthropus": {
    "rank": "genus",
@@ -5385,10 +5392,8 @@
    "fad": 14.9,
    "lad": 8.48,
    "range": [
-    "af-e",
-    "as-e",
-    "as-w",
-    "in"
+    "in",
+    "as-w"
    ],
    "note": "A large Miocene ape from the Siwaliks, close to the ancestry of the orangutan.",
    "pbdb": {
@@ -5411,7 +5416,22 @@
      "as-e": 2,
      "as-w": 2
     }
-   }
+   },
+   "box": [
+    [
+     65,
+     80,
+     28,
+     35
+    ],
+    [
+     28,
+     42,
+     36,
+     42
+    ]
+   ],
+   "place_ok": true
   },
   "Smilodon": {
    "rank": "genus",

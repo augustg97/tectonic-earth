@@ -295,7 +295,10 @@
     "deep"
    ],
    "rep": "Longfengshania",
-   "assemblage": true
+   "assemblage": true,
+   "avoid": [
+    "North China"
+   ]
   },
   "Liulaobei biota": {
    "rank": "informal",
@@ -312,7 +315,10 @@
     "coast"
    ],
    "rep": "Longfengshania",
-   "assemblage": true
+   "assemblage": true,
+   "avoid": [
+    "South China"
+   ]
   },
   "Longfengshania": {
    "rank": "genus",
@@ -347,7 +353,10 @@
     "regions": {
      "as-e": 7
     }
-   }
+   },
+   "avoid": [
+    "South China"
+   ]
   },
   "Melanocyrillium": {
    "rank": "genus",

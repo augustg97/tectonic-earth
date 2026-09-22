@@ -236,7 +236,15 @@
     "regions": {
      "as-e": 19
     }
-   }
+   },
+   "box": [
+    [
+     110,
+     126,
+     38,
+     47
+    ]
+   ]
   },
   "Gastornis": {
    "rank": "genus",
@@ -474,10 +482,12 @@
    "fad": 84,
    "lad": 78,
    "range": [
-    "eu",
+    "na-w",
     "na-e",
     "na-n",
-    "na-w"
+    "eu",
+    "arc",
+    "as-n"
    ],
    "note": "A flightless, toothed diving bird that swam the seaway like a loon.",
    "sz": 1.8,
@@ -504,7 +514,11 @@
      "eu": 7
     }
    },
-   "w": 3
+   "w": 3,
+   "lat": [
+    30,
+    80
+   ]
   },
   "Palaeeudyptes": {
    "rank": "genus",

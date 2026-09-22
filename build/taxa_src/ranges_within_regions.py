@@ -363,8 +363,6 @@ PATCH = {
     "Equidae": {"lat": [{"t": [56, 2.6], "lat": [0, 62]}, {"t": [2.6, 0], "lat": [0, 80]}]},
     "Bovidae": {"lat": [{"t": [20, 5], "lat": [0, 55]}, {"t": [5, 0], "lat": [0, 75]}]},
     # --- 20 Ma
-    "Sequoiadendron": {"range": ["na-w"], "box": NOW(*SIERRA, since=2.6),
-                       "avoid": ["Basin and Range", "Rocky Mountains", "Colorado Plateau", "Rio Grande Rift"]},
     "Teratornithidae": {"range": [{"t": [25, 0.011], "in": ["sa-s", "sa-n"]}, {"t": [12, 0.011], "in": ["na-w", "na-e"]}]},
     "Hyaenodon": {"range": [{"t": [42.9, 23], "in": ["as-e", "as-w", "eu", "na-w"]}, {"t": [23, 18.21], "in": ["as-e", "as-c"]}]},
     "Acacia": {"range": ["au", "ng"]},
@@ -437,6 +435,79 @@ PATCH = {
     # --- 400 Ma
     "Amphipora": {"fad": 393},
     "Tardigrada": {"fad": 360},
+    # ======================= placement review, second pass (2026-09-22) ==========
+    # 10, 35, 80, 120, 200, 230, 280, 350, 450, 500 and 600 Ma.
+    # --- 10 Ma
+    # its fossils lie on the coasts of every continent, as a seabird's do; the
+    # range is the water it flew over, so a continent's interior never shows it
+    "Pelagornithidae": {"range": ["pac", "atl", "ind", "sou", "arc", "tet", "med", "pan"], "place_ok": True},
+    # the PBDB's African "Sivapithecus" are old referrals of Kenyapithecus and its kin
+    "Sivapithecus": {"range": ["in", "as-w"], "box": [[65, 80, 28, 35], [28, 42, 36, 42]], "place_ok": True},
+    "Mourasuchus": {"box": AMAZONIA + [[-73, -60, 3, 11]], "avoid": HIGH_ANDES},
+    "Stupendemys": {"box": AMAZONIA + [[-73, -60, 3, 11]], "avoid": HIGH_ANDES},
+    "Purussaurus": {"box": [[-82, -45, -15, 12]], "avoid": HIGH_ANDES},
+    "Adansonia": {"box": [[-18, 52, -30, 20], [42, 51, -26, -12], [122, 132, -19, -13]]},
+    "Eucalyptus": {"range": [{"t": [52, 40], "in": ["sa-s"]}, {"t": [45, 0], "in": ["au"]}, {"t": [3, 0], "in": ["ng", "as-se"]}]},
+    "Hominidae": {"box": [{"t": [23, 7], "box": [[28, 42, -5, 15], [-10, 30, 35, 50], [65, 80, 28, 35], [98, 125, 20, 35]]}]},
+    "Sequoiadendron": {"range": ["na-w"],
+                       "box": [{"t": [40, 2.6], "box": [[-125, -105, 35, 48]]}, {"t": [2.6, 0], "box": SIERRA}],
+                       "avoid": ["Basin and Range", "Rocky Mountains", "Colorado Plateau", "Rio Grande Rift", "Gulf of California", "Williston Basin"]},
+    # --- 35 Ma
+    "Amphicyonidae": {"range": [{"t": [45, 8], "in": ["na-w", "na-e", "eu", "as-e", "as-c"]}, {"t": [23, 8], "in": ["af-e", "af-n", "in"]}]},
+    "Rhinocerotidae": {"lat": [{"t": [46, 23], "lat": [0, 58]}, {"t": [23, 0], "lat": [0, 75]}]},
+    "Moeritherium": {"range": ["af-n"]},
+    # --- 80 Ma
+    "Hadrosauridae": {"range": [{"t": [86, 66], "in": ["na-w", "na-e", "na-n", "as-e", "as-c", "as-n"]},
+                                {"t": [72, 66], "in": ["eu", "sa-s", "sa-n", "an", "af-n"]}]},
+    "Abelisauridae": {"range": [{"t": [145, 66], "in": ["sa-n", "sa-s", "af-n", "af-e", "mg", "in"]}, {"t": [75, 66], "in": ["eu"]}]},
+    "Ceratopsidae": {"range": [{"t": [83, 66], "in": ["na-w", "na-n", "na-e"]}, {"t": [74, 72], "in": ["as-e"]}]},
+    "Hesperornis": {"range": ["na-w", "na-e", "na-n", "eu", "arc", "as-n"], "lat": [30, 80]},
+    "Belemnitella": {"lat": [30, 72]},
+    "Ornithomimosauria": {"range": [{"t": [140, 66], "in": ["as-e", "as-c", "na-w", "eu"]}, {"t": [140, 125], "in": ["af-s"]}]},
+    "Gasparinisaura": {"box": [[-72, -62, -45, -35]]},
+    "Elasmosaurus": {"range": ["na-w", "na-e"]}, "Protostega": {"range": ["na-w", "na-e"]},
+    "Toxochelys": {"range": ["na-w", "na-e"]}, "Platecarpus": {"range": ["na-w", "na-e", "eu", "af-n", "atl"]},
+    "Uintacrinus": {"range": ["na-w", "na-e", "eu"]}, "Bananogmius": {"range": ["na-w", "na-e"]},
+    "Nyctosaurus": {"range": ["na-w", "na-e"]}, "Ichthyornis": {"range": ["na-w", "na-e"]},
+    # --- 120 Ma
+    "Tritylodontidae": {"lad": 100, "range": [{"t": [210, 180], "in": ["af-s", "as-c", "as-e", "eu", "na-w", "an", "sa-s"]},
+                                  {"t": [180, 130], "in": ["as-c", "as-e", "na-w", "eu"]},
+                                  {"t": [130, 100], "in": ["as-e", "as-n"]}]},
+    "Cynodontia": {"range": [{"t": [260, 252], "in": ["af-s", "af-e", "eu", "as-n", "sa-s"]},
+                             {"t": [252, 201], "in": ["af-s", "af-e", "an", "in", "as-e", "as-c", "as-n", "eu", "sa-s", "mg", "au", "na-e", "na-w"]},
+                             {"t": [201, 180], "in": ["af-s", "an", "sa-s"]},
+                             {"t": [201, 130], "in": ["as-e", "as-c", "na-w", "eu"]},
+                             {"t": [130, 100], "in": ["as-e", "as-n"]}]},
+    "Koolasuchus": {"box": [[140, 150, -40, -35]]},
+    "Confuciusornis": {"box": [[110, 126, 38, 47]]}, "Repenomamus": {"box": [[110, 126, 38, 47]]},
+    "Sinosauropteryx": {"box": [[110, 126, 38, 47]]}, "Microraptor": {"box": [[110, 126, 38, 47]]},
+    "Jehol Biota": {"box": [[110, 126, 38, 47]]},
+    # --- 200 and 230 Ma
+    "Lufengosaurus": {"box": [[98, 112, 22, 32]]},
+    "Scelidosaurus": {"box": [[-6, 2, 49, 52]], "avoid": ["Caledonides", "Ural Mountains", "Bohemian Massif", "Massif Central",
+                                                        "Iberian Massif", "Rhodope Massif", "Fennoscandian Shield", "Greater Adria"]},
+    # --- 280 Ma: Angara stays in Angara, Cathaysia in Cathaysia
+    "Angaropteridium": {"box": [[45, 120, 45, 75]]}, "Rufloria": {"box": [[45, 130, 40, 75]]},
+    "Vojnovskya": {"box": [[45, 130, 40, 75]]},
+    "Lobatannularia": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Emplectopteris": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Tingia": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Gigantopteris": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Cathaysian flora": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Cathaysiodendron": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    # --- 450 Ma: the warm Laurentian shelf does not reach the cold Gondwanan margin
+    "Astraspis": {"lat": [0, 45]}, "Constellaria": {"lat": [0, 45]}, "Isorophus": {"lat": [0, 45]},
+    "Flexicalymene": {"lat": [0, 45]}, "Rafinesquina": {"lat": [0, 50]}, "Platystrophia": {"lat": [0, 45]},
+    "Streptelasma": {"lat": [0, 45]}, "Isotelus": {"lat": [0, 45]}, "Elrathia": {"lat": [0, 45]},
+    "Marrella": {"lat": [0, 45]}, "Opabinia": {"lat": [0, 45]}, "Pikaia": {"lat": [0, 45]}, "Ottoia": {"lat": [0, 45]},
+    # --- 600 Ma: as-e is North China AND South China
+    "Lantian biota": {"avoid": ["North China"]}, "Doushantuo biota": {"avoid": ["North China"]},
+    "Chengjiang Biota": {"avoid": ["North China"]},
+    "Myllokunmingia": {"avoid": ["North China"]}, "Haikouichthys": {"avoid": ["North China"]},
+    "Luoping biota": {"avoid": ["North China"]}, "Keichousaurus": {"avoid": ["North China"]},
+    "Meishan fauna": {"avoid": ["North China"]},
+    "Liulaobei biota": {"avoid": ["South China"]}, "Longfengshania": {"avoid": ["South China"]},
+    "Toxaster": {"lat": [0, 55]},
     # -------------------------------------------------------------- ocean islands
     "Pandanus": {"range+": ["ind"]},
     "Saxifraga oppositifolia": {"range+": ["arc"]},

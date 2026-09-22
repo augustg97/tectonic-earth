@@ -42,7 +42,7 @@ E("Ptychagnostus", "genus", "sea", "agnostid", 510, 497, ["cosmo"],
 E("Olenus", "genus", "sea", "trilobite", 497, 485, ["eu", "iap", "na-e", "as-c", "as-e"],
   "The late Cambrian trilobite of the Baltic alum shales, living in black oxygen-poor mud that preserved it in its thousands.",
   hab=["shelf"], cls=("Trilobita", "Ptychopariida", "Olenidae"))
-E("Archaeocyathus", "genus", "sea", "archaeocyath", 525, 510, ["au", "sa-s", "na-w", "as-n", "af-n", "an"],
+E("Archaeocyathus", "genus", "sea", "archaeocyath", 525, 510, ["au", "sa-s", "na-w", "as-n", "af-n", "an", "as-e", "eu"],
   "A cup-shaped reef builder of the early Cambrian, sponge-grade animals that made the first animal reefs and were gone by the middle of the period.",
   hab=["reef"], cls=("Archaeocyatha", "", ""))
 
@@ -59,7 +59,7 @@ E("Platystrophia", "genus", "sea", "brachiopod", 470, 430, LAUR + ["eu"],
 E("Cryptolithus", "genus", "sea", "trilobite", 465, 445, LAUR + ["eu"],
   "The lace-collar trilobite: blind, with a pitted fringe around the head that filtered the mud it ploughed through.",
   hab=["shelf"], cls=("Trilobita", "Asaphida", "Trinucleidae"))
-E("Orthoceras", "genus", "sea", "orthocone", 470, 440, ["eu", "iap", "ura", "af-n", "as-c", "na-e", "na-w"],
+E("Orthoceras", "genus", "sea", "orthocone", 470, 440, ["eu", "iap", "ura", "af-n", "as-c", "as-n", "na-e", "na-w"],
   "The straight-shelled nautiloid of the Baltic 'Orthoceras limestone', a metre-long swimmer whose chambered shells pave the floors of Swedish churches.",
   hab=["shelf", "pelagic"], w=2, cls=("Cephalopoda", "Orthocerida", "Orthoceratidae"))
 E("Didymograptus", "genus", "sea", "graptolite", 480, 460, ["cosmo"],

@@ -187,7 +187,14 @@
    "fad": 62,
    "lad": 2.5,
    "range": [
-    "cosmo"
+    "pac",
+    "atl",
+    "ind",
+    "sou",
+    "arc",
+    "tet",
+    "med",
+    "pan"
    ],
    "note": "Pseudo-toothed birds: seabirds with bony spikes along the beak and wingspans to six metres, gliding the oceans from the Palaeocene to the Pliocene.",
    "hab": [
@@ -238,7 +245,8 @@
     },
     "fea_r": 52.03,
     "lla_r": 3.09
-   }
+   },
+   "place_ok": true
   },
   "Polypodiopsida": {
    "rank": "class",

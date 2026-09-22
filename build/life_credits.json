@@ -811,6 +811,13 @@
   "taxon": "Aysheaia pedunculata",
   "uuid": "aef5c182-4370-42fc-ae7f-ef996a1f1ba2"
  },
+ "lobster": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Homarus gammarus",
+  "uuid": "8d538340-49b0-4950-8dbc-ad4942363bb5"
+ },
  "lungfish": {
   "attribution": "Roberto D\u00edaz Sibaja",
   "licence": "CC BY 3.0",
@@ -2624,6 +2631,13 @@
   "taxon": "Diprotodon optatum",
   "uuid": "0dd852df-bb80-456f-ab3f-d8bf011ca2a1"
  },
+ "t:dissostichus-mawsoni": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Dissostichus mawsoni",
+  "uuid": "d18f6a1f-c545-44c5-a224-141ff79bc49d"
+ },
  "t:docodonta": {
   "attribution": "(unattributed)",
   "licence": "PDM",
@@ -2834,6 +2848,13 @@
   "taxon": "Eunectes murinus",
   "uuid": "3bc382f7-f157-4462-b28d-2d30f5a6ba96"
  },
+ "t:euphausia-superba": {
+  "attribution": "Steven Haddock \u2022 Jellywatch.org",
+  "licence": "PDM",
+  "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "taxon": "Euphausia pacifica",
+  "uuid": "44a3628d-aafd-45cc-97a6-1cb74bd43dec"
+ },
  "t:europasaurus": {
   "attribution": "Will Toosey",
   "licence": "CC BY 4.0",
@@ -2903,6 +2924,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Platysolenites antiquissimus",
   "uuid": "6106721c-f9d7-42b2-ba0d-621ed889840d"
+ },
+ "t:gadus-morhua": {
+  "attribution": "Alexandra Hahn",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Gadus morhua",
+  "uuid": "483fe84e-23fb-4098-8cbf-9ba2d7e6b779"
  },
  "t:gastornis": {
   "attribution": "Colin McElroy (vectorized by Andrew Schwartz)",
@@ -3085,6 +3113,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Heloderma suspectum",
   "uuid": "9cae2028-126b-416f-9094-250782c5bc22"
+ },
+ "t:henodus": {
+  "attribution": "Jaime Headden",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Henodus chelyops",
+  "uuid": "a138478b-8bdc-48f7-a05e-7227afde84fa"
  },
  "t:herrerasaurus": {
   "attribution": "Tasman Dixon",
@@ -3408,6 +3443,13 @@
   "taxon": "Lepus arcticus",
   "uuid": "a87a3826-dc6c-4bad-8a89-82553e8e8ea0"
  },
+ "t:limacina-helicina": {
+  "attribution": "Elodie Jacob",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Limacina helicina",
+  "uuid": "2b77991f-ba4f-4d6a-8f19-3b979b582b07"
+ },
  "t:lingula": {
   "attribution": "(unattributed)",
   "licence": "CC0",
@@ -3428,6 +3470,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Liopleurodon",
   "uuid": "52d69849-6f8c-40dc-8cfb-7f28e1506911"
+ },
+ "t:lobodon-carcinophaga": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Lobodon carcinophaga",
+  "uuid": "e8fe7e96-5366-4500-91d3-ee243ded47d4"
  },
  "t:loxodonta": {
   "attribution": "Evan Hockridge",
@@ -3519,6 +3568,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Coryphaenoides armatus",
   "uuid": "2dc03e34-234e-4b64-b6cb-e7e2d2a513b2"
+ },
+ "t:mallotus-villosus": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Mallotus villosus",
+  "uuid": "778fb4c9-1122-43e3-a62a-3e3eff67e14e"
  },
  "t:mamenchisaurus": {
   "attribution": "Scott Hartman",
@@ -4066,6 +4122,13 @@
   "taxon": "Ovis canadensis",
   "uuid": "b7344c53-6115-49cf-836d-ae71cc3853a8"
  },
+ "t:pagophilus-groenlandicus": {
+  "attribution": "Margot Michaud",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Pagophilus groenlandicus",
+  "uuid": "81018a4e-92f9-4376-a242-dbd082c02da6"
+ },
  "t:palaeocharinus": {
   "attribution": "(unattributed)",
   "licence": "CC0",
@@ -4100,6 +4163,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Pandanus tectorius",
   "uuid": "30375f96-02aa-4198-8d27-0f5db037b09a"
+ },
+ "t:panopea": {
+  "attribution": "Harold N Eyster",
+  "licence": "CC BY 3.0",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "taxon": "Panopea generosa",
+  "uuid": "a5656048-c212-4526-ac65-a7f421b891f8"
  },
  "t:panthera": {
   "attribution": "Margot Michaud",

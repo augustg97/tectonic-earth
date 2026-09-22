@@ -420,6 +420,9 @@
    "w": 3,
    "aka": [
     "Haikouichthys ercaicunensis"
+   ],
+   "avoid": [
+    "North China"
    ]
   },
   "Helicoprion": {
@@ -591,7 +594,10 @@
     "regions": {
      "as-e": 2
     }
-   }
+   },
+   "avoid": [
+    "North China"
+   ]
   },
   "Notothenioidei": {
    "rank": "suborder",

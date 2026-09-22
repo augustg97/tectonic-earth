@@ -62,7 +62,12 @@
    "note": "The tropical coal-forest flora - Gigantopteris, Lobatannularia - that built the great Shanxi coals.",
    "assemblage": true,
    "fill": false,
-   "rep": "Gigantopteris"
+   "rep": "Gigantopteris",
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Cerrado flora": {
    "rank": "assemblage",
@@ -112,6 +117,9 @@
    "rep": "Anomalocaris",
    "aka": [
     "Chengjiang biota"
+   ],
+   "avoid": [
+    "North China"
    ]
   },
   "Chinchilla fauna": {
@@ -156,7 +164,10 @@
    ],
    "note": "Weng'an phosphorites preserving algae and controversial embryo-like fossils at cellular resolution, ~600 Ma.",
    "assemblage": true,
-   "fill": false
+   "fill": false,
+   "avoid": [
+    "North China"
+   ]
   },
   "Dwyka glacial fauna": {
    "rank": "assemblage",
@@ -317,6 +328,14 @@
    "rep": "Confuciusornis",
    "aka": [
     "Jehol biota"
+   ],
+   "box": [
+    [
+     110,
+     126,
+     38,
+     47
+    ]
    ]
   },
   "Karoo therapsids": {
@@ -344,7 +363,10 @@
    ],
    "note": "A Middle Triassic marine Lagerstatte in Yunnan documenting the recovery of ocean life after the extinction.",
    "assemblage": true,
-   "fill": false
+   "fill": false,
+   "avoid": [
+    "North China"
+   ]
   },
   "Malvinokaffric fauna": {
    "rank": "assemblage",
@@ -403,7 +425,10 @@
    ],
    "note": "The Meishan section is the global boundary marker for the end-Permian extinction, in continuous marine limestone.",
    "assemblage": true,
-   "fill": false
+   "fill": false,
+   "avoid": [
+    "North China"
+   ]
   },
   "Messel biota": {
    "rank": "assemblage",

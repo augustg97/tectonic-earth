@@ -506,6 +506,10 @@ def review(reg=None):
                 tops_auth.update(c.split("-")[0] for c in codes)
             if not everywhere:
                 heavy = {c.split("-")[0] for c, n in regs.items() if n >= max(3, 0.12 * total)}
+                # "sea" is the PBDB's collections on no continent -- ocean floor
+                # cores, islands, and the Arctic shelf; any basin code answers it
+                if any(c in BASINS for _o, _y, codes in e["_slices"] for c in codes):
+                    heavy.discard("sea")
                 miss = sorted(heavy - tops_auth)
                 if miss:
                     out.append(("PLACE", name, f"{', '.join(miss)} hold a large share of its "
@@ -664,7 +668,8 @@ LABEL_HOME = {
     # the Caledonian belt ran through three continents; the CALEDONIDES on the
     # map today are Scotland and Norway, and a composite home put Titanis and
     # Megalonyx on them
-    "Caledonides": [{"t": [490, 60], "in": ["eu", "gl", "na-e"]}, {"t": [60, 0], "in": ["eu"]}],
+    "Caledonides": [{"t": [490, 180], "in": ["eu", "gl", "na-e"]}, {"t": [180, 55], "in": ["eu", "gl"]},
+                    {"t": [55, 0], "in": ["eu"]}],
     "Andes": ["sa"], "Himalaya": ["as-c", "in"], "Cordillera": ["na-w", "na-n"],
     "Zagros Mts": ["as-w", "ar"],
     "Ural Mountains": ["eu", "as-n"], "Variscan Belt": ["eu"], "Beringia": ["na-n", "as-n"],
@@ -774,6 +779,11 @@ SUBMERGED = {
     # a drowned sliver until its volcano broke the surface: Mauritius is about
     # 8 Myr old, Jan Mayen's Beerenberg under one
     "Mauritia": (66, 9), "Jan Mayen Microcontinent": (25, 1),
+    # an oceanic plateau and its island arc: nothing walked to it
+    "Wrangellia Terrane": None,
+    # Wallacea's islands rose from the sea in the Pliocene; before that the label
+    # marks a strait
+    "Wallacea": (15, 5),
 }
 #: Below sea level on the DEM and rightly a LAND card: crust under an ice sheet,
 #: and drowned microcontinents whose card is the life of the islands still above
@@ -782,6 +792,8 @@ DROWNED_LAND_OK = {"West Antarctic Rift", "Zealandia", "Kerguelen Microcontinent
                    "Mauritia", "Jan Mayen Microcontinent", "Seychelles Microcontinent"}
 #: The submerged labels that are not deep water: shallow banks and young seas.
 SUBMERGED_HAB = {"Mascarene Plateau": {"reef", "shelf", "pelagic"},
+                 "Wrangellia Terrane": {"reef", "shelf", "pelagic", "coast"},
+                 "Wallacea": {"reef", "shelf", "pelagic", "coast"},
                  "Red Sea Rift": {"reef", "shelf", "pelagic", "coast"},
                  "Gulf of California": {"shelf", "pelagic", "coast", "reef"}}
 

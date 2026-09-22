@@ -2,6 +2,36 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.8",
+   "date": "22 September 2026",
+   "title": "The Triassic and Cretaceous seas, the polar oceans, and every age read",
+   "summary": "The third flora-and-fauna pass. Every card at the eleven ages not yet read -- from the late Miocene to the Ediacaran -- was listed organism by organism and read, and about fifty placements fixed. Sixty-two genera fill the seas that were still thin: the Triassic shelves, the Early Cretaceous, the Southern Ocean, the Arctic and the Paratethys. The class-level curated lists of Ordovician Laurentia, Baltica and Siberia are rewritten with the genera the record actually names.",
+   "sections": [
+    {
+     "name": "In the seas",
+     "items": [
+      "The Triassic at genus level: Eumorphotis and Unionites in the seas after the great dying, Flexoptychites and Gymnotoceras, the crinoid gardens of the Muschelkalk, nothosaurs, Henodus, Psiloceras at the base of the Jurassic. The Early Cretaceous: Neocomites, Olcostephanus, Crioceratites, Deshayesites, Douvilleiceras, the Boreal Polyptychites, the giant Tropaeum and Umoonasaurus of the Eromanga sea, Orbitolina of the Urgonian reefs.",
+      "The polar oceans: krill, silverfish and toothfish, crabeater and harp seals, orcas and humpbacks, sea butterflies and sea angels, geoducks, cold-water scallops and bryozoan thickets; the Arctic Ocean's card now names its bowhead, narwhal, polar cod, walrus and sea-ice algae. The Paratethys gets its Sarmatian cockles and horn snails.",
+      "Class-level entries on marine cards: early Palaeozoic 45 to 36 per cent, Mesozoic 51 to 40, Cenozoic 37 to 33."
+     ]
+    },
+    {
+     "name": "The right place, third pass",
+     "items": [
+      "Read at 10, 35, 80, 120, 200, 230, 280, 350, 450, 500 and 600 million years ago. Sivapithecus stays in the Siwaliks and Anatolia; the Amazon's giant caimans and turtles stay in Amazonia; Australopithecus-age apes stay where their fossils are; ceratopsids reach Asia only for the two million years Sinoceratops did; hadrosaurs reach the south only at the very end; Archaeopteryx's neighbour Scelidosaurus stays in Dorset; Jehol's animals stay in Liaoning; the Angaran and Cathaysian floras stop at their own provinces; the warm Laurentian shelf fauna no longer reaches the cold Gondwanan margin; South China's biotas stay off North China's card.",
+      "Wrangellia, an oceanic plateau, and Wallacea before its islands rose are sea cards. The Caledonides shed the Appalachians' animals once the Atlantic opened."
+     ]
+    },
+    {
+     "name": "Kept honest",
+     "items": [
+      "The early Palaeozoic continents' own lists name Cameroceras, Flexicalymene, Rafinesquina, Asaphus, Heliolites and Atrypa where they named 'Brachiopoda' and 'Crinoidea'.",
+      "Every new organism was cross-examined against the Paleobiology Database, and the batch sources carry the verdicts."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.7",
    "date": "22 September 2026",
    "title": "Deeper seas, older land, and six labels put back on their own continent",

@@ -42,7 +42,15 @@
     },
     "fea_r": 301.3,
     "lla_r": 267.13
-   }
+   },
+   "box": [
+    [
+     45,
+     120,
+     45,
+     75
+    ]
+   ]
   },
   "Aztec fish fauna": {
    "rank": "informal",
@@ -367,7 +375,12 @@
     },
     "fea_r": 286.7,
     "lla_r": 257.0
-   }
+   },
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Endothiodon": {
    "rank": "genus",
@@ -1349,7 +1362,12 @@
     },
     "fea_r": 294.5,
     "lla_r": 257.0
-   }
+   },
+   "avoid": [
+    "Sibumasu",
+    "Cimmeria",
+    "Cimmerian Belt"
+   ]
   },
   "Tulerpeton": {
    "rank": "genus",
