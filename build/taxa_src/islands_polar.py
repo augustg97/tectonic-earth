@@ -54,7 +54,7 @@ E("Pteropus niger", "species", "air", "bat", 2, 0, ["ind"],
 E("Falco punctatus", "species", "air", "raptor", 2, 0, ["ind"],
   "The Mauritius kestrel, reduced to four wild birds in 1974 and brought back by captive breeding.",
   hab=["island", "forest"], box=MAURITIUS, realms=["air", "land"], cls=("Aves", "Falconiformes", "Falconidae"))
-E("Phelsuma", "genus", "land", "lizard", 20, 0, ["ind", "mg"],
+E("Phelsuma", "genus", "land", "lizard", 10, 0, ["ind", "mg"],
   "Day geckos, bright green nectar-feeders that spread from Madagascar to every island group of the western Indian Ocean.",
   hab=["island", "forest", "coast"], box=[[43, 64, -26, -3.5]], cls=("Reptilia", "Squamata", "Gekkonidae"))
 E("Diospyros tessellaria", "species", "land", "broadleaf", 5, 0, ["ind"],
@@ -108,7 +108,7 @@ E("Listroderini", "tribe", "land", "beetle", 40, 0, [T(40, 14, "an", "sa-s"), T(
 E("Bryophyta", "division", "land", "moss", 330, 0, ["cosmo", "an"],
   "Mosses. They are most of Antarctica's land vegetation today, and beds of them lie freeze-dried in its Miocene tundra deposits.",
   hab=["tundra", "forest", "wetland", "alpine", "coast", "ice", "island"], cls=("Bryopsida", "", ""))
-E("Tardigrada", "phylum", "land", "lobopod", 530, 0, ["cosmo", "an"],
+E("Tardigrada", "phylum", "land", "lobopod", 420, 0, ["cosmo", "an"],
   "Water bears, surviving freezing and drying alike; with nematodes and rotifers they are the permanent land animals of the ice-free Antarctic.",
   hab=["tundra", "ice", "forest", "wetland", "alpine"], cls=("", "", ""), pic="Hypsibius")
 E("Prasiola crispa", "species", "land", "seaweed", 5, 0, ["an", "sou", "sa-s", "arc", "eu"],

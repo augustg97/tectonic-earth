@@ -1,0 +1,279 @@
+{
+ "taxa": {
+  "Bumbudendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 330,
+   "lad": 300,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A small tree lycopsid of Carboniferous Argentina, growing in the outwash plains in front of Gondwana's glaciers.",
+   "hab": [
+    "tundra",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Lepidodendrales"
+   }
+  },
+  "Collembola": {
+   "rank": "order",
+   "realm": "land",
+   "form": "springtail",
+   "fad": 410,
+   "lad": 0,
+   "range": [
+    "cosmo",
+    "an"
+   ],
+   "note": "Springtails, among the first land animals -- Rhyniella from the Rhynie chert is Early Devonian -- and among the last to give up before the ice; they live in every soil on Earth.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "tundra",
+    "ice",
+    "wetland",
+    "alpine",
+    "grassland",
+    "desert",
+    "island",
+    "coast"
+   ],
+   "cls": {
+    "class": "Collembola"
+   },
+   "pbdb": {
+    "asked": "Collembola",
+    "matched": "Collembola",
+    "exact": true,
+    "oid": "txn:133900",
+    "rank": "class",
+    "extant": true,
+    "noc": 225,
+    "fea": 413.02,
+    "lla": 13.82,
+    "phylum": "Arthropoda",
+    "class": "Collembola",
+    "order": null,
+    "family": null,
+    "genus": null,
+    "regions": {
+     "eu": 111,
+     "ca": 43,
+     "sea": 27,
+     "as-e": 19,
+     "na-w": 18,
+     "af-e": 2,
+     "nz": 2,
+     "af-s": 1,
+     "sa-n": 1,
+     "as-w": 1
+    },
+    "fea_r": 103.4,
+    "lla_r": 14.9
+   }
+  },
+  "Nothorhacopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 345,
+   "lad": 300,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "af-e",
+    "in",
+    "au",
+    "an",
+    "mg"
+   ],
+   "note": "A fern-like seed plant of Carboniferous Gondwana, the commonest fossil of the cold country between the ice sheets; its name is a flora as much as a plant.",
+   "hab": [
+    "tundra",
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "order": "Pteridospermales"
+   }
+  },
+  "Oribatida": {
+   "rank": "suborder",
+   "realm": "land",
+   "form": "spider",
+   "fad": 380,
+   "lad": 0,
+   "range": [
+    "cosmo",
+    "an"
+   ],
+   "note": "Oribatid mites, the slow armoured grazers of leaf litter and moss, in the soil of every land ecosystem since the Devonian.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "tundra",
+    "ice",
+    "wetland",
+    "alpine",
+    "grassland",
+    "island",
+    "coast"
+   ],
+   "cls": {
+    "class": "Arachnida",
+    "order": "Sarcoptiformes"
+   },
+   "pbdb": {
+    "asked": "Oribatida",
+    "matched": "Oribatida",
+    "exact": true,
+    "oid": "txn:155663",
+    "rank": "infraorder",
+    "extant": true,
+    "noc": 106,
+    "fea": 393.47,
+    "lla": 0.0117,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Acariformes",
+    "family": null,
+    "genus": null,
+    "regions": {
+     "eu": 72,
+     "ca": 15,
+     "nz": 6,
+     "na-n": 5,
+     "na-e": 4,
+     "na-w": 2,
+     "as-e": 1,
+     "au": 1
+    },
+    "fea_r": 333.1,
+    "lla_r": 6.29
+   }
+  },
+  "Paranocladus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 299,
+   "lad": 270,
+   "range": [
+    "sa-s",
+    "af-s"
+   ],
+   "note": "An early conifer of Permian Gondwana, in the Parana and Karoo basins as the ice withdrew.",
+   "hab": [
+    "forest",
+    "tundra"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Voltziales"
+   },
+   "pbdb": {
+    "asked": "Paranocladus",
+    "matched": "Paranocladus",
+    "exact": true,
+    "oid": "txn:412117",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 315.2,
+    "lla": 274.4,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Paranocladus",
+    "regions": {
+     "sa-s": 13,
+     "in": 2
+    },
+    "fea_r": 307.05,
+    "lla_r": 286.65
+   }
+  },
+  "Tillites": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "strata",
+   "fad": 717,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      717,
+      660
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      650,
+      635
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      582,
+      579
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      445,
+      443
+     ],
+     "in": [
+      "gondwana"
+     ]
+    },
+    {
+     "t": [
+      335,
+      260
+     ],
+     "in": [
+      "gondwana"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "na-n",
+      "na-e",
+      "na-w",
+      "eu",
+      "as-n",
+      "gl",
+      "an",
+      "sa-s",
+      "nz"
+     ]
+    }
+   ],
+   "note": "Tillite: the unsorted rubble a glacier leaves, cemented to rock. Gondwana's Carboniferous-Permian tillites lie on five continents, and their scratched pavements were among the first evidence that those continents had once been one.",
+   "hab": [
+    "ice",
+    "tundra"
+   ]
+  }
+ }
+}

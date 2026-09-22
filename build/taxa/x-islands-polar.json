@@ -36,7 +36,29 @@
      -56,
      -40
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Acaena magellanica",
+    "matched": "Acaena",
+    "exact": false,
+    "oid": "txn:264406",
+    "rank": "genus",
+    "extant": true,
+    "noc": 8,
+    "fea": 48.07,
+    "lla": 0.774,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rosales",
+    "family": "Rosaceae",
+    "genus": "Acaena",
+    "regions": {
+     "sa-s": 4,
+     "au": 4
+    },
+    "fea_r": 28.47,
+    "lla_r": 1.68
+   }
   },
   "Aldabrachelys gigantea": {
    "rank": "species",
@@ -66,7 +88,26 @@
      -10,
      -3.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Aldabrachelys gigantea",
+    "matched": "Aldabrachelys gigantea",
+    "exact": true,
+    "oid": "txn:365355",
+    "rank": "species",
+    "extant": true,
+    "noc": 2,
+    "fea": 0.129,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae",
+    "genus": "Aldabrachelys",
+    "regions": {
+     "af-e": 2
+    }
+   }
   },
   "Anas eatoni": {
    "rank": "species",
@@ -100,7 +141,45 @@
      -50.5,
      -45.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Anas eatoni",
+    "matched": "Anas",
+    "exact": false,
+    "oid": "txn:67686",
+    "rank": "genus",
+    "extant": true,
+    "noc": 337,
+    "fea": 23.04,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "Anatidae",
+    "genus": "Anas",
+    "regions": {
+     "na-w": 82,
+     "eu": 69,
+     "na-e": 64,
+     "nz": 24,
+     "as-w": 20,
+     "as-n": 12,
+     "oc": 10,
+     "sea": 10,
+     "mg": 10,
+     "sa-n": 7,
+     "au": 7,
+     "as-e": 5,
+     "sa-s": 5,
+     "ca": 4,
+     "as-c": 3,
+     "ar": 2,
+     "na-n": 2,
+     "af-e": 1
+    },
+    "fea_r": 3.05,
+    "lla_r": 0.01
+   }
   },
   "Azorella selago": {
    "rank": "species",
@@ -162,6 +241,50 @@
    ],
    "cls": {
     "class": "Bryopsida"
+   },
+   "pbdb": {
+    "asked": "Bryophyta",
+    "matched": "Bryophyta",
+    "exact": true,
+    "oid": "txn:55134",
+    "rank": "phylum",
+    "extant": true,
+    "noc": 1307,
+    "fea": 443.1,
+    "lla": 0,
+    "phylum": "Bryophyta",
+    "class": null,
+    "order": null,
+    "family": null,
+    "genus": null,
+    "regions": {
+     "sa-s": 224,
+     "na-w": 182,
+     "au": 165,
+     "as-n": 113,
+     "na-n": 112,
+     "eu": 101,
+     "na-e": 92,
+     "in": 73,
+     "an": 72,
+     "af-s": 42,
+     "as-e": 25,
+     "as-w": 21,
+     "af-w": 19,
+     "as-c": 18,
+     "sa-n": 13,
+     "nz": 13,
+     "af-e": 6,
+     "af-n": 4,
+     "as-se": 3,
+     "ar": 2,
+     "sea": 1,
+     "mg": 1,
+     "ca": 1,
+     "gl": 1
+    },
+    "fea_r": 381.2,
+    "lla_r": 1.29
    }
   },
   "Coracopsis barklyi": {
@@ -194,7 +317,28 @@
      -5.5,
      -3.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Coracopsis barklyi",
+    "matched": "Coracopsis",
+    "exact": false,
+    "oid": "txn:158294",
+    "rank": "genus",
+    "extant": true,
+    "noc": 8,
+    "fea": 0.129,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Psittaciformes",
+    "family": "Psittacidae",
+    "genus": "Coracopsis",
+    "regions": {
+     "mg": 8
+    },
+    "fea_r": 0.06,
+    "lla_r": 0.01
+   }
   },
   "Cupressaceae": {
    "rank": "family",
@@ -224,6 +368,46 @@
     "class": "Pinopsida",
     "order": "Pinales",
     "family": "Cupressaceae"
+   },
+   "pbdb": {
+    "asked": "Cupressaceae",
+    "matched": "Cupressaceae",
+    "exact": true,
+    "oid": "txn:54792",
+    "rank": "family",
+    "extant": true,
+    "noc": 1635,
+    "fea": 205.7,
+    "lla": 0,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": null,
+    "regions": {
+     "na-w": 650,
+     "eu": 522,
+     "as-e": 132,
+     "au": 90,
+     "na-e": 87,
+     "as-n": 70,
+     "sa-s": 21,
+     "as-c": 16,
+     "in": 16,
+     "as-se": 8,
+     "af-e": 5,
+     "na-n": 5,
+     "gl": 3,
+     "sea": 3,
+     "af-s": 2,
+     "sa-n": 1,
+     "ar": 1,
+     "nz": 1,
+     "ca": 1,
+     "as-w": 1
+    },
+    "fea_r": 103.55,
+    "lla_r": 1.3
    }
   },
   "Cylindraspis": {
@@ -255,7 +439,10 @@
      -22,
      -19
     ]
-   ]
+   ],
+   "pbdb": {
+    "homonym": "the PBDB's Cylindraspis is a Carboniferous form; the tortoise has no PBDB record"
+   }
   },
   "Diospyros tessellaria": {
    "rank": "species",
@@ -283,7 +470,36 @@
      -20.6,
      -19.9
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Diospyros tessellaria",
+    "matched": "Diospyros",
+    "exact": false,
+    "oid": "txn:54724",
+    "rank": "genus",
+    "extant": true,
+    "noc": 73,
+    "fea": 113.2,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "Dicotyledoneae",
+    "order": "Ericales",
+    "family": "Ebenaceae",
+    "genus": "Diospyros",
+    "regions": {
+     "na-w": 20,
+     "in": 17,
+     "na-e": 13,
+     "eu": 8,
+     "as-e": 6,
+     "au": 5,
+     "af-e": 2,
+     "as-n": 1,
+     "sa-n": 1
+    },
+    "fea_r": 83.25,
+    "lla_r": 2.67
+   }
   },
   "Eremotherium": {
    "rank": "genus",
@@ -329,6 +545,30 @@
     "class": "Mammalia",
     "order": "Pilosa",
     "family": "Megatheriidae"
+   },
+   "pbdb": {
+    "asked": "Eremotherium",
+    "matched": "Eremotherium",
+    "exact": true,
+    "oid": "txn:43611",
+    "rank": "genus",
+    "extant": false,
+    "noc": 148,
+    "fea": 8,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Xenarthra",
+    "family": "Megatheriidae",
+    "genus": "Eremotherium",
+    "regions": {
+     "sa-n": 56,
+     "ca": 53,
+     "na-e": 28,
+     "sa-s": 11
+    },
+    "fea_r": 2.19,
+    "lla_r": 0.07
    }
   },
   "Falco punctatus": {
@@ -361,7 +601,26 @@
      -20.6,
      -19.9
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Falco punctatus",
+    "matched": "Falco punctatus",
+    "exact": true,
+    "oid": "txn:371706",
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Falconiformes",
+    "family": "Falconidae",
+    "genus": "Falco",
+    "regions": {
+     "sea": 1
+    }
+   }
   },
   "Latania": {
    "rank": "genus",
@@ -430,6 +689,26 @@
     "class": "Insecta",
     "order": "Coleoptera",
     "family": "Curculionidae"
+   },
+   "pbdb": {
+    "asked": "Listroderini",
+    "matched": "Listroderini",
+    "exact": true,
+    "oid": "txn:253281",
+    "rank": "tribe",
+    "extant": true,
+    "noc": 6,
+    "fea": 51.1,
+    "lla": 11.63,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Coleoptera",
+    "family": "Curculionidae",
+    "genus": null,
+    "regions": {
+     "na-w": 4,
+     "an": 2
+    }
    }
   },
   "Lodoicea maldivica": {
@@ -513,6 +792,30 @@
     "class": "Mammalia",
     "order": "Notoungulata",
     "family": "Toxodontidae"
+   },
+   "pbdb": {
+    "asked": "Mixotoxodon",
+    "matched": "Mixotoxodon",
+    "exact": true,
+    "oid": "txn:43395",
+    "rank": "genus",
+    "extant": false,
+    "noc": 26,
+    "fea": 4.7,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "family": "Toxodontidae",
+    "genus": "Mixotoxodon",
+    "regions": {
+     "ca": 17,
+     "sa-n": 7,
+     "na-e": 1,
+     "sa-s": 1
+    },
+    "fea_r": 2.19,
+    "lla_r": 0.07
    }
   },
   "Nepenthes pervillei": {
@@ -542,7 +845,23 @@
      -5.5,
      -3.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Nepenthes pervillei",
+    "matched": "Nepenthes",
+    "exact": false,
+    "oid": "txn:499093",
+    "rank": "genus",
+    "extant": true,
+    "noc": 0,
+    "fea": null,
+    "lla": null,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Nepenthes"
+   }
   },
   "Oxyria digyna": {
    "rank": "species",
@@ -573,13 +892,33 @@
     "class": "Magnoliopsida",
     "order": "Caryophyllales",
     "family": "Polygonaceae"
+   },
+   "pbdb": {
+    "asked": "Oxyria digyna",
+    "matched": "Oxyria",
+    "exact": false,
+    "oid": "txn:467320",
+    "rank": "genus",
+    "extant": true,
+    "noc": 2,
+    "fea": 2.58,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Caryophyllales",
+    "family": "Polygonaceae",
+    "genus": "Oxyria",
+    "regions": {
+     "gl": 1,
+     "in": 1
+    }
    }
   },
   "Phelsuma": {
    "rank": "genus",
    "realm": "land",
    "form": "lizard",
-   "fad": 20,
+   "fad": 10,
    "lad": 0,
    "range": [
     "ind",
@@ -603,7 +942,28 @@
      -26,
      -3.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Phelsuma",
+    "matched": "Phelsuma",
+    "exact": true,
+    "oid": "txn:37910",
+    "rank": "genus",
+    "extant": true,
+    "noc": 2,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Gekkonidae",
+    "genus": "Phelsuma",
+    "regions": {
+     "sea": 2
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "no pre-Quaternary fossils; the genus is dated by molecular clocks to the Miocene"
   },
   "Poa cookii": {
    "rank": "species",
@@ -640,7 +1000,26 @@
      -55,
      -54
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Poa cookii",
+    "matched": "Poa",
+    "exact": false,
+    "oid": "txn:488376",
+    "rank": "genus",
+    "extant": true,
+    "noc": 1,
+    "fea": 2.58,
+    "lla": 0.0117,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Poa",
+    "regions": {
+     "gl": 1
+    }
+   }
   },
   "Prasiola crispa": {
    "rank": "species",
@@ -731,7 +1110,26 @@
      -22,
      -19
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Pteropus niger",
+    "matched": "Pteropus niger",
+    "exact": true,
+    "oid": "txn:233813",
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Pteropodidae",
+    "genus": "Pteropus",
+    "regions": {
+     "sea": 1
+    }
+   }
   },
   "Pteropus seychellensis": {
    "rank": "species",
@@ -763,7 +1161,32 @@
      -10,
      -3.5
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Pteropus seychellensis",
+    "matched": "Pteropus",
+    "exact": false,
+    "oid": "txn:103145",
+    "rank": "genus",
+    "extant": true,
+    "noc": 29,
+    "fea": 0.774,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Pteropodidae",
+    "genus": "Pteropus",
+    "regions": {
+     "sea": 21,
+     "oc": 4,
+     "nz": 2,
+     "mg": 1,
+     "as-se": 1
+    },
+    "fea_r": 0.01,
+    "lla_r": 0.01
+   }
   },
   "Racomitrium lanuginosum": {
    "rank": "species",
@@ -824,7 +1247,26 @@
      -20.6,
      -19.9
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Raphus cucullatus",
+    "matched": "Raphus cucullatus",
+    "exact": true,
+    "oid": "txn:92328",
+    "rank": "species",
+    "extant": false,
+    "noc": 4,
+    "fea": 0.0117,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Columbiformes",
+    "family": "Columbidae",
+    "genus": "Raphus",
+    "regions": {
+     "sea": 4
+    }
+   }
   },
   "Salix herbacea": {
    "rank": "species",
@@ -853,6 +1295,25 @@
     "class": "Magnoliopsida",
     "order": "Malpighiales",
     "family": "Salicaceae"
+   },
+   "pbdb": {
+    "asked": "Salix herbacea",
+    "matched": "Salix herbacea",
+    "exact": true,
+    "oid": "txn:511674",
+    "rank": "species",
+    "extant": true,
+    "noc": 1,
+    "fea": 0.129,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Malpighiales",
+    "family": "Salicaceae",
+    "genus": "Salix",
+    "regions": {
+     "eu": 1
+    }
    }
   },
   "Sideroxylon grandiflorum": {
@@ -881,7 +1342,30 @@
      -20.6,
      -19.9
     ]
-   ]
+   ],
+   "pbdb": {
+    "asked": "Sideroxylon grandiflorum",
+    "matched": "Sideroxylon",
+    "exact": false,
+    "oid": "txn:452248",
+    "rank": "genus",
+    "extant": true,
+    "noc": 9,
+    "fea": 56,
+    "lla": 2.58,
+    "phylum": "Angiospermae",
+    "class": "Dicotyledoneae",
+    "order": "Ericales",
+    "family": "Sapotaceae",
+    "genus": "Sideroxylon",
+    "regions": {
+     "as-e": 5,
+     "sa-n": 3,
+     "eu": 1
+    },
+    "fea_r": 44.95,
+    "lla_r": 3.96
+   }
   },
   "Sooglossidae": {
    "rank": "family",
@@ -910,19 +1394,35 @@
      -3.5
     ]
    ],
-   "pic": "Sooglossus"
+   "pic": "Sooglossus",
+   "pbdb": {
+    "asked": "Sooglossidae",
+    "matched": "Sooglossidae",
+    "exact": true,
+    "oid": "txn:133802",
+    "rank": "family",
+    "extant": true,
+    "noc": 0,
+    "fea": null,
+    "lla": null,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Anura",
+    "family": "Sooglossidae",
+    "genus": null
+   }
   },
   "Tardigrada": {
    "rank": "phylum",
    "realm": "land",
    "form": "lobopod",
-   "fad": 530,
+   "fad": 360,
    "lad": 0,
    "range": [
     "cosmo",
     "an"
    ],
-   "note": "Water bears, microscopic animals that survive freezing and drying alike; in Antarctica they are among the few permanent land animals.",
+   "note": "Water bears, surviving freezing and drying alike; with nematodes and rotifers they are the permanent land animals of the ice-free Antarctic.",
    "hab": [
     "tundra",
     "ice",
@@ -931,7 +1431,10 @@
     "alpine"
    ],
    "cls": {},
-   "pic": "Hypsibius"
+   "pic": "Hypsibius",
+   "pbdb": {
+    "homonym": "the PBDB resolves Tardigrada to a xenarthran record"
+   }
   }
  }
 }

@@ -1,0 +1,764 @@
+{
+ "taxa": {
+  "Aldanella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 537,
+   "lad": 521,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A tiny coiled shell of the earliest Cambrian, snail-like or a mollusc's cousin, found from Siberia to Newfoundland and marking the base of the Tommotian.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "family": "Aldanellidae"
+   },
+   "pbdb": {
+    "asked": "Aldanella",
+    "matched": "Aldanella",
+    "exact": true,
+    "oid": "txn:7870",
+    "rank": "genus",
+    "extant": false,
+    "noc": 129,
+    "fea": 538.8,
+    "lla": 506.5,
+    "phylum": "Mollusca",
+    "class": "Helcionelloida",
+    "order": "Pelagiellida",
+    "family": "Aldanellidae",
+    "genus": "Aldanella",
+    "regions": {
+     "as-n": 86,
+     "na-e": 29,
+     "as-e": 9,
+     "as-c": 2,
+     "eu": 2,
+     "af-w": 1
+    },
+    "fea_r": 532.15,
+    "lla_r": 523.25
+   }
+  },
+  "Anabarites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tubeworm",
+   "fad": 541,
+   "lad": 525,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A three-lobed tube a few millimetres long, among the first mineralised skeletons of the Cambrian and a zone fossil of its opening stage on every continent.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "order": "Anabaritida",
+    "family": "Anabaritidae"
+   },
+   "pbdb": {
+    "asked": "Anabarites",
+    "matched": "Anabarites",
+    "exact": true,
+    "oid": "txn:4515",
+    "rank": "genus",
+    "extant": false,
+    "noc": 264,
+    "fea": 635,
+    "lla": 512.1,
+    "phylum": "Cnidaria",
+    "class": "Scyphozoa",
+    "order": "Anabaritida",
+    "family": "Anabaritidae",
+    "genus": "Anabarites",
+    "regions": {
+     "as-n": 106,
+     "as-e": 92,
+     "au": 36,
+     "as-c": 21,
+     "na-e": 7,
+     "in": 2
+    },
+    "fea_r": 534.75,
+    "lla_r": 514.05
+   }
+  },
+  "Bitter Springs microbiota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 830,
+   "lad": 800,
+   "range": [
+    "au"
+   ],
+   "note": "The chert microfossils of the Bitter Springs Formation of central Australia: cyanobacterial mats, colonial cells and eukaryotic algae preserved cell by cell, the standard picture of a Tonian shallow sea.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "rep": "Siphonophycus",
+   "assemblage": true
+  },
+  "Cerebrosphaera": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 780,
+   "lad": 740,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A wrinkled, brain-textured acritarch of the late Tonian, the zone fossil of the last thirty million years before the Sturtian ice.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "order": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Cerebrosphaera",
+    "matched": "Cerebrosphaera",
+    "exact": true,
+    "oid": "txn:170200",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 1000,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cerebrosphaera",
+    "regions": {
+     "na-w": 10,
+     "eu": 3,
+     "as-c": 2,
+     "au": 2
+    },
+    "fea_r": 860.0,
+    "lla_r": 586.9
+   }
+  },
+  "Chancelloria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 525,
+   "lad": 500,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A bag-shaped animal armoured with star-shaped spicules, sessile on Cambrian sea floors, whose isolated stars are among the commonest small shelly fossils.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "family": "Chancelloriidae"
+   },
+   "pbdb": {
+    "asked": "Chancelloria",
+    "matched": "Chancelloria",
+    "exact": true,
+    "oid": "txn:7321",
+    "rank": "genus",
+    "extant": false,
+    "noc": 309,
+    "fea": 538.8,
+    "lla": 486.85,
+    "phylum": "Problematica",
+    "class": "Coeloscleritophora",
+    "order": "Chancelloriida",
+    "family": "Chancelloriidae",
+    "genus": "Chancelloria",
+    "regions": {
+     "au": 96,
+     "na-w": 49,
+     "as-e": 49,
+     "as-n": 34,
+     "eu": 26,
+     "na-e": 25,
+     "as-c": 17,
+     "gl": 4,
+     "sa-s": 2,
+     "as-w": 2,
+     "ar": 2,
+     "af-w": 1,
+     "af-n": 1,
+     "an": 1
+    },
+    "fea_r": 529.9,
+    "lla_r": 501.75
+   }
+  },
+  "Chuar Group biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "testate",
+   "fad": 780,
+   "lad": 740,
+   "range": [
+    "na-w",
+    "na-e"
+   ],
+   "note": "The late Tonian shales of the Grand Canyon: vase-shaped amoebae, spiny acritarchs and the first sign of predation on eukaryotes, in a sea over Laurentia thirty million years before the ice.",
+   "hab": [
+    "shelf"
+   ],
+   "rep": "Melanocyrillium",
+   "assemblage": true
+  },
+  "Eoentophysalis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 2000,
+   "lad": 600,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A colonial coccoid cyanobacterium of Proterozoic cherts, all but identical to the living Entophysalis of tropical tidal flats.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cyanophyceae",
+    "order": "Chroococcales"
+   },
+   "pbdb": {
+    "asked": "Eoentophysalis",
+    "matched": "Eoentophysalis",
+    "exact": true,
+    "oid": "txn:462356",
+    "rank": "genus",
+    "extant": false,
+    "noc": 27,
+    "fea": 2800,
+    "lla": 720,
+    "phylum": "Cyanobacteria",
+    "class": "Coccogoneae",
+    "order": "Chroococcales",
+    "family": "Entophysalidaceae",
+    "genus": "Eoentophysalis",
+    "regions": {
+     "na-e": 8,
+     "au": 6,
+     "as-n": 5,
+     "gl": 4,
+     "na-n": 1,
+     "af-s": 1,
+     "as-e": 1,
+     "na-w": 1
+    },
+    "fea_r": 1925.0,
+    "lla_r": 860.0
+   }
+  },
+  "Lakhanda biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1030,
+   "lad": 1000,
+   "range": [
+    "as-n"
+   ],
+   "note": "The Lakhanda Group of the Siberian platform, about a billion years old: filamentous algae, acritarchs and the sheaths of cyanobacteria in a shallow, quiet sea.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "rep": "Palaeovaucheria",
+   "assemblage": true
+  },
+  "Lantian biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 602,
+   "lad": 580,
+   "range": [
+    "as-e"
+   ],
+   "note": "The Lantian Formation of Anhui: macroalgae and enigmatic soft-bodied forms in black shale just after the Marinoan ice, among the oldest large complex organisms.",
+   "hab": [
+    "shelf",
+    "deep"
+   ],
+   "rep": "Longfengshania",
+   "assemblage": true
+  },
+  "Liulaobei biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 900,
+   "lad": 800,
+   "range": [
+    "as-e"
+   ],
+   "note": "Macroscopic algae of the Tonian of North China -- Longfengshania and its kin -- among the oldest seaweeds visible to the naked eye.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "rep": "Longfengshania",
+   "assemblage": true
+  },
+  "Longfengshania": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 900,
+   "lad": 800,
+   "range": [
+    "as-e"
+   ],
+   "note": "A stalked, bulb-headed macroalga of the Tonian of North China, a few centimetres tall, held to the sea floor by a disc.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Longfengshania",
+    "matched": "Longfengshania",
+    "exact": true,
+    "oid": "txn:513863",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 1000,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "Algae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Longfengshania",
+    "regions": {
+     "as-e": 7
+    }
+   }
+  },
+  "Melanocyrillium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "testate",
+   "fad": 780,
+   "lad": 740,
+   "range": [
+    "na-w",
+    "na-e",
+    "au",
+    "eu",
+    "as-n"
+   ],
+   "note": "A vase-shaped microfossil of the Chuar Group of the Grand Canyon: the shell of a testate amoeba, and among the oldest fossils that can be tied to a living eukaryote group.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "order": "Arcellinida"
+   },
+   "pbdb": {
+    "asked": "Melanocyrillium",
+    "matched": "Melanocyrillium",
+    "exact": true,
+    "oid": "txn:274523",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 1000,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Melanocyrillium",
+    "regions": {
+     "na-w": 11,
+     "na-n": 2
+    },
+    "fea_r": 860.0,
+    "lla_r": 677.5
+   }
+  },
+  "Microdictyon": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobopod",
+   "fad": 525,
+   "lad": 505,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A lobopodian whose net-patterned armour plates were known as small shelly fossils for decades before the Chengjiang animal that wore them turned up.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {
+    "class": "Lobopodia"
+   },
+   "pbdb": {
+    "asked": "Microdictyon",
+    "matched": "Microdictyon",
+    "exact": true,
+    "oid": "txn:18886",
+    "rank": "genus",
+    "extant": false,
+    "noc": 97,
+    "fea": 538.8,
+    "lla": 497,
+    "phylum": "Onychophora",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Microdictyon",
+    "regions": {
+     "as-e": 29,
+     "au": 27,
+     "as-n": 12,
+     "na-w": 7,
+     "as-c": 7,
+     "na-e": 5,
+     "gl": 5,
+     "eu": 4,
+     "as-w": 1
+    },
+    "fea_r": 525.0,
+    "lla_r": 506.35
+   }
+  },
+  "Palaeovaucheria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1030,
+   "lad": 1000,
+   "range": [
+    "as-n"
+   ],
+   "note": "A filamentous yellow-green alga of the Lakhanda Group of Siberia, close to the living Vaucheria; one of the first algae that can be placed in a modern group.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Xanthophyceae"
+   }
+  },
+  "Proterocladus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 1000,
+   "lad": 800,
+   "range": [
+    "as-e",
+    "na-n",
+    "eu"
+   ],
+   "note": "A branching green alga a few millimetres tall, from the Tonian of North China and Spitsbergen: the oldest known green seaweed, and green plants' first anchor to the sea floor.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "cls": {
+    "class": "Ulvophyceae",
+    "order": "Cladophorales"
+   },
+   "pbdb": {
+    "asked": "Proterocladus",
+    "matched": "Proterocladus",
+    "exact": true,
+    "oid": "txn:473709",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 1200,
+    "lla": 720,
+    "phylum": "Chlorophyta",
+    "class": "Ulvophyceae",
+    "order": "Siphonocladales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Proterocladus",
+    "regions": {
+     "as-e": 1
+    }
+   }
+  },
+  "Siphonophycus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 2000,
+   "lad": 500,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Sheaths of a filamentous cyanobacterium, the mat-builder of Proterozoic tidal flats, preserved in chert on every craton.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Cyanophyceae",
+    "order": "Oscillatoriales"
+   },
+   "pbdb": {
+    "asked": "Siphonophycus",
+    "matched": "Siphonophycus",
+    "exact": true,
+    "oid": "txn:170218",
+    "rank": "genus",
+    "extant": false,
+    "noc": 182,
+    "fea": 3600,
+    "lla": 525.5,
+    "phylum": "Cyanobacteria",
+    "class": "Hormogoneae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Siphonophycus",
+    "regions": {
+     "na-n": 49,
+     "au": 36,
+     "eu": 32,
+     "gl": 19,
+     "na-w": 13,
+     "sea": 7,
+     "as-e": 6,
+     "sa-s": 5,
+     "as-n": 4,
+     "af-s": 4,
+     "na-e": 3,
+     "as-c": 2,
+     "in": 1,
+     "af-w": 1
+    },
+    "fea_r": 1925.0,
+    "lla_r": 586.9
+   }
+  },
+  "Svanbergfjellet biota": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 810,
+   "lad": 750,
+   "range": [
+    "eu",
+    "gl"
+   ],
+   "note": "The Svanbergfjellet Formation of Spitsbergen: Proterocladus and other green algae, acritarchs and cyanobacterial mats on the Tonian margin of Baltica.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "rep": "Proterocladus",
+   "assemblage": true
+  },
+  "Tappania": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "hyphae",
+   "fad": 1600,
+   "lad": 800,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A branching, budding microfossil of the Mesoproterozoic and Tonian, read by some as an early fungus, by others as an alga; either way, a complex cell a billion years before animals.",
+   "hab": [
+    "shelf"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Tappania",
+    "matched": "Tappania",
+    "exact": true,
+    "oid": "txn:480943",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 1800,
+    "lla": 1400,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tappania",
+    "regions": {
+     "au": 4,
+     "na-w": 1
+    }
+   }
+  },
+  "Trachyhystrichosphaera": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 1000,
+   "lad": 720,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A large spiny acritarch, the cyst of a Tonian eukaryote, found in shales from Siberia to Svalbard and Australia: the plankton of the world before the snowball.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "order": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Trachyhystrichosphaera",
+    "matched": "Trachyhystrichosphaera",
+    "exact": true,
+    "oid": "txn:440744",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 1200,
+    "lla": 538.8,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Trachyhystrichosphaera",
+    "regions": {
+     "na-n": 5,
+     "eu": 1,
+     "sea": 1
+    }
+   }
+  },
+  "Treptichnus pedum": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "strata",
+   "fad": 541,
+   "lad": 480,
+   "range": [
+    "cosmo"
+   ],
+   "note": "The zigzag burrow that defines the base of the Cambrian: an animal probing the sediment from below, worldwide, at a level no body fossil can match.",
+   "hab": [
+    "shelf",
+    "coast"
+   ],
+   "pbdb": {
+    "asked": "Treptichnus pedum",
+    "matched": "Treptichnus pedum",
+    "exact": true,
+    "oid": "txn:284958",
+    "rank": "species",
+    "extant": false,
+    "noc": 22,
+    "fea": 635,
+    "lla": 477.1,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Treptichnus",
+    "regions": {
+     "eu": 10,
+     "af-s": 5,
+     "na-w": 3,
+     "au": 1,
+     "as-e": 1,
+     "na-e": 1,
+     "na-n": 1
+    },
+    "fea_r": 586.9,
+    "lla_r": 481.75
+   }
+  },
+  "Valeria": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 1600,
+   "lad": 700,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A large acritarch with concentric striations, one of the longest-lived Proterozoic eukaryotes, in shales for nine hundred million years.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "order": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Valeria",
+    "matched": "Valeria",
+    "exact": true,
+    "oid": "txn:430297",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 1800,
+    "lla": 720,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Valeria",
+    "regions": {
+     "na-w": 4,
+     "au": 4,
+     "as-e": 3,
+     "na-n": 1
+    },
+    "fea_r": 1700.0,
+    "lla_r": 860.0
+   }
+  },
+  "Vazante stromatolites": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "stromatolite",
+   "fad": 1000,
+   "lad": 900,
+   "range": [
+    "sa-n",
+    "sa-s"
+   ],
+   "note": "Stromatolite reefs of the Vazante Group on the Sao Francisco craton, columns and domes of a Tonian carbonate platform.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "rep": "Stromatolites",
+   "assemblage": true
+  },
+  "Vindhyan microfossils": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 1100,
+   "lad": 950,
+   "range": [
+    "in"
+   ],
+   "note": "Cherts and shales of the Vindhyan basin of central India: cyanobacterial mats, acritarchs and stromatolites, on a craton that would drift from the equator to the pole and back before anything walked on it.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "rep": "Siphonophycus",
+   "assemblage": true
+  }
+ }
+}

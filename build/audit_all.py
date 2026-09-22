@@ -54,12 +54,13 @@ CHECKS = [
           r"matched to a known block or assembly; (\d+) findings", "gt", 2,
           "a label drawn when the entity it names did not exist"),
     Check("curated biota · exceptions", os.path.join(MODELING, "audit_curated_biota.py"),
-          r"EXCEPTION (\d+)", "ne", 11,
-          "the eleven localities the province model must never overwrite. A run that "
+          r"EXCEPTION (\d+)", "ne", 12,
+          "the twelve localities the province model must never overwrite. A run that "
           "reclassifies Solnhofen as province-typical is a bug. (Ten until 2026-09, "
           "when Wallacea joined them: its whole meaning is what did NOT cross "
           "Wallace's Line, and the crust code it shares with Sundaland would "
-          "otherwise put tigers and orangutans on it.)"),
+          "otherwise put tigers and orangutans on it. Twelve from 2026-09-22, with "
+          "the Arctic Azolla Bloom: an ocean freshened enough to grow a fern.)"),
     Check("curated biota · conflicts", os.path.join(MODELING, "audit_curated_biota.py"),
           r"CONFLICT (\d+)", "gt", 0,
           "a curated entry whose exception flag disagrees with what it looks like"),
@@ -145,9 +146,11 @@ CHECKS = [
           "a card label with no home crust (add it to biota.LABEL_HOME): nothing "
           "local can be placed on it"),
     Check("biota · parent-form drawings", os.path.join(HERE, "audit_biota.py"),
-          r"^BIOTA drawn from a PARENT form \(declared approximation\): (\d+)", "gt", 30,
+          r"^BIOTA drawn from a PARENT form \(declared approximation\): (\d+)", "gt", 0,
           "taxa drawn with a parent form's icon because their own form has "
-          "nothing to trace. Declared, counted, and only allowed to fall"),
+          "nothing to trace. Declared, counted, and only allowed to fall: 33 at "
+          "the start, 0 since 2026-09-22, when the last seventeen forms were "
+          "drawn by hand (fix_form_icons.HAND)"),
     Check("frame gate · true regressions", os.path.join(MODELING, "regression_gate.py"),
           r"^  TRUE\s+(\d+)", "gt", 0,
           "features the frame switch made worse with no other explanation",

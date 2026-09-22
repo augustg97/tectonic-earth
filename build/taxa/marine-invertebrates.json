@@ -221,7 +221,7 @@
    "rank": "genus",
    "realm": "sea",
    "form": "stromatoporoid",
-   "fad": 400,
+   "fad": 393,
    "lad": 360,
    "range": [
     "af-n",
@@ -1338,7 +1338,15 @@
     "fresh",
     "sea"
    ],
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     10,
+     60,
+     36,
+     50
+    ]
+   ]
   },
   "Crinoidea": {
    "rank": "class",
@@ -1954,6 +1962,11 @@
    "lat": [
     40,
     90
+   ],
+   "hab": [
+    "shelf",
+    "coast",
+    "ice"
    ]
   },
   "Euryhaline molluscs": {
@@ -2839,13 +2852,15 @@
    "rank": "family",
    "realm": "sea",
    "form": "clam",
-   "fad": 390,
+   "fad": 237,
    "lad": 183,
    "range": [
+    "tet",
+    "eu",
     "as-c",
     "as-se",
-    "eu",
-    "na-w"
+    "na-w",
+    "pan"
    ],
    "note": "Thick heart-shaped bivalves crowding the Triassic Tethyan carbonate platforms.",
    "pbdb": {

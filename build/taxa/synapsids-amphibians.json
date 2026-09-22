@@ -103,7 +103,35 @@
    "fad": 270,
    "lad": 201,
    "range": [
-    "cosmo"
+    {
+     "t": [
+      270,
+      252
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      252,
+      201
+     ],
+     "in": [
+      "af-s",
+      "af-e",
+      "an",
+      "in",
+      "as-e",
+      "as-c",
+      "as-n",
+      "eu",
+      "sa-s",
+      "au",
+      "na-w",
+      "as-se"
+     ]
+    }
    ],
    "note": "Beaked, tusked herbivorous therapsids that become the most abundant large land animals on Earth.",
    "pbdb": {
@@ -205,9 +233,25 @@
    "fad": 300,
    "lad": 255,
    "range": [
-    "na-w",
-    "na-e",
-    "af-n"
+    {
+     "t": [
+      300,
+      270
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      268,
+      255
+     ],
+     "in": [
+      "af-n"
+     ]
+    }
    ],
    "note": "A boomerang-headed amphibian of Permian ponds, its skull drawn out into broad lateral horns.",
    "pbdb": {
@@ -520,6 +564,7 @@
     "an",
     "as-c",
     "as-e",
+    "as-n",
     "eu"
    ],
    "note": "A pig-sized dicynodont that survives the extinction and then makes up most of the land vertebrate fauna of the entire planet.",
@@ -548,7 +593,21 @@
      "eu": 1
     }
    },
-   "w": 3
+   "w": 3,
+   "box": [
+    [
+     35,
+     60,
+     50,
+     62
+    ],
+    [
+     -180,
+     180,
+     -90,
+     20
+    ]
+   ]
   },
   "Metoposauridae": {
    "rank": "family",
@@ -634,6 +693,9 @@
      1,
      7
     ]
+   ],
+   "avoid": [
+    "Andes"
    ]
   },
   "Placerias": {
@@ -826,12 +888,35 @@
    "fad": 210,
    "lad": 110,
    "range": [
-    "af-s",
-    "as-c",
-    "as-e",
-    "as-n",
-    "eu",
-    "na-w"
+    {
+     "t": [
+      210,
+      180
+     ],
+     "in": [
+      "af-s",
+      "as-c",
+      "as-e",
+      "as-n",
+      "eu",
+      "na-w",
+      "an",
+      "sa-s"
+     ]
+    },
+    {
+     "t": [
+      180,
+      110
+     ],
+     "in": [
+      "as-c",
+      "as-e",
+      "as-n",
+      "na-w",
+      "eu"
+     ]
+    }
    ],
    "note": "Small mammal-like cynodonts, herbivorous survivors of the synapsid line into the dinosaur age.",
    "pbdb": {

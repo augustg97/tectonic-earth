@@ -237,7 +237,10 @@ def at_home(e, home, age, ice=True, sea_card=None):
     # "Cosmopolitan" on land means every continent. It does not mean Kerguelen or
     # the summit of a seamount: a home that is ocean basin and nothing else is
     # reached by a land taxon only when its author named that ocean.
-    oceanic = bool(home) and "*" not in home and set(home) <= set(BASINS)
+    # ice=False is the author's word (a curated list): neither the ice rule nor
+    # the ocean-crust rule second-guesses it -- Kerguelen's curated conifers are
+    # "cosmo" and its home is ocean, and that is exactly why they are curated
+    oceanic = ice and bool(home) and "*" not in home and set(home) <= set(BASINS)
     for old, young, codes in e["_slices"]:
         if young - 1e-9 <= age <= old + 1e-9:
             # '*' on either side: a cosmopolitan taxon is at home anywhere, and
@@ -552,7 +555,12 @@ TYPE_HABITAT = {
     "plateau": {"alpine", "grassland", "desert"}, "island": {"island", "coast", "forest"},
     "sea": {"shelf", "reef", "pelagic", "coast"}, "ocean": {"pelagic", "deep", "shelf"},
 }
+#: A sea label whose card takes more than the sea: the Eocene Arctic was capped
+#: with fresh water, and the fern that covered it is the point of the label.
+LABEL_REALMS = {"Arctic Azolla Bloom": ["fresh", "sea"]}
+
 NAME_HABITAT = {
+    "Arctic Azolla Bloom": {"lake", "wetland", "pelagic", "shelf", "coast"},
     "Amazon Rainforest": {"rainforest", "river", "wetland"},
     # a lake at 3,800 m is not a lowland wetland: capybara and swamp palms stay out
     "Lake Titicaca": {"lake", "alpine"}, "Lake Tauca": {"lake", "alpine"},
@@ -652,7 +660,11 @@ LABEL_HOME = {
                      {"t": [20, 0], "in": ["ind", "ar", "af-e", "af-n"]}],
     "Gulf of California": [{"t": [12, 7], "in": ["ca", "na-w"]},
                            {"t": [7, 0], "in": ["pac", "ca", "na-w"]}],
-    "Old Red Sandstone Continent": ["euramerica"], "Caledonides": ["eu", "gl", "na-e"],
+    "Old Red Sandstone Continent": ["euramerica"],
+    # the Caledonian belt ran through three continents; the CALEDONIDES on the
+    # map today are Scotland and Norway, and a composite home put Titanis and
+    # Megalonyx on them
+    "Caledonides": [{"t": [490, 60], "in": ["eu", "gl", "na-e"]}, {"t": [60, 0], "in": ["eu"]}],
     "Andes": ["sa"], "Himalaya": ["as-c", "in"], "Cordillera": ["na-w", "na-n"],
     "Zagros Mts": ["as-w", "ar"],
     "Ural Mountains": ["eu", "as-n"], "Variscan Belt": ["eu"], "Beringia": ["na-n", "as-n"],
@@ -670,8 +682,10 @@ LABEL_HOME = {
                                   {"t": [63, 0], "in": ["ind"]}],
     "Mascarene Plateau": ["ind"], "Agulhas Plateau": ["ind", "sou"],
     "Broken Ridge": ["ind"], "Ninetyeast Ridge": ["ind"],
-    "Kerguelen Microcontinent": [{"t": [120, 34], "in": ["an", "in", "ind", "sou"]},
-                                 {"t": [34, 0], "in": ["ind", "sou"]}],
+    # an isolated plateau throughout: its Cretaceous forest is curated, its
+    # animals are what flew or swam there (a home of "an, in" had it borrowing
+    # Antarctica's marsupials and India's bats)
+    "Kerguelen Microcontinent": ["ind", "sou"],
     "Rio Grande Rise": ["atl"], "Walvis Ridge": ["atl"], "Shatsky Rise": ["pac"],
     "Ontong Java Plateau": ["pac"], "Manihiki Plateau": ["pac"], "Emperor Seamounts": ["pac"],
     "East Tasman Plateau": ["pac", "sou", "au"],
@@ -780,6 +794,7 @@ ARCTIC_ICE_FROM = 2.6
 #: Antarctica kept a Nothofagus tundra under its first ice sheets; the mid-Miocene
 #: cooling (about 14 Ma) ended it, and the interior has been polar desert since.
 ANTARCTIC_DESERT_FROM = 14.0
+LPIA = (335.0, 290.0)     # the peak: by the Sakmarian, Glossopteris forest stood at 70 S
 
 
 def submerged(lab, age):
@@ -801,6 +816,10 @@ def is_polar(lab, age, plat):
     has a date on each pole."""
     if plat is None or abs(plat) < POLAR_LAT or is_marine(lab, age):
         return False
+    # the Late Palaeozoic ice age: Gondwana's pole under ice from the
+    # Serpukhovian to the early Permian (335-260 Ma)
+    if LPIA[1] <= age <= LPIA[0]:
+        return True
     return age <= (ANTARCTIC_DESERT_FROM if plat < 0 else ARCTIC_ICE_FROM)
 
 
@@ -1128,8 +1147,8 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
             return "wrong habitat"
         return None
 
-    def gather(want, use_hab=True):
-        ranked, seen = [], set()
+    def gather(want, use_hab=True, curated_only=False, skip=()):
+        ranked, seen = [], set(skip)
         # 1. curated: authority over place, none over time
         for name in curated or ():
             e = get(name)
@@ -1155,7 +1174,7 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
         # An exception locality speaks for itself -- unless its own taxa are
         # not alive at this age, in which case saying nothing is worse than
         # letting the model fill in around it.
-        if exception and len(ranked) >= 4:
+        if curated_only or (exception and len(ranked) >= 4):
             return ranked
         # "only": the curated list is ALL there is (Lake Vostok, sealed under the
         # ice), and the model must not furnish the place with plausible neighbours
@@ -1226,12 +1245,21 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
         # A phylum is true of every sea there has ever been. Where the card can be
         # filled with something more particular, the generic entries stand down;
         # where it cannot (much of the Precambrian), they are what there is.
-        _GENERIC = ("phylum", "kingdom", "domain", "class")
+        _GENERIC = ("phylum", "kingdom", "domain", "class", "subphylum", "subclass")
         spec = {k: [(e, sc) for e, sc in by[k]
                     if e.get("rank") not in _GENERIC or src.get(e["n"]) == "curated"]
                 for k in by}
         if sum(min(len(spec[k]), have[k]) for k in ("fauna", "flora")) >= 5:
             by = spec
+        # A CURATED class-level name ("Brachiopoda", "Ichthyosauria") is a
+        # reader's note about the place, and it keeps one slot; but when the
+        # registry can name four animals of that sea by genus, the rest of the
+        # card is theirs. A sea whose every fauna is a phylum reads as a lesson.
+        _BROAD = _GENERIC + ("order", "superorder", "infraorder", "suborder")
+        real = [(e, sc) for e, sc in by["fauna"] if e.get("rank") not in _BROAD]
+        if len(real) >= 4:
+            gen = [(e, sc) for e, sc in by["fauna"] if e.get("rank") in _BROAD]
+            by["fauna"] = sorted(real + gen[:1], key=lambda t: (-t[1], t[0]["n"]))
         chosen, groups = [], []
         for k in ("fauna", "flora", "other"):
             got = _pick(by[k], have[k], age, habs, chosen)
@@ -1245,10 +1273,17 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
 
     groups = []
     if marine:
-        groups = split(gather(["sea"]), sea=True)
+        groups = split(gather(LABEL_REALMS.get(lab["n"], ["sea"])), sea=True)
         if lab["t"] not in MARINE_TYPES:
             # a sea card on a label the app does not know to be sea: say so in the key
             groups = [("sea-" + k, v) for k, v in groups]
+        # A lagoon's fame can be what fell into it. Curated land and air taxa on
+        # a sea card (Archaeopteryx at Solnhofen) were being dropped as "wrong
+        # realm"; they are the author's statement and get their own heading.
+        # skip everything the main pass already weighed (src), not only what it
+        # kept: a curated plankter the quota cut must not resurface as shore life
+        shore = split(gather(["land", "air", "fresh"], use_hab=False, curated_only=True, skip=set(src)), 4)
+        groups += [("shore-" + k, v) for k, v in shore]
     elif age > NO_LAND_LIFE_BEFORE:
         land = split(gather(["land", "fresh"], use_hab=False), 2)
         shelf = split(gather(["sea"], use_hab=False), sea=True)
@@ -1260,6 +1295,11 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
     else:
         want = ["fresh", "land", "air"] if lake else ["land", "air", "fresh"]
         groups = split(gather(want))
+        # ... and the seas a curated list says lay across this land: Basilosaurus
+        # in the Fayum on Africa's Eocene card, the Muschelkalk's nothosaurs on
+        # Eurasia's Triassic one. Curated only; the model never invents a sea.
+        shelf = split(gather(["sea"], use_hab=False, curated_only=True, skip=set(src)), 4, sea=True)
+        groups += [("shelf-" + k, v) for k, v in shelf]
     return {"groups": groups, "src": src, "dropped": dropped}
 
 
@@ -1312,10 +1352,32 @@ def _province_at(runs, age):
 
 
 def curated_at(spans, age):
-    for s in spans or ():
-        if min(s["a0"], s["a1"]) - 1e-9 <= age <= max(s["a0"], s["a1"]) + 1e-9:
-            return s
-    return None
+    """Every curated span holding `age`, merged: a label's spans were authored
+    at different times by different hands and twelve pairs overlap (Africa
+    30-56 and 33-56). Taking the first silently lost the second's taxa --
+    Basilosaurus never reached Africa's Eocene card. Order is kept; a name
+    appears once; `exception` and `only` hold if any span says so."""
+    hits = [s for s in spans or ()
+            if min(s["a0"], s["a1"]) - 1e-9 <= age <= max(s["a0"], s["a1"]) + 1e-9]
+    if not hits:
+        return None
+    if len(hits) == 1:
+        return hits[0]
+    merged = dict(hits[0])
+    seen, taxa = set(), []
+    for h in hits:
+        for t in h.get("taxa", []):
+            nm = t[0] if isinstance(t, (list, tuple)) else t["name"]
+            if nm not in seen:
+                seen.add(nm)
+                taxa.append(t)
+    merged["taxa"] = taxa
+    merged["exception"] = any(h.get("exception") for h in hits)
+    merged["only"] = any(h.get("only") for h in hits)
+    shared = [h["shared"] for h in hits if h.get("shared")]
+    if shared:
+        merged["shared"] = " ".join(dict.fromkeys(shared))
+    return merged
 
 
 def build_cards(labels, prov_recs, prov_runs, curated, icons, features=None, log=print):

@@ -520,7 +520,27 @@
      "af-s": 6
     }
    },
-   "w": 3
+   "w": 3,
+   "box": [
+    [
+     28,
+     42,
+     -5,
+     15
+    ],
+    [
+     22,
+     32,
+     -30,
+     -22
+    ],
+    [
+     14,
+     20,
+     13,
+     18
+    ]
+   ]
   },
   "Australopithecus afarensis": {
    "rank": "species",
@@ -1343,7 +1363,28 @@
    "fad": 53,
    "lad": 0,
    "range": [
-    "cosmo"
+    {
+     "t": [
+      53,
+      45
+     ],
+     "in": [
+      "tet",
+      "in",
+      "ar",
+      "af-n",
+      "as-w"
+     ]
+    },
+    {
+     "t": [
+      45,
+      0
+     ],
+     "in": [
+      "cosmo"
+     ]
+    }
    ],
    "note": "Whales and dolphins: hoofed mammals that returned to the sea in the Eocene and became its largest predators and filter-feeders.",
    "pbdb": {
@@ -2651,11 +2692,28 @@
    "fad": 42.9,
    "lad": 18.21,
    "range": [
-    "af-e",
-    "as-e",
-    "as-w",
-    "eu",
-    "na-w"
+    {
+     "t": [
+      42.9,
+      23
+     ],
+     "in": [
+      "as-e",
+      "as-w",
+      "eu",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      23,
+      18.21
+     ],
+     "in": [
+      "as-e",
+      "as-c"
+     ]
+    }
    ],
    "note": "A hypercarnivorous hyaenodont with slicing cheek teeth, a leading predator of the northern continents from the Eocene to the Miocene.",
    "pbdb": {
@@ -3463,8 +3521,21 @@
    "conf_note": "PBDB fad inflated by coarse bins; real fad ~5.3 Ma. NA/CA occurrences are likely Eremotherium, a different genus.",
    "hab": [
     "grassland",
-    "forest",
-    "alpine"
+    "forest"
+   ],
+   "box": [
+    [
+     -80,
+     -40,
+     -56,
+     -8
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
    ]
   },
   "Merychippus": {
@@ -3905,7 +3976,15 @@
     "regions": {
      "au": 7
     }
-   }
+   },
+   "box": [
+    [
+     137,
+     155,
+     -30,
+     -15
+    ]
+   ]
   },
   "Okapia johnstoni": {
    "rank": "species",

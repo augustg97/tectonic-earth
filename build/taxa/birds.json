@@ -127,7 +127,15 @@
     "phylum": "Chordata",
     "class": "Aves",
     "family": "Archaeopterygidae"
-   }
+   },
+   "box": [
+    [
+     8,
+     14,
+     47,
+     51
+    ]
+   ]
   },
   "Archaeopteryx lithographica": {
    "rank": "species",
@@ -570,7 +578,32 @@
     "class": "Aves",
     "order": "Cariamiformes",
     "family": "Phorusrhacidae"
-   }
+   },
+   "box": [
+    [
+     -75,
+     -38,
+     -55,
+     -10
+    ],
+    [
+     -100,
+     -78,
+     24,
+     34
+    ]
+   ],
+   "hab": [
+    "grassland",
+    "forest",
+    "wetland"
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
   },
   "Phorusrhacos": {
    "rank": "genus",
@@ -686,7 +719,15 @@
     "regions": {
      "na-e": 4
     }
-   }
+   },
+   "box": [
+    [
+     -100,
+     -78,
+     24,
+     34
+    ]
+   ]
   },
   "Vegavis iaai": {
    "rank": "species",

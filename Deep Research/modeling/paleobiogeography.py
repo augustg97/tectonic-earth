@@ -200,12 +200,16 @@ def _devonian_marine(age, lat, block):
 
 
 def _late_paleozoic_marine(age, lat, block):
+    # Named apart from the Mesozoic realms of the same latitude: provinces are
+    # keyed by name downstream, and one "Tethyan Realm" gave the Pennsylvanian
+    # Absaroka Sea a paragraph about Cretaceous rudist reefs.
     if abs(lat) < 30:
-        return Province("Tethyan Realm", "marine", "latitude", "good",
+        return Province("Tethyan Realm (Late Palaeozoic)", "marine", "latitude", "good",
                         "Warm equatorial. Fusulinid foraminifera are the diagnostic "
-                        "marker; reef-rich.", ("Fusulinids", "Verbeekina", "Waagenophyllum"))
+                        "marker; reef-rich, with phylloid algae and sponges building "
+                        "the mounds.", ("Fusulinids", "Verbeekina", "Waagenophyllum"))
     if lat >= 30:
-        return Province("Boreal Realm", "marine", "latitude", "good",
+        return Province("Boreal Realm (Late Palaeozoic)", "marine", "latitude", "good",
                         "Cool northern shelves; no fusulinids.", _band_taxa(age, 2))
     return Province("Gondwanan (Austral) Realm", "marine", "latitude", "good",
                     "Cool southern shelves under the Late Palaeozoic Ice Age; "

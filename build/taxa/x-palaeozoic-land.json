@@ -1,0 +1,1392 @@
+{
+ "taxa": {
+  "Angaropteridium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 330,
+   "lad": 270,
+   "range": [
+    "as-n",
+    "as-c",
+    "eu"
+   ],
+   "note": "An Angaran seed fern, its fronds among the commonest plant fossils of the Kuznetsk Basin coal measures.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "order": "Pteridospermales"
+   },
+   "pbdb": {
+    "asked": "Angaropteridium",
+    "matched": "Angaropteridium",
+    "exact": true,
+    "oid": "txn:404078",
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 323.4,
+    "lla": 259.857,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae",
+    "genus": "Angaropteridium",
+    "regions": {
+     "as-e": 8,
+     "as-n": 7,
+     "as-c": 3,
+     "as-w": 1
+    },
+    "fea_r": 301.3,
+    "lla_r": 267.13
+   }
+  },
+  "Aztec fish fauna": {
+   "rank": "informal",
+   "realm": "fresh",
+   "form": "placoderm",
+   "fad": 390,
+   "lad": 380,
+   "range": [
+    "an",
+    "au"
+   ],
+   "note": "The Middle Devonian fishes of the Aztec Siltstone in the Transantarctic Mountains -- placoderms, acanthodians, lungfish and early sharks in rivers and lakes at 30 degrees south.",
+   "hab": [
+    "river",
+    "lake"
+   ],
+   "rep": "Bothriolepis",
+   "assemblage": true
+  },
+  "Bolosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 290,
+   "lad": 270,
+   "range": [
+    "na-w",
+    "as-e"
+   ],
+   "note": "A small early reptile with chewing teeth, of the Permian of Texas and, as its relative Belebey, of Russia and China.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "family": "Bolosauridae"
+   },
+   "pbdb": {
+    "asked": "Bolosaurus",
+    "matched": "Bolosaurus",
+    "exact": true,
+    "oid": "txn:37511",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 298.9,
+    "lla": 274.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Bolosauridae",
+    "genus": "Bolosaurus",
+    "regions": {
+     "na-e": 8,
+     "na-w": 1
+    },
+    "fea_r": 292.45,
+    "lla_r": 278.85
+   }
+  },
+  "Bradysaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 265,
+   "lad": 260,
+   "range": [
+    "af-s"
+   ],
+   "note": "The commonest large animal of the middle Permian Karoo, a two-and-a-half-metre pareiasaur with a warty hide, in herds on the floodplain.",
+   "hab": [
+    "grassland",
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Procolophonomorpha",
+    "family": "Pareiasauridae"
+   },
+   "pbdb": {
+    "asked": "Bradysaurus",
+    "matched": "Bradysaurus",
+    "exact": true,
+    "oid": "txn:37559",
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 264.28,
+    "lla": 254.14,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Bradysaurus",
+    "regions": {
+     "af-s": 30
+    },
+    "fea_r": 262.07,
+    "lla_r": 262.07
+   }
+  },
+  "Buriadia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 290,
+   "lad": 260,
+   "range": [
+    "in",
+    "au",
+    "af-s",
+    "sa-s"
+   ],
+   "note": "An early conifer of the Glossopteris country, in Permian India and Australia, when conifers were still rare south of the tropics.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Voltziales",
+    "family": "Buriadiaceae"
+   },
+   "pbdb": {
+    "asked": "Buriadia",
+    "matched": "Buriadia",
+    "exact": true,
+    "oid": "txn:406046",
+    "rank": "genus",
+    "extant": false,
+    "noc": 27,
+    "fea": 315.2,
+    "lla": 251.902,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Buriadia",
+    "regions": {
+     "sa-s": 14,
+     "in": 13
+    },
+    "fea_r": 291.81,
+    "lla_r": 255.88
+   }
+  },
+  "Deltavjatia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 260,
+   "lad": 255,
+   "range": [
+    "eu"
+   ],
+   "note": "The pareiasaur of Kotelnich, known from dozens of skeletons, a plant-eater the size of a cow.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Procolophonomorpha",
+    "family": "Pareiasauridae"
+   },
+   "pbdb": {
+    "asked": "Deltavjatia",
+    "matched": "Deltavjatia",
+    "exact": true,
+    "oid": "txn:159483",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 264.28,
+    "lla": 259.857,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pareiasauridae",
+    "genus": "Deltavjatia",
+    "regions": {
+     "eu": 3
+    }
+   }
+  },
+  "Diictodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 265,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "as-e"
+   ],
+   "note": "A pig-sized dicynodont that dug spiral burrows in the Karoo floodplain; the most abundant vertebrate fossil of the Late Permian of South Africa.",
+   "hab": [
+    "grassland",
+    "wetland",
+    "forest"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therapsida",
+    "family": "Pylaecephalidae"
+   },
+   "pbdb": {
+    "asked": "Diictodon",
+    "matched": "Diictodon",
+    "exact": true,
+    "oid": "txn:39075",
+    "rank": "genus",
+    "extant": false,
+    "noc": 93,
+    "fea": 274.4,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia",
+    "family": "Pylaecephalidae",
+    "genus": "Diictodon",
+    "regions": {
+     "af-s": 84,
+     "af-e": 8,
+     "as-c": 1
+    },
+    "fea_r": 262.07,
+    "lla_r": 255.88
+   }
+  },
+  "Drepanophycus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 410,
+   "lad": 380,
+   "range": [
+    "eu",
+    "na-e",
+    "as-e",
+    "as-n",
+    "au"
+   ],
+   "note": "A sprawling Devonian lycopsid with sickle-shaped leaves, among the first plants with true leaves, on the shores of Laurussia and China alike.",
+   "hab": [
+    "wetland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Drepanophycales",
+    "family": "Drepanophycaceae"
+   },
+   "pbdb": {
+    "asked": "Drepanophycus",
+    "matched": "Drepanophycus",
+    "exact": true,
+    "oid": "txn:407910",
+    "rank": "genus",
+    "extant": false,
+    "noc": 128,
+    "fea": 419.62,
+    "lla": 372.15,
+    "phylum": "Psilophytophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Drepanophycus",
+    "regions": {
+     "na-e": 49,
+     "eu": 48,
+     "na-n": 16,
+     "as-e": 6,
+     "na-w": 4,
+     "as-n": 2,
+     "sea": 1,
+     "as-c": 1,
+     "sa-n": 1
+    },
+    "fea_r": 411.82,
+    "lla_r": 380.65
+   }
+  },
+  "Emplectopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 295,
+   "lad": 260,
+   "range": [
+    "as-e",
+    "as-se"
+   ],
+   "note": "A Cathaysian seed fern with netted leaf veins, of the Permian coal swamps of North China.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "order": "Gigantopteridales"
+   },
+   "pbdb": {
+    "asked": "Emplectopteris",
+    "matched": "Emplectopteris",
+    "exact": true,
+    "oid": "txn:408028",
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 290.1,
+    "lla": 254.14,
+    "phylum": "Pteridospermophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Emplectopteris",
+    "regions": {
+     "as-e": 32,
+     "as-c": 1
+    },
+    "fea_r": 286.7,
+    "lla_r": 257.0
+   }
+  },
+  "Endothiodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 262,
+   "lad": 254,
+   "range": [
+    "af-s",
+    "af-e",
+    "in",
+    "sa-s"
+   ],
+   "note": "A large dicynodont with rows of cheek teeth, found from the Karoo to India and Brazil: one of the animals that show Permian Gondwana was one country.",
+   "hab": [
+    "grassland",
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therapsida",
+    "family": "Endothiodontidae"
+   },
+   "pbdb": {
+    "asked": "Endothiodon",
+    "matched": "Endothiodon",
+    "exact": true,
+    "oid": "txn:39012",
+    "rank": "genus",
+    "extant": false,
+    "noc": 27,
+    "fea": 266.9,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Endothiodon",
+    "regions": {
+     "af-s": 13,
+     "af-e": 11,
+     "in": 2,
+     "sa-s": 1
+    },
+    "fea_r": 262.07,
+    "lla_r": 255.88
+   }
+  },
+  "Gogonasus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobefin",
+   "fad": 384,
+   "lad": 380,
+   "range": [
+    "au"
+   ],
+   "note": "A lobe-finned fish from the Gogo reef of Western Australia, preserved whole in three dimensions, with the wrist bones and nostrils of a fish on its way to land.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Megalichthyidae"
+   },
+   "pbdb": {
+    "asked": "Gogonasus",
+    "matched": "Gogonasus",
+    "exact": true,
+    "oid": "txn:242713",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 382.31,
+    "lla": 379,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Gogonasus",
+    "regions": {
+     "au": 1
+    }
+   }
+  },
+  "Groenlandaspis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "placoderm",
+   "fad": 385,
+   "lad": 359,
+   "range": [
+    "gl",
+    "an",
+    "au",
+    "eu",
+    "na-e",
+    "af-n"
+   ],
+   "note": "A small placoderm with a tall crest on its trunk armour, in fresh water from Greenland to Antarctica and Australia: the first fish genus shown to span both hemispheres.",
+   "hab": [
+    "river",
+    "lake",
+    "coast"
+   ],
+   "cls": {
+    "class": "Placodermi",
+    "order": "Arthrodira",
+    "family": "Groenlandaspididae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb": {
+    "asked": "Groenlandaspis",
+    "matched": "Groenlandaspis",
+    "exact": true,
+    "oid": "txn:34341",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 410.62,
+    "lla": 346.7,
+    "phylum": "Chordata",
+    "class": "Placodermi",
+    "order": "Phlyctaeniiformes",
+    "family": "Gronlandaspididae",
+    "genus": "Gronlandaspis",
+    "regions": {
+     "eu": 6,
+     "au": 6,
+     "af-s": 2,
+     "an": 2,
+     "na-e": 2,
+     "sa-n": 1,
+     "gl": 1
+    },
+    "fea_r": 385.13,
+    "lla_r": 352.78
+   }
+  },
+  "Guangdedendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 372,
+   "lad": 365,
+   "range": [
+    "as-e"
+   ],
+   "note": "The lycopsid of the Xinhang forest of Anhui, the oldest forest known in Asia: thousands of trees preserved standing in a Late Devonian coastal swamp.",
+   "hab": [
+    "wetland",
+    "coast",
+    "forest"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Lepidodendrales"
+   }
+  },
+  "Hastimima": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "eurypterid",
+   "fad": 290,
+   "lad": 274,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A eurypterid of the Permian of Brazil, one of the last of its kind, in the rivers and lakes of Gondwana.",
+   "hab": [
+    "river",
+    "lake"
+   ],
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Hibbertopteridae"
+   },
+   "pbdb": {
+    "asked": "Hastimima",
+    "matched": "Hastimima",
+    "exact": true,
+    "oid": "txn:18972",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 290.1,
+    "lla": 274.4,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Mycteropidae",
+    "genus": "Hastimima",
+    "regions": {
+     "na-w": 1,
+     "sa-s": 1
+    }
+   }
+  },
+  "Jimusaria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 256,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-c"
+   ],
+   "note": "A dicynodont of the Junggar Basin at the very end of the Permian, one of the tusked plant-eaters that were about to inherit the Earth.",
+   "hab": [
+    "forest",
+    "wetland",
+    "grassland"
+   ],
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therapsida",
+    "family": "Dicynodontidae"
+   },
+   "pbdb": {
+    "asked": "Jimusaria",
+    "matched": "Jimusaria",
+    "exact": true,
+    "oid": "txn:100518",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dicynodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Jimusaria",
+    "regions": {
+     "as-c": 2,
+     "as-e": 1
+    }
+   }
+  },
+  "Karoo insect fauna": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "beetle",
+   "fad": 265,
+   "lad": 252,
+   "range": [
+    "af-s"
+   ],
+   "note": "Beetles, cockroaches, dragonflies and the first true bugs of the Karoo's Permian, preserved as wings in the lake shales.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "rep": "Coleoptera",
+   "assemblage": true
+  },
+  "Kotelnich fauna": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 260,
+   "lad": 255,
+   "range": [
+    "eu"
+   ],
+   "note": "The Late Permian tetrapods of Kotelnich on the Vyatka: pareiasaurs, gorgonopsians and the earliest cynodont-like therapsids, from a riverbank where they are found standing in their burrows.",
+   "hab": [
+    "wetland",
+    "river",
+    "forest"
+   ],
+   "rep": "Inostrancevia",
+   "assemblage": true
+  },
+  "Kuznetsk flora": {
+   "rank": "informal",
+   "realm": "land",
+   "form": "cordaite",
+   "fad": 300,
+   "lad": 252,
+   "range": [
+    "as-n"
+   ],
+   "note": "The Permian coal flora of the Kuznetsk Basin: Rufloria and Cordaites forests with Angaropteridium beneath them, the counterpart in cool Angara of the Glossopteris forests of the south.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "rep": "Rufloria",
+   "assemblage": true
+  },
+  "Leclercqia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 390,
+   "lad": 380,
+   "range": [
+    "na-e",
+    "eu",
+    "au",
+    "as-e"
+   ],
+   "note": "A Middle Devonian clubmoss with hooked leaf tips for climbing, known from New York to Australia: one of the first plants to spread across both hemispheres.",
+   "hab": [
+    "wetland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Protolepidodendrales"
+   },
+   "pbdb": {
+    "asked": "Leclercqia",
+    "matched": "Leclercqia",
+    "exact": true,
+    "oid": "txn:417647",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 419.62,
+    "lla": 382.31,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Protolepidodendraceae",
+    "genus": "Leclercqia",
+    "regions": {
+     "na-e": 7,
+     "as-e": 1,
+     "sa-n": 1,
+     "eu": 1,
+     "na-w": 1
+    },
+    "fea_r": 402.05,
+    "lla_r": 385.13
+   }
+  },
+  "Lepidodendropsis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 345,
+   "lad": 320,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "af-e",
+    "af-n",
+    "in",
+    "au",
+    "an",
+    "mg",
+    "ar",
+    "as-e",
+    "na-e",
+    "na-w",
+    "eu"
+   ],
+   "note": "An early tree lycopsid of Mississippian Gondwana and North Africa, before Lepidodendron proper.",
+   "hab": [
+    "wetland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Lepidodendrales"
+   },
+   "pbdb": {
+    "asked": "Lepidodendropsis",
+    "matched": "Lepidodendropsis",
+    "exact": true,
+    "oid": "txn:410363",
+    "rank": "genus",
+    "extant": false,
+    "noc": 130,
+    "fea": 419.62,
+    "lla": 298.9,
+    "phylum": "Pteridophyta",
+    "class": "Lycopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Lepidodendropsis",
+    "regions": {
+     "na-e": 114,
+     "in": 10,
+     "eu": 2,
+     "sa-n": 2,
+     "as-e": 2
+    },
+    "fea_r": 352.78,
+    "lla_r": 338.5
+   }
+  },
+  "Metaxygnathus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 365,
+   "lad": 360,
+   "range": [
+    "au"
+   ],
+   "note": "A Late Devonian tetrapod known from a jaw found in New South Wales, the first sign that the earliest four-limbed animals were in Gondwana as well as in Greenland.",
+   "hab": [
+    "river",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Stegocephalia"
+   },
+   "pbdb": {
+    "asked": "Metaxygnathus",
+    "matched": "Metaxygnathus",
+    "exact": true,
+    "oid": "txn:255867",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 372.15,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Metaxygnathus",
+    "regions": {
+     "au": 1
+    }
+   }
+  },
+  "Paracalamites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 330,
+   "lad": 252,
+   "range": [
+    "as-n",
+    "as-c",
+    "eu",
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "af-e",
+    "af-n",
+    "in",
+    "au",
+    "an",
+    "mg",
+    "ar"
+   ],
+   "note": "A horsetail with unbranched stems, the Angaran and Gondwanan counterpart of Calamites, along every Permian riverbank of Siberia and the Glossopteris country.",
+   "hab": [
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "class": "Equisetopsida",
+    "order": "Equisetales"
+   },
+   "pbdb": {
+    "asked": "Paracalamites",
+    "matched": "Paracalamites",
+    "exact": true,
+    "oid": "txn:379231",
+    "rank": "genus",
+    "extant": false,
+    "noc": 404,
+    "fea": 315.2,
+    "lla": 174.7,
+    "phylum": "Sphenophyta",
+    "class": "Sphenopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Paracalamites",
+    "regions": {
+     "as-n": 146,
+     "eu": 107,
+     "as-e": 49,
+     "au": 36,
+     "as-c": 28,
+     "sa-s": 25,
+     "an": 6,
+     "af-s": 3,
+     "na-e": 1,
+     "in": 1,
+     "af-e": 1,
+     "na-n": 1
+    },
+    "fea_r": 291.81,
+    "lla_r": 253.02
+   }
+  },
+  "Procynosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 259,
+   "lad": 252,
+   "range": [
+    "af-s",
+    "af-e",
+    "eu"
+   ],
+   "note": "The earliest well-known cynodont, from the Late Permian of the Karoo, Zambia and Germany, with a paddle-like tail that suggests it swam.",
+   "hab": [
+    "wetland",
+    "forest",
+    "river"
+   ],
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therapsida",
+    "family": "Procynosuchidae"
+   },
+   "pbdb": {
+    "asked": "Procynosuchus",
+    "matched": "Procynosuchus",
+    "exact": true,
+    "oid": "txn:39172",
+    "rank": "genus",
+    "extant": false,
+    "noc": 28,
+    "fea": 264.28,
+    "lla": 247,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Procynosuchidae",
+    "genus": "Procynosuchus",
+    "regions": {
+     "af-s": 23,
+     "af-e": 3,
+     "eu": 2
+    },
+    "fea_r": 257.0,
+    "lla_r": 253.02
+   }
+  },
+  "Protolepidodendron": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 400,
+   "lad": 385,
+   "range": [
+    "as-e",
+    "eu",
+    "na-e"
+   ],
+   "note": "An early lycopsid of the Devonian of China and Europe, low and branching, before the tree forms of its group.",
+   "hab": [
+    "wetland",
+    "coast"
+   ],
+   "cls": {
+    "class": "Lycopodiopsida",
+    "order": "Protolepidodendrales"
+   },
+   "pbdb": {
+    "asked": "Protolepidodendron",
+    "matched": "Protolepidodendron",
+    "exact": true,
+    "oid": "txn:406538",
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 410.62,
+    "lla": 358.86,
+    "phylum": "Lycophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Protolepidodendron",
+    "regions": {
+     "na-e": 9,
+     "sa-n": 2,
+     "eu": 1,
+     "in": 1,
+     "au": 1
+    },
+    "fea_r": 387.89,
+    "lla_r": 370.59
+   }
+  },
+  "Rhacopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 345,
+   "lad": 300,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "af-e",
+    "af-n",
+    "in",
+    "au",
+    "an",
+    "mg",
+    "ar",
+    "eu",
+    "na-e"
+   ],
+   "note": "A fern-like seed plant with fan-shaped leaflets, the signature plant of the Early Carboniferous of eastern Australia and Argentina.",
+   "hab": [
+    "wetland",
+    "forest",
+    "tundra"
+   ],
+   "cls": {
+    "order": "Pteridospermales"
+   },
+   "pbdb": {
+    "asked": "Rhacopteris",
+    "matched": "Rhacopteris",
+    "exact": true,
+    "oid": "txn:53360",
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 372.15,
+    "lla": 227.3,
+    "phylum": "Pteridophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rhacopteris",
+    "regions": {
+     "na-e": 11,
+     "eu": 9,
+     "in": 8,
+     "as-c": 2,
+     "as-e": 2,
+     "au": 1,
+     "na-n": 1
+    },
+    "fea_r": 344.58,
+    "lla_r": 259.21
+   }
+  },
+  "Schizoneura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 290,
+   "lad": 200,
+   "range": [
+    "sa-s",
+    "sa-n",
+    "af-s",
+    "af-e",
+    "af-n",
+    "in",
+    "au",
+    "an",
+    "mg",
+    "ar",
+    "as-e",
+    "eu"
+   ],
+   "note": "A horsetail with paired leaves fused into sheaths, common through the Permian and Triassic of Gondwana.",
+   "hab": [
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "class": "Equisetopsida",
+    "order": "Equisetales"
+   },
+   "pbdb": {
+    "asked": "Schizoneura",
+    "matched": "Schizoneura",
+    "exact": true,
+    "oid": "txn:283535",
+    "rank": "genus",
+    "extant": false,
+    "noc": 186,
+    "fea": 298.9,
+    "lla": 149.2,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Equisetales",
+    "family": "Equisetaceae",
+    "genus": "Schizoneura",
+    "regions": {
+     "in": 62,
+     "eu": 43,
+     "af-s": 30,
+     "au": 11,
+     "as-n": 11,
+     "as-c": 10,
+     "as-e": 6,
+     "sa-s": 4,
+     "mg": 4,
+     "af-e": 2,
+     "na-w": 1,
+     "na-e": 1,
+     "an": 1
+    },
+    "fea_r": 288.41,
+    "lla_r": 188.05
+   }
+  },
+  "Shihtienfenia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 259,
+   "lad": 254,
+   "range": [
+    "as-e"
+   ],
+   "note": "A pareiasaur of the Late Permian of Shanxi, a barrel-bodied plant-eater armoured with bony studs.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Procolophonomorpha",
+    "family": "Pareiasauridae"
+   },
+   "pbdb": {
+    "asked": "Shihtienfenia",
+    "matched": "Shihtienfenia",
+    "exact": true,
+    "oid": "txn:37566",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 254.14,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pareiasauridae",
+    "genus": "Shihtienfenia",
+    "regions": {
+     "as-e": 5
+    }
+   }
+  },
+  "Sphenophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 360,
+   "lad": 252,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A slender sphenopsid with wedge-shaped leaves in whorls, a scrambling plant of Carboniferous and Permian swamps on every continent.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Equisetopsida",
+    "order": "Sphenophyllales",
+    "family": "Sphenophyllaceae"
+   },
+   "pbdb": {
+    "asked": "Sphenophyllum",
+    "matched": "Sphenophyllum",
+    "exact": true,
+    "oid": "txn:249938",
+    "rank": "genus",
+    "extant": false,
+    "noc": 560,
+    "fea": 382.31,
+    "lla": 251.902,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "Sphenophyllales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sphenophyllum",
+    "regions": {
+     "as-e": 167,
+     "na-e": 150,
+     "eu": 100,
+     "as-n": 40,
+     "as-c": 19,
+     "sa-s": 16,
+     "in": 15,
+     "as-se": 13,
+     "af-s": 12,
+     "na-w": 11,
+     "as-w": 6,
+     "af-n": 2,
+     "ng": 2,
+     "sa-n": 2,
+     "ar": 2,
+     "gl": 1,
+     "au": 1,
+     "mg": 1
+    },
+    "fea_r": 332.43,
+    "lla_r": 257.0
+   }
+  },
+  "Sporogonites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "moss",
+   "fad": 415,
+   "lad": 400,
+   "range": [
+    "eu",
+    "au",
+    "as-e"
+   ],
+   "note": "A Devonian plant known from spore capsules on short stalks, close to the mosses; found in Belgium, China and Australia.",
+   "hab": [
+    "wetland",
+    "coast"
+   ],
+   "cls": {},
+   "pbdb": {
+    "asked": "Sporogonites",
+    "matched": "Sporogonites",
+    "exact": true,
+    "oid": "txn:415081",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 419.62,
+    "lla": 382.31,
+    "phylum": "Bryophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sporogonites",
+    "regions": {
+     "eu": 11,
+     "as-e": 1
+    },
+    "fea_r": 411.82,
+    "lla_r": 396.47
+   }
+  },
+  "Stereosternum": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "mesosaur",
+   "fad": 290,
+   "lad": 275,
+   "range": [
+    "sa-s",
+    "af-s"
+   ],
+   "note": "A small mesosaur of the Irati and Whitehill shales, in the inland sea shared by Brazil and South Africa before the Atlantic; with Mesosaurus, early evidence for drift.",
+   "hab": [
+    "lake",
+    "coast"
+   ],
+   "cls": {
+    "class": "Reptilia",
+    "order": "Mesosauria",
+    "family": "Mesosauridae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb": {
+    "asked": "Stereosternum",
+    "matched": "Stereosternum",
+    "exact": true,
+    "oid": "txn:37580",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 290.1,
+    "lla": 283.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Mesosauridae",
+    "genus": "Stereosternum",
+    "regions": {
+     "sa-s": 9,
+     "sa-n": 3,
+     "af-s": 1
+    },
+    "fea_r": 286.7,
+    "lla_r": 286.7
+   }
+  },
+  "Suminia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 260,
+   "lad": 255,
+   "range": [
+    "eu"
+   ],
+   "note": "A small anomodont from Kotelnich with a grasping hand and long tail: the earliest tree-climbing vertebrate known.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Synapsida",
+    "order": "Therapsida",
+    "family": "Venyukoviidae"
+   },
+   "pbdb": {
+    "asked": "Suminia",
+    "matched": "Suminia",
+    "exact": true,
+    "oid": "txn:180710",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 264.28,
+    "lla": 259.857,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Anomodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Suminia",
+    "regions": {
+     "eu": 6
+    }
+   }
+  },
+  "Tingia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "progymnosperm",
+   "fad": 299,
+   "lad": 252,
+   "range": [
+    "as-e",
+    "as-se"
+   ],
+   "note": "A Cathaysian plant with two rows of leaves of two sizes, of uncertain kinship; it grew in the wet Permian forests of China and nowhere else.",
+   "hab": [
+    "forest",
+    "wetland"
+   ],
+   "cls": {
+    "order": "Noeggerathiales"
+   },
+   "pbdb": {
+    "asked": "Tingia",
+    "matched": "Tingia",
+    "exact": true,
+    "oid": "txn:415787",
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 298.9,
+    "lla": 251.902,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tingia",
+    "regions": {
+     "as-e": 51,
+     "as-c": 5,
+     "ar": 2,
+     "na-e": 1,
+     "na-w": 1,
+     "as-se": 1
+    },
+    "fea_r": 294.5,
+    "lla_r": 257.0
+   }
+  },
+  "Tulerpeton": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 365,
+   "lad": 360,
+   "range": [
+    "eu"
+   ],
+   "note": "A six-toed Devonian tetrapod from the Tula region of Russia, with limbs strong enough to walk on the bottom.",
+   "hab": [
+    "coast",
+    "river"
+   ],
+   "cls": {
+    "family": "Tulerpetontidae"
+   },
+   "pbdb": {
+    "asked": "Tulerpeton",
+    "matched": "Tulerpeton",
+    "exact": true,
+    "oid": "txn:37184",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 365.2,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tulerpetidae",
+    "genus": "Tulerpeton",
+    "regions": {
+     "eu": 1
+    }
+   }
+  }
+ }
+}

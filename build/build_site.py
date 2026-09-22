@@ -338,10 +338,31 @@ for _page in ("index.html", "ambient.html"):
             continue
         if not os.path.exists(os.path.join(SITE, _m.group(1))):
             _missing.append(f"{_page}: <script src={_m.group(1)}>")
+# ... and every per-keyframe field the app derives BY NAME from the timeline:
+# e/r/m as listed, and the nine siblings (app.js FIELD_KINDS) unless the entry
+# declares them absent ("no"). Five fut_XXXX_f and pre_1000_v 404'd on every
+# load of the live page for weeks before anyone looked at the network log.
+_tl = json.load(open(os.path.join(SITE, "timeline.json")))
+_man = {m["e"]: m for m in json.load(open(os.path.join(SITE, "fields", "manifest.json")))}
+_nf = 0
+for _m in _tl:
+    _stem = _m["e"][: _m["e"].rfind("_e")]
+    for _k in ("e", "r", "m"):
+        if not os.path.exists(os.path.join(SITE, "fields", _m[_k])):
+            _missing.append(f"fields/{_m[_k]}")
+    for _k in "wdovptfqx":
+        if _k in (_m.get("no") or ""):
+            continue
+        if not os.path.exists(os.path.join(SITE, "fields", f"{_stem}_{_k}.webp")):
+            _missing.append(f"fields/{_stem}_{_k}.webp (not declared absent)")
+        _nf += 1
+    if (_man.get(_m["e"], {}).get("no") or "") != (_m.get("no") or ""):
+        _missing.append(f"fields/manifest.json disagrees with timeline.json about {_stem}'s absent fields")
 if _missing:
     raise SystemExit("build_site: the pages fetch files the site does not carry -- "
-                     + ", ".join(_missing))
-print("fetch targets: every file the pages fetch by name, and every script tag, is in the site")
+                     + ", ".join(_missing[:12]) + (" ..." if len(_missing) > 12 else ""))
+print(f"fetch targets: every file the pages fetch by name, every script tag, and every "
+      f"per-keyframe field ({_nf} derived names across {len(_tl)} keyframes) is in the site")
 
 # THE AMBIENT PAGE CARRIES A COPY of app.js's bakeNoiseLUT (its cloud shader
 # reads the same lattice and the page has no app.js). A copy drifts; refuse

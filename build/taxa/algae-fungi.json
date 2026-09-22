@@ -565,7 +565,16 @@
     "class": "Lecanoromycetes",
     "order": "",
     "family": ""
-   }
+   },
+   "hab": [
+    "tundra",
+    "ice",
+    "alpine",
+    "desert",
+    "forest",
+    "coast",
+    "island"
+   ]
   },
   "Posidonia oceanica": {
    "rank": "species",

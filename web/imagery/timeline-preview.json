@@ -37,7 +37,7 @@
     ],
     "sampling": "flippedUVRect assumes createImageBitmap(imageOrientation=flipY), texture.flipY=false. Clamp local sheet UV to its texel centers to avoid neighboring frames."
   },
-  "timelineSHA256": "4a6861bb98025b4318a1009383b2019bfb3647d4ba299474f39e3753ac8f2e67",
+  "timelineSHA256": "e1a5c9ed8b20c341bab9ac6138a6c82e64e37054f9491abae892f116f0cf4c71",
   "sourceManifestSHA256": "c1138b952febe7b51a67c566f783697dd0219b3c204e25df78ee3d6019cb8d44",
   "frames": [
     {

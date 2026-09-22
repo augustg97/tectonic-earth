@@ -25,6 +25,13 @@ os.makedirs(WEB, exist_ok=True)
 def r(x, n=2):
     return round(float(x), n)
 
+#: The per-keyframe fields the app derives by name from the elevation stem
+#: (app.js FIELD_KINDS, less e/r/m which the manifest names): lake depth,
+#: surface process, ocean structure, displacement, plate id, tectonic fabric,
+#: foreland, fold coordinates, drainage coordinates.
+FIELD_SIBLINGS = "wdovptfqx"
+
+
 # ---------- timeline (merge manifests) ----------
 def build_timeline():
     """The field manifest IS the timeline now — it already carries the per
@@ -33,9 +40,35 @@ def build_timeline():
     display choice (how the water reads) not part of the elevation/rainfall
     physics, so it can be retuned without a 35-minute field rebuild."""
     all_ = json.load(open("../web/fields/manifest.json"))
+    # The nine derived fields are named from the elevation stem and not listed
+    # per keyframe, and not every keyframe has every one: the oldest frame has
+    # no displacement to a next-older frame. The app must not ask for a file
+    # that is not there, so each entry says which of its siblings are ABSENT
+    # ("no"), read off the disk here, where the truth is.
+    absent_total = 0
     for m in all_:
         m.update(climate.sea_colour_at(m["age"]))
+        stem = m["e"][: m["e"].rfind("_e")]
+        missing = [k for k in FIELD_SIBLINGS
+                   if not os.path.exists(f"{WEB}/fields/{stem}_{k}.webp")]
+        m.pop("no", None)
+        if missing:
+            m["no"] = "".join(missing)
+            absent_total += len(missing)
+    if absent_total:
+        print(f"  fields: {absent_total} sibling field(s) absent and declared: "
+              + ", ".join(f"{m['e'][:m['e'].rfind('_e')]} -{m['no']}" for m in all_ if m.get("no")))
     all_.sort(key=lambda m: m["age"])
+    # the ambient page reads the field manifest itself, so the declaration goes
+    # back into it too (build_fields.py rewrites the manifest without it; this
+    # runs after build_fields in every pipeline, and build_site checks the result)
+    man = json.load(open("../web/fields/manifest.json"))
+    by_e = {m["e"]: m for m in all_}
+    for rec in man:
+        rec.pop("no", None)
+        if by_e.get(rec["e"], {}).get("no"):
+            rec["no"] = by_e[rec["e"]]["no"]
+    json.dump(man, open("../web/fields/manifest.json", "w"), separators=(",", ":"))
     json.dump(all_, open(f"{WEB}/timeline.json", "w"), separators=(",", ":"))
     print("timeline:", len(all_), "keyframes (with sea-colour palette)")
     return all_

@@ -52,7 +52,7 @@ E("Dugong dugon", "species", "sea", "sirenian", 2, 0, ["ind", "pac"],
 E("Myctophidae", "family", "sea", "cod", 55, 0, OCEANS + ["med", "arc", "tet"],
   "Lanternfishes, perhaps the most abundant vertebrates on Earth, rising hundreds of metres to the surface every night.",
   hab=["pelagic", "deep"], w=2, cls=("Actinopterygii", "Myctophiformes", "Myctophidae"), pic="Myctophum")
-E("Ceratioidei", "suborder", "sea", "fish", 50, 0, OCEANS,
+E("Ceratioidei", "suborder", "sea", "fish", 23, 0, OCEANS,
   "Deep-sea anglerfishes, luring prey with a glowing bait; in some, the dwarf male fuses to the female for life.",
   hab=["deep"], cls=("Actinopterygii", "Lophiiformes", ""), pic="Melanocetus")
 E("Macrouridae", "family", "sea", "cod", 40, 0, OCEANS + ["arc"],
@@ -125,7 +125,7 @@ E("Fulmarus glacialis", "species", "air", "seabird", 2, 0, ["arc", "atl", "pac"]
   "The northern fulmar, a cold-water petrel that nests on sea cliffs from Brittany to the High Arctic.",
   hab=["coast", "island", "pelagic", "tundra"], lat=[45, 85], realms=["air", "sea", "land"],
   cls=("Aves", "Procellariiformes", ""))
-E("Phaethon", "genus", "air", "seabird", 20, 0, WARM,
+E("Phaethon", "genus", "air", "seabird", 5, 0, WARM,
   "Tropicbirds, plunge-divers of the warm open ocean that nest on the remotest islands.",
   hab=["pelagic", "island"], lat=[0, 32], realms=["air", "sea", "land"], cls=("Aves", "Charadriiformes", ""))
 E("Onychoprion fuscatus", "species", "air", "seabird", 2, 0, WARM,

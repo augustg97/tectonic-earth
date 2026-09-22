@@ -120,10 +120,16 @@ GATE_LO = 700.0
 FOOT_MIN = 900.0
 
 
+def _stem(age):
+    """The keyframe's file stem: fut_/phan_/pre_ by age, as build_fields names them."""
+    if age < 0:
+        return "fut_%04d" % abs(age)
+    return ("phan_%04d" if age <= 540 else "pre_%04d") % age
+
+
 def _load_field(age, kind):
-    tag = "phan" if age <= 540 else "pre"
     for ext in ("avif", "webp"):
-        p = os.path.join(FIELDS, "%s_%04d_%s.%s" % (tag, age, kind, ext))
+        p = os.path.join(FIELDS, "%s_%s.%s" % (_stem(age), kind, ext))
         if os.path.exists(p):
             im = Image.open(p)
             return np.asarray(im.convert("L" if kind == "e" else "RGB"))
@@ -319,7 +325,7 @@ def bake(age, quiet=False):
     g = np.clip(up / BULGE_MAX, 0, 1)
     b = np.zeros_like(r)
     arr = np.stack([np.round(x * 255).astype(np.uint8) for x in (r, g, b)], -1)
-    name = "phan_%04d_f.webp" % age if age <= 540 else "pre_%04d_f.webp" % age
+    name = _stem(age) + "_f.webp"
     path = os.path.join(FIELDS, name)
     Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
     cov = 100.0 * float((down > 25.0).mean())
@@ -387,7 +393,9 @@ def main():
     if "--selftest" in sys.argv:
         return 0 if _selftest() else 1
     args = [int(a) for a in sys.argv[1:] if not a.startswith("--")]
-    ages = args or list(range(0, 1001, 5))
+    # the future series too: it has belts (_t) and relief, so it has forelands.
+    # Without it the app asked for fifty fut_XXXX_f.webp that did not exist.
+    ages = args or list(range(-250, 1001, 5))
     print("baking %d foreland fields at %dx%d" % (len(ages), FW, FH))
     t0 = time.time()
     covs = [bake(a) for a in ages]

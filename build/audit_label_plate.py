@@ -82,7 +82,8 @@ ACCEPTED = {
     "Central Pangaean Mts": "one chain from the Appalachians through Iberia to "
                             "Morocco; every anchor is on some other part of it",
     "Hun Superterrane": "a peri-Gondwanan strip that RIFTS off Africa and ends "
-                        "up as southern Europe; both are true, at different ages",
+                        "up as southern Europe; anchored in the Massif Central, "
+                        "and its description names both, at different ages",
     "Kuunga Orogen": "the India-Antarctica/Australia suture: it is on both",
     "Wallacea": "the boundary itself, between Sundaland and Sahul",
     "Greater Caucasus": "raised by Arabia's collision and riding its plate",
@@ -163,6 +164,44 @@ def main():
     for name, typ, lon, lat, pid, got, want in findings:
         print(f"  {name:<28} [{typ:<9}] ({lon:>7},{lat:>6}) rides plate {pid} "
               f"= {got}, but its text says {' or '.join(want)}")
+
+    # SECOND DETECTOR, from the biota registry (2026-09-22). The text test above
+    # needs the description to name a continent, and eight labels' did not: the
+    # Gilboa Forest (New York) was authored at its Devonian position, which is
+    # Brazil today, and rode South America to 85 S. biota.LABEL_HOME records the
+    # present-day crust of every palaeo-frame label for the biota cards, so a
+    # tracked label whose authored coordinate lies outside its own home is
+    # riding the wrong continent -- whatever its text says.
+    import biota                                            # noqa: PLC0415
+    import pbdb                                             # noqa: PLC0415
+    composites = set(getattr(features, "COMPOSITE_LABELS", {})) | \
+        set(getattr(features, "COMPOSITE_BELTS", {})) | set(getattr(features, "COMPOSITE_WATER", {}))
+    home_findings = []
+    for e in features.LABELS:
+        typ, name, lon, lat = e[0], e[1], e[2], e[3]
+        if typ == "ocean" or name in composites or name not in biota.LABEL_HOME:
+            continue
+        if elev(present, lon, lat) <= 0:
+            continue                       # not tracked
+        spec = biota.LABEL_HOME[name]
+        codes = {c for x in spec for c in x["in"]} if spec and isinstance(spec[0], dict) else set(spec)
+        codes = biota.expand(list(codes))
+        if "*" in codes:
+            continue
+        here = pbdb.region_of(lon, lat)
+        if here is None:
+            continue
+        tops = {c.split("-")[0] for c in codes}
+        if here in codes or here.split("-")[0] in tops:
+            continue
+        if name in ACCEPTED:
+            exempt += 1
+            continue
+        home_findings.append((name, typ, lon, lat, here, sorted(codes)))
+    for name, typ, lon, lat, here, codes in home_findings:
+        print(f"  {name:<28} [{typ:<9}] ({lon:>7},{lat:>6}) is {here} today, but the "
+              f"feature's home crust is {'/'.join(codes[:5])}: a palaeo coordinate on modern land")
+    findings += home_findings
     print(f"\n{len(findings)} findings")
     return len(findings)
 

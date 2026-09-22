@@ -392,13 +392,33 @@
    "fad": 300,
    "lad": 252,
    "range": [
-    "na-w",
-    "na-e",
-    "eu",
-    "af-n",
-    "af-s",
-    "as-e",
-    "in"
+    {
+     "t": [
+      300,
+      290
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      290,
+      252
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu",
+      "af-n",
+      "af-s",
+      "af-e",
+      "as-e",
+      "in",
+      "sa-s"
+     ]
+    }
    ],
    "note": "Stocky lizard-shaped early reptiles, some with several rows of teeth for grinding plants -- among the first small herbivores on land.",
    "cls": {
@@ -554,7 +574,7 @@
      ],
      "lat": [
       0,
-      78
+      84
      ]
     },
     {
@@ -588,22 +608,48 @@
     {
      "t": [
       260,
-      145
+      252
      ],
      "in": [
-      "cosmo"
+      "af-s",
+      "af-e",
+      "eu",
+      "as-n",
+      "sa-s"
      ]
     },
     {
      "t": [
-      145,
+      252,
+      201
+     ],
+     "in": [
+      "af-s",
+      "af-e",
+      "an",
+      "in",
+      "as-e",
+      "as-c",
+      "as-n",
+      "eu",
+      "sa-s",
+      "mg",
+      "au",
+      "na-e",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      201,
       100
      ],
      "in": [
       "as-e",
+      "as-c",
       "as-n",
-      "eu",
       "na-w",
+      "eu",
       "af-s"
      ]
     }
@@ -786,8 +832,7 @@
    "fad": 340,
    "lad": 255,
    "range": [
-    "euramerica",
-    "as-e"
+    "euramerica"
    ],
    "note": "Long-bodied, eel-like reptiliomorphs of the coal-swamp pools -- fish-eating ambush predators close to the ancestry of amniotes.",
    "cls": {
@@ -957,11 +1002,28 @@
    "fad": 84,
    "lad": 40,
    "range": [
-    "sa-s",
-    "mg",
-    "in",
-    "an",
-    "af-e"
+    {
+     "t": [
+      84,
+      66
+     ],
+     "in": [
+      "sa-s",
+      "mg",
+      "in",
+      "af-e"
+     ]
+    },
+    {
+     "t": [
+      84,
+      40
+     ],
+     "in": [
+      "an",
+      "sa-s"
+     ]
+    }
    ],
    "note": "Gnawing, high-toothed mammals unique to the southern continents; Madagascar's Adalatherium shows they could reach the size of a badger.",
    "cls": {
@@ -1110,12 +1172,12 @@
    "lat": [
     {
      "t": [
-      250,
+      130,
       34
      ],
      "lat": [
       0,
-      75
+      66
      ]
     },
     {
@@ -1198,7 +1260,15 @@
    "cls": {
     "class": "Ornithischia",
     "order": "Ankylosauria"
-   }
+   },
+   "box": [
+    [
+     137,
+     155,
+     -35,
+     -18
+    ]
+   ]
   },
   "Leaellynasaura": {
    "rank": "genus",
@@ -1296,7 +1366,8 @@
     "eu",
     "na-w",
     "af-n",
-    "as-e"
+    "as-e",
+    "as-c"
    ],
    "note": "Robust Jurassic predators seven to ten metres long -- the family of the first dinosaur ever named.",
    "cls": {
@@ -1338,7 +1409,15 @@
     "class": "Ornithischia",
     "order": "Ornithopoda",
     "family": "Rhabdodontidae"
-   }
+   },
+   "box": [
+    [
+     137,
+     155,
+     -35,
+     -18
+    ]
+   ]
   },
   "Nigersaurus": {
    "rank": "genus",
@@ -1364,11 +1443,28 @@
    "fad": 155,
    "lad": 66,
    "range": [
-    "na-w",
-    "na-e",
-    "eu",
-    "an",
-    "au"
+    {
+     "t": [
+      155,
+      66
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      120,
+      66
+     ],
+     "in": [
+      "au",
+      "an",
+      "sa-s"
+     ]
+    }
    ],
    "note": "Armoured dinosaurs without tail clubs, relying on shoulder spikes; often found washed out to sea.",
    "cls": {
@@ -1384,13 +1480,43 @@
    "fad": 130,
    "lad": 11,
    "range": [
-    "sa-n",
-    "sa-s",
-    "af-n",
-    "af-e",
-    "mg",
-    "in",
-    "eu"
+    {
+     "t": [
+      130,
+      66
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "af-n",
+      "af-e",
+      "mg",
+      "in",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      66,
+      40
+     ],
+     "in": [
+      "sa-n",
+      "sa-s",
+      "eu",
+      "af-n"
+     ]
+    },
+    {
+     "t": [
+      40,
+      11
+     ],
+     "in": [
+      "sa-n",
+      "sa-s"
+     ]
+    }
    ],
    "note": "Land-living crocodile relatives of the southern continents: long-legged runners, some with mammal-like teeth, some plant-eaters.",
    "cls": {
@@ -1543,7 +1669,15 @@
     "class": "Saurischia",
     "order": "Sauropoda",
     "family": "Titanosauria"
-   }
+   },
+   "box": [
+    [
+     -72,
+     -62,
+     -45,
+     -35
+    ]
+   ]
   },
   "Plateosauridae": {
    "rank": "family",
@@ -1950,7 +2084,15 @@
    "cls": {
     "class": "Mammalia",
     "order": "Monotremata"
-   }
+   },
+   "box": [
+    [
+     137,
+     155,
+     -35,
+     -18
+    ]
+   ]
   },
   "Suchomimus": {
    "rank": "genus",
@@ -2010,8 +2152,21 @@
       "au",
       "as-e",
       "as-c",
+      "as-n",
+      "an"
+     ]
+    },
+    {
+     "t": [
+      201,
+      190
+     ],
+     "in": [
       "sa-s",
-      "af-s"
+      "af-s",
+      "in",
+      "eu",
+      "na-w"
      ]
     }
    ],

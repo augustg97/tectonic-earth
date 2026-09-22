@@ -175,6 +175,10 @@
    "realms": [
     "fresh",
     "land"
+   ],
+   "lat": [
+    0,
+    55
    ]
   },
   "Apterygidae": {
@@ -329,7 +333,29 @@
     "class": "Mammalia",
     "order": "Artiodactyla",
     "family": "Bovidae"
-   }
+   },
+   "lat": [
+    {
+     "t": [
+      20,
+      5
+     ],
+     "lat": [
+      0,
+      55
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "lat": [
+      0,
+      75
+     ]
+    }
+   ]
   },
   "Brontotheriidae": {
    "rank": "family",
@@ -1125,7 +1151,29 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Equidae"
-   }
+   },
+   "lat": [
+    {
+     "t": [
+      56,
+      2.6
+     ],
+     "lat": [
+      0,
+      62
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "lat": [
+      0,
+      80
+     ]
+    }
+   ]
   },
   "Felidae": {
    "rank": "family",
@@ -1591,7 +1639,15 @@
     "class": "Mammalia",
     "order": "Rodentia",
     "family": "Dinomyidae"
-   }
+   },
+   "box": [
+    [
+     -60,
+     -52,
+     -36,
+     -30
+    ]
+   ]
   },
   "Kelenken": {
    "rank": "genus",
@@ -1747,7 +1803,11 @@
     "class": "Mammalia",
     "order": "Pilosa",
     "family": "Megalonychidae"
-   }
+   },
+   "lat": [
+    0,
+    64
+   ]
   },
   "Meiolaniidae": {
    "rank": "family",
@@ -2008,12 +2068,12 @@
    "rank": "family",
    "realm": "land",
    "form": "rhino",
-   "fad": 50,
+   "fad": 46,
    "lad": 0,
    "range": [
     {
      "t": [
-      50,
+      46,
       4.5
      ],
      "in": [
@@ -2256,10 +2316,26 @@
    "fad": 25,
    "lad": 0.011,
    "range": [
-    "sa-s",
-    "sa-n",
-    "na-w",
-    "na-e"
+    {
+     "t": [
+      25,
+      0.011
+     ],
+     "in": [
+      "sa-s",
+      "sa-n"
+     ]
+    },
+    {
+     "t": [
+      12,
+      0.011
+     ],
+     "in": [
+      "na-w",
+      "na-e"
+     ]
+    }
    ],
    "note": "Giant condor-like birds. Argentavis, with a seven-metre wingspan, is among the largest flying birds known.",
    "cls": {
@@ -2317,7 +2393,15 @@
     "class": "Mammalia",
     "order": "Sparassodonta",
     "family": "Thylacosmilidae"
-   }
+   },
+   "box": [
+    [
+     -70,
+     -50,
+     -40,
+     -20
+    ]
+   ]
   },
   "Ursidae": {
    "rank": "family",

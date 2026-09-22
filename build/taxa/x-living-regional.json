@@ -249,7 +249,15 @@
     "class": "Liliopsida",
     "order": "Asparagales",
     "family": "Asparagaceae"
-   }
+   },
+   "box": [
+    [
+     -118,
+     -95,
+     14,
+     37
+    ]
+   ]
   },
   "Alcolapia": {
    "rank": "genus",
@@ -847,7 +855,15 @@
     "class": "Magnoliopsida",
     "order": "Sapindales",
     "family": "Burseraceae"
-   }
+   },
+   "box": [
+    [
+     42,
+     60,
+     10,
+     20
+    ]
+   ]
   },
   "Bradypus": {
    "rank": "genus",
@@ -3048,6 +3064,20 @@
    "box": [
     {
      "t": [
+      5,
+      0.02
+     ],
+     "box": [
+      [
+       -10,
+       30,
+       30,
+       53
+      ]
+     ]
+    },
+    {
+     "t": [
       0.02,
       0
      ],
@@ -3473,7 +3503,11 @@
     "class": "Mammalia",
     "order": "Artiodactyla",
     "family": "Cervidae"
-   }
+   },
+   "lat": [
+    8,
+    62
+   ]
   },
   "Oncorhynchus clarkii": {
    "rank": "species",
@@ -4371,7 +4405,21 @@
     "class": "Magnoliopsida",
     "order": "Fabales",
     "family": "Fabaceae"
-   }
+   },
+   "box": [
+    [
+     -118,
+     -95,
+     20,
+     38
+    ],
+    [
+     -75,
+     -50,
+     -45,
+     -5
+    ]
+   ]
   },
   "Protea": {
    "rank": "genus",

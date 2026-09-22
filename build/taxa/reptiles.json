@@ -74,7 +74,21 @@
      "na-w": 137,
      "eu": 10
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -98,
+     30,
+     48
+    ],
+    [
+     -10,
+     -6,
+     38,
+     42
+    ]
+   ]
   },
   "Anchiornis": {
    "rank": "genus",
@@ -489,7 +503,15 @@
     "regions": {
      "eu": 4
     }
-   }
+   },
+   "box": [
+    [
+     5,
+     14,
+     43,
+     51
+    ]
+   ]
   },
   "Cryolophosaurus ellioti": {
    "rank": "species",
@@ -658,7 +680,15 @@
     }
    },
    "w": 3,
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     -72,
+     -62,
+     -45,
+     -35
+    ]
+   ]
   },
   "Giraffatitan": {
    "rank": "genus",
@@ -682,7 +712,7 @@
    "rank": "genus",
    "realm": "fresh",
    "form": "gharial",
-   "fad": 20,
+   "fad": 16,
    "lad": 5,
    "range": [
     "sa-n"
@@ -706,7 +736,33 @@
      "sa-s": 1,
      "sa-n": 30
     }
-   }
+   },
+   "box": [
+    [
+     -78,
+     -48,
+     -10,
+     6
+    ],
+    [
+     -66.5,
+     -48,
+     -16,
+     -10
+    ],
+    [
+     -73,
+     -60,
+     3,
+     11
+    ]
+   ],
+   "avoid": [
+    "Lake Titicaca",
+    "Altiplano",
+    "Andes",
+    "Lake Tauca"
+   ]
   },
   "Guanlong": {
    "rank": "genus",
@@ -1073,7 +1129,10 @@
      "as-c": 8,
      "as-se": 2
     }
-   }
+   },
+   "avoid": [
+    "Lhasa Terrane"
+   ]
   },
   "Massospondylus": {
    "rank": "genus",
@@ -2216,8 +2275,7 @@
    "fad": 103.6,
    "lad": 97.2,
    "range": [
-    "af-n",
-    "as-w"
+    "af-n"
    ],
    "note": "A sail-backed, paddle-tailed theropod that hunted fish in North African river systems.",
    "pbdb": {
@@ -2238,7 +2296,8 @@
      "as-w": 4,
      "af-n": 22
     }
-   }
+   },
+   "place_ok": true
   },
   "Stegosaurus": {
    "rank": "genus",
@@ -2273,7 +2332,21 @@
      "eu": 2,
      "as-e": 1
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -98,
+     30,
+     48
+    ],
+    [
+     -10,
+     -6,
+     38,
+     42
+    ]
+   ]
   },
   "Stupendemys": {
    "rank": "genus",

@@ -59,6 +59,7 @@ EXCEPTION_MARKERS = (
     "hydrothermal", "vent", "mid-atlantic ridge", "east pacific rise",
     "madagascar", "new zealand", "zealandia", "galapagos", "hawaii",
     "beringia", "wallace",
+    "azolla",          # the Eocene Arctic freshened enough to grow a floating fern: no province is like it
 )
 
 MARINE_HINT = ("ocean", "sea", "seaway", "strait", "corridor", "gulf", "ridge",

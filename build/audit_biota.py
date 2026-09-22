@@ -260,7 +260,7 @@ def audit(write_ledger=False, write_sheets=False):
             if not es or statistics.median(es) > -200:
                 continue
             run0 = next((r for r in (cards.get(lab["n"]) or {}).get("r", []) if r[0] <= 0), None)
-            if run0 and any(not k.startswith(("sea-", "shelf-")) for k, _ids in run0[4]):
+            if run0 and any(not k.startswith(("sea-", "shelf-", "shore-")) for k, _ids in run0[4]):
                 drowned.append(f"{lab['n']} ({statistics.median(es):.0f} m)")
     except Exception as ex:                                  # noqa: BLE001
         drowned.append(f"DEM check could not run: {ex}")

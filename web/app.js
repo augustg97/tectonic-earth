@@ -160,7 +160,7 @@ function ensureBitmap(kind,i,force){
   const key=kind+i;
   const e0=TEXCACHE.get(key);
   if(e0&&e0.bm)return Promise.resolve();
-  if(_bmMissing.has(key))return Promise.resolve();
+  if(_bmMissing.has(key)||fieldAbsent(i,kind))return Promise.resolve();
   if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_bmPending.get(key); if(p0)return p0;
   // Elevation defines the world, then the kinds that define how time LOOKS
@@ -356,13 +356,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260921-2222';
+const DATA_V='20260922-0016';
 const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260907b';
+const IMAGERY_V='20260922';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -492,9 +492,13 @@ function drawFieldImage(cx,img,w,h){
     cx.save();cx.translate(0,h);cx.scale(1,-1);cx.drawImage(img,0,0,w,h);cx.restore();
   } else cx.drawImage(img,0,0,w,h);
 }
+/* A keyframe declares the sibling fields it does NOT have (timeline[i].no,
+   written by build_webdata from the disk): the oldest frame has no displacement
+   to a next-older frame. Asking anyway was five 404s on every load. */
+function fieldAbsent(i,kind){const no=DATA.timeline[i]&&DATA.timeline[i].no;return !!no&&no.includes(kind);}
 function loadField(i,kind,boot){
   const key=kind+i;
-  if(_fieldTried.has(key))return Promise.resolve();
+  if(_fieldTried.has(key)||fieldAbsent(i,kind))return Promise.resolve();
   if((_fieldRetryAt.get(key)||0)>performance.now())return Promise.resolve();
   const p0=_fieldPending.get(key); if(p0)return p0;
   const arr=FIELD_KINDS.find(k=>k[0]===kind)[1]();
@@ -2188,9 +2192,12 @@ function lifeHTML(taxa,limit){
                        n: {taxonId: a note local to this label}}
        groups       = [[key, [taxon ids]], ...]   key: fauna | flora | other,
                       or the same three prefixed "shelf-" -- the seas that lay
-                      across a land label before there was life on land -- or
-                      "sea-": a label typed for its tectonics (an oceanic plateau,
-                      a flooded rift) whose surface is water at this age.
+                      across a land label (every sea before there was life on
+                      land; only what a curated list names after that) -- or
+                      "shore-": curated land and air life on a sea card (what fell
+                      into the Solnhofen lagoon) -- or "sea-": a label typed for
+                      its tectonics (an oceanic plateau, a flooded rift) whose
+                      surface is water at this age.
        tier         x  a curated EXCEPTION locality, atypical for its province
                     c  curated taxa plus what the model adds around them
                     p  no curated list: the province and the registry
@@ -2246,10 +2253,10 @@ function lifeSection(l){
     if(!marine&&!seaRun&&age>430)h+=`<p class="desc">The land itself is bare rock, sand and `+
       `microbial crust — vascular plants do not spread until the Silurian. What lived `+
       `here lived in the seas that lay across it.</p>`;
-    let shelfHead=false;
+    let shelfHead=false, shoreHead=false;
     for(const [key,ids] of groups){
-      const shelf=key.startsWith('shelf-'), sea=key.startsWith('sea-'),
-            k=shelf?key.slice(6):sea?key.slice(4):key;
+      const shelf=key.startsWith('shelf-'), sea=key.startsWith('sea-'), shore=key.startsWith('shore-'),
+            k=shelf?key.slice(6):sea?key.slice(4):shore?key.slice(6):key;
       /* a label's local note belongs to the runs in which that taxon is CURATED
          here (run[6]); the same taxon arriving as fill at another age keeps the
          registry's own, place-neutral note */
@@ -2257,7 +2264,8 @@ function lifeSection(l){
                              return ln?Object.assign({},t,{note:ln}):t;});
       if(!taxa.length)continue;
       if(shelf&&!shelfHead){h+=`<div class="ihead">In the seas across it</div>`;shelfHead=true;}
-      h+=`<div class="lsub">${groupTitle(k,taxa,marine||shelf||sea)}</div>`+lifeHTML(taxa);
+      if(shore&&!shoreHead){h+=`<div class="ihead">On its shores and in the air above it</div>`;shoreHead=true;}
+      h+=`<div class="lsub">${groupTitle(k,taxa,(marine||shelf||sea)&&!shore)}</div>`+lifeHTML(taxa);
     }
     if(tier==='x')h+=`<p class="desc">A locality that does not fit its region`+
       (prov?`: the surrounding ${esc(prov.n)} looked nothing like this`:``)+

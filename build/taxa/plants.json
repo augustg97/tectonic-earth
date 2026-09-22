@@ -8,8 +8,7 @@
    "lad": 0,
    "range": [
     "au",
-    "ng",
-    "as-se"
+    "ng"
    ],
    "note": "Flat-topped thorn trees, browsed to their characteristic silhouette by giraffe.",
    "pbdb": {
@@ -203,7 +202,47 @@
     "order": "Araucariales",
     "family": "Araucariaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      23,
+      0
+     ],
+     "box": [
+      [
+       -76,
+       -45,
+       -45,
+       -18
+      ],
+      [
+       140,
+       155,
+       -40,
+       -10
+      ],
+      [
+       130,
+       152,
+       -10,
+       0
+      ],
+      [
+       164,
+       180,
+       -48,
+       -34
+      ],
+      [
+       -180,
+       180,
+       -90,
+       -60
+      ]
+     ]
+    }
+   ]
   },
   "Araucariaceae": {
    "rank": "family",
@@ -765,7 +804,7 @@
    "rank": "genus",
    "realm": "land",
    "form": "fern",
-   "fad": 300,
+   "fad": 320,
    "lad": 280,
    "range": [
     "af-s",
@@ -793,7 +832,12 @@
      "in": 8,
      "as-w": 1
     }
-   }
+   },
+   "hab": [
+    "tundra",
+    "wetland",
+    "forest"
+   ]
   },
   "Bouteloua gracilis": {
    "rank": "species",
@@ -865,7 +909,15 @@
     "order": "Poales",
     "family": "Bromeliaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     -125,
+     -34,
+     -40,
+     38
+    ]
+   ]
   },
   "C4 grasses": {
    "rank": "informal",
@@ -883,7 +935,7 @@
    ],
    "lat": [
     0,
-    45
+    38
    ],
    "cls": {
     "phylum": "Angiospermae",
@@ -907,9 +959,7 @@
     "euramerica",
     "as-e",
     "as-c",
-    "as-se",
-    "af-n",
-    "sa-n"
+    "af-n"
    ],
    "note": "Tree-sized horsetails forming dense stands along channel margins.",
    "sz": 12.0,
@@ -990,13 +1040,8 @@
    "fad": 300,
    "lad": 270,
    "range": [
-    "af-n",
-    "as-c",
-    "as-e",
-    "as-n",
-    "eu",
-    "na-e",
-    "na-w"
+    "euramerica",
+    "af-n"
    ],
    "note": "The seed fern that marks the Permian red beds across Euramerica: the flora of a continent that had lost its swamps.",
    "pbdb": {
@@ -1196,14 +1241,10 @@
    "fad": 325,
    "lad": 252,
    "range": [
+    "euramerica",
     "as-c",
     "as-e",
-    "as-n",
-    "eu",
-    "in",
-    "na-e",
-    "na-w",
-    "sa-s"
+    "as-n"
    ],
    "note": "Strap-leaved coniferophytes up to thirty metres tall on the drier ground beyond the mires: the first vegetation that would read as forest rather than swamp.",
    "sz": 30.0,
@@ -1681,7 +1722,12 @@
      "af-e": 5,
      "af-w": 1
     }
-   }
+   },
+   "hab": [
+    "tundra",
+    "wetland",
+    "forest"
+   ]
   },
   "Gigantopteris": {
    "rank": "genus",
@@ -1742,10 +1788,20 @@
     {
      "t": [
       66,
-      2.6
+      15
      ],
      "in": [
       "holarctic"
+     ]
+    },
+    {
+     "t": [
+      15,
+      2.6
+     ],
+     "in": [
+      "eu",
+      "as-e"
      ]
     },
     {
@@ -1805,6 +1861,28 @@
        26,
        32
       ]
+     ]
+    }
+   ],
+   "lat": [
+    {
+     "t": [
+      170,
+      34
+     ],
+     "lat": [
+      0,
+      90
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      66
      ]
     }
    ]
@@ -1969,6 +2047,9 @@
      1,
      7
     ]
+   ],
+   "avoid": [
+    "Andes"
    ]
   },
   "Kobresia": {
@@ -1988,8 +2069,7 @@
    "note": "Tough, mat-forming sedges whose turf makes the vast alpine meadows of high Asia and the Arctic.",
    "hab": [
     "alpine",
-    "tundra",
-    "grassland"
+    "tundra"
    ],
    "cls": {
     "phylum": "Angiospermae",
@@ -2068,8 +2148,36 @@
     "alpine"
    ],
    "lat": [
-    40,
-    75
+    {
+     "t": [
+      50,
+      23
+     ],
+     "lat": [
+      55,
+      85
+     ]
+    },
+    {
+     "t": [
+      23,
+      5
+     ],
+     "lat": [
+      30,
+      80
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "lat": [
+      43,
+      75
+     ]
+    }
    ],
    "cls": {
     "phylum": "Pinophyta",
@@ -2248,8 +2356,6 @@
    "fad": 345,
    "lad": 252,
    "range": [
-    "as-e",
-    "as-se",
     {
      "t": [
       345,
@@ -2259,6 +2365,15 @@
       "euramerica",
       "as-c",
       "af-n"
+     ]
+    },
+    {
+     "t": [
+      345,
+      252
+     ],
+     "in": [
+      "as-e"
      ]
     }
    ],
@@ -2419,7 +2534,16 @@
     "lla": 13.82,
     "phylum": "Marchantiophyta"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "hab": [
+    "wetland",
+    "forest",
+    "rainforest",
+    "tundra",
+    "alpine",
+    "coast",
+    "island"
+   ]
   },
   "Mauritia": {
    "rank": "genus",
@@ -2507,13 +2631,10 @@
    "fad": 340,
    "lad": 255,
    "range": [
-    "as-c",
+    "euramerica",
     "as-e",
-    "as-n",
-    "as-se",
-    "eu",
-    "na-e",
-    "na-w"
+    "as-c",
+    "af-n"
    ],
    "note": "Seed ferns with enormous fronds and the largest seeds of the Palaeozoic.",
    "pbdb": {
@@ -2556,7 +2677,7 @@
     {
      "t": [
       100,
-      2.6
+      20
      ],
      "in": [
       "na-w",
@@ -2566,6 +2687,19 @@
       "eu",
       "as-n",
       "as-e"
+     ]
+    },
+    {
+     "t": [
+      20,
+      2.6
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu",
+      "as-e",
+      "as-n"
      ]
     },
     {
@@ -2624,6 +2758,28 @@
        29,
        31.5
       ]
+     ]
+    }
+   ],
+   "lat": [
+    {
+     "t": [
+      100,
+      20
+     ],
+     "lat": [
+      0,
+      90
+     ]
+    },
+    {
+     "t": [
+      20,
+      0
+     ],
+     "lat": [
+      0,
+      66
      ]
     }
    ]
@@ -2791,7 +2947,47 @@
     "order": "Fagales",
     "family": "Nothofagaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    {
+     "t": [
+      23,
+      0
+     ],
+     "box": [
+      [
+       -76,
+       -60,
+       -56,
+       -30
+      ],
+      [
+       135,
+       155,
+       -44,
+       -15
+      ],
+      [
+       164,
+       180,
+       -48,
+       -34
+      ],
+      [
+       130,
+       152,
+       -10,
+       0
+      ],
+      [
+       -180,
+       180,
+       -90,
+       -60
+      ]
+     ]
+    }
+   ]
   },
   "Nymphaeales": {
    "rank": "order",
@@ -3745,8 +3941,7 @@
    "lad": 255,
    "range": [
     "euramerica",
-    "as-e",
-    "sa-s"
+    "as-e"
    ],
    "note": "A tree fern whose trunk was a mantle of adventitious roots rather than wood. It took over the mires as the giant lycopsids faltered.",
    "sz": 10.0,
@@ -3837,16 +4032,22 @@
    "fad": 56,
    "lad": 0,
    "range": [
-    "na-w",
-    "na-e",
-    "ca",
-    "eu",
-    "as-w",
-    "as-c",
-    "as-e",
-    "af-n",
-    "as-se",
-    "in",
+    {
+     "t": [
+      56,
+      0
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "ca",
+      "eu",
+      "as-w",
+      "as-c",
+      "as-e",
+      "as-se"
+     ]
+    },
     {
      "t": [
       56,
@@ -3856,6 +4057,16 @@
       "gl",
       "na-n",
       "as-n"
+     ]
+    },
+    {
+     "t": [
+      23,
+      0
+     ],
+     "in": [
+      "af-n",
+      "in"
      ]
     }
    ],
@@ -3902,7 +4113,7 @@
    "box": [
     {
      "t": [
-      2.6,
+      23,
       0
      ],
      "box": [
@@ -3913,7 +4124,7 @@
        50
       ],
       [
-       -10,
+       -12,
        60,
        28,
        62
@@ -3937,6 +4148,38 @@
     "Kunlun Belt",
     "Qilian Belt",
     "Tibetan Plateau"
+   ],
+   "lat": [
+    {
+     "t": [
+      56,
+      34
+     ],
+     "lat": [
+      0,
+      80
+     ]
+    },
+    {
+     "t": [
+      34,
+      5
+     ],
+     "lat": [
+      0,
+      66
+     ]
+    },
+    {
+     "t": [
+      5,
+      0
+     ],
+     "lat": [
+      0,
+      62
+     ]
+    }
    ]
   },
   "Rapateaceae": {
@@ -4043,8 +4286,7 @@
     }
    },
    "hab": [
-    "coast",
-    "wetland"
+    "coast"
    ],
    "lat": [
     0,
@@ -4065,16 +4307,32 @@
    "fad": 55,
    "lad": 0,
    "range": [
-    "as-e",
-    "as-c",
-    "in",
-    "as-se",
-    "ng",
-    "eu",
-    "as-w",
-    "na-w",
-    "na-e",
-    "as-n"
+    {
+     "t": [
+      55,
+      0
+     ],
+     "in": [
+      "as-e",
+      "as-c",
+      "eu",
+      "as-w",
+      "na-w",
+      "na-e",
+      "as-n"
+     ]
+    },
+    {
+     "t": [
+      15,
+      0
+     ],
+     "in": [
+      "in",
+      "as-se",
+      "ng"
+     ]
+    }
    ],
    "note": "Rhododendrons: evergreen shrubs and small trees that band wet mountain slopes by altitude, with their greatest diversity in the Sino-Himalaya.",
    "pbdb": {
@@ -4148,9 +4406,8 @@
    "fad": 315,
    "lad": 252,
    "range": [
-    "as-c",
-    "as-e",
     "as-n",
+    "as-c",
     "eu"
    ],
    "note": "The characteristic Angaran leaf - cool temperate, seasonal, deciduous.",
@@ -4295,25 +4552,7 @@
    "fad": 40,
    "lad": 0,
    "range": [
-    {
-     "t": [
-      40,
-      5
-     ],
-     "in": [
-      "na-w",
-      "eu"
-     ]
-    },
-    {
-     "t": [
-      5,
-      0
-     ],
-     "in": [
-      "na-w"
-     ]
-    }
+    "na-w"
    ],
    "note": "The giant sequoia, largest tree on Earth by volume and a relict of a family once spread across the northern continents.",
    "pbdb": {
@@ -4452,7 +4691,11 @@
     "order": "Poales",
     "family": "Poaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "lat": [
+    20,
+    58
+   ]
   },
   "Tamarix": {
    "rank": "genus",
@@ -4704,14 +4947,31 @@
    "fad": 300,
    "lad": 200,
    "range": [
-    "af-s",
-    "as-c",
-    "as-e",
-    "eu",
-    "mg",
-    "na-e",
-    "na-w",
-    "sa-s"
+    {
+     "t": [
+      300,
+      200
+     ],
+     "in": [
+      "euramerica",
+      "as-e",
+      "as-c"
+     ]
+    },
+    {
+     "t": [
+      285,
+      200
+     ],
+     "in": [
+      "af-s",
+      "mg",
+      "sa-s",
+      "in",
+      "au",
+      "an"
+     ]
+    }
    ],
    "note": "Conifers spreading through the dry Triassic interior: the first forests built by plants that could survive a real dry season.",
    "pbdb": {
@@ -4753,13 +5013,8 @@
    "fad": 310,
    "lad": 280,
    "range": [
-    "af-n",
-    "as-c",
-    "as-e",
-    "as-n",
-    "eu",
-    "na-e",
-    "na-w"
+    "euramerica",
+    "af-n"
    ],
    "note": "An early conifer in drier upland settings -- the beginning of forest that is not a swamp.",
    "pbdb": {

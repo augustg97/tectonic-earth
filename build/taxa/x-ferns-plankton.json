@@ -1,0 +1,282 @@
+{
+ "taxa": {
+  "Cyatheales": {
+   "rank": "order",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      200,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      0
+     ],
+     "in": [
+      "sa",
+      "ca",
+      "au",
+      "nz",
+      "ng",
+      "as-se",
+      "in",
+      "af-e",
+      "af-w",
+      "mg",
+      "oc",
+      "ind"
+     ]
+    }
+   ],
+   "note": "Tree ferns, with trunks to twenty metres, in wet forests from the Jurassic to the present; the pale forms of Cretaceous polar forests and of today's cloud forests alike.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "island",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Cyatheales"
+   },
+   "pbdb": {
+    "asked": "Cyatheales",
+    "matched": "Cyatheales",
+    "exact": true,
+    "oid": "txn:196332",
+    "rank": "order",
+    "extant": true,
+    "noc": 1395,
+    "fea": 323.4,
+    "lla": 0,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Cyatheales",
+    "family": null,
+    "genus": null,
+    "regions": {
+     "as-n": 345,
+     "as-c": 339,
+     "as-e": 258,
+     "eu": 108,
+     "au": 73,
+     "na-w": 69,
+     "ca": 43,
+     "in": 40,
+     "as-w": 30,
+     "na-e": 21,
+     "an": 15,
+     "sa-s": 14,
+     "sea": 12,
+     "nz": 10,
+     "na-n": 9,
+     "sa-n": 4,
+     "as-se": 3,
+     "mg": 1,
+     "af-s": 1
+    },
+    "fea_r": 200.45,
+    "lla_r": 1.68
+   }
+  },
+  "Dinoflagellata": {
+   "rank": "division",
+   "realm": "sea",
+   "form": "dinoflagellate",
+   "fad": 240,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Dinoflagellates: armoured plankton whose resting cysts are the sea's fine-grained clock, and whose symbionts make a reef coral's colour and food.",
+   "hab": [
+    "pelagic",
+    "shelf",
+    "reef",
+    "coast"
+   ],
+   "cls": {
+    "class": "Dinophyceae"
+   },
+   "realms": [
+    "sea",
+    "fresh"
+   ],
+   "pbdb": {
+    "asked": "Dinoflagellata",
+    "matched": "Dinoflagellata",
+    "exact": true,
+    "oid": "txn:354791",
+    "rank": "superclass",
+    "extant": true,
+    "noc": 6727,
+    "fea": 486.85,
+    "lla": 0,
+    "phylum": "Dinozoa",
+    "class": null,
+    "order": null,
+    "family": null,
+    "genus": null
+   }
+  },
+  "Osmunda": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 200,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Royal ferns, a genus so conservative that a Jurassic rhizome from Sweden is cell for cell like a living one.",
+   "hab": [
+    "wetland",
+    "forest",
+    "river"
+   ],
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Osmundales",
+    "family": "Osmundaceae"
+   },
+   "pbdb": {
+    "asked": "Osmunda",
+    "matched": "Osmunda",
+    "exact": true,
+    "oid": "txn:55240",
+    "rank": "genus",
+    "extant": true,
+    "noc": 69,
+    "fea": 241.464,
+    "lla": 0,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Osmundaceae",
+    "genus": "Osmunda",
+    "regions": {
+     "na-w": 27,
+     "eu": 21,
+     "as-e": 6,
+     "na-e": 6,
+     "as-n": 2,
+     "in": 2,
+     "na-n": 1,
+     "ca": 1,
+     "an": 1,
+     "sea": 1,
+     "as-se": 1
+    },
+    "fea_r": 106.85,
+    "lla_r": 1.68
+   }
+  },
+  "Pelagornithidae": {
+   "rank": "family",
+   "realm": "air",
+   "form": "seabird",
+   "fad": 62,
+   "lad": 2.5,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Pseudo-toothed birds: seabirds with bony spikes along the beak and wingspans to six metres, gliding the oceans from the Palaeocene to the Pliocene.",
+   "hab": [
+    "pelagic",
+    "coast",
+    "island"
+   ],
+   "w": 2,
+   "cls": {
+    "class": "Aves",
+    "order": "Odontopterygiformes",
+    "family": "Pelagornithidae"
+   },
+   "realms": [
+    "air",
+    "sea"
+   ],
+   "pic": "Pelagornis",
+   "pbdb": {
+    "asked": "Pelagornithidae",
+    "matched": "Pelagornithidae",
+    "exact": true,
+    "oid": "txn:39658",
+    "rank": "family",
+    "extant": false,
+    "noc": 110,
+    "fea": 61.66,
+    "lla": 0.0117,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Odontopterygiformes",
+    "family": "Pelagornithidae",
+    "genus": null,
+    "regions": {
+     "eu": 25,
+     "na-w": 16,
+     "af-n": 13,
+     "sa-n": 12,
+     "na-e": 11,
+     "an": 8,
+     "as-e": 8,
+     "sa-s": 6,
+     "nz": 5,
+     "as-c": 2,
+     "af-w": 2,
+     "ca": 1,
+     "au": 1
+    },
+    "fea_r": 52.03,
+    "lla_r": 3.09
+   }
+  },
+  "Polypodiopsida": {
+   "rank": "class",
+   "realm": "land",
+   "form": "fern",
+   "fad": 360,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Ferns. The understorey of every forest since the Carboniferous, and the whole canopy of some; for a few thousand years after the Chicxulub impact, fern spores are almost all there is.",
+   "hab": [
+    "forest",
+    "rainforest",
+    "wetland",
+    "alpine",
+    "island",
+    "river"
+   ],
+   "cls": {
+    "class": "Polypodiopsida"
+   },
+   "pbdb": {
+    "asked": "Polypodiopsida",
+    "matched": "Polypodiopsida",
+    "exact": true,
+    "oid": "txn:196331",
+    "rank": "class",
+    "extant": true,
+    "noc": 19372,
+    "fea": 410.62,
+    "lla": 0,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": null,
+    "family": null,
+    "genus": null
+   }
+  }
+ }
+}

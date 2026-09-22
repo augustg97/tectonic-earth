@@ -244,7 +244,21 @@
     "lake",
     "river"
    ],
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     -10,
+     60,
+     25,
+     52
+    ],
+    [
+     164,
+     180,
+     -48,
+     -34
+    ]
+   ]
   },
   "Myriapoda": {
    "rank": "class",

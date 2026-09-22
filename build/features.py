@@ -217,8 +217,12 @@ LABELS = [
     # closing between Gondwana-derived terranes and Asia while Neotethys opened
     # behind them. Forty degrees of separation, so the two never label one sea.
     ("ocean", "Palaeo-Tethys",       102,  24,  200, 420),
-    ("sea", "Zechstein Sea",         12,  25,  252, 262),
-    ("orogen", "Central Pangaean Mts", -5, 10, 250, 330),
+    # PRESENT-DAY anchors (build_labels plate-tracks a coordinate that is land
+    # today). Eight of these were authored where the feature sat in its own era,
+    # and because that spot happens to be land now they rode the wrong continent:
+    # the Gilboa Forest of New York was tracked on Brazil to 85 S. 2026-09-22.
+    ("sea", "Zechstein Sea",         9.7, 52.4, 252, 262),   # Hanover: the basin's southern outcrop, on the same crust as the North Sea
+    ("orogen", "Central Pangaean Mts", -10, 19, 250, 330),  # the Mauritanides, on the suture itself
     ("orogen", "Ural Mountains",     58,  55,  0, 320),
     ("orogen", "Appalachians",      -80,  38,  0, 470),
     ("orogen", "Variscan Belt",       3,  46,  280, 380),   # Massif Central, not the Sahara;
@@ -261,7 +265,7 @@ LABELS = [
     ("ocean", "Panthalassic Ocean", -150,  0,  330, 540),
     ("sea", "Sauk Sea",             -90,  42,  480, 530),   # see the Sloss note below
     ("orogen", "Caledonides",      -4.5,  57,  0, 440),   # the Scottish Highlands
-    ("orogen", "Acadian Belt",      -48,  -10,  355, 420),
+    ("orogen", "Acadian Belt",      -70,  44,  355, 420),   # New England and the Maritimes
     ("orogen", "Taconic Belt",      -55,  12,  440, 470),
     # ---------- Precambrian ----------
     ("continent", "Gondwana (assembling)", 25, -45, 540, 600),
@@ -341,7 +345,7 @@ LABELS = [
     ("continent", "Sao Francisco Craton", -42, -13, 545, 950),
     ("continent", "Amasia", 70, 75, -250, -150),
     # -- desert --
-    ("desert", "Rotliegend Desert", 10, 16, 288, 299),
+    ("desert", "Rotliegend Desert", 9.5, 52.8, 288, 299),   # the Lower Saxony basin
     ("desert", "Coconino Erg", -105, 6, 272, 285),
     ("desert", "Navajo Erg", -110, 15, 190, 200),
     ("desert", "Botucatu Erg", -48, -27, 132, 148),
@@ -351,14 +355,14 @@ LABELS = [
     ("desert", "Taklamakan", 83, 39, 0, 7),
     ("desert", "Proxima Interior Desert", 10, 18, -250, -130),
     # -- forest --
-    ("forest", "Gilboa Forest", -45, -18, 382, 392),
+    ("forest", "Gilboa Forest", -74.4, 42.4, 382, 392),      # Gilboa, Schoharie County, New York
     ("forest", "Euramerican Coal Forests", -35, 0, 299, 325),
     ("forest", "Cathaysian Coal Forests", 110, 3, 255, 310),
     ("forest", "Angaran Flora Belt", 95, 55, 250, 305),
     ("forest", "Glossopteris Flora", 30, -58, 250, 298),
     ("forest", "Jehol Forests", 120, 43, 121, 135),
     ("forest", "Antarctic Nothofagus Forest", -60, -67, 30, 58),
-    ("forest", "Arctic Azolla Bloom", 10, 84, 48, 50),
+    ("sea", "Arctic Azolla Bloom", 10, 84, 48, 50),      # an ocean event, not a forest: typed sea so its card is the water's
     ("forest", "Amazon Rainforest", -62, -4, 0, 10),
     # -- grassland --
     ("grassland", "Great Plains", -100, 41, 0, 18),
@@ -403,7 +407,7 @@ LABELS = [
     ("island", "Oaxaquia", -96, 17, 450, 540),
     ("island", "Perunica", 14, 50, 440, 500),
     ("island", "Armorica", -3, 48, 380, 470),
-    ("island", "Hun Superterrane", 20, -30, 380, 455),
+    ("island", "Hun Superterrane", 5, 45.5, 380, 455),      # the Massif Central: Armorican-Hun basement that stayed in Europe
     ("island", "Sibumasu", 99, 17, 210, 300),
     ("island", "Lhasa Terrane", 91, 30, 130, 250),
     ("island", "Greater Adria", 16, 41, 140, 240),
@@ -502,7 +506,7 @@ LABELS = [
     # -- rift --
     ("rift", "Midcontinent Rift", -35, 18, 985, 1000),
     ("rift", "Adelaide Rift Complex", 125, -30, 660, 830),
-    ("rift", "Oslo Rift", 10, 14, 288, 300),
+    ("rift", "Oslo Rift", 10.7, 59.9, 288, 300),            # Oslo
     # The authored coordinate was (-68, 12) -- the Caribbean Sea off Venezuela,
     # 3,300 km from the Newark Basin and 1,064 m under water, so it failed the
     # land-today gate and was never plate-tracked at all. It rode PALEOMAP plate
@@ -539,7 +543,7 @@ LABELS = [
     ("sea", "Viking Corridor", -2, 67, 155, 195),
     ("sea", "Hispanic Corridor", -55, 5, 150, 190),
     ("sea", "Boreal Sea", 45, 70, 90, 190),
-    ("sea", "Solnhofen Lagoon", 11, 25, 149, 152),
+    ("sea", "Solnhofen Lagoon", 10.95, 48.9, 149, 152),     # Solnhofen, Bavaria
     # (-100, 50) is 5 degrees from the Western Interior Seaway's own anchor
     # (-95, 45) on the same craton, yet it rendered 30 degrees further west,
     # out in the Pacific past the Cordillera. The cause is the SNAP: the

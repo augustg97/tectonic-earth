@@ -2,6 +2,46 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.7",
+   "date": "22 September 2026",
+   "title": "Deeper seas, older land, and six labels put back on their own continent",
+   "summary": "A second pass over the flora and fauna. The catalogue grows from about 1,150 organisms to 1,320, most of them the animals and plants of the Palaeozoic and Mesozoic seas and of Devonian to Permian land outside Europe and North America, so a Silurian sea or a Permian Siberia now names its trilobites, sharks and seed ferns instead of its phyla. Every card at eight sample ages from the Pliocene to the Devonian was read by eye and the placements the rules could not see were fixed. Six labels that had been drawn on the wrong continent -- the Gilboa Forest of New York was riding Brazil to the South Pole -- now sit where they belong.",
+   "sections": [
+    {
+     "name": "In the seas",
+     "items": [
+      "Ninety-one genera from the Cambrian to the Cretaceous: Marrella and Opabinia in the Sauk Sea, Flexicalymene and Orthoceras in the Ordovician, Calymene and Eurypterus in the Silurian, Phacops and Cladoselache in the Devonian, Archimedes and Pentremites in the Carboniferous, Leedsichthys and Metriorhynchus in the Jurassic, Elasmosaurus and Pteranodon over the Western Interior Seaway. Where a card can name four animals by genus, the class-level names stand down to one.",
+      "The sea's own plants: dasyclad and coralline algae, Solenopora, Girvanella and the phylloid algae that built Permian reefs, where every sea had shown only 'green algae, red algae'.",
+      "Class-level entries on marine cards fell from 82 to 45 per cent in the early Palaeozoic, 79 to 44 in the late, and 63 to 51 in the Mesozoic."
+     ]
+    },
+    {
+     "name": "On the land before the dinosaurs",
+     "items": [
+      "Devonian to Permian life beyond Europe and North America: the Aztec fishes of Antarctica, the Xinhang forest of China, Bradysaurus, Diictodon and Procynosuchus in the Karoo, Deltavjatia and Suminia at Kotelnich, the Kuznetsk coal forests of Siberia, and the Cathaysian seed ferns of Permian China.",
+      "Glaciated Gondwana, 335 to 290 million years ago, is now polar ground: its cards show the springtails, mites, mosses, Nothorhacopteris and Botrychiopsis of the country between the ice sheets, where before the polar rule did not reach that far back.",
+      "The Tonian and Cryogenian, block by block: the Bitter Springs, Chuar, Svanbergfjellet, Lakhanda and Liulaobei assemblages, the first green seaweeds (Proterocladus, Longfengshania) and the named acritarchs of the world before the snowball. Seventeen Precambrian labels had shared one identical list."
+     ]
+    },
+    {
+     "name": "The right place, again",
+     "items": [
+      "Every card at 3, 20, 50, 100, 150, 250, 300 and 400 million years ago was listed organism by organism and read: Australopithecus off the Atlas, edelweiss off the Urals, Archaeopteryx confined to Solnhofen, Allosaurus and Stegosaurus to Portugal and the Morrison, Lystrosaurus off Scotland, Rufloria out of China, Psaronius out of Patagonia, and about sixty more.",
+      "Six labels authored at their ancient positions had been tracked on whatever continent lies there today: the Gilboa Forest, the Acadian Belt, the Oslo Rift, the Rotliegend Desert, the Zechstein Sea and the Solnhofen Lagoon now ride their own crust, and a check derived from each label's home crust will catch the next one.",
+      "Curated lists that overlapped in time were silently losing taxa: Basilosaurus never reached Africa's Eocene card. They are merged now. Life that fell into a sea -- Archaeopteryx into the Solnhofen lagoon -- and seas that lay over a continent -- the Muschelkalk's nothosaurs on Eurasia's Triassic card -- appear under their own headings.",
+      "The Arctic Azolla Bloom is a sea card with the fern on it. Kerguelen's Cretaceous conifer forest, known from wood in drill cores, has its own list and says that no land animal is known from it."
+     ]
+    },
+    {
+     "name": "Drawings",
+     "items": [
+      "Seventeen body plans that no silhouette library holds -- belemnite, conodont, blastoid, bryozoan, horn coral, rudist, stromatoporoid, zosterophyll, progymnosperm, astrapothere, embrithopod, mesosaur, ostracod, uncoiled ammonite, bamboo, Namacalathus and agnostid -- are drawn by hand. No organism on any card is drawn as its parent group any more; the count was 33 in release 3.5.",
+      "Five files the app asked for on every load did not exist. The future keyframes now carry their foreland basins, the one field that truly does not exist is declared, and the build refuses to publish a page that fetches a file the site lacks."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.6",
    "date": "21 September 2026",
    "title": "Flora and fauna, rebuilt: the right life, in the right place, with the right picture",

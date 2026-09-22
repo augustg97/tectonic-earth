@@ -1,0 +1,329 @@
+{
+ "taxa": {
+  "Charophyta": {
+   "rank": "division",
+   "realm": "fresh",
+   "form": "seaweed",
+   "fad": 420,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Stoneworts: green algae of clear fresh water that stand like tiny horsetails and coat themselves in lime; their oospores are the commonest plant fossil of ancient lake beds.",
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "class": "Charophyceae",
+    "order": "Charales",
+    "family": "Characeae"
+   },
+   "pbdb": {
+    "asked": "Charophyta",
+    "matched": "Charophyta",
+    "exact": true,
+    "oid": "txn:55110",
+    "rank": "phylum",
+    "extant": true,
+    "noc": 388,
+    "fea": 413.02,
+    "lla": 0,
+    "phylum": "Charophyta",
+    "class": null,
+    "order": null,
+    "family": null,
+    "genus": null,
+    "regions": {
+     "eu": 186,
+     "in": 42,
+     "as-e": 34,
+     "sa-n": 30,
+     "na-w": 27,
+     "af-n": 27,
+     "sa-s": 18,
+     "as-c": 7,
+     "na-e": 4,
+     "as-w": 4,
+     "ar": 3,
+     "na-n": 3,
+     "ca": 1,
+     "af-s": 1,
+     "au": 1
+    },
+    "fea_r": 265.59,
+    "lla_r": 3.09
+   }
+  },
+  "Corallinales": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 140,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Coralline red algae, crusts as hard as the rock they grow on, cementing reef rubble into reef; on a modern reef they hold more of the framework together than the corals do.",
+   "hab": [
+    "reef",
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Florideophyceae",
+    "order": "Corallinales"
+   },
+   "pbdb": {
+    "asked": "Corallinales",
+    "matched": "Corallinales",
+    "exact": true,
+    "oid": "txn:54334",
+    "rank": "order",
+    "extant": true,
+    "noc": 3544,
+    "fea": 486.4,
+    "lla": 0,
+    "phylum": "Rhodophyta",
+    "class": "Florideophyceae",
+    "order": "Corallinales",
+    "family": null,
+    "genus": null,
+    "regions": {
+     "eu": 1451,
+     "in": 658,
+     "as-w": 264,
+     "sea": 212,
+     "ar": 195,
+     "oc": 188,
+     "as-se": 108,
+     "au": 101,
+     "as-e": 97,
+     "af-n": 69,
+     "ca": 52,
+     "as-c": 41,
+     "na-e": 28,
+     "nz": 23,
+     "ng": 17,
+     "sa-n": 16,
+     "na-w": 13,
+     "mg": 7,
+     "af-e": 1,
+     "as-n": 1,
+     "sa-s": 1,
+     "af-w": 1
+    },
+    "fea_r": 103.4,
+    "lla_r": 0.01
+   }
+  },
+  "Dasycladales": {
+   "rank": "order",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 520,
+   "lad": 0,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Dasyclad green algae, single cells the size of a finger with whorls of branches, calcified enough to be rock-formers in Palaeozoic and Mesozoic shelf limestones; a few, like the mermaid's wineglass, survive.",
+   "hab": [
+    "shelf",
+    "reef",
+    "coast"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Ulvophyceae",
+    "order": "Dasycladales"
+   },
+   "pbdb": {
+    "asked": "Dasycladales",
+    "matched": "Dasycladales",
+    "exact": true,
+    "oid": "txn:54326",
+    "rank": "order",
+    "extant": true,
+    "noc": 2798,
+    "fea": 635,
+    "lla": 7.246,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "Dasycladales",
+    "family": null,
+    "genus": null,
+    "regions": {
+     "eu": 1260,
+     "as-w": 528,
+     "ar": 231,
+     "in": 188,
+     "as-e": 159,
+     "as-c": 131,
+     "na-w": 83,
+     "na-e": 75,
+     "af-n": 56,
+     "as-se": 24,
+     "na-n": 16,
+     "as-n": 11,
+     "ca": 10,
+     "au": 7,
+     "sa-n": 5,
+     "sea": 4,
+     "sa-s": 3,
+     "af-e": 3,
+     "oc": 2,
+     "af-w": 1,
+     "ng": 1
+    },
+    "fea_r": 440.85,
+    "lla_r": 52.03
+   }
+  },
+  "Girvanella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 540,
+   "lad": 145,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Tangled tubes of a calcified cyanobacterium, coating shells and grains into oncoids on Cambrian to Jurassic sea floors: the commonest microbial fossil of the Palaeozoic shelf.",
+   "hab": [
+    "shelf",
+    "coast",
+    "reef"
+   ],
+   "cls": {
+    "class": "Cyanophyceae"
+   },
+   "pbdb": {
+    "asked": "Girvanella",
+    "matched": "Girvanella",
+    "exact": true,
+    "oid": "txn:82372",
+    "rank": "genus",
+    "extant": false,
+    "noc": 469,
+    "fea": 635,
+    "lla": 5.333,
+    "phylum": "Cyanobacteria",
+    "class": "Hormogoneae",
+    "order": "Oscillatoriales",
+    "family": "Girvanellaceae",
+    "genus": "Girvanella",
+    "regions": {
+     "eu": 164,
+     "na-e": 98,
+     "as-c": 41,
+     "as-e": 38,
+     "na-w": 34,
+     "au": 31,
+     "as-n": 20,
+     "af-n": 12,
+     "as-w": 8,
+     "as-se": 8,
+     "na-n": 6,
+     "sa-s": 2,
+     "an": 2,
+     "sa-n": 2,
+     "in": 1,
+     "oc": 1,
+     "ar": 1
+    },
+    "fea_r": 516.55,
+    "lla_r": 152.0
+   }
+  },
+  "Solenopora": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 470,
+   "lad": 140,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A calcified red alga growing in nodules and crusts on Ordovician to Cretaceous reefs; sliced, its pink and grey banding is the 'beetroot stone' of Jurassic England.",
+   "hab": [
+    "reef",
+    "shelf"
+   ],
+   "lat": [
+    0,
+    45
+   ],
+   "cls": {
+    "class": "Florideophyceae",
+    "family": "Solenoporaceae"
+   },
+   "pbdb": {
+    "asked": "Solenopora",
+    "matched": "Solenopora",
+    "exact": true,
+    "oid": "txn:54321",
+    "rank": "genus",
+    "extant": false,
+    "noc": 307,
+    "fea": 477.1,
+    "lla": 33.9,
+    "phylum": "Rhodophyta",
+    "class": "Rhodophyceae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Solenoporaceae",
+    "genus": "Solenopora",
+    "regions": {
+     "eu": 116,
+     "na-e": 78,
+     "as-e": 37,
+     "na-w": 16,
+     "as-c": 11,
+     "as-w": 11,
+     "in": 9,
+     "as-n": 8,
+     "as-se": 7,
+     "ar": 4,
+     "na-n": 3,
+     "au": 3,
+     "af-n": 3,
+     "ng": 1
+    },
+    "fea_r": 463.1,
+    "lla_r": 103.4
+   }
+  },
+  "phylloid algae": {
+   "rank": "informal",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 320,
+   "lad": 252,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "as-c",
+    "as-e",
+    "tet",
+    "pan"
+   ],
+   "note": "Leaf-like calcareous algae that grew in thickets on Pennsylvanian and Permian sea floors and built mounds hundreds of metres across -- the reef builders of an age with few corals.",
+   "hab": [
+    "shelf",
+    "reef"
+   ],
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Ulvophyceae",
+    "order": "Bryopsidales"
+   }
+  }
+ }
+}

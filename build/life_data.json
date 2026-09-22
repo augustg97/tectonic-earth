@@ -9363,6 +9363,49 @@
       "Mosses, then as now a large part of the ground cover."
      ]
     ]
+   },
+   {
+    "a0": 34,
+    "a1": 120,
+    "shared": "Drill cores from the plateau hold wood, spores and coal: forest grew on an island here for tens of millions of years before it subsided. No land animal is known from it, and none is shown.",
+    "taxa": [
+     [
+      "Araucariaceae",
+      "family",
+      "land",
+      "Araucarian wood and charcoal from drill cores: the plateau stood above the sea and carried conifer forest in the Late Cretaceous."
+     ],
+     [
+      "Podocarpaceae",
+      "family",
+      "land",
+      "Podocarps with the araucarians, a southern conifer forest on an island the size of a large country."
+     ],
+     [
+      "Cupressaceae",
+      "family",
+      "land",
+      "Cypress-family wood in the same cores."
+     ],
+     [
+      "Polypodiopsida",
+      "class",
+      "land",
+      "Fern spores in the plateau's coals and soils."
+     ],
+     [
+      "Pelagornithidae",
+      "family",
+      "air",
+      "Pseudo-toothed birds, the great gliders of the Palaeogene Southern Ocean, on the wing along these shores."
+     ],
+     [
+      "Spheniscidae",
+      "family",
+      "land",
+      "Penguins, ocean-wide in the south from the Palaeocene."
+     ]
+    ]
    }
   ],
   "Mauritia": [
@@ -9713,6 +9756,40 @@
      ]
     ]
    }
+  ],
+  "Arctic Azolla Bloom": [
+   {
+    "a0": 48,
+    "a1": 50,
+    "exception": true,
+    "shared": "Rivers draining into a nearly landlocked ocean freshened its surface for some 800,000 years. Nothing like it has happened since the gateways opened.",
+    "taxa": [
+     [
+      "Azolla",
+      "genus",
+      "fresh",
+      "The floating fern itself, in mats across an ocean surface fresh enough to grow it; its remains make up much of the Eocene mud under the North Pole."
+     ],
+     [
+      "Diatomea",
+      "class",
+      "sea",
+      "Brackish and freshwater diatoms in the surface layer, marine ones in the saltier water below: the two-layer sea recorded in one core."
+     ],
+     [
+      "Dinoflagellata",
+      "division",
+      "sea",
+      "Low-salinity dinoflagellate cysts, the other plankton of the freshened surface."
+     ],
+     [
+      "Crocodylia",
+      "order",
+      "fresh",
+      "Crocodilians on the surrounding shores at 80 degrees north: the Eocene Arctic did not freeze."
+     ]
+    ]
+   }
   ]
  },
  "sparse": {
@@ -9803,6 +9880,13 @@
     "a0": 0,
     "a1": 15,
     "why": "Sealed beneath about four kilometres of ice for some fourteen million years. Microbes are all that is expected, and all that the ice cores show."
+   }
+  ],
+  "Kerguelen Microcontinent": [
+   {
+    "a0": 63,
+    "a1": 120,
+    "why": "Drill cores from the plateau hold wood, spores and coal, so forest grew here; no land animal has been found in them, and none is shown. Seabirds and penguins arrive on the card with their own fossil records, from about 62 Ma."
    }
   ]
  }
