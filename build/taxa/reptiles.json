@@ -126,7 +126,8 @@
    "fad": 112,
    "lad": 108,
    "range": [
-    "sa-n"
+    "sa-n",
+    "eu"
    ],
    "note": "A crested, toothed fishing pterosaur from Brazil's Santana Formation, known from beautifully preserved three-dimensional skulls that reveal the shape of its bony head crest.",
    "cls": {
@@ -134,7 +135,24 @@
     "class": "Reptilia",
     "order": "Pterosauria",
     "family": "Anhangueridae"
-   }
+   },
+   "box": [
+    [
+     -45,
+     -34,
+     -12,
+     -3
+    ],
+    [
+     -2,
+     2,
+     50,
+     54
+    ]
+   ],
+   "avoid": [
+    "Caledonides"
+   ]
   },
   "Antarctopelta": {
    "rank": "genus",
@@ -420,7 +438,6 @@
    "fad": 221.3,
    "lad": 200.4,
    "range": [
-    "na-e",
     "na-w"
    ],
    "note": "A slender early theropod dinosaur, hundreds found together at Ghost Ranch in Pangaea's western deserts.",
@@ -445,7 +462,15 @@
      "na-e": 2,
      "na-w": 24
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -100,
+     30,
+     40
+    ]
+   ]
   },
   "Coelophysis bauri": {
    "rank": "species",
@@ -474,7 +499,15 @@
     "regions": {
      "na-w": 6
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -100,
+     30,
+     40
+    ]
+   ]
   },
   "Compsognathus": {
    "rank": "genus",
@@ -557,7 +590,15 @@
     "class": "Reptilia",
     "order": "Aetosauria",
     "family": "Stagonolepididae"
-   }
+   },
+   "box": [
+    [
+     -115,
+     -96,
+     30,
+     40
+    ]
+   ]
   },
   "Dilophosaurus": {
    "rank": "genus",
@@ -587,7 +628,15 @@
      "na-w": 13,
      "in": 1
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -105,
+     32,
+     40
+    ]
+   ]
   },
   "Edmontosaurus": {
    "rank": "genus",
@@ -649,7 +698,21 @@
     "regions": {
      "eu": 13
     }
-   }
+   },
+   "box": [
+    [
+     5,
+     20,
+     42,
+     50
+    ],
+    [
+     -30,
+     -18,
+     68,
+     73
+    ]
+   ]
   },
   "Giganotosaurus": {
    "rank": "genus",
@@ -1011,7 +1074,7 @@
    "fad": 242,
    "lad": 237,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "A small long-necked marine reptile found by the thousand in Guizhou Triassic shales.",
    "pbdb": {
@@ -1043,7 +1106,7 @@
    "fad": 120,
    "lad": 100,
    "range": [
-    "au",
+    "au-e",
     "sa-n"
    ],
    "note": "A giant short-necked pliosaur, apex predator of the cold Cretaceous sea over central Australia.",
@@ -1065,7 +1128,21 @@
      "au": 3,
      "sa-n": 1
     }
-   }
+   },
+   "box": [
+    [
+     138,
+     152,
+     -30,
+     -18
+    ],
+    [
+     -78,
+     -70,
+     3,
+     8
+    ]
+   ]
   },
   "Liopleurodon": {
    "rank": "genus",
@@ -1109,7 +1186,7 @@
    "fad": 163,
    "lad": 145,
    "range": [
-    "as-e",
+    "as-s",
     "as-c"
    ],
    "note": "A Chinese sauropod with a neck half its total length -- among the longest necks any animal has had.",
@@ -1240,7 +1317,7 @@
    "fad": 117.3,
    "lad": 117.3,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "A four-winged dromaeosaur with flight feathers on both fore and hind limbs, glossy black in life.",
    "pbdb": {
@@ -1476,9 +1553,10 @@
    "range": [
     "af-n",
     "as-c",
-    "as-e",
+    "as-ne",
+    "as-s",
     "as-n",
-    "au",
+    "au-e",
     "eu",
     "na-e",
     "sa-n"
@@ -1730,7 +1808,21 @@
      "af-s": 1,
      "sa-s": 1
     }
-   }
+   },
+   "box": [
+    [
+     -10,
+     25,
+     42,
+     62
+    ],
+    [
+     -30,
+     -18,
+     68,
+     73
+    ]
+   ]
   },
   "Platypterygius": {
    "rank": "genus",
@@ -1849,7 +1941,15 @@
      "na-w": 30,
      "na-e": 1
     }
-   }
+   },
+   "box": [
+    [
+     -115,
+     -96,
+     30,
+     40
+    ]
+   ]
   },
   "Proterosuchus": {
    "rank": "genus",
@@ -1921,9 +2021,11 @@
    "fad": 126,
    "lad": 101,
    "range": [
-    "as-e",
+    "as-ne",
+    "as-s",
     "as-c",
-    "as-n"
+    "as-n",
+    "as-ic"
    ],
    "note": "A parrot-beaked early ceratopsian, the most abundant dinosaur of the Jehol beds.",
    "pbdb": {
@@ -1948,7 +2050,21 @@
      "na-w": 1
     }
    },
-   "w": 3
+   "w": 3,
+   "box": [
+    [
+     75,
+     135,
+     25,
+     58
+    ],
+    [
+     98,
+     106,
+     12,
+     20
+    ]
+   ]
   },
   "Pterodactylus": {
    "rank": "genus",
@@ -2282,7 +2398,7 @@
    "fad": 123.6,
    "lad": 122.7,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "The first dinosaur found with unambiguous filamentous feathers, and later with its ginger-and-white banded tail decoded.",
    "pbdb": {

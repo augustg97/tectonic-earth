@@ -78,8 +78,8 @@ FLORA_KINDS = ("plant", "fungus", "alga")
 
 # ---------------------------------------------------------------- regions --
 LAND_CODES = ("na-w", "na-e", "na-n", "ca", "gl", "sa-n", "sa-s", "eu", "af-n", "af-e",
-              "af-w", "af-s", "mg", "ar", "as-w", "as-n", "as-c", "as-e", "as-se", "in",
-              "au", "ng", "nz", "oc", "an")
+              "af-w", "af-s", "mg", "ar", "as-w", "as-n", "as-c", "as-ne", "as-s", "as-ic",
+              "as-sb", "in", "au-w", "au-e", "ng", "nz", "oc", "an")
 #: Ocean basins, for the marine taxa and labels that belong to water rather
 #: than to any crust. The Palaeozoic names are here because their faunas were
 #: real and distinct, not because anything survives of their floors.
@@ -88,17 +88,23 @@ ALIASES = {
     "na": ["na-w", "na-e", "na-n"],
     "sa": ["sa-n", "sa-s"],
     "af": ["af-n", "af-e", "af-w", "af-s"],
-    "as": ["as-w", "as-n", "as-c", "as-e", "as-se"],
+    # East Asia is the North China block (with Korea and Japan) and the South
+    # China block; South-East Asia is Indochina and Gondwanan Sibumasu. The old
+    # pair codes mean both halves, so every range written with them still does.
+    "as-e": ["as-ne", "as-s"],
+    "as-se": ["as-ic", "as-sb"],
+    "au": ["au-w", "au-e"],
+    "as": ["as-w", "as-n", "as-c", "as-ne", "as-s", "as-ic", "as-sb"],
     "laurentia": ["na-w", "na-e", "na-n", "gl"],
     "euramerica": ["na-w", "na-e", "na-n", "gl", "eu"],
-    "laurasia": ["na-w", "na-e", "na-n", "gl", "eu", "as-n", "as-c", "as-e"],
-    "holarctic": ["na-w", "na-e", "na-n", "gl", "eu", "as-n", "as-c", "as-e", "as-w"],
-    "gondwana": ["sa-n", "sa-s", "af-n", "af-e", "af-w", "af-s", "mg", "ar", "in", "au",
-                 "ng", "nz", "an"],
+    "laurasia": ["na-w", "na-e", "na-n", "gl", "eu", "as-n", "as-c", "as-ne", "as-s"],
+    "holarctic": ["na-w", "na-e", "na-n", "gl", "eu", "as-n", "as-c", "as-ne", "as-s", "as-w"],
+    "gondwana": ["sa-n", "sa-s", "af-n", "af-e", "af-w", "af-s", "mg", "ar", "in", "au-w",
+                 "au-e", "ng", "nz", "an", "as-sb"],
     "afro-arabia": ["af-n", "af-e", "af-w", "af-s", "ar"],
-    "sahul": ["au", "ng"],
+    "sahul": ["au-w", "au-e", "ng"],
     "old-world": ["eu", "af-n", "af-e", "af-w", "af-s", "ar", "as-w", "as-n", "as-c",
-                  "as-e", "as-se", "in"],
+                  "as-ne", "as-s", "as-ic", "as-sb", "in"],
     "new-world": ["na-w", "na-e", "na-n", "ca", "sa-n", "sa-s"],
     "neotropics": ["ca", "sa-n", "sa-s"],
     "cosmo": ["*"],
@@ -575,6 +581,11 @@ NAME_HABITAT = {
     "Tibetan Alpine Tundra": {"alpine", "tundra", "grassland"},
     "Pebas Mega-Wetland": {"wetland", "river", "lake", "rainforest"},
     "East African Rift soda lakes": {"lake", "wetland", "grassland"},
+    # a brackish lake on a desiccated sea floor has no marsh and no forest: its
+    # shore is salt flat and tamarisk, its water killifish, charophytes and
+    # dreissenids -- and the mastodons and dawn redwoods stay on the land cards
+    "Lago Mare (Messinian Mediterranean)": {"lake", "coast", "desert"},
+    "Aral Sea": {"lake", "desert", "grassland"},
 }
 
 #: A habitat with a DATE. These labels are typed for their tectonics -- a block,
@@ -590,7 +601,7 @@ HABITAT_SINCE = {
     "Colorado Plateau": (8, {"desert", "alpine", "forest"}),
     "Amuria": (3, {"forest", "grassland"}), "Williston Basin": (8, {"grassland"}),
     "Solimoes Basin": (10, {"rainforest", "river", "wetland"}),
-    "Congo Basin": (10, {"rainforest", "river", "wetland", "forest"}),
+    "Congo Basin": (23, {"rainforest", "river", "wetland", "forest"}),
     "Parana Basin": (5, {"forest", "grassland", "wetland", "river"}),
     "West Siberian Basin": (3, {"forest", "wetland", "tundra"}),
     "Canadian Shield": (3, {"forest", "tundra", "lake", "wetland"}),
@@ -632,9 +643,9 @@ LABEL_HOME = {
     "Laurentia": ["laurentia"], "North America": ["na", "gl"], "South America": ["sa"],
     "Africa": ["af"], "Eurasia": ["eu", "as"], "Antarctica": ["an"], "Australia": ["au", "ng"],
     "India": ["in"], "Greater India": ["in"], "Siberia": ["as-n"], "Baltica": ["eu"],
-    "Avalonia": ["eu", "na-e"], "Kazakhstania": ["as-c"], "Amuria": ["as-e", "as-c", "as-n"],
-    "North China": ["as-e"], "South China": ["as-e"], "Tarim Block": ["as-c"],
-    "Cimmeria": ["as-w", "as-c", "as-se"], "Annamia": ["as-se"],
+    "Avalonia": ["eu", "na-e"], "Kazakhstania": ["as-c"], "Amuria": ["as-ne", "as-c", "as-n"],
+    "North China": ["as-ne"], "South China": ["as-s"], "Tarim Block": ["as-c"],
+    "Cimmeria": ["as-w", "as-c", "as-sb"], "Annamia": ["as-ic"],
     "Anatolide-Tauride Block": ["as-w"], "Amazonia": ["sa-n"],
     "Sao Francisco Craton": ["sa-n", "sa-s"], "Congo Craton": ["af-w", "af-e"],
     "Kalahari Craton": ["af-s"], "West Africa Craton": ["af-w", "af-n"],
@@ -648,13 +659,13 @@ LABEL_HOME = {
     "Rotliegend Desert": ["eu"], "Oslo Rift": ["eu"], "Zechstein Sea": ["eu"],
     "Solnhofen Lagoon": ["eu"], "Sveconorwegian Belt": ["eu"], "Timanian Belt": ["eu"],
     "Hun Superterrane": ["eu", "as-w", "as-c"], "Hispanic Corridor": ["ca", "na-e", "af-n", "sa-n"],
-    "Cathaysian Coal Forests": ["as-e"], "Karoo Basin": ["af-s"],
+    "Cathaysian Coal Forests": ["as-ne", "as-s", "as-ic"], "Karoo Basin": ["af-s"],
     "Glossopteris Flora": ["af-s", "in", "au", "an", "sa-s", "sa-n", "mg"],
     "Gondwanan Polar Tundra": ["an", "af-s", "sa-s", "au", "in"],
     "Botucatu Erg": ["sa-s"], "Brasiliano Belt": ["sa-n", "sa-s"], "Sunsas Belt": ["sa-n"],
     "Pan-African Belt": ["af"], "East African Orogen": ["af-e", "mg", "ar"],
     "Irumide Belt": ["af-s", "af-e"], "Benue Trough": ["af-w"], "Namib": ["af-s"],
-    "Centralian Superbasin": ["au"], "Officer Basin": ["au"], "Adelaide Rift Complex": ["au"],
+    "Centralian Superbasin": ["au"], "Officer Basin": ["au"], "Adelaide Rift Complex": ["au-e"],
     "Antarctic Nothofagus Forest": ["an"], "West Antarctic Rift": ["an"],
     "Arctic Azolla Bloom": ["arc", "na-n", "gl", "as-n", "eu"],
     "Avalon Deep-Water Realm": ["na-e", "eu", "iap"], "White Sea Realm": ["eu", "au"],
@@ -675,8 +686,8 @@ LABEL_HOME = {
     "Ural Mountains": ["eu", "as-n"], "Variscan Belt": ["eu"], "Beringia": ["na-n", "as-n"],
     "Beringian Steppe-Tundra": ["na-n", "as-n"], "Arctic Tundra": ["as-n", "eu", "na-n"],
     "Eurasian Steppe": ["as-c", "eu", "as-n"], "Sahul": ["au", "ng"],
-    "Wallacea": ["as-se"], "Sundaland": ["as-se"],
-    "Central Asian Orogenic Belt": ["as-c", "as-n", "as-e"],
+    "Wallacea": ["as-ic"], "Sundaland": ["as-se"],
+    "Central Asian Orogenic Belt": ["as-c", "as-n", "as-ne"],
     "Australasian Belt": ["au", "ng", "as-se"],
     # --- drowned fragments and ocean-floor features with no crust code
     # A microcontinent is its parent's crust until it leaves, and an ocean island
@@ -704,7 +715,7 @@ LABEL_HOME = {
     "Panthalassa": ["pan", "na-w", "as-e", "as-n", "au", "nz", "sa-s", "an"], "Panthalassic Ocean": ["pan", "na-w", "as-e", "as-n", "au", "sa-s", "an"], "Panthalassic (proto)": ["pan", "mir"],
     "Neo-Panthalassa": ["pac"], "Mirovia": ["mir"],
     "Iapetus Ocean": ["iap", "na-e", "gl", "eu"], "Rheic Ocean": ["rhe", "eu", "af-n", "na-e"],
-    "Ural Ocean": ["ura", "eu", "as-n", "as-c"], "Mongol-Okhotsk Ocean": ["pan", "as-n", "as-e"],
+    "Ural Ocean": ["ura", "eu", "as-n", "as-c"], "Mongol-Okhotsk Ocean": ["pan", "as-n", "as-ne"],
     "Piedmont-Ligurian Ocean": ["tet", "eu"], "Mozambique Ocean": ["mir", "af-e", "mg", "in"],
     "Adamastor Ocean": ["mir", "sa-s", "af-s"], "Tornquist Sea": ["iap", "eu"],
     "Mid-Atlantic Ridge": ["atl"], "East Pacific Rise": ["pac"], "Reykjanes Ridge": ["atl"],
@@ -716,7 +727,7 @@ LABEL_HOME = {
     "Lago Mare (Messinian Mediterranean)": ["med", "eu"],
     "Paratethys": ["tet", "eu", "as-w", "as-c"], "Gulf of Mexico": ["atl", "ca", "na-e"],
     "Central American Sea": ["atl", "pac", "ca"], "Tasman Sea": ["pac", "au", "nz"],
-    "Sea of Japan": ["pac", "as-e"], "South China Sea": ["pac", "as-se", "as-e"],
+    "Sea of Japan": ["pac", "as-ne"], "South China Sea": ["pac", "as-ic", "as-s"],
     "Okhotsk Sea": ["pac", "as-n"], "Boreal Sea": ["arc", "eu", "as-n"],
     "Viking Corridor": ["arc", "atl", "eu"], "Turgai Strait": ["tet", "arc", "as-c", "as-n"],
     "West Siberian Sea": ["arc", "as-n"], "Trans-Saharan Sea": ["tet", "atl", "af-n", "af-w"],
@@ -724,8 +735,8 @@ LABEL_HOME = {
     "Mowry Sea": ["na-w", "arc"], "Bearpaw Sea": ["na-w"], "Cannonball Sea": ["na-w", "na-e"],
     "Sundance Sea": ["na-w"], "Absaroka Sea": ["na-w", "na-e"], "Kaskaskia Sea": ["na-e", "na-w"],
     "Tippecanoe Sea": ["na-e", "na-w"], "Sauk Sea": ["na-e", "na-w"],
-    "Eromanga Sea": ["au"], "Muschelkalk Sea": ["eu", "tet"], "Nama Sea": ["af-s"],
-    "Bitter Springs Sea": ["au"],
+    "Eromanga Sea": ["au-e"], "Muschelkalk Sea": ["eu", "tet"], "Nama Sea": ["af-s"],
+    "Bitter Springs Sea": ["au-e"],
 }
 
 

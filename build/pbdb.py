@@ -74,9 +74,23 @@ REGIONS = [
     ("oc", -180.0, -120.0, -30.0, 30.0),       # Polynesia, Hawaii
     ("oc", 155.0, 180.0, -23.0, 20.0),         # Melanesia east, Micronesia
     ("oc", -120.0, -85.0, -28.0, 5.0),         # Galapagos, Easter, Juan Fernandez
-    ("au", 110.0, 156.0, -45.0, -9.5),         # Australia, Tasmania
-    ("as-se", 92.0, 129.0, -11.5, 23.5),       # Indochina, Sundaland, Philippines
-    ("as-e", 100.0, 150.0, 18.0, 50.0),        # China, Korea, Japan
+    # Australia is two records: the Yilgarn, Pilbara and Kimberley of the west
+    # (Gogo, the Canning reefs, Pilbara stromatolites) and the Flinders, Emu Bay,
+    # Winton and Riversleigh of the east. One code put Muttaburra on the Yilgarn.
+    # "au" survives as an ALIAS for the pair (biota.ALIASES).
+    ("au-w", 110.0, 129.0, -45.0, -9.5),        # Western Australia
+    ("au-e", 129.0, 156.0, -45.0, -9.5),        # the rest, and Tasmania
+    # East and South-East Asia are four blocks with four Palaeozoic-Mesozoic
+    # histories, and one code for each pair put the Chengjiang fauna on North
+    # China and the Cathaysian coal flora on Gondwanan Sibumasu (2026-09-22).
+    # "as-e" and "as-se" survive as ALIASES for the pair (biota.ALIASES).
+    ("as-sb", 92.0, 100.5, 5.0, 29.0),          # Sibumasu: Myanmar, western Thailand
+    ("as-sb", 95.0, 106.0, -6.5, 7.5),          # ... the Malay peninsula and Sumatra
+    ("as-s", 106.5, 123.0, 18.0, 33.0),         # the South China block's coast, Hainan, Taiwan
+    ("as-ic", 92.0, 129.0, -11.5, 23.5),        # Indochina, Borneo, Java, the Philippines
+    ("as-s", 100.0, 123.0, 18.0, 33.0),         # the South China block, south of the Qinling
+    ("as-ne", 100.0, 150.0, 33.0, 50.0),        # North China, Korea, Japan
+    ("as-ne", 123.0, 150.0, 18.0, 33.0),        # ... Kyushu, the Ryukyus, Taiwan
     ("as-c", 46.0, 120.0, 28.0, 50.0),         # Turan, Kazakhstan, Tarim, Tibet, Mongolia
     ("as-w", 25.0, 66.0, 24.0, 44.0),          # Anatolia, Caucasus, Iran, Afghanistan
     ("as-n", 58.0, 180.0, 50.0, 82.0),         # Siberia and the Russian Far East

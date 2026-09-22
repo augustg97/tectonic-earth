@@ -88,7 +88,8 @@ ACCEPTED = {
     "Wallacea": "the boundary itself, between Sundaland and Sahul",
     "Greater Caucasus": "raised by Arabia's collision and riding its plate",
     "Arabian Desert": "Arabia is African crust on a plate of its own",
-    "Tethyan Himalaya": "the Indian margin, now thrust onto the Eurasian side",
+    "Anatolide-Tauride Block": "Gondwana-derived: PALEOMAP numbers it with "
+                               "Arabia, and it is Turkey now",
     "Himalaya": "the collision itself; GPlates carries it on the Eurasian plate",
     "Sundaland": "Eurasia's SE promontory, named for its Indian-Ocean margin",
     "Tien Shan": "Asian, described by the collision that reactivated it",
@@ -202,6 +203,48 @@ def main():
         print(f"  {name:<28} [{typ:<9}] ({lon:>7},{lat:>6}) is {here} today, but the "
               f"feature's home crust is {'/'.join(codes[:5])}: a palaeo coordinate on modern land")
     findings += home_findings
+
+    # THIRD DETECTOR (2026-09-22): the same two statements, through time. The
+    # second compares a label's authored coordinate with its home crust TODAY;
+    # a coordinate on the right crust today can still ride the wrong plate,
+    # because plate polygons have edges. The Tethyan Himalaya at (88, 29) was
+    # Indian rock by every description and sat on the Lhasa polygon, so at
+    # 110 Ma its card stood at 12 N showing India's fauna while India was at
+    # 43 S. Here the plate block of the tracked point is held against the
+    # continent(s) its home codes name.
+    CODE_BLOCK = {"na": "North America", "gl": "North America",
+                  "sa": "South America", "eu": "Eurasia", "as": "Eurasia",
+                  "in": "India/Arabia", "ar": "India/Arabia",
+                  "af": "Africa", "mg": "Africa",
+                  "au": "Australia/Antarctica", "an": "Australia/Antarctica",
+                  "nz": "Australia/Antarctica", "ng": "Australia/Antarctica"}
+    ride_findings = []
+    for e in features.LABELS:
+        typ, name, lon, lat = e[0], e[1], e[2], e[3]
+        if typ == "ocean" or name in composites or name not in biota.LABEL_HOME:
+            continue
+        if elev(present, lon, lat) <= 0:
+            continue
+        spec = biota.LABEL_HOME[name]
+        codes = {c for x in spec for c in x["in"]} if spec and isinstance(spec[0], dict) else set(spec)
+        codes = biota.expand(list(codes))
+        if "*" in codes:
+            continue
+        want = {CODE_BLOCK[c.split("-")[0]] for c in codes if c.split("-")[0] in CODE_BLOCK}
+        if not want:
+            continue
+        pid = rec.plate_id(lon, lat)
+        got = BLOCK.get(pid // 100, "?")
+        if got in ("oceanic", "?") or got in want:
+            continue
+        if name in ACCEPTED:
+            exempt += 1
+            continue
+        ride_findings.append((name, typ, lon, lat, pid, got, sorted(want)))
+    for name, typ, lon, lat, pid, got, want in ride_findings:
+        print(f"  {name:<28} [{typ:<9}] ({lon:>7},{lat:>6}) rides plate {pid} = {got}, "
+              f"but its home crust ({'/'.join(want)}) is another plate's")
+    findings += ride_findings
     print(f"\n{len(findings)} findings")
     return len(findings)
 

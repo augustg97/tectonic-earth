@@ -2261,7 +2261,11 @@
     },
     "fea_r": 196.2,
     "lla_r": 183.8
-   }
+   },
+   "lat": [
+    0,
+    40
+   ]
   },
   "Lophophyllidium": {
    "rank": "genus",
@@ -3803,9 +3807,9 @@
    "fad": 465,
    "lad": 455,
    "range": [
-    "sa-s",
+    "au-e",
     "sa-n",
-    "au"
+    "sa-s"
    ],
    "note": "A jawless armoured fish of Ordovician Gondwana, tadpole-shaped with a bony head shield, in shoals along the Bolivian shore.",
    "hab": [
@@ -4604,11 +4608,29 @@
    "fad": 360,
    "lad": 252,
    "range": [
-    "euramerica",
-    "as-e",
-    "in",
-    "au",
-    "sa-s"
+    {
+     "t": [
+      360,
+      300
+     ],
+     "in": [
+      "euramerica"
+     ]
+    },
+    {
+     "t": [
+      300,
+      252
+     ],
+     "in": [
+      "euramerica",
+      "as-ne",
+      "as-s",
+      "in",
+      "au",
+      "sa-s"
+     ]
+    }
    ],
    "note": "A freshwater shark with an eel's body and a long spine at the back of the head, hunting the coal-swamp rivers and lakes for a hundred million years.",
    "hab": [

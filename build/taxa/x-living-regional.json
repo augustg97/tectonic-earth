@@ -646,7 +646,7 @@
    "fad": 2,
    "lad": 0,
    "range": [
-    "as-se"
+    "as-ic"
    ],
    "note": "The babirusa of Sulawesi, whose upper tusks grow up through the snout and curl back toward the skull.",
    "hab": [
@@ -665,6 +665,9 @@
      -3.5,
      2
     ]
+   ],
+   "avoid": [
+    "Sundaland"
    ]
   },
   "Bertholletia excelsa": {
@@ -6068,7 +6071,7 @@
    "fad": 2,
    "lad": 0,
    "range": [
-    "as-se"
+    "as-ic"
    ],
    "hab": [
     "rainforest",
@@ -6081,7 +6084,10 @@
     "family": "Bovidae"
    },
    "fill": false,
-   "note": "The anoa, a dwarf forest buffalo barely a metre tall, found only on Sulawesi."
+   "note": "The anoa, a dwarf forest buffalo barely a metre tall, found only on Sulawesi.",
+   "avoid": [
+    "Sundaland"
+   ]
   },
   "Macrocephalon maleo": {
    "rank": "species",
@@ -6090,7 +6096,7 @@
    "fad": 2,
    "lad": 0,
    "range": [
-    "as-se"
+    "as-ic"
    ],
    "hab": [
     "rainforest",
@@ -6103,7 +6109,10 @@
     "family": "Megapodiidae"
    },
    "fill": false,
-   "note": "The maleo, a megapode that buries its eggs in volcanically heated sand and leaves them."
+   "note": "The maleo, a megapode that buries its eggs in volcanically heated sand and leaves them.",
+   "avoid": [
+    "Sundaland"
+   ]
   },
   "Ailurops ursinus": {
    "rank": "species",
@@ -6112,7 +6121,7 @@
    "fad": 2,
    "lad": 0,
    "range": [
-    "as-se"
+    "as-ic"
    ],
    "hab": [
     "rainforest",
@@ -6125,7 +6134,10 @@
    },
    "fill": false,
    "form_ok": true,
-   "note": "The bear cuscus: a marsupial in Asia, one of the few mammals to cross Wallacea from the Australian side."
+   "note": "The bear cuscus: a marsupial in Asia, one of the few mammals to cross Wallacea from the Australian side.",
+   "avoid": [
+    "Sundaland"
+   ]
   },
   "Eucalyptus deglupta": {
    "rank": "species",

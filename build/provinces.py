@@ -250,6 +250,17 @@ MARKER_NOTES = {
 # "tropical" into "Cathaysian Province".
 MARINE_TYPES = {"ocean", "sea"}
 
+#: Labels that ARE a block of the palaeogeography model under another name.
+LABEL_BLOCK = {
+    "Amuria": "Amuria / Mongolia", "Central Asian Orogenic Belt": "Amuria / Mongolia",
+    "Greater Adria": "Adria / Apulia", "Annamia": "Indochina", "Lhasa Terrane": "Lhasa",
+    "Tarim Block": "Tarim", "Qaidam Basin": "Qaidam", "Wrangellia Terrane": "Wrangellia",
+    "Fennoscandian Shield": "Fennoscandia", "Iberian Massif": "Iberia",
+    "Sao Francisco Craton": "Sao Francisco", "Kerguelen Microcontinent": "Kerguelen Plateau",
+    "Seychelles Microcontinent": "Seychelles", "Arabian Desert": "Arabia",
+    "Patagonian Batholith": "Patagonia", "Timanian Belt": "Timan-Pechora",
+}
+
 # --- WHICH BLOCK IS A LABEL STANDING ON? ----------------------------------
 # The best provinces in the model are keyed on the BLOCK, not on latitude. The
 # Ordovician alone names the Laurentian, Baltic, Siberian and Mediterranean
@@ -506,7 +517,13 @@ def build(labels, step=5):
         hi = min(hi, 1000)
         realm = "marine" if lab.get("t") in MARINE_TYPES else "terrestrial"
         # A label that IS a craton keeps its own name -- exact beats nearest.
-        own = name if name in blocks else None
+        # LABEL_BLOCK is the same rule for the labels whose names differ from
+        # the model's: "Amuria" at 122 E tracks with North China in the
+        # rotation model, so nearest-anchor gave it the Cathaysian coal flora
+        # while its own card listed the Angaran one.
+        own = name if name in blocks else LABEL_BLOCK.get(name)
+        if own is not None and own not in blocks:
+            own = None
         runs = []
         a = lo
         while a <= hi + 1e-9:

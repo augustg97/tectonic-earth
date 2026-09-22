@@ -1912,10 +1912,39 @@
    "fad": 46,
    "lad": 16,
    "range": [
-    "as-e",
-    "eu",
-    "na-e",
-    "na-w"
+    {
+     "t": [
+      46,
+      38
+     ],
+     "in": [
+      "as-ne",
+      "as-s",
+      "as-c"
+     ]
+    },
+    {
+     "t": [
+      38,
+      16
+     ],
+     "in": [
+      "as-ne",
+      "as-s",
+      "as-c",
+      "na-w",
+      "na-e"
+     ]
+    },
+    {
+     "t": [
+      38,
+      23
+     ],
+     "in": [
+      "eu"
+     ]
+    }
    ],
    "note": "'Hell pigs': massive omnivorous artiodactyls with metre-long skulls, bony cheek flanges and bone-crushing jaws.",
    "pbdb": {
@@ -2380,7 +2409,11 @@
      "as-se": 4,
      "as-n": 7
     }
-   }
+   },
+   "lat": [
+    0,
+    55
+   ]
   },
   "Hippocamelus bisulcus": {
    "rank": "species",
@@ -3139,7 +3172,11 @@
      "as-se": 3,
      "in": 4
     }
-   }
+   },
+   "lat": [
+    5,
+    62
+   ]
   },
   "Mammuthus": {
    "rank": "genus",
@@ -3838,7 +3875,7 @@
    "fad": 17,
    "lad": 12,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A sheep-sized tree-dwelling marsupial herbivore, mass-preserved in Riversleigh cave pools.",
    "pbdb": {
@@ -3955,7 +3992,7 @@
    "fad": 28.5,
    "lad": 13.8,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A Riversleigh platypus that, unlike the living one, kept functional teeth as an adult.",
    "pbdb": {
@@ -5161,7 +5198,7 @@
    "fad": 125.77,
    "lad": 119.57,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "A badger-sized Jehol mammal found with a juvenile dinosaur in its stomach -- Mesozoic mammals were not all prey.",
    "pbdb": {
@@ -5638,8 +5675,7 @@
    "fad": 9.44,
    "lad": 3.96,
    "range": [
-    "sa-n",
-    "sa-s"
+    "pac"
    ],
    "note": "A marine ground sloth that grazed seagrass off the Peruvian coast -- a lineage no one predicted.",
    "pbdb": {
@@ -5660,7 +5696,21 @@
      "sa-n": 7,
      "sa-s": 8
     }
-   }
+   },
+   "box": [
+    [
+     -82,
+     -69,
+     -18,
+     -4
+    ]
+   ],
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "place_ok": true,
+   "conf_note": "PBDB collections are the Pisco coast of Peru; the range is that coast's ocean, by design"
   },
   "Theropithecus gelada": {
    "rank": "species",

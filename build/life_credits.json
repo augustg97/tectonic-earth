@@ -1385,6 +1385,13 @@
   "taxon": "Loligo vulgaris",
   "uuid": "d5d78e19-e0e6-4726-9083-c3008d3e6ff1"
  },
+ "starfish": {
+  "attribution": "(unattributed)",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Odontaster validus",
+  "uuid": "37d1d45b-66c7-4240-a81c-bad76f27443d"
+ },
  "stegosaur": {
   "attribution": "Connor Ashbridge",
   "licence": "CC BY 4.0",
@@ -1594,6 +1601,13 @@
   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
   "taxon": "Anchiornis huxleyi",
   "uuid": "f55638db-7db5-4214-b720-2766e76372fc"
+ },
+ "t:andiva": {
+  "attribution": "Aleksey Nagovitsyn",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Andiva ivantsovi",
+  "uuid": "f9c5db25-3969-44fe-b922-b6fa8ff102b8"
  },
  "t:andrewsarchus": {
   "attribution": "Steven Traver",
@@ -2224,6 +2238,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "taxon": "Charnia",
   "uuid": "5711f5d3-b783-42a0-b217-56f3c4ef92d7"
+ },
+ "t:charniodiscus": {
+  "attribution": "Daniel P\u00e9rez-Pinedo, Christopher McKean, Rod Taylor, Duncan McIlroy (original animation)",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Charniodiscus concentricus",
+  "uuid": "c5a910bb-4b88-4973-87c8-14b5f4c39931"
  },
  "t:cheirolepis": {
   "attribution": "Steven Coombs",
@@ -4262,6 +4283,13 @@
   "taxon": "Parasaurolophus",
   "uuid": "ef954cac-604a-4e1f-9b8d-bd92bf3cc3f6"
  },
+ "t:parvancorina": {
+  "attribution": "Caleb M. Gordon",
+  "licence": "CC0",
+  "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "taxon": "Parvancorina",
+  "uuid": "be4535a1-7005-48b9-9ff8-01228522bd6b"
+ },
  "t:pavo-cristatus": {
   "attribution": "(unattributed)",
   "licence": "CC0",
@@ -5178,6 +5206,13 @@
   "licence_url": "https://creativecommons.org/publicdomain/mark/1.0/",
   "taxon": "Thalassia testudinum",
   "uuid": "5b4d47b8-9068-4028-a1d1-c51169f48b1d"
+ },
+ "t:thectardis": {
+  "attribution": "Matteo De Stefano/MUSE",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "taxon": "Thectardis avalonensis",
+  "uuid": "ba836d0a-c910-40ca-9edd-8f0b118d35a5"
  },
  "t:therizinosaurus": {
   "attribution": "Martin Kevil",

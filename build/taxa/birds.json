@@ -216,7 +216,7 @@
    "fad": 122.7,
    "lad": 117.3,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "An early beaked bird known from thousands of specimens, many with long ornamental tail streamers.",
    "pbdb": {
@@ -253,8 +253,27 @@
    "fad": 60.5,
    "lad": 48,
    "range": [
-    "eu",
-    "na-n"
+    {
+     "t": [
+      60.5,
+      48
+     ],
+     "in": [
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      56,
+      48
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "as-ne"
+     ]
+    }
    ],
    "note": "A large flightless bird once assumed to be a predator, now thought to have been a heavy-billed herbivore; the same lineage also reached Ellesmere Island in Arctic Canada.",
    "pbdb": {

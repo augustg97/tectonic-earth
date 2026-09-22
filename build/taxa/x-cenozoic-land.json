@@ -149,7 +149,15 @@
     "class": "Mammalia",
     "order": "Artiodactyla",
     "family": "Mesonychia"
-   }
+   },
+   "box": [
+    [
+     100,
+     125,
+     38,
+     48
+    ]
+   ]
   },
   "Antarctodolops": {
    "rank": "genus",
@@ -174,13 +182,35 @@
    "fad": 45,
    "lad": 2,
    "range": [
-    "as-e",
-    "as-se",
-    "in",
-    "eu",
-    "af-n",
-    "af-e",
-    "na-w"
+    {
+     "t": [
+      45,
+      15
+     ],
+     "in": [
+      "eu",
+      "as-ne",
+      "as-s",
+      "as-ic",
+      "in",
+      "af-n",
+      "af-e",
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      15,
+      2
+     ],
+     "in": [
+      "in",
+      "as-ic",
+      "as-s",
+      "af-n",
+      "af-e"
+     ]
+    }
    ],
    "note": "Swamp-dwelling, pig-like artiodactyls of the Old World -- the stock from which hippos arose.",
    "cls": {
@@ -390,7 +420,27 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Brontotheriidae"
-   }
+   },
+   "box": [
+    [
+     -170,
+     -55,
+     25,
+     75
+    ],
+    [
+     65,
+     150,
+     20,
+     52
+    ],
+    [
+     20,
+     30,
+     40,
+     45
+    ]
+   ]
   },
   "Camelidae": {
    "rank": "family",
@@ -778,7 +828,11 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Chalicotheriidae"
-   }
+   },
+   "lat": [
+    0,
+    55
+   ]
   },
   "Chalicotherium": {
    "rank": "genus",
@@ -797,7 +851,11 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Chalicotheriidae"
-   }
+   },
+   "lat": [
+    0,
+    55
+   ]
   },
   "Coryphodon": {
    "rank": "genus",
@@ -1091,7 +1149,15 @@
     "class": "Mammalia",
     "order": "Perissodactyla",
     "family": "Brontotheriidae"
-   }
+   },
+   "box": [
+    [
+     88,
+     120,
+     38,
+     52
+    ]
+   ]
   },
   "Equidae": {
    "rank": "family",
@@ -2070,8 +2136,24 @@
    "fad": 60,
    "lad": 48,
    "range": [
-    "na-w",
-    "eu"
+    {
+     "t": [
+      60,
+      48
+     ],
+     "in": [
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      56,
+      48
+     ],
+     "in": [
+      "eu"
+     ]
+    }
    ],
    "note": "A sheep-sized, five-toed early hoofed mammal close to the ancestry of horses and rhinos.",
    "cls": {

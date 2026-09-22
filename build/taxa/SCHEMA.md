@@ -80,13 +80,19 @@ af-w  Guinea, Congo basin           af-s  Karoo, Kalahari, Zambezi
 mg    Madagascar                    ar    Arabian plate
 as-w  Anatolia, Caucasus, Iran, Afghanistan
 as-n  Siberia, Russian Far East     as-c  Kazakhstan, Tarim, Tibet, Mongolia
-as-e  China, Korea, Japan           as-se Indochina, Sundaland, Philippines
-in    Indian subcontinent           au    Australia, Tasmania
+as-ne North China block, Korea, Japan   as-s  South China block (south of the Qinling), Hainan, Taiwan
+as-ic Indochina, Borneo, Java, Philippines   as-sb Sibumasu: Myanmar, W Thailand, Malaya, Sumatra
+in    Indian subcontinent           au-w  Western Australia (Yilgarn, Pilbara, Kimberley)
+au-e  the rest of Australia, Tasmania
 ng    New Guinea                    nz    New Zealand, New Caledonia
 oc    Pacific islands               an    Antarctica
 ```
 
-Aliases: `na sa af as` (all sub-codes) · `laurentia` (na+gl) · `euramerica` · `laurasia`
+Aliases: `na sa af as` (all sub-codes) · `au` (= au-w + au-e; the Ediacara Hills, Emu Bay, Winton
+and Riversleigh are `au-e`, Gogo and the Canning reefs `au-w`) · `as-e` (= as-ne + as-s) · `as-se` (= as-ic + as-sb: the
+two old East and South-East Asia codes, kept because both halves share a Cenozoic; write the
+block itself for anything Palaeozoic or Mesozoic — Chengjiang is `as-s`, Jehol `as-ne`, the
+Cathaysian flora `as-ne, as-s, as-ic`, and Sibumasu is Gondwanan) · `laurentia` (na+gl) · `euramerica` · `laurasia`
 · `holarctic` · `gondwana` · `afro-arabia` · `sahul` · `old-world` · `new-world` ·
 `neotropics` · `cosmo` (everywhere — use for genuinely cosmopolitan or open-ocean taxa).
 

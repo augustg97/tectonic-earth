@@ -413,7 +413,15 @@
     "family": "Araucariaceae"
    },
    "pbdb_ok": true,
-   "place_ok": true
+   "place_ok": true,
+   "box": [
+    [
+     -115,
+     -100,
+     30,
+     40
+    ]
+   ]
   },
   "Archaefructus": {
    "rank": "genus",
@@ -716,8 +724,26 @@
    "fad": 427,
    "lad": 393,
    "range": [
-    "au",
-    "na-e"
+    {
+     "t": [
+      427,
+      410
+     ],
+     "in": [
+      "au-e"
+     ]
+    },
+    {
+     "t": [
+      410,
+      393
+     ],
+     "in": [
+      "au-e",
+      "na-e",
+      "na-n"
+     ]
+    }
    ],
    "note": "A lycophyte with real leaves, appearing surprisingly early in Australia and complicating every tidy story about plant evolution.",
    "sz": 0.3,
@@ -742,7 +768,21 @@
      "as-se": 1,
      "au": 4
     }
-   }
+   },
+   "box": [
+    [
+     140,
+     152,
+     -40,
+     -33
+    ],
+    [
+     -70,
+     -60,
+     46,
+     50
+    ]
+   ]
   },
   "Bennettitales": {
    "rank": "order",
@@ -829,7 +869,8 @@
    "range": [
     "af-s",
     "in",
-    "sa-s"
+    "sa-s",
+    "as-sb"
    ],
    "note": "A cold-climate seed plant of the floras that recolonised bare ground as the Karoo ice sheets melted.",
    "pbdb": {
@@ -1147,7 +1188,9 @@
    "fad": 300,
    "lad": 252,
    "range": [
-    "as-e"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "A lycopsid tree of the Cathaysian coal forests of South China -- the rainforests that kept growing after the Euramerican ones collapsed.",
    "hab": [
@@ -1161,9 +1204,9 @@
     "family": ""
    },
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Ceiba pentandra": {
@@ -1197,7 +1240,27 @@
    "fad": 230,
    "lad": 60,
    "range": [
-    "cosmo"
+    {
+     "t": [
+      230,
+      66
+     ],
+     "in": [
+      "cosmo"
+     ]
+    },
+    {
+     "t": [
+      66,
+      60
+     ],
+     "in": [
+      "sa-s",
+      "au",
+      "nz",
+      "an"
+     ]
+    }
    ],
    "note": "A drought-tolerant conifer family whose Classopollis pollen swamps Jurassic and Cretaceous lowland sediments: the canopy many sauropods fed in.",
    "pbdb": {
@@ -1714,7 +1777,8 @@
     "an",
     "au",
     "in",
-    "sa-s"
+    "sa-s",
+    "as-sb"
    ],
    "note": "As glossopteris but with non-midribbed leaves",
    "sz": 15.0,
@@ -1761,8 +1825,9 @@
    "fad": 285,
    "lad": 252,
    "range": [
-    "as-e",
-    "as-se"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "A Cathaysian seed plant with broad net-veined leaves that look startlingly like an angiosperm's, 150 million years early.",
    "sz": 3.0,
@@ -1794,9 +1859,9 @@
    },
    "place_ok": true,
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Ginkgo": {
@@ -2006,7 +2071,8 @@
     "sa-s",
     "sa-n",
     "mg",
-    "nz"
+    "nz",
+    "as-sb"
    ],
    "note": "A tongue-leaved seed fern blanketing Gondwana, whose distribution across five now-separate continents was early evidence for continental drift.",
    "sz": 30.0,
@@ -2454,9 +2520,9 @@
    "fad": 290,
    "lad": 252,
    "range": [
-    "as-e",
-    "as-se",
-    "as-c"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "A horsetail relative with whorls of broad leaves, characteristic of the Cathaysian flora.",
    "pbdb": {
@@ -2488,9 +2554,9 @@
     }
    },
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Lobelia rhynchopetalum": {
@@ -2881,7 +2947,8 @@
     "au",
     "af-s",
     "sa-s",
-    "an"
+    "an",
+    "as-sb"
    ],
    "note": "A strap-leaved cordaitalean of the Glossopteris flora, growing beside the seed ferns in the cool-temperate forests of Permian Gondwana.",
    "pbdb": {
@@ -3863,7 +3930,19 @@
     "order": "Araucariales",
     "family": "Podocarpaceae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "lat": [
+    {
+     "t": [
+      240,
+      66
+     ],
+     "lat": [
+      0,
+      62
+     ]
+    }
+   ]
   },
   "Polylepis": {
    "rank": "genus",
@@ -4888,7 +4967,8 @@
     "sa-s",
     "sa-n",
     "mg",
-    "nz"
+    "nz",
+    "as-sb"
    ],
    "note": "The segmented root of the Glossopteris trees, preserved in Antarctic peat and Indian coal: the plumbing of a forest that grew in polar light.",
    "dt": "-",
@@ -5357,7 +5437,15 @@
    "cls": {
     "class": "Zosterophyllopsida",
     "family": "Zosterophyllaceae"
-   }
+   },
+   "avoid": [
+    "Armorica",
+    "Hun Superterrane",
+    "Perunica",
+    "Iberian Massif",
+    "Massif Central",
+    "Gondwana"
+   ]
   },
   "angiosperm canopy trees": {
    "rank": "informal",

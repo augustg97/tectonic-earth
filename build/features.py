@@ -373,8 +373,11 @@ LABELS = [
     # cold for wood, not simply "cold desert" -- it is one of the largest
     # biomes on Earth and the app had no name for any of it. Coordinates are
     # present-day and ride the plate tracks like every other land label.
-    ("tundra", "Arctic Tundra", 100, 71, 0, 5),
-    ("tundra", "Nearctic Tundra", -95, 67, 0, 5),
+    # To 2.8 Ma: the Pliocene Arctic was boreal forest to the coast (beavers
+    # and camels at 79 N on Ellesmere at 3.9 Ma); tundra is a product of the
+    # Northern Hemisphere ice.
+    ("tundra", "Arctic Tundra", 100, 71, 0, 2.8),
+    ("tundra", "Nearctic Tundra", -95, 67, 0, 2.8),
     # On the Alaskan side, not in the strait: Beringia was land only while sea
     # level was low, so a label at 170W today sits in 44 m of water.
     ("tundra", "Beringian Steppe-Tundra", -157, 66, 0, 2.6),
@@ -702,7 +705,10 @@ LABELS = [
     ("ocean", "Piedmont-Ligurian Ocean", 8, 45, 35, 170),
     ("sea", "Okhotsk Sea", 148, 55, 0, 30),
     ("sea", "Sea of Japan", 135, 40, 0, 25),
-    ("region", "Tethyan Himalaya", 88, 29, 0, 250),
+    # At (88, 29) the point sat on the Lhasa polygon and rode Asia: at 110 Ma
+    # the card stood at 12 N showing India's fauna. Tingri, south of the suture,
+    # is Indian plate in the rotation model as in the rock.
+    ("region", "Tethyan Himalaya", 87, 28.5, 0, 250),
     ("region", "Morrison Floodplain", -108, 40, 145, 157),
     ("island", "Yakutat Terrane", -140, 60, 0, 50),
     ("orogen", "Baikalian Belt", 105, 55, 300, 850),

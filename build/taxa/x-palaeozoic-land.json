@@ -78,7 +78,7 @@
    "lad": 270,
    "range": [
     "na-w",
-    "as-e"
+    "as-ne"
    ],
    "note": "A small early reptile with chewing teeth, of the Permian of Texas and, as its relative Belebey, of Russia and China.",
    "hab": [
@@ -245,7 +245,8 @@
    "lad": 252,
    "range": [
     "af-s",
-    "as-e"
+    "as-c",
+    "as-ne"
    ],
    "note": "A pig-sized dicynodont that dug spiral burrows in the Karoo floodplain; the most abundant vertebrate fossil of the Late Permian of South Africa.",
    "hab": [
@@ -343,8 +344,9 @@
    "fad": 295,
    "lad": 260,
    "range": [
-    "as-e",
-    "as-se"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "A Cathaysian seed fern with netted leaf veins, of the Permian coal swamps of North China.",
    "hab": [
@@ -377,9 +379,9 @@
     "lla_r": 257.0
    },
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Endothiodon": {
@@ -437,7 +439,7 @@
    "fad": 384,
    "lad": 380,
    "range": [
-    "au"
+    "au-w"
    ],
    "note": "A lobe-finned fish from the Gogo reef of Western Australia, preserved whole in three dimensions, with the wrist bones and nostrils of a fish on its way to land.",
    "hab": [
@@ -533,7 +535,7 @@
    "fad": 372,
    "lad": 365,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "The lycopsid of the Xinhang forest of Anhui, the oldest forest known in Asia: thousands of trees preserved standing in a Late Devonian coastal swamp.",
    "hab": [
@@ -791,7 +793,7 @@
    "fad": 365,
    "lad": 360,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A Late Devonian tetrapod known from a jaw found in New South Wales, the first sign that the earliest four-limbed animals were in Gondwana as well as in Greenland.",
    "hab": [
@@ -840,7 +842,8 @@
     "au",
     "an",
     "mg",
-    "ar"
+    "ar",
+    "as-sb"
    ],
    "note": "A horsetail with unbranched stems, the Angaran and Gondwanan counterpart of Calamites, along every Permian riverbank of Siberia and the Glossopteris country.",
    "hab": [
@@ -1103,7 +1106,7 @@
    "fad": 259,
    "lad": 254,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "A pareiasaur of the Late Permian of Shanxi, a barrel-bodied plant-eater armoured with bony studs.",
    "hab": [
@@ -1326,8 +1329,9 @@
    "fad": 299,
    "lad": 252,
    "range": [
-    "as-e",
-    "as-se"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "A Cathaysian plant with two rows of leaves of two sizes, of uncertain kinship; it grew in the wet Permian forests of China and nowhere else.",
    "hab": [
@@ -1364,9 +1368,9 @@
     "lla_r": 257.0
    },
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Tulerpeton": {

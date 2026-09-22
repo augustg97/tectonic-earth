@@ -96,7 +96,7 @@
    "fad": 830,
    "lad": 800,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "The chert microfossils of the Bitter Springs Formation of central Australia: cyanobacterial mats, colonial cells and eukaryotic algae preserved cell by cell, the standard picture of a Tonian shallow sea.",
    "hab": [
@@ -287,7 +287,7 @@
    "fad": 602,
    "lad": 580,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "The Lantian Formation of Anhui: macroalgae and enigmatic soft-bodied forms in black shale just after the Marinoan ice, among the oldest large complex organisms.",
    "hab": [
@@ -307,7 +307,7 @@
    "fad": 900,
    "lad": 800,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "Macroscopic algae of the Tonian of North China -- Longfengshania and its kin -- among the oldest seaweeds visible to the naked eye.",
    "hab": [
@@ -327,7 +327,7 @@
    "fad": 900,
    "lad": 800,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "A stalked, bulb-headed macroalga of the Tonian of North China, a few centimetres tall, held to the sea floor by a disc.",
    "hab": [
@@ -655,7 +655,7 @@
    "realm": "sea",
    "form": "strata",
    "fad": 541,
-   "lad": 480,
+   "lad": 515,
    "range": [
     "cosmo"
    ],

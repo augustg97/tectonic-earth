@@ -171,7 +171,22 @@
     "regions": {
      "eu": 7
     }
-   }
+   },
+   "box": [
+    [
+     -9,
+     2,
+     50,
+     59
+    ]
+   ],
+   "avoid": [
+    "Armorica",
+    "Hun Superterrane",
+    "Perunica",
+    "Iberian Massif",
+    "Massif Central"
+   ]
   },
   "Meganeura": {
    "rank": "genus",
@@ -408,6 +423,21 @@
    "pbdb_ok": true,
    "aka": [
     "Pneumodesmus newmani"
+   ],
+   "box": [
+    [
+     -9,
+     2,
+     50,
+     59
+    ]
+   ],
+   "avoid": [
+    "Armorica",
+    "Hun Superterrane",
+    "Perunica",
+    "Iberian Massif",
+    "Massif Central"
    ]
   },
   "Rhyniella": {

@@ -2,6 +2,35 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.9",
+   "date": "22 September 2026",
+   "title": "The late Palaeozoic seas, the ages between the samples, and Australia and China by block",
+   "summary": "The fourth flora-and-fauna pass. Forty-seven genera fill the Devonian, Carboniferous and Permian shelves outside North America and the Ediacaran sea floor. The placement listing was read at the fourteen ages between the ones already read, and about seventy placements fixed. Four region codes became eight: East Asia is now North China, South China, Indochina and Sibumasu, and Australia is east and west, so the Chengjiang fauna, the Cathaysian coal flora, the Glossopteris flora and the Winton dinosaurs each sit on their own block. The Tethyan Himalaya rides India, as its rock does.",
+   "sections": [
+    {
+     "name": "In the seas",
+     "items": [
+      "The Devonian reef and shelf: Palmatolepis and Polygnathus conodonts, Schizophoria and Athyris, the trilobites Reedops and Gerastos, the goniatites Anarcestes, Sporadoceras and Cymaclymenia, the Canning Basin reef fauna, the Malvinokaffric Metacryphaeus. The Carboniferous: Siphonodella, the horn corals Siphonodendron and Caninia, Elonichthys, Eomarginifera, Dombarites, Fenestella, Spirifer, the cold-water Levipustula. The Permian: Spinomarginifera, Neochonetes, Orthothetina, Permophricodothyris, Paratirolites at the very end, Dielasma, Schizodus, the Gondwanan Terrakea, Echinalosia and Ingelarella, the last fusulinid seas' Spirigerella and Enteletes. The Ediacaran: Charniodiscus, Thectardis, Andiva, Parvancorina, Arkarua, Swartpuntia.",
+      "The Lago Mare card is a brackish lake: killifish, charophytes, dreissenid mussels and tamarisk, and the mastodons and dawn redwoods stay on the land cards around it."
+     ]
+    },
+    {
+     "name": "The right place, fourth pass",
+     "items": [
+      "Read at 5, 15, 40, 60, 90, 110, 170, 190, 215, 265, 320, 375, 420 and 480 million years ago. Hipparion, the chalicotheres and Mammut no longer stand at 71 N in a Pliocene that was forest, and the tundra labels begin at 2.8 million years with the ice; the anthracotheres leave Europe when they did; brontotheres, entelodonts and Andrewsarchus keep to the continents and basins that hold them; carcharodontosaurs, brachiosaurs and spinosaurs to their own decades of the Cretaceous; Plateosaurus, Eudimorphodon and Metoposaurus to the Germanic basin, Coelophysis and Placerias to the Chinle; the Triassic dicynodonts and rauisuchians to the crust that has their bones; gorgonopsians to the Karoo and the Russian platform; Baragwanathia to Victoria, and the Silurian myriapods of Scotland off the Gondwanan terranes that are France today.",
+      "The swimming sloth Thalassocnus stays on the Pisco coast. The Cathaysian flora stops at the Solonker suture, so Amuria is Angaran on both its province and its list. The Tethyan Himalaya was riding the Lhasa terrane at 12 N while India was at 43 S; it sits on India now, and a third detector holds every label's plate against its home crust so the next one cannot."
+     ]
+    },
+    {
+     "name": "Keeping it right",
+     "items": [
+      "Region codes: as-ne, as-s, as-ic, as-sb replace the two East Asian codes and au-w, au-e the Australian one; the old codes survive as aliases, so nothing written before this release changed meaning. Labels named differently from the province model's blocks (Amuria, Annamia, Greater Adria, the Lhasa terrane and eleven more) keep their own block instead of the nearest one.",
+      "The measure of how generic the marine cards still are is a script now (build/measure_generic.py), run on two releases side by side: at class and order level, Cenozoic 22, Mesozoic 26, late Palaeozoic 28 to 27, early Palaeozoic 38, Precambrian 51 per cent of marine slot-ages. The numbers quoted before this release used a counting nobody wrote down and are not comparable."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.8",
    "date": "22 September 2026",
    "title": "The Triassic and Cretaceous seas, the polar oceans, and every age read",

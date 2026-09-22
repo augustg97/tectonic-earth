@@ -56,17 +56,18 @@
    "fad": 310,
    "lad": 252,
    "range": [
-    "as-e",
-    "as-se"
+    "as-ne",
+    "as-s",
+    "as-ic"
    ],
    "note": "The tropical coal-forest flora - Gigantopteris, Lobatannularia - that built the great Shanxi coals.",
    "assemblage": true,
    "fill": false,
    "rep": "Gigantopteris",
    "avoid": [
-    "Sibumasu",
-    "Cimmeria",
-    "Cimmerian Belt"
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
    ]
   },
   "Cerrado flora": {
@@ -109,7 +110,7 @@
    "fad": 520,
    "lad": 515,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "An early Cambrian Lagerstatte in Yunnan, older than the Burgess Shale and just as detailed -- soft tissue, guts and nervous systems.",
    "assemblage": true,
@@ -160,7 +161,7 @@
    "fad": 600,
    "lad": 560,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "Weng'an phosphorites preserving algae and controversial embryo-like fossils at cellular resolution, ~600 Ma.",
    "assemblage": true,
@@ -271,7 +272,8 @@
     "sa-s",
     "sa-n",
     "mg",
-    "nz"
+    "nz",
+    "as-sb"
    ],
    "note": "The whole cool-temperate seed-fern forest - Vertebraria roots, Gangamopteris - that defines Permian Gondwana.",
    "assemblage": true,
@@ -320,7 +322,7 @@
    "fad": 131,
    "lad": 120,
    "range": [
-    "as-e"
+    "as-ne"
    ],
    "note": "The Yixian and Jiufotang beds of Liaoning: volcanic ash falls that buried a whole forest ecosystem intact, feathers, stomach contents, colour-bearing melanosomes and all.",
    "assemblage": true,
@@ -359,7 +361,7 @@
    "fad": 246,
    "lad": 242,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "A Middle Triassic marine Lagerstatte in Yunnan documenting the recovery of ocean life after the extinction.",
    "assemblage": true,
@@ -421,7 +423,7 @@
    "fad": 254,
    "lad": 251,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "The Meishan section is the global boundary marker for the end-Permian extinction, in continuous marine limestone.",
    "assemblage": true,

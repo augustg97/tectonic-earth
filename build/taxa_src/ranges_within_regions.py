@@ -45,6 +45,12 @@ SIERRA = [[-121.5, -117.8, 35.3, 40.5]]
 IWP = [[30, 180, -35, 35], [-180, -140, -30, 30]]
 CARIB = [-98, -58, 8, 31]
 
+#: Mongolia shares the as-ne code with North China but was Angaran ground in
+#: the Permian: the Cathaysian flora stops at the Solonker suture.
+_NOT_CATHAYSIA = ["Amuria", "Central Asian Orogenic Belt", "Mongol-Okhotsk Ocean"]
+#: European labels that were Gondwanan terranes in the early Palaeozoic.
+_PERI_GONDWANA = ["Armorica", "Hun Superterrane", "Perunica", "Iberian Massif", "Massif Central"]
+
 PATCH = {
     # ------------------------------------------------------------ North America
     "Sequoiadendron": {"box": NOW(*SIERRA, since=2.6),
@@ -479,39 +485,181 @@ PATCH = {
                              {"t": [201, 130], "in": ["as-e", "as-c", "na-w", "eu"]},
                              {"t": [130, 100], "in": ["as-e", "as-n"]}]},
     "Koolasuchus": {"box": [[140, 150, -40, -35]]},
-    "Confuciusornis": {"box": [[110, 126, 38, 47]]}, "Repenomamus": {"box": [[110, 126, 38, 47]]},
-    "Sinosauropteryx": {"box": [[110, 126, 38, 47]]}, "Microraptor": {"box": [[110, 126, 38, 47]]},
-    "Jehol Biota": {"box": [[110, 126, 38, 47]]},
     # --- 200 and 230 Ma
-    "Lufengosaurus": {"box": [[98, 112, 22, 32]]},
     "Scelidosaurus": {"box": [[-6, 2, 49, 52]], "avoid": ["Caledonides", "Ural Mountains", "Bohemian Massif", "Massif Central",
                                                         "Iberian Massif", "Rhodope Massif", "Fennoscandian Shield", "Greater Adria"]},
-    # --- 280 Ma: Angara stays in Angara, Cathaysia in Cathaysia
+    # --- 280 Ma: Angara stays in Angara, Cathaysia in Cathaysia. The Cathaysian
+    # taxa are ranged on the blocks the flora grew on (North China, South China,
+    # Indochina); Gondwanan Sibumasu is a different code now, so no avoid lists.
     "Angaropteridium": {"box": [[45, 120, 45, 75]]}, "Rufloria": {"box": [[45, 130, 40, 75]]},
     "Vojnovskya": {"box": [[45, 130, 40, 75]]},
-    "Lobatannularia": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
-    "Emplectopteris": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
-    "Tingia": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
-    "Gigantopteris": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
-    "Cathaysian flora": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
-    "Cathaysiodendron": {"avoid": ["Sibumasu", "Cimmeria", "Cimmerian Belt"]},
+    "Lobatannularia": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
+    "Emplectopteris": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
+    "Tingia": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
+    "Gigantopteris": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
+    "Cathaysian flora": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
+    "Cathaysiodendron": {"range": ["as-ne", "as-s", "as-ic"], "avoid": _NOT_CATHAYSIA},
     # --- 450 Ma: the warm Laurentian shelf does not reach the cold Gondwanan margin
     "Astraspis": {"lat": [0, 45]}, "Constellaria": {"lat": [0, 45]}, "Isorophus": {"lat": [0, 45]},
     "Flexicalymene": {"lat": [0, 45]}, "Rafinesquina": {"lat": [0, 50]}, "Platystrophia": {"lat": [0, 45]},
     "Streptelasma": {"lat": [0, 45]}, "Isotelus": {"lat": [0, 45]}, "Elrathia": {"lat": [0, 45]},
     "Marrella": {"lat": [0, 45]}, "Opabinia": {"lat": [0, 45]}, "Pikaia": {"lat": [0, 45]}, "Ottoia": {"lat": [0, 45]},
-    # --- 600 Ma: as-e is North China AND South China
-    "Lantian biota": {"avoid": ["North China"]}, "Doushantuo biota": {"avoid": ["North China"]},
-    "Chengjiang Biota": {"avoid": ["North China"]},
-    "Myllokunmingia": {"avoid": ["North China"]}, "Haikouichthys": {"avoid": ["North China"]},
-    "Luoping biota": {"avoid": ["North China"]}, "Keichousaurus": {"avoid": ["North China"]},
-    "Meishan fauna": {"avoid": ["North China"]},
-    "Liulaobei biota": {"avoid": ["South China"]}, "Longfengshania": {"avoid": ["South China"]},
+    # --- the two Chinas, by block, now that the codes can say which
+    "Lantian biota": {"range": ["as-s"]}, "Doushantuo biota": {"range": ["as-s"]},
+    "Chengjiang Biota": {"range": ["as-s"]}, "Myllokunmingia": {"range": ["as-s"]},
+    "Haikouichthys": {"range": ["as-s"]}, "Eoredlichia": {"range": ["as-s", "au"]},
+    "Luoping biota": {"range": ["as-s"]}, "Keichousaurus": {"range": ["as-s"]},
+    "Meishan fauna": {"range": ["as-s"]}, "Guangdedendron": {"range": ["as-s"]},
+    "Liulaobei biota": {"range": ["as-ne"]}, "Longfengshania": {"range": ["as-ne"]},
+    "Shihtienfenia": {"range": ["as-ne"]}, "Bolosaurus": {"range": ["na-w", "as-ne"]},
+    "Lufengosaurus": {"range": ["as-s"]},
+    "Mamenchisaurus": {"range": ["as-s", "as-c"], "avoid": ["Lhasa Terrane"]},
+    "Confuciusornis": {"range": ["as-ne"]}, "Repenomamus": {"range": ["as-ne"]},
+    "Sinosauropteryx": {"range": ["as-ne"]}, "Microraptor": {"range": ["as-ne"]},
+    "Jehol Biota": {"range": ["as-ne"]},
     "Toxaster": {"lat": [0, 55]},
+    # Sibumasu was Gondwanan crust: the Glossopteris flora and its cold-water sea reach it
+    "Glossopteris": {"range+": ["as-sb"]}, "Gangamopteris": {"range+": ["as-sb"]},
+    "Noeggerathiopsis": {"range+": ["as-sb"]}, "Vertebraria": {"range+": ["as-sb"]},
+    "Glossopteris flora": {"range+": ["as-sb"]}, "Botrychiopsis": {"range+": ["as-sb"]},
+    "Paracalamites": {"range+": ["as-sb"]}, "Eurydesma": {"range+": ["as-sb"]},
+    # Wallacea's endemics stay east of Wallace's Line
+    "Babyrousa": {"range": ["as-ic"], "avoid": ["Sundaland"]},
+    "Bubalus depressicornis": {"range": ["as-ic"], "avoid": ["Sundaland"]},
+    "Ailurops ursinus": {"range": ["as-ic"], "avoid": ["Sundaland"]},
+    "Macrocephalon maleo": {"range": ["as-ic"], "avoid": ["Sundaland"]},
     # -------------------------------------------------------------- ocean islands
     "Pandanus": {"range+": ["ind"]},
     "Saxifraga oppositifolia": {"range+": ["arc"]},
     "Birgus latro": {"lat": [0, 26]},
+    # ------------------------------------------------ the ages between the samples
+    # The placement listing had been read at twenty ages, every 25-50 Myr. Read
+    # at the fourteen between them (5, 15, 40, 60, 90, 110, 170, 190, 215, 265,
+    # 320, 375, 420, 480 Ma), which is where a genus with a short span and a
+    # single home shows up on the wrong crust.
+    # --- 5 Ma: the Pliocene Arctic was forest, not a home for hipparions
+    "Hipparion": {"lat": [0, 55]}, "Chalicotheriidae": {"lat": [0, 55]},
+    "Chalicotherium": {"lat": [0, 55]}, "Mammut": {"lat": [5, 62]},
+    "Anthracotheriidae": {"range": [
+        {"t": [45, 15], "in": ["eu", "as-ne", "as-s", "as-ic", "in", "af-n", "af-e", "na-w"]},
+        {"t": [15, 2], "in": ["in", "as-ic", "as-s", "af-n", "af-e"]}]},
+    # the swimming sloth of the Pisco coast. An ocean card has no footprint, so
+    # a box cannot keep a coastal species off the basins its LAND codes touch:
+    # a shore animal of one coast gets that ocean's code and nothing else.
+    "Thalassocnus": {"range": ["pac"], "box": [[-82, -69, -18, -4]], "hab": ["coast", "shelf"],
+                     "place_ok": True, "conf_note": "PBDB collections are the Pisco coast of Peru; the range is that coast's ocean, by design"},
+    # the Lago Mare ostracod lives in brackish water, so it can reach a lake card
+    "Cyprideis": {"realms": ["sea", "fresh"], "hab": ["coast", "lake"]},
+    # --- 40-60 Ma: families with one continent at a time
+    "Brontotheriidae": {"box": [[-170, -55, 25, 75], [65, 150, 20, 52], [20, 30, 40, 45]]},
+    "Entelodontidae": {"range": [
+        {"t": [46, 38], "in": ["as-ne", "as-s", "as-c"]},
+        {"t": [38, 16], "in": ["as-ne", "as-s", "as-c", "na-w", "na-e"]},
+        {"t": [38, 23], "in": ["eu"]}]},
+    "Andrewsarchus": {"box": [[100, 125, 38, 48]]},
+    "Embolotherium": {"box": [[88, 120, 38, 52]]},
+    "Phenacodus": {"range": [{"t": [60, 48], "in": ["na-w"]}, {"t": [56, 48], "in": ["eu"]}]},
+    "Gastornis": {"range": [{"t": [60.5, 48], "in": ["eu"]},
+                            {"t": [56, 48], "in": ["na-w", "na-e", "na-n", "as-ne"]}]},
+    "Notosuchia": {"lat": [0, 52]},
+    "Cheirolepidiaceae": {"range": [{"t": [230, 66], "in": ["cosmo"]},
+                                    {"t": [66, 60], "in": ["sa-s", "au", "nz", "an"]}]},
+    # --- 90-110 Ma
+    "Carcharodontosauridae": {"range": [
+        {"t": [130, 120], "in": ["eu"]}, {"t": [116, 98], "in": ["na-w"]},
+        {"t": [130, 90], "in": ["sa-s", "sa-n"]}, {"t": [130, 90], "in": ["af-n", "af-e"]},
+        {"t": [125, 90], "in": ["as-c", "as-ne"]}]},
+    "Brachiosauridae": {"range": [{"t": [160, 125], "in": ["eu"]}, {"t": [160, 100], "in": ["na-w"]},
+                                  {"t": [160, 110], "in": ["af-e", "af-n"]}]},
+    "Spinosauridae": {"box": [[-10, 25, 36, 53], [-20, 55, -35, 37], [-82, -34, -56, 13],
+                              [95, 125, 10, 45], [140, 150, -40, -35]], "avoid": ["Caledonides"]},
+    "Psittacosaurus": {"range": ["as-ne", "as-s", "as-c", "as-n", "as-ic"],
+                       "box": [[75, 135, 25, 58], [98, 106, 12, 20]]},
+    "Tritylodontidae": {"box": [{"t": [130, 100], "box": [[75, 140, 30, 58]]}]},
+    "Nigersaurus": {"box": [[-5, 20, 10, 25]]},
+    "Anhanguera": {"range": ["sa-n", "eu"], "box": [[-45, -34, -12, -3], [-2, 2, 50, 54]], "avoid": ["Caledonides"]},
+    "Tapejara": {"box": [[-45, -34, -12, -3]]},
+    "Leaellynasaura": {"box": [[140, 150, -40, -36]]},
+    "Kronosaurus": {"box": [[138, 152, -30, -18], [-78, -70, 3, 8]]},
+    # --- 170-215 Ma: the Triassic and Jurassic genera of one formation
+    "Coelophysoidea": {"range": [{"t": [228, 190], "in": ["na-w", "na-e", "eu", "af-s"]},
+                                 {"t": [201, 190], "in": ["as-s"]}]},
+    "Massospondylidae": {"range": ["af-s", "sa-s", "an", "na-w", "in", "as-s"]},
+    "Dicynodontia": {"range": [
+        {"t": [270, 252], "in": ["af-s", "af-e", "eu", "as-c", "as-ne", "sa-s", "in"]},
+        {"t": [252, 227], "in": ["af-s", "af-e", "an", "in", "as-ne", "as-s", "as-c", "as-n", "eu", "sa-s", "au", "na-w", "as-ic", "as-sb"]},
+        {"t": [227, 201], "in": ["na-w", "na-e", "sa-s", "af-s", "eu", "in"]}]},
+    "Cynodontia": {"range": [
+        {"t": [260, 252], "in": ["af-s", "af-e", "eu", "as-n", "sa-s"]},
+        {"t": [252, 201], "in": ["af-s", "af-e", "in", "as-ne", "as-s", "as-c", "as-n", "eu", "sa-s", "mg", "na-e", "na-w"]},
+        {"t": [252, 235], "in": ["an"]},
+        {"t": [201, 180], "in": ["af-s", "an", "sa-s"]},
+        {"t": [201, 130], "in": ["as-ne", "as-s", "as-c", "na-w", "eu"]},
+        {"t": [130, 100], "in": ["as-ne", "as-n"]}],
+                   "box": [{"t": [130, 100], "box": [[75, 140, 30, 58]]}]},
+    "Rauisuchia": {"range": ["na-w", "na-e", "sa-s", "sa-n", "eu", "af-s", "af-e", "af-n", "in",
+                             "as-ne", "as-s"]},
+    "Podocarpaceae": {"lat": [{"t": [240, 66], "lat": [0, 62]}]},
+    "Lithiotis": {"lat": [0, 40]},
+    "Plateosaurus": {"box": [[-10, 25, 42, 62], [-30, -18, 68, 73]]},
+    "Eudimorphodon": {"box": [[5, 20, 42, 50], [-30, -18, 68, 73]]},
+    "Metoposaurus": {"box": [[-10, 25, 36, 55]]},
+    "Placerias": {"range": ["na-w"], "box": [[-115, -100, 30, 40]]},
+    "Coelophysis": {"range": ["na-w"], "box": [[-115, -100, 30, 40]]},
+    "Coelophysis bauri": {"range": ["na-w"], "box": [[-115, -100, 30, 40]]},
+    "Desmatosuchus": {"box": [[-115, -96, 30, 40]]}, "Postosuchus": {"box": [[-115, -96, 30, 40]]},
+    "Araucarioxylon": {"box": [[-115, -100, 30, 40]]}, "Dilophosaurus": {"box": [[-115, -105, 32, 40]]},
+    # --- 265-320 Ma: the Permian of one basin each
+    "Gorgonopsia": {"box": [[42, 62, 50, 62], [10, 42, -36, -4], [100, 120, 30, 45]]},
+    "Estemmenosuchus": {"box": [[50, 62, 54, 60]]},
+    "Sinophoneus": {"range": ["as-ne"], "box": [[95, 105, 35, 42]], "avoid": ["Cathaysian Coal Forests"]},
+    "Diictodon": {"range": ["af-s", "as-c", "as-ne"]},
+    "Dinocephalia": {"range": ["af-s", "eu", "as-ne", "sa-s"]},
+    "Therocephalia": {"range": [{"t": [265, 240], "in": ["af-s", "eu", "as-ne", "as-c"]},
+                                {"t": [252, 240], "in": ["an"]}]},
+    "Diplocaulus": {"box": [[-100, -94, 32, 37], [-12, 0, 29, 35]]},
+    "Temnospondyli": {"range": [{"t": [330, 300], "in": ["na-w", "na-e", "na-n", "eu"]},
+                                {"t": [300, 201], "in": ["cosmo"]},
+                                {"t": [201, 120], "in": ["au", "as-ne", "as-s", "as-c", "as-n", "an"]},
+                                {"t": [201, 190], "in": ["sa-s", "af-s", "in", "eu", "na-w"]}]},
+    "Xenacanthus": {"range": [{"t": [360, 300], "in": ["euramerica"]},
+                              {"t": [300, 252], "in": ["euramerica", "as-ne", "as-s", "in", "au", "sa-s"]}]},
+    # --- 420-480 Ma: the first land floras were one place each
+    "Zosterophyllum": {"avoid": _PERI_GONDWANA + ["Gondwana"]},
+    # Armorica and the Hun terranes are "eu" today and were Gondwana then: the
+    # next code split (eu-n / eu-s) retires these; until then the avoid list.
+    "Kampecaris": {"box": [[-9, 2, 50, 59]], "avoid": _PERI_GONDWANA},
+    "Pneumodesmus": {"box": [[-9, 2, 50, 59]], "avoid": _PERI_GONDWANA},
+    "Treptichnus pedum": {"lad": 515},
+    # --- Australia is two codes now (au-w / au-e). The genera of one formation
+    # go to their half; the Broome tracks are the west's only Mesozoic dinosaurs.
+    "Arkarua": {"range": ["au-e"]}, "Spriggina": {"range": ["au-e"]},
+    "Dickinsonia": {"range": ["au-e", "eu"]}, "Kimberella": {"range": ["ar", "au-e", "eu"]},
+    "Tribrachidium": {"range": ["au-e", "eu"]}, "Yorgia": {"range": ["au-e", "eu"]},
+    "Parvancorina": {"range": ["as-n", "au-e", "eu"]},
+    "Pteridinium": {"range": ["af-s", "au-e", "eu", "na-e"]}, "Rangea": {"range": ["af-s", "au-e", "eu"]},
+    "Charnia": {"range": ["as-n", "au-e", "eu", "na-e"]},
+    "Charniodiscus": {"range": ["au-e", "eu", "iap", "na-e"]},
+    "Anomalocaris": {"range": ["as-s", "au-e", "na-e", "na-w"]}, "Eoredlichia": {"range": ["as-s", "au-e"]},
+    "Redlichia": {"range": ["an", "as-c", "as-ne", "as-s", "au-e", "in"]},
+    "Sacabambaspis": {"range": ["au-e", "sa-n", "sa-s"]},
+    "Metaxygnathus": {"range": ["au-e"]}, "Bitter Springs microbiota": {"range": ["au-e"]},
+    "Gogonasus": {"range": ["au-w"]}, "Canning Basin reef fauna": {"range": ["au-w"]},
+    "Rhoetosaurus": {"range": ["au-e"]}, "Australovenator": {"range": ["au-e"]},
+    "Diamantinasaurus": {"range": ["au-e"]}, "Kunbarrasaurus": {"range": ["au-e"]},
+    "Steropodon": {"range": ["au-e"]}, "Muttaburrasaurus": {"range": ["au-e"]},
+    "Leaellynasaura": {"range": ["au-e"]}, "Koolasuchus": {"range": ["au-e"]},
+    "Umoonasaurus": {"range": ["au-e"]}, "Kronosaurus": {"range": ["au-e", "sa-n"]},
+    "Ptyktoptychion": {"range": ["au-e", "pan"]},
+    "Nimbadon": {"range": ["au-e"]}, "Obdurodon": {"range": ["au-e"]},
+    "Ornithocheiridae": {"range": ["af-n", "as-c", "as-ne", "as-s", "as-n", "au-e", "eu", "na-e", "sa-n"]},
+    "Allosauroidea": {"range": ["na-w", "eu", "af-n", "af-e", "sa-s", "as-ne", "as-s", "au-e"]},
+    "Nodosauridae": {"range": [{"t": [155, 66], "in": ["na-w", "na-e", "eu"]},
+                               {"t": [120, 66], "in": ["au-e", "an", "sa-s"]}]},
+    "Titanosauria": {"range": [{"t": [140, 66], "in": ["sa", "af", "mg", "in", "au-e", "an", "eu", "as-ne", "as-s", "as-c", "as-se"]},
+                               {"t": [70, 66], "in": ["na-w"]}]},
+    "Baragwanathia": {"range": [{"t": [427, 410], "in": ["au-e"]}, {"t": [410, 393], "in": ["au-e", "na-e", "na-n"]}],
+                      "box": [[140, 152, -40, -33], [-70, -60, 46, 50]]},
 }
 
 

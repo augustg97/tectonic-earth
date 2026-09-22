@@ -322,8 +322,8 @@
    "fad": 518.5,
    "lad": 500.8,
    "range": [
-    "as-e",
-    "au",
+    "as-s",
+    "au-e",
     "na-e",
     "na-w"
    ],
@@ -1115,10 +1115,10 @@
    "fad": 575,
    "lad": 555,
    "range": [
+    "as-n",
+    "au-e",
     "eu",
-    "na-e",
-    "au",
-    "as-n"
+    "na-e"
    ],
    "note": "Frond-shaped rangeomorphs anchored to the sea floor, feeding without a mouth or a gut.",
    "sz": 1.0,
@@ -1472,7 +1472,15 @@
      "as-c": 1,
      "sa-s": 3
     }
-   }
+   },
+   "realms": [
+    "sea",
+    "fresh"
+   ],
+   "hab": [
+    "coast",
+    "lake"
+   ]
   },
   "Cyrtospirifer": {
    "rank": "genus",
@@ -1624,7 +1632,7 @@
    "fad": 560,
    "lad": 550,
    "range": [
-    "au",
+    "au-e",
     "eu"
    ],
    "note": "A flat, segmented, centimetre-to-metre oval that left feeding traces as it moved; cholesterol in its tissues shows it was an animal.",
@@ -1816,8 +1824,8 @@
    "fad": 520,
    "lad": 515,
    "range": [
-    "as-e",
-    "au"
+    "as-s",
+    "au-e"
    ],
    "note": "An early redlichiid trilobite of South China, found in the Chengjiang Lagerstaette alongside soft-bodied animals.",
    "pbdb": {
@@ -1930,7 +1938,8 @@
     "in",
     "sa-s",
     "af-s",
-    "an"
+    "an",
+    "as-sb"
    ],
    "note": "A thick-shelled cold-water bivalve of the peri-glacial Gondwanan seas.",
    "sz": 0.12,
@@ -2724,9 +2733,9 @@
    "fad": 560,
    "lad": 550,
    "range": [
-    "au",
-    "eu",
-    "ar"
+    "ar",
+    "au-e",
+    "eu"
    ],
    "note": "A bilaterally symmetrical grazer that scraped mats with a feeding structure -- the best candidate for an early mollusc relative.",
    "sz": 0.05,
@@ -3884,7 +3893,7 @@
    "lad": 539,
    "range": [
     "af-s",
-    "au",
+    "au-e",
     "eu",
     "na-e"
    ],
@@ -3963,7 +3972,7 @@
    "lad": 539,
    "range": [
     "af-s",
-    "au",
+    "au-e",
     "eu"
    ],
    "note": "A fractal frondose Ediacaran of the Namibian shelf, type of the whole rangeomorph group.",
@@ -4089,11 +4098,12 @@
    "fad": 520,
    "lad": 509,
    "range": [
-    "as-e",
-    "au",
-    "in",
+    "an",
     "as-c",
-    "an"
+    "as-ne",
+    "as-s",
+    "au-e",
+    "in"
    ],
    "note": "A large, spiny redlichiid trilobite that typifies the Cambrian shelves of Gondwana and China.",
    "sz": 0.25,
@@ -4256,7 +4266,7 @@
    "fad": 560,
    "lad": 550,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A segmented Ediacaran form with a shield-like head end, argued over for decades as a possible early arthropod relative.",
    "pbdb": {
@@ -4429,7 +4439,7 @@
    "fad": 560,
    "lad": 550,
    "range": [
-    "au",
+    "au-e",
     "eu"
    ],
    "note": "A body plan with no counterpart in any living phylum.",
@@ -4698,8 +4708,8 @@
    "fad": 560,
    "lad": 550,
    "range": [
-    "eu",
-    "au"
+    "au-e",
+    "eu"
    ],
    "note": "Found with a trail of its own feeding impressions.",
    "sz": 0.25,

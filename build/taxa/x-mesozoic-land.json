@@ -84,8 +84,9 @@
     "af-n",
     "af-e",
     "sa-s",
-    "as-e",
-    "au"
+    "as-ne",
+    "as-s",
+    "au-e"
    ],
    "note": "The big three-fingered predators of the Jurassic and mid-Cretaceous, from Allosaurus to the carcharodontosaurs.",
    "cls": {
@@ -228,7 +229,7 @@
    "fad": 96,
    "lad": 93,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A lightly built six-metre megaraptoran with huge hand claws: Australia's best-known predatory dinosaur.",
    "cls": {
@@ -355,10 +356,34 @@
    "fad": 160,
    "lad": 100,
    "range": [
-    "na-w",
-    "af-e",
-    "eu",
-    "af-n"
+    {
+     "t": [
+      160,
+      125
+     ],
+     "in": [
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      160,
+      100
+     ],
+     "in": [
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      160,
+      110
+     ],
+     "in": [
+      "af-e",
+      "af-n"
+     ]
+    }
    ],
    "note": "Sauropods built like giraffes, front legs longer than hind, holding the head twelve metres up.",
    "cls": {
@@ -449,11 +474,54 @@
    "fad": 130,
    "lad": 90,
    "range": [
-    "af-n",
-    "sa-s",
-    "na-w",
-    "eu",
-    "as-e"
+    {
+     "t": [
+      130,
+      120
+     ],
+     "in": [
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      116,
+      98
+     ],
+     "in": [
+      "na-w"
+     ]
+    },
+    {
+     "t": [
+      130,
+      90
+     ],
+     "in": [
+      "sa-s",
+      "sa-n"
+     ]
+    },
+    {
+     "t": [
+      130,
+      90
+     ],
+     "in": [
+      "af-n",
+      "af-e"
+     ]
+    },
+    {
+     "t": [
+      125,
+      90
+     ],
+     "in": [
+      "as-c",
+      "as-ne"
+     ]
+    }
    ],
    "note": "Shark-toothed giants that rivalled Tyrannosaurus in size, hunting sauropods across the mid-Cretaceous world.",
    "cls": {
@@ -543,10 +611,27 @@
    "fad": 228,
    "lad": 190,
    "range": [
-    "na-w",
-    "eu",
-    "af-s",
-    "as-e"
+    {
+     "t": [
+      228,
+      190
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "eu",
+      "af-s"
+     ]
+    },
+    {
+     "t": [
+      201,
+      190
+     ],
+     "in": [
+      "as-s"
+     ]
+    }
    ],
    "note": "Slender, hollow-boned early theropods two or three metres long: the first widespread predatory dinosaurs.",
    "cls": {
@@ -659,17 +744,25 @@
      "in": [
       "af-s",
       "af-e",
-      "an",
       "in",
-      "as-e",
+      "as-ne",
+      "as-s",
       "as-c",
       "as-n",
       "eu",
       "sa-s",
       "mg",
-      "au",
       "na-e",
       "na-w"
+     ]
+    },
+    {
+     "t": [
+      252,
+      235
+     ],
+     "in": [
+      "an"
      ]
     },
     {
@@ -689,7 +782,8 @@
       130
      ],
      "in": [
-      "as-e",
+      "as-ne",
+      "as-s",
       "as-c",
       "na-w",
       "eu"
@@ -701,7 +795,7 @@
       100
      ],
      "in": [
-      "as-e",
+      "as-ne",
       "as-n"
      ]
     }
@@ -710,7 +804,23 @@
    "cls": {
     "class": "Synapsida",
     "order": "Cynodontia"
-   }
+   },
+   "box": [
+    {
+     "t": [
+      130,
+      100
+     ],
+     "box": [
+      [
+       75,
+       140,
+       30,
+       58
+      ]
+     ]
+    }
+   ]
   },
   "Deinocheirus": {
    "rank": "genus",
@@ -776,7 +886,7 @@
    "fad": 96,
    "lad": 93,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A stocky titanosaur from the Winton Formation of Queensland, found beside the predator that may have fed on it.",
    "cls": {
@@ -1314,7 +1424,7 @@
    "fad": 125,
    "lad": 120,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "The last of the giant temnospondyls, five metres long, surviving in the cold rift-valley rivers of polar Australia where crocodiles could not live.",
    "w": 3,
@@ -1339,7 +1449,7 @@
    "fad": 105,
    "lad": 100,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "Australia's most complete dinosaur: a sheep-sized armoured ankylosaur preserved with its last meal of ferns and fruit.",
    "cls": {
@@ -1362,14 +1472,22 @@
    "fad": 118,
    "lad": 110,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A small, big-eyed ornithopod from Dinosaur Cove, which lay inside the Antarctic Circle: it lived through months of winter darkness.",
    "cls": {
     "class": "Ornithischia",
     "order": "Ornithopoda",
     "family": "Elasmaria"
-   }
+   },
+   "box": [
+    [
+     140,
+     150,
+     -40,
+     -36
+    ]
+   ]
   },
   "Lepidoptera": {
    "rank": "order",
@@ -1394,7 +1512,7 @@
    "fad": 201,
    "lad": 190,
    "range": [
-    "as-e"
+    "as-s"
    ],
    "note": "The common early sauropodomorph of Yunnan, six to nine metres long; embryos in its eggs preserve some of the oldest known organic remains in a dinosaur.",
    "cls": {
@@ -1440,7 +1558,7 @@
     "an",
     "na-w",
     "in",
-    "as-e"
+    "as-s"
    ],
    "note": "Mid-sized early sauropodomorphs of Early Jurassic Gondwana and beyond; nests of Massospondylus eggs show the young hatched toothless and helpless.",
    "cls": {
@@ -1494,7 +1612,7 @@
    "fad": 112,
    "lad": 100,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "An eight-metre Australian ornithopod with an inflated, hollow snout -- probably for calling across the polar forests.",
    "w": 3,
@@ -1527,7 +1645,15 @@
     "class": "Saurischia",
     "order": "Sauropoda",
     "family": "Rebbachisauridae"
-   }
+   },
+   "box": [
+    [
+     -5,
+     20,
+     10,
+     25
+    ]
+   ]
   },
   "Nodosauridae": {
    "rank": "family",
@@ -1553,7 +1679,7 @@
       66
      ],
      "in": [
-      "au",
+      "au-e",
       "an",
       "sa-s"
      ]
@@ -1615,7 +1741,11 @@
    "cls": {
     "class": "Reptilia",
     "family": "Notosuchia"
-   }
+   },
+   "lat": [
+    0,
+    52
+   ]
   },
   "Odonatoptera": {
    "rank": "superorder",
@@ -1896,7 +2026,17 @@
    "fad": 250,
    "lad": 201,
    "range": [
-    "cosmo"
+    "na-w",
+    "na-e",
+    "sa-s",
+    "sa-n",
+    "eu",
+    "af-s",
+    "af-e",
+    "af-n",
+    "in",
+    "as-ne",
+    "as-s"
    ],
    "note": "Crocodile-line archosaurs that walked upright on pillar legs: the top land predators of the Triassic, before dinosaurs had the role.",
    "cls": {
@@ -1912,7 +2052,7 @@
    "fad": 165,
    "lad": 160,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "Australia's Jurassic sauropod, about fifteen metres long -- one of very few windows on the continent's Jurassic land life.",
    "cls": {
@@ -2156,7 +2296,42 @@
     "order": "Theropoda",
     "family": "Spinosauridae"
    },
-   "rep": "Spinosaurus"
+   "rep": "Spinosaurus",
+   "box": [
+    [
+     -10,
+     25,
+     36,
+     53
+    ],
+    [
+     -20,
+     55,
+     -35,
+     37
+    ],
+    [
+     -82,
+     -34,
+     -56,
+     13
+    ],
+    [
+     95,
+     125,
+     10,
+     45
+    ],
+    [
+     140,
+     150,
+     -40,
+     -35
+    ]
+   ],
+   "avoid": [
+    "Caledonides"
+   ]
   },
   "Stegosauria": {
    "rank": "clade",
@@ -2187,7 +2362,7 @@
    "fad": 108,
    "lad": 100,
    "range": [
-    "au"
+    "au-e"
    ],
    "note": "A Cretaceous monotreme known from an opalised jaw at Lightning Ridge -- platypus relatives are at least this old.",
    "cls": {
@@ -2234,7 +2409,15 @@
     "class": "Reptilia",
     "order": "Pterosauria",
     "family": "Tapejaridae"
-   }
+   },
+   "box": [
+    [
+     -45,
+     -34,
+     -12,
+     -3
+    ]
+   ]
   },
   "Temnospondyli": {
    "rank": "order",
@@ -2246,6 +2429,18 @@
     {
      "t": [
       330,
+      300
+     ],
+     "in": [
+      "na-w",
+      "na-e",
+      "na-n",
+      "eu"
+     ]
+    },
+    {
+     "t": [
+      300,
       201
      ],
      "in": [
@@ -2259,7 +2454,8 @@
      ],
      "in": [
       "au",
-      "as-e",
+      "as-ne",
+      "as-s",
       "as-c",
       "as-n",
       "an"
@@ -2353,10 +2549,27 @@
    "fad": 265,
    "lad": 240,
    "range": [
-    "af-s",
-    "eu",
-    "as-e",
-    "an"
+    {
+     "t": [
+      265,
+      240
+     ],
+     "in": [
+      "af-s",
+      "eu",
+      "as-ne",
+      "as-c"
+     ]
+    },
+    {
+     "t": [
+      252,
+      240
+     ],
+     "in": [
+      "an"
+     ]
+    }
    ],
    "note": "Weasel- to wolf-sized therapsid predators. Unlike the gorgonopsians they got through the end-Permian extinction and hunted the Early Triassic.",
    "cls": {
@@ -2381,10 +2594,11 @@
       "af",
       "mg",
       "in",
-      "au",
+      "au-e",
       "an",
       "eu",
-      "as-e",
+      "as-ne",
+      "as-s",
       "as-c",
       "as-se"
      ]
