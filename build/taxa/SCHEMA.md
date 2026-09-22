@@ -70,11 +70,13 @@ animal lived on, so this is independent of any plate model and valid at any age:
 na-w  W North America: Cordillera, Great Plains, Alaska south of 60N
 na-e  E North America: shield, Appalachians, coastal plain
 na-n  Arctic North America (north of 60N)
+na-av the Avalon and Carolina terranes: Avalon Peninsula, Nova Scotia, S New Brunswick, Boston basin, Carolina slate belt (Gondwanan crust until the Silurian)
 ca    Mexico south of the Tropic, Central America, Caribbean
 gl    Greenland
 sa-n  tropical South America: Amazonia, N and central Andes (north of 18S)
 sa-s  southern cone, Patagonia, Falklands
-eu    Europe to the Urals, incl. Iceland
+eu-n  Baltica and Avalonia: Britain, Scandinavia, N Germany, Poland, the Russian platform to the Urals, Iceland
+eu-s  the peri-Gondwanan south: Iberia, France, S Germany, Bohemia, the Alps, Italy, the Balkans, Romania
 af-n  Maghreb, Sahara, Egypt        af-e  Rift, Ethiopia, Horn
 af-w  Guinea, Congo basin           af-s  Karoo, Kalahari, Zambezi
 mg    Madagascar                    ar    Arabian plate
@@ -88,7 +90,7 @@ ng    New Guinea                    nz    New Zealand, New Caledonia
 oc    Pacific islands               an    Antarctica
 ```
 
-Aliases: `na sa af as` (all sub-codes) · `au` (= au-w + au-e; the Ediacara Hills, Emu Bay, Winton
+Aliases: `na sa af as` (all sub-codes; `na` includes `na-av`, `laurentia` does not) · `eu` (= eu-n + eu-s: one continent since the Variscan orogeny, two before it — a Silurian animal of Scotland or Podolia is `eu-n`, a Bohemian or Armorican trilobite `eu-s`) · `au` (= au-w + au-e; the Ediacara Hills, Emu Bay, Winton
 and Riversleigh are `au-e`, Gogo and the Canning reefs `au-w`) · `as-e` (= as-ne + as-s) · `as-se` (= as-ic + as-sb: the
 two old East and South-East Asia codes, kept because both halves share a Cenozoic; write the
 block itself for anything Palaeozoic or Mesozoic — Chengjiang is `as-s`, Jehol `as-ne`, the

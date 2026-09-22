@@ -200,21 +200,23 @@
     "family": "Halimedaceae",
     "genus": "Halimeda",
     "regions": {
-     "eu": 41,
-     "oc": 29,
-     "af-e": 16,
-     "af-n": 3,
-     "sa-n": 9,
-     "ca": 24,
-     "au": 16,
-     "as-e": 4,
-     "na-e": 3,
-     "as-w": 19,
-     "mg": 2,
-     "nz": 3,
-     "ar": 17,
      "in": 80,
-     "as-se": 3
+     "eu-s": 40,
+     "oc": 29,
+     "ca": 24,
+     "as-w": 19,
+     "ar": 17,
+     "af-e": 16,
+     "au-e": 16,
+     "sea": 10,
+     "sa-n": 9,
+     "as-ne": 4,
+     "af-n": 3,
+     "na-e": 3,
+     "nz": 3,
+     "as-ic": 3,
+     "mg": 2,
+     "eu-n": 1
     }
    },
    "hab": [
@@ -377,8 +379,9 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Prototaxites",
     "regions": {
+     "eu-n": 23,
+     "eu-s": 12,
      "na-e": 5,
-     "eu": 33,
      "ar": 1
     }
    },
@@ -474,7 +477,7 @@
    "fad": 445,
    "lad": 380,
    "range": [
-    "eu",
+    "eu-n",
     "na-e",
     "af-n",
     "ar"

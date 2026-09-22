@@ -27,13 +27,14 @@
     "genus": "Acacia",
     "regions": {
      "af-e": 54,
-     "na-w": 3,
-     "sa-s": 6,
-     "sa-n": 1,
-     "ca": 5,
-     "au": 45,
+     "au-e": 45,
      "in": 10,
-     "as-e": 1
+     "sa-s": 6,
+     "ca": 5,
+     "na-w": 3,
+     "sa-n": 1,
+     "as-ne": 1,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -118,7 +119,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "From the Rhynie chert, and the earliest clear evidence of arbuscular mycorrhizal symbiosis - land plants have always been partly fungal.",
    "sz": 0.18,
@@ -200,16 +201,18 @@
     "family": "Araucariaceae",
     "genus": "Araucaria",
     "regions": {
-     "af-s": 8,
-     "au": 69,
-     "eu": 2,
+     "au-e": 69,
      "sa-s": 23,
-     "in": 7,
+     "af-s": 8,
      "na-w": 8,
-     "ca": 1,
+     "in": 7,
+     "na-e": 6,
      "an": 4,
      "nz": 2,
-     "na-e": 8
+     "na-av": 2,
+     "eu-s": 1,
+     "ca": 1,
+     "eu-n": 1
     }
    },
    "hab": [
@@ -337,29 +340,32 @@
     "order": "NO_ORDER_SPECIFIED",
     "family": "Araucariaceae",
     "regions": {
-     "na-w": 224,
-     "na-e": 63,
-     "af-s": 14,
      "sa-s": 312,
-     "au": 293,
-     "eu": 352,
-     "gl": 2,
-     "na-n": 12,
-     "ca": 7,
+     "au-e": 289,
+     "in": 267,
+     "na-w": 224,
+     "as-w": 198,
      "sa-n": 196,
+     "eu-s": 191,
+     "eu-n": 163,
      "as-c": 102,
      "an": 89,
-     "as-e": 83,
-     "as-se": 3,
-     "af-n": 6,
-     "as-w": 198,
-     "in": 267,
-     "ar": 32,
-     "as-n": 39,
-     "mg": 3,
+     "af-w": 79,
      "nz": 55,
+     "as-s": 52,
+     "na-e": 47,
+     "as-n": 39,
+     "as-ne": 34,
+     "ar": 32,
      "af-e": 28,
-     "af-w": 79
+     "na-av": 16,
+     "af-s": 14,
+     "na-n": 12,
+     "ca": 7,
+     "af-n": 6,
+     "au-w": 4,
+     "mg": 3,
+     "gl": 2
     }
    },
    "rep": "Araucaria",
@@ -396,14 +402,15 @@
     "family": "Araucariaceae",
     "genus": "Araucarioxylon",
     "regions": {
-     "au": 6,
-     "eu": 3,
+     "in": 31,
      "na-w": 20,
-     "na-n": 1,
+     "au-e": 6,
      "ca": 4,
      "sa-s": 3,
+     "eu-s": 2,
      "as-w": 2,
-     "in": 31
+     "na-n": 1,
+     "eu-n": 1
     }
    },
    "cls": {
@@ -451,7 +458,7 @@
     "family": "Archaefructaceae",
     "genus": "Archaefructus",
     "regions": {
-     "as-e": 2
+     "as-ne": 2
     }
    },
    "hab": [
@@ -488,11 +495,12 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Archaeocalamites",
     "regions": {
-     "eu": 14,
-     "na-e": 2,
-     "na-w": 1,
+     "eu-n": 11,
+     "eu-s": 3,
      "sa-n": 3,
-     "in": 2
+     "na-e": 2,
+     "in": 2,
+     "na-w": 1
     }
    }
   },
@@ -530,9 +538,9 @@
     "genus": "Archaeopteris",
     "regions": {
      "na-e": 103,
+     "eu-n": 19,
      "na-n": 4,
      "na-w": 2,
-     "eu": 19,
      "af-n": 1
     }
    },
@@ -599,7 +607,7 @@
    "fad": 411,
    "lad": 393,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "An early lycophyte with leaf-like enations along a branching stem, and rooting structures that are not yet true roots.",
    "pbdb": {
@@ -617,7 +625,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Asteroxylon",
     "regions": {
-     "eu": 2,
+     "eu-n": 2,
      "na-e": 1
     }
    }
@@ -700,9 +708,11 @@
     "family": "Proteaceae",
     "genus": "Banksia",
     "regions": {
-     "au": 53,
+     "au-e": 52,
+     "as-ne": 2,
      "nz": 1,
-     "as-e": 3
+     "au-w": 1,
+     "as-s": 1
     }
    },
    "cls": {
@@ -765,8 +775,8 @@
     "genus": "Baragwanathia",
     "regions": {
      "na-e": 4,
-     "as-se": 1,
-     "au": 4
+     "au-e": 4,
+     "as-ic": 1
     }
    },
    "box": [
@@ -834,14 +844,18 @@
     "genus": "Betula",
     "regions": {
      "na-w": 88,
-     "as-e": 27,
-     "eu": 74,
+     "eu-n": 51,
+     "na-e": 42,
+     "in": 32,
      "as-n": 25,
+     "as-ne": 24,
+     "eu-s": 23,
+     "na-av": 10,
+     "as-sb": 9,
      "na-n": 4,
-     "na-e": 52,
-     "as-c": 4,
-     "as-w": 1,
-     "in": 32
+     "as-c": 3,
+     "as-s": 1,
+     "as-w": 1
     }
    },
    "hab": [
@@ -1041,18 +1055,21 @@
     "family": "Calamitaceae",
     "genus": "Calamites",
     "regions": {
+     "na-e": 122,
+     "as-ne": 63,
+     "eu-s": 30,
+     "na-av": 29,
      "na-w": 24,
-     "na-e": 151,
-     "eu": 53,
-     "ar": 3,
+     "eu-n": 23,
      "af-s": 16,
-     "ca": 3,
-     "as-w": 1,
      "as-c": 16,
-     "as-e": 70,
+     "as-s": 7,
+     "as-sb": 5,
+     "ar": 3,
+     "ca": 3,
      "as-n": 3,
-     "as-se": 5,
      "af-n": 2,
+     "as-w": 1,
      "na-n": 1,
      "an": 1
     }
@@ -1089,8 +1106,9 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Calamophyton",
     "regions": {
-     "na-e": 2,
-     "eu": 10
+     "eu-n": 7,
+     "eu-s": 3,
+     "na-e": 2
     }
    }
   },
@@ -1120,15 +1138,16 @@
     "family": "Peltaspermaceae",
     "genus": "Callipteris",
     "regions": {
-     "na-w": 21,
-     "na-e": 26,
-     "eu": 196,
-     "ca": 1,
+     "eu-n": 114,
+     "eu-s": 82,
+     "as-n": 46,
+     "as-ne": 37,
      "as-c": 27,
-     "as-e": 37,
-     "as-w": 1,
+     "na-e": 26,
+     "na-w": 21,
      "af-n": 11,
-     "as-n": 46
+     "ca": 1,
+     "as-w": 1
     }
    }
   },
@@ -1157,7 +1176,8 @@
     "family": "Ericaceae",
     "genus": "Calluna",
     "regions": {
-     "eu": 2
+     "eu-n": 1,
+     "eu-s": 1
     }
    },
    "cls": {
@@ -1312,10 +1332,11 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Cooksonia",
     "regions": {
-     "eu": 46,
-     "na-n": 1,
+     "eu-n": 36,
      "sa-s": 11,
+     "eu-s": 10,
      "na-e": 5,
+     "na-n": 1,
      "na-w": 1,
      "af-n": 1
     }
@@ -1353,22 +1374,26 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Cordaites",
     "regions": {
-     "na-w": 13,
-     "na-e": 74,
-     "ar": 3,
-     "eu": 73,
-     "af-s": 8,
-     "au": 10,
-     "as-e": 195,
-     "ca": 6,
-     "gl": 1,
-     "as-w": 2,
-     "sa-s": 15,
-     "as-c": 31,
-     "in": 67,
-     "as-se": 10,
-     "af-n": 4,
+     "as-ne": 179,
      "as-n": 107,
+     "in": 67,
+     "na-e": 63,
+     "eu-n": 46,
+     "as-c": 31,
+     "eu-s": 27,
+     "as-s": 16,
+     "sa-s": 15,
+     "na-w": 13,
+     "na-av": 11,
+     "au-e": 10,
+     "af-s": 8,
+     "ca": 6,
+     "as-sb": 6,
+     "af-n": 4,
+     "as-ic": 4,
+     "ar": 3,
+     "as-w": 2,
+     "gl": 1,
      "sa-n": 1
     }
    }
@@ -1468,16 +1493,16 @@
     "family": "Corystospermaceae",
     "genus": "Dicroidium",
     "regions": {
-     "af-s": 55,
-     "as-w": 1,
-     "an": 12,
      "sa-s": 63,
-     "au": 22,
-     "as-e": 1,
+     "af-s": 55,
      "in": 30,
+     "au-e": 22,
+     "an": 12,
+     "ar": 4,
+     "as-w": 1,
+     "as-ne": 1,
      "mg": 1,
-     "as-n": 1,
-     "ar": 4
+     "as-n": 1
     }
    },
    "w": 3
@@ -1509,9 +1534,10 @@
     "order": "Malvales",
     "family": "Dipterocarpaceae",
     "regions": {
-     "as-se": 16,
      "in": 81,
-     "as-e": 1
+     "as-sb": 22,
+     "as-ic": 2,
+     "as-s": 1
     }
    },
    "hab": [
@@ -1643,14 +1669,15 @@
     "family": "Myrtaceae",
     "genus": "Eucalyptus",
     "regions": {
-     "na-w": 1,
+     "au-e": 62,
      "sa-s": 18,
-     "au": 62,
-     "eu": 1,
-     "na-e": 9,
+     "na-e": 6,
      "in": 5,
+     "na-av": 3,
      "as-c": 2,
-     "as-e": 2
+     "as-s": 2,
+     "na-w": 1,
+     "eu-n": 1
     }
    },
    "w": 3,
@@ -1701,12 +1728,16 @@
     "family": "Fagaceae",
     "genus": "Fagus",
     "regions": {
-     "as-e": 40,
-     "eu": 80,
-     "as-n": 7,
+     "eu-n": 67,
+     "as-ne": 38,
      "na-w": 14,
-     "na-e": 8,
+     "eu-s": 13,
      "sa-s": 8,
+     "as-n": 7,
+     "na-e": 5,
+     "na-av": 3,
+     "as-sb": 2,
+     "as-s": 2,
      "ca": 1,
      "as-w": 1
     }
@@ -1799,16 +1830,17 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Gangamopteris",
     "regions": {
-     "ca": 1,
      "in": 191,
-     "an": 20,
      "sa-s": 61,
-     "au": 28,
-     "as-e": 4,
-     "mg": 4,
+     "au-e": 22,
+     "an": 20,
      "af-s": 10,
-     "sa-n": 1,
+     "au-w": 6,
      "af-e": 5,
+     "as-ne": 4,
+     "mg": 4,
+     "ca": 1,
+     "sa-n": 1,
      "af-w": 1
     }
    },
@@ -1848,12 +1880,15 @@
     "family": "Gigantopteridaceae",
     "genus": "Gigantopteris",
     "regions": {
-     "na-e": 19,
+     "as-s": 52,
+     "na-e": 18,
+     "as-ne": 18,
+     "as-c": 2,
+     "as-sb": 2,
+     "na-av": 1,
      "ca": 1,
      "as-w": 1,
-     "as-c": 3,
-     "as-e": 67,
-     "as-se": 5,
+     "as-ic": 1,
      "ar": 1
     }
    },
@@ -1928,16 +1963,18 @@
     "family": "Ginkgoaceae",
     "genus": "Ginkgo",
     "regions": {
-     "na-w": 71,
-     "gl": 2,
-     "na-n": 23,
-     "eu": 55,
-     "as-e": 61,
-     "as-c": 153,
-     "au": 9,
      "as-n": 205,
+     "as-c": 153,
+     "na-w": 71,
+     "as-ne": 60,
+     "eu-n": 50,
+     "na-n": 23,
      "as-w": 17,
      "in": 14,
+     "eu-s": 10,
+     "au-e": 9,
+     "gl": 2,
+     "as-s": 1,
      "sa-s": 1
     }
    },
@@ -2031,26 +2068,30 @@
     "class": "Ginkgoopsida",
     "order": "Ginkgoales",
     "regions": {
-     "na-w": 85,
-     "na-e": 5,
-     "af-s": 63,
-     "eu": 235,
-     "gl": 20,
-     "na-n": 31,
-     "as-e": 290,
-     "as-c": 352,
-     "sa-s": 28,
-     "au": 16,
      "as-n": 457,
+     "as-c": 351,
+     "as-ne": 215,
+     "eu-n": 182,
+     "na-w": 85,
+     "as-s": 75,
+     "af-s": 63,
+     "eu-s": 62,
      "as-w": 34,
      "in": 32,
+     "na-n": 31,
+     "sa-s": 28,
+     "gl": 20,
+     "au-e": 16,
+     "na-e": 4,
      "ar": 3,
-     "mg": 2,
      "af-n": 3,
+     "mg": 2,
+     "nz": 2,
+     "as-sb": 1,
      "af-e": 1,
      "af-w": 1,
-     "nz": 2,
-     "ca": 1
+     "ca": 1,
+     "na-av": 1
     }
    },
    "rep": "Ginkgo",
@@ -2093,20 +2134,22 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Glossopteris",
     "regions": {
-     "af-s": 90,
-     "ca": 1,
-     "as-w": 2,
-     "an": 76,
-     "sa-s": 145,
-     "au": 195,
-     "sa-n": 1,
-     "as-e": 12,
-     "as-se": 1,
      "in": 748,
-     "mg": 12,
+     "au-e": 173,
+     "sa-s": 145,
+     "af-s": 90,
+     "an": 76,
      "af-e": 30,
+     "au-w": 22,
+     "as-ne": 12,
+     "mg": 12,
      "ar": 9,
+     "as-sb": 3,
      "ng": 3,
+     "as-w": 2,
+     "ca": 1,
+     "sa-n": 1,
+     "as-s": 1,
      "af-w": 1
     }
    },
@@ -2231,12 +2274,13 @@
     "family": "Pinaceae",
     "genus": "Larix",
     "regions": {
-     "na-n": 4,
      "na-w": 10,
-     "na-e": 7,
-     "eu": 1,
-     "as-e": 1,
-     "in": 7
+     "in": 7,
+     "na-e": 6,
+     "na-n": 4,
+     "eu-n": 1,
+     "as-s": 1,
+     "na-av": 1
     }
    },
    "hab": [
@@ -2308,12 +2352,13 @@
     "family": "Pinaceae",
     "genus": "Larix",
     "regions": {
-     "na-n": 4,
      "na-w": 10,
-     "na-e": 7,
-     "eu": 1,
-     "as-e": 1,
-     "in": 7
+     "in": 7,
+     "na-e": 6,
+     "na-n": 4,
+     "eu-n": 1,
+     "as-s": 1,
+     "na-av": 1
     }
    },
    "hab": [
@@ -2368,12 +2413,13 @@
     "family": "Pinaceae",
     "genus": "Larix",
     "regions": {
-     "na-n": 4,
      "na-w": 10,
-     "na-e": 7,
-     "eu": 1,
-     "as-e": 1,
-     "in": 7
+     "in": 7,
+     "na-e": 6,
+     "na-n": 4,
+     "eu-n": 1,
+     "as-s": 1,
+     "na-av": 1
     }
    },
    "hab": [
@@ -2427,21 +2473,24 @@
     "class": "NO_CLASS_SPECIFIED",
     "order": "Lepidodendrales",
     "regions": {
-     "na-e": 263,
-     "eu": 74,
+     "na-e": 218,
+     "as-ne": 77,
+     "eu-n": 66,
+     "na-av": 45,
+     "as-s": 20,
      "na-w": 17,
-     "af-s": 1,
+     "eu-s": 11,
+     "na-n": 10,
+     "as-c": 8,
      "as-w": 4,
-     "au": 3,
-     "as-c": 9,
-     "as-e": 96,
-     "as-se": 4,
+     "as-sb": 4,
+     "au-w": 3,
+     "sa-s": 2,
+     "in": 2,
+     "af-s": 1,
      "as-n": 1,
      "ar": 1,
-     "na-n": 10,
-     "sa-s": 2,
-     "ca": 1,
-     "in": 2
+     "ca": 1
     }
    }
   },
@@ -2492,19 +2541,22 @@
     "family": "Lepidodendraceae",
     "genus": "Lepidodendron",
     "regions": {
-     "na-e": 145,
-     "eu": 41,
+     "na-e": 112,
+     "as-ne": 68,
+     "eu-n": 35,
+     "na-av": 33,
+     "as-s": 19,
      "na-w": 11,
-     "af-s": 1,
-     "as-w": 2,
-     "au": 3,
-     "as-c": 9,
-     "as-e": 86,
-     "as-se": 4,
-     "ar": 1,
+     "as-c": 8,
+     "eu-s": 6,
      "na-n": 6,
+     "as-sb": 4,
+     "au-w": 3,
+     "as-w": 2,
      "sa-s": 2,
-     "in": 2
+     "in": 2,
+     "af-s": 1,
+     "ar": 1
     }
    },
    "hab": [
@@ -2540,17 +2592,19 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Lobatannularia",
     "regions": {
+     "as-ne": 86,
+     "as-s": 46,
+     "as-c": 10,
+     "gl": 8,
+     "in": 8,
+     "as-sb": 5,
+     "as-w": 4,
+     "as-n": 4,
      "ar": 2,
-     "as-e": 129,
      "na-e": 1,
      "ca": 1,
-     "gl": 8,
-     "eu": 2,
-     "as-w": 4,
-     "as-c": 11,
-     "as-se": 7,
-     "in": 8,
-     "as-n": 4
+     "eu-s": 1,
+     "eu-n": 1
     }
    },
    "avoid": [
@@ -2721,7 +2775,7 @@
     "genus": "Medullosa",
     "regions": {
      "na-e": 16,
-     "eu": 9
+     "eu-n": 9
     }
    }
   },
@@ -2751,20 +2805,22 @@
     "class": "Cycadopsida",
     "order": "Trigonocarpales",
     "regions": {
-     "na-w": 14,
-     "na-e": 107,
-     "eu": 45,
-     "na-n": 2,
-     "ca": 1,
-     "as-w": 4,
-     "as-c": 11,
-     "as-e": 56,
-     "as-se": 6,
-     "af-n": 2,
+     "na-e": 89,
      "as-n": 35,
+     "as-s": 33,
+     "eu-s": 30,
+     "as-ne": 29,
+     "na-av": 18,
+     "eu-n": 15,
+     "na-w": 14,
+     "as-c": 11,
+     "as-w": 4,
+     "na-n": 2,
+     "af-n": 2,
      "sa-n": 2,
-     "ar": 1,
-     "in": 2
+     "in": 2,
+     "ca": 1,
+     "ar": 1
     }
    }
   },
@@ -2833,11 +2889,12 @@
     "genus": "Metasequoia",
     "regions": {
      "na-w": 183,
-     "as-e": 41,
+     "as-ne": 39,
      "as-n": 6,
      "na-n": 2,
-     "eu": 1,
-     "as-c": 2
+     "as-c": 2,
+     "as-s": 2,
+     "eu-n": 1
     }
    },
    "hab": [
@@ -2917,21 +2974,25 @@
     "family": "Calamitaceae",
     "genus": "Neocalamites",
     "regions": {
-     "na-w": 2,
-     "na-e": 11,
-     "gl": 11,
-     "na-n": 2,
-     "eu": 47,
-     "as-c": 146,
-     "an": 4,
-     "sa-s": 14,
-     "au": 4,
-     "as-e": 223,
+     "as-c": 145,
+     "as-ne": 137,
+     "as-s": 91,
+     "eu-n": 40,
      "as-n": 40,
-     "as-se": 8,
-     "af-n": 1,
      "as-w": 27,
+     "sa-s": 14,
+     "eu-s": 13,
+     "gl": 11,
+     "na-e": 6,
+     "na-av": 5,
+     "an": 4,
+     "au-e": 4,
+     "as-sb": 3,
+     "na-w": 2,
+     "na-n": 2,
      "ar": 2,
+     "as-ic": 2,
+     "af-n": 1,
      "in": 1
     }
    }
@@ -2966,18 +3027,19 @@
     "family": "Cordaitaceae",
     "genus": "Noeggerathiopsis",
     "regions": {
-     "af-s": 11,
-     "na-w": 3,
-     "an": 6,
-     "sa-s": 26,
-     "au": 17,
-     "as-e": 34,
-     "as-c": 32,
      "as-n": 148,
+     "as-ne": 34,
+     "as-c": 32,
+     "sa-s": 26,
+     "eu-n": 25,
      "in": 21,
-     "mg": 4,
-     "eu": 25,
+     "af-s": 11,
+     "au-e": 11,
      "af-e": 7,
+     "an": 6,
+     "au-w": 6,
+     "mg": 4,
+     "na-w": 3,
      "af-w": 2
     }
    },
@@ -3032,9 +3094,10 @@
     "genus": "Nothofagus",
     "regions": {
      "an": 249,
+     "au-e": 78,
      "sa-s": 33,
-     "au": 80,
-     "nz": 8
+     "nz": 8,
+     "au-w": 2
     }
    },
    "hab": [
@@ -3204,11 +3267,13 @@
     "family": "Arecaceae",
     "genus": "Nypa",
     "regions": {
-     "eu": 33,
-     "au": 2,
-     "af-n": 1,
+     "eu-n": 30,
      "in": 9,
-     "na-e": 4
+     "na-e": 4,
+     "eu-s": 3,
+     "au-e": 2,
+     "af-n": 1,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -3242,10 +3307,11 @@
     "family": "Oleaceae",
     "genus": "Olea",
     "regions": {
-     "eu": 42,
+     "eu-s": 35,
+     "au-e": 21,
      "af-e": 10,
+     "eu-n": 7,
      "af-s": 3,
-     "au": 21,
      "in": 3
     }
    },
@@ -3310,15 +3376,19 @@
     "family": "Pinaceae",
     "genus": "Picea",
     "regions": {
-     "as-e": 17,
-     "eu": 46,
+     "na-n": 126,
      "na-w": 58,
      "as-n": 38,
-     "na-n": 126,
-     "na-e": 30,
+     "eu-n": 26,
+     "eu-s": 22,
+     "na-e": 22,
+     "in": 22,
+     "as-ne": 10,
+     "na-av": 8,
+     "as-s": 5,
      "as-c": 4,
-     "as-w": 1,
-     "in": 22
+     "as-sb": 4,
+     "as-w": 1
     }
    },
    "hab": [
@@ -3414,15 +3484,19 @@
     "family": "Pinaceae",
     "genus": "Picea",
     "regions": {
-     "as-e": 17,
-     "eu": 46,
+     "na-n": 126,
      "na-w": 58,
      "as-n": 38,
-     "na-n": 126,
-     "na-e": 30,
+     "eu-n": 26,
+     "eu-s": 22,
+     "na-e": 22,
+     "in": 22,
+     "as-ne": 10,
+     "na-av": 8,
+     "as-s": 5,
      "as-c": 4,
-     "as-w": 1,
-     "in": 22
+     "as-sb": 4,
+     "as-w": 1
     }
    },
    "hab": [
@@ -3492,18 +3566,22 @@
     "family": "Pinaceae",
     "genus": "Pinus",
     "regions": {
+     "eu-n": 172,
      "na-w": 104,
-     "as-e": 32,
-     "eu": 260,
-     "as-n": 37,
-     "af-e": 1,
+     "eu-s": 88,
      "na-n": 73,
-     "af-s": 2,
-     "na-e": 45,
-     "as-c": 7,
-     "as-w": 1,
-     "as-se": 1,
      "in": 44,
+     "as-n": 37,
+     "na-e": 36,
+     "as-ne": 23,
+     "as-sb": 10,
+     "na-av": 9,
+     "as-c": 7,
+     "as-s": 6,
+     "af-s": 2,
+     "af-e": 1,
+     "as-w": 1,
+     "as-ic": 1,
      "ca": 1
     }
    },
@@ -3545,18 +3623,22 @@
     "family": "Pinaceae",
     "genus": "Pinus",
     "regions": {
+     "eu-n": 172,
      "na-w": 104,
-     "as-e": 32,
-     "eu": 260,
-     "as-n": 37,
-     "af-e": 1,
+     "eu-s": 88,
      "na-n": 73,
-     "af-s": 2,
-     "na-e": 45,
-     "as-c": 7,
-     "as-w": 1,
-     "as-se": 1,
      "in": 44,
+     "as-n": 37,
+     "na-e": 36,
+     "as-ne": 23,
+     "as-sb": 10,
+     "na-av": 9,
+     "as-c": 7,
+     "as-s": 6,
+     "af-s": 2,
+     "af-e": 1,
+     "as-w": 1,
+     "as-ic": 1,
      "ca": 1
     }
    },
@@ -3623,13 +3705,15 @@
     "family": "Platanaceae",
     "regions": {
      "na-w": 468,
-     "eu": 18,
-     "as-e": 7,
-     "na-n": 6,
-     "na-e": 30,
+     "na-e": 29,
+     "eu-n": 14,
      "as-n": 9,
+     "as-ne": 7,
+     "na-n": 6,
+     "eu-s": 4,
      "as-c": 3,
-     "as-w": 1
+     "as-w": 1,
+     "na-av": 1
     }
    },
    "cls": {
@@ -3676,13 +3760,15 @@
     "family": "Pleuromeiaceae",
     "genus": "Pleuromeia",
     "regions": {
-     "eu": 20,
-     "sa-s": 1,
-     "as-e": 22,
+     "as-ne": 21,
+     "eu-n": 16,
+     "eu-s": 4,
      "as-c": 3,
      "as-n": 2,
+     "sa-s": 1,
+     "as-s": 1,
      "as-w": 1,
-     "au": 1
+     "au-e": 1
     }
    }
   },
@@ -3778,24 +3864,28 @@
     "order": "Poales",
     "family": "Poaceae",
     "regions": {
-     "eu": 90,
-     "as-e": 57,
-     "na-w": 20,
-     "af-s": 4,
-     "af-e": 20,
-     "na-e": 42,
-     "sa-n": 23,
-     "ca": 9,
-     "an": 6,
+     "in": 112,
+     "eu-s": 70,
+     "au-e": 52,
+     "as-ne": 46,
+     "na-e": 35,
      "sa-s": 34,
-     "ar": 1,
-     "au": 52,
-     "na-n": 1,
+     "sa-n": 23,
+     "eu-n": 20,
+     "na-w": 20,
+     "af-e": 20,
+     "as-s": 11,
+     "ca": 9,
+     "as-sb": 8,
+     "na-av": 7,
+     "an": 6,
      "as-c": 5,
+     "af-s": 4,
      "af-w": 2,
      "as-w": 2,
-     "in": 112,
-     "as-se": 1,
+     "ar": 1,
+     "na-n": 1,
+     "as-ic": 1,
      "gl": 1
     }
    },
@@ -3899,29 +3989,34 @@
     "order": "Coniferales",
     "family": "Podocarpaceae",
     "regions": {
-     "na-e": 79,
-     "na-w": 116,
-     "af-s": 22,
-     "eu": 304,
-     "au": 682,
-     "af-e": 13,
-     "gl": 26,
-     "na-n": 39,
-     "as-e": 409,
-     "ca": 8,
-     "as-w": 94,
-     "as-c": 263,
-     "an": 268,
      "sa-s": 806,
-     "as-se": 6,
-     "as-n": 232,
-     "af-n": 3,
+     "au-e": 674,
+     "as-ne": 278,
+     "an": 268,
+     "as-c": 262,
      "in": 255,
+     "as-n": 232,
+     "eu-n": 215,
+     "as-s": 135,
      "ar": 135,
-     "mg": 3,
      "nz": 134,
+     "na-w": 116,
+     "eu-s": 97,
+     "as-w": 94,
      "sa-n": 88,
-     "af-w": 4
+     "na-e": 71,
+     "na-n": 39,
+     "gl": 26,
+     "af-s": 22,
+     "af-e": 13,
+     "na-av": 8,
+     "ca": 8,
+     "au-w": 8,
+     "as-sb": 5,
+     "af-w": 4,
+     "af-n": 3,
+     "mg": 3,
+     "as-ic": 1
     }
    },
    "cls": {
@@ -4002,13 +4097,16 @@
     "genus": "Populus",
     "regions": {
      "na-w": 201,
-     "as-e": 34,
-     "eu": 73,
-     "af-e": 3,
-     "na-n": 1,
-     "na-e": 7,
+     "eu-n": 55,
+     "as-ne": 26,
+     "eu-s": 18,
+     "in": 14,
      "as-c": 10,
-     "in": 14
+     "na-e": 7,
+     "as-s": 5,
+     "as-sb": 4,
+     "af-e": 3,
+     "na-n": 1
     }
    },
    "hab": [
@@ -4077,9 +4175,10 @@
     "genus": "Psaronius",
     "regions": {
      "na-e": 11,
-     "as-e": 1,
-     "as-se": 1,
-     "eu": 3
+     "eu-n": 2,
+     "as-ne": 1,
+     "as-sb": 1,
+     "eu-s": 1
     }
    },
    "hab": [
@@ -4119,22 +4218,24 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Ptilophyllum",
     "regions": {
+     "in": 169,
+     "as-c": 62,
+     "eu-n": 55,
+     "eu-s": 39,
+     "as-s": 37,
+     "as-w": 36,
      "sa-s": 21,
-     "gl": 6,
-     "na-n": 1,
-     "eu": 94,
+     "as-ne": 20,
      "ca": 18,
      "na-w": 15,
-     "as-c": 62,
      "an": 10,
-     "au": 3,
-     "as-e": 55,
-     "as-se": 3,
-     "sa-n": 4,
-     "as-w": 36,
-     "in": 169,
-     "ar": 3,
      "as-n": 7,
+     "gl": 6,
+     "sa-n": 4,
+     "au-e": 3,
+     "ar": 3,
+     "na-n": 1,
+     "as-sb": 1,
      "nz": 1
     }
    }
@@ -4201,16 +4302,20 @@
     "genus": "Quercus",
     "regions": {
      "na-w": 229,
-     "as-e": 130,
+     "eu-s": 119,
+     "as-ne": 81,
+     "eu-n": 54,
+     "in": 44,
+     "as-sb": 42,
+     "na-e": 35,
+     "as-s": 33,
+     "as-ic": 25,
      "as-c": 8,
-     "eu": 173,
-     "na-e": 42,
-     "af-s": 1,
+     "na-av": 7,
      "as-n": 5,
+     "af-s": 1,
      "ca": 1,
-     "as-w": 1,
-     "as-se": 27,
-     "in": 44
+     "as-w": 1
     }
    },
    "hab": [
@@ -4394,9 +4499,10 @@
     "genus": "Rhizophora",
     "regions": {
      "ca": 44,
-     "sa-n": 4,
      "in": 8,
-     "na-e": 3
+     "sa-n": 4,
+     "na-e": 3,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -4464,12 +4570,14 @@
     "family": "Ericaceae",
     "genus": "Rhododendron",
     "regions": {
-     "as-e": 8,
-     "eu": 2,
-     "na-w": 3,
      "in": 8,
+     "as-ne": 5,
+     "na-w": 3,
      "as-c": 3,
-     "as-se": 1
+     "eu-n": 2,
+     "as-s": 2,
+     "as-ic": 1,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -4491,7 +4599,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A leafless, rootless Rhynie chert plant preserved cell by cell, and the closest thing we have to a photograph of the first land ecosystem.",
    "pbdb": {
@@ -4509,7 +4617,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Rhynia",
     "regions": {
-     "eu": 2
+     "eu-n": 2
     }
    }
   },
@@ -4543,10 +4651,10 @@
     "family": "Vojnovskyaceae",
     "genus": "Rufloria",
     "regions": {
-     "as-c": 22,
-     "as-e": 72,
      "as-n": 86,
-     "eu": 43,
+     "as-ne": 72,
+     "eu-n": 43,
+     "as-c": 22,
      "na-n": 1
     }
    },
@@ -4588,17 +4696,21 @@
     "genus": "Salix",
     "regions": {
      "na-w": 166,
-     "as-e": 69,
-     "eu": 51,
+     "as-ne": 63,
+     "na-e": 34,
+     "eu-s": 26,
+     "eu-n": 25,
+     "in": 23,
      "as-n": 8,
+     "as-c": 6,
+     "na-av": 6,
+     "as-s": 6,
+     "as-sb": 5,
      "af-e": 2,
      "na-n": 2,
-     "na-e": 40,
      "ca": 2,
-     "as-c": 6,
-     "sa-s": 1,
-     "in": 23,
      "gl": 2,
+     "sa-s": 1,
      "as-w": 1
     }
    },
@@ -4642,7 +4754,7 @@
     "family": "Cupressaceae",
     "genus": "Sequoia",
     "regions": {
-     "as-e": 3
+     "as-ne": 3
     }
    },
    "hab": [
@@ -4692,8 +4804,8 @@
     "family": "Cupressaceae",
     "genus": "Sequoiadendron",
     "regions": {
-     "eu": 5,
      "na-w": 16,
+     "eu-n": 5,
      "as-n": 1
     }
    },
@@ -4776,10 +4888,13 @@
     "family": "Sigillariaceae",
     "genus": "Sigillaria",
     "regions": {
-     "na-e": 103,
+     "na-e": 77,
+     "na-av": 26,
+     "eu-n": 10,
      "na-w": 7,
-     "eu": 14,
-     "as-e": 4,
+     "eu-s": 4,
+     "as-ne": 3,
+     "as-s": 1,
      "as-w": 1,
      "af-e": 1,
      "af-s": 1,
@@ -4869,7 +4984,7 @@
     "genus": "Tamarix",
     "regions": {
      "in": 5,
-     "eu": 1
+     "eu-s": 1
     }
    },
    "hab": [
@@ -4919,8 +5034,8 @@
     "genus": "Umkomasia",
     "regions": {
      "af-s": 21,
-     "au": 7,
-     "eu": 1,
+     "au-e": 7,
+     "eu-s": 1,
      "sa-s": 1
     }
    }
@@ -4988,13 +5103,14 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Vertebraria",
     "regions": {
-     "au": 36,
-     "an": 10,
-     "sa-s": 3,
      "in": 87,
-     "ng": 1,
+     "au-e": 31,
+     "an": 10,
      "af-s": 8,
-     "af-e": 3
+     "au-w": 5,
+     "sa-s": 3,
+     "af-e": 3,
+     "ng": 1
     }
    }
   },
@@ -5024,8 +5140,8 @@
     "family": "Vojnovskyaceae",
     "genus": "Vojnovskya",
     "regions": {
-     "as-e": 9,
      "as-n": 12,
+     "as-ne": 9,
      "na-n": 1
     }
    },
@@ -5072,18 +5188,20 @@
     "family": "Voltziaceae",
     "genus": "Voltzia",
     "regions": {
+     "eu-s": 55,
+     "eu-n": 9,
      "na-w": 5,
-     "eu": 64,
-     "na-e": 3,
-     "sa-s": 3,
-     "as-e": 2,
      "as-c": 4,
-     "as-se": 3,
-     "af-e": 1,
      "mg": 4,
-     "sa-n": 1,
+     "sa-s": 3,
+     "as-s": 3,
      "as-n": 3,
-     "in": 2
+     "na-av": 2,
+     "as-ne": 2,
+     "in": 2,
+     "na-e": 1,
+     "af-e": 1,
+     "sa-n": 1
     }
    }
   },
@@ -5134,22 +5252,24 @@
     "class": "Voltziopsida",
     "order": "Voltziales",
     "regions": {
-     "na-w": 5,
-     "na-e": 4,
+     "eu-s": 68,
+     "eu-n": 30,
      "af-s": 18,
-     "eu": 98,
+     "as-ne": 7,
      "sa-s": 6,
-     "as-e": 7,
+     "na-w": 5,
      "as-c": 4,
-     "as-se": 3,
-     "af-e": 1,
      "mg": 4,
-     "sa-n": 1,
+     "as-s": 3,
      "as-n": 3,
+     "na-e": 2,
+     "na-av": 2,
      "ar": 2,
+     "in": 2,
+     "af-e": 1,
+     "sa-n": 1,
      "as-w": 1,
-     "nz": 1,
-     "in": 2
+     "nz": 1
     }
    }
   },
@@ -5180,14 +5300,17 @@
     "genus": "Walchia",
     "regions": {
      "na-w": 33,
-     "na-e": 27,
-     "eu": 51,
-     "ca": 2,
-     "as-c": 5,
-     "as-e": 3,
+     "eu-s": 30,
+     "eu-n": 21,
+     "na-e": 19,
      "af-n": 15,
+     "na-av": 8,
+     "as-c": 5,
      "as-n": 4,
-     "as-se": 2,
+     "ca": 2,
+     "as-ne": 2,
+     "as-sb": 2,
+     "as-s": 1,
      "na-n": 1
     }
    }
@@ -5223,7 +5346,7 @@
     "genus": "Wattieza",
     "regions": {
      "sa-n": 1,
-     "eu": 1
+     "eu-n": 1
     }
    },
    "w": 3,
@@ -5262,13 +5385,14 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Weichselia",
     "regions": {
-     "eu": 8,
+     "na-w": 5,
+     "eu-n": 5,
+     "eu-s": 3,
+     "in": 3,
      "af-n": 2,
      "as-w": 2,
      "sa-n": 2,
-     "na-w": 5,
-     "ar": 1,
-     "in": 3
+     "ar": 1
     }
    }
   },
@@ -5343,19 +5467,20 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Williamsonia",
     "regions": {
-     "na-w": 8,
-     "eu": 29,
-     "na-e": 2,
-     "ca": 20,
-     "as-c": 14,
-     "an": 3,
-     "sa-s": 2,
-     "au": 1,
-     "as-e": 4,
-     "as-w": 2,
      "in": 35,
-     "ar": 1,
-     "as-n": 3
+     "ca": 20,
+     "eu-n": 16,
+     "as-c": 14,
+     "eu-s": 13,
+     "na-w": 8,
+     "as-ne": 4,
+     "an": 3,
+     "as-n": 3,
+     "na-av": 2,
+     "sa-s": 2,
+     "as-w": 2,
+     "au-e": 1,
+     "ar": 1
     }
    }
   },
@@ -5367,7 +5492,7 @@
    "lad": 360,
    "range": [
     "as-c",
-    "eu",
+    "eu-n",
     "na-e",
     "na-n"
    ],
@@ -5384,11 +5509,11 @@
     "phylum": "Zosterophyllophyta",
     "class": "Zosterophyllopsida",
     "regions": {
-     "as-c": 5,
-     "na-n": 14,
-     "eu": 5,
      "na-e": 17,
-     "au": 1,
+     "na-n": 14,
+     "eu-n": 6,
+     "as-c": 5,
+     "au-e": 1,
      "as-n": 1
     }
    },
@@ -5401,11 +5526,35 @@
    "fad": 425,
    "lad": 390,
    "range": [
-    "as-c",
-    "as-e",
-    "as-se",
-    "eu",
-    "na-n"
+    {
+     "t": [
+      425,
+      419
+     ],
+     "in": [
+      "eu-n",
+      "as-c",
+      "as-ne",
+      "as-s",
+      "na-n"
+     ]
+    },
+    {
+     "t": [
+      419,
+      390
+     ],
+     "in": [
+      "eu-n",
+      "eu-s",
+      "as-c",
+      "as-ne",
+      "as-s",
+      "as-ic",
+      "as-sb",
+      "na-n"
+     ]
+    }
    ],
    "note": "An early vascular plant carrying sporangia along the sides of its stems, on the line that leads to the lycophytes.",
    "pbdb": {
@@ -5424,11 +5573,12 @@
     "genus": "Zosterophyllum",
     "regions": {
      "na-n": 50,
-     "eu": 28,
-     "as-se": 4,
-     "as-e": 7,
+     "eu-n": 23,
+     "as-s": 7,
+     "eu-s": 7,
+     "as-ic": 4,
      "as-c": 3,
-     "au": 1,
+     "au-e": 1,
      "af-s": 1,
      "na-e": 1,
      "as-n": 1
@@ -5439,11 +5589,6 @@
     "family": "Zosterophyllaceae"
    },
    "avoid": [
-    "Armorica",
-    "Hun Superterrane",
-    "Perunica",
-    "Iberian Massif",
-    "Massif Central",
     "Gondwana"
    ]
   },

@@ -148,10 +148,10 @@
     "class": "NO_CLASS_SPECIFIED",
     "order": "Calpionellida",
     "regions": {
-     "eu": 240,
-     "na-e": 1,
+     "eu-s": 240,
      "ca": 13,
-     "af-n": 3
+     "af-n": 3,
+     "na-av": 1
     }
    },
    "hab": [
@@ -345,19 +345,19 @@
     "family": "Discocyclinidae",
     "genus": "Discocyclina",
     "regions": {
+     "eu-s": 168,
      "in": 111,
-     "eu": 168,
-     "na-e": 4,
-     "sa-n": 8,
-     "af-n": 5,
-     "af-s": 2,
-     "as-c": 8,
      "as-w": 22,
-     "af-w": 1,
-     "oc": 1,
-     "as-e": 4,
+     "sa-n": 8,
+     "as-c": 8,
+     "af-n": 5,
      "ca": 5,
-     "ar": 3
+     "na-e": 4,
+     "as-s": 4,
+     "ar": 3,
+     "af-s": 2,
+     "af-w": 1,
+     "oc": 1
     }
    },
    "lat": [
@@ -427,10 +427,10 @@
     "class": "Fusulinata",
     "order": "Fusulinida",
     "regions": {
-     "na-w": 5,
-     "ca": 4,
      "na-e": 35,
-     "eu": 6
+     "eu-n": 6,
+     "na-w": 5,
+     "ca": 4
     }
    },
    "hab": [
@@ -542,21 +542,23 @@
     "family": "Nummulitidae",
     "genus": "Nummulites",
     "regions": {
-     "eu": 295,
-     "sa-n": 8,
+     "eu-s": 266,
      "in": 102,
-     "ar": 14,
-     "ca": 26,
      "as-w": 68,
-     "af-n": 31,
-     "af-w": 3,
-     "af-e": 32,
-     "na-e": 9,
-     "af-s": 1,
      "as-c": 46,
-     "as-se": 3,
+     "af-e": 32,
+     "af-n": 31,
+     "eu-n": 29,
+     "ca": 26,
+     "ar": 14,
+     "na-e": 9,
+     "sa-n": 8,
+     "sea": 6,
+     "af-w": 3,
+     "as-ic": 3,
      "mg": 3,
-     "au": 2
+     "au-w": 2,
+     "af-s": 1
     }
    },
    "hab": [
@@ -602,26 +604,31 @@
     "order": "Foraminifera",
     "family": "Nummulitidae",
     "regions": {
-     "na-e": 13,
-     "eu": 715,
-     "sa-n": 19,
+     "eu-s": 705,
      "in": 287,
-     "na-w": 3,
-     "ar": 23,
-     "ca": 50,
-     "as-w": 135,
-     "af-s": 4,
-     "as-se": 26,
-     "as-e": 4,
-     "af-n": 60,
-     "af-e": 47,
-     "af-w": 8,
-     "oc": 10,
-     "au": 49,
      "as-c": 210,
+     "as-w": 135,
+     "ca": 50,
+     "au-w": 48,
+     "af-e": 47,
+     "af-n": 40,
+     "eu-n": 30,
+     "as-ic": 25,
+     "ar": 23,
+     "sea": 22,
+     "sa-n": 19,
+     "na-e": 13,
      "ng": 12,
+     "oc": 10,
+     "af-w": 8,
+     "mg": 8,
+     "af-s": 4,
+     "na-w": 3,
      "nz": 3,
-     "mg": 8
+     "as-s": 2,
+     "as-ne": 2,
+     "au-e": 1,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -662,10 +669,12 @@
     "family": "Boultoniidae",
     "genus": "Palaeofusulina",
     "regions": {
-     "as-e": 152,
-     "eu": 5,
-     "as-se": 12,
-     "as-c": 1
+     "as-s": 142,
+     "as-ne": 13,
+     "as-sb": 8,
+     "eu-s": 5,
+     "as-c": 1,
+     "as-ic": 1
     }
    },
    "lat": [
@@ -816,14 +825,17 @@
     "family": "Verbeekinidae",
     "genus": "Verbeekina",
     "regions": {
-     "as-w": 8,
      "as-c": 22,
-     "as-e": 25,
-     "eu": 4,
-     "as-se": 5,
+     "as-ne": 20,
      "ar": 17,
-     "na-w": 1,
+     "as-sb": 13,
+     "as-w": 8,
+     "as-s": 5,
      "as-n": 3,
+     "eu-s": 2,
+     "eu-n": 2,
+     "as-ic": 2,
+     "na-w": 1,
      "ca": 1
     }
    },

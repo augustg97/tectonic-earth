@@ -191,7 +191,7 @@
    "fad": 338,
    "lad": 330,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A Scottish Mississippian hot-spring site preserving early terrestrial tetrapods such as Westlothiana.",
    "assemblage": true,
@@ -205,8 +205,8 @@
    "lad": 539,
    "range": [
     "au",
-    "eu",
-    "na-e",
+    "eu-n",
+    "na-av",
     "af-s",
     "as-n",
     "as-e",
@@ -287,7 +287,7 @@
    "fad": 433,
    "lad": 423,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "Silurian Gotland is a fossilised barrier reef of tabulate and rugose corals and stromatoporoids.",
    "assemblage": true,
@@ -467,7 +467,7 @@
    "fad": 500,
    "lad": 488,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "Alum-shale nodules of Sweden preserve millimetre crustaceans in uncrushed three-dimensional phosphate.",
    "assemblage": true,
@@ -509,7 +509,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A Scottish hot-spring deposit that silicified an entire Early Devonian land ecosystem where it stood.",
    "assemblage": true,
@@ -622,6 +622,7 @@
    "range": [
     "eu",
     "na-e",
+    "na-av",
     "gl"
    ],
    "note": "Trilobites so different on its two shores that the contrast first revealed the ocean's former existence.",

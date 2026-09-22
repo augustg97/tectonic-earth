@@ -100,12 +100,35 @@ REGIONS = [
     ("ca", -65.0, -59.0, 12.0, 17.2),          # Lesser Antilles
     ("na-n", -170.0, -52.0, 60.0, 84.0),       # Alaska, Arctic Canada
     ("na-n", -180.0, -168.0, 50.0, 72.0),
+    # The Avalon and Carolina terranes: peri-Gondwanan crust on the Atlantic
+    # side of the Appalachians (the Avalon Peninsula, Nova Scotia and New
+    # Brunswick, the Boston basin, the Carolina slate belt). One code with the
+    # Laurentian craton put the Mistaken Point fronds on Laurentia at 565 Ma.
+    ("na-av", -56.0, -52.5, 46.3, 49.0),        # the Avalon Peninsula and Bonavista
+    ("na-av", -67.0, -59.5, 43.3, 47.2),        # Nova Scotia, southern New Brunswick
+    ("na-av", -71.6, -69.8, 41.2, 43.2),        # the Boston basin, Rhode Island
+    ("na-av", -81.5, -78.5, 34.0, 36.5),        # the Carolina slate belt
     ("na-w", -170.0, -100.0, 24.5, 60.0),      # Cordillera and high plains
     ("na-e", -100.0, -52.0, 24.5, 60.0),       # shield, Appalachians, coastal plain
     ("sa-n", -82.0, -34.0, -18.0, 13.0),       # Amazonia, the northern and central Andes
     ("sa-s", -76.0, -39.0, -56.0, -18.0),      # southern cone, Patagonia
     ("sa-s", -62.0, -57.0, -53.0, -51.0),      # Falklands / Malvinas
-    ("eu", -25.0, 58.0, 35.0, 72.0),           # Europe to the Urals, Iceland
+    # Europe is two crusts in the Palaeozoic: Baltica and Avalonia north of the
+    # Rheic suture and the Trans-European Suture Zone, and the peri-Gondwanan
+    # terranes south of them (Armorica, Iberia, Perunica, Adria, the Balkans).
+    # One code put a Silurian myriapod of Scotland on Armorica at 55 S. The line
+    # is approximated: the Rheic suture at 50 N across France and Germany, the
+    # TESZ as a step across Poland to the Black Sea. "eu" is an ALIAS for both.
+    ("eu-s", -10.0, 3.5, 35.0, 44.0),          # Iberia
+    ("eu-s", -5.0, 8.0, 41.0, 50.0),           # France, Switzerland, the western Alps
+    ("eu-s", 8.0, 15.0, 44.0, 50.5),           # southern Germany, Bohemia, Austria
+    ("eu-s", 6.0, 19.0, 35.0, 47.0),           # Italy, Sardinia, Sicily, Slovenia, Croatia
+    ("eu-s", 15.0, 23.0, 44.0, 50.5),          # Slovakia, Hungary, the Dinarides, Serbia
+    ("eu-s", 19.0, 29.5, 34.0, 44.5),          # Greece, Albania, N Macedonia, Bulgaria
+    ("eu-s", 22.0, 30.0, 43.0, 48.5),          # Romania, Moldova
+    ("eu-n", -25.0, 58.0, 35.0, 72.0),         # Baltica, Avalonia, the Russian platform, Iceland
+    ("eu-n", 8.0, 36.0, 74.0, 81.0),           # Svalbard: Old Red Sandstone crust of Laurussia
+    ("eu-n", 36.0, 58.0, 72.0, 82.0),          # Franz Josef Land, the Barents shelf
     ("af-n", -18.0, 40.0, 15.0, 38.0),         # Maghreb, Sahara, Egypt
     ("af-e", 28.0, 52.0, -12.0, 15.0),         # the Rift, Ethiopia, the Horn
     ("af-w", -18.0, 28.0, -12.0, 15.0),        # Guinea, Congo basin

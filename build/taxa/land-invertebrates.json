@@ -29,7 +29,8 @@
     "family": "Arthropleuridae",
     "genus": "Arthropleura",
     "regions": {
-     "eu": 59,
+     "eu-n": 32,
+     "eu-s": 27,
      "na-e": 2
     }
    },
@@ -120,7 +121,7 @@
    "fad": 415,
    "lad": 372,
    "range": [
-    "eu",
+    "eu-n",
     "na-e"
    ],
    "note": "A Devonian relative of Arthropleura, an early millipede-grade detritivore of the first forest floors.",
@@ -139,7 +140,7 @@
     "family": "Arthropleuridae",
     "genus": "Eoarthropleura",
     "regions": {
-     "eu": 1,
+     "eu-n": 1,
      "na-e": 1
     }
    }
@@ -151,7 +152,7 @@
    "fad": 430,
    "lad": 415,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A stubby Silurian millipede of the earliest land litter, feeding on decaying plant matter beside water.",
    "pbdb": {
@@ -169,7 +170,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Kampecaris",
     "regions": {
-     "eu": 7
+     "eu-n": 7
     }
    },
    "box": [
@@ -195,7 +196,7 @@
    "fad": 305,
    "lad": 299,
    "range": [
-    "eu"
+    "eu-s"
    ],
    "note": "A dragonfly relative with a wingspan approaching three-quarters of a metre, possible only in a high-oxygen atmosphere.",
    "sz": 0.7,
@@ -216,7 +217,7 @@
     "family": "Meganeuridae",
     "genus": "Meganeura",
     "regions": {
-     "eu": 7
+     "eu-s": 7
     }
    },
    "w": 3
@@ -249,7 +250,8 @@
     "family": "Melanopsidae",
     "genus": "Melanopsis",
     "regions": {
-     "eu": 212,
+     "eu-s": 164,
+     "eu-n": 48,
      "as-w": 17,
      "nz": 2,
      "na-e": 1
@@ -334,7 +336,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A Rhynie chert trigonotarbid preserved in such detail that its book lungs and leg joints can be counted.",
    "pbdb": {
@@ -352,7 +354,7 @@
     "family": "Palaeocharinidae",
     "genus": "Palaeocharinus",
     "regions": {
-     "eu": 9
+     "eu-n": 9
     }
    }
   },
@@ -382,12 +384,14 @@
     "class": "Insecta",
     "order": "Palaeodictyoptera",
     "regions": {
-     "na-e": 64,
-     "au": 1,
-     "eu": 254,
+     "eu-s": 143,
+     "eu-n": 111,
+     "na-e": 54,
      "as-n": 31,
-     "as-e": 6,
+     "na-av": 10,
      "na-w": 10,
+     "as-ne": 6,
+     "au-e": 1,
      "sa-s": 1
     }
    }
@@ -399,7 +403,7 @@
    "fad": 428,
    "lad": 410,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A millipede from ~425 Ma Scotland with open spiracles -- the oldest direct evidence of an animal breathing air.",
    "pbdb": {
@@ -417,7 +421,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Pneumodesmus",
     "regions": {
-     "eu": 3
+     "eu-n": 3
     }
    },
    "pbdb_ok": true,
@@ -447,7 +451,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A springtail from the Rhynie chert, ~410 Ma: the oldest known hexapod, and effectively a modern-looking one.",
    "pbdb": {
@@ -465,7 +469,7 @@
     "family": "Isotomidae",
     "genus": "Rhyniella",
     "regions": {
-     "eu": 2
+     "eu-n": 2
     }
    }
   },
@@ -476,7 +480,7 @@
    "fad": 411,
    "lad": 405,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "Rhynie chert jaws of disputed affinity, argued to be the oldest insect -- possibly even a winged one.",
    "pbdb": {
@@ -494,7 +498,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Rhyniognatha",
     "regions": {
-     "eu": 1
+     "eu-n": 1
     }
    },
    "aka": [
@@ -524,8 +528,10 @@
     "class": "Arachnida",
     "order": "Trigonotarbida",
     "regions": {
-     "eu": 145,
-     "na-e": 35,
+     "eu-n": 111,
+     "eu-s": 34,
+     "na-e": 28,
+     "na-av": 7,
      "na-w": 1,
      "sa-s": 1
     }

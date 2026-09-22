@@ -54,7 +54,7 @@
     "genus": "Acaena",
     "regions": {
      "sa-s": 4,
-     "au": 4
+     "au-e": 4
     },
     "fea_r": 28.47,
     "lla_r": 1.68
@@ -159,23 +159,25 @@
     "genus": "Anas",
     "regions": {
      "na-w": 82,
-     "eu": 69,
      "na-e": 64,
+     "eu-s": 48,
      "nz": 24,
+     "eu-n": 21,
      "as-w": 20,
      "as-n": 12,
      "oc": 10,
      "sea": 10,
      "mg": 10,
      "sa-n": 7,
-     "au": 7,
-     "as-e": 5,
+     "au-e": 7,
      "sa-s": 5,
+     "as-ne": 4,
      "ca": 4,
      "as-c": 3,
      "ar": 2,
      "na-n": 2,
-     "af-e": 1
+     "af-e": 1,
+     "as-s": 1
     },
     "fea_r": 3.05,
     "lla_r": 0.01
@@ -260,27 +262,30 @@
     "regions": {
      "sa-s": 224,
      "na-w": 182,
-     "au": 165,
+     "au-e": 151,
      "as-n": 113,
      "na-n": 112,
-     "eu": 101,
-     "na-e": 92,
+     "na-e": 84,
      "in": 73,
      "an": 72,
+     "eu-n": 60,
+     "eu-s": 42,
      "af-s": 42,
-     "as-e": 25,
      "as-w": 21,
      "af-w": 19,
      "as-c": 18,
+     "as-ne": 18,
+     "au-w": 14,
      "sa-n": 13,
      "nz": 13,
+     "as-s": 9,
+     "na-av": 8,
      "af-e": 6,
      "af-n": 4,
-     "as-se": 3,
      "ar": 2,
-     "sea": 1,
      "mg": 1,
      "ca": 1,
+     "as-sb": 1,
      "gl": 1
     },
     "fea_r": 381.2,
@@ -386,23 +391,27 @@
     "genus": null,
     "regions": {
      "na-w": 650,
-     "eu": 522,
-     "as-e": 132,
-     "au": 90,
-     "na-e": 87,
+     "eu-n": 450,
+     "as-ne": 116,
+     "au-e": 89,
+     "na-e": 86,
+     "eu-s": 72,
      "as-n": 70,
      "sa-s": 21,
      "as-c": 16,
      "in": 16,
-     "as-se": 8,
+     "as-s": 15,
+     "as-ic": 7,
      "af-e": 5,
      "na-n": 5,
+     "as-sb": 5,
      "gl": 3,
-     "sea": 3,
      "af-s": 2,
      "sa-n": 1,
      "ar": 1,
+     "au-w": 1,
      "nz": 1,
+     "na-av": 1,
      "ca": 1,
      "as-w": 1
     },
@@ -489,13 +498,16 @@
     "regions": {
      "na-w": 20,
      "in": 17,
-     "na-e": 13,
-     "eu": 8,
-     "as-e": 6,
-     "au": 5,
+     "na-e": 12,
+     "eu-n": 6,
+     "as-ne": 5,
+     "au-e": 5,
      "af-e": 2,
+     "eu-s": 2,
      "as-n": 1,
-     "sa-n": 1
+     "sa-n": 1,
+     "na-av": 1,
+     "as-s": 1
     },
     "fea_r": 83.25,
     "lla_r": 2.67
@@ -1182,7 +1194,7 @@
      "oc": 4,
      "nz": 2,
      "mg": 1,
-     "as-se": 1
+     "as-ic": 1
     },
     "fea_r": 0.01,
     "lla_r": 0.01
@@ -1312,7 +1324,7 @@
     "family": "Salicaceae",
     "genus": "Salix",
     "regions": {
-     "eu": 1
+     "eu-n": 1
     }
    }
   },
@@ -1359,9 +1371,9 @@
     "family": "Sapotaceae",
     "genus": "Sideroxylon",
     "regions": {
-     "as-e": 5,
+     "as-ne": 5,
      "sa-n": 3,
-     "eu": 1
+     "eu-s": 1
     },
     "fea_r": 44.95,
     "lla_r": 3.96
@@ -1422,7 +1434,7 @@
     "cosmo",
     "an"
    ],
-   "note": "Water bears, surviving freezing and drying alike; with nematodes and rotifers they are the permanent land animals of the ice-free Antarctic.",
+   "note": "Water bears, microscopic animals that survive freezing and drying alike; in Antarctica they are among the few permanent land animals.",
    "hab": [
     "tundra",
     "ice",

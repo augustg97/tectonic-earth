@@ -34,12 +34,12 @@
     "genus": "Anhinga",
     "regions": {
      "na-e": 9,
+     "sa-n": 7,
      "af-n": 6,
      "af-e": 6,
-     "sa-n": 7,
-     "eu": 4,
+     "au-e": 6,
+     "eu-s": 4,
      "ca": 2,
-     "au": 6,
      "sa-s": 2,
      "in": 1,
      "mg": 1
@@ -119,7 +119,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Archaeopteryx",
     "regions": {
-     "eu": 10
+     "eu-s": 10
     }
    },
    "w": 3,
@@ -162,7 +162,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Archaeopteryx",
     "regions": {
-     "eu": 6
+     "eu-s": 6
     }
    }
   },
@@ -234,7 +234,7 @@
     "family": "Confuciusornithidae",
     "genus": "Confuciusornis",
     "regions": {
-     "as-e": 19
+     "as-ne": 19
     }
    },
    "box": [
@@ -291,7 +291,8 @@
     "family": "Gastornithidae",
     "genus": "Gastornis",
     "regions": {
-     "eu": 12,
+     "eu-s": 9,
+     "eu-n": 3,
      "na-n": 1
     }
    },
@@ -372,7 +373,7 @@
     "family": "Dromornithidae",
     "genus": "Genyornis",
     "regions": {
-     "au": 3
+     "au-e": 3
     }
    },
    "cls": {
@@ -408,7 +409,7 @@
     "family": "Dromornithidae",
     "genus": "Genyornis",
     "regions": {
-     "au": 1
+     "au-e": 1
     }
    },
    "pbdb_ok": true,
@@ -440,7 +441,7 @@
     "family": "Accipitridae",
     "genus": "Gyps",
     "regions": {
-     "eu": 11,
+     "eu-s": 11,
      "as-c": 1,
      "af-n": 1
     }
@@ -527,10 +528,10 @@
     "family": "Hesperornithidae",
     "genus": "Hesperornis",
     "regions": {
+     "na-e": 37,
      "na-w": 11,
      "na-n": 10,
-     "na-e": 37,
-     "eu": 7
+     "eu-n": 7
     }
    },
    "w": 3,
@@ -567,10 +568,10 @@
     "family": "Spheniscidae",
     "genus": "Palaeeudyptes",
     "regions": {
-     "sa-s": 2,
+     "an": 22,
      "nz": 8,
-     "au": 1,
-     "an": 22
+     "sa-s": 2,
+     "au-e": 1
     }
    },
    "hab": [
@@ -707,14 +708,15 @@
     "family": "Struthionidae",
     "genus": "Struthio",
     "regions": {
-     "af-s": 22,
-     "as-w": 8,
-     "af-n": 14,
      "af-e": 27,
-     "ar": 1,
+     "af-s": 22,
+     "af-n": 14,
+     "eu-s": 13,
+     "eu-n": 9,
+     "as-w": 8,
      "as-c": 2,
-     "eu": 22,
-     "as-e": 2,
+     "as-ne": 2,
+     "ar": 1,
      "as-n": 1,
      "in": 1
     }

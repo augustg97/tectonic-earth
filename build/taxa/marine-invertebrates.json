@@ -52,21 +52,26 @@
     "family": "Acroporidae",
     "genus": "Acropora",
     "regions": {
-     "eu": 126,
-     "in": 14,
      "ca": 464,
-     "oc": 103,
-     "ar": 64,
-     "as-w": 19,
-     "ng": 47,
-     "as-se": 151,
-     "as-e": 97,
+     "au-w": 188,
+     "as-ic": 124,
      "sa-n": 121,
+     "eu-s": 119,
+     "oc": 103,
+     "as-ne": 96,
+     "ar": 64,
      "af-e": 60,
+     "sea": 49,
+     "ng": 47,
      "na-e": 47,
-     "au": 233,
-     "mg": 6,
+     "au-e": 45,
+     "as-sb": 21,
      "nz": 21,
+     "as-w": 19,
+     "in": 14,
+     "as-s": 7,
+     "eu-n": 7,
+     "mg": 6,
      "as-c": 2
     }
    },
@@ -115,7 +120,7 @@
    "fad": 505,
    "lad": 485,
    "range": [
-    "eu",
+    "eu-n",
     "na-e",
     "na-w",
     "as-n",
@@ -138,16 +143,18 @@
     "family": "Agnostidae",
     "genus": "Agnostus",
     "regions": {
-     "na-w": 8,
-     "eu": 37,
-     "na-n": 5,
-     "as-n": 2,
-     "na-e": 4,
-     "as-e": 7,
-     "gl": 5,
-     "sa-s": 1,
+     "eu-n": 36,
      "as-c": 34,
-     "as-se": 1,
+     "na-w": 8,
+     "as-s": 6,
+     "na-n": 5,
+     "gl": 5,
+     "na-e": 4,
+     "as-n": 2,
+     "sa-s": 1,
+     "eu-s": 1,
+     "as-ne": 1,
+     "as-ic": 1,
      "an": 1
     }
    },
@@ -248,16 +255,19 @@
     "family": "Amphiporidae",
     "genus": "Amphipora",
     "regions": {
-     "na-n": 42,
+     "eu-s": 95,
+     "eu-n": 65,
      "na-w": 59,
-     "eu": 160,
-     "na-e": 3,
-     "au": 15,
+     "na-n": 42,
      "as-c": 32,
-     "as-e": 6,
-     "as-se": 46,
+     "as-ic": 31,
+     "as-s": 20,
+     "af-n": 10,
+     "au-e": 8,
+     "au-w": 7,
      "as-n": 7,
-     "af-n": 10
+     "na-e": 3,
+     "as-ne": 1
     }
    },
    "hab": [
@@ -300,18 +310,21 @@
     "family": "Raphiophoridae",
     "genus": "Ampyx",
     "regions": {
+     "eu-n": 119,
      "na-e": 28,
-     "na-n": 2,
-     "eu": 122,
+     "as-s": 20,
      "na-w": 15,
-     "au": 6,
-     "as-e": 24,
-     "sa-s": 13,
-     "as-c": 7,
-     "as-n": 2,
      "af-n": 14,
+     "sa-s": 13,
+     "eu-s": 10,
+     "as-c": 7,
+     "au-w": 5,
+     "as-ne": 4,
      "as-w": 3,
-     "as-se": 1
+     "na-n": 2,
+     "as-n": 2,
+     "au-e": 1,
+     "as-sb": 1
     }
    }
   },
@@ -346,10 +359,10 @@
     "family": "Anomalocarididae",
     "genus": "Anomalocaris",
     "regions": {
-     "na-e": 9,
      "na-w": 18,
-     "as-e": 4,
-     "au": 2,
+     "na-e": 9,
+     "as-s": 4,
+     "au-e": 2,
      "na-n": 1
     }
    },
@@ -384,18 +397,20 @@
     "phylum": "Porifera",
     "class": "Archaeocyatha",
     "regions": {
-     "na-e": 20,
-     "na-w": 172,
-     "na-n": 87,
      "as-n": 2822,
+     "eu-s": 258,
+     "au-e": 177,
+     "na-w": 172,
+     "af-n": 140,
      "as-c": 139,
-     "as-e": 98,
-     "in": 1,
-     "eu": 278,
-     "au": 177,
+     "na-n": 87,
+     "as-ne": 70,
      "an": 62,
+     "as-s": 28,
+     "na-e": 20,
+     "eu-n": 20,
      "gl": 4,
-     "af-n": 140
+     "in": 1
     }
    },
    "hab": [
@@ -440,18 +455,21 @@
     "family": "Asaphidae",
     "regions": {
      "na-e": 1222,
+     "eu-n": 965,
      "na-w": 516,
-     "eu": 1072,
-     "na-n": 72,
-     "au": 133,
-     "as-se": 9,
-     "as-e": 396,
      "sa-s": 357,
-     "sa-n": 10,
-     "ca": 19,
+     "as-s": 272,
      "as-c": 141,
-     "as-n": 19,
+     "as-ne": 125,
+     "eu-s": 118,
+     "au-e": 84,
+     "na-n": 72,
+     "au-w": 49,
      "af-n": 20,
+     "ca": 19,
+     "as-n": 19,
+     "sa-n": 10,
+     "as-ic": 8,
      "nz": 1,
      "gl": 1,
      "as-w": 1
@@ -465,7 +483,7 @@
    "fad": 470,
    "lad": 455,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A large asaphid trilobite of the Baltic Ordovician, some species carrying their eyes on long stalks to see over soft mud.",
    "pbdb": {
@@ -483,14 +501,20 @@
     "family": "Asaphidae",
     "genus": "Asaphus",
     "regions": {
-     "eu": 161,
-     "as-e": 8,
-     "sa-s": 1,
+     "eu-n": 160,
+     "as-s": 4,
+     "as-ne": 4,
      "as-c": 4,
+     "as-n": 2,
+     "sa-s": 1,
+     "eu-s": 1,
      "na-e": 1,
-     "as-n": 2
+     "as-sb": 1
     }
-   }
+   },
+   "avoid": [
+    "Avalonia"
+   ]
   },
   "Australocoelia": {
    "rank": "genus",
@@ -605,24 +629,26 @@
     "genus": "Baculites",
     "regions": {
      "na-w": 566,
-     "eu": 134,
      "na-e": 263,
+     "eu-n": 70,
+     "eu-s": 65,
+     "as-ne": 30,
+     "af-s": 24,
      "sa-s": 22,
+     "an": 16,
      "as-w": 12,
      "nz": 10,
-     "af-s": 24,
-     "in": 1,
-     "as-e": 30,
-     "na-n": 4,
+     "ar": 10,
      "af-w": 9,
      "gl": 9,
-     "an": 16,
-     "au": 2,
+     "as-c": 5,
+     "sea": 4,
+     "na-n": 4,
+     "au-w": 2,
      "ca": 2,
      "sa-n": 2,
-     "af-n": 1,
-     "ar": 10,
-     "as-c": 5
+     "in": 1,
+     "af-n": 1
     }
    },
    "pbdb_ok": true
@@ -655,8 +681,8 @@
     "genus": "Bathymodiolus",
     "regions": {
      "na-w": 20,
-     "as-e": 2,
-     "sa-n": 5
+     "sa-n": 5,
+     "as-ne": 2
     }
    },
    "hab": [
@@ -699,7 +725,7 @@
    "fad": 521,
    "lad": 517,
    "range": [
-    "eu",
+    "eu-s",
     "af-n"
    ],
    "note": "An early Cambrian trilobite of the West Gondwanan shelves, and the marker of the Bigotinid province.",
@@ -718,8 +744,8 @@
     "family": "Bigotinidae",
     "genus": "Bigotina",
     "regions": {
-     "eu": 3,
-     "af-n": 12
+     "af-n": 12,
+     "eu-s": 3
     }
    }
   },
@@ -779,18 +805,22 @@
     "class": "Blastoidea",
     "regions": {
      "na-e": 513,
-     "na-n": 3,
-     "au": 44,
-     "as-c": 22,
-     "eu": 110,
+     "eu-n": 65,
+     "eu-s": 45,
      "na-w": 33,
-     "as-se": 7,
-     "as-e": 5,
+     "au-w": 29,
+     "as-c": 22,
+     "au-e": 15,
      "af-s": 9,
-     "sa-n": 1,
-     "sa-s": 2,
      "ar": 8,
+     "as-ic": 5,
+     "as-s": 4,
+     "na-n": 3,
+     "as-sb": 2,
+     "sa-s": 2,
      "af-n": 2,
+     "as-ne": 1,
+     "sa-n": 1,
      "as-n": 1
     }
    }
@@ -828,8 +858,8 @@
    "fad": 575,
    "lad": 560,
    "range": [
-    "eu",
-    "na-e"
+    "eu-n",
+    "na-av"
    ],
    "note": "A bush-shaped rangeomorph, its fronds radiating from a common base rather than standing on a stalk.",
    "pbdb": {
@@ -847,8 +877,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Bradgatia",
     "regions": {
-     "na-e": 24,
-     "eu": 4,
+     "na-av": 24,
+     "eu-n": 4,
      "na-w": 1
     }
    },
@@ -912,20 +942,20 @@
     "family": "Buchiidae",
     "genus": "Buchia",
     "regions": {
-     "gl": 141,
-     "mg": 1,
-     "as-n": 187,
      "na-w": 240,
+     "eu-n": 197,
+     "as-n": 187,
      "na-n": 144,
-     "eu": 59,
-     "an": 3,
-     "as-e": 85,
-     "ca": 6,
+     "gl": 141,
+     "as-ne": 85,
      "nz": 25,
      "in": 17,
+     "ca": 6,
      "ng": 6,
-     "au": 2,
-     "as-c": 3
+     "an": 3,
+     "as-c": 3,
+     "au-e": 2,
+     "mg": 1
     }
    },
    "lat": [
@@ -960,12 +990,12 @@
     "family": "Homalonotidae",
     "genus": "Burmeisteria",
     "regions": {
-     "sa-n": 6,
-     "af-n": 4,
      "af-s": 19,
      "sa-s": 10,
+     "sa-n": 6,
+     "af-n": 4,
      "nz": 3,
-     "eu": 1
+     "eu-s": 1
     }
    },
    "lat": [
@@ -999,10 +1029,10 @@
     "family": "Vesicomyidae",
     "genus": "Calyptogena",
     "regions": {
-     "as-e": 3,
-     "as-n": 1,
      "na-w": 6,
-     "na-n": 3
+     "as-ne": 3,
+     "na-n": 3,
+     "as-n": 1
     }
    },
    "hab": [
@@ -1019,7 +1049,7 @@
    "range": [
     "as-c",
     "as-e",
-    "eu",
+    "eu-n",
     "na-e"
    ],
    "note": "A giant straight-shelled nautiloid, possibly six metres long, hunting the shelf seas.",
@@ -1042,11 +1072,18 @@
     "genus": "Cameroceras",
     "regions": {
      "na-e": 41,
-     "as-e": 23,
+     "eu-n": 15,
+     "as-s": 13,
+     "as-ne": 10,
+     "eu-s": 6,
      "as-c": 3,
-     "eu": 21
+     "as-sb": 1
     }
-   }
+   },
+   "lat": [
+    0,
+    50
+   ]
   },
   "Ceratites": {
    "rank": "genus",
@@ -1073,13 +1110,14 @@
     "family": "Ceratitidae",
     "genus": "Ceratites",
     "regions": {
-     "na-w": 3,
-     "eu": 111,
-     "as-se": 1,
-     "ar": 5,
+     "eu-s": 63,
+     "eu-n": 58,
      "in": 24,
+     "ar": 5,
      "as-n": 4,
-     "as-e": 2
+     "na-w": 3,
+     "as-ne": 2,
+     "as-s": 1
     }
    },
    "place_ok": true
@@ -1117,8 +1155,8 @@
    "range": [
     "as-n",
     "au-e",
-    "eu",
-    "na-e"
+    "eu-n",
+    "na-av"
    ],
    "note": "Frond-shaped rangeomorphs anchored to the sea floor, feeding without a mouth or a gut.",
    "sz": 1.0,
@@ -1139,13 +1177,13 @@
     "family": "Charniidae",
     "genus": "Charnia",
     "regions": {
-     "na-e": 32,
-     "eu": 14,
+     "na-av": 32,
+     "eu-n": 14,
+     "au-e": 3,
+     "as-s": 3,
      "as-n": 2,
-     "au": 3,
-     "na-n": 1,
-     "as-e": 3,
-     "as-c": 2
+     "as-c": 2,
+     "na-n": 1
     }
    },
    "w": 3,
@@ -1187,19 +1225,22 @@
     "family": "Claraiidae",
     "genus": "Claraia",
     "regions": {
-     "eu": 178,
+     "as-s": 562,
      "gl": 166,
-     "na-w": 44,
-     "as-e": 528,
-     "af-n": 3,
-     "as-se": 75,
+     "eu-s": 164,
      "ar": 53,
-     "as-c": 28,
-     "au": 8,
-     "in": 29,
      "as-w": 49,
-     "na-n": 2,
+     "na-w": 44,
+     "eu-n": 30,
+     "in": 29,
+     "as-c": 28,
+     "as-ne": 18,
+     "as-sb": 17,
+     "au-w": 8,
+     "as-ic": 6,
      "as-n": 5,
+     "af-n": 3,
+     "na-n": 2,
      "mg": 1
     }
    }
@@ -1231,10 +1272,10 @@
     "family": "Eatoniidae",
     "genus": "Clarkeia",
     "regions": {
-     "eu": 6,
      "sa-s": 11,
-     "af-w": 1,
+     "eu-s": 6,
      "sa-n": 6,
+     "af-w": 1,
      "af-n": 1,
      "af-s": 1
     }
@@ -1256,7 +1297,7 @@
     "ar",
     "as-e",
     "as-n",
-    "eu",
+    "eu-s",
     "na-w",
     "sa-n",
     "sa-s"
@@ -1280,14 +1321,15 @@
     "family": "Cloudinidae",
     "genus": "Cloudina",
     "regions": {
+     "sa-s": 18,
      "af-s": 12,
      "na-w": 12,
+     "as-s": 12,
      "ar": 5,
-     "as-e": 13,
-     "sa-s": 18,
+     "eu-s": 5,
      "sa-n": 2,
      "as-n": 2,
-     "eu": 5
+     "as-ne": 1
     }
    },
    "hab": [
@@ -1326,7 +1368,7 @@
     "family": "Dreissenidae",
     "genus": "Congeria",
     "regions": {
-     "eu": 22,
+     "eu-s": 22,
      "as-w": 7,
      "na-e": 1
     }
@@ -1406,27 +1448,33 @@
     "family": "Cucullaeidae",
     "genus": "Cucullaea",
     "regions": {
-     "na-e": 483,
-     "an": 79,
-     "eu": 207,
+     "na-e": 482,
      "na-w": 217,
-     "as-n": 11,
      "sa-s": 165,
-     "in": 8,
-     "sa-n": 20,
-     "ar": 30,
-     "af-e": 23,
-     "ca": 4,
-     "as-w": 24,
-     "af-w": 2,
-     "au": 22,
+     "eu-s": 106,
+     "eu-n": 103,
      "nz": 90,
-     "as-e": 40,
+     "an": 79,
+     "as-ne": 35,
+     "ar": 30,
+     "as-w": 24,
+     "af-e": 23,
+     "sa-n": 20,
+     "au-e": 18,
+     "as-n": 11,
+     "in": 8,
      "af-s": 6,
+     "as-s": 5,
+     "ca": 4,
+     "sea": 4,
+     "au-w": 4,
      "as-c": 4,
-     "as-se": 7,
+     "as-ic": 4,
      "gl": 4,
-     "af-n": 2
+     "as-sb": 3,
+     "af-w": 2,
+     "af-n": 2,
+     "na-av": 1
     }
    },
    "pbdb_ok": true
@@ -1463,14 +1511,14 @@
     "genus": "Cyprideis",
     "regions": {
      "af-e": 12,
-     "eu": 8,
-     "na-w": 3,
-     "na-e": 2,
      "sa-n": 9,
+     "eu-s": 8,
      "as-w": 4,
+     "na-w": 3,
+     "sa-s": 3,
+     "na-e": 2,
      "ca": 1,
-     "as-c": 1,
-     "sa-s": 3
+     "as-c": 1
     }
    },
    "realms": [
@@ -1513,19 +1561,20 @@
     "family": "Cyrtospiriferidae",
     "genus": "Cyrtospirifer",
     "regions": {
-     "na-e": 116,
      "na-w": 118,
-     "na-n": 7,
-     "eu": 92,
+     "na-e": 116,
      "as-c": 60,
-     "au": 4,
-     "af-n": 9,
-     "sa-n": 1,
-     "as-e": 16,
+     "eu-s": 51,
+     "eu-n": 41,
+     "as-s": 17,
      "ar": 10,
-     "sa-s": 1,
-     "as-se": 8,
-     "as-n": 7
+     "af-n": 9,
+     "na-n": 7,
+     "as-ic": 7,
+     "as-n": 7,
+     "au-w": 4,
+     "sa-n": 1,
+     "sa-s": 1
     }
    }
   },
@@ -1560,21 +1609,24 @@
     "family": "Halobiidae",
     "genus": "Daonella",
     "regions": {
-     "eu": 292,
+     "eu-s": 289,
      "na-w": 67,
-     "as-c": 10,
-     "as-e": 40,
-     "nz": 26,
-     "in": 8,
-     "as-se": 35,
-     "na-e": 1,
-     "ar": 2,
-     "as-w": 12,
+     "eu-n": 56,
      "as-n": 52,
-     "au": 9,
-     "ng": 3,
-     "na-n": 5,
+     "nz": 26,
+     "as-ne": 20,
+     "as-s": 20,
+     "as-ic": 19,
+     "as-sb": 16,
+     "as-w": 12,
+     "as-c": 10,
+     "au-w": 9,
+     "in": 8,
      "sa-s": 6,
+     "na-n": 5,
+     "ng": 3,
+     "ar": 2,
+     "na-e": 1,
      "gl": 1
     }
    }
@@ -1607,16 +1659,18 @@
     "family": "Deltopectinidae",
     "genus": "Deltopecten",
     "regions": {
+     "au-e": 58,
+     "au-w": 10,
+     "na-w": 9,
      "na-e": 7,
+     "as-n": 6,
+     "eu-n": 5,
      "in": 3,
      "nz": 3,
      "as-c": 2,
-     "au": 68,
-     "as-e": 1,
-     "as-n": 6,
      "na-n": 2,
-     "na-w": 9,
-     "eu": 4,
+     "as-ne": 1,
+     "eu-s": 1,
      "sa-s": 1
     }
    },
@@ -1633,7 +1687,7 @@
    "lad": 550,
    "range": [
     "au-e",
-    "eu"
+    "eu-n"
    ],
    "note": "A flat, segmented, centimetre-to-metre oval that left feeding traces as it moved; cholesterol in its tissues shows it was an animal.",
    "sz": 1.4,
@@ -1654,12 +1708,12 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Dickinsonia",
     "regions": {
-     "eu": 23,
-     "au": 29,
-     "in": 1,
-     "as-e": 1,
+     "au-e": 29,
+     "eu-n": 23,
+     "na-n": 4,
      "as-n": 3,
-     "na-n": 4
+     "in": 1,
+     "as-s": 1
     }
    },
    "w": 3,
@@ -1695,11 +1749,13 @@
     "family": "Dreissenidae",
     "genus": "Dreissena",
     "regions": {
-     "na-e": 2,
-     "eu": 13,
+     "eu-s": 9,
      "as-w": 6,
-     "ca": 1,
-     "as-c": 3
+     "eu-n": 4,
+     "as-c": 3,
+     "na-e": 1,
+     "na-av": 1,
+     "ca": 1
     }
    },
    "hab": [
@@ -1746,8 +1802,9 @@
     "family": "Encrinidae",
     "genus": "Encrinus",
     "regions": {
-     "as-e": 24,
-     "eu": 42,
+     "eu-s": 32,
+     "as-s": 24,
+     "eu-n": 10,
      "nz": 5,
      "na-w": 2,
      "as-w": 1
@@ -1783,7 +1840,7 @@
    "lad": 445,
    "range": [
     "as-e",
-    "eu",
+    "eu-n",
     "na-e",
     "na-n",
     "na-w",
@@ -1806,13 +1863,15 @@
     "genus": "Endoceras",
     "regions": {
      "na-e": 99,
-     "eu": 52,
-     "as-e": 10,
-     "sa-s": 6,
+     "eu-n": 50,
      "na-w": 26,
-     "as-c": 2,
      "na-n": 22,
-     "as-se": 2
+     "sa-s": 6,
+     "as-ne": 6,
+     "as-sb": 5,
+     "as-s": 4,
+     "as-c": 2,
+     "eu-s": 2
     }
    },
    "no_own_icon": true
@@ -1843,10 +1902,11 @@
     "family": "Redlichiidae",
     "genus": "Eoredlichia",
     "regions": {
-     "au": 15,
-     "as-e": 41,
+     "as-s": 39,
+     "au-e": 15,
      "af-n": 3,
-     "eu": 2
+     "as-ne": 2,
+     "eu-s": 2
     }
    }
   },
@@ -1912,8 +1972,8 @@
     "class": "Malacostraca",
     "order": "Euphausiacea",
     "regions": {
+     "eu-n": 3,
      "na-e": 2,
-     "eu": 3,
      "an": 1
     }
    },
@@ -1960,12 +2020,13 @@
     "family": "Eurydesmatidae",
     "genus": "Eurydesma",
     "regions": {
+     "au-e": 127,
+     "in": 39,
+     "sa-s": 8,
+     "au-w": 5,
      "na-e": 1,
      "af-s": 1,
-     "in": 39,
-     "au": 132,
-     "as-c": 1,
-     "sa-s": 8
+     "as-c": 1
     }
    },
    "lat": [
@@ -2026,19 +2087,22 @@
     "class": "NO_CLASS_SPECIFIED",
     "order": "Eurypterida",
     "regions": {
-     "na-e": 212,
-     "eu": 287,
-     "na-n": 18,
+     "eu-n": 233,
+     "na-e": 204,
+     "eu-s": 57,
      "as-n": 22,
-     "sa-n": 4,
-     "af-n": 5,
-     "au": 10,
-     "as-e": 21,
-     "af-s": 2,
+     "as-s": 22,
+     "na-n": 18,
      "na-w": 10,
+     "au-e": 9,
+     "na-av": 8,
+     "af-n": 5,
+     "sa-n": 4,
      "sa-s": 3,
-     "as-se": 4,
+     "as-ne": 3,
+     "af-s": 2,
      "as-w": 1,
+     "au-w": 1,
      "as-c": 1
     }
    },
@@ -2055,7 +2119,7 @@
    "lad": 418,
    "range": [
     "na-e",
-    "eu"
+    "eu-n"
    ],
    "note": "Sea scorpions patrolling brackish lagoons, some large enough to take vertebrate prey.",
    "pbdb": {
@@ -2073,10 +2137,11 @@
     "family": "Eurypteridae",
     "genus": "Eurypterus",
     "regions": {
+     "eu-n": 20,
      "na-e": 17,
-     "eu": 21,
      "na-n": 4,
-     "as-e": 3,
+     "as-s": 3,
+     "eu-s": 2,
      "as-n": 1
     }
    },
@@ -2154,7 +2219,7 @@
    "fad": 571,
    "lad": 560,
    "range": [
-    "na-e"
+    "na-av"
    ],
    "note": "Shows evidence of reproduction by stolons.",
    "sz": 0.4,
@@ -2175,11 +2240,19 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Fractofusus",
     "regions": {
-     "na-e": 14,
+     "na-av": 14,
      "na-n": 1
     }
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "box": [
+    [
+     -56,
+     -52.5,
+     46.3,
+     48.5
+    ]
+   ]
   },
   "Goniatitida": {
    "rank": "order",
@@ -2265,24 +2338,25 @@
     "family": "Gryphaeidae",
     "genus": "Gryphaea",
     "regions": {
-     "sa-n": 2,
-     "na-w": 112,
-     "na-e": 88,
-     "ca": 5,
-     "ar": 110,
-     "as-c": 7,
-     "na-n": 22,
-     "eu": 492,
+     "eu-s": 405,
      "sa-s": 181,
-     "af-n": 10,
-     "in": 39,
-     "af-e": 18,
-     "as-n": 11,
-     "as-e": 10,
-     "as-w": 15,
-     "mg": 9,
-     "nz": 3,
+     "na-w": 112,
+     "ar": 110,
+     "eu-n": 93,
+     "na-e": 88,
      "gl": 73,
+     "in": 39,
+     "na-n": 22,
+     "af-e": 18,
+     "as-w": 15,
+     "as-n": 11,
+     "af-n": 10,
+     "as-ne": 10,
+     "mg": 9,
+     "as-c": 7,
+     "ca": 5,
+     "nz": 3,
+     "sa-n": 2,
      "af-w": 1
     }
    },
@@ -2317,8 +2391,8 @@
     "family": "Hallucigeniidae",
     "genus": "Hallucigenia",
     "regions": {
-     "as-e": 11,
-     "na-w": 15
+     "na-w": 15,
+     "as-s": 11
     }
    },
    "w": 3
@@ -2355,19 +2429,22 @@
     "family": "Halobiidae",
     "genus": "Halobia",
     "regions": {
-     "as-e": 90,
      "na-w": 217,
-     "na-n": 20,
-     "eu": 200,
+     "eu-s": 198,
      "as-n": 110,
+     "as-ne": 66,
+     "as-ic": 44,
+     "au-w": 41,
+     "eu-n": 40,
+     "as-s": 24,
      "nz": 24,
-     "as-se": 61,
+     "na-n": 20,
+     "as-sb": 17,
      "as-c": 12,
-     "au": 41,
      "as-w": 9,
-     "ca": 2,
-     "in": 3,
      "ar": 5,
+     "in": 3,
+     "ca": 2,
      "ng": 2
     }
    }
@@ -2407,14 +2484,16 @@
     "genus": "Halysites",
     "regions": {
      "na-e": 105,
-     "eu": 102,
+     "eu-n": 93,
      "na-w": 37,
-     "na-n": 24,
-     "au": 2,
-     "as-e": 30,
      "as-n": 30,
+     "na-n": 24,
      "as-c": 16,
+     "as-ne": 15,
+     "as-s": 15,
+     "eu-s": 9,
      "in": 4,
+     "au-e": 2,
      "as-w": 2
     }
    },
@@ -2512,18 +2591,20 @@
     "family": "Draboviidae",
     "genus": "Hirnantia",
     "regions": {
-     "eu": 98,
-     "as-e": 20,
-     "sa-s": 2,
-     "na-e": 16,
+     "eu-n": 82,
+     "as-s": 21,
+     "eu-s": 16,
+     "na-e": 14,
+     "as-sb": 10,
      "af-n": 6,
-     "as-se": 3,
      "na-n": 4,
-     "au": 1,
+     "as-w": 3,
+     "sa-s": 2,
+     "na-av": 2,
+     "au-e": 1,
      "as-n": 1,
      "as-c": 1,
-     "sa-n": 1,
-     "as-w": 3
+     "sa-n": 1
     }
    },
    "w": 1,
@@ -2537,7 +2618,7 @@
    "fad": 520,
    "lad": 514,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "An olenellid trilobite of the early Cambrian Baltic and Laurentian shelves.",
    "pbdb": {
@@ -2555,11 +2636,14 @@
     "family": "Holmiidae",
     "genus": "Holmia",
     "regions": {
-     "eu": 11,
+     "eu-n": 11,
      "af-n": 1,
      "na-n": 1
     }
-   }
+   },
+   "avoid": [
+    "Avalonia"
+   ]
   },
   "Inoceramidae": {
    "rank": "family",
@@ -2592,30 +2676,35 @@
     "order": "Myalinida",
     "family": "Inoceramidae",
     "regions": {
-     "na-e": 238,
      "na-w": 1018,
-     "sa-s": 23,
-     "as-e": 325,
-     "eu": 1228,
-     "mg": 17,
-     "af-w": 14,
-     "ar": 11,
+     "eu-n": 870,
+     "eu-s": 358,
      "sa-n": 358,
-     "as-n": 186,
-     "gl": 21,
+     "as-ne": 323,
+     "na-e": 236,
      "nz": 228,
-     "as-c": 23,
-     "af-n": 8,
+     "as-n": 186,
+     "na-n": 112,
+     "an": 56,
+     "as-w": 33,
      "in": 32,
      "af-s": 25,
-     "as-w": 33,
+     "sa-s": 23,
+     "as-c": 23,
+     "gl": 21,
+     "mg": 17,
      "ca": 15,
-     "au": 17,
+     "au-e": 15,
+     "af-w": 14,
+     "ar": 11,
+     "af-n": 8,
+     "as-s": 4,
+     "ng": 4,
      "af-e": 3,
-     "an": 56,
-     "na-n": 112,
-     "as-se": 4,
-     "ng": 4
+     "au-w": 2,
+     "na-av": 2,
+     "as-ic": 2,
+     "sea": 1
     }
    }
   },
@@ -2650,30 +2739,34 @@
     "family": "Inoceramidae",
     "genus": "Inoceramus",
     "regions": {
-     "na-e": 191,
      "na-w": 692,
-     "sa-s": 25,
-     "as-e": 226,
-     "eu": 783,
-     "mg": 10,
-     "af-w": 17,
-     "ar": 9,
-     "sa-n": 47,
-     "as-n": 153,
+     "eu-n": 667,
+     "as-ne": 226,
      "nz": 194,
-     "as-c": 18,
-     "af-n": 5,
-     "in": 22,
-     "af-s": 14,
-     "as-w": 18,
-     "ca": 7,
-     "au": 18,
-     "gl": 10,
-     "an": 24,
+     "na-e": 189,
+     "as-n": 153,
+     "eu-s": 124,
      "na-n": 96,
-     "af-e": 2,
+     "sa-n": 47,
+     "sa-s": 25,
+     "an": 24,
+     "in": 22,
+     "as-c": 18,
+     "as-w": 18,
+     "af-w": 17,
+     "au-e": 16,
+     "af-s": 14,
+     "mg": 10,
+     "gl": 10,
+     "ar": 9,
+     "ca": 7,
+     "af-n": 5,
      "ng": 3,
-     "as-se": 1
+     "au-w": 2,
+     "na-av": 2,
+     "af-e": 2,
+     "sea": 2,
+     "as-ic": 1
     }
    },
    "w": 3
@@ -2712,11 +2805,11 @@
      "na-e": 1028,
      "na-n": 28,
      "na-w": 27,
-     "au": 1,
-     "as-e": 3,
      "as-n": 27,
+     "eu-n": 26,
+     "as-s": 3,
+     "au-e": 1,
      "as-c": 1,
-     "eu": 26,
      "sa-s": 1
     }
    },
@@ -2735,7 +2828,7 @@
    "range": [
     "ar",
     "au-e",
-    "eu"
+    "eu-n"
    ],
    "note": "A bilaterally symmetrical grazer that scraped mats with a feeding structure -- the best candidate for an early mollusc relative.",
    "sz": 0.05,
@@ -2756,13 +2849,13 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Kimberella",
     "regions": {
-     "eu": 13,
-     "au": 5,
-     "in": 1,
+     "eu-n": 13,
+     "au-e": 5,
      "ar": 3,
+     "in": 1,
      "sa-n": 1,
      "na-n": 1,
-     "as-e": 1
+     "as-s": 1
     }
    },
    "w": 3,
@@ -2778,7 +2871,7 @@
    "fad": 520,
    "lad": 514,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A large olenellid trilobite of the early Cambrian Scandinavian shelf.",
    "pbdb": {
@@ -2796,10 +2889,13 @@
     "family": "Holmiidae",
     "genus": "Kjerulfia",
     "regions": {
-     "eu": 8,
+     "eu-n": 8,
      "af-n": 1
     }
-   }
+   },
+   "avoid": [
+    "Avalonia"
+   ]
   },
   "Lingula": {
    "rank": "genus",
@@ -2890,20 +2986,23 @@
     "order": "Megalodontida",
     "family": "Megalodontidae",
     "regions": {
+     "eu-s": 257,
+     "eu-n": 14,
      "na-w": 8,
-     "eu": 269,
-     "af-n": 2,
-     "na-e": 3,
-     "as-n": 4,
-     "as-e": 4,
      "as-c": 7,
+     "as-ic": 6,
+     "as-n": 4,
+     "na-e": 3,
      "ar": 3,
-     "as-se": 7,
-     "au": 2,
-     "sa-n": 2,
      "in": 3,
-     "ng": 1,
-     "as-w": 2
+     "af-n": 2,
+     "as-s": 2,
+     "au-w": 2,
+     "as-ne": 2,
+     "sa-n": 2,
+     "as-w": 2,
+     "as-sb": 1,
+     "ng": 1
     }
    }
   },
@@ -2914,7 +3013,7 @@
    "fad": 480,
    "lad": 460,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A big asaphid trilobite of the Baltoscandian Ordovician, common in the orthoceratite limestones.",
    "pbdb": {
@@ -2932,17 +3031,22 @@
     "family": "Asaphidae",
     "genus": "Megistaspis",
     "regions": {
-     "na-w": 8,
-     "au": 1,
-     "eu": 202,
-     "as-e": 4,
+     "eu-n": 196,
      "sa-s": 11,
-     "sa-n": 1,
+     "na-w": 8,
+     "eu-s": 6,
+     "as-s": 3,
      "as-c": 3,
      "as-n": 2,
-     "as-se": 2
+     "as-sb": 2,
+     "au-e": 1,
+     "sa-n": 1,
+     "as-ne": 1
     }
-   }
+   },
+   "avoid": [
+    "Avalonia"
+   ]
   },
   "Mesolimulus": {
    "rank": "genus",
@@ -2969,7 +3073,7 @@
     "family": "Limulidae",
     "genus": "Mesolimulus",
     "regions": {
-     "eu": 12,
+     "eu-s": 12,
      "af-n": 1,
      "as-n": 1
     }
@@ -3031,14 +3135,16 @@
     "genus": "Mucrospirifer",
     "regions": {
      "na-e": 665,
-     "as-e": 12,
-     "eu": 20,
-     "af-n": 8,
+     "eu-n": 16,
+     "as-s": 11,
      "sa-n": 10,
-     "sa-s": 1,
-     "na-w": 3,
-     "as-se": 1,
+     "af-n": 8,
      "as-n": 7,
+     "eu-s": 4,
+     "na-w": 3,
+     "as-ne": 1,
+     "sa-s": 1,
+     "as-ic": 1,
      "as-c": 1
     }
    }
@@ -3092,31 +3198,36 @@
     "family": "Mytilidae",
     "genus": "Mytilus",
     "regions": {
-     "eu": 273,
-     "na-e": 94,
      "na-w": 204,
-     "af-w": 2,
-     "as-c": 6,
-     "af-n": 8,
-     "ar": 18,
-     "af-e": 26,
-     "na-n": 5,
-     "as-e": 39,
-     "an": 1,
-     "oc": 4,
-     "ca": 3,
+     "eu-s": 174,
+     "eu-n": 102,
+     "na-e": 89,
      "as-n": 61,
-     "in": 4,
      "sa-n": 40,
-     "sa-s": 13,
-     "nz": 6,
-     "au": 4,
+     "as-ne": 38,
      "gl": 27,
-     "as-se": 5,
-     "af-s": 4,
+     "af-e": 26,
+     "ar": 18,
+     "sa-s": 13,
+     "af-n": 8,
+     "as-c": 6,
+     "nz": 6,
+     "na-n": 5,
+     "na-av": 5,
      "mg": 5,
+     "oc": 4,
+     "in": 4,
+     "as-sb": 4,
+     "af-s": 4,
+     "as-w": 4,
+     "ca": 3,
+     "au-e": 3,
+     "af-w": 2,
+     "as-s": 2,
      "ng": 2,
-     "as-w": 4
+     "an": 1,
+     "au-w": 1,
+     "as-ic": 1
     }
    },
    "hab": [
@@ -3223,30 +3334,35 @@
     "class": "Cephalopoda",
     "order": "Nautilida",
     "regions": {
-     "na-w": 203,
-     "eu": 1025,
-     "af-n": 43,
-     "ar": 81,
+     "eu-s": 706,
+     "eu-n": 321,
      "na-e": 299,
-     "an": 36,
-     "sa-n": 53,
-     "as-e": 108,
-     "nz": 28,
-     "sa-s": 62,
-     "au": 110,
-     "af-w": 35,
-     "in": 60,
-     "as-w": 78,
+     "na-w": 203,
+     "as-ne": 104,
      "as-c": 86,
-     "ca": 22,
-     "gl": 3,
-     "mg": 30,
-     "af-s": 14,
-     "as-se": 10,
+     "ar": 81,
+     "as-w": 78,
+     "au-e": 74,
+     "sa-s": 62,
+     "in": 60,
+     "sa-n": 53,
+     "af-n": 43,
      "af-e": 42,
-     "oc": 3,
-     "ng": 8,
+     "an": 36,
+     "au-w": 36,
+     "af-w": 35,
+     "mg": 30,
+     "nz": 28,
+     "ca": 22,
+     "af-s": 14,
      "as-n": 14,
+     "sea": 10,
+     "ng": 8,
+     "as-ic": 6,
+     "as-s": 5,
+     "gl": 3,
+     "oc": 3,
+     "as-sb": 3,
      "na-n": 2
     }
    },
@@ -3283,18 +3399,22 @@
     "family": "Nautilidae",
     "genus": "Nautilus",
     "regions": {
-     "as-e": 10,
+     "au-e": 26,
+     "eu-s": 17,
+     "na-e": 11,
+     "as-ne": 7,
      "na-w": 6,
      "as-w": 5,
-     "na-e": 11,
-     "as-se": 8,
      "ng": 5,
-     "au": 30,
+     "eu-n": 5,
+     "as-s": 4,
+     "as-ic": 4,
+     "au-w": 4,
+     "in": 4,
+     "as-sb": 3,
+     "as-c": 3,
      "oc": 2,
      "nz": 2,
-     "as-c": 3,
-     "in": 4,
-     "eu": 20,
      "af-e": 1,
      "sa-s": 1
     }
@@ -3330,7 +3450,7 @@
     "af-n",
     "ar",
     "sa-s",
-    "as-e"
+    "as-s"
    ],
    "note": "A calymenid trilobite of the cold, muddy shelves that ringed high-latitude Gondwana.",
    "pbdb": {
@@ -3348,16 +3468,18 @@
     "family": "Calymenidae",
     "genus": "Neseuretus",
     "regions": {
-     "na-e": 1,
-     "eu": 177,
-     "au": 1,
-     "as-se": 1,
-     "as-e": 32,
-     "sa-n": 4,
+     "eu-s": 156,
+     "as-s": 25,
+     "eu-n": 21,
      "sa-s": 15,
-     "as-c": 4,
      "af-n": 9,
-     "ar": 4
+     "as-ne": 6,
+     "sa-n": 4,
+     "as-c": 4,
+     "ar": 4,
+     "as-sb": 2,
+     "na-e": 1,
+     "au-e": 1
     }
    }
   },
@@ -3390,10 +3512,11 @@
     "family": "Olenellidae",
     "genus": "Olenellus",
     "regions": {
-     "na-n": 43,
      "na-w": 214,
      "na-e": 86,
+     "na-n": 43,
      "gl": 5,
+     "eu-n": 4,
      "sa-s": 1
     }
    },
@@ -3477,11 +3600,12 @@
     "regions": {
      "in": 37,
      "na-n": 32,
-     "gl": 24,
      "as-n": 26,
-     "as-e": 2,
+     "gl": 24,
+     "eu-n": 5,
+     "as-s": 2,
      "as-w": 2,
-     "au": 1
+     "au-w": 1
     }
    }
   },
@@ -3493,7 +3617,7 @@
    "lad": 500,
    "range": [
     "eu",
-    "na-e",
+    "na-av",
     "af-n"
    ],
    "note": "A large spiny trilobite of the Baltic-Avalonian 'Atlantic' province, unknown on Cambrian Laurentia.",
@@ -3512,11 +3636,13 @@
     "family": "Paradoxididae",
     "genus": "Paradoxides",
     "regions": {
+     "eu-s": 64,
+     "eu-n": 29,
+     "na-av": 17,
+     "as-w": 17,
      "as-n": 7,
-     "na-n": 1,
-     "na-e": 20,
-     "eu": 93,
-     "as-w": 17
+     "na-e": 3,
+     "na-n": 1
     }
    },
    "place_ok": true
@@ -3576,19 +3702,20 @@
     "family": "Pentacrinitidae",
     "genus": "Pentacrinites",
     "regions": {
-     "gl": 7,
-     "eu": 83,
-     "na-e": 2,
-     "in": 3,
+     "eu-s": 55,
+     "eu-n": 32,
      "na-w": 23,
-     "na-n": 3,
+     "sa-s": 10,
+     "gl": 7,
      "nz": 5,
      "as-w": 4,
-     "as-e": 4,
-     "sa-s": 10,
-     "as-se": 1,
-     "ng": 1,
-     "as-n": 2
+     "as-ne": 4,
+     "in": 3,
+     "na-n": 3,
+     "na-e": 2,
+     "as-n": 2,
+     "as-s": 1,
+     "ng": 1
     }
    }
   },
@@ -3623,15 +3750,18 @@
     "family": "Pentameridae",
     "genus": "Pentamerus",
     "regions": {
-     "na-e": 107,
-     "eu": 47,
-     "ca": 1,
+     "na-e": 106,
+     "eu-n": 41,
      "na-w": 16,
      "as-c": 9,
-     "as-e": 6,
      "as-n": 9,
+     "eu-s": 6,
      "na-n": 5,
-     "in": 1
+     "as-ne": 3,
+     "as-s": 3,
+     "ca": 1,
+     "in": 1,
+     "na-av": 1
     }
    }
   },
@@ -3664,13 +3794,15 @@
     "genus": "Placenticeras",
     "regions": {
      "na-w": 92,
-     "na-e": 64,
-     "eu": 56,
-     "in": 3,
-     "sa-s": 1,
+     "na-e": 62,
+     "eu-s": 44,
      "af-s": 19,
+     "eu-n": 12,
      "as-c": 4,
-     "ng": 2
+     "in": 3,
+     "na-av": 2,
+     "ng": 2,
+     "sa-s": 1
     }
    }
   },
@@ -3678,7 +3810,7 @@
    "rank": "phylum",
    "realm": "sea",
    "form": "sponge",
-   "fad": 1000.0,
+   "fad": 660,
    "lad": 0,
    "range": [
     "cosmo"
@@ -3748,24 +3880,29 @@
     "family": "Poritidae",
     "genus": "Porites",
     "regions": {
-     "eu": 287,
      "ca": 698,
-     "af-n": 31,
-     "in": 16,
-     "oc": 137,
+     "eu-s": 297,
      "ar": 146,
-     "as-w": 27,
+     "oc": 137,
+     "as-ne": 114,
      "sa-n": 107,
-     "as-se": 79,
-     "ng": 50,
-     "na-w": 29,
-     "as-e": 114,
-     "as-c": 2,
-     "af-e": 60,
-     "mg": 3,
      "na-e": 78,
-     "au": 83,
-     "nz": 27
+     "af-e": 60,
+     "as-ic": 56,
+     "ng": 50,
+     "au-e": 44,
+     "au-w": 39,
+     "sea": 31,
+     "na-w": 29,
+     "as-w": 27,
+     "nz": 27,
+     "af-n": 16,
+     "in": 16,
+     "as-sb": 16,
+     "as-s": 7,
+     "eu-n": 5,
+     "mg": 3,
+     "as-c": 2
     }
    },
    "hab": [
@@ -3843,20 +3980,23 @@
     "family": "Posidoniidae",
     "genus": "Posidonia",
     "regions": {
-     "na-e": 11,
-     "eu": 164,
-     "ar": 4,
+     "eu-n": 119,
+     "as-s": 58,
+     "eu-s": 51,
      "na-w": 20,
-     "as-e": 62,
-     "af-n": 1,
-     "na-n": 1,
-     "as-se": 12,
-     "in": 8,
+     "na-e": 11,
+     "as-ne": 11,
      "as-n": 11,
-     "af-e": 3,
-     "as-c": 2,
      "sa-s": 10,
-     "as-w": 2
+     "in": 8,
+     "as-sb": 5,
+     "ar": 4,
+     "af-e": 3,
+     "as-ic": 2,
+     "as-c": 2,
+     "as-w": 2,
+     "af-n": 1,
+     "na-n": 1
     }
    }
   },
@@ -3894,8 +4034,8 @@
    "range": [
     "af-s",
     "au-e",
-    "eu",
-    "na-e"
+    "eu-n",
+    "na-av"
    ],
    "note": "A quilted, vane-like Ediacaran organism of the terminal-Ediacaran Nama sandflats.",
    "pbdb": {
@@ -3913,12 +4053,12 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Pteridinium",
     "regions": {
-     "au": 4,
      "af-s": 13,
-     "eu": 4,
-     "na-e": 4,
-     "na-n": 1,
-     "as-e": 3
+     "au-e": 4,
+     "eu-n": 4,
+     "na-av": 4,
+     "as-s": 3,
+     "na-n": 1
     }
    },
    "pbdb_ok": true
@@ -3955,12 +4095,13 @@
     "family": "Pterygotidae",
     "genus": "Pterygotus",
     "regions": {
+     "eu-n": 30,
      "na-e": 17,
-     "eu": 37,
+     "eu-s": 9,
      "af-n": 3,
      "as-n": 2,
-     "au": 1,
-     "as-e": 2
+     "as-s": 2,
+     "au-e": 1
     }
    }
   },
@@ -3992,9 +4133,9 @@
     "genus": "Rangea",
     "regions": {
      "af-s": 10,
-     "eu": 4,
-     "au": 3,
-     "as-e": 2
+     "eu-n": 4,
+     "au-e": 3,
+     "as-s": 2
     }
    },
    "pbdb_ok": true
@@ -4006,9 +4147,9 @@
    "fad": 575,
    "lad": 541,
    "range": [
-    "na-e",
-    "eu",
-    "au",
+    "na-av",
+    "eu-n",
+    "au-e",
     "as-n",
     "af-s",
     "na-n"
@@ -4027,16 +4168,16 @@
     "class": "NO_CLASS_SPECIFIED",
     "order": "Rangeomorpha",
     "regions": {
+     "na-av": 168,
+     "eu-n": 33,
      "af-s": 11,
-     "eu": 33,
-     "na-e": 168,
+     "as-s": 10,
+     "au-e": 9,
      "na-n": 6,
      "as-n": 4,
-     "as-e": 10,
-     "au": 9,
+     "as-c": 2,
      "na-w": 1,
      "sa-n": 1,
-     "as-c": 2,
      "in": 1
     }
    },
@@ -4074,14 +4215,15 @@
     "family": "Receptaculitidae",
     "genus": "Receptaculites",
     "regions": {
-     "eu": 8,
+     "na-n": 48,
      "na-e": 35,
      "na-w": 20,
+     "eu-n": 6,
      "as-c": 3,
-     "na-n": 48,
-     "au": 2,
-     "sa-n": 1,
-     "nz": 2
+     "eu-s": 3,
+     "au-e": 2,
+     "nz": 2,
+     "sa-n": 1
     }
    },
    "cls": {
@@ -4089,7 +4231,11 @@
     "order": "Receptaculitida",
     "family": "Receptaculitidae"
    },
-   "pbdb_ok": true
+   "pbdb_ok": true,
+   "lat": [
+    0,
+    55
+   ]
   },
   "Redlichia": {
    "rank": "genus",
@@ -4124,11 +4270,12 @@
     "family": "Redlichiidae",
     "genus": "Redlichia",
     "regions": {
-     "as-e": 105,
+     "as-s": 67,
+     "as-ne": 38,
+     "au-e": 22,
      "as-c": 4,
-     "as-n": 1,
-     "au": 22,
      "in": 3,
+     "as-n": 1,
      "an": 1,
      "af-n": 1
     }
@@ -4212,7 +4359,7 @@
    "fad": 521,
    "lad": 516,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "One of the oldest trilobites of Baltica, from the earliest Cambrian shelly faunas.",
    "pbdb": {
@@ -4230,9 +4377,12 @@
     "family": "Holmiidae",
     "genus": "Schmidtiellus",
     "regions": {
-     "eu": 2
+     "eu-n": 2
     }
-   }
+   },
+   "avoid": [
+    "Avalonia"
+   ]
   },
   "Scleractinia": {
    "rank": "order",
@@ -4284,8 +4434,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Spriggina",
     "regions": {
-     "au": 9,
-     "eu": 2
+     "au-e": 9,
+     "eu-n": 2
     }
    },
    "cls": {
@@ -4327,16 +4477,18 @@
     "family": "Stringocephalidae",
     "genus": "Stringocephalus",
     "regions": {
+     "eu-n": 41,
+     "as-s": 31,
      "na-w": 27,
-     "na-e": 4,
-     "as-se": 8,
-     "as-e": 27,
-     "eu": 45,
-     "au": 2,
      "na-n": 5,
-     "as-n": 2,
+     "na-e": 4,
+     "eu-s": 4,
      "as-c": 4,
-     "af-n": 2
+     "as-ic": 3,
+     "au-e": 2,
+     "as-n": 2,
+     "af-n": 2,
+     "as-ne": 1
     }
    }
   },
@@ -4370,22 +4522,25 @@
     "phylum": "Porifera",
     "class": "Stromatoporoidea",
     "regions": {
+     "eu-n": 787,
+     "eu-s": 618,
      "na-e": 546,
-     "na-n": 282,
-     "na-w": 359,
-     "au": 248,
-     "eu": 1404,
      "as-c": 360,
-     "as-e": 231,
+     "na-w": 359,
      "as-n": 358,
-     "gl": 1,
-     "nz": 4,
-     "in": 3,
-     "as-w": 6,
+     "na-n": 282,
+     "au-e": 187,
+     "as-s": 173,
+     "as-ic": 134,
+     "as-ne": 86,
+     "au-w": 61,
      "ar": 20,
      "af-n": 12,
-     "as-se": 162,
-     "af-e": 3
+     "as-w": 6,
+     "nz": 4,
+     "in": 3,
+     "af-e": 3,
+     "gl": 1
     }
    },
    "hab": [
@@ -4440,7 +4595,7 @@
    "lad": 550,
    "range": [
     "au-e",
-    "eu"
+    "eu-n"
    ],
    "note": "A body plan with no counterpart in any living phylum.",
    "sz": 0.04,
@@ -4461,8 +4616,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Tribrachidium",
     "regions": {
-     "au": 17,
-     "eu": 12,
+     "au-e": 17,
+     "eu-n": 12,
      "in": 1
     }
    },
@@ -4566,13 +4721,15 @@
     "family": "Tropidoleptidae",
     "genus": "Tropidoleptus",
     "regions": {
-     "na-e": 389,
-     "sa-s": 3,
-     "au": 1,
-     "eu": 7,
-     "af-s": 3,
+     "na-e": 388,
+     "sa-n": 30,
      "af-n": 13,
-     "sa-n": 30
+     "eu-s": 6,
+     "sa-s": 3,
+     "af-s": 3,
+     "au-w": 1,
+     "na-av": 1,
+     "eu-n": 1
     }
    }
   },
@@ -4605,18 +4762,21 @@
     "order": "Stauriida",
     "family": "Waagenophyllidae",
     "regions": {
-     "as-e": 420,
-     "ar": 54,
-     "as-se": 117,
+     "as-s": 315,
+     "as-ne": 117,
      "as-c": 113,
-     "eu": 10,
-     "na-w": 12,
      "as-w": 90,
      "in": 66,
+     "ar": 54,
+     "as-sb": 53,
+     "as-ic": 52,
+     "na-w": 12,
+     "eu-s": 8,
      "af-n": 4,
-     "as-n": 1,
+     "eu-n": 3,
      "nz": 2,
-     "au": 1
+     "as-n": 1,
+     "au-w": 1
     }
    }
   },
@@ -4650,14 +4810,16 @@
     "family": "Waagenophyllidae",
     "genus": "Waagenophyllum",
     "regions": {
-     "as-e": 89,
-     "ar": 4,
-     "as-se": 19,
-     "eu": 3,
-     "as-w": 20,
+     "as-s": 54,
      "in": 42,
+     "as-ne": 39,
+     "as-w": 20,
      "as-c": 15,
+     "as-ic": 9,
+     "as-sb": 6,
      "na-w": 5,
+     "ar": 4,
+     "eu-s": 3,
      "af-n": 1,
      "nz": 1
     }
@@ -4693,9 +4855,9 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Wiwaxia",
     "regions": {
-     "na-n": 5,
      "na-w": 32,
-     "as-e": 4,
+     "na-n": 5,
+     "as-s": 4,
      "as-n": 1
     }
    },
@@ -4709,7 +4871,7 @@
    "lad": 550,
    "range": [
     "au-e",
-    "eu"
+    "eu-n"
    ],
    "note": "Found with a trail of its own feeding impressions.",
    "sz": 0.25,
@@ -4730,8 +4892,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Yorgia",
     "regions": {
-     "eu": 11,
-     "au": 2
+     "eu-n": 11,
+     "au-e": 2
     }
    },
    "cls": {

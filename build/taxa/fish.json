@@ -140,7 +140,7 @@
     "as-e",
     "as-n",
     "au",
-    "eu",
+    "eu-n",
     "gl",
     "na-e",
     "na-w"
@@ -161,18 +161,19 @@
     "family": "Bothriolepididae",
     "genus": "Bothriolepis",
     "regions": {
+     "eu-n": 62,
+     "au-e": 18,
+     "an": 16,
+     "as-n": 10,
+     "as-s": 9,
      "na-e": 8,
      "na-w": 6,
-     "as-e": 8,
-     "as-n": 10,
-     "eu": 62,
+     "gl": 3,
      "sa-n": 2,
      "af-s": 1,
-     "au": 19,
      "na-n": 1,
-     "as-se": 2,
-     "an": 16,
-     "gl": 3
+     "au-w": 1,
+     "as-ne": 1
     }
    },
    "w": 3
@@ -214,7 +215,7 @@
    "fad": 419,
    "lad": 400,
    "range": [
-    "eu",
+    "eu-n",
     "na-e",
     "na-n",
     "na-w"
@@ -235,10 +236,11 @@
     "family": "Cephalaspididae",
     "genus": "Cephalaspis",
     "regions": {
-     "na-e": 8,
-     "na-w": 2,
-     "eu": 19,
-     "na-n": 5
+     "eu-n": 27,
+     "na-e": 5,
+     "na-n": 5,
+     "na-av": 3,
+     "na-w": 2
     }
    }
   },
@@ -298,7 +300,7 @@
    "lad": 358,
    "range": [
     "na-e",
-    "eu",
+    "eu-n",
     "af-n"
    ],
    "note": "A six-metre placoderm that sheared prey with self-sharpening bony blades instead of teeth.",
@@ -322,7 +324,7 @@
     "regions": {
      "na-e": 5,
      "na-w": 1,
-     "eu": 1
+     "eu-n": 1
     }
    },
    "w": 3
@@ -361,7 +363,7 @@
    "lad": 375,
    "range": [
     "na-e",
-    "eu"
+    "eu-n"
    ],
    "note": "A lobe-finned fish with the limb bone arrangement of a tetrapod already inside its fin.",
    "pbdb": {
@@ -379,8 +381,8 @@
     "family": "Tristichopteridae",
     "genus": "Eustenopteron",
     "regions": {
+     "eu-n": 9,
      "na-e": 1,
-     "eu": 9,
      "na-n": 1
     }
    },
@@ -414,7 +416,7 @@
     "family": "Myllokunmingiidae",
     "genus": "Haikouichthys",
     "regions": {
-     "as-e": 2
+     "as-s": 2
     }
    },
    "w": 3,
@@ -460,10 +462,11 @@
     "regions": {
      "na-w": 26,
      "na-n": 2,
+     "eu-n": 2,
+     "as-ne": 2,
      "ca": 1,
-     "au": 1,
-     "eu": 2,
-     "as-e": 3
+     "au-w": 1,
+     "as-s": 1
     }
    },
    "w": 3
@@ -592,7 +595,7 @@
     "family": "Myllokunmingiidae",
     "genus": "Myllokunmingia",
     "regions": {
-     "as-e": 2
+     "as-s": 2
     }
    },
    "avoid": [
@@ -682,7 +685,7 @@
    "lad": 372,
    "range": [
     "as-n",
-    "eu",
+    "eu-n",
     "na-e",
     "na-n"
    ],
@@ -699,11 +702,12 @@
     "phylum": "Chordata",
     "class": "Osteostraci",
     "regions": {
-     "eu": 204,
-     "na-e": 12,
+     "eu-n": 291,
+     "na-n": 16,
      "as-n": 9,
-     "na-w": 3,
-     "na-n": 16
+     "na-e": 9,
+     "na-av": 3,
+     "na-w": 3
     }
    }
   },
@@ -783,12 +787,13 @@
     "family": "Palaeoniscidae",
     "genus": "Palaeoniscum",
     "regions": {
-     "eu": 54,
+     "eu-n": 52,
+     "na-av": 5,
      "af-s": 3,
-     "as-w": 1,
-     "na-e": 5,
+     "eu-s": 2,
      "as-n": 2,
-     "au": 2
+     "au-e": 2,
+     "as-w": 1
     }
    },
    "pbdb_ok": true
@@ -885,7 +890,7 @@
    "fad": 345,
    "lad": 310,
    "range": [
-    "eu",
+    "eu-n",
     "na-e"
    ],
    "note": "A seven-metre freshwater lobe-finned predator, the largest freshwater fish known.",
@@ -904,7 +909,7 @@
     "family": "Rhizodontidae",
     "genus": "Rhizodus",
     "regions": {
-     "eu": 9
+     "eu-n": 9
     }
    }
   },
@@ -1028,11 +1033,12 @@
     "family": "Ichthyodectidae",
     "genus": "Xiphactinus",
     "regions": {
-     "na-e": 43,
+     "na-e": 42,
      "na-w": 13,
      "na-n": 1,
      "sa-n": 1,
-     "eu": 1
+     "eu-n": 1,
+     "na-av": 1
     }
    },
    "w": 3

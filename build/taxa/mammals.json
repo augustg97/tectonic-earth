@@ -30,13 +30,14 @@
     "family": "Felidae",
     "genus": "Acinonyx",
     "regions": {
-     "af-e": 2,
+     "eu-s": 19,
      "af-s": 5,
+     "af-e": 2,
      "af-n": 2,
      "as-c": 2,
-     "eu": 21,
+     "eu-n": 2,
      "as-w": 2,
-     "as-e": 1
+     "as-ne": 1
     }
    }
   },
@@ -179,10 +180,11 @@
     "family": "Cervidae",
     "genus": "Alces",
     "regions": {
-     "na-n": 2,
-     "eu": 26,
-     "as-n": 3,
+     "eu-s": 17,
      "na-e": 13,
+     "eu-n": 9,
+     "as-n": 3,
+     "na-n": 2,
      "na-w": 1
     }
    },
@@ -235,9 +237,10 @@
     "family": "Cervidae",
     "genus": "Alces",
     "regions": {
-     "eu": 8,
-     "as-n": 2,
      "na-e": 8,
+     "eu-s": 4,
+     "eu-n": 4,
+     "as-n": 2,
      "na-w": 1,
      "na-n": 1
     }
@@ -410,10 +413,10 @@
     "class": "Mammalia",
     "order": "Cetacea",
     "regions": {
-     "na-e": 4,
-     "eu": 7,
-     "nz": 3,
+     "eu-n": 7,
      "in": 6,
+     "na-e": 4,
+     "nz": 3,
      "as-w": 1,
      "an": 1
     }
@@ -448,12 +451,12 @@
     "family": "Arsinoitheriidae",
     "genus": "Arsinoitherium",
     "regions": {
-     "af-n": 1,
-     "as-w": 3,
      "ar": 7,
+     "as-w": 3,
+     "af-n": 1,
      "af-e": 1,
      "af-w": 1,
-     "eu": 1
+     "eu-s": 1
     }
    }
   },
@@ -597,9 +600,9 @@
     "family": "Balaenidae",
     "genus": "Balaena",
     "regions": {
-     "na-e": 13,
-     "eu": 67,
      "na-n": 306,
+     "eu-n": 72,
+     "na-e": 13,
      "gl": 11,
      "as-n": 4
     }
@@ -642,12 +645,13 @@
     "family": "Balaenopteridae",
     "genus": "Balaenoptera",
     "regions": {
+     "eu-n": 9,
      "sa-s": 2,
      "ar": 1,
-     "as-e": 1,
+     "as-ne": 1,
      "nz": 1,
-     "eu": 10,
      "na-w": 1,
+     "eu-s": 1,
      "af-s": 1
     }
    }
@@ -683,11 +687,11 @@
     "family": "Basilosauridae",
     "genus": "Basilosaurus",
     "regions": {
-     "as-w": 21,
      "na-e": 55,
-     "ar": 1,
-     "eu": 3,
-     "af-n": 8
+     "as-w": 21,
+     "af-n": 8,
+     "eu-n": 3,
+     "ar": 1
     }
    }
   },
@@ -739,16 +743,19 @@
     "family": "Bovidae",
     "genus": "Bison",
     "regions": {
-     "as-n": 7,
-     "as-w": 6,
-     "na-e": 77,
      "na-w": 96,
+     "na-e": 77,
+     "eu-s": 65,
+     "eu-n": 28,
      "ca": 15,
      "na-n": 13,
-     "eu": 93,
+     "as-ne": 8,
+     "as-n": 7,
+     "as-w": 6,
      "as-c": 4,
      "in": 1,
-     "as-e": 9
+     "as-s": 1,
+     "as-sb": 1
     }
    },
    "hab": [
@@ -871,10 +878,11 @@
     "family": "Bovidae",
     "genus": "Bison",
     "regions": {
-     "as-w": 3,
+     "eu-n": 15,
+     "eu-s": 12,
      "na-n": 5,
+     "as-w": 3,
      "na-w": 2,
-     "eu": 27,
      "as-c": 1,
      "as-n": 1
     }
@@ -989,14 +997,15 @@
     "family": "Camelidae",
     "genus": "Camelus",
     "regions": {
-     "as-w": 5,
      "af-e": 13,
-     "eu": 13,
+     "eu-n": 8,
+     "in": 6,
+     "as-w": 5,
+     "eu-s": 5,
      "af-n": 5,
      "as-c": 2,
-     "in": 6,
      "as-n": 1,
-     "as-e": 1,
+     "as-ne": 1,
      "na-w": 1
     }
    },
@@ -1031,14 +1040,15 @@
     "family": "Camelidae",
     "genus": "Camelus",
     "regions": {
-     "as-w": 5,
      "af-e": 13,
-     "eu": 13,
+     "eu-n": 8,
+     "in": 6,
+     "as-w": 5,
+     "eu-s": 5,
      "af-n": 5,
      "as-c": 2,
-     "in": 6,
      "as-n": 1,
-     "as-e": 1,
+     "as-ne": 1,
      "na-w": 1
     }
    },
@@ -1110,15 +1120,17 @@
     "family": "Canidae",
     "genus": "Canis",
     "regions": {
-     "ca": 2,
-     "na-n": 5,
-     "na-e": 13,
+     "eu-s": 62,
      "na-w": 16,
+     "na-e": 13,
+     "eu-n": 13,
+     "na-n": 5,
+     "as-ne": 5,
      "as-c": 3,
-     "eu": 75,
-     "as-w": 1,
      "as-n": 3,
-     "as-e": 6,
+     "ca": 2,
+     "as-w": 1,
+     "as-s": 1,
      "gl": 1,
      "af-n": 1
     }
@@ -1192,7 +1204,7 @@
     "family": "Bovidae",
     "genus": "Capra",
     "regions": {
-     "eu": 20,
+     "eu-s": 20,
      "as-w": 1
     }
    },
@@ -1267,7 +1279,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Castorocauda",
     "regions": {
-     "as-e": 1
+     "as-ne": 1
     }
    },
    "hab": [
@@ -1335,17 +1347,20 @@
     "family": "Cervidae",
     "genus": "Cervus",
     "regions": {
-     "as-w": 15,
-     "as-se": 39,
-     "in": 29,
-     "as-e": 43,
-     "na-w": 17,
-     "na-n": 5,
+     "eu-s": 215,
+     "eu-n": 58,
      "na-e": 42,
+     "as-s": 40,
+     "in": 29,
+     "as-ne": 23,
+     "na-w": 17,
+     "as-ic": 16,
+     "as-w": 15,
      "as-c": 9,
+     "na-n": 5,
      "sa-n": 4,
-     "eu": 273,
      "as-n": 4,
+     "as-sb": 4,
      "sa-s": 4,
      "ca": 1
     }
@@ -1472,10 +1487,11 @@
     "family": "Rhinocerotidae",
     "genus": "Coelodonta",
     "regions": {
-     "as-e": 4,
-     "as-c": 1,
-     "eu": 20,
-     "as-n": 2
+     "eu-n": 18,
+     "as-ne": 4,
+     "as-n": 2,
+     "eu-s": 2,
+     "as-c": 1
     }
    },
    "lat": [
@@ -1509,14 +1525,16 @@
     "order": "Condylarthra",
     "regions": {
      "na-w": 1205,
+     "eu-s": 33,
+     "eu-n": 13,
+     "sa-s": 13,
+     "as-ne": 8,
+     "as-s": 8,
+     "as-w": 6,
+     "af-n": 4,
      "na-e": 2,
      "ca": 1,
      "af-w": 1,
-     "eu": 46,
-     "as-e": 16,
-     "as-w": 6,
-     "af-n": 4,
-     "sa-s": 13,
      "as-c": 1
     }
    },
@@ -1549,9 +1567,9 @@
     "genus": "Connochaetes",
     "regions": {
      "af-e": 37,
+     "af-s": 8,
      "af-n": 4,
-     "eu": 1,
-     "af-s": 8
+     "eu-s": 1
     }
    },
    "hab": [
@@ -1626,7 +1644,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Darwinius",
     "regions": {
-     "eu": 1
+     "eu-s": 1
     }
    }
   },
@@ -1659,13 +1677,14 @@
     "genus": "Deinotherium",
     "regions": {
      "af-e": 85,
-     "eu": 54,
+     "eu-s": 41,
      "as-w": 18,
-     "ar": 2,
-     "as-se": 2,
-     "as-n": 1,
      "in": 17,
+     "eu-n": 13,
+     "ar": 2,
+     "as-ic": 2,
      "af-s": 2,
+     "as-n": 1,
      "af-n": 1
     }
    }
@@ -1695,7 +1714,7 @@
     "family": "Diprotodontidae",
     "genus": "Diprotodon",
     "regions": {
-     "au": 72
+     "au-e": 72
     }
    },
    "w": 3
@@ -1727,11 +1746,12 @@
     "class": "Osteichthyes",
     "order": "Docodonta",
     "regions": {
+     "eu-n": 17,
      "na-w": 15,
-     "eu": 19,
      "as-c": 13,
      "as-n": 7,
-     "as-e": 3,
+     "as-ne": 3,
+     "eu-s": 2,
      "in": 1
     }
    }
@@ -1799,7 +1819,7 @@
     "genus": "Ectoconus",
     "regions": {
      "na-w": 33,
-     "as-e": 1
+     "as-s": 1
     }
    },
    "w": 1
@@ -1860,17 +1880,20 @@
     "family": "Elephantidae",
     "genus": "Elephas",
     "regions": {
-     "as-se": 19,
      "in": 30,
      "af-e": 28,
-     "eu": 19,
-     "af-s": 3,
-     "af-n": 2,
-     "as-w": 4,
-     "as-e": 7,
-     "as-c": 1,
-     "na-w": 5,
+     "eu-s": 14,
+     "as-s": 10,
+     "as-ic": 9,
      "na-e": 7,
+     "eu-n": 5,
+     "na-w": 5,
+     "as-w": 4,
+     "as-sb": 4,
+     "af-s": 3,
+     "as-ne": 3,
+     "af-n": 2,
+     "as-c": 1,
      "ca": 1
     }
    },
@@ -1961,14 +1984,16 @@
     "order": "Artiodactyla",
     "family": "Entelodontidae",
     "regions": {
-     "as-e": 22,
      "na-w": 109,
+     "as-ne": 19,
      "na-e": 13,
-     "eu": 10,
-     "in": 1,
+     "eu-s": 9,
+     "as-s": 3,
      "as-c": 2,
-     "as-w": 1,
-     "as-se": 2
+     "as-sb": 2,
+     "eu-n": 1,
+     "in": 1,
+     "as-w": 1
     }
    }
   },
@@ -2062,23 +2087,25 @@
     "family": "Equidae",
     "genus": "Equus",
     "regions": {
-     "as-w": 38,
-     "in": 48,
-     "as-n": 13,
-     "af-e": 258,
-     "ca": 57,
      "na-w": 480,
+     "af-e": 258,
      "na-e": 221,
-     "na-n": 20,
-     "as-c": 11,
-     "eu": 277,
+     "eu-s": 211,
      "af-s": 105,
-     "af-n": 21,
-     "ar": 7,
-     "as-e": 17,
+     "eu-n": 66,
+     "ca": 57,
      "sa-s": 56,
+     "in": 48,
      "sa-n": 45,
-     "as-se": 1,
+     "as-w": 38,
+     "af-n": 21,
+     "na-n": 20,
+     "as-n": 13,
+     "as-c": 11,
+     "as-ne": 10,
+     "as-s": 8,
+     "ar": 7,
+     "as-sb": 1,
      "oc": 1
     }
    },
@@ -2116,23 +2143,25 @@
     "family": "Equidae",
     "genus": "Equus",
     "regions": {
-     "as-w": 38,
-     "in": 48,
-     "as-n": 13,
-     "af-e": 258,
-     "ca": 57,
      "na-w": 480,
+     "af-e": 258,
      "na-e": 221,
-     "na-n": 20,
-     "as-c": 11,
-     "eu": 277,
+     "eu-s": 211,
      "af-s": 105,
-     "af-n": 21,
-     "ar": 7,
-     "as-e": 17,
+     "eu-n": 66,
+     "ca": 57,
      "sa-s": 56,
+     "in": 48,
      "sa-n": 45,
-     "as-se": 1,
+     "as-w": 38,
+     "af-n": 21,
+     "na-n": 20,
+     "as-n": 13,
+     "as-c": 11,
+     "as-ne": 10,
+     "as-s": 8,
+     "ar": 7,
+     "as-sb": 1,
      "oc": 1
     }
    },
@@ -2263,11 +2292,12 @@
     "family": "Mustelidae",
     "genus": "Gulo",
     "regions": {
+     "eu-s": 11,
+     "na-n": 6,
      "na-e": 5,
      "na-w": 4,
-     "na-n": 6,
-     "eu": 13,
-     "as-n": 2
+     "as-n": 2,
+     "eu-n": 2
     }
    },
    "hab": [
@@ -2310,10 +2340,11 @@
     "family": "Mustelidae",
     "genus": "Gulo",
     "regions": {
+     "eu-s": 9,
+     "na-n": 6,
      "na-e": 4,
      "na-w": 4,
-     "na-n": 6,
-     "eu": 11,
+     "eu-n": 2,
      "as-n": 1
     }
    },
@@ -2395,19 +2426,22 @@
     "family": "Equidae",
     "genus": "Hipparion",
     "regions": {
-     "as-e": 61,
+     "af-e": 247,
+     "eu-s": 140,
+     "as-ne": 57,
      "as-w": 52,
-     "in": 16,
+     "na-w": 40,
+     "eu-n": 33,
      "as-c": 21,
      "na-e": 17,
-     "na-w": 40,
-     "af-e": 247,
+     "in": 16,
      "af-s": 12,
-     "ar": 2,
-     "eu": 173,
      "af-n": 8,
-     "as-se": 4,
-     "as-n": 7
+     "as-n": 7,
+     "as-s": 4,
+     "ar": 2,
+     "as-sb": 2,
+     "as-ic": 2
     }
    },
    "lat": [
@@ -2502,13 +2536,14 @@
     "family": "Hippopotamidae",
     "genus": "Hippopotamus",
     "regions": {
+     "eu-n": 42,
      "as-w": 37,
      "af-e": 33,
-     "af-w": 1,
-     "eu": 70,
+     "eu-s": 28,
      "af-s": 23,
      "ar": 5,
-     "af-n": 5
+     "af-n": 5,
+     "af-w": 1
     }
    },
    "hab": [
@@ -2548,10 +2583,10 @@
     "genus": "Homo",
     "regions": {
      "af-e": 30,
-     "eu": 2,
+     "as-ic": 5,
      "af-n": 3,
-     "as-w": 1,
-     "as-se": 5
+     "eu-s": 2,
+     "as-w": 1
     }
    },
    "w": 3,
@@ -2614,7 +2649,7 @@
     "family": "Hominidae",
     "genus": "Homo",
     "regions": {
-     "eu": 6
+     "eu-s": 6
     }
    },
    "pbdb_ok": true,
@@ -2697,21 +2732,26 @@
     "family": "Hominidae",
     "genus": "Homo",
     "regions": {
-     "as-se": 8,
      "af-s": 24,
      "af-e": 12,
-     "eu": 4,
-     "as-w": 4,
-     "na-e": 9,
-     "as-e": 2,
-     "af-n": 5,
-     "sa-s": 3,
-     "sa-n": 2,
+     "na-e": 8,
      "na-w": 7,
+     "sea": 6,
+     "as-ic": 5,
+     "af-n": 5,
+     "as-w": 4,
+     "as-s": 4,
+     "eu-n": 3,
+     "sa-s": 3,
      "oc": 3,
-     "au": 4,
+     "au-e": 3,
      "ca": 3,
-     "gl": 1
+     "sa-n": 2,
+     "as-ne": 1,
+     "na-av": 1,
+     "gl": 1,
+     "eu-s": 1,
+     "au-w": 1
     }
    },
    "pbdb_ok": true,
@@ -2765,9 +2805,10 @@
     "genus": "Hyaenodon",
     "regions": {
      "na-w": 81,
+     "as-ne": 46,
+     "eu-s": 35,
      "af-e": 12,
-     "as-e": 46,
-     "eu": 39,
+     "eu-n": 4,
      "as-w": 4,
      "as-c": 2
     }
@@ -2800,8 +2841,9 @@
     "genus": "Hyracotherium",
     "regions": {
      "na-w": 194,
-     "na-e": 1,
-     "eu": 8
+     "eu-n": 4,
+     "eu-s": 4,
+     "na-e": 1
     }
    }
   },
@@ -2833,9 +2875,9 @@
     "genus": "Icaronycteris",
     "regions": {
      "na-w": 4,
+     "eu-s": 3,
      "in": 1,
-     "eu": 3,
-     "as-e": 1
+     "as-ne": 1
     }
    }
   },
@@ -2925,8 +2967,9 @@
     "family": "Cricetidae",
     "genus": "Lemmus",
     "regions": {
+     "eu-s": 22,
      "na-n": 14,
-     "eu": 29,
+     "eu-n": 7,
      "as-n": 2,
      "na-e": 1,
      "na-w": 1,
@@ -3017,11 +3060,11 @@
     "genus": "Loxodonta",
     "regions": {
      "af-e": 110,
-     "af-w": 2,
-     "as-w": 1,
      "af-s": 21,
      "af-n": 13,
-     "eu": 1,
+     "af-w": 2,
+     "as-w": 1,
+     "eu-s": 1,
      "ar": 1
     }
    },
@@ -3125,8 +3168,10 @@
     "order": "Diprotodontia",
     "family": "Macropodidae",
     "regions": {
-     "au": 400,
-     "ng": 5
+     "au-e": 381,
+     "au-w": 19,
+     "ng": 5,
+     "sea": 2
     }
    }
   },
@@ -3157,20 +3202,24 @@
     "family": "Mammutidae",
     "genus": "Mammut",
     "regions": {
+     "na-e": 384,
      "na-w": 105,
-     "na-e": 386,
+     "eu-s": 69,
+     "eu-n": 17,
      "ca": 7,
-     "na-n": 4,
-     "ar": 1,
-     "eu": 86,
-     "as-e": 3,
-     "af-w": 1,
-     "sa-n": 4,
-     "sa-s": 3,
      "as-w": 5,
      "as-n": 5,
-     "as-se": 3,
-     "in": 4
+     "na-n": 4,
+     "sa-n": 4,
+     "in": 4,
+     "sa-s": 3,
+     "na-av": 2,
+     "as-s": 2,
+     "as-sb": 2,
+     "ar": 1,
+     "as-ne": 1,
+     "af-w": 1,
+     "as-ic": 1
     }
    },
    "lat": [
@@ -3238,20 +3287,22 @@
     "family": "Elephantidae",
     "genus": "Mammuthus",
     "regions": {
-     "as-n": 13,
-     "as-w": 16,
-     "ca": 27,
-     "na-w": 171,
      "na-e": 187,
+     "na-w": 171,
+     "eu-s": 138,
+     "eu-n": 53,
+     "ca": 27,
      "na-n": 26,
+     "as-w": 16,
      "af-e": 16,
-     "af-s": 7,
-     "eu": 191,
-     "af-n": 1,
      "as-c": 14,
-     "as-e": 9,
-     "in": 1,
-     "as-se": 14
+     "as-n": 13,
+     "as-ic": 11,
+     "as-ne": 8,
+     "af-s": 7,
+     "as-s": 4,
+     "af-n": 1,
+     "in": 1
     }
    },
    "pbdb_ok": true,
@@ -3340,14 +3391,15 @@
     "family": "Elephantidae",
     "genus": "Mammuthus",
     "regions": {
-     "na-w": 8,
      "na-e": 23,
+     "eu-n": 21,
      "na-n": 10,
-     "eu": 27,
-     "as-c": 1,
+     "na-w": 8,
      "as-n": 6,
+     "eu-s": 6,
+     "as-c": 1,
      "ca": 1,
-     "as-e": 1
+     "as-ne": 1
     }
    },
    "pbdb_ok": true,
@@ -3381,12 +3433,13 @@
     "regions": {
      "na-e": 64,
      "na-w": 26,
-     "na-n": 1,
-     "eu": 17,
+     "eu-s": 17,
      "as-n": 3,
      "as-w": 3,
-     "as-e": 3,
-     "ca": 1
+     "as-ne": 2,
+     "na-n": 1,
+     "ca": 1,
+     "as-s": 1
     }
    },
    "hab": [
@@ -3427,7 +3480,7 @@
     "family": "Sciuridae",
     "genus": "Marmota",
     "regions": {
-     "eu": 8
+     "eu-s": 8
     }
    },
    "hab": [
@@ -3726,8 +3779,9 @@
     "family": "Morganucodontidae",
     "genus": "Morganucodon",
     "regions": {
-     "as-e": 3,
-     "eu": 10,
+     "eu-n": 6,
+     "eu-s": 4,
+     "as-s": 3,
      "na-w": 1
     }
    }
@@ -3757,18 +3811,21 @@
     "class": "Mammalia",
     "order": "Multituberculata",
     "regions": {
-     "as-e": 79,
-     "na-e": 14,
      "na-w": 1817,
-     "na-n": 3,
-     "eu": 181,
+     "eu-s": 136,
+     "as-ne": 76,
+     "eu-n": 45,
      "as-c": 18,
-     "au": 2,
+     "na-e": 12,
+     "na-n": 3,
      "sa-s": 3,
+     "as-n": 3,
+     "as-s": 3,
+     "au-e": 2,
      "in": 2,
      "af-e": 2,
      "mg": 2,
-     "as-n": 3
+     "na-av": 2
     }
    },
    "rep": "Ptilodus"
@@ -3843,27 +3900,33 @@
     "class": "Mammalia",
     "order": "Cetacea",
     "regions": {
-     "eu": 689,
-     "na-w": 189,
-     "na-e": 194,
-     "as-e": 208,
-     "nz": 74,
-     "sa-n": 54,
-     "ca": 28,
-     "sa-s": 66,
-     "as-w": 5,
-     "as-c": 6,
-     "au": 79,
-     "af-n": 2,
-     "af-s": 41,
+     "eu-n": 477,
      "na-n": 313,
+     "eu-s": 219,
+     "as-ne": 200,
+     "na-e": 192,
+     "na-w": 189,
+     "au-e": 78,
+     "nz": 74,
+     "sa-s": 66,
+     "sa-n": 54,
+     "af-s": 41,
+     "ca": 28,
+     "sea": 20,
+     "gl": 16,
+     "as-s": 15,
+     "an": 10,
+     "as-ic": 7,
+     "as-c": 6,
+     "as-n": 6,
+     "as-w": 5,
+     "as-sb": 4,
+     "af-n": 2,
+     "na-av": 2,
      "in": 2,
      "ar": 2,
-     "as-se": 18,
-     "an": 10,
-     "gl": 16,
      "af-w": 2,
-     "as-n": 6
+     "au-w": 1
     }
    },
    "rep": "Balaenoptera musculus"
@@ -3893,7 +3956,7 @@
     "family": "Diprotodontidae",
     "genus": "Nimbadon",
     "regions": {
-     "au": 4
+     "au-e": 4
     }
    }
   },
@@ -3978,9 +4041,10 @@
     "order": "Notoungulata",
     "regions": {
      "sa-s": 1719,
-     "ca": 22,
      "sa-n": 275,
-     "as-e": 2,
+     "ca": 22,
+     "as-ne": 1,
+     "as-s": 1,
      "na-e": 1
     }
    }
@@ -4010,7 +4074,7 @@
     "family": "Ornithorhynchidae",
     "genus": "Obdurodon",
     "regions": {
-     "au": 7
+     "au-e": 7
     }
    },
    "box": [
@@ -4134,10 +4198,11 @@
     "regions": {
      "af-e": 26,
      "af-n": 5,
-     "eu": 3,
-     "af-s": 3,
      "as-w": 4,
-     "ar": 1
+     "af-s": 3,
+     "eu-s": 2,
+     "ar": 1,
+     "eu-n": 1
     }
    },
    "hab": [
@@ -4172,10 +4237,11 @@
     "genus": "Oryx",
     "regions": {
      "af-e": 5,
-     "eu": 2,
      "af-s": 3,
+     "eu-s": 1,
      "as-w": 1,
-     "af-n": 1
+     "af-n": 1,
+     "eu-n": 1
     }
    },
    "hab": [
@@ -4245,11 +4311,12 @@
     "genus": "Ovibos",
     "regions": {
      "na-n": 39,
+     "gl": 36,
      "na-w": 4,
-     "eu": 4,
-     "as-n": 1,
+     "eu-n": 3,
      "na-e": 2,
-     "gl": 36
+     "eu-s": 1,
+     "as-n": 1
     }
    },
    "hab": [
@@ -4315,11 +4382,11 @@
     "family": "Bovidae",
     "genus": "Ovibos",
     "regions": {
-     "na-w": 2,
      "na-n": 38,
-     "eu": 3,
-     "na-e": 2,
-     "gl": 36
+     "gl": 36,
+     "eu-n": 3,
+     "na-w": 2,
+     "na-e": 2
     }
    },
    "hab": [
@@ -4436,22 +4503,25 @@
     "family": "Felidae",
     "genus": "Panthera",
     "regions": {
-     "as-se": 17,
-     "in": 10,
-     "na-w": 22,
-     "ca": 10,
-     "na-e": 48,
-     "sa-n": 13,
-     "af-e": 46,
+     "eu-s": 100,
      "af-s": 58,
-     "eu": 123,
+     "na-e": 48,
+     "af-e": 46,
+     "sa-s": 29,
+     "eu-n": 23,
+     "na-w": 22,
+     "as-s": 19,
+     "sa-n": 13,
      "af-n": 12,
-     "as-c": 2,
      "as-w": 11,
-     "as-e": 23,
+     "in": 10,
+     "as-ic": 10,
+     "ca": 10,
+     "as-ne": 10,
      "as-n": 6,
+     "as-c": 2,
      "ar": 1,
-     "sa-s": 29
+     "as-sb": 1
     }
    },
    "pbdb_ok": true
@@ -4509,20 +4579,21 @@
     "family": "Felidae",
     "genus": "Panthera",
     "regions": {
-     "in": 1,
+     "eu-s": 26,
+     "af-s": 20,
      "na-w": 15,
-     "ca": 5,
      "na-e": 14,
      "af-e": 12,
-     "af-s": 20,
-     "eu": 38,
+     "eu-n": 12,
      "af-n": 7,
-     "as-c": 1,
-     "as-w": 3,
-     "as-n": 4,
-     "sa-n": 2,
      "sa-s": 6,
-     "as-e": 1
+     "ca": 5,
+     "as-n": 4,
+     "as-w": 3,
+     "sa-n": 2,
+     "in": 1,
+     "as-c": 1,
+     "as-ne": 1
     }
    },
    "hab": [
@@ -4635,11 +4706,12 @@
     "family": "Felidae",
     "genus": "Panthera",
     "regions": {
-     "eu": 8,
-     "as-c": 1,
+     "eu-n": 5,
      "as-n": 4,
+     "eu-s": 3,
+     "as-c": 1,
      "af-s": 1,
-     "as-e": 1,
+     "as-ne": 1,
      "na-w": 1
     }
    },
@@ -4759,10 +4831,11 @@
     "genus": "Paraceratherium",
     "regions": {
      "as-c": 14,
-     "as-e": 14,
+     "as-ne": 13,
      "in": 6,
      "as-w": 2,
-     "eu": 2
+     "eu-s": 2,
+     "as-s": 1
     }
    },
    "pbdb_ok": true,
@@ -4854,7 +4927,8 @@
     "order": "Primates",
     "regions": {
      "na-w": 71,
-     "eu": 9
+     "eu-s": 7,
+     "eu-n": 2
     }
    },
    "rep": "Carpolestes"
@@ -4948,7 +5022,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Procoptodon",
     "regions": {
-     "au": 121
+     "au-e": 113,
+     "au-w": 8
     }
    }
   },
@@ -4977,8 +5052,9 @@
     "family": "Palaeotheriidae",
     "genus": "Propalaeotherium",
     "regions": {
-     "eu": 68,
-     "as-e": 1
+     "eu-n": 53,
+     "eu-s": 15,
+     "as-ne": 1
     }
    },
    "w": 1
@@ -5128,12 +5204,14 @@
     "family": "Cervidae",
     "genus": "Rangifer",
     "regions": {
-     "as-n": 8,
-     "na-w": 9,
      "na-n": 45,
-     "na-e": 29,
-     "eu": 29,
-     "gl": 19
+     "na-e": 28,
+     "eu-n": 19,
+     "gl": 19,
+     "eu-s": 10,
+     "na-w": 9,
+     "as-n": 8,
+     "na-av": 1
     }
    },
    "hab": [
@@ -5178,11 +5256,13 @@
     "genus": "Rangifer",
     "regions": {
      "na-n": 40,
-     "na-w": 5,
-     "eu": 26,
+     "na-e": 19,
+     "gl": 19,
+     "eu-n": 18,
+     "eu-s": 8,
      "as-n": 6,
-     "na-e": 20,
-     "gl": 19
+     "na-w": 5,
+     "na-av": 1
     }
    },
    "lat": [
@@ -5216,7 +5296,7 @@
     "family": "Gobiconodontidae",
     "genus": "Repenomamus",
     "regions": {
-     "as-e": 2
+     "as-ne": 2
     }
    },
    "box": [
@@ -5333,9 +5413,10 @@
     "family": "Bovidae",
     "genus": "Saiga",
     "regions": {
-     "eu": 2,
+     "eu-n": 1,
      "as-n": 1,
-     "na-n": 1
+     "na-n": 1,
+     "eu-s": 1
     }
    },
    "hab": [
@@ -5393,26 +5474,27 @@
     "class": "Mammalia",
     "order": "Sirenia",
     "regions": {
-     "ca": 32,
+     "eu-s": 416,
      "na-e": 117,
      "as-w": 65,
-     "sa-n": 45,
      "na-w": 62,
+     "sa-n": 45,
+     "af-n": 43,
+     "as-ne": 35,
+     "ca": 32,
      "in": 31,
-     "eu": 443,
-     "af-n": 45,
-     "as-e": 35,
+     "eu-n": 29,
      "ar": 12,
-     "af-w": 4,
+     "nz": 10,
      "af-e": 8,
-     "as-se": 4,
-     "au": 3,
-     "mg": 5,
      "as-n": 8,
+     "mg": 5,
      "sa-s": 5,
+     "af-w": 4,
+     "as-ic": 4,
+     "au-e": 3,
      "as-c": 3,
      "na-n": 2,
-     "nz": 10,
      "ng": 2
     }
    },
@@ -5450,7 +5532,7 @@
     "regions": {
      "in": 7,
      "af-e": 5,
-     "as-e": 2,
+     "as-s": 2,
      "as-w": 2
     }
    },
@@ -5586,9 +5668,9 @@
     "class": "Mammalia",
     "order": "Sparassodonta",
     "regions": {
-     "sa-n": 53,
      "sa-s": 276,
-     "eu": 1
+     "sa-n": 53,
+     "eu-s": 1
     }
    }
   },
@@ -5621,15 +5703,17 @@
     "family": "Elephantidae",
     "genus": "Stegodon",
     "regions": {
+     "as-ic": 35,
+     "as-s": 32,
      "in": 23,
-     "as-se": 49,
-     "as-w": 3,
-     "as-e": 33,
      "af-e": 15,
-     "af-s": 1,
+     "as-ne": 9,
+     "as-sb": 6,
+     "as-w": 3,
      "af-n": 2,
-     "au": 2,
-     "eu": 1
+     "au-w": 2,
+     "af-s": 1,
+     "eu-s": 1
     }
    }
   },
@@ -5663,7 +5747,7 @@
      "na-w": 245,
      "na-e": 82,
      "ca": 19,
-     "eu": 1,
+     "eu-n": 1,
      "as-w": 1
     }
    }
@@ -5773,7 +5857,7 @@
     "family": "Thylacoleonidae",
     "genus": "Thylacoleo",
     "regions": {
-     "au": 35
+     "au-e": 35
     }
    },
    "w": 3
@@ -5803,7 +5887,7 @@
     "family": "Thylacoleonidae",
     "genus": "Thylacoleo",
     "regions": {
-     "au": 26
+     "au-e": 26
     }
    }
   },
@@ -5875,7 +5959,7 @@
     "genus": "Uintatherium",
     "regions": {
      "na-w": 30,
-     "as-e": 4,
+     "as-ne": 4,
      "as-c": 1
     }
    }
@@ -5908,19 +5992,23 @@
     "family": "Ursidae",
     "genus": "Ursus",
     "regions": {
-     "as-se": 18,
-     "na-w": 30,
-     "na-e": 80,
+     "eu-s": 187,
+     "na-e": 79,
+     "eu-n": 63,
      "na-n": 62,
-     "eu": 247,
-     "af-n": 5,
-     "as-w": 13,
-     "as-c": 5,
-     "as-e": 22,
-     "as-n": 17,
-     "ca": 1,
+     "na-w": 30,
      "gl": 30,
-     "in": 2
+     "as-s": 18,
+     "as-n": 17,
+     "as-w": 13,
+     "as-ne": 11,
+     "as-ic": 7,
+     "af-n": 5,
+     "as-c": 5,
+     "as-sb": 4,
+     "in": 2,
+     "ca": 1,
+     "na-av": 1
     }
    },
    "w": 3,
@@ -5954,9 +6042,10 @@
     "family": "Ursidae",
     "genus": "Ursus",
     "regions": {
+     "na-e": 55,
      "na-w": 12,
-     "na-e": 56,
-     "na-n": 4
+     "na-n": 4,
+     "na-av": 1
     }
    },
    "hab": [
@@ -5998,19 +6087,23 @@
     "family": "Ursidae",
     "genus": "Ursus",
     "regions": {
-     "as-se": 18,
-     "na-w": 30,
-     "na-e": 80,
+     "eu-s": 187,
+     "na-e": 79,
+     "eu-n": 63,
      "na-n": 62,
-     "eu": 247,
-     "af-n": 5,
-     "as-w": 13,
-     "as-c": 5,
-     "as-e": 22,
-     "as-n": 17,
-     "ca": 1,
+     "na-w": 30,
      "gl": 30,
-     "in": 2
+     "as-s": 18,
+     "as-n": 17,
+     "as-w": 13,
+     "as-ne": 11,
+     "as-ic": 7,
+     "af-n": 5,
+     "as-c": 5,
+     "as-sb": 4,
+     "in": 2,
+     "ca": 1,
+     "na-av": 1
     }
    },
    "w": 3,
@@ -6054,7 +6147,8 @@
     "family": "Ursidae",
     "genus": "Ursus",
     "regions": {
-     "eu": 29,
+     "eu-s": 21,
+     "eu-n": 8,
      "as-c": 1
     }
    },
@@ -6135,7 +6229,7 @@
     "family": "Triconodontidae",
     "genus": "Volaticotherium",
     "regions": {
-     "as-e": 1
+     "as-ne": 1
     }
    }
   },
@@ -6168,10 +6262,11 @@
     "genus": "Vulpes",
     "regions": {
      "na-n": 18,
-     "as-n": 5,
-     "na-w": 1,
      "gl": 17,
-     "eu": 4
+     "as-n": 5,
+     "eu-n": 3,
+     "na-w": 1,
+     "eu-s": 1
     }
    },
    "hab": [

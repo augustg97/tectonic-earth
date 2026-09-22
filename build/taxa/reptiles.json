@@ -26,14 +26,16 @@
     "class": "Reptilia",
     "regions": {
      "na-w": 312,
-     "eu": 31,
+     "na-e": 91,
      "sa-s": 26,
-     "gl": 2,
-     "na-e": 111,
+     "eu-s": 22,
+     "na-av": 20,
+     "eu-n": 9,
+     "as-ne": 7,
      "af-s": 6,
-     "sa-n": 2,
      "af-n": 3,
-     "as-e": 7,
+     "gl": 2,
+     "sa-n": 2,
      "in": 2,
      "af-w": 1
     }
@@ -72,7 +74,8 @@
     "genus": "Allosaurus",
     "regions": {
      "na-w": 137,
-     "eu": 10
+     "eu-s": 9,
+     "eu-n": 1
     }
    },
    "box": [
@@ -115,7 +118,7 @@
     "family": "Troodontidae",
     "genus": "Anchiornis",
     "regions": {
-     "as-e": 3
+     "as-ne": 3
     }
    }
   },
@@ -274,9 +277,9 @@
     "genus": "Brachiosaurus",
     "regions": {
      "na-w": 16,
-     "af-s": 1,
      "af-e": 2,
-     "eu": 1
+     "af-s": 1,
+     "eu-n": 1
     }
    }
   },
@@ -395,8 +398,9 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Cetiosaurus",
     "regions": {
-     "eu": 24,
-     "af-n": 6
+     "eu-n": 22,
+     "af-n": 6,
+     "eu-s": 2
     }
    },
    "pbdb_ok": true,
@@ -427,7 +431,7 @@
     "family": "Grippiidae",
     "genus": "Chaohusaurus",
     "regions": {
-     "as-e": 9
+     "as-s": 9
     }
    }
   },
@@ -534,7 +538,7 @@
     "family": "Compsognathidae",
     "genus": "Compsognathus",
     "regions": {
-     "eu": 4
+     "eu-s": 4
     }
    },
    "box": [
@@ -696,7 +700,7 @@
     "family": "Campylognathoididae",
     "genus": "Eudimorphodon",
     "regions": {
-     "eu": 13
+     "eu-s": 13
     }
    },
    "box": [
@@ -881,7 +885,7 @@
     "family": "Azhdarchidae",
     "genus": "Hatzegopteryx",
     "regions": {
-     "eu": 4
+     "eu-s": 4
     }
    }
   },
@@ -913,8 +917,8 @@
     "family": "Protorothyrididae",
     "genus": "Hylonomus",
     "regions": {
-     "na-e": 5,
-     "eu": 1
+     "na-av": 5,
+     "eu-s": 1
     }
    }
   },
@@ -943,7 +947,7 @@
     "family": "Protorothyrididae",
     "genus": "Hylonomus",
     "regions": {
-     "na-e": 3
+     "na-av": 3
     }
    }
   },
@@ -996,9 +1000,10 @@
     "family": "Ichthyosauridae",
     "genus": "Ichthyosaurus",
     "regions": {
-     "na-w": 8,
-     "eu": 83,
+     "eu-n": 67,
+     "eu-s": 16,
      "sa-s": 9,
+     "na-w": 8,
      "gl": 1
     }
    },
@@ -1030,11 +1035,12 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Iguanodon",
     "regions": {
-     "eu": 129,
+     "eu-n": 80,
+     "eu-s": 49,
      "af-n": 1,
      "na-w": 1,
      "in": 1,
-     "as-e": 1
+     "as-ne": 1
     }
    }
   },
@@ -1092,7 +1098,7 @@
     "family": "Keichousauridae",
     "genus": "Keichousaurus",
     "regions": {
-     "as-e": 7
+     "as-s": 7
     }
    },
    "avoid": [
@@ -1125,7 +1131,7 @@
     "family": "Pliosauridae",
     "genus": "Kronosaurus",
     "regions": {
-     "au": 3,
+     "au-e": 3,
      "sa-n": 1
     }
    },
@@ -1172,8 +1178,9 @@
     "family": "Pliosauridae",
     "genus": "Liopleurodon",
     "regions": {
-     "eu": 12,
-     "sa-s": 1
+     "eu-n": 11,
+     "sa-s": 1,
+     "eu-s": 1
     }
    },
    "pbdb_ok": true,
@@ -1205,9 +1212,10 @@
     "family": "Mamenchisauridae",
     "genus": "Mamenchisaurus",
     "regions": {
-     "as-e": 14,
+     "as-s": 12,
      "as-c": 8,
-     "as-se": 2
+     "as-ne": 2,
+     "as-ic": 2
     }
    },
    "avoid": [
@@ -1268,9 +1276,10 @@
     "family": "Megalosauridae",
     "genus": "Megalosaurus",
     "regions": {
-     "eu": 56,
-     "af-e": 1,
+     "eu-n": 39,
+     "eu-s": 17,
      "as-c": 2,
+     "af-e": 1,
      "in": 1
     }
    },
@@ -1335,7 +1344,7 @@
     "family": "Dromaeosauridae",
     "genus": "Microraptor",
     "regions": {
-     "as-e": 10
+     "as-ne": 10
     }
    },
    "box": [
@@ -1437,19 +1446,20 @@
     "genus": "Mosasaurus",
     "regions": {
      "na-e": 53,
+     "eu-n": 24,
      "na-w": 10,
-     "eu": 34,
+     "eu-s": 10,
      "as-w": 9,
      "af-n": 5,
      "nz": 4,
-     "as-e": 3,
+     "as-ne": 3,
+     "an": 3,
      "af-s": 2,
+     "ca": 2,
+     "sa-n": 2,
      "af-w": 1,
      "ar": 1,
-     "sa-s": 1,
-     "an": 3,
-     "ca": 2,
-     "sa-n": 2
+     "sa-s": 1
     }
    }
   },
@@ -1537,9 +1547,10 @@
     "family": "Nothosauridae",
     "genus": "Nothosaurus",
     "regions": {
-     "eu": 90,
+     "eu-s": 61,
+     "eu-n": 29,
      "ar": 8,
-     "as-e": 4,
+     "as-s": 4,
      "na-w": 1
     }
    }
@@ -1576,14 +1587,16 @@
     "order": "Pterosauria",
     "family": "Ornithocheiridae",
     "regions": {
-     "as-e": 2,
+     "eu-n": 17,
+     "eu-s": 13,
      "af-n": 8,
-     "as-n": 5,
-     "eu": 30,
-     "na-e": 2,
      "as-c": 6,
+     "as-n": 5,
      "sa-n": 5,
-     "au": 2,
+     "as-ne": 2,
+     "na-e": 2,
+     "au-w": 1,
+     "au-e": 1,
      "na-w": 1
     }
    },
@@ -1678,11 +1691,12 @@
     "class": "Reptilia",
     "regions": {
      "af-s": 72,
-     "eu": 44,
-     "sa-s": 3,
-     "as-e": 13,
+     "eu-n": 43,
+     "as-ne": 13,
+     "af-e": 7,
      "af-n": 5,
-     "af-e": 7
+     "sa-s": 3,
+     "eu-s": 1
     }
    },
    "rep": "Scutosaurus"
@@ -1712,18 +1726,20 @@
     "phylum": "Chordata",
     "class": "Reptilia",
     "regions": {
-     "na-e": 47,
      "na-w": 376,
-     "eu": 85,
-     "af-n": 9,
-     "as-se": 4,
-     "as-w": 1,
-     "mg": 3,
-     "sa-s": 1,
+     "eu-s": 58,
+     "na-e": 36,
+     "eu-n": 27,
      "in": 13,
-     "as-e": 2,
+     "na-av": 11,
+     "af-n": 9,
+     "as-ic": 4,
+     "af-s": 4,
+     "mg": 3,
+     "as-s": 2,
      "gl": 2,
-     "af-s": 4
+     "as-w": 1,
+     "sa-s": 1
     }
    },
    "rep": "Rutiodon"
@@ -1753,9 +1769,10 @@
     "class": "Reptilia",
     "order": "Placodontia",
     "regions": {
+     "eu-s": 65,
      "ar": 19,
-     "eu": 80,
-     "as-e": 5,
+     "eu-n": 15,
+     "as-s": 5,
      "as-w": 1
     }
    },
@@ -1803,7 +1820,8 @@
     "family": "Plateosauridae",
     "genus": "Plateosaurus",
     "regions": {
-     "eu": 33,
+     "eu-s": 28,
+     "eu-n": 5,
      "gl": 1,
      "af-s": 1,
      "sa-s": 1
@@ -1899,15 +1917,16 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Plesiosaurus",
     "regions": {
-     "eu": 46,
+     "eu-n": 36,
+     "eu-s": 10,
+     "na-e": 2,
      "nz": 1,
      "af-s": 1,
-     "na-e": 2,
      "ca": 1,
-     "as-e": 1,
+     "as-ne": 1,
      "sa-s": 1,
      "na-w": 1,
-     "au": 1
+     "au-e": 1
     }
    },
    "pbdb_ok": true,
@@ -1939,7 +1958,7 @@
     "genus": "Postosuchus",
     "regions": {
      "na-w": 30,
-     "na-e": 1
+     "na-av": 1
     }
    },
    "box": [
@@ -2009,7 +2028,7 @@
     "family": "Protoceratopsidae",
     "genus": "Protoceratops",
     "regions": {
-     "as-e": 37,
+     "as-ne": 37,
      "as-c": 1
     }
    }
@@ -2043,10 +2062,10 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Psittacosaurus",
     "regions": {
-     "as-e": 54,
-     "as-c": 6,
+     "as-ne": 54,
      "as-n": 7,
-     "as-se": 2,
+     "as-c": 6,
+     "as-ic": 2,
      "na-w": 1
     }
    },
@@ -2091,8 +2110,9 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Pterodactylus",
     "regions": {
-     "eu": 13,
-     "af-e": 2
+     "eu-s": 11,
+     "af-e": 2,
+     "eu-n": 2
     }
    }
   },
@@ -2229,7 +2249,8 @@
     "family": "Rhamphorhynchidae",
     "genus": "Rhamphorhynchus",
     "regions": {
-     "eu": 29,
+     "eu-s": 27,
+     "eu-n": 2,
      "af-e": 1
     }
    }
@@ -2305,7 +2326,7 @@
     "family": "Scelidosauridae",
     "genus": "Scelidosaurus",
     "regions": {
-     "eu": 12,
+     "eu-n": 12,
      "as-c": 1
     }
    },
@@ -2353,7 +2374,7 @@
     "family": "Pareiasauridae",
     "genus": "Scutosaurus",
     "regions": {
-     "eu": 15
+     "eu-n": 15
     }
    }
   },
@@ -2386,8 +2407,9 @@
     "family": "Shastasauridae",
     "genus": "Shonisaurus",
     "regions": {
-     "eu": 2,
-     "na-w": 3
+     "na-w": 3,
+     "eu-s": 1,
+     "eu-n": 1
     }
    }
   },
@@ -2416,7 +2438,7 @@
     "family": "Sinosauropterygidae",
     "genus": "Sinosauropteryx",
     "regions": {
-     "as-e": 4
+     "as-ne": 4
     }
    },
    "box": [
@@ -2522,8 +2544,8 @@
     "genus": "Stegosaurus",
     "regions": {
      "na-w": 83,
-     "eu": 2,
-     "as-e": 1
+     "eu-s": 2,
+     "as-ne": 1
     }
    },
    "box": [
@@ -2622,10 +2644,11 @@
     "family": "Tanystropheidae",
     "genus": "Tanystropheus",
     "regions": {
+     "eu-s": 12,
+     "eu-n": 3,
      "ar": 2,
-     "eu": 15,
-     "as-e": 1,
-     "na-e": 1
+     "as-s": 1,
+     "na-av": 1
     }
    }
   },
@@ -2655,8 +2678,8 @@
     "family": "Tyrannosauridae",
     "genus": "Tarbosaurus",
     "regions": {
-     "as-c": 10,
-     "as-e": 46
+     "as-ne": 46,
+     "as-c": 10
     }
    }
   },
@@ -2782,10 +2805,12 @@
     "family": "Mosasauridae",
     "genus": "Tylosaurus",
     "regions": {
-     "na-e": 24,
      "na-w": 25,
-     "eu": 15,
+     "na-e": 21,
+     "eu-n": 13,
+     "na-av": 3,
      "af-w": 2,
+     "eu-s": 2,
      "ar": 1
     }
    }
@@ -2844,7 +2869,7 @@
     "family": "Varanidae",
     "genus": "Varanus",
     "regions": {
-     "au": 9
+     "au-e": 9
     }
    },
    "no_own_icon": true
@@ -2875,9 +2900,9 @@
     "family": "Dromaeosauridae",
     "genus": "Velociraptor",
     "regions": {
-     "na-w": 1,
-     "as-e": 17,
-     "as-c": 2
+     "as-ne": 17,
+     "as-c": 2,
+     "na-w": 1
     }
    },
    "w": 3

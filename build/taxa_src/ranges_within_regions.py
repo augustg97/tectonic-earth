@@ -48,8 +48,8 @@ CARIB = [-98, -58, 8, 31]
 #: Mongolia shares the as-ne code with North China but was Angaran ground in
 #: the Permian: the Cathaysian flora stops at the Solonker suture.
 _NOT_CATHAYSIA = ["Amuria", "Central Asian Orogenic Belt", "Mongol-Okhotsk Ocean"]
-#: European labels that were Gondwanan terranes in the early Palaeozoic.
-_PERI_GONDWANA = ["Armorica", "Hun Superterrane", "Perunica", "Iberian Massif", "Massif Central"]
+#: The Avalon Peninsula: the Carolina slate belt shares na-av and had no deep-water fronds.
+_AVALON = [[-56, -52.5, 46.3, 48.5]]
 
 PATCH = {
     # ------------------------------------------------------------ North America
@@ -625,11 +625,6 @@ PATCH = {
     "Xenacanthus": {"range": [{"t": [360, 300], "in": ["euramerica"]},
                               {"t": [300, 252], "in": ["euramerica", "as-ne", "as-s", "in", "au", "sa-s"]}]},
     # --- 420-480 Ma: the first land floras were one place each
-    "Zosterophyllum": {"avoid": _PERI_GONDWANA + ["Gondwana"]},
-    # Armorica and the Hun terranes are "eu" today and were Gondwana then: the
-    # next code split (eu-n / eu-s) retires these; until then the avoid list.
-    "Kampecaris": {"box": [[-9, 2, 50, 59]], "avoid": _PERI_GONDWANA},
-    "Pneumodesmus": {"box": [[-9, 2, 50, 59]], "avoid": _PERI_GONDWANA},
     "Treptichnus pedum": {"lad": 515},
     # --- Australia is two codes now (au-w / au-e). The genera of one formation
     # go to their half; the Broome tracks are the west's only Mesozoic dinosaurs.
@@ -660,7 +655,122 @@ PATCH = {
                                {"t": [70, 66], "in": ["na-w"]}]},
     "Baragwanathia": {"range": [{"t": [427, 410], "in": ["au-e"]}, {"t": [410, 393], "in": ["au-e", "na-e", "na-n"]}],
                       "box": [[140, 152, -40, -33], [-70, -60, 46, 50]]},
+    # --- Europe is two codes now (eu-n Baltica-Avalonia / eu-s the peri-Gondwanan
+    # south). Before the Rheic Ocean closed they were two crusts, so every
+    # pre-Carboniferous entry whose PBDB collections fall in one half (>= 5 there,
+    # <= 2 in the other, rebinned by taxa_src/recode_regions.py) is narrowed to
+    # it, plus the one-locality names whose place is known: Rhynie, East Kirkton,
+    # Cowie Harbour, the White Sea, Charnwood. From the Carboniferous on Europe is
+    # one continent and "eu" stays.
+    "Tortotubus protuberans": {"range": ["eu-n", "na-e", "af-n", "ar"]},
+    "East Kirkton tetrapods": {"range": ["eu-n"]},
+    "Gotland reef fauna": {"range": ["eu-n"]}, "Orsten fauna": {"range": ["eu-n"]},
+    "Rhynie chert biota": {"range": ["eu-n"]},
+    "Bothriolepis": {"range": ["an", "as-e", "as-n", "au", "eu-n", "gl", "na-e", "na-w"]},
+    "Cephalaspis": {"range": ["eu-n", "na-e", "na-n", "na-w"]},
+    "Dunkleosteus": {"range": ["na-e", "eu-n", "af-n"]},
+    "Eusthenopteron": {"range": ["na-e", "eu-n"]},
+    "Osteostraci": {"range": ["as-n", "eu-n", "na-e", "na-n"]},
+    "Rhizodus": {"range": ["eu-n", "na-e"]}, "Eoarthropleura": {"range": ["eu-n", "na-e"]},
+    "Kampecaris": {"range": ["eu-n"], "box": [[-9, 2, 50, 59]]},
+    "Pneumodesmus": {"range": ["eu-n"], "box": [[-9, 2, 50, 59]]},
+    "Meganeura": {"range": ["eu-s"]},
+    "Palaeocharinus": {"range": ["eu-n"]}, "Rhyniella": {"range": ["eu-n"]},
+    "Rhyniognatha": {"range": ["eu-n"]},
+    "Agnostus": {"range": ["eu-n", "na-e", "na-w", "as-n", "as-e", "as-c"]},
+    "Asaphus": {"range": ["eu-n"]}, "Bigotina": {"range": ["eu-s", "af-n"]},
+    "Cloudina": {"range": ["af-s", "ar", "as-e", "as-n", "eu-s", "na-w", "sa-n", "sa-s"]},
+    "Dickinsonia": {"range": ["au-e", "eu-n"]},
+    "Endoceras": {"range": ["as-e", "eu-n", "na-e", "na-n", "na-w", "sa-s"]},
+    "Eurypterus": {"range": ["na-e", "eu-n"]}, "Holmia": {"range": ["eu-n"]},
+    "Kimberella": {"range": ["ar", "au-e", "eu-n"]}, "Kjerulfia": {"range": ["eu-n"]},
+    "Schmidtiellus": {"range": ["eu-n"]}, "Tribrachidium": {"range": ["au-e", "eu-n"]},
+    "Yorgia": {"range": ["au-e", "eu-n"]}, "Aglaophyton": {"range": ["eu-n"]},
+    "Asteroxylon": {"range": ["eu-n"]}, "Rhynia": {"range": ["eu-n"]},
+    "Zosterophyllopsida": {"range": ["as-c", "eu-n", "na-e", "na-n"]},
+    "Westlothiana lizziae": {"range": ["eu-n"]},
+    "Anarcestes": {"range": ["af-n", "eu-s", "rhe", "as-ne", "as-s"]},
+    "Parvancorina": {"range": ["as-n", "au-e", "eu-n"]},
+    "Reedops": {"range": ["af-n", "eu-s", "rhe"]},
+    "Archaeocyathus": {"range": ["au", "sa-s", "na-w", "as-n", "af-n", "an", "as-e", "eu-s"]},
+    "Cheirolepis": {"range": ["eu-n", "gl", "na-e"]}, "Coccosteus": {"range": ["eu-n", "gl", "na-e"]},
+    "Dalmanites": {"range": ["eu-n", "na-e", "iap", "af-n", "sa-s"]},
+    "Platystrophia": {"range": ["na-w", "na-e", "na-n", "gl", "iap", "eu-n"]},
+    "Stethacanthus": {"range": ["na-e", "na-w", "eu-n", "as-n", "au"]},
+    "Streptelasma": {"range": ["na-w", "na-e", "na-n", "gl", "iap", "eu-n"]},
+    "Pulmonoscorpius": {"range": ["eu-n"]},
+    "Groenlandaspis": {"range": ["gl", "an", "au", "eu-n", "na-e", "af-n"]},
+    "Sporogonites": {"range": ["eu-n", "au", "as-e"]}, "Tulerpeton": {"range": ["eu-n"]},
+    "Melanocyrillium": {"range": ["na-w", "na-e", "au", "eu-n", "as-n"]},
+    "Proterocladus": {"range": ["as-e", "na-n", "eu-n"]},
+    "Svanbergfjellet biota": {"range": ["eu-n", "gl"]},
+    # Silurian Zosterophyllum is Laurussian, Kazakh and South Chinese; the Devonian
+    # records add the peri-Gondwanan south
+    "Zosterophyllum": {"range": [{"t": [425, 419], "in": ["eu-n", "as-c", "as-ne", "as-s", "na-n"]},
+                                 {"t": [419, 390], "in": ["eu-n", "eu-s", "as-c", "as-ne", "as-s", "as-ic", "as-sb", "na-n"]}],
+                       "avoid": ["Gondwana"]},
+    "Gymnotoceras": {"range+": ["eu-n"]},
+    # the PBDB files these under Problematica, which it draws as anything
+    # --- eastern North America is two codes now: the Laurentian craton (na-e)
+    # and the Avalon-Carolina terranes (na-av), Gondwanan until the Silurian.
+    # Mistaken Point, Charnwood's twin, is na-av; so are the Avalonian Cambrian
+    # trilobites of Newfoundland and Nova Scotia and the Carolina Ediacarans.
+    "Fractofusus": {"range": ["na-av"], "box": _AVALON}, "Beothukis": {"range": ["na-av"], "box": _AVALON},
+    "Trepassia": {"range": ["na-av"], "box": _AVALON}, "Pectinifrons": {"range": ["na-av"], "box": _AVALON},
+    "Thectardis": {"range": ["na-av"], "box": _AVALON},
+    "Haootia quadriformis": {"range": ["na-av"], "box": _AVALON},
+    # Baltica's own trilobites do not reach Avalonia, which shared eu-n's code
+    # and sat 30 degrees of latitude away until the Silurian
+    "Asaphus": {"range": ["eu-n"], "avoid": ["Avalonia"]},
+    "Holmia": {"range": ["eu-n"], "avoid": ["Avalonia"]}, "Kjerulfia": {"range": ["eu-n"], "avoid": ["Avalonia"]},
+    "Schmidtiellus": {"range": ["eu-n"], "avoid": ["Avalonia"]},
+    "Ogygiocaris": {"avoid": ["Avalonia"]},
+    "Bradgatia": {"range": ["eu-n", "na-av"]}, "Charnia": {"range": ["as-n", "au-e", "eu-n", "na-av"]},
+    "Charniodiscus": {"range": ["au-e", "eu-n", "iap", "na-av"]},
+    "Aspidella": {"range": ["na-av", "eu-n", "au-e", "as-n"], "form_ok": True},
+    "Rangeomorpha": {"range": ["na-av", "eu-n", "au-e", "as-n", "af-s", "na-n"]},
+    "Pteridinium": {"range": ["af-s", "au-e", "eu-n", "na-av"]},
+    "Ediacaran biota": {"range": ["au", "eu-n", "na-av", "af-s", "as-n", "as-e", "in"]},
+    "Paradoxides": {"range": ["eu", "na-av", "af-n"]},
+    "Olenus": {"range": ["eu-n", "iap", "na-av", "as-c", "as-e"]},
+    "Trilobite provinces": {"range": ["eu", "na-e", "na-av", "gl"]},
+    # the re-read at 455-475 Ma: the warm-water Ordovician of Baltica and
+    # Laurentia does not reach the Gondwanan terranes at 60-70 S
+    "Megistaspis": {"range": ["eu-n"], "avoid": ["Avalonia"]},
+    "Cameroceras": {"range": ["as-c", "as-e", "eu-n", "na-e"], "lat": [0, 50]},
+    "Receptaculites": {"lat": [0, 55]},
+    "Neseuretus": {"range": ["eu", "af-n", "ar", "sa-s", "as-s"]},
+    # sponges: the Cryogenian sterane biomarkers are the oldest evidence anyone
+    # accepts; body fossils are Ediacaran at the earliest. Not the Tonian.
+    "Porifera": {"fad": 660},
+    "Cyclomedusa": {"form_ok": True},
+    "Megasphaera": {"form_ok": True}, "Shaanxilithes": {"form_ok": True},
 }
+
+
+def _patch_merged():
+    """PATCH is a dict literal, and Python keeps only the LAST entry for a name
+    written twice -- which silently dropped Quercus's box when a later round
+    gave it a range, and Streptelasma's latitude band when it got a range. The
+    table is read from its own source and duplicates are merged field by
+    field, later over earlier, so each round's refinement adds to the last."""
+    import ast                                                 # noqa: PLC0415
+    with open(__file__) as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and \
+                any(getattr(t, "id", None) == "PATCH" for t in node.targets):
+            merged, dups = {}, set()
+            for k, v in zip(node.value.keys, node.value.values):
+                name = ast.literal_eval(k)
+                val = eval(compile(ast.Expression(v), __file__, "eval"), globals())
+                if name in merged:
+                    dups.add(name)
+                merged.setdefault(name, {}).update(val)
+            if dups:
+                print(f"{len(dups)} names refined in more than one round, merged")
+            return merged
+    return PATCH
 
 
 def main():
@@ -672,7 +782,8 @@ def main():
         for n in files[fn]["taxa"]:
             where[n] = fn
     missing, touched = [], set()
-    for name, fields in PATCH.items():
+    patch = _patch_merged()
+    for name, fields in patch.items():
         fn = where.get(name)
         if not fn:
             missing.append(name)
@@ -691,7 +802,7 @@ def main():
     for fn in touched:
         with open(fn, "w") as f:
             json.dump(files[fn], f, indent=1, ensure_ascii=False)
-    print(f"{len(PATCH) - len(missing)} entries refined in {len(touched)} files")
+    print(f"{len(patch) - len(missing)} entries refined in {len(touched)} files")
     if missing:
         print("NOT IN THE REGISTRY:", ", ".join(missing))
 

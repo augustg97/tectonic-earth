@@ -61,11 +61,12 @@
     "family": null,
     "genus": null,
     "regions": {
-     "eu": 111,
+     "eu-n": 96,
      "ca": 43,
-     "sea": 27,
-     "as-e": 19,
+     "as-sb": 27,
+     "as-s": 19,
      "na-w": 18,
+     "eu-s": 15,
      "af-e": 2,
      "nz": 2,
      "af-s": 1,
@@ -144,14 +145,15 @@
     "family": null,
     "genus": null,
     "regions": {
-     "eu": 72,
+     "eu-n": 63,
      "ca": 15,
+     "eu-s": 9,
      "nz": 6,
      "na-n": 5,
      "na-e": 4,
      "na-w": 2,
-     "as-e": 1,
-     "au": 1
+     "as-ne": 1,
+     "au-e": 1
     },
     "fea_r": 333.1,
     "lla_r": 6.29

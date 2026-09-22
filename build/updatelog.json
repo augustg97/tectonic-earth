@@ -2,6 +2,37 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.10",
+   "date": "22 September 2026",
+   "title": "Europe and eastern North America by crust, and the first seas at genus level",
+   "summary": "The fifth flora-and-fauna pass. Europe is two codes now -- Baltica and Avalonia in the north, the Gondwanan terranes that are France, Iberia, Bohemia and the Balkans in the south -- and eastern North America is two as well, the Laurentian craton and the Avalon and Carolina terranes that arrived with the Appalachians. So the Silurian myriapods of Scotland stay off Armorica, and the Mistaken Point fronds stay off Laurentia. Eighty-two genera fill the Tonian cratons, the Ediacaran assemblages and the Cambrian to Silurian shelves that were still 'Trilobita, Orthida, Dasycladales'. Class-level marine slots in the early Palaeozoic fell from 38 to 21 per cent.",
+   "sections": [
+    {
+     "name": "In the seas",
+     "items": [
+      "The Tonian: the Atar Group microfossils of Mauritania and the Rasthof cap-carbonate mats of Namibia; Chuaria, Tawuia and the billion-year fungus Ourasphaira. The Ediacaran: Vendia, Cyclomedusa, Aspidella, Eoandromeda, Inaria, Palaeopascichnus, the Nama reef-builder Namapoikia, Nasepia, Shaanxilithes, the Mistaken Point fronds Beothukis, Trepassia and Pectinifrons, Haootia with its muscles, the Doushantuo acritarchs and embryos, the Miaohe seaweeds.",
+      "The Cambrian to Silurian by block: the Moroccan trilobites Hupetina and Cambropallas, the Bohemian Ellipsocephalus, Conocoryphe and Eccaparadoxides, the Tremadocian olenids Parabolina, Jujuyaspis and Kainella of Argentina and Oaxaca, the Mediterranean-province trilobites Selenopeltis, Placoparia, Colpocoryphe, Ectillaenus, Onnia and Dalmanitina, Baltica's Ogygiocaris and Trinucleus; the zone graptolites from Rhabdinopora to Saetograptus; the conodonts Cordylodus, Iapetognathus, Ozarkodina and Icriodus; Lichenaria, Catenipora and Syringopora; Prasopora and Hallopora; Orthis, Sowerbyella, Strophomena and Eospirifer; the calcareous algae Vermiporella, Cyclocrinites, Dimorphosiphon and Palaeoporella; the Silurian fishes Thelodus, Loganellia, Birkenia, Jamoytius, Andreolepis, Guiyu and Entelognathus.",
+      "Sponges begin with the Cryogenian biomarkers, not in the Tonian."
+     ]
+    },
+    {
+     "name": "The right crust",
+     "items": [
+      "Sixty pre-Carboniferous European taxa are now on one half of Europe or the other, by where their collections are (Baltica's Asaphus and Megistaspis, the Rhynie chert, East Kirkton, Cowie Harbour; Bohemia's Reedops and Anarcestes, the Montagne Noire's Meganeura), and Baltica's own trilobites stay off Avalonia, which sat thirty degrees away until the Silurian.",
+      "The Avalon Peninsula, Nova Scotia, the Boston basin and the Carolina slate belt are one code, Gondwanan until the Silurian; the Mistaken Point fronds keep to the Avalon Peninsula, and Laurentia at 565 million years shows the rangeomorphs of the Mackenzie Mountains and nothing from Newfoundland."
+     ]
+    },
+    {
+     "name": "Keeping it right",
+     "items": [
+      "The PBDB evidence attached to every entry is re-binned under the current region table by taxa_src/recode_regions.py, offline, so a code split is checked by the record the same day.",
+      "The refinement table had fifty-one names written in two rounds, and Python keeps only the last entry for a repeated key: Quercus lost its box when a later round gave it a range. The table now merges repeated names field by field.",
+      "Measured by build/measure_generic.py: marine slot-ages at class or order level, Cenozoic 22, Mesozoic 26, late Palaeozoic 27, early Palaeozoic 38 to 21, Precambrian 51 to 42 per cent."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.9",
    "date": "22 September 2026",
    "title": "The late Palaeozoic seas, the ages between the samples, and Australia and China by block",

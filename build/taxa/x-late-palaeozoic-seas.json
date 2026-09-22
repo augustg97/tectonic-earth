@@ -8,7 +8,7 @@
    "lad": 395,
    "range": [
     "af-n",
-    "eu",
+    "eu-s",
     "rhe",
     "as-ne",
     "as-s"
@@ -40,7 +40,7 @@
     "genus": "Anarcestes",
     "regions": {
      "af-n": 42,
-     "eu": 34,
+     "eu-s": 34,
      "as-s": 3,
      "as-n": 2,
      "na-n": 1
@@ -82,7 +82,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Andiva",
     "regions": {
-     "eu": 3
+     "eu-n": 3
     }
    }
   },
@@ -116,7 +116,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Arkarua",
     "regions": {
-     "au": 5
+     "au-e": 5
     }
    }
   },
@@ -155,19 +155,20 @@
     "genus": "Athyris",
     "regions": {
      "na-e": 383,
-     "eu": 337,
+     "eu-n": 194,
+     "eu-s": 145,
      "in": 99,
      "na-w": 48,
      "as-s": 39,
-     "au": 31,
+     "au-e": 25,
      "nz": 24,
      "as-c": 13,
      "as-ic": 10,
      "af-n": 9,
      "as-n": 8,
      "as-sb": 6,
+     "au-w": 6,
      "na-n": 4,
-     "sea": 2,
      "as-w": 2,
      "as-ne": 1,
      "sa-n": 1,
@@ -212,18 +213,19 @@
     "family": "Cyathopsidae",
     "genus": "Caninia",
     "regions": {
-     "eu": 108,
+     "eu-n": 122,
      "na-w": 67,
      "na-e": 34,
-     "sea": 16,
      "as-s": 11,
      "na-n": 8,
      "as-c": 5,
      "as-ic": 3,
-     "au": 2,
+     "eu-s": 2,
      "as-ne": 2,
      "as-n": 2,
      "as-w": 2,
+     "au-w": 1,
+     "au-e": 1,
      "ca": 1,
      "sa-n": 1
     },
@@ -255,9 +257,9 @@
    "lad": 555,
    "range": [
     "au-e",
-    "eu",
+    "eu-n",
     "iap",
-    "na-e"
+    "na-av"
    ],
    "note": "A frond on a stalk with a holdfast disc, standing in the current from Newfoundland to the Flinders Ranges; the disc was found first and named alone.",
    "hab": [
@@ -283,10 +285,10 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Charniodiscus",
     "regions": {
-     "na-e": 24,
-     "eu": 11,
+     "na-av": 24,
+     "eu-n": 11,
      "na-n": 10,
-     "au": 9,
+     "au-e": 9,
      "as-s": 2,
      "in": 1,
      "sa-n": 1,
@@ -337,9 +339,10 @@
     "genus": "Cymaclymenia",
     "regions": {
      "af-n": 81,
-     "eu": 31,
+     "eu-n": 27,
      "as-s": 7,
      "as-c": 7,
+     "eu-s": 4,
      "as-w": 1
     },
     "fea_r": 365.5,
@@ -382,25 +385,26 @@
     "genus": "Dielasma",
     "regions": {
      "na-w": 467,
-     "eu": 182,
+     "eu-n": 177,
      "na-e": 89,
      "in": 82,
      "as-s": 58,
      "as-c": 28,
-     "au": 26,
+     "au-e": 25,
      "as-ne": 16,
      "as-sb": 13,
      "ar": 12,
      "as-w": 12,
      "na-n": 10,
+     "eu-s": 8,
      "sa-n": 8,
      "as-n": 8,
      "gl": 7,
      "as-ic": 5,
      "nz": 4,
      "ng": 4,
-     "sea": 3,
      "sa-s": 2,
+     "au-w": 1,
      "mg": 1
     },
     "fea_r": 346.8,
@@ -444,9 +448,10 @@
     "family": "Delepinoceratidae",
     "genus": "Dombarites",
     "regions": {
-     "eu": 86,
+     "eu-n": 78,
      "as-n": 17,
      "af-n": 10,
+     "eu-s": 8,
      "as-ne": 1
     },
     "fea_r": 333.1,
@@ -490,9 +495,10 @@
     "family": "Strophalosiidae",
     "genus": "Echinalosia",
     "regions": {
-     "au": 346,
+     "au-e": 339,
      "in": 65,
      "nz": 12,
+     "au-w": 7,
      "na-w": 5,
      "ng": 1,
      "as-c": 1,
@@ -546,9 +552,11 @@
     "family": "Elonichthyidae",
     "genus": "Elonichthys",
     "regions": {
-     "eu": 193,
-     "na-e": 23,
-     "au": 6,
+     "eu-n": 145,
+     "eu-s": 48,
+     "na-e": 13,
+     "na-av": 10,
+     "au-e": 6,
      "af-s": 4,
      "na-w": 4,
      "as-n": 4,
@@ -599,7 +607,7 @@
      "na-e": 55,
      "as-c": 49,
      "in": 48,
-     "eu": 45,
+     "eu-s": 43,
      "as-ne": 42,
      "af-n": 19,
      "sa-n": 6,
@@ -607,6 +615,7 @@
      "as-sb": 5,
      "as-ic": 4,
      "ar": 4,
+     "eu-n": 2,
      "ca": 1,
      "mg": 1
     },
@@ -651,15 +660,15 @@
     "family": "Productellidae",
     "genus": "Eomarginifera",
     "regions": {
-     "eu": 155,
-     "au": 29,
+     "eu-n": 152,
+     "au-e": 29,
      "na-w": 20,
      "na-e": 14,
      "as-c": 9,
+     "eu-s": 5,
      "na-n": 4,
      "as-s": 4,
      "in": 3,
-     "sea": 2,
      "as-w": 1,
      "sa-n": 1,
      "as-sb": 1,
@@ -704,14 +713,15 @@
     "genus": "Fenestella",
     "regions": {
      "na-e": 336,
-     "eu": 167,
-     "au": 154,
+     "eu-n": 168,
      "na-w": 138,
+     "au-e": 135,
      "as-c": 30,
      "as-s": 29,
      "as-ne": 25,
      "in": 24,
-     "sea": 20,
+     "eu-s": 19,
+     "au-w": 19,
      "as-sb": 14,
      "as-w": 10,
      "na-n": 9,
@@ -769,7 +779,8 @@
     "family": "Proetidae",
     "genus": "Gerastos",
     "regions": {
-     "eu": 89,
+     "eu-n": 47,
+     "eu-s": 42,
      "af-n": 27,
      "na-n": 17,
      "gl": 1
@@ -819,17 +830,19 @@
      "as-s": 49,
      "as-ne": 44,
      "as-sb": 41,
-     "eu": 22,
+     "eu-n": 17,
      "as-w": 10,
      "na-n": 9,
      "as-c": 8,
      "gl": 8,
      "as-ic": 6,
-     "au": 4,
+     "eu-s": 5,
      "sa-s": 3,
+     "au-w": 3,
      "ca": 3,
      "ar": 3,
      "ng": 2,
+     "au-e": 1,
      "as-n": 1
     },
     "fea_r": 328.88,
@@ -873,7 +886,7 @@
     "family": "Ingelarellidae",
     "genus": "Ingelarella",
     "regions": {
-     "au": 182,
+     "au-e": 182,
      "nz": 24,
      "as-ne": 6,
      "in": 2,
@@ -921,7 +934,7 @@
     "family": "Productellidae",
     "genus": "Levipustula",
     "regions": {
-     "au": 49,
+     "au-e": 49,
      "sa-s": 3,
      "as-sb": 1
     },
@@ -970,9 +983,9 @@
      "as-ne": 28,
      "na-e": 25,
      "as-sb": 20,
-     "eu": 16,
+     "eu-n": 14,
+     "eu-s": 9,
      "as-ic": 7,
-     "sea": 7,
      "ar": 5,
      "gl": 5,
      "na-n": 4,
@@ -1065,10 +1078,10 @@
      "as-s": 338,
      "na-e": 290,
      "na-w": 107,
-     "au": 77,
+     "au-w": 75,
      "as-c": 42,
      "as-sb": 36,
-     "eu": 30,
+     "eu-n": 32,
      "as-ne": 22,
      "ar": 21,
      "sa-n": 21,
@@ -1077,11 +1090,12 @@
      "in": 13,
      "as-n": 7,
      "nz": 4,
-     "sea": 3,
      "sa-s": 2,
+     "au-e": 2,
      "as-ic": 2,
      "ng": 1,
-     "ca": 1
+     "ca": 1,
+     "eu-s": 1
     },
     "fea_r": 309.4,
     "lla_r": 253.02
@@ -1122,15 +1136,16 @@
     "family": "Discinidae",
     "genus": "Orbiculoidea",
     "regions": {
-     "na-e": 282,
-     "eu": 189,
+     "na-e": 279,
+     "eu-n": 159,
      "na-w": 127,
      "as-s": 78,
      "sa-n": 41,
      "gl": 34,
+     "eu-s": 31,
      "sa-s": 31,
      "na-n": 19,
-     "au": 16,
+     "au-e": 16,
      "as-ne": 16,
      "as-n": 14,
      "as-c": 11,
@@ -1139,9 +1154,9 @@
      "in": 6,
      "ca": 5,
      "an": 5,
+     "na-av": 3,
      "nz": 2,
-     "as-ic": 2,
-     "sea": 1
+     "as-ic": 2
     },
     "fea_r": 453.45,
     "lla_r": 188.55
@@ -1185,12 +1200,13 @@
      "as-w": 94,
      "as-c": 45,
      "as-ne": 20,
-     "eu": 17,
+     "eu-s": 15,
      "ar": 12,
      "as-sb": 9,
      "in": 4,
      "na-w": 2,
-     "as-ic": 2
+     "as-ic": 2,
+     "eu-n": 2
     },
     "fea_r": 278.85,
     "lla_r": 253.02
@@ -1231,15 +1247,17 @@
     "family": "Palmatolepidae",
     "genus": "Palmatolepis",
     "regions": {
-     "eu": 943,
+     "eu-s": 667,
      "as-s": 499,
+     "eu-n": 276,
      "as-ic": 209,
      "as-w": 142,
      "na-e": 86,
      "na-w": 41,
      "af-n": 36,
-     "au": 18,
+     "au-e": 11,
      "as-c": 10,
+     "au-w": 7,
      "as-n": 3
     },
     "fea_r": 377.23,
@@ -1291,7 +1309,7 @@
      "as-ne": 4,
      "in": 1,
      "as-sb": 1,
-     "eu": 1,
+     "eu-s": 1,
      "mg": 1
     },
     "fea_r": 253.02,
@@ -1307,7 +1325,7 @@
    "range": [
     "as-n",
     "au-e",
-    "eu"
+    "eu-n"
    ],
    "note": "A shield-shaped animal a centimetre long with an anchor-shaped ridge, from the Flinders Ranges and the White Sea, that could orient itself to the current.",
    "hab": [
@@ -1330,8 +1348,8 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Parvancorina",
     "regions": {
-     "au": 16,
-     "eu": 8,
+     "au-e": 16,
+     "eu-n": 8,
      "sa-n": 1
     },
     "fea_r": 586.9,
@@ -1379,8 +1397,9 @@
     "regions": {
      "af-n": 47,
      "na-w": 18,
-     "eu": 7,
      "na-e": 6,
+     "eu-n": 4,
+     "eu-s": 3,
      "in": 1
     },
     "fea_r": 352.78,
@@ -1437,10 +1456,11 @@
      "as-c": 40,
      "as-ne": 26,
      "na-n": 18,
-     "eu": 14,
+     "eu-s": 13,
      "as-ic": 8,
      "as-sb": 7,
-     "ar": 6
+     "ar": 6,
+     "eu-n": 1
     },
     "fea_r": 278.85,
     "lla_r": 253.02
@@ -1524,12 +1544,13 @@
     "family": "Polygnathidae",
     "genus": "Polygnathus",
     "regions": {
-     "eu": 1530,
+     "eu-s": 996,
      "af-n": 671,
+     "eu-n": 534,
      "na-w": 332,
      "na-e": 269,
      "as-s": 240,
-     "au": 158,
+     "au-e": 154,
      "as-ic": 71,
      "as-c": 53,
      "as-n": 43,
@@ -1537,6 +1558,7 @@
      "na-n": 27,
      "as-w": 27,
      "as-sb": 4,
+     "au-w": 4,
      "sa-n": 1
     },
     "fea_r": 402.05,
@@ -1551,7 +1573,7 @@
    "lad": 385,
    "range": [
     "af-n",
-    "eu",
+    "eu-s",
     "rhe"
    ],
    "note": "A phacopid trilobite of the Devonian of Morocco and Bohemia, one of the enrolled trilobites quarried from the Anti-Atlas by the thousand.",
@@ -1579,9 +1601,9 @@
     "family": "Phacopidae",
     "genus": "Reedops",
     "regions": {
-     "eu": 46,
+     "eu-s": 46,
      "af-n": 46,
-     "au": 2,
+     "au-e": 2,
      "as-c": 1,
      "as-sb": 1,
      "na-e": 1
@@ -1624,18 +1646,20 @@
     "family": "Rhomboporidae",
     "genus": "Rhombopora",
     "regions": {
-     "na-e": 310,
+     "na-e": 306,
      "na-w": 54,
-     "eu": 46,
      "sa-n": 34,
+     "eu-n": 32,
+     "eu-s": 20,
      "ar": 14,
-     "au": 11,
      "as-c": 7,
+     "au-e": 7,
      "as-ne": 6,
-     "sea": 6,
      "as-s": 4,
      "in": 4,
+     "au-w": 4,
      "af-n": 4,
+     "na-av": 4,
      "as-n": 3,
      "na-n": 3,
      "as-sb": 2,
@@ -1681,19 +1705,20 @@
     "genus": "Schizodus",
     "regions": {
      "na-w": 220,
-     "eu": 180,
+     "eu-n": 161,
      "na-e": 143,
      "as-s": 66,
-     "au": 43,
      "in": 39,
+     "au-e": 31,
+     "eu-s": 21,
      "as-n": 16,
      "sa-s": 14,
+     "au-w": 12,
      "sa-n": 9,
      "ca": 6,
      "gl": 5,
      "as-c": 4,
      "as-ne": 4,
-     "sea": 2,
      "as-w": 2,
      "as-ic": 2,
      "af-n": 1,
@@ -1741,12 +1766,13 @@
     "family": "Schizophoriidae",
     "genus": "Schizophoria",
     "regions": {
-     "na-e": 280,
-     "eu": 271,
+     "na-e": 279,
      "na-w": 269,
+     "eu-n": 227,
      "na-n": 155,
      "as-s": 62,
-     "au": 62,
+     "au-e": 61,
+     "eu-s": 44,
      "as-n": 23,
      "as-c": 16,
      "as-sb": 14,
@@ -1757,7 +1783,9 @@
      "sa-n": 2,
      "ca": 2,
      "in": 2,
-     "as-w": 1
+     "na-av": 1,
+     "as-w": 1,
+     "au-w": 1
     },
     "fea_r": 418.21,
     "lla_r": 313.05
@@ -1799,9 +1827,10 @@
     "genus": "Siphonodella",
     "regions": {
      "as-s": 116,
-     "eu": 31,
      "as-n": 29,
+     "eu-n": 22,
      "na-e": 10,
+     "eu-s": 9,
      "na-w": 5,
      "as-w": 3,
      "as-c": 1
@@ -1850,16 +1879,16 @@
     "family": "Lithostrotionidae",
     "genus": "Siphonodendron",
     "regions": {
-     "eu": 87,
+     "eu-n": 75,
      "af-n": 64,
      "na-w": 38,
+     "eu-s": 16,
      "as-s": 9,
      "as-c": 8,
      "as-ne": 6,
-     "au": 4,
-     "sea": 4,
+     "au-e": 4,
      "as-w": 3,
-     "na-e": 2
+     "na-av": 2
     },
     "fea_r": 341.3,
     "lla_r": 319.3
@@ -1912,7 +1941,7 @@
      "as-ne": 27,
      "as-sb": 14,
      "in": 11,
-     "eu": 11,
+     "eu-s": 11,
      "na-w": 6,
      "as-ic": 3,
      "as-n": 1
@@ -1957,8 +1986,9 @@
     "regions": {
      "na-w": 394,
      "na-e": 380,
-     "eu": 106,
-     "au": 59,
+     "eu-n": 82,
+     "au-e": 53,
+     "eu-s": 26,
      "in": 25,
      "af-n": 21,
      "na-n": 18,
@@ -1966,11 +1996,11 @@
      "sa-n": 11,
      "as-ne": 7,
      "as-s": 6,
+     "au-w": 6,
      "as-n": 4,
      "as-ic": 4,
      "ca": 4,
-     "as-w": 3,
-     "sea": 2
+     "as-w": 3
     },
     "fea_r": 429.8,
     "lla_r": 270.65
@@ -2017,13 +2047,14 @@
      "in": 849,
      "as-s": 40,
      "as-c": 16,
-     "eu": 9,
-     "au": 5,
+     "eu-s": 9,
      "as-sb": 4,
      "as-ne": 3,
+     "au-e": 3,
      "as-w": 3,
      "ar": 3,
-     "as-ic": 2
+     "as-ic": 2,
+     "au-w": 2
     },
     "fea_r": 265.59,
     "lla_r": 253.02
@@ -2064,13 +2095,15 @@
     "family": "Sporadoceratidae",
     "genus": "Sporadoceras",
     "regions": {
-     "au": 100,
+     "au-w": 98,
      "as-n": 22,
      "af-n": 18,
-     "eu": 9,
+     "eu-n": 8,
      "as-ne": 6,
      "as-c": 6,
-     "as-s": 2
+     "as-s": 2,
+     "au-e": 2,
+     "eu-s": 1
     },
     "fea_r": 370.32,
     "lla_r": 362.03
@@ -2157,15 +2190,17 @@
     "family": "Euomphalidae",
     "genus": "Straparollus",
     "regions": {
-     "eu": 121,
      "na-e": 103,
+     "eu-n": 78,
      "na-w": 62,
-     "au": 22,
+     "eu-s": 43,
+     "au-e": 21,
      "as-n": 10,
      "na-n": 7,
      "as-s": 4,
      "as-w": 2,
      "as-c": 1,
+     "au-w": 1,
      "sa-s": 1,
      "as-ne": 1
     },
@@ -2208,9 +2243,9 @@
     "regions": {
      "af-s": 5,
      "na-w": 3,
-     "eu": 2,
-     "au": 1,
-     "na-e": 1
+     "eu-n": 2,
+     "au-e": 1,
+     "na-av": 1
     },
     "fea_r": 586.9,
     "lla_r": 518.5
@@ -2253,11 +2288,12 @@
      "na-w": 60,
      "na-e": 56,
      "in": 22,
-     "eu": 21,
+     "eu-n": 18,
      "as-c": 10,
-     "au": 8,
+     "au-e": 8,
      "af-n": 7,
      "as-s": 4,
+     "eu-s": 3,
      "ca": 3,
      "as-ne": 3,
      "na-n": 2,
@@ -2304,13 +2340,14 @@
     "family": "Linoproductidae",
     "genus": "Terrakea",
     "regions": {
-     "au": 345,
+     "au-e": 343,
      "nz": 18,
      "na-n": 15,
-     "eu": 9,
+     "eu-n": 9,
      "as-ne": 9,
      "as-n": 7,
      "in": 2,
+     "au-w": 2,
      "as-c": 1
     },
     "fea_r": 286.7,
@@ -2324,7 +2361,7 @@
    "fad": 575,
    "lad": 565,
    "range": [
-    "na-e"
+    "na-av"
    ],
    "note": "A triangular, cone-shaped organism of the Avalon deep sea floor, read by some as the oldest sponge.",
    "hab": [
@@ -2347,12 +2384,20 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Thectardis",
     "regions": {
-     "na-e": 8,
-     "eu": 1
+     "na-av": 8,
+     "eu-n": 1
     },
     "fea_r": 586.9,
     "lla_r": 586.9
-   }
+   },
+   "box": [
+    [
+     -56,
+     -52.5,
+     46.3,
+     48.5
+    ]
+   ]
   }
  }
 }

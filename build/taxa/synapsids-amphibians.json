@@ -89,10 +89,10 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Dicynodon",
     "regions": {
-     "af-e": 5,
-     "sa-s": 1,
      "af-s": 23,
-     "eu": 2
+     "af-e": 5,
+     "eu-n": 2,
+     "sa-s": 1
     }
    }
   },
@@ -201,9 +201,10 @@
     "family": "Sphenacodontidae",
     "genus": "Dimetrodon",
     "regions": {
-     "na-e": 88,
-     "eu": 1,
-     "na-w": 5
+     "na-e": 87,
+     "na-w": 5,
+     "na-av": 1,
+     "eu-n": 1
     }
    },
    "w": 3
@@ -234,12 +235,12 @@
     "class": "Osteichthyes",
     "order": "Cotylosauria",
     "regions": {
-     "eu": 51,
+     "af-s": 112,
+     "eu-n": 51,
+     "sa-s": 7,
      "na-e": 2,
      "as-c": 2,
-     "af-e": 1,
-     "af-s": 112,
-     "sa-s": 7
+     "af-e": 1
     }
    },
    "cls": {
@@ -340,7 +341,7 @@
     "regions": {
      "na-e": 32,
      "na-w": 6,
-     "eu": 1
+     "eu-n": 1
     }
    }
   },
@@ -373,7 +374,7 @@
     "regions": {
      "na-e": 69,
      "na-w": 17,
-     "eu": 2
+     "eu-s": 2
     }
    }
   },
@@ -402,7 +403,7 @@
     "family": "Estemmenosuchidae",
     "genus": "Estemmenosuchus",
     "regions": {
-     "eu": 5
+     "eu-n": 5
     }
    },
    "box": [
@@ -477,12 +478,12 @@
     "order": "Cotylosauria",
     "regions": {
      "af-s": 193,
-     "eu": 44,
+     "eu-n": 44,
      "af-e": 43,
-     "in": 1,
      "na-e": 4,
      "af-n": 4,
-     "as-e": 1
+     "in": 1,
+     "as-ne": 1
     }
    },
    "rep": "Inostrancevia",
@@ -541,7 +542,7 @@
     "genus": "Ichthyostega",
     "regions": {
      "gl": 5,
-     "eu": 1
+     "eu-n": 1
     }
    },
    "w": 3
@@ -575,7 +576,7 @@
     "family": "Inostranceviidae",
     "genus": "Inostrancevia",
     "regions": {
-     "eu": 11,
+     "eu-n": 11,
      "af-e": 1
     }
    },
@@ -606,7 +607,7 @@
     "family": "Kotlassidae",
     "genus": "Kotlassia",
     "regions": {
-     "eu": 3
+     "eu-n": 3
     }
    },
    "cls": {
@@ -650,11 +651,11 @@
     "family": "Lystrosauridae",
     "genus": "Lystrosaurus",
     "regions": {
-     "an": 4,
-     "in": 19,
      "af-s": 91,
+     "in": 19,
      "as-c": 9,
-     "eu": 1
+     "an": 4,
+     "eu-n": 1
     }
    },
    "w": 3,
@@ -701,11 +702,13 @@
     "family": "Metoposauridae",
     "regions": {
      "na-w": 205,
-     "af-n": 5,
-     "eu": 22,
-     "na-e": 7,
+     "eu-s": 18,
      "in": 9,
+     "af-n": 5,
+     "na-e": 5,
+     "eu-n": 4,
      "mg": 2,
+     "na-av": 2,
      "af-s": 1,
      "ar": 1
     }
@@ -799,7 +802,7 @@
     "genus": "Placerias",
     "regions": {
      "na-w": 11,
-     "na-e": 2
+     "na-av": 2
     }
    },
    "box": [
@@ -874,10 +877,12 @@
     "phylum": "Chordata",
     "class": "Osteichthyes",
     "regions": {
-     "na-e": 17,
+     "eu-n": 65,
+     "na-e": 16,
+     "eu-s": 12,
      "as-c": 6,
-     "eu": 77,
-     "na-w": 4
+     "na-w": 4,
+     "na-av": 1
     }
    },
    "cls": {
@@ -1031,14 +1036,16 @@
     "order": "Cotylosauria",
     "family": "Tritylodontidae",
     "regions": {
-     "af-s": 27,
-     "eu": 26,
-     "as-e": 16,
      "na-w": 33,
+     "af-s": 27,
+     "eu-n": 23,
+     "as-s": 12,
      "as-n": 10,
+     "as-c": 7,
+     "as-ne": 4,
+     "eu-s": 3,
      "an": 1,
-     "na-e": 1,
-     "as-c": 7
+     "na-e": 1
     }
    },
    "box": [
@@ -1065,7 +1072,7 @@
    "fad": 338,
    "lad": 334,
    "range": [
-    "eu"
+    "eu-n"
    ],
    "note": "A small, slender East Kirkton tetrapod, close to the origin of fully terrestrial amniotes.",
    "pbdb": {
@@ -1083,7 +1090,7 @@
     "family": "NO_FAMILY_SPECIFIED",
     "genus": "Westlothiana",
     "regions": {
-     "eu": 1
+     "eu-n": 1
     }
    },
    "cls": {
