@@ -919,6 +919,26 @@ verdicts and every hand edit on the next run. The writer now carries a whitelist
 tool-attached keys forward from the previous file, and every authored change goes back into the
 batch source, never into the JSON alone.
 
+### 7.27 A coordinate on the right crust can still ride the wrong plate
+
+The Tethyan Himalaya label sat at (88, 29): Indian rock by every description, and `pbdb.region_of`
+agreed, so §7.24's detector passed it. But plate polygons have edges, and that point is 30 km
+north of the Yarlung suture in the rotation model's static polygons — on the Lhasa terrane. At
+110 Ma the card stood at 12°N showing India's fauna while India was at 43°S. The present-day
+check cannot see it; the plate id can. The third detector in `audit_label_plate.py` maps each
+label's home codes to a continent and holds the tracked point's plate block against it. **A
+present-day test of a present-day fact says nothing about the track; test the thing that moves.**
+
+### 7.28 A name resolved by nearest neighbour drifts with the neighbour
+
+The province model keys its best provinces on the BLOCK a label stands on, matched by exact name
+first and nearest reconstructed anchor second. "Amuria" is not the model's "Amuria / Mongolia",
+so it fell to nearest-anchor; the label at 122°E tracks with North China in the rotation model,
+and North China's anchor was nearer at 265 Ma than Mongolia's. The card's banner read *Cathaysian
+Province* over an Angaran list. `provinces.LABEL_BLOCK` names the block for the fifteen labels
+whose names differ from the model's. **When two systems name the same thing differently, write
+the alias table; a fallback to "nearest" is a guess that changes with the age.**
+
 ## 8. Sources
 
 | role | source |
@@ -956,8 +976,8 @@ batch source, never into the JSON alone.
 
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **The biota cards are composed from a registry, and these are their limits.** (The three-tier panel — exception-curated → province assemblage → global list — is gone; §5.6.) All 38,036 card-ages pass the gate, which means no organism is outside its lifetime, its crust or its declared range, and none is under the wrong body form. It does not mean every card is the best card:
-  - *Depth is uneven, and measured.* The registry holds 1,382 taxa. Class- and order-level entries on marine cards: 33% of Cenozoic, 40% of Mesozoic, 43% of late Palaeozoic, 36% of early Palaeozoic card slots (82% and 79% before 3.7), 77% of Precambrian — where the honest list is microbial. The earliest Cambrian shelf (541–521 Ma) is one list on every continent, because the small shelly fauna was. Cenozoic and Mesozoic land are well served; Ordovician–Silurian land is cryptospore crust by design.
-  - *Region codes are continent-sized.* About 330 taxa carry a finer `box`, `avoid` list, sliced latitude band or dated habitat; the rest are as precise as their code. The placement listing (`audit_biota.py --placements`) has been read at twenty ages (0, 3, 10, 20, 35, 50, 80, 100, 120, 150, 200, 230, 250, 280, 300, 350, 400, 450, 500, 600 Ma); each pass found 10–60 things, the later ones fewer. What remains is what a rule cannot see and no one has read yet.
+  - *Depth is uneven, and measured.* The registry holds 1,429 taxa. Class- and order-level entries on marine cards, measured by `build/measure_generic.py` on the shipped `life.json` (marine slot-ages; the 3.7–3.8 figures used an unrecorded counting and are not comparable): 22% of Cenozoic, 26% of Mesozoic, 27% of late Palaeozoic (28% in 3.8), 38% of early Palaeozoic, 51% of Precambrian — where the honest list is microbial. The earliest Cambrian shelf (541–521 Ma) is one list on every continent, because the small shelly fauna was. Cenozoic and Mesozoic land are well served; Ordovician–Silurian land is cryptospore crust by design.
+  - *Region codes are block-sized now, and still coarse.* East Asia is four codes (North China, South China, Indochina, Sibumasu) and Australia two (east, west), with the old codes as aliases; `eu` still spans Baltica and the Gondwanan terranes that are France and Iberia today, so a Silurian animal of Scotland reaches Armorica unless its entry says `avoid` — the next code split. About 470 taxa carry a finer `box`, `avoid` list, sliced latitude band or dated habitat; the rest are as precise as their code. The placement listing (`audit_biota.py --placements`) has been read at thirty-four ages, every 10–25 Myr from 0 to 600 Ma; it is the check that finds what no rule can, and it must be read again after any large registry change. A box is not consulted on an ocean card (an ocean has no footprint), so a coastal species gets its basin's code and nothing else.
   - *A label is a point with a reach.* Long or irregular features (the Cordillera, the Central Asian Orogenic Belt) are approximated by an ellipse round one coordinate.
   - *Twenty-six body forms are hand-drawn* (belemnite, conodont, blastoid, bryozoan, horn coral, rudist, stromatoporoid, zosterophyll, progymnosperm, astrapothere, embrithopod, mesosaur, ostracod, uncoiled ammonite, bamboo, Namacalathus, agnostid, and the nine from 3.6) because no silhouette library holds them. They name the group at 46×31 px; they are not specimens.
   - *Ocean-island deep time is inference.* The Seychelles have no fossil record; their 3–62 Ma cards show the lineages phylogeny says were aboard and print a note saying so. Kerguelen's Miocene conifers are from wood in its lavas; its fauna then is inferred.

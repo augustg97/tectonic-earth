@@ -18,13 +18,15 @@ Paste this whole file as the first message of a new session.
 
 The user asked for the feature cards' flora and fauna to be fixed **systematically**: every card
 rich, accurate, diverse, with the right icon, the right organisms for that place and time, and a
-tracking system so it cannot decay. The system shipped in 3.6; 3.7 and 3.8 (2026-09-22) added depth — 226 taxa for the seas,
-Palaeozoic land and the Precambrian — read the placement listing at twenty ages, re-anchored
-eight mislaid labels, hand-drew the last forms, closed the five 404s, and rewrote the
-class-level curated lists. The user's instruction was "keep going until completion" and then
-"keep going with the remaining placement ages and the Mesozoic seas, and any other remaining
-items": those are done. What is left is in the work queue below, and all of it is depth. There
-is no open loop; every round ends deployed and verified live.
+tracking system so it cannot decay. The system shipped in 3.6; 3.7, 3.8 and 3.9 (2026-09-22)
+added depth — 273 taxa for the seas, Palaeozoic land and the Precambrian — read the placement
+listing at thirty-four ages, re-anchored nine mislaid labels, hand-drew the last forms, closed
+the five 404s, rewrote the class-level curated lists, and split the region codes that were two
+provinces (East Asia into four blocks, Australia into two). The user's instructions were "keep
+going until completion", then "the remaining placement ages and the Mesozoic seas", then "the
+late Palaeozoic shelves and the in-between ages, Precambrian, region codes, and all other
+handoff items": all done. What is left is in the work queue below, and all of it is depth.
+There is no open loop; every round ends deployed and verified live.
 
 ## How the system works, in one paragraph
 
@@ -63,16 +65,44 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260922-0339`**, release 3.8, commit `5c94cdf9`.
+- Last live deploy: **`DATA_V=20260922-0630`**, release 3.9, commit `29973f6d` (the record —
+  README, HANDOFF, MODEL-GAPS, TRAPS — is the commit after it).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
   drawings **0** (ratchet at 0); curated exceptions **12**. The frame gate is skipped under `--quick`.
-- Registry: **1,382 taxa** in 23 files; 1,229 reach a card; 724 illustrations shipped. ~330 taxa
-  carry a box, avoid list, sliced latitude or dated habitat.
-- Marine card slots at class/order level: Cz 33%, Mz 40%, late Pz 43%, early Pz 36%, Pc 77%.
-- Placement listing read at: 0, 3, 10, 20, 35, 50, 80, 100, 120, 150, 200, 230, 250, 280, 300,
-  350, 400, 450, 500, 600 Ma.
+- Registry: **1,429 taxa** in 24 files; 729 illustrations shipped. ~470 taxa carry a box,
+  avoid list, sliced latitude, dated habitat or block-level range.
+- Marine slot-ages at class/order level, by `build/measure_generic.py` (run it on two
+  `life.json` files side by side; the 3.7–3.8 figures used an unrecorded counting and are not
+  comparable): Cz 22%, Mz 26%, late Pz 27%, early Pz 38%, Pc 51%.
+- Placement listing read at: 0, 3, 5, 10, 15, 20, 35, 40, 50, 60, 80, 90, 100, 110, 120, 150,
+  170, 190, 200, 215, 230, 250, 265, 280, 300, 320, 350, 375, 400, 420, 450, 480, 500, 600 Ma.
+- Region codes: `as-ne as-s as-ic as-sb` (East Asia by block) and `au-w au-e`; `as-e`, `as-se`
+  and `au` are aliases. `pbdb.REGIONS` is first-match boxes; `biota.LAND_CODES`/`ALIASES`.
+
+## What the fourth round found (3.9)
+
+1. The in-between ages found the same shapes as before at a finer grain: a Pliocene Arctic
+   card typed "tundra" from 5 Ma took hipparions and chalicotheres at 71°N (the label now
+   begins at 2.8 Ma with the ice; latitude bands on the genera); families with one continent
+   per epoch (anthracotheres, entelodonts, brontotheres, carcharodontosaurs) ranged by time
+   slice; genera of one formation (Chinle, Germanic Keuper, Karoo, Cowie Harbour) given boxes.
+2. **A box is not consulted on an ocean card** — an ocean has no footprint — so a coastal
+   species with a land code reaches every basin that code touches (Thalassocnus on the Atlantic
+   and Southern Ocean). Give a shore animal its basin code only.
+3. **A label on the right crust today can ride the wrong plate.** The Tethyan Himalaya at
+   (88, 29) sat on the Lhasa polygon 30 km north of the suture; at 110 Ma its card stood at
+   12°N with India at 43°S. Moved to Tingri (87, 28.5), plate 501; a third detector in
+   `audit_label_plate.py` compares each label's home-code continent with its plate block
+   (README §7.27). The Anatolide-Tauride block is ACCEPTED there with a reason.
+4. **A block resolved by nearest anchor drifts with the age.** "Amuria" is not the province
+   model's "Amuria / Mongolia", so the fallback gave it North China's block and a Cathaysian
+   banner over an Angaran list. `provinces.LABEL_BLOCK` (README §7.28).
+5. Mongolia shares `as-ne` with North China but was Angaran in the Permian: `_NOT_CATHAYSIA`
+   avoid lists on the Cathaysian flora until the code is split further. Likewise `eu` spans
+   Baltica and the peri-Gondwanan terranes (`_PERI_GONDWANA`).
+6. The generic-share measure was quoted from an unrecorded script; now `measure_generic.py`.
 
 ## What the third round found (3.8)
 
@@ -138,24 +168,31 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - Git on this repo is slow; a timed-out `git add` leaves `.git/index.lock`.
 - `build_webdata.build_updatelog()` must run before `build_site.py`, or `docs/updatelog.json`
   ships the previous release's log.
+- The live stamp is in the PAGE (`?cb=`), not in `app.js`: a poll that greps the wrong URL
+  reads an empty string forever and looks like a deploy that never landed.
+- After a `features.py` change run `build_labels()` as well as `build_life()`; `labels.json`
+  carries the tracks the cards' palaeolatitudes come from.
 
 Plus the standing ones: a process backgrounded with `&` inside a tool call dies with the call;
 `pgrep -f` matches the waiter itself — wait on a PID.
 
 ## The work queue, ranked by how much of the remaining gap each closes
 
-1. **Late Palaeozoic seas at 43%**: the Carboniferous–Permian shelves outside North America
-   (the Ural Ocean, the Cathaysian and Gondwanan shelves) and the Devonian reef faunas of
-   Australia and the Rhenish shelf. `pbdb_menus/*.md` for as-e, au, eu.
-2. **Precambrian at 77%**: microbial by nature. Only the Ediacaran can go further (the White
-   Sea and Avalon assemblages at genus level are curated already; the rest is acritarchs).
-3. **Placement at the ages between** (the review sampled every ~25–50 Myr): a pass at 5, 15,
-   40, 60, 90, 110, 170, 190, 215, 265, 320, 375, 420, 480 Ma would find a handful each.
-4. **Curated spans that are still generic** on smaller labels (the province markers are
-   class-level by design; the "c" tier is now genus-level on the continents).
-5. **Region codes remain continent-sized** where no box or avoid has been authored; the
-   listing is how to find them. Splitting `as-e` (North/South China) and `as-se`
-   (Indochina/Sibumasu) would retire a dozen `avoid` lists.
+1. **Split `eu` into `eu-n` (Baltica, Avalonia, the Russian platform) and `eu-s` (Armorica,
+   Iberia, Bohemia, the Alps, Italy, the Balkans)**, the way `as-e` and `au` were split: add
+   the boxes to `pbdb.REGIONS`, the leaves to `biota.LAND_CODES`, `"eu"` to `ALIASES`, then
+   re-range the early Palaeozoic Laurussian taxa (`_PERI_GONDWANA` in
+   `ranges_within_regions.py` lists the labels that would stop needing `avoid`) and the
+   Variscan/Alpine endemics. Every `eu` entry keeps its meaning through the alias.
+2. **Early Palaeozoic seas at 38% and the Precambrian at 51%** (new measure): the Cambrian
+   Series 2–Furongian shelves by block (the small-shelly interval is one list by nature), and
+   the Ediacaran White Sea / Nama assemblages beyond the eleven genera now registered.
+3. **Curated spans that are still generic** on smaller labels (the province markers are
+   class-level by design; the "c" tier is genus-level on the continents).
+4. **Mongolia as its own code** (`as-mn`) would retire `_NOT_CATHAYSIA`; the Gobi's Cretaceous
+   entries (Psittacosaurus, Velociraptor, Protoceratops…) would need it added.
+5. **Read the listing again** after any batch of more than ~20 taxa: `--placements` at a few
+   ages near the batch's span. It is the check that finds what no rule can.
 6. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
 
@@ -163,7 +200,7 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
 
 ```bash
 cd build
-../venv/bin/python -c "import build_webdata as b; b.build_life(); b.build_updatelog()"
+../venv/bin/python -c "import build_webdata as b; b.build_labels(); b.build_life(); b.build_updatelog()"
 ../venv/bin/python audit_all.py --quick
 ../venv/bin/python check_shader.py && ../venv/bin/python build_site.py   # stamps DATA_V, writes ../docs
 cd .. && git add -A build web docs README.md HANDOFF.md "Deep Research" && git commit && git push origin main

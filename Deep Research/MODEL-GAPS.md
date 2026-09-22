@@ -29,9 +29,21 @@ subsystem it would change. **This was the handover surface between research and 
 | the Triassic, Early Cretaceous and polar seas | 62 genera (`x-mesozoic-polar-seas`); the Arctic Ocean's curated list rewritten at species level; the Paratethys given its Sarmatian fauna | marine slots at class/order level: early Palaeozoic **45% → 36%**, Mesozoic **51% → 40%**, Cenozoic **37% → 33%** |
 | class-level curated lists | Laurentia's, Baltica's, Siberia's and Avalonia's Ordovician–Silurian spans rewritten with the genera now registered | 'Brachiopoda, Crinoidea, Bryozoa' gone from the "c" tier |
 
-Open after this round: nothing that changes the mechanism. Depth can always go further —
-the Precambrian is microbial by nature (77% generic), and every card is only as good as
-the most recent reading of the placement listing.
+### Round 4, 2026-09-22 (release 3.9)
+
+| item | what shipped | measured |
+|---|---|---|
+| the late Palaeozoic shelves outside North America, and the Ediacaran | 47 genera (`x-late-palaeozoic-seas`): Devonian conodonts, goniatites and the Canning reef; Carboniferous horn corals, Siphonodella, Fenestella; Permian productids, Paratirolites; six Ediacaran forms | late Palaeozoic marine slot-ages at class/order level **28% → 27%** by `measure_generic.py` — the measure is a script now; the earlier "33/40/43/36/77" series used an unrecorded counting and is retired |
+| the fourteen ages between the twenty read | `--placements` read at 5, 15, 40, 60, 90, 110, 170, 190, 215, 265, 320, 375, 420, 480 Ma | ~70 placements fixed in the refinement table (Pliocene Arctic, anthracotheres, brontotheres, carcharodontosaurs, the Chinle and Germanic Triassic, Karoo gorgonopsians, the Silurian myriapods); the tundra labels begin at 2.8 Ma; the Lago Mare has its own habitat set; `Congo Basin` rainforest from 23 Ma |
+| region codes that were two provinces | `as-e` → `as-ne`/`as-s`, `as-se` → `as-ic`/`as-sb`, `au` → `au-w`/`au-e`, old codes as aliases; 60 entries re-ranged by block | the Chengjiang fauna off North China, the Cathaysian flora off Sibumasu and Amuria, Muttaburra off the Yilgarn; `biota.py --check` place findings 0 |
+| **B15** a label on the right crust today riding the wrong plate | the Tethyan Himalaya moved 30 km south of the suture onto plate 501; third detector in `audit_label_plate.py` (home codes → continent vs plate block) | 1 finding → fixed; Anatolide-Tauride accepted with a reason (Gondwana-derived, numbered with Arabia) |
+| **B16** a label's block resolved by nearest anchor | `provinces.LABEL_BLOCK` for the fifteen labels named differently from the model's blocks | Amuria's banner Cathaysian → Angaran, matching its list |
+
+Open after this round: the `eu` code still spans Baltica and the peri-Gondwanan terranes
+(Armorica, Iberia, Bohemia), so early Palaeozoic Laurussian taxa need `avoid` lists to stay
+off them — the next code split is `eu-n`/`eu-s`. Depth can always go further; the
+Precambrian is microbial by nature (51% generic on the new measure), and every card is
+only as good as the most recent reading of the placement listing.
 
 Open after the first round, all DEPTH and none mechanism: Palaeozoic/Mesozoic marine cards at genus
 level; Devonian–Carboniferous land fauna outside Euramerica; a placement review at deep-time
