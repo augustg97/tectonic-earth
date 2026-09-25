@@ -137,7 +137,7 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 ## State right now
 
 - Last live deploy: **`DATA_V=20260925-1925`**, release 3.13 (mountains shaped by erosion; the
-  texture pop-in), commit `__COMMIT__`. Before it: 3.12, `DATA_V=20260925-0752`, `08d2f435`.
+  texture pop-in), commit `8119fd30` (the record is the commit after it). Before it: 3.12, `DATA_V=20260925-0752`, `08d2f435`.
 - Cache versions: `FIELD_V='20260925-baked'`, `SHEET_V='20260925b'`, `IMAGERY_V='20260925b'`
   (in `web/app.js` AND `web/ambient.html`).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
