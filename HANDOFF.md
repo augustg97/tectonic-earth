@@ -15,7 +15,36 @@ Paste this whole file as the first message of a new session.
   commands, §7 traps (7.30–7.32 are this round's), §9 known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: mountains (3.12, 2026-09-24)
+## The latest round: mountains, second pass (3.13, 2026-09-25)
+
+The user, on 3.12: "the mountains still have pop in and look symmetrical. the future mountains look
+too clumpy still and seem not to account for erosion. Let's keep making changes until these
+resemble real world mountains a la google earth."
+
+- **Pop-in = a coordinate frame (README 7.33).** `platerot.json` axes are z-up; the shader is y-up
+  with latitude mirrored; unmapped, so every crust-keyed texture jumped at every keyframe, app-wide,
+  since H2. Mapped (x,y,z)→(x,−z,y) in `app.js` (three sites), plus `gMatOff` (rotate where the crust
+  sat at keyframe A). `?show=16` draws the material coordinate; `?matoff=0` the old offset.
+- **Symmetric/clumpy = the per-pixel relief's limits.** The relief now goes into `_e`: `relief.py`
+  (wedge toward the foreland → `lem.py`/`lem.c` steady-state stream power under the keyframe's
+  rainfall → three bands matched in amplitude and distribution to real belts by height and slope),
+  for every upland older than 55–70 Ma and the future's smooth belts. Hooked into
+  `build_fields.export` and `reskin_seafloor.save_eo`. The deficit then reads 0 in baked belts, so
+  the shader's coarse octaves stand down and only 12 km and finer are drawn per pixel.
+- **The calibration method is a control (7.35)**: blur today's belts to an envelope, re-grow, compare
+  beside the real ones in the app. Rock bands parallel to the belt (`strike_bands`, keyed to the
+  envelope's contours) are in; noise stripes failed (worms). Remaining shortfall, measured:
+  elongation along strike (coherence ~0.28–0.31 against real 0.44–0.53).
+- **Ice sheets low-pass their bed** in the shader (keep the ±137 km regional slope, drop the bed's
+  relief inside a sheet): with relief in the field the 700 Ma snowball drew ridges through its ice.
+- **Lakes**: the lake bake reads `_e` at half resolution on the 8-bit encoding, and averaging dammed
+  the new valleys' outlets (7.37); `relief.fill_new_pits_coarse` fills new hollows as the lake bake
+  sees them, so belt lakes are no more than the source's own.
+- The bake: `build/bake_relief.py` (12 workers, ~25 min for 240 keyframes; `reskin_seafloor.py`
+  is the serial equivalent), then `build/rederive_fields.py` (`_t _q _x _d _w _f`, the present-day
+  lakes, the manifest, with a census), then both sheet sets and the preview.
+
+## The round before: mountains (3.12, 2026-09-24)
 
 The user: "our mountains before the end-Permian and in the future still look not good -- the
 pre-end-Permian mountains look like symmetric triangular prisms, and the future mountains clump
@@ -107,9 +136,9 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260925-0752`**, release 3.12 (the mountains), commit `08d2f435` (the record is the commit after it).
-  Before it: 3.11, `DATA_V=20260922-1642`, commit `da86a95c`.
-- Cache versions: `FIELD_V='20260925-relief'`, `SHEET_V='20260925'`, `IMAGERY_V='20260925'`
+- Last live deploy: **`DATA_V=20260925-1925`**, release 3.13 (mountains shaped by erosion; the
+  texture pop-in), commit `__COMMIT__`. Before it: 3.12, `DATA_V=20260925-0752`, `08d2f435`.
+- Cache versions: `FIELD_V='20260925-baked'`, `SHEET_V='20260925b'`, `IMAGERY_V='20260925b'`
   (in `web/app.js` AND `web/ambient.html`).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.

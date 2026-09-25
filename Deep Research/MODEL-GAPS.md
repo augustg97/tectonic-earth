@@ -8092,3 +8092,58 @@ a kind the timeline declares absent (its `_v`) was never counted as settled by
 `sol` at some earlier rebuild, so the live readout said "ice-free" at every glaciation and never
 showed the Sun's luminance; the refresh this round's future rebuild ran restores them (present day
 10.4% of land under ice, 16.8% at 300 Ma, 98% at 690 Ma; the Sun 2.6% fainter at 300 Ma).
+
+## THE MOUNTAIN ROUND, SECOND PASS (2026-09-25): the relief goes into the field, and the pop-in was a frame
+
+The user, on 3.12 live: the mountains still pop in and look symmetrical; the future's look clumpy
+and seem not to account for erosion; keep going until they resemble real mountains, "a la Google
+Earth".
+
+**The pop-in was a coordinate frame (README 7.33).** `platerot.json` axes are z-up geography; the
+shader's directions are y-up with latitude mirrored; the axis was never mapped. Every crust-keyed
+texture rotated about the wrong axis, so consecutive keyframes disagreed on where the crust was and
+every procedural pattern jumped at every keyframe -- in the whole app, since H2 shipped, not only in
+the mountains. `?show=16` (new) draws the material coordinate: across the 405 Ma crossing 25 levels
+of change against 2.6 for an ordinary step; mapped, 1.9 against 2.8. Plus `gMatOff`: mid-interval
+the rotation is applied where the crust sat at keyframe A. Split `matRot` (vectors) from `matDir`
+(positions).
+
+**Symmetric and clumpy were the per-pixel relief's limits.** It could dissect an envelope but not
+reshape it, and its 96 km octave cut valleys up to 1.4 km deep where real terrain's 60-120 km band
+carries ~100 m. Measured against the real present-day bands (0-30 Ma), the relief now goes into `_e`
+(`relief.py`, README 5.10): a wedge toward the foreland, a steady-state stream-power network under
+the keyframe's rainfall (`lem.py`/`lem.c`, Braun & Willett 2013, Barnes et al. 2014), and three
+bands matched in amplitude and distribution to real belts by regional height and slope.
+
+**Calibrated by a control (README 7.35)**: today's belts blurred to a 60 km envelope and re-grown,
+beside the real ones in the app. Each step against it:
+
+| change | band-0 kurtosis (real 10.9) | band coherence 40-80 km (real 0.44) | on screen |
+|---|---|---|---|
+| amplitude by band, 60 km window | 4.0 | 0.27 | blobs on every upland |
+| + strike stripes in uplift/erodibility | 3.4 | 0.49 | worms across the Himalaya |
+| + quantile map, 150 km window | 3.7-4.2 | 0.40 | Sahara plateaus as rugged as flanks |
+| + tables by height AND slope, no stripes, tails to 99.99%, fitted over belts, 400 km window | 9.4 | 0.26 | dendritic valleys, plateaus calm, reads like the real ranges |
+| + rock bands parallel to the belt, keyed to the envelope's contours (shipped) | **10.6** | 0.28 | the snow on the synthetic Himalaya breaks into finer, varied networks like the real one's |
+
+Elongation along strike is the remaining shortfall (0.28-0.31 against 0.44-0.53) even with the
+contour-keyed bands; noise stripes raised it and drew worms (`stripes`, `across_material` kept).
+
+**Ice sheets low-pass their bed.** With the relief in the field, the 700 Ma snowball drew its baked
+ranges as dark ridges through the ice; the shader now keeps only the regional slope under a sheet,
+fading to the bed at the margin. Present-day Antarctica and Greenland render as before.
+
+**Where.** Every upland older than 55-70 Ma (a local roughness test was fooled by Scotese's
+crest-line noise, README 7.34; the deficit is now L1, not RMS); the future where the deficit says
+the belt was built smooth. The present day and the Cenozoic frames younger than 55 Ma are untouched.
+Keyframe coherence: consecutive keyframes' baked valleys correlate 0.46 after the warp against the
+source's own 0.19, because every perturbation is keyed to the crust's 0 Ma position.
+
+**Lakes (README 7.37).** The baked valleys drain by construction, yet the lake bake filled them:
+it reads `_e` at half resolution through PIL's bilinear filter on the 8-bit encoding, and averaging
+a gorge's walls into its floor dams it. `relief.fill_new_pits_coarse` fills new hollows as the lake
+bake sees them, keeping the source's own basins. Lake cover on belts (regional height > 900 m),
+3.12 -> 3.13: 100 Ma 1.04 -> 0.68%, 200 Ma 1.48 -> 1.70, 300 Ma 0.08 -> 0.12, 400 Ma 0.19 -> 0.59
+(1.02 before the coarse fill), 500 Ma 0.07 -> 0.10, 700 Ma 0.32 -> 0.75, +150 Myr 1.66 -> 1.48,
++250 Myr 1.56 -> 1.49; all land within 0.3 points at every age. Greenness at the deep-time gate's
+framings unchanged within 0.003; `audit_all --quick` at baseline, ice extent included.

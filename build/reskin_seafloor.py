@@ -20,6 +20,7 @@ import numpy as np
 from PIL import Image
 import build_fields as bf
 import paleo_tracks
+import relief
 
 OUT = bf.OUT
 ELEV_H, ELEV_W = bf.ELEV_H, bf.ELEV_W
@@ -28,6 +29,9 @@ STEP = bf.STEP
 
 
 def save_eo(age, tag, Zhi):
+    # The mountain relief (relief.py) goes in before the sea floor, exactly as
+    # build_fields.export applies it, so a reskin reproduces a full rebuild.
+    Zhi = relief.apply(Zhi, age, tag)
     mot = bf._load_motion(age, tag)
     Z2, ofield = bf.SF.apply(Zhi, age, reconstructor=bf._sf_reconstructor(), motion=mot)
     # Same polar band-limiting as build_fields.export -- this path must not

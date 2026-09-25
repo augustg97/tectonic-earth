@@ -134,6 +134,7 @@ uniform float uShow;
    enters the shading normal at (?eroN=), z the share of the sub-grid octaves
    (?eroF=), w spare. */
 uniform vec4 uEroK;
+uniform float uMatOffK;   // 1: crust-bound texture at the warped position (?matoff=0 for the old grid-keyed A/B)
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
@@ -246,6 +247,17 @@ vec2 wB(vec2 uv){ return uv+(1.0-mixf)*gWarp; }
    Read at wA(uv), not uv: asking which plate owns the crust that is ACTUALLY
    HERE is what keeps the coordinate continuous across a keyframe boundary. */
 vec3 gMatAxis=vec3(0.0,0.0,1.0); float gMatAng=0.0;
+/* WHERE THIS CRUST SAT AT KEYFRAME A, as an offset on the sphere: the rotation
+   above takes keyframe A's positions to 0 Ma, and mid-interval the rock under
+   this pixel was at wA(uv) at A, not at uv. Applying the rotation to the
+   pixel's own direction (as this did until the mountain round, 2026-09) keyed
+   every crust-bound texture to the GRID for the length of an interval and
+   then jumped it by the whole displacement at the keyframe -- up to ~470 km
+   at 400 Ma: measured on the relief alone, 14.2 levels of change between
+   404.9 and 405.0 Ma against 3.7 between 405.0 and 405.1. That was the pop-in.
+   Set once per pixel in main(); the stencil taps share it, as they share the
+   rotation. */
+vec3 gMatOff=vec3(0.0);
 /* Tectonic fabric and substrate for this pixel, read once in main(). gFold is
    the fold axis as a 3-D tangent vector; gShort is 0..1 how hard this crust is
    being shortened; gHard is the substrate, 0 soft sediment basin .. 1 hard
@@ -273,10 +285,19 @@ float gEroOwn=0.0, gEroD=0.0, gEroH=0.0;
    ?show=14 (the colour alone) and ?show=15 (the lighting alone). */
 vec3 gAlb=vec3(0.0); float gShd=1.0;
 float gEroA=0.0;   // the erosion relief's first-octave amplitude here, to normalise its tone
+float gIceDeep=0.0; // how far inside a land ice sheet this pixel is (0 margin, 1 deep), set in the ice block
+/* matRot turns a VECTOR (a gradient, a direction along the ground) into the
+   material frame: rotation only. matDir turns a POSITION: moved first to where
+   this crust sat at keyframe A, then rotated. Adding that offset to a gradient
+   would be meaningless, which is why the two are separate. */
+vec3 matRot(vec3 v){
+  if(gMatAng==0.0) return v;
+  float c=cos(gMatAng), sn=sin(gMatAng);
+  return v*c + cross(gMatAxis,v)*sn + gMatAxis*(dot(gMatAxis,v)*(1.0-c));
+}
 vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
-  float c=cos(gMatAng), sn=sin(gMatAng);
-  return d*c + cross(gMatAxis,d)*sn + gMatAxis*(dot(gMatAxis,d)*(1.0-c));
+  return matRot(normalize(d+gMatOff));
 }
 /* THE OROGEN ATLAS, SAMPLED ON THE FOLD COORDINATES (WP-10, plan B3).
 
@@ -1042,7 +1063,7 @@ vec3 matDirInv(vec3 d){
    the coarse octaves' amplitude and aF the fine ones' (metres at the first,
    96 km, octave), pxKm the pixel footprint. */
 vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
-  vec3 Gm=matDir(Gw), Am=matDir(Aw);
+  vec3 Gm=matRot(Gw), Am=matRot(Aw);
   vec3 aw=pow(abs(msd), vec3(12.0)); aw/=(aw.x+aw.y+aw.z);
   /* 96 km FIRST, THEN 48. At the zoom a globe is looked at (a pixel is ~7 km
      at zoom 2.5, measured off the camera) only the first two octaves survive
@@ -1064,7 +1085,13 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
        and the sheets (a texel is 9.8 km) carry the 96, 48 and 24 km octaves. */
     float fade=smoothstep(2.2,4.5,L/pxKm);
     if(fade<0.01) break;
-    float a=(k<4 ? aC : aF)*amp;
+    /* THE COARSE OCTAVES ARE 96, 48 AND 24 km, AND 12 km IS ALWAYS DRAWN (the
+       second pass). The baked relief (relief.py) now carries the belt's form
+       down to the 10 km grid, so where the deficit is zero -- every baked belt,
+       and every real one -- only octaves the grid cannot hold are grown: the
+       12 km octave is below its Nyquist (two texels are 20 km) and gives the
+       baked valleys their crisp walls instead of a bilinear smear. */
+    float a=(k<3 ? aC : aF)*amp;
     /* THE STRUCTURE IS NOT THE DEPTH. How deep a coarse valley is DRAWN is the
        deficit's decision; how strongly it ORGANISES the gullies below it is
        not -- a tributary runs down its valley's wall whether or not the source
@@ -1072,7 +1099,11 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
        octaves steered by the flank everywhere the deficit was partial, and
        the whole belt came out combed in one direction (?show=13). So the
        coarse octaves steer at no less than 0.6 of the fine octaves' scale. */
-    float aS=(k<4 ? max(aC, 0.6*aF) : aF)*amp;
+    /* ...and where the baked or real field carries the valleys, it is their
+       walls that steer (Gw is the field's own gradient), so a coarse octave
+       steers only as much as it is drawn: a synthetic 48 km valley network
+       steering the gullies across a baked one would draw two drainages at once. */
+    float aS=(k<3 ? aC : aF)*amp;
     if(max(a,aS)*fade>0.5){
       /* Steer by the slope of the terrain cut so far (the branching), plus a
          whisper across strike that only matters where that slope vanishes --
@@ -1479,6 +1510,7 @@ void main(){
     int slot=int(texture2D(plateA,wA(uv)).r*255.0+0.5);
     vec4 q=uPlateQ[clamp(slot,0,47)];
     gMatAxis=normalize(q.xyz+vec3(0.0,0.0,1e-9)); gMatAng=q.w;
+    gMatOff=(dirFromUv(wA(uv))-dirFromUv(uv))*uMatOffK;
   }
   /* Substrate, read early because elevDetail needs it to decide how much relief
      this ground carries -- see the amplitude note there. */
@@ -1623,6 +1655,9 @@ void main(){
      the erosion relief is steered and sized by. Both come from taps the
      branches below already take, so nothing is read twice. */
   vec3 gEnv3=vec3(0.0); float gMac=0.0;
+  /* The macro (+/-137 km) difference on land, in the branch frame, kept apart
+     so an ice sheet can keep the regional slope and drop the bed's relief. */
+  vec2 gMacD=vec2(0.0);
   /* How far this point stands above its own surroundings. Free: the four wide
      taps the dequantisation already needs are exactly the ring to measure it
      against. Used to keep ridge-parallel fabric off volcanoes -- see the note
@@ -1751,6 +1786,7 @@ void main(){
     g1+=(mE1-mE2)*0.50*gMacroW;
     g2+=(mN1-mN2)*0.50*gMacroW;
     gMac=0.25*(mE1+mE2+mN1+mN2);
+    gMacD=vec2(mE1-mE2, mN1-mN2)*gMacroW;
   }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
@@ -2117,7 +2153,8 @@ void main(){
      east/north, and assigning directly keeps that branch float-identical
      to before this refactor (pixel-diff verified); the polar ring frame
      rotates, exactly as its gradient always did. */
-  if(pw>0.004){ vec3 gF3=gAx1*g1+gAx2*g2; gE=dot(gF3,Eax); gN=dot(gF3,Nax); }
+  if(pw>0.004){ vec3 gF3=gAx1*g1+gAx2*g2; gE=dot(gF3,Eax); gN=dot(gF3,Nax);
+                vec3 gM3=gAx1*gMacD.x+gAx2*gMacD.y; gMacD=vec2(dot(gM3,Eax),dot(gM3,Nax)); }
   else { gE=g1; gN=g2; }
   /* THE EROSION RELIEF (see eroRelief above). Once per pixel, after the
      hillshade gradient is final: its HEIGHT goes into z, so the snowline, the
@@ -2718,7 +2755,7 @@ void main(){
       if(erg>0.01 && uErgK>0.0){
         float wlat=asin(clamp(sdir.y,-1.0,1.0));
         float wth=radians(45.0)*clamp(wlat/radians(6.0),-1.0,1.0);
-        vec3 dT=matDir(normalize(Eax*cos(wth)+Nax*sin(wth)));   // the line, in the material frame
+        vec3 dT=matRot(normalize(Eax*cos(wth)+Nax*sin(wth)));   // the line, in the material frame
         vec3 dA=normalize(cross(mdc,dT));                       // across it
         float ergFine=clamp((gFineFade-0.55)*2.2,0.0,1.0);
         /* corridor octave: 11 km cells, +-3.6 cells along the line. Its
@@ -3046,6 +3083,7 @@ void main(){
       vec3 mdi=matDir(sdir);
       // how deep into the sheet this pixel sits: 0 at the margin, 1 well inside
       float iceDeep=smoothstep(0.35,2.6,iceIm);
+      gIceDeep=iceDeep;
       // ablation band: grey-blue old ice with melt speckle, strongest at the edge
       float melt=vnoise3(mdi*310.0+77.0);
       vec3 ablC=mix(vec3(0.678,0.753,0.804), vec3(0.769,0.831,0.871), melt);
@@ -3202,6 +3240,20 @@ void main(){
      the ice, not the valleys cut into the rock beneath it: a whisper stays,
      as the bed does in the sheet's own colour above. */
   float eroIce=1.0-0.85*landIce;
+  /* AN ICE SHEET IS A LOW-PASS FILTER ON ITS BED. Ice a kilometre or more thick
+     carries only the bed's longest wavelengths to its surface, so inside a sheet
+     the shading keeps the REGIONAL slope (the +/-137 km macro difference, put in
+     the local gradient's units: it spans 14/2.4 times the baseline, and half of
+     it is already added) and drops the bed's relief, which since the baked
+     relief is a full dissected range under every past glaciation -- the
+     Cryogenian snowball drew as dark rocky ridges through its ice. The margin
+     (gIceDeep near 0) keeps the bed, as thin ice and nunataks do. Today's sheets
+     are drawn by their surface in the DEM, which is already smooth. */
+  if(z>=wl && landIce>0.001){
+    float fIce=0.80*landIce*gIceDeep;
+    vec2 gSm=gMacD*(2.4/14.0+0.5);
+    gE=mix(gE, gSm.x, fIce); gN=mix(gN, gSm.y, fIce);
+  }
   vec3 nrm=normalize(vec3(-(gE+gEroE*eroIce), gN+gEroN*eroIce, vex));
 
   if(z>=wl){
@@ -4607,7 +4659,9 @@ void main(){
      10 the relief deficit, 11 the erosion relief's gate, 12 its height
      (grey 0.5 is zero, +-400 m to white and black) and 13 its hillshade alone
      on a flat base; 14 the albedo before any lighting and 15 the lighting
-     alone -- which is how a two-toned prism was found to be COLOUR. */
+     alone -- which is how a two-toned prism was found to be COLOUR; 16 the
+     material coordinate itself (a ~200 km noise on it), which must not jump
+     at a keyframe. */
   if(uShow>0.5 && z>=wl){
     float v = uShow<1.5 ? gErg : uShow<2.5 ? atlasGate(z) : uShow<3.5 ? gArc
             : uShow<4.5 ? reliefEnv(z,rug) : uShow<5.5 ? dissectGate(z,rug) : uShow<6.5 ? rug
@@ -4617,7 +4671,8 @@ void main(){
             : uShow<12.5 ? 0.5+gEroH/800.0
             : clamp(dot(normalize(vec3(-gEroE, gEroN, 300.0)), normalize(vec3(Lh,0.63))),0.0,1.0);
     col=vec3(clamp(v,0.0,1.0));
-    if(uShow>13.5) col = uShow<14.5 ? gAlb : vec3(clamp(gShd*0.62,0.0,1.0));
+    if(uShow>13.5) col = uShow<14.5 ? gAlb : uShow<15.5 ? vec3(clamp(gShd*0.62,0.0,1.0))
+                     : vec3(vnoise3(matDir(sdir)*30.0), vnoise3(matDir(sdir)*30.0+7.0), 0.5);
   }
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }

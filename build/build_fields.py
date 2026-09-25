@@ -275,6 +275,13 @@ def export(age, Z_hi, z_for_climate, tag):
     # Evolving sea-floor structure and the oceanic plateaus: age-graded abyss
     # from ridge distance, fracture zones, and Kerguelen / Ontong Java / the
     # Seychelles seeded so they drown and re-emerge on cue. See seafloor.py.
+    # THE MOUNTAIN RELIEF (relief.py): the belts the source drew as smooth
+    # envelopes, eroded -- a wedge toward the foreland, a steady-state drainage
+    # network under this age's rainfall, and every band matched to real belts.
+    # Land only; before 55-70 Ma and on the future's smooth belts; a no-op
+    # elsewhere. Before the sea floor, which it never touches.
+    import relief as _RELIEF
+    Z_hi = _RELIEF.apply(Z_hi, age, tag, rain=rain * RF_MAX)
     mot = _load_motion(age, tag)
     Z_hi, ofield = SF.apply(Z_hi, age, reconstructor=_sf_reconstructor(), motion=mot)
     # Kill the polar longitude surplus BEFORE encoding, in true metres, so every

@@ -356,13 +356,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260925-0752';
-const FIELD_V='20260925-relief';   // bumped: every _f gained the relief deficit in B, and the future's fields were rebuilt
+const DATA_V='20260925-1925';
+const FIELD_V='20260925-baked';   // bumped: the mountain relief is baked into _e (relief.py), and everything derived from it
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260925';
+const IMAGERY_V='20260925b';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -1020,6 +1020,7 @@ function initGL(){
     uPlatK:{value:+(_sq.get('plat')||0)},      // DEM-driven plateau envelope on the atlas: OFF by default (see FRAG reliefEnv), ?plat=1 to try
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
+    uMatOffK:{value:_sq.get('matoff')==='0'?0:1},   // texture rides the crust through an interval (FRAG gMatOff)
     uEroK:{value:new THREE.Vector4(+(_sq.get('ero')||1),+(_sq.get('eroN')||100),+(_sq.get('eroF')||1),0)},   // the erosion relief (FRAG eroRelief): amplitude (0 off), normal gain, sub-grid share
     uNz:{value:bakeNoiseLUT()},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
@@ -3390,7 +3391,7 @@ function bindTextures(){
     if(ps&&pr){
       mat.uniforms.plateA.value=ps;
       const Q=mat.uniforms.uPlateQ.value;
-      for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
+      for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],-q[2],q[1],q[3]);}
       mat.uniforms.uMat.value=1.0;
     } else mat.uniforms.uMat.value=0.0;
     const S=stackFill(bi,gT);                       // _t _f _q _x: one texture, a still
@@ -3445,11 +3446,21 @@ function bindTextures(){
   /* Material coordinates. The slot raster and the rotation table must come
      from the SAME keyframe or the texture rides crust it does not belong to,
      so both are taken from f.i and uMat is off unless both are present. */
+  /* THE AXIS IS MAPPED INTO THE SHADER'S FRAME (the mountain round, 2026-09).
+     platerot.json is written by build_platefield.py in z-up geography,
+     (cos lat cos lon, cos lat sin lon, sin lat); the shader's dirFromUv is
+     y-up with latitude mirrored, (cos lat cos lon, -sin lat, cos lat sin lon).
+     The map between them is the proper rotation (x, y, z) -> (x, -z, y), and a
+     rotation about axis a in one frame is a rotation about the mapped axis in
+     the other. Passed through unmapped, every keyframe's material coordinate
+     was a rotation about the wrong axis, so no two keyframes agreed on where a
+     piece of crust was: all crust-keyed texture jumped at every keyframe, by
+     up to hundreds of kilometres in deep time -- the mountains' pop-in. */
   const pa=bindTex('p',f.i,true), prot=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[f.i].age)];
   if(pa&&prot){
     mat.uniforms.plateA.value=pa;
     const Q=mat.uniforms.uPlateQ.value;
-    for(let k=0;k<Q.length;k++){const q=prot[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
+    for(let k=0;k<Q.length;k++){const q=prot[k]||[0,0,1,0];Q[k].set(q[0],-q[2],q[1],q[3]);}
     mat.uniforms.uMat.value=1.0;
   } else mat.uniforms.uMat.value=0.0;
   /* Tectonic state: shortening + fold axis, from the same keyframe as the warp.
@@ -3548,7 +3559,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260925';
+const SHEET_V='20260925b';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
@@ -3693,7 +3704,7 @@ function bindStill(i){
   u.uWarp.value=0.0;
   const ps=T('p'), pr=DATA.platerot&&DATA.platerot.rot[String(DATA.timeline[i].age)];
   if(ps&&pr){u.plateA.value=ps;const Q=u.uPlateQ.value;
-    for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],q[1],q[2],q[3]);}
+    for(let k=0;k<Q.length;k++){const q=pr[k]||[0,0,1,0];Q[k].set(q[0],-q[2],q[1],q[3]);}
     u.uMat.value=1.0;} else u.uMat.value=0.0;
   const S=stackFill(i,T); bindStacks(u,S,S);      // _t _f _q _x: one texture, a still
   const ms=T('m'); if(ms)u.motA.value=ms;

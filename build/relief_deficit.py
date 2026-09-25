@@ -83,6 +83,19 @@ R_E = np.array([0.0, 300.0, 400.0, 600.0, 800.0, 1000.0, 1250.0, 1550.0, 1850.0,
                 2200.0, 2600.0, 3050.0, 3650.0, 4750.0, 9000.0])
 R_MED = np.array([0.0, 18.0, 25.0, 40.0, 64.0, 82.0, 100.0, 128.0, 152.0,
                   180.0, 225.0, 240.0, 215.0, 175.0, 175.0])
+# THE DEFICIT IS MEASURED IN L1, NOT RMS (the mountain round, second pass). A
+# schematic belt is a tent, and a tent's crest is a sharp line: all of its band
+# energy sits in a pixel or two, which an RMS over a ~120 km window reads as
+# rough ground -- so the crests, the one part of a prism that most needs relief,
+# were exactly where the deficit said none was missing (seen as holes along
+# every crest in the bake's weight map). The mean ABSOLUTE band value discounts
+# a sparse line: real terrain's L1 is a steady 0.68 of its RMS at every height,
+# a lone crest line's a fraction of that. R_L1 is the median L1 over the same
+# 12 px window on 0, 10, 20 and 30 Ma (land equatorward of 62 deg):
+#     E     400  600  800 1000 1250 1550 1850 2200 2600 3050 3650 4750
+#     L1     18   28   51   59   61   84  100  112  105  126  129  116
+R_L1 = np.array([0.0, 14.0, 18.0, 28.0, 48.0, 58.0, 66.0, 84.0, 100.0,
+                 110.0, 115.0, 122.0, 122.0, 116.0, 116.0])
 # The real terrain's own lower quartile sits at 0.45-0.75 of the median in
 # every elevation bin (measured, 0-35 Ma). Measuring the deficit below 0.55 of
 # the median, rather than below the median itself, is what keeps real ground
@@ -129,18 +142,19 @@ def _g(a, s):
     return gaussian_filter(a, s, mode=("nearest", "wrap"))
 
 
-def fields(z):
-    """Regional elevation E, the band's regional rms, and the land mask."""
+def fields(z, l1=False):
+    """Regional elevation E, the band's regional rms (or L1), and the land mask."""
     H = z.shape[0]
     lat = np.abs(90.0 - (np.arange(H) + 0.5) / H * 180.0)[:, None]
     land = (z > 0.0)
     lf = land.astype(np.float32)
     band = z - _g(z, SIG_BAND)
     E = _g(np.maximum(z, 0.0), SIG_REGION)
-    # rms over LAND only, so a coastline's own step is not counted as relief
-    num = _g(band * band * lf, SIG_RMS_REGION)
+    # over LAND only, so a coastline's own step is not counted as relief
     den = np.maximum(_g(lf, SIG_RMS_REGION), 1e-3)
-    rms = np.sqrt(num / den)
+    if l1:
+        return E, _g(np.abs(band) * lf, SIG_RMS_REGION) / den, land, lat
+    rms = np.sqrt(_g(band * band * lf, SIG_RMS_REGION) / den)
     return E, rms, land, lat
 
 
@@ -163,8 +177,8 @@ def envelope_slope(z):
 
 def deficit(z):
     """D in [0, 1] at the full grid of z."""
-    E, rms, land, lat = fields(z)
-    R = np.interp(E, R_E, R_MED)
+    E, rms, land, lat = fields(z, l1=True)
+    R = np.interp(E, R_E, R_L1)
     lo = np.maximum(LO_FRAC * R, 1.0)
     D = np.clip((lo - rms) / lo, 0.0, 1.0)
     D = D * _smoothstep(E_ON0, E_ON1, E) * land
