@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth, flora and fauna
+# Handoff — Tectonic Earth (mountains 3.12; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,11 +10,50 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.6 the biota subsystem, §6 the gate and the
-  "adding an organism" commands, §7.18–7.23 this work's traps, §9 known limits.
+- **Read `README.md` first**: §2 working rules, §5.10 mountains (the erosion relief), §5.1b the
+  future series (the collision zone), §5.6 the biota subsystem, §6 the gate and the build
+  commands, §7 traps (7.30–7.32 are this round's), §9 known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The current task
+## The latest round: mountains (3.12, 2026-09-24)
+
+The user: "our mountains before the end-Permian and in the future still look not good -- the
+pre-end-Permian mountains look like symmetric triangular prisms, and the future mountains clump
+up unrealistically... Let's fix these mountains so they look and appear natural and complex."
+(The future in general being rough was deferred by the user: "we'll address that later".)
+
+**What was wrong, measured.** Inside belts, the relief finer than ~60–90 km is 84 m at 1 km and
+176 m at 2.2 km of regional elevation today, 16–44 m at 300–400 Ma, 11 m in the Precambrian,
+~23 m on the future's belts: Scotese drew old belts as smooth envelopes and the future's belts
+were gaussian domes over the plate-overlap patches. The prism's dark face is shade clamped at
+zero (a smooth flank at the base's ~156x is tilted past the sun), not colour (README 7.30).
+
+**What shipped.**
+- `build/relief_deficit.py` — the relief deficit in the blue of every `_f` (`build_foreland`
+  writes it too). `--stats`, `--calib`, `-j 4`.
+- `eroRelief()` in `web/shaders/index__FRAG.frag.glsl` — a slope-steered, branching erosion
+  filter, material-keyed, 96 km → 0.75 km; coarse octaves times the deficit, fine ones always;
+  analytic slope into the normal; height into z and tone; the envelope's face handed to the
+  facets; faded under ice; no new water. The fold-axis noise compression (fingerprint whorls,
+  7.31) is retired while it is on. Knobs `?ero= ?eroN= ?eroF=`, masks `?show=10..15`.
+- `_zone_orogen()` in `build/build_fields.py` — the future's collision zones as plateau + a main
+  range on the pruned medial axis (7.32) + swell + crust-keyed segmentation; 50 future keyframes
+  rebuilt with their `_d _w _f _q _x`. +250 Myr: >2 km 13.0, >4 km 2.5 Mkm², summit 6.5 km.
+- Both sheet sets re-baked, the preview atlas rebuilt; `FIELD_V`, `SHEET_V`, `IMAGERY_V` bumped.
+
+**Open, none of it asked for.** The Precambrian belts are 1–1.5 km swells and are dissected
+lightly (little relief to cut; their height is `precambrian.py`'s). The future ranges sit where
+the rigid groups overlap — the same kinematic input as before, drawn as an orogen. The future
+still carries the Antarctic ice surface as land. **The future's orogen LABELS are fixed authored
+points** (`features.py`: Neo-Himalaya 60°E 25°N, Trans-Atlantic Belt 0°E 25°N, Afro-European Belt,
+Australasian Belt) with no tie to where the model's collision zones are: at +250 Myr the
+Neo-Himalaya label sits just east of the new range system and the Trans-Atlantic Belt over the
+sea, and that label's text describes an Atlantic closure this model's +250 frame does not show.
+Pre-existing (labels.json did not change this round); it belongs to the deferred future round —
+position them from `_zone_orogen`'s medial axes, or re-word them. Judge the look on a real display: `?ero=0`
+beside the default, and `?eroN=` (normal gain, default 100) / `?ero=` (depth) to bracket it.
+
+## The flora-and-fauna task (3.6–3.11)
 
 The user asked for the feature cards' flora and fauna to be fixed **systematically**: every card
 rich, accurate, diverse, with the right icon, the right organisms for that place and time, and a
@@ -68,8 +107,10 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260922-1642`**, release 3.11, commit `da86a95c` (the record —
-  README, HANDOFF, MODEL-GAPS — is the commit after it).
+- Last live deploy: **`DATA_V=20260925-0752`**, release 3.12 (the mountains), commit `__COMMIT__`.
+  Before it: 3.11, `DATA_V=20260922-1642`, commit `da86a95c`.
+- Cache versions: `FIELD_V='20260925-relief'`, `SHEET_V='20260925'`, `IMAGERY_V='20260925'`
+  (in `web/app.js` AND `web/ambient.html`).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
@@ -226,6 +267,16 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - After a `features.py` change run `build_labels()` as well as `build_life()`; `labels.json`
   carries the tracks the cards' palaeolatitudes come from.
 
+- **Mountains (3.12).** Split albedo from lighting (`?show=14/15`) before tuning either: the
+  prism's dark face was shade clamped at zero (README 7.30). Measure km per pixel off the camera
+  (zoom 2.5 is ~7 km/px) before choosing octave scales. The sheet bake used to stall for its whole
+  deadline on the 1000 Ma keyframe, whose `_v` the timeline declares absent (fixed in
+  `_sheetKindsResident`). `bake_sheets.py` always writes `web/sheets/` and resets its manifest on a
+  width change: park the other set before baking. A driver that uses `multiprocessing` needs an
+  `if __name__ == "__main__":` guard: macOS spawns workers by re-importing the script, so an
+  unguarded one re-ran every step in each worker (four processes writing the same files) and the
+  pool respawned the dying workers until killed by PID.
+
 Plus the standing ones: a process backgrounded with `&` inside a tool call dies with the call;
 `pgrep -f` matches the waiter itself — wait on a PID.
 
@@ -251,6 +302,12 @@ cd build
 ../venv/bin/python -c "import build_webdata as b; b.build_labels(); b.build_life(); b.build_updatelog()"
 ../venv/bin/python audit_all.py --quick
 ../venv/bin/python check_shader.py && ../venv/bin/python build_site.py   # stamps DATA_V, writes ../docs
+# A SHADER change invalidates both sheet sets and the preview atlas (README 5.9, 5.11):
+#   mv ../web/sheets ../web/sheets4096 ; ../venv/bin/python bake_sheets.py --width 2048
+#   mv ../web/sheets2048 <backup> ; mv ../web/sheets ../web/sheets2048 ; mv ../web/sheets4096 <backup>
+#   ../venv/bin/python bake_sheets.py            # the 4096 set, into ../web/sheets
+#   ../venv/bin/python build_timeline_preview.py # then bump SHEET_V and IMAGERY_V in app.js AND ambient.html
+# A FIELD change (any _e/_f/...) wants FIELD_V bumped in both too, or browsers keep the old textures.
 cd .. && git add -A build web docs README.md HANDOFF.md "Deep Research" && git commit && git push origin main
 curl -s "https://augustg97.github.io/tectonic-earth/?cb=$RANDOM" | grep -o "DATA_V='[0-9-]*'"
 ```

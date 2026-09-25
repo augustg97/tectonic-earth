@@ -126,8 +126,14 @@ uniform float uFoldK;
 /* MASK VIEW (?show=N): draw one gate as grey over land, so a gate can be
    looked at instead of inferred from a render pair. 1 the erg mask, 2 the
    atlas belt gate, 3 the belt type (arc), 4 the DEM plateau envelope, 5 the
-   dissection gate, 6 rug, 7 shortening. Sea keeps its colour for the coast. */
+   dissection gate, 6 rug, 7 shortening, 10 the relief deficit, 11 the erosion
+   relief's gate. Sea keeps its colour for the coast. */
 uniform float uShow;
+/* THE EROSION RELIEF (the mountain round, 2026-09; see eroRelief): x the
+   amplitude (?ero=, 0 switches the whole term off), y the gain its slope
+   enters the shading normal at (?eroN=), z the share of the sub-grid octaves
+   (?eroF=), w spare. */
+uniform vec4 uEroK;
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
@@ -258,6 +264,15 @@ float gErg=0.0; vec2 gDuneN=vec2(0.0);
    crust going down -- 0 for a fold-and-thrust belt. A _t written without
    the channel decodes as 0. */
 float gArc=0.0;
+/* The erosion relief's gate (how much this pixel is a place valleys are cut)
+   and the baked relief deficit, set once in main(): the isotropic grain in the
+   normal fades under the first (one system per band, README 7.4), and ?show=
+   draws both. */
+float gEroOwn=0.0, gEroD=0.0, gEroH=0.0;
+/* The albedo and the shade multiplier just before they are combined, for
+   ?show=14 (the colour alone) and ?show=15 (the lighting alone). */
+vec3 gAlb=vec3(0.0); float gShd=1.0;
+float gEroA=0.0;   // the erosion relief's first-octave amplitude here, to normalise its tone
 vec3 matDir(vec3 d){
   if(gMatAng==0.0) return d;
   float c=cos(gMatAng), sn=sin(gMatAng);
@@ -766,7 +781,18 @@ float elevDetail(float z, vec3 d, float rug){
      wood grain. A belt is a narrow thing; 0.30 admits a strain of 0.045, which
      is an orogen, and leaves cratons isotropic where they belong. */
   vec3 dF=d;
-  if(z>=wl && uTect>0.5 && gShort>0.30){
+  /* RETIRED UNDER THE EROSION RELIEF (the mountain round, 2026-09). The
+     compression below rescales the ABSOLUTE material position along a
+     direction that varies from pixel to pixel, so wherever the strike field
+     curves -- contours round a dome, a crest's end -- a rotation of a hundredth
+     of a radian moves the noise nearly a cell, and the noise wraps into
+     concentric fingerprint whorls round the high ground (found on the 300 Ma
+     close framing, present in the renders before this round, and surviving
+     ?plainsK=0, ?nodrain=1 and ?erg=0). Its purpose -- ranges that read as
+     shortened, not bumpy -- is what the erosion relief now does with
+     landforms, in the same band; two systems there is README 7.4. ?ero=0
+     brings it back with everything else. */
+  if(z>=wl && uTect>0.5 && gShort>0.30 && uEroK.x<=0.0){
     /* GATE RECALIBRATED TO THE FIELD'S ACTUAL RANGE (2026-08-03). This demanded
        gShort above 0.30 before it compressed anything, and the field never went
        there: measured, the HIMALAYA read 0.365 and the ANDES 0.055, so the
@@ -892,6 +918,213 @@ float elevDetail(float z, vec3 d, float rug){
 // upsampled field doesn't read as soft
 float elevAt(vec2 uv, float rug){
   return elevDetail(baseElev(uv), matDir(dirFromUv(uv)), rug);
+}
+/* ============== THE EROSION RELIEF (the mountain round, 2026-09) ==============
+
+   WHAT WAS WRONG. The Palaeozoic and Precambrian ranges read as symmetric
+   triangular prisms and the future's collision belts as smooth clumps, and the
+   fields say why: inside mountain belts the relief finer than ~60-90 km -- the
+   band a range is made of: transverse valleys, spurs, peaks and saddles --
+   measures a local rms of ~84 m at 1 km and ~176 m at 2.2 km of regional
+   elevation in the present-day PaleoDEM, 16-44 m at 300-400 Ma, 11 m in the
+   generated Precambrian and ~23 m everywhere on the +250 Myr belts. Scotese
+   drew the older belts as smooth envelopes and the future's are gaussians of a
+   contact indicator, so both carry the belt and none of its dissection; the
+   hillshade then lit each smooth envelope as two faces and a crest.
+
+   WHY PER PIXEL, AND WHY THIS AND NOT ITERATIONS 51-77. That band cannot come
+   from the field (the stencil differencing it is blind at 47 km, iteration
+   62) and must reach the normal directly -- and orienting NOISE along a slope,
+   by stretching, line-integral convolution, ribs or a baked atlas, was
+   measured five ways and closed (iterations 76-77, WP-10 review): streaks, not
+   landforms. What erosion makes is a BRANCHING network, and the construction
+   that produces one per pixel is the erosion filter (Clay John 2018, Felix
+   Westin 2023, Rune Skovbo Johansen 2026, written here from the published
+   description): each octave is a field of stripes running DOWNHILL, and the
+   next octave is steered by the slope of the terrain SO FAR -- base plus the
+   gullies already cut -- so the finer gullies run down the walls of the
+   coarser ones and join them at an angle, which is what a tributary is.
+   Branching is not added; it falls out of the steering.
+
+   WHAT STEERS IT. The first octave follows the belt's own downhill direction,
+   from the base field over +/-31 km (the prisms are exactly where that is
+   smooth and trustworthy -- iteration 76's objection was to the present-day
+   DEM's noisy local gradient), falling back to across-strike from the baked
+   fold axis on a crest line, where the slope vanishes but the strike does
+   not. Transverse valleys across a linear belt are also what the record says:
+   outlets from linear ranges are regularly spaced (Hovius 1996).
+
+   WHERE AND HOW MUCH. Everything is welded to the crust through the material
+   direction, so a valley rides its plate through playback instead of the
+   continent sliding out from under it. The four coarse octaves (96, 48, 24,
+   12 km) are scaled by the baked RELIEF DEFICIT (the blue of _f,
+   relief_deficit.py): only the relief the source never drew is grown, so the
+   present day and the modern-topography Cenozoic frames keep their own
+   valleys. The finer octaves exist in no field at any age and are grown at
+   the amplitude real mountains of this height carry in the present-day DEM,
+   continued down the spectrum at half an octave's amplitude per octave (a
+   k^-2 spectrum, i.e. constant slope per octave). All of it scales with how
+   much relief the place has to be cut from: a tableland is barely dissected,
+   a belt's flank deeply. */
+/* A sin-free 2-D hash (Hoskins' hash22): cell indices reach several thousand
+   at the finest octave, where fract(sin(large)) goes periodic on some GPUs. */
+vec2 eroHash(vec2 p){
+  vec3 p3=fract(vec3(p.xyx)*vec3(0.1031,0.1030,0.0973));
+  p3+=dot(p3,p3.yzx+33.33);
+  return fract((p3.xx+p3.yz)*p3.zy);
+}
+/* ONE PLANE OF ONE OCTAVE. p in cells, n the unit ACROSS-gully direction in
+   this plane (the stripes run along the other one). Every pivot contributes a
+   stripe through itself, and the stripes are summed as a PHASE VECTOR (cos,
+   sin): two stripes of one direction and any two phases add to a stripe of
+   that direction, so after normalising the gullies keep their depth and drift
+   in phase from cell to cell -- which is what lets two of them fork or join.
+   Pivots sit in the middle half of their cell and the kernel reaches 1.2
+   cells, so the 3x3 neighbourhood holds every pivot that can reach this point
+   (a cell two away is at least 1.25 cells off) and every point has one within
+   1.06.
+   EACH PIVOT HAS ITS OWN SPACING AND ITS OWN SAY. With one cycle per cell for
+   all of them and equal weights, the first render drew a near-regular grating
+   -- zebra stripes across every belt when lit alone (?show=13). A pivot now
+   draws 0.78-1.30 cycles per cell, votes with 0.20-1.0 of a full weight and
+   heads +-25 degrees off the local downhill, so neighbouring valleys differ in
+   spacing, depth and course and beat against each other the way real
+   transverse drainages do. */
+vec3 eroPlane(vec2 p, vec2 n){
+  vec2 ip=floor(p), fp=p-ip;
+  vec3 acc=vec3(0.0);
+  for(int j=-1;j<=1;j++){
+    for(int i=-1;i<=1;i++){
+      vec2 o=vec2(float(i),float(j));
+      vec2 hv=eroHash(ip+o);
+      vec2 d=fp-o-(0.25+0.5*hv);
+      float w=max(1.0-dot(d,d)*0.69444,0.0); w*=w*w;   // C2, zero at 1.2 cells
+      vec2 hq=eroHash(ip+o+vec2(37.1,11.7));
+      w*=0.20+0.80*hq.x;
+      /* ...and its own heading, +-25 degrees off the local downhill: real
+         transverse valleys bend and converge rather than run as the parallel
+         rungs of a ladder, and the blend of slightly crossing stripes is what
+         makes two of them meet. */
+      float ja=(eroHash(ip+o+vec2(5.3,71.9)).x-0.5)*0.87;
+      vec2 nj=n*cos(ja)+vec2(-n.y,n.x)*sin(ja);
+      float ph=6.2831853*(0.78+0.52*hq.y)*dot(d,nj);
+      acc+=vec3(cos(ph),sin(ph),1.0)*w;
+    }
+  }
+  return acc;
+}
+/* One octave on the sphere, in the three axis planes of the material
+   direction, blended by a steep power of it so nearly every pixel reads one
+   plane (the band where two meet is a smooth phase drift, not a seam). m is
+   the material direction in cells, n3 the across-gully tangent, aw the plane
+   weights. Returns the blended (cos, sin) and a confidence that fades the rare
+   points where the pivots cancel -- the fork of a stripe -- flat instead of
+   letting them flicker. */
+vec3 eroOct(vec3 m, vec3 n3, vec3 aw){
+  vec3 a=vec3(0.0);
+  if(aw.x>0.02) a+=aw.x*eroPlane(m.yz, normalize(n3.yz+vec2(1e-7,0.0)));
+  if(aw.y>0.02) a+=aw.y*eroPlane(m.zx, normalize(n3.zx+vec2(1e-7,0.0)));
+  if(aw.z>0.02) a+=aw.z*eroPlane(m.xy, normalize(n3.xy+vec2(1e-7,0.0)));
+  float l=length(a.xy);
+  return vec3(a.xy/max(l,1e-6), smoothstep(0.04,0.22,l/max(a.z,1e-6)));
+}
+/* The rotation matDir applies, undone: the relief is grown in the crust's
+   frame and its slope has to come back to the globe's to be lit. */
+vec3 matDirInv(vec3 d){
+  if(gMatAng==0.0) return d;
+  float c=cos(gMatAng), sn=-sin(gMatAng);
+  return d*c + cross(gMatAxis,d)*sn + gMatAxis*(dot(gMatAxis,d)*(1.0-c));
+}
+/* The relief itself: height in metres (x) and its SHADING slope as a world
+   tangent vector (yzw; true slope in metres per metre times a gain that falls
+   with scale, see below). Gw is the base field's gradient (world, m/m), Aw the
+   across-strike direction (world, unit; zero where there is no fold axis), aC
+   the coarse octaves' amplitude and aF the fine ones' (metres at the first,
+   96 km, octave), pxKm the pixel footprint. */
+vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
+  vec3 Gm=matDir(Gw), Am=matDir(Aw);
+  vec3 aw=pow(abs(msd), vec3(12.0)); aw/=(aw.x+aw.y+aw.z);
+  /* 96 km FIRST, THEN 48. At the zoom a globe is looked at (a pixel is ~7 km
+     at zoom 2.5, measured off the camera) only the first two octaves survive
+     the anti-alias fade, and one octave of parallel valleys is a zebra
+     however it is shaped. What makes a real range read at that scale is not
+     its valleys but its MASSIFS AND PASSES -- the crest rising and falling
+     every hundred kilometres -- and the spurs off them; a 96 km octave of
+     stripes running down the flanks, continuous across the crest where the
+     slope flips, is exactly that: a transverse ridge is a massif where it
+     crosses the divide and a transverse valley a pass. The 48 km octave,
+     steered by those walls, is the transverse drainage itself -- across a
+     belt 150-300 km wide the spacing of its outlets (Hovius 1996: about half
+     the half-width) -- and it branches off the massifs as the first visible
+     level of the tree. */
+  float h=0.0, L=96.0, amp=1.0, mask=1.0;
+  vec3 gr=vec3(0.0), gi=vec3(0.0);
+  for(int k=0;k<8;k++){
+    /* A gully narrower than about three pixels is not drawn: it would alias,
+       and the sheets (a texel is 9.8 km) carry the 96, 48 and 24 km octaves. */
+    float fade=smoothstep(2.2,4.5,L/pxKm);
+    if(fade<0.01) break;
+    float a=(k<4 ? aC : aF)*amp;
+    /* THE STRUCTURE IS NOT THE DEPTH. How deep a coarse valley is DRAWN is the
+       deficit's decision; how strongly it ORGANISES the gullies below it is
+       not -- a tributary runs down its valley's wall whether or not the source
+       also drew that valley. Steering by the drawn depth alone left the fine
+       octaves steered by the flank everywhere the deficit was partial, and
+       the whole belt came out combed in one direction (?show=13). So the
+       coarse octaves steer at no less than 0.6 of the fine octaves' scale. */
+    float aS=(k<4 ? max(aC, 0.6*aF) : aF)*amp;
+    if(max(a,aS)*fade>0.5){
+      /* Steer by the slope of the terrain cut so far (the branching), plus a
+         whisper across strike that only matters where that slope vanishes --
+         a crest line -- and whose sign follows the slope's, because a stripe
+         read against -n is the same stripe. */
+      vec3 S=Gm+gi;
+      S+=Am*(dot(Am,S)>=0.0 ? 0.004 : -0.004);
+      vec3 t=S-msd*dot(S,msd);
+      t=t/max(length(t),1e-9);
+      vec3 n=cross(msd,t);
+      vec3 e=eroOct(msd*(6371.0/L)+vec3(float(k)*7.31,float(k)*3.17,float(k)*5.53), n, aw);
+      /* PLANAR WALLS, NOT A SINE. A valley cut into rock is a V with straight
+         sides and a sharp crest between two of them; a sine has neither, and
+         lit alone it reads as corrugated sheet. asin(k cos) is a triangle wave
+         with its corners rounded by k: the crests sharp (0.985), the floors a
+         little rounder (0.93) where the debris sits. Its slope is flat along
+         the wall, so each wall takes one tone under the sun, which is how a
+         dissected flank looks in shaded relief. */
+      float kr=e.x>0.0 ? 0.985 : 0.93;
+      float q=clamp(kr*e.x,-0.9999,0.9999);
+      float tri=0.63662*asin(q);                       // 2/pi: +-1 at crest and floor
+      float dtri=-0.63662*kr*e.y/sqrt(1.0-q*q);        // d tri / d phase
+      float ae=a*fade*mask*e.z;
+      float kk=6.2831853/(L*1000.0);                   // phase per metre across the gullies
+      h+=ae*tri;
+      /* THE SLOPE IS SHADED AT A GAIN THAT FALLS WITH SCALE, not at one
+         exaggeration. The base field lights its 50-150 km forms at ~156x, and
+         a valley 48 km across has to be lit near that or the flank it is cut
+         into out-votes it (measured: at a flat gain of 20 the 300 Ma frame
+         moved by 0.72/255). But every octave here carries the same slope, so
+         one high gain would stack seven saturated octaves into black-and-white
+         static: a shaded relief map exaggerates less the finer it looks. The
+         gain goes as the square root of the wavelength, 1 at 96 km. */
+      gr+=(ae*dtri*kk*sqrt(L*(1.0/96.0)))*n;
+      /* The STEERING slope is this wall's own, which the triangle already makes
+         flat across the wall (Johansen's straight gullies): a wall steers the
+         next octave straight down it all the way across, instead of fading to
+         nothing mid-wall and letting the finer gullies curl along the coarse
+         one. Weighted 1.8: a wall is steeper than the flank it is cut into,
+         and it is the wall a tributary follows, so the coarse valleys must
+         out-vote the flank in the steering or nothing branches. */
+      gi+=(1.8*aS*mask*kk*dtri)*n;
+      /* The next octave lives mostly on this one's walls: a ridge crest and a
+         valley floor are where tributaries end, not where they run. Weighted
+         by how much this octave actually cut here, so an octave the deficit
+         switched off does not confine the ones below it. */
+      float rel=clamp(aS/max(aF*amp,1.0),0.0,1.0);
+      mask*=mix(1.0, smoothstep(0.0,0.55,abs(e.y)), 0.60*rel);
+    }
+    L*=0.5; amp*=0.5;
+  }
+  return vec4(h, matDirInv(gr));
 }
 /* The moisture solve advects along rows of constant latitude, which leaves
    faint row-to-row streaks in the rainfall field — and those streaks were
@@ -1385,6 +1618,11 @@ void main(){
   vec3 t2=cross(sdir,t1);
   float rug, gE, gN, z;
   vec3 gAx1, gAx2; float g1, g2, gMacroW;
+  /* The base field's own gradient over +/-31 km as a world tangent vector in
+     metres per metre, and the mean of the four macro taps (+/-137 km): what
+     the erosion relief is steered and sized by. Both come from taps the
+     branches below already take, so nothing is read twice. */
+  vec3 gEnv3=vec3(0.0); float gMac=0.0;
   /* How far this point stands above its own surroundings. Free: the four wide
      taps the dequantisation already needs are exactly the ring to measure it
      against. Used to keep ridge-parallel fabric off volcanoes -- see the note
@@ -1407,6 +1645,7 @@ void main(){
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
     // the detail character does not step at the branch.
     rug=clamp(length(gv)*1.78/460.0,0.0,1.0);
+    gEnv3=(t1*gv.x+t2*gv.y)/(r*6.371e6);    // metres over the ring radius -> m/m
     float zb=mix(baseElev(uv), sum/6.0, pw);
     z=elevDetail(zb, matDir(sdir), rug);
     // The gradient stays in ring-frame COMPONENTS here; the shared
@@ -1440,9 +1679,10 @@ void main(){
     }
   } else {
     float rda=3.2/2048.0*PI;
-    rug=clamp(length(vec2(
-        baseElev(uvFromDir(normalize(sdir+Eax*rda)))-baseElev(uvFromDir(normalize(sdir-Eax*rda))),
-        baseElev(uvFromDir(normalize(sdir+Nax*rda)))-baseElev(uvFromDir(normalize(sdir-Nax*rda)))))/460.0,0.0,1.0);
+    float rE=baseElev(uvFromDir(normalize(sdir+Eax*rda)))-baseElev(uvFromDir(normalize(sdir-Eax*rda)));
+    float rN=baseElev(uvFromDir(normalize(sdir+Nax*rda)))-baseElev(uvFromDir(normalize(sdir-Nax*rda)));
+    rug=clamp(length(vec2(rE,rN))/460.0,0.0,1.0);
+    gEnv3=(Eax*rE+Nax*rN)/(2.0*rda*6.371e6);
     z=elevAt(uv,rug);
     /* AND THIS ONE KEEPS ITS ANGLE TOO, which is not the obvious choice and is
        worth the note. The tempting move when the grid doubles is to halve the
@@ -1506,8 +1746,11 @@ void main(){
     /* MACRO RELIEF (iter 3): the basin-and-swell band the 23.5 km
        gradient is too short to feel, folded into the same normal. */
     float daM=14.0/2048.0*PI;
-    g1+=(baseElev(uvFromDir(normalize(sdir+gAx1*daM)))-baseElev(uvFromDir(normalize(sdir-gAx1*daM))))*0.50*gMacroW;
-    g2+=(baseElev(uvFromDir(normalize(sdir+gAx2*daM)))-baseElev(uvFromDir(normalize(sdir-gAx2*daM))))*0.50*gMacroW;
+    float mE1=baseElev(uvFromDir(normalize(sdir+gAx1*daM))), mE2=baseElev(uvFromDir(normalize(sdir-gAx1*daM)));
+    float mN1=baseElev(uvFromDir(normalize(sdir+gAx2*daM))), mN2=baseElev(uvFromDir(normalize(sdir-gAx2*daM)));
+    g1+=(mE1-mE2)*0.50*gMacroW;
+    g2+=(mN1-mN2)*0.50*gMacroW;
+    gMac=0.25*(mE1+mE2+mN1+mN2);
   }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
        to it with depth. The elevation field is 8-bit over a signed-square
@@ -1876,6 +2119,85 @@ void main(){
      rotates, exactly as its gradient always did. */
   if(pw>0.004){ vec3 gF3=gAx1*g1+gAx2*g2; gE=dot(gF3,Eax); gN=dot(gF3,Nax); }
   else { gE=g1; gN=g2; }
+  /* THE EROSION RELIEF (see eroRelief above). Once per pixel, after the
+     hillshade gradient is final: its HEIGHT goes into z, so the snowline, the
+     bare rock and the treeline follow the spurs and valleys; its SLOPE is kept
+     apart and joins the normal where the normal is built, because the ice
+     sheet decided further down has to be able to take it back off. */
+  float gEroE=0.0, gEroN=0.0;
+  gEroOwn=0.0; gEroD=0.0;
+  if(z>=wl && uEroK.x>0.0){
+    float zb=baseElev(uv);
+    /* How much relief there is to cut the valleys from: the envelope's slope
+       over a drainage length (a flank), or the height above the regional mean
+       (a crest line, where the slope vanishes). A tableland is neither. */
+    float lr=max(length(gEnv3)*60000.0, zb-gMac);
+    float eG=smoothstep(80.0,350.0,lr)*smoothstep(150.0,600.0,zb)*mix(0.35,1.0,gHard);
+    if(eG>0.003){
+      /* HOW DEEP THE 96 km OCTAVE CUTS: a share of the relief it is cut
+         from, not a function of height. A dissected flank is not a smooth
+         slope with ripples on it -- its valley walls are two to three times
+         steeper than the flank they cut (the reason it reads as spurs and
+         valleys and not as one face), and that is also what a hillshade needs:
+         the flank is lit at ~156x, so a valley shallower than that rise is
+         out-voted by it (measured: sized by elevation, as the relief the
+         present-day DEM carries per km of height, the 300 Ma belts moved
+         0.72/255). lr is the flank's rise over 60 km, and a triangle octave
+         of wavelength L and amplitude a has walls of slope 4a/L, so 0.8 of the
+         relief gives the 96 km octave walls twice the flank -- and a crest
+         that rises and falls about a kilometre between massif and pass on a
+         2 km belt, which is the Alps' own spread (passes near 2 km, peaks near
+         4). Capped where a plateau rim would ask for more. The deficit (in
+         eroRelief's coarse octaves) still decides WHETHER. */
+      float a0=min(0.80*lr, 1400.0)*uEroK.x*eG;
+      /* ...and not uniformly along the belt. A range the same ruggedness end to
+         end is a tell; real belts run through rugged sections and smoother
+         saddles and gaps, a few hundred kilometres each. A ~450 km noise welded
+         to the crust takes the depth between 0.55 and 1.45 of itself. */
+      a0*=0.55+0.90*vnoise3(matDir(sdir)*14.0+vec3(3.1,7.7,1.3));
+      /* The deficit, interpolated across the interval like the elevation it was
+         measured on. Missing stack band (still loading): no coarse octaves. */
+      float dA=stkFore(wA(uv)).b;
+      float dB=texture2D(stkB, vec2(wB(uv).x, clamp(wB(uv).y,0.5/512.0,1.0-0.5/512.0)*0.5)).b;
+      gEroD=uFore>0.5 ? mix(dA,dB,mixf) : 0.0;
+      vec3 Aw=vec3(0.0);
+      if(uTect>0.5 && dot(gFold,gFold)>0.25) Aw=normalize(cross(sdir,gFold));
+      vec4 er=eroRelief(matDir(sdir), gEnv3, Aw, a0*gEroD, a0*uEroK.z, sfoot*3.11);
+      /* The same promise elevDetail makes: procedural relief may never carve
+         new water, so no coastline moves because of it and no valley floor in
+         a coastal range fills with sea. */
+      er.x=max(er.x, -(z-wl)*0.85);
+      z+=er.x; gEroH=er.x; gEroA=a0;
+      /* Into the normal at 300 per unit slope times the gain: the base normal
+         is (-gE, gN, 300) with gE a difference over 46.9 km, so a slope s here
+         tilts it by atan(s * gain). The base lights a flank at ~156x; the
+         valleys are cut at the gain, which keeps a gully wall from saturating
+         to black while still out-voting the flank it is cut into. */
+      gEroE=dot(er.yzw,Eax)*300.0*uEroK.y;
+      gEroN=dot(er.yzw,Nax)*300.0*uEroK.y;
+      gEroOwn=eG;
+      /* THE ENVELOPE'S FACE IS HANDED TO THE FACETS. Found with ?show=15 (the
+         lighting alone): the prism's dark face is not a colour, it is shade
+         clamped at zero. The base lights its 47 km stencil at ~156x, so any
+         smooth flank steeper than about half a per cent that faces away from
+         the sun is tilted past the sun's 39 degrees and goes uniformly black
+         -- and no valley of real proportions can turn a facet back into the
+         light from there. On real terrain the stencil measures spurs and
+         valleys and its normals vary; on a schematic envelope it measures one
+         plane. So where the synthetic dissection now carries the flank (the
+         gate times the square root of the deficit -- the present day, whose
+         deficit is zero, is untouched), the envelope's single tilt is
+         soft-compressed, saturating at ~32 degrees, and the facets swing the
+         light around it: the away side still reads darker on average, which is
+         the belt, and is no longer a slab. (A weight linear in the deficit left
+         the half-deficit north-south ridges of 300 Ma at 48 degrees -- still
+         past the sun, still slabs.) */
+      float wD=eG*sqrt(gEroD);
+      vec2 gb=vec2(gE,gN);
+      gb*=1.0/(1.0+wD*length(gb)*(1.0/187.0));
+      gE=gb.x; gN=gb.y;
+    }
+  }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
      t1 written in east/north coordinates, so blending toward (-0.55,0.55)
      expressed through c rotates the sun out of the spinning local frame into
@@ -2876,7 +3198,11 @@ void main(){
      kilometres are still ~77 degrees, and the abyssal fabric is untouched
      because it is added after this as an explicit slope. */
   float vex = z<wl ? mix(760.0, 920.0, smoothstep(-20.0,-600.0,z)) : 300.0;
-  vec3 nrm=normalize(vec3(-gE, gN, vex));
+  /* The erosion relief's slope joins here. Under an ice sheet the surface is
+     the ice, not the valleys cut into the rock beneath it: a whisper stays,
+     as the bed does in the sheet's own colour above. */
+  float eroIce=1.0-0.85*landIce;
+  vec3 nrm=normalize(vec3(-(gE+gEroE*eroIce), gN+gEroN*eroIce, vex));
 
   if(z>=wl){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -2907,6 +3233,18 @@ void main(){
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
     col=mix(col, rockc, bare*0.6);
+    /* THE VALLEYS AS TONE (the erosion relief). Shading alone cannot show a
+       valley on the side of a range facing away from the sun -- there every
+       wall is some shade of dark -- but a valley floor is also a different
+       SURFACE: soil, water and whatever grows gather in it, and bare rock is
+       what the crests are left with. So the relief's own height, normalised
+       by the depth it was cut at, darkens the floors and lifts the crests a
+       little, which is the cue the eye follows on the shadowed flank, and
+       which the retired atlas carried for the same reason. */
+    if(gEroOwn>0.003){
+      float et=clamp(gEroH/max(gEroA,60.0),-1.0,1.0);
+      col*=1.0+et*0.13*gEroOwn;
+    }
     /* Hydrology: drainage, marshes and delta plains. We cannot know the courses
        of ancient rivers, but water obeys the terrain and climate we DO
        reconstruct: it gathers in the lows of the paleo-DEM and pools where wet
@@ -2991,6 +3329,12 @@ void main(){
         ny+=(vnoise3(msd*5200.0+29.0)-0.5)*0.40*closeH;
       }
     }
+    /* ONE SYSTEM PER BAND (README 7.4). Where valleys are being cut, the
+       erosion relief owns the 1-60 km band these isotropic octaves also fill;
+       left at full strength they lay a mottle across the gullies that reads as
+       noise on a landform. A little stays, as the grain of the rock. */
+    float ownQ=1.0-0.70*gEroOwn;
+    nx*=ownQ; ny*=ownQ;
     /* FOLD-PARALLEL GRATING IN THE NORMAL: RETIRED (WP-10, B1). Two sines
        across strike, documented as 26 km and 13.6 km, added to the shading
        normal. A sine's period on the unit sphere is 2*pi/K radians, so K=246
@@ -4079,6 +4423,7 @@ void main(){
        2.0 / 0.90      0.0897   0.1080         97.2 */
   float shd=shade;
   if(z<wl) shd=clamp(0.90+(shade-0.90)*2.00,0.05,1.5);
+  gAlb=col; gShd=(1.0-hw)+hw*shd;
   col*=((1.0-hw)+hw*shd);
 
   if(z<wl && uSchem<0.5){
@@ -4258,12 +4603,21 @@ void main(){
   /* ?show=N draws one gate as grey: 1 gErg, 2 atlasGate, 3 gArc, 4 reliefEnv,
      5 dissectGate, 6 rug, 7 gShort, 8 fract(phi) and 9 fract(chi) -- the fold
      and drainage coordinates as sawtooth ramps, which read as clean bands when
-     the 16-bit decode is exact and as speckle when a tap has blended bytes. */
+     the 16-bit decode is exact and as speckle when a tap has blended bytes --
+     10 the relief deficit, 11 the erosion relief's gate, 12 its height
+     (grey 0.5 is zero, +-400 m to white and black) and 13 its hillshade alone
+     on a flat base; 14 the albedo before any lighting and 15 the lighting
+     alone -- which is how a two-toned prism was found to be COLOUR. */
   if(uShow>0.5 && z>=wl){
     float v = uShow<1.5 ? gErg : uShow<2.5 ? atlasGate(z) : uShow<3.5 ? gArc
             : uShow<4.5 ? reliefEnv(z,rug) : uShow<5.5 ? dissectGate(z,rug) : uShow<6.5 ? rug
-            : uShow<7.5 ? gShort : uShow<8.5 ? fract(gFoldP.x)*gFoldW : fract(gDrnP.x)*step(0.001,gDrnW);
+            : uShow<7.5 ? gShort : uShow<8.5 ? fract(gFoldP.x)*gFoldW
+            : uShow<9.5 ? fract(gDrnP.x)*step(0.001,gDrnW)
+            : uShow<10.5 ? gEroD : uShow<11.5 ? gEroOwn
+            : uShow<12.5 ? 0.5+gEroH/800.0
+            : clamp(dot(normalize(vec3(-gEroE, gEroN, 300.0)), normalize(vec3(Lh,0.63))),0.0,1.0);
     col=vec3(clamp(v,0.0,1.0));
+    if(uShow>13.5) col = uShow<14.5 ? gAlb : vec3(clamp(gShd*0.62,0.0,1.0));
   }
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }

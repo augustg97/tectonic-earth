@@ -110,7 +110,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_v` | displacement | 1024×512 | how far the crust under each pixel moves to the next keyframe, east/north in degrees of great circle, B = divergence (`build_displacement.py`) |
 | `_p` | plate slot | 1024×512 | index into the per-keyframe rotation table in `platerot.json`, giving each pixel a material coordinate so procedural texture rides its plate (`build_platefield.py`) |
 | `_t` | tectonic fabric | 512×256 | R shortening, G/B the fold axis as a double angle (`build_tectonic.py`); A the **belt type**, 1 − arc: a magmatic arc (the overriding plate 150–300 km behind a trench with ocean crust going down) against a fold-and-thrust belt (`build_arc.py`, §5.10) |
-| `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`) |
+| `_f` | foreland flexure | 1024×512 | R the moat in front of a mountain belt (0–620 m), G the forebulge beyond it (0–90 m) (`build_foreland.py`); B the **relief deficit**, 0–1: how much of the ridge-and-valley relief a real belt of that height carries the source never drew there, which the shader's erosion relief fills (`relief_deficit.py`, §5.10) |
 | `_x` | drainage coordinates | 512×256 | two potentials fitted to the downhill direction of the PaleoDEM smoothed to ~120 km, χ across the regional flow and ω along it (increasing upstream), one unit per 256 km, gated on plains with a regional slope of 0.2–1 m/km; the tilted plains patches of the atlas are sampled at (χ, ω) (`build_drainphase.py`, §5.10) |
 | `_q` | fold coordinates | 512×256 | two potentials fitted to the strike field, φ across strike and ψ along it, one unit per 256 km, 16-bit byte pairs in a lossless WebP; the orogen atlas is sampled at (φ, ψ) (`build_foldphase.py`, §5.10) |
 
@@ -154,6 +154,16 @@ The present DEM carried by rigid per-group rotations toward `GROUP_TARGET`. Two 
 No collision rule fixes that — whichever cell you keep, the other has nowhere to go. `_packed_targets` instead treats each group as a disc of its own land radius and relaxes the *authored* targets until they only touch, mass-weighted (so a small block docks against a large one rather than shoving it aside) and sprung back toward the authored arrangement (so what changes is the packing, not the reconstruction). Raw land now runs **150.5 → 133.1 Mkm², −11.6%** against a 5.5% rasterisation floor, land above 1 km is flat at 29.9 → 29.4, and mean land elevation rises 56 m instead of 212.
 
 The same relaxation fixes the separate finding that the assembly ended too tight: **r90 60° → 76.6°**, against PALEOMAP's own 76°.
+
+**The collision zone is a landform (2026-09).** Where two groups' footprints interpenetrate, the overlap *is* the collision zone -- its width is the shortening -- and until this round its uplift was `gaussian_filter(overlap, 3°)²`: a dome over every patch, in the shape of the overlap rather than of an orogen. Measured on the shipped +250 Myr field it was what the user called clumps: more land above 2 km than today (12.1 Mkm² against 8.7) and almost none above 4 km (0.37 against 2.69), the summit 4.9 km. `_zone_orogen()` now builds the zone's own geometry: a **plateau** that rises across the zone's margin and is flat inside, the way Tibet's is; a **main range** along the zone's medial axis (`skimage.morphology.medial_axis`), as wide as the zone is, present only where the zone is wide enough to carry one and pruned to the axis's spine so a roundish zone does not grow a starfish (§7.32); a broad **swell** round the zone outside its plateau; and along-strike **segmentation** keyed to the crust's own present-day position, so massifs and saddles ride their plates. Calibrated on the 2048-row field that ships, the uplands stay where the user signed them off and the high tail moves into chains:
+
+| +250 Myr, Mkm² | >1 km | >2 km | >3 km | >4 km | >5 km | max |
+|---|---|---|---|---|---|---|
+| today (0 Ma) | 30.2 | 8.7 | 4.3 | 2.7 | -- | 6.7 km |
+| domes (until 3.11) | 27.1 | 12.1 | 3.8 | 0.37 | -- | 4.9 km |
+| zone orogen | 26.1 | 13.0 | 4.7 | 2.5 | 1.0 | 6.5 km |
+
+The shader's erosion relief (§5.10) then cuts them into ranges; the relief deficit on the future's smooth belts runs from 0.07 at +50 Myr to 0.70 at +250.
 
 ### 5.2 Paleogeography
 
@@ -308,6 +318,10 @@ adds only the terminator, the limb and the schematic tint on top. Measured again
 shader at the zoom where it engages, the difference is 1.2/255 mean; the cost is a few
 texture reads a pixel.
 
+- **A bake waits for every field kind of its keyframe, and a kind the timeline declares
+  absent counts as settled** (`_sheetKindsResident`, fixed 2026-09-25): the oldest keyframe
+  has no `_v`, and until then the 1000 Ma sheet waited out its in-page timeout and
+  `bake_sheets.py` its whole deadline after that, for a file that was never going to come.
 - Sheets are **baked in the app** in sixteen strips across frames (never one hitch), for
   the current pair and the next keyframe in the playback direction, from a small pool of
   render targets. Or they are **shipped**: `build/bake_sheets.py` drives the app headless
@@ -392,7 +406,15 @@ rule: with the 2048 set a screen at pixel ratio 2 reaches the sheets only near t
 is nearly dormant and the terrain shader is the picture; the 4096 set would engage it from
 about zoom 2.
 
-### 5.10 Mountains: the orogen atlas and the fold coordinates
+### 5.10 Mountains: the erosion relief, the orogen atlas and the fold coordinates
+
+**The erosion relief (the mountain round, 2026-09).** The Palaeozoic and Precambrian ranges read as symmetric triangular prisms and the future's as smooth clumps, and the fields said why before the renderer did. Inside mountain belts the relief finer than ~60–90 km -- the band a range is made of: transverse valleys, spurs, massifs and passes -- measures, as a local rms at the same regional elevation, 84 m at 1 km and 176 m at 2.2 km in the present-day PaleoDEM; ~40 m at 100–200 Ma; 16–44 m at 300–400 Ma; 11 m in the generated Precambrian; ~23 m at every elevation on the +250 Myr belts. Scotese drew the older belts as smooth envelopes (where a range stood and how high), the future's were gaussians, and the hillshade lit each smooth envelope as two faces and a crest.
+
+- **The deficit** (`relief_deficit.py`, the blue of `_f`): how much of the relief a real belt of that height carries -- `R_MED`, measured on the present-day field, `--calib` re-measures it -- the source never drew, below the real terrain's own lower quartile (0.55 of the median), so the present day and the modern-topography Cenozoic frames keep their own valleys (median 0 across 0–50 Ma), and it evens the source's own authoring noise (5, 15 and 25 Ma carry half the relief of 0, 10 and 20). Median over belts: 0.3–0.45 in parts of the Mesozoic, ~0.65–0.7 across 250–540 Ma, 0.75 in the Precambrian, 0.07 → 0.70 through the future. Tablelands score a deficit too (the Kalahari, the High Plains) -- relief alone cannot tell them from a schematic belt -- and are sorted out in the shader by how much relief there is to cut.
+- **The relief** (`eroRelief` in FRAG): the erosion filter (Clay John 2018, Felix Westin 2023, Rune Skovbo Johansen 2026, written here from the published description). Each octave is a field of stripes running DOWNHILL, grown from jittered pivots blended as a phase vector; the next octave is steered by the slope of the terrain cut so far, so the finer gullies run down the walls of the coarser ones and meet them at an angle -- branching falls out of the steering. Eight octaves, 96 km to 0.75 km: the 96 km octave's transverse ridges are the massifs and passes along a crest, the 48 km octave the transverse drainage (outlets spaced about half a belt's half-width, Hovius 1996). Walls are planar (a rounded triangle wave), each pivot has its own spacing, weight and heading, and the depth varies along strike over ~450 km. Welded to the crust through the material direction, triplanar, so a valley rides its plate through playback (checked across an interval at mixf 0–1). The four coarse octaves are scaled by the deficit; the four finer ones exist in no field at any age and are grown everywhere mountains are. The depth is a share of the local relief (the envelope's rise over 60 km, or a crest's height above its surroundings), so a tableland is barely cut and a flank deeply; the steering is by the belt's own smooth slope, falling back to across-strike from `_t` on a crest line.
+- **Handed to the normal once per pixel** with an analytic slope, because the hillshade stencil is blind in this band (iteration 62). Shaded at a gain that falls as the square root of the wavelength (`?eroN=`, default 100 at 96 km), and where the synthetic dissection carries a flank the envelope's own tilt is soft-compressed toward ~32° -- without that a smooth flank facing away from the sun is shade clamped at zero and no valley can show on it (§7.30). The relief's height goes into z (the snowline and bare rock follow the spurs), its height also into the albedo as tone (floors darker, crests lighter), it fades under land ice, and it may never carve new water.
+- **What it replaced**: the isotropic grain in the normal fades to 30% under it (one system per band, §7.4), and the fold-axis compression of the detail noise is retired while it is on -- that compression was drawing fingerprint whorls round every high point in deep time (§7.31).
+- **Cost** at 2560×1440 on the M1, live path, term on against `?ero=0`: within run-to-run noise. A first run read +0.4 ms (present-day Himalaya), +0.6 ms (300 Ma belt) and +2.4 ms (400 Ma belt); the final shader, measured while a rebuild loaded the CPU, read −0.4, −0.1 and −2.4 ms. Call it ±2 ms: the term replaces work it retires (the fold compression, most of the grain) about as fast as it adds its own. Knobs: `?ero=0` switches the whole term off (and brings the compression back), `?ero=`, `?eroN=`, `?eroF=`; `?show=10` the deficit, `11` the gate, `12` the height, `13` its hillshade alone, `14` the albedo alone, `15` the lighting alone.
 
 The three per-pixel constructions that used to make the mountains (a ridged fBm in the
 height, a `sin²(fBm)` tone band and a sine grating in the normal) are retired (WP-10 B1);
@@ -562,6 +584,8 @@ Common targeted rebuilds:
 ```bash
 ONLY_AGE=300 python reskin_seafloor.py     # one keyframe, quick visual check
 python reskin_seafloor.py                  # _e and _o for all 251 (~40 min)
+python relief_deficit.py -j 4              # the relief deficit into B of every _f (~2 min); --stats, --calib
+python rebuild_future.py                   # the 50 future keyframes (~45 min); then their _d, _w, _f, _q, _x
 python build_webdata.py                    # labels, timeline, boundaries, life
 python build_foldphase.py -j               # fold coordinates for all 251 (~2 min on three cores)
 python build_drainphase.py -j              # drainage coordinates for all 251 (~5 min on three cores)
@@ -950,6 +974,36 @@ duplicates are merged field by field, later over earlier. **A literal that is ap
 log, and a log needs a merge rule; a language that silently discards the earlier entry will not
 supply one.**
 
+### 7.30 A dark face can be clamped shade, not colour
+
+The Palaeozoic "prisms" looked like a two-tone albedo -- one flank dark brown, one tan -- and
+the first erosion relief changed the dark face by nothing. `?show=14` (the albedo alone) and
+`?show=15` (the lighting alone) split it in one render: the belt's colour was one uniform
+grey-brown, and the dark face was the hillshade CLAMPED AT ZERO. The base lights its 47 km
+stencil at ~156x, so any smooth flank steeper than about half a per cent that faces away from the
+sun is tilted past the sun's 39 degrees and is uniformly black, and nothing added on top can turn
+a facet back into the light. **When a surface does not respond to a change in its normal, look at
+the lighting alone before the colour: a saturated multiplier hides everything under it.**
+
+### 7.31 Rescaling an absolute coordinate by a varying direction makes whorls
+
+The fold-fabric compression in `elevDetail` stretched the noise along strike by rewriting the
+ABSOLUTE material position, `d - gFold*(dot(d,gFold)*k)`. Where the strike field curves -- the
+contours round a dome, a crest's end -- a rotation of a hundredth of a radian moves that point by
+nearly a noise cell, and the noise wrapped into concentric fingerprint whorls round the high
+ground. They survived every knob anyone thought to try (`?plainsK=0`, `?nodrain=1`, `?erg=0`)
+because none of them owned the term. A domain transform must be applied to the LOCAL offset about
+a point that does not move, or be keyed to a field whose value varies smoothly (a potential, the
+way `_q` is), never to the global position under a rotating frame.
+
+### 7.32 A medial axis grows an arm to every bump of its outline
+
+The future's collision ranges are built along the medial axis of each overlap zone, and the
+first cut drew starfish over North Africa and Siberia at +150 Myr: a crenellated, roundish zone's
+skeleton sends an arm into every lobe of its edge. Two fixes, both needed: smooth the outline
+first (1.3 degrees), and keep only the SPINE -- axis points where the zone is at least 0.75 as
+thick as its thickest part within 3.5 degrees, since an arm into a lobe thins as it goes.
+
 ## 8. Sources
 
 | role | source |
@@ -976,6 +1030,7 @@ supply one.**
 
 - **Palaeozoic longitude is a choice, not a measurement, and a residual against another reconstruction is EXPECTED.** Palaeomagnetism fixes palaeolatitude and orientation and says nothing about longitude, so before ~175 Ma — where the oldest sea floor and its magnetic stripes run out — every published model picks its own. Measured against Deep Time Maps (Blakey), an independent reconstruction: 5° mean |Δlon| over 0–100 Ma, 12° over 100–260 Ma, and **73° over 260–525 Ma, reaching 146° at 500 Ma**. Scotese's own model moved by up to **60°** between its ~2000 and 2016 editions. Latitude agrees throughout — land-versus-latitude correlation 0.87–0.97 across 400–525 Ma — which is the signature of a one-dimensional uncertainty. Chasing the residual to zero is the wrong goal; part of it can also be a true-polar-wander correction present in one model and absent in another.
 - **The synthesised spreading network is plausible, not surveyed.** The pattern is real; the particular line is not. Same standing as the modelled rivers.
+- **So are a deep-time range's valleys and massifs.** The erosion relief (§5.10) puts back the dissection Scotese's smooth envelopes leave out, sized by what real belts of that height carry today and steered by the belt's own slope; no particular valley, pass or peak in it is a claim about the Palaeozoic. The envelope -- where a range stood, how wide and how high -- is still the PaleoDEM's, untouched. The future's collision ranges are one step further out: their geometry comes from where the rigidly rotated groups overlap, which is the same kinematic input the domes had, drawn as an orogen instead of a lump.
 - **41 tracked labels** still sit on the wrong medium for more than a third of their span, down from 62 before the frame switch. The old root cause — a Merdith-vs-Scotese frame mismatch patched with a rigid global longitude shift — is gone; tracks now use Scotese's own rotations, so the mismatch is zero by construction. What remains is a different and smaller set of causes: about a third of them are submarine **plateaus** (Ontong Java, Manihiki, Agulhas, Broken Ridge, Mascarene, Kerguelen) where "wrong medium" means the audit expected land and the feature is genuinely a drowned plateau, and most of the rest are terranes below what a 20 km grid resolves.
 
 - **A small block in a shredded region is below the grid, in any frame.** The Rhodope Massif is the worked example: nine anchors *inside the same massif*, all assigned the same plate, score anywhere from 0.15 to 0.92 on the medium test under **either** rotation model. The spread is the measurement — the answer depends on which texel you land in, not on the reconstruction — so its residual is recorded rather than tuned away.

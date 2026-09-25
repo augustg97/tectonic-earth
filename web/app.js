@@ -356,13 +356,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260925-0518';
-const FIELD_V='20260804-fabric';   // bumped: two keyframes gained a _t that had none
+const DATA_V='20260925-0752';
+const FIELD_V='20260925-relief';   // bumped: every _f gained the relief deficit in B, and the future's fields were rebuilt
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260922';
+const IMAGERY_V='20260925';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -1020,6 +1020,7 @@ function initGL(){
     uPlatK:{value:+(_sq.get('plat')||0)},      // DEM-driven plateau envelope on the atlas: OFF by default (see FRAG reliefEnv), ?plat=1 to try
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
+    uEroK:{value:new THREE.Vector4(+(_sq.get('ero')||1),+(_sq.get('eroN')||100),+(_sq.get('eroF')||1),0)},   // the erosion relief (FRAG eroRelief): amplitude (0 off), normal gain, sub-grid share
     uNz:{value:bakeNoiseLUT()},
     // One texel of the SURFACE-PROCESS and lake fields (2048x1024), which is what
     // it is used to warp -- not the elevation, which is now twice that.
@@ -3547,7 +3548,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260907';
+const SHEET_V='20260925';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
@@ -3669,7 +3670,11 @@ function _sheetKindsResident(i){
   let ok=true;
   for(const [k] of FIELD_KINDS){
     const key=k+i, e=TEXCACHE.get(key);
-    if(!(e&&e.bm)&&!_bmMissing.has(key)){ok=false;ensureBitmap(k,i,true);}
+    /* A kind the timeline DECLARES absent (timeline[i].no -- the oldest keyframe has
+       no _v) is settled too: ensureBitmap returns at once for it without marking it
+       missing, so waiting on it here stalled the bake of 1000 Ma for its full
+       timeout, and bake_sheets.py for its whole deadline after that (2026-09-25). */
+    if(!(e&&e.bm)&&!_bmMissing.has(key)&&!fieldAbsent(i,k)){ok=false;ensureBitmap(k,i,true);}
   }
   return ok;
 }

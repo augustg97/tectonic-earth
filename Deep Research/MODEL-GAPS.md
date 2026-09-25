@@ -7999,3 +7999,96 @@ a green shelf sea would read as wet land, a dark forest as wetter than a bright 
 for a screensaver and registered here so nobody reads it as climate. The transport, the zonal
 climatology, the synoptic gate and the snowball damping are the app's, unchanged; there is no
 cloud shadow on the ambient globe.
+
+## THE MOUNTAIN ROUND (2026-09-24): the erosion relief, and the collision zone as a landform
+
+The user: the ranges before the end-Permian look like symmetric triangular prisms, and the
+future's clump up. Both are the same defect seen twice, and the fields said so before any shader
+was touched.
+
+**Measured first.** Inside mountain belts (regional elevation over 1.2 km), the relief finer than
+~60-90 km -- the band a range is made of -- as a local rms at the same regional elevation
+(`relief_deficit.py --calib`, `--stats`):
+
+| frames | at 1 km | at 2.2 km |
+|---|---|---|
+| 0-35 Ma (PaleoDEMs on modern topography) | 84 m | 176 m |
+| 100-200 Ma | ~40 | ~35-120 |
+| 300-400 Ma | 16-19 | 26-44 |
+| 700 Ma (generated) | 11 | -- |
+| +250 Myr (the suture domes) | ~23 | ~23 |
+
+and the Cenozoic itself alternates: 5, 15 and 25 Ma carry about half the relief of 0, 10 and 20.
+Scotese drew the older belts as envelopes; the future's were `gaussian(overlap)**2`. On the
+shipped +250 Myr field the domes were 12.1 Mkm2 above 2 km (today 8.7) and 0.37 above 4 km
+(today 2.7), summit 4.9 km.
+
+**Why the shader could not show it, measured on screen.** `?show=14/15` (new: albedo alone,
+lighting alone) split the prism in one render: the belt's colour is uniform and the dark face is
+the hillshade clamped at zero -- a smooth flank facing away from the sun at the 47 km stencil's
+~156x is tilted past the sun's 39 degrees. README 7.30.
+
+**Shipped.**
+
+1. `relief_deficit.py` bakes the deficit into the blue of `_f` (all 251; `build_foreland.bake`
+   writes it on every rebake): the shortfall below 0.55 of the present-day median at that
+   regional elevation, smoothed to a regional quantity. Median over belts: 0 across 0-50 Ma,
+   0.02-0.45 across the Mesozoic, 0.51-0.71 across 250-540 Ma, 0.75 in the Precambrian,
+   0.07 -> 0.70 through the future. A slope gate was built and REJECTED: envelope rms slope
+   reads 0.14-0.36% on real tablelands and 0.31-0.66% on the schematic belts (0.09% on the
+   Precambrian uplands) -- the distributions overlap -- so the tableland question is left to the
+   shader, which sizes the relief by the local relief.
+2. `eroRelief` in FRAG: an erosion filter (Clay John 2018 / Westin 2023 / Johansen 2026, written
+   from the published description) -- stripes running downhill from jittered pivots blended as a
+   phase vector, each octave steered by the slope cut so far, so tributaries branch. 96 km to
+   0.75 km; the four coarse octaves times the deficit, the four fine ones always; depth 0.8 of
+   the local relief (the flank's rise over 60 km or a crest's height over its surroundings);
+   material-keyed triplanar; planar walls; per-pivot spacing, weight and heading; along-strike
+   depth 0.55-1.45 over ~450 km. Once per pixel, analytic slope into the normal at a gain falling
+   as sqrt(wavelength); height into z (snowline, bare rock) and into albedo as tone; faded under
+   land ice; may not carve new water. Where it carries a flank, the envelope's tilt is
+   soft-compressed toward ~32 degrees (weight gate x sqrt(deficit)).
+3. The fold-axis compression of the detail noise is retired while the erosion relief is on: it
+   rescaled the absolute material position by a rotating direction and drew fingerprint whorls
+   round every dome (README 7.31). The isotropic normal grain fades to 30% under the relief.
+4. `_zone_orogen` in `build_fields.future_grid`: plateau on the smoothed overlap, main range on
+   the pruned medial axis as wide as the zone, swell outside the plateau, segmentation keyed to
+   the crust's present-day position. +250 Myr on the 2048-row field: >1 km 26.1, >2 km 13.0,
+   >3 km 4.7, >4 km 2.5, >5 km 1.0 Mkm2, summit 6.5 km (checked at 1024 rows too). The 50 future
+   keyframes rebuilt, and their _d, _w, _f, _q, _x.
+
+**What the iterations taught, in order.** A flat normal gain of 20 moved the 300 Ma frame
+0.72/255 (the flank out-votes a valley shallower than its rise). Sized by elevation, the valleys
+were a quarter of what a hillshade at 156x needs; sized by relief, visible. A sine profile at
+one spacing drew zebra stripes lit alone (`?show=13`); planar walls, per-pivot variation and a
+96 km octave (massifs and passes, which is what a range reads as at 7 km a pixel -- the zoom a
+globe is looked at, measured off the camera, not the 1.3 km first assumed) fixed it. Steering
+by the drawn (deficit-scaled) depth combed every belt in one direction; the structure now
+steers at no less than 0.6 of the fine scale and 1.8x, and tributaries branch. The medial axis
+drew starfish at +150 Myr (README 7.32).
+
+**Verified.** Every framing before/after on the live path (`lite=0`): 300, 350, 400, 450, 500,
+540, 600, 650, 700, 900 Ma, 100 and 200 Ma, the present day (Himalaya, Andes, Alps, Antarctica --
+unchanged by construction, the deficit being zero), the south polar cap at 350 Ma (the snowline
+now follows the ridges), the flat map; a strip across 300 -> 305 Ma at mixf 0/0.25/0.5/0.75/1
+(the facets hold still while the envelope evolves under them). Cost at 2560x1440 on the M1,
+on against ?ero=0: within run-to-run noise (+0.4/+0.6/+2.4 ms in one run, -0.4/-0.1/-2.4 in
+another at the Himalaya, 300 Ma and 400 Ma framings) -- the term retires about as much work as
+it adds.
+
+**Open.** The Precambrian belts are 1-1.5 km swells with 0.1% slopes; the relief dissects them
+lightly because there is little relief to cut -- their height is precambrian.py's choice, not
+this term's. The future's ranges sit where the rigidly rotated groups overlap, the same
+kinematic input the domes had; where the overlap is roundish the range is a short spine. The
+Antarctic ice dome is still carried into the future as land (out of this round's scope). The
+future's orogen labels are fixed authored points with no tie to the modelled collision zones --
+at +250 Myr the Neo-Himalaya label sits beside the new range system and the Trans-Atlantic Belt
+over the sea, whose text also claims an Atlantic closure the +250 frame does not show. Pre-
+existing; queued for the deferred future round (place them from the medial axes, or re-word).
+
+**Also fixed on the way.** The sheet bake stalled on the 1000 Ma keyframe for its whole deadline:
+a kind the timeline declares absent (its `_v`) was never counted as settled by
+`_sheetKindsResident`. And the deployed manifest and timeline had lost `iceLand`, `iceSea` and
+`sol` at some earlier rebuild, so the live readout said "ice-free" at every glaciation and never
+showed the Sun's luminance; the refresh this round's future rebuild ran restores them (present day
+10.4% of land under ice, 16.8% at 300 Ma, 98% at 690 Ma; the Sun 2.6% fainter at 300 Ma).

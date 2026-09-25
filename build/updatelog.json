@@ -2,6 +2,38 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.12",
+   "date": "24 September 2026",
+   "title": "Mountains that are ranges: valleys, massifs and passes in deep time, and chains in the future",
+   "summary": "The Palaeozoic and Precambrian ranges read as smooth triangular prisms and the future's collision belts as round clumps. Both came from the source: Scotese drew the older belts as smooth envelopes, and the future's were smooth domes over the patches where two plates overlap, so neither had any of the ridge-and-valley relief a real range is made of, and the lighting drew each smooth envelope as two faces and a crest. Now every range is cut by branching valleys that run down its flanks, with massifs and passes along its crest, grown from the belt's own slope and only where the source left them out; and the future's collisions build long mountain chains with plateaus behind them instead of domes.",
+   "sections": [
+    {
+     "name": "Deep-time ranges",
+     "items": [
+      "Transverse valleys, spurs, massifs and passes on every range the source drew smooth: the Central Pangean Mountains, the Caledonides, the Appalachian and Variscan belts, the Urals, the Gondwanan belts and the generated Precambrian ones. Tributaries branch off the valleys down to a kilometre across at the closest zoom.",
+      "The relief rides its crust through playback -- a valley stays where it is from one keyframe to the next instead of dissolving into another.",
+      "The snowline and the bare rock follow the ridges, valley floors are darker and crests lighter, and the shadowed side of a range shows its valleys instead of one dark face.",
+      "Measured, not assumed: inside mountain belts the fine relief is 84 m at 1 km and 176 m at 2.2 km of elevation today, and 16-44 m in the Palaeozoic. Only that shortfall is filled, so the present day and the Cenozoic keep their own valleys untouched."
+     ]
+    },
+    {
+     "name": "The future",
+     "items": [
+      "Where continents collide in the next 250 million years the land now rises into long mountain chains along the collision, as wide as the collision is, with a plateau behind and uplands around -- not a smooth dome over the overlap.",
+      "Land above 1-3 km is where it was; what moved is the high ground: 2.5 million square kilometres above 4 km at +250 Myr (today 2.7, before 0.4), the highest summit 6.5 km."
+     ]
+    },
+    {
+     "name": "Behind it",
+     "items": [
+      "A per-keyframe relief deficit (build/relief_deficit.py) says how much ridge-and-valley relief a real belt of that height carries that the source never drew; the shader grows exactly that with an erosion filter steered by the belt's slope.",
+      "Fingerprint whorls that circled the high ground of deep-time ranges at close zoom are gone: a texture term that bent its noise round every dome was retired.",
+      "The conditions readout shows how much of the world is under ice, and how much fainter or brighter the Sun was, again: both had quietly dropped out of the data at an earlier rebuild, so every glaciation read as ice-free."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.11",
    "date": "22 September 2026",
    "title": "The curated seas at genus level, and the Cryogenian and Cambrian by block",

@@ -508,9 +508,9 @@ SUTURE_DEG = 3.0        # half-width of a collisional belt, degrees (~330 km)
 # (measured convergence) earns the Himalayan scale; mere adjacency earns a
 # coastal-range scale. Calibrated so the +250 hypsometry lands NEAR TODAY'S
 # (a supercontinent may run a little higher, not half again higher).
-SUTURE_UPLIFT_C = 9500.0  # m at a genuinely converging (overlapping) contact
-SUTURE_POW_C = 2.0        # broader-shouldered than the contact belt: the overlap
-                          # source is patchy areas, and 2.5 crushed them to hills
+SUTURE_UPLIFT_C = 9500.0  # m: the unit the collision zone's ZONE_* heights are fractions of
+# (SUTURE_POW_C, the dome's power, went with the dome in the orogen round of
+# 2026-09: see _zone_orogen.)
 SUTURE_UPLIFT_A = 2900.0  # m at an adjacency-only contact -- foothills, not walls
 SUTURE_POW = 2.5        # sharpens the belt; see the note where it is applied
 # THE SEED WIDENING IS IN DEGREES, NOT CELLS. It used to be maximum_filter(size=3),
@@ -734,6 +734,133 @@ def _packed_targets(gid, Zsrc=None):
     return out
 
 
+# THE COLLISION ZONE AS A LANDFORM (the orogen round, 2026-09). Until this
+# round the convergent belt was gaussian_filter(overlap area, 3 deg) ** 2: a
+# DOME over every patch where two groups' footprints interpenetrate. Measured
+# on the shipped +250 Myr field that is exactly what the user called clumps --
+# more land above 2 km than today (12.1 Mkm2 against 8.7) and almost none above
+# 4 km (0.37 against 2.69), the highest point 4.9 km: broad domes, no chains,
+# no plateau edges, in the shape of the overlap and not of an orogen.
+#
+# The overlap IS the collision zone -- its width is the shortening -- and
+# thickened crust in it stands high, so the landform is built from the zone's
+# own geometry: a PLATEAU over the zone, rising across its margin and flat
+# inside, the way Tibet's is, plus a MAIN RANGE along its medial axis -- the
+# suture's crest, where the crust is thickest, as wide as the zone is and
+# present only where the zone is wide enough to carry one --
+# segmented along strike by a noise keyed to the crust's own present-day
+# position so massifs and saddles ride their plates. The adjacency foothills
+# (beltA) are unchanged. Heights are calibrated against the shipped hypsometry
+# (the S2/S4 notes above), measured on the 2048-row field that ships, Mkm2:
+#
+#                        >1 km   >2 km   >3 km   >4 km   >5 km    max
+#     today (0 Ma)        30.2     8.7     4.3     2.7     --     6.7 km
+#     +250, domes         27.1    12.1     3.8     0.37    --     4.9
+#     +250, this          26.1    13.0     4.7     2.5     1.0    6.5
+#
+# so the uplands the user signed off in the S2/S4 rounds stay where they were,
+# and what moves is the high tail: out of 2-3 km domes into 4-6.5 km chains,
+# which is what today's own hypsometry says collision builds. The widths are
+# in DEGREES and were checked at 1024 and 2048 rows (a filter written in cells
+# changed meaning here twice before; see SUTURE_SEED_DEG).
+ZONE_SMOOTH_DEG = 1.30   # the overlap mask is smoothed first: its edge is two coastlines' crenulation,
+                         # and every bump of an edge grows a medial-axis arm (the +150 starfish)
+ZONE_SPINE = 0.75        # keep the axis only where the zone is this fraction as thick as its
+ZONE_SPINE_DEG = 3.5     # ...thickest part within this reach: the spine, not the arms to its lobes
+ZONE_AXIS_W_FRAC = 0.50  # the main range's half-width about the medial axis, as a share of the
+                         # zone's own half-width there: a wide collision builds a wide range
+ZONE_AXIS_W_LIM = (0.40, 1.30)   # and clamped
+ZONE_MIN_MKM2 = (0.08, 0.60)     # a zone smaller than this builds hills, not a range (a docked islet is a bump)
+ZONE_AXIS_MIN_DEG = 0.35 # medial-axis points closer than this to the edge are twigs, not a suture
+ZONE_AXIS_ON_DEG = (0.30, 0.90)  # zone half-width over which the main range comes in
+ZONE_SPREAD_DEG = 0.35   # foothills beyond the zone edge (and the crest rounded)
+ZONE_PLATEAU = 0.12      # plateau top, as a fraction of SUTURE_UPLIFT_C
+ZONE_RANGE = 0.33        # the main range above it, same units
+ZONE_SWELL = 0.30        # a broad swell round the zone, outside its plateau (the uplands round an orogen)
+ZONE_SWELL_DEG = 2.0     # its reach
+ZONE_SEG = (0.62, 1.30)  # along-strike range of the main range's height
+ZONE_SEG_SCALE = 7.0     # noise frequency on the unit sphere (~900 km cells)
+
+
+def _zone_orogen(shorten, src, h, w):
+    """0..~1 belt of the collision zone: plateau + main range, see ZONE_*."""
+    from scipy.ndimage import gaussian_filter, distance_transform_edt
+    from skimage.morphology import medial_axis
+    deg = 180.0 / h
+    zsm = gaussian_filter(shorten.astype(np.float32), max(1.0, ZONE_SMOOTH_DEG / deg),
+                          mode=("nearest", "wrap"))
+    zone = zsm > 0.30
+    if not zone.any():
+        return np.zeros((h, w), np.float32)
+    # longitude is periodic: pad by more than any zone's reach, cut after
+    pad = int(np.ceil(6.0 / deg))
+    zp = np.concatenate([zone[:, -pad:], zone, zone[:, :pad]], axis=1)
+    skel, dedge = medial_axis(zp, return_distance=True)
+    dedge = dedge * deg                                   # degrees to the zone edge
+    skel &= dedge > ZONE_AXIS_MIN_DEG
+    # PRUNE TO THE SPINE. A roundish, crenellated zone's medial axis is a star --
+    # an arm to every lobe of the outline -- and a range along each arm drew
+    # starfish over North Africa and Siberia at +150 Myr. An arm into a lobe
+    # thins as it goes (the lobe is narrower than the body), so keep only the
+    # axis points where the zone is nearly as thick as it gets nearby.
+    from scipy.ndimage import maximum_filter as _mxf
+    loc = _mxf(dedge, size=max(3, int(round(ZONE_SPINE_DEG / deg)) | 1), mode=("nearest", "wrap"))
+    skel &= dedge >= ZONE_SPINE * loc
+    # the plateau rises on the SMOOTHED overlap, not on the distance from the
+    # binary zone edge: that distance starts at zero slope on a hard line, and
+    # the crease drew a faint ring round every range in the hillshade. The same
+    # 0.30 contour is the zone's edge, and the plateau is full by 0.75, about a
+    # degree inside it on a typical zone.
+    zsp = np.concatenate([zsm[:, -pad:], zsm, zsm[:, :pad]], axis=1)
+    t = np.clip((zsp - 0.30) / 0.45, 0.0, 1.0)
+    plat = t * t * (3.0 - 2.0 * t)
+    # the main range: along the medial axis, sized by how wide the zone is there
+    if skel.any():
+        dax, (iy, ix) = distance_transform_edt(~skel, return_indices=True)
+        dax = dax * deg
+        half = dedge[iy, ix]                              # the zone's half-width at the nearest axis point
+        a0, a1 = ZONE_AXIS_ON_DEG
+        on = np.clip((half - a0) / (a1 - a0), 0.0, 1.0)
+        on = on * on * (3.0 - 2.0 * on)
+        # a range as wide as its collision: the worm of one constant width
+        # that the first cut drew along every axis is not what an orogen is
+        wl0, wl1 = ZONE_AXIS_W_LIM
+        wid = np.clip(ZONE_AXIS_W_FRAC * half, wl0, wl1)
+        rng = np.exp(-(dax / wid) ** 2) * on * zp
+        # small zones build hills: scale by the area of the zone the axis belongs to
+        from scipy.ndimage import label
+        lab, nl = label(zp)
+        if nl:
+            lat = 90.0 - (np.arange(h) + 0.5) * deg
+            cell = (np.cos(np.radians(lat)) * (np.pi * 6371.0 / h) ** 2)[:, None] * np.ones((1, zp.shape[1]))
+            areas = np.bincount(lab.ravel(), weights=cell.ravel(), minlength=nl + 1) / 1e6
+            m0, m1 = ZONE_MIN_MKM2
+            big = np.clip((areas - m0) / (m1 - m0), 0.0, 1.0)
+            rng *= big[lab[iy, ix]]
+    else:
+        rng = np.zeros_like(plat)
+    plat = plat[:, pad:-pad]
+    rng = rng[:, pad:-pad]
+    # along-strike segmentation on the crust's own coordinates, smoothed across
+    # the owner seam so the two plates' frames blend instead of stepping
+    sv = src.reshape(3, h, w)
+    sm = np.stack([gaussian_filter(sv[k], max(1.0, 1.0 / deg), mode=("nearest", "wrap"))
+                   for k in range(3)])
+    sm /= np.maximum(np.linalg.norm(sm, axis=0), 1e-6)
+    nz = PRE.fbm3(sm.reshape(3, -1) * ZONE_SEG_SCALE, 7717, octaves=2).reshape(h, w)
+    s0, s1 = ZONE_SEG
+    seg = s0 + (s1 - s0) * np.clip((nz - 0.25) / 0.5, 0.0, 1.0)
+    belt = ZONE_PLATEAU * plat + ZONE_RANGE * rng * seg
+    belt = gaussian_filter(belt.astype(np.float32), max(1.0, ZONE_SPREAD_DEG / deg),
+                           mode=("nearest", "wrap"))
+    # the swell is the SURROUNDINGS' uplift: inside the zone the plateau
+    # already stands, and adding both there piled the interior past 3 km
+    swell = gaussian_filter(zone.astype(np.float32), max(1.0, ZONE_SWELL_DEG / deg),
+                            mode=("nearest", "wrap"))
+    belt += ZONE_SWELL * swell * (1.0 - plat)
+    return np.clip(belt, 0.0, 1.5)
+
+
 def future_grid(frac, gid, Zsrc, h, w):
     """Inverse-warp the present DEM by per-group rotation. frac 0 -> identity.
 
@@ -794,6 +921,11 @@ def future_grid(frac, gid, Zsrc, h, w):
 
     packed = _packed_targets(gid, Zsrc)
     nland = np.zeros((h, w), np.float32)   # land-on-land overlap depth (S4)
+    # Where each output cell's crust sits TODAY -- the winning group's source
+    # direction. The orogen's along-strike segmentation is keyed to it, so a
+    # massif stays on its crust from one keyframe to the next instead of the
+    # continent sliding under a pattern fixed to the grid.
+    src = np.zeros((3, h * w), np.float32)
     for i, g in enumerate(GROUPS):
         if g not in cent:
             continue
@@ -822,7 +954,9 @@ def future_grid(frac, gid, Zsrc, h, w):
         # convergence, and S4 below turns it into crustal thickening instead of
         # letting one map simply win and look like interpenetration.
         nland += ((z >= 0.0) & (out >= 0.0)).astype(np.float32)
-        owner = np.where(z > out, i, owner)
+        win = (z > out)
+        src[:, win.ravel()] = S[:, win.ravel()]
+        owner = np.where(win, i, owner)
         out = np.maximum(out, z)          # overlap -> collision keeps the high ground
 
     # COLLISIONAL UPLIFT ALONG THE SUTURES.
@@ -895,8 +1029,7 @@ def future_grid(frac, gid, Zsrc, h, w):
         seed = np.maximum(seed, shorten)    # union, for the weld's own source
         # ---- S2: the widening is in DEGREES (see SUTURE_SEED_DEG) ----
         n = int(round(SUTURE_SEED_DEG / (180.0 / h))) * 2 + 1
-        beltC = gaussian_filter(maximum_filter(np.clip(shorten * 1.15, 0.0, 1.0),
-                                               size=max(3, n)), sigma) ** SUTURE_POW_C
+        beltC = _zone_orogen(shorten, src, h, w)
         beltA = gaussian_filter(maximum_filter(seedA, size=max(3, n)), sigma) ** SUTURE_POW
         if WELD:
             # ---- S6: weld the collision zone before raising it ----

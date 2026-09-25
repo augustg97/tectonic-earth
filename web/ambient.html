@@ -78,8 +78,8 @@ const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0
 const FPS=+(q.get('fps')||(REDUCED?10:30));
 let CLOUDS=q.get('clouds')!=='0';
 const WEATHER=q.get('weather')!=='0'&&!REDUCED;
-const SHEET_V='20260907', FIELD_V='20260804-fabric', IMAGERY_V='20260922';
-const DATA_V='20260925-0518';   // stamped by build/stamp_data_version.py (its own line, as the stamp expects)
+const SHEET_V='20260925', FIELD_V='20260925-relief', IMAGERY_V='20260925';
+const DATA_V='20260925-0752';   // stamped by build/stamp_data_version.py (its own line, as the stamp expects)
 let SHEET_DIR='sheets2048/';   // the lean set this page runs on; sheets/ (4096, the app's) if it is all the site ships
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};

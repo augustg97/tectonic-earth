@@ -323,7 +323,12 @@ def bake(age, quiet=False):
         return 0.0
     r = np.clip(down / FLEX_MAX, 0, 1)
     g = np.clip(up / BULGE_MAX, 0, 1)
-    b = np.zeros_like(r)
+    # B is the RELIEF DEFICIT (relief_deficit.py): how much ridge-and-valley
+    # relief the source never drew here, which the shader's erosion relief
+    # fills. Computed from the same shipped _e, so a foreland rebake keeps it.
+    import relief_deficit as RD
+    b = RD.deficit_f(age)
+    b = np.zeros_like(r) if b is None else b.astype(r.dtype)
     arr = np.stack([np.round(x * 255).astype(np.uint8) for x in (r, g, b)], -1)
     name = _stem(age) + "_f.webp"
     path = os.path.join(FIELDS, name)
