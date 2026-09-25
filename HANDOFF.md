@@ -107,7 +107,7 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260925-0752`**, release 3.12 (the mountains), commit `__COMMIT__`.
+- Last live deploy: **`DATA_V=20260925-0752`**, release 3.12 (the mountains), commit `08d2f435` (the record is the commit after it).
   Before it: 3.11, `DATA_V=20260922-1642`, commit `da86a95c`.
 - Cache versions: `FIELD_V='20260925-relief'`, `SHEET_V='20260925'`, `IMAGERY_V='20260925'`
   (in `web/app.js` AND `web/ambient.html`).
