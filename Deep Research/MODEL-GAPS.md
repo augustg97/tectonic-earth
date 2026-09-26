@@ -8147,3 +8147,58 @@ bake sees them, keeping the source's own basins. Lake cover on belts (regional h
 (1.02 before the coarse fill), 500 Ma 0.07 -> 0.10, 700 Ma 0.32 -> 0.75, +150 Myr 1.66 -> 1.48,
 +250 Myr 1.56 -> 1.49; all land within 0.3 points at every age. Greenness at the deep-time gate's
 framings unchanged within 0.003; `audit_all --quick` at baseline, ice extent included.
+
+## THE MOUNTAIN ROUND, THIRD PASS (2026-09-25): thrust sheets, the range scale, and the lakes were noise
+
+The user, on 3.13 live, with three Google Earth views (the BC Coast Mountains and the Rockies, the
+Basin and Range, the Himalaya and Tibet): add thrust-sheet structure so the ranges look more linear,
+fix the belt lakes; improved, but still needs work.
+
+**The belt lakes were three things, and only one was the relief.** (1) The relief's hollows, which
+3.13's check caught at the wrong view: it now reads exactly what the lake bake reads (8-bit, half
+resolution, sigma 1), fills against the ocean as the bake does, and raises a hollow to its spill
+level. (2) The CODEC: on one keyframe, lakes from the exact 8-bit field covered 0.047% of the belts
+and from the AVIF 0.097% -- the decode is off by 33 m rms and up to 156 m over rugged relief, where
+one code is already 63-89 m. The lake bake now keeps a basin only if it is a code deep
+(`drop_unresolved`, README 7.39). (3) A NONDETERMINISTIC sea floor that made every A/B unrepeatable
+and every build different: `seamounts.py` seeded chains with a salted `hash()` (README 7.38) -- the
+seamounts re-rolled between keyframes baked by different pool workers, since the pool bakes began.
+Belt lake bodies 300/400/700 Ma: 13/24/15 (3.13) -> 0/3/1; lakes the relief makes, <=0.007% of
+belt area. **Open:** the future's belt lakes (1.3-1.4%) are the future terrain's own basins (the
+relief removes a fifth); its large lowland lakes are blocky at close zoom.
+
+**Linearity was missing at the range scale, and no erosion model supplies it (README 7.42).**
+Control coherence by band (1-2 / 2-4 / 4-8 px; real 0.38 / 0.44 / 0.53):
+
+| state | coherence | on screen |
+|---|---|---|
+| 3.13 (rock bands on the envelope's contours) | - / 0.28 / - | ranges as blotches |
+| + thrust sheets in the landscape model (first version) | 0.36 / 0.35 / 0.38 | fingerprint whorls at belt ends, ripples |
+| sheets fixed: phase added not divided (7.31), per-plate noise (7.40), lenses | 0.36 / 0.32 / 0.36 | coherent lenses in the forcing, blotchy output |
+| + the range scale as structure: major ranges in the 2-4 band, sub-belts as a 4th band | 0.37 / 0.35 / 0.40 | parallel ranges where the gates let them |
+| + gates by family (vortex, alias, curl at 2-4 spacings), 4th-band gain 1.5 | 0.40 / 0.37 / 0.44 | sub-belts gated out of the Andes, Alps, Zagros |
+| + curl at ~1 spacing, coherence 0.15-0.45 (shipped) | **0.43 / 0.44 / 0.51** | long parallel ranges and trench valleys (BC), fold trains (Zagros) |
+
+The landscape model's own bands never passed 0.35 with a 16:1 sheet contrast in its uplift and
+erodibility: at steady state it drains across strike. Two bugs made the first sheets worse than
+none: u / lambda(x) with u in the thousands of km (the noise gradient times u swamped u's own), and
+a material coordinate interpolated between plates' frames, which stretched the crust 6-46x along
+every suture and turned every noise on it to sub-pixel stripes down the belt axes.
+
+**The squiggles were the renderer's relief measure (README 7.41).** `rug` was a first difference,
+zero on every crest and thalweg: the orange (laterite, dune-field) and pale-green lines along the
+ranges were the lowland colour showing through its zeros, and the prairie squiggles were code
+steps read as relief. Now phase-independent relief less half a code; laterite fades above
+1.2-2.2 km (a lowland weathering crust); ergs need a basin and fade out at 1.5-2.6 km (every large
+sand sea lies below ~1.5 km).
+
+**Open, against the Google Earth references:**
+- *Crispness at mid zoom.* At ~1 km a screen pixel the field is ~10 km a texel; ranges 10-20 km wide
+  (the Basin and Range) render as soft blobs even from the real DEM. Only sub-texel synthesis can
+  close it; the erosion relief does so in deep-time belts and not on real terrain.
+- *Tone.* The valley tone darkens floors everywhere; in deserts the basin floors should be the
+  palest ground (playas, bajadas) and the ranges the darkest. Humid ranges render brown where the
+  reference is conifer forest to the treeline.
+- *Tibet* renders with broad snow on the plateau interior and a dark snowless Himalayan front, the
+  reverse of the reference; and present-day polar land shows large dark bare-rock areas.
+- *The Altiplano* is too ridged: its flat interior between the cordilleras is not modelled.

@@ -31,7 +31,7 @@ from scipy.ndimage import (gaussian_filter, label as cclabel, mean as nd_mean,
 from skimage.morphology import reconstruction
 from skimage.segmentation import watershed
 
-from fieldpack import dec_elev, RF_MAX
+from fieldpack import dec_elev, RF_MAX, Z_RANGE
 from climate import climate_at
 
 FIELDS = os.path.join(os.path.dirname(__file__), "..", "web", "fields")
@@ -87,6 +87,31 @@ def fill_depressions(Z, sea=0.0):
     return reconstruction(seed, Z, method="erosion")
 
 
+def drop_unresolved(Zs, filled, k=1.0):
+    """Keep only the closed basins the shipped elevation can actually resolve.
+
+    The lakes are read from the 8-bit sqrt-encoded AVIF, and one code of that
+    encoding is (4/255)*sqrt(8000 z): 20 m at 200 m, 63 m at 2 km, 89 m at
+    4 km. A basin shallower than one code at its own water level cannot be told
+    from quantisation -- and the codec's own error is of that order (33 m rms,
+    up to 150 m, over the mountain belts at 400 Ma, where rugged relief costs
+    the encoder most). Read literally, that noise pocked every range with
+    small lakes: on one keyframe the codec alone doubled the belt lake cover.
+    So a flooded region survives only if its deepest point lies at least one
+    code below its spill level. Unlike an h-minima transform this leaves the
+    basins that do survive their full depth. September 2026."""
+    dep = filled - Zs
+    lbl, n = cclabel(dep > 1e-3)
+    if not n:
+        return filled
+    ids = np.arange(1, n + 1)
+    dmax = nd_max(dep, lbl, ids)
+    lvl = nd_max(filled, lbl, ids)
+    step = (4.0 / 255.0) * np.sqrt(Z_RANGE * np.maximum(lvl, 0.0))
+    keep = np.concatenate([[True], dmax >= k * step])
+    return np.where(keep[lbl], filled, Zs).astype(np.float32)
+
+
 def parse_age(base):
     kind, num = base.split("_")
     a = int(num)
@@ -139,7 +164,7 @@ def lake_depth(Z, Rf, T, age=0.0):
     # De-terrace the 8-bit paleo-DEM before the fill so basins are natural, not
     # staircased (the shipped elevation is untouched -- this feeds only the lakes).
     Zs = gaussian_filter(Z, sigma=1.0, mode="nearest")
-    filled = fill_depressions(Zs)
+    filled = drop_unresolved(Zs, fill_depressions(Zs))
 
     # Basin bottoms are the flooded hollows; use them (plus the ocean) as the
     # markers of a watershed segmentation, which assigns every land cell to the

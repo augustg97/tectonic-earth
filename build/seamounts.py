@@ -65,10 +65,24 @@ Three things then fall out of the catalogue rather than needing new machinery:
   record has them, a modelled population where it does not.
 """
 import math
+import zlib
 
 import numpy as np
 
 import hotspots_cat
+
+
+def _name_seed(name):
+    """A seed from a plume's name that is the same in every process.
+
+    NOT the builtin hash(): Python salts str hashes per process
+    (PYTHONHASHSEED), and the bakes run in a worker pool, so every worker drew a
+    different set of volcanoes for the same named chain -- the seamounts along
+    a hotspot track re-rolled between neighbouring keyframes baked by different
+    workers, and no two builds of one keyframe agreed (up to 1.8 km of sea
+    floor, found in September 2026 when an A/B of the relief would not repeat).
+    """
+    return zlib.crc32(str(name).encode("utf-8")) % 100000
 
 # --- populations -----------------------------------------------------------
 N_PLUMES = 34             # active plumes worldwide; the real count is 40-50
@@ -358,7 +372,7 @@ def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7, age_of=None
                 hgt = min(hgt, H_CHAIN_MAX)
                 if hgt <= 250.0:
                     continue
-                sd = (abs(hash(name)) % 100000) + int(A)
+                sd = _name_seed(name) + int(A)
                 _stamp(chain, ys, xs, h, w, dpc, lo, la, hgt,
                        1.1 + 0.5 * _h(sd, 29), 0.0, sd, cap, -summit)
 
@@ -429,7 +443,7 @@ def field(age_myr, sea, lat1d, deg_per_cell, u=None, v=None, seed=7, age_of=None
                     dlo = 0.0 if u is None else float(u[r, c])
                     dla = 0.0 if v is None else float(v[r, c])
                 azi = math.degrees(math.atan2(dla, dlo)) if (dlo or dla) else 0.0
-                sd = (abs(hash(tag)) % 100000) + ti * 7919 + k
+                sd = _name_seed(tag) + ti * 7919 + k
                 _stamp(chain if not modelled else out, ys, xs, h, w, dpc, lo, la,
                        hgt, (0.9 if dense else 0.55) + 0.7 * _h(sd, 29), azi, sd,
                        None if modelled else cap,

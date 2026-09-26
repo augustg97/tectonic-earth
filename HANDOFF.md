@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (mountains 3.12; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -12,10 +12,38 @@ Paste this whole file as the first message of a new session.
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
 - **Read `README.md` first**: §2 working rules, §5.10 mountains (the erosion relief), §5.1b the
   future series (the collision zone), §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.30–7.32 are this round's), §9 known limits.
+  commands, §7 traps (7.38–7.42 are this round's; 7.30–7.37 the two before), §9 known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: mountains, second pass (3.13, 2026-09-25)
+## The latest round: mountains, third pass (3.14, 2026-09-25)
+
+The user, on 3.13, with three Google Earth views (BC Coast Mountains and the Rockies, the Basin and
+Range, the Himalaya and Tibet): "add thrust-sheet structure so the ranges look more linear, and
+let's fix the belt lakes. Overall the mountains are improved but still need work."
+
+- **Belt lakes were three things (README 7.38, 7.39; MODEL-GAPS third pass).** The relief's hollows
+  (its check now reads the lake bake's exact view, fills against the ocean, raises to the spill);
+  the AVIF codec (pits of 30–150 m read as basins: `bake_lakes.drop_unresolved` keeps a basin only
+  if it is one 8-bit code deep); and a nondeterministic sea floor (`seamounts.py` seeded chains
+  with the salted `hash()`, so every pool worker drew different seamounts and no A/B repeated).
+  Belt lake bodies 300/400/700 Ma: 13/24/15 → 0/3/1.
+- **Thrust sheets** on a strike potential (`relief.strike_potential`, `_sheet_family`): three
+  families (45/140/300 km apart), each sheet a lens with its own strength along strike, gated
+  per family (`family_gate`). The first version drew fingerprint whorls: u/λ(x) with u in the
+  thousands of km (7.31), and a material coordinate blended between plates' frames (7.40, now
+  `relief.Material`: noise per plate, blended by value).
+- **The range scale is structure (7.42).** The landscape model drains across strike whatever its
+  forcing; the 2–4 px band now mixes the major ranges in, and a fourth band (σ 4–8 px) is laid from
+  the sub-belts, calibrated to real belts (`STRUCT_BANDS`, `REAL_Q3`). Control coherence
+  (1–2/2–4/4–8 px) 0.36/0.32/0.36 → 0.43/0.44/0.51, real 0.38/0.44/0.53.
+- **Shader**: land hillshade by scale (`?hsC=` `?hsF=`), the erosion relief steered by the fine
+  gradient (`?eroS=`), `rug` as relief not slope (7.41: its zeros on every crest drew the orange
+  and pale-green squiggles), laterite only on low ground, ergs only in basins below ~1.5–2.6 km.
+- Test harness for this kind of work: a symlink farm of `web/fields` in the scratchpad with test
+  bakes in it, served as `web/fields_test` (`&fieldbase=fields_test/`). **Remove the symlink
+  before committing.**
+
+## The round before: mountains, second pass (3.13, 2026-09-25)
 
 The user, on 3.12: "the mountains still have pop in and look symmetrical. the future mountains look
 too clumpy still and seem not to account for erosion. Let's keep making changes until these
@@ -136,9 +164,10 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260925-1925`**, release 3.13 (mountains shaped by erosion; the
-  texture pop-in), commit `8119fd30` (the record is the commit after it). Before it: 3.12, `DATA_V=20260925-0752`, `08d2f435`.
-- Cache versions: `FIELD_V='20260925-baked'`, `SHEET_V='20260925b'`, `IMAGERY_V='20260925b'`
+- Last live deploy: **`DATA_V=20260926-0235`**, release 3.14 (thrust sheets and the range scale;
+  belt lakes; a deterministic sea floor), commit recorded in the record commit after it. Before it:
+  3.13, `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
+- Cache versions: `FIELD_V='20260925-sheets'`, `SHEET_V='20260925c'`, `IMAGERY_V='20260925c'`
   (in `web/app.js` AND `web/ambient.html`).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
@@ -306,6 +335,12 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
   unguarded one re-ran every step in each worker (four processes writing the same files) and the
   pool respawned the dying workers until killed by PID.
 
+- **Mountains (3.14).** Test determinism with two different `PYTHONHASHSEED`s, not a repeat in one
+  process (7.38). Before trusting an A/B of anything the lake bake reads, compare the exact 8-bit
+  field with the AVIF decode: the codec alone doubled belt lakes once (7.39). A per-plate
+  `Material` costs ~2 GB a worker; the bake peaks near 55 GB on 12 workers (no swap on 103 GB).
+  `?show=6` (rug), `?show=1` (ergs) and `?show=14` (albedo) found the crest squiggles in minutes.
+
 Plus the standing ones: a process backgrounded with `&` inside a tool call dies with the call;
 `pgrep -f` matches the waiter itself — wait on a PID.
 
@@ -323,6 +358,11 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
    ages after the mirrored lists.
 4. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
+5. **Mountains against the Google Earth references** (MODEL-GAPS, third pass, "Open"): crispness at
+   mid zoom (the real DEM's 10–20 km ranges render as soft blobs); tone (desert basin floors should
+   be the palest ground, humid ranges forested to the treeline); Tibet's snow is on the plateau
+   rather than the Himalayan front; the Altiplano's flat interior; the future's blocky lowland
+   lakes; dark bare-rock areas on present-day polar land.
 
 ## Commands to ship
 

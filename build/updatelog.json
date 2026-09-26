@@ -2,6 +2,36 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.14",
+   "date": "25 September 2026",
+   "title": "Mountain ranges that run in lines, and lakes only where there are basins",
+   "summary": "Folded mountain belts now carry thrust sheets: ridges that run along the belt, rise, and hand over to the next one en echelon, grouped into parallel ranges with long valleys between them, the way the Rockies, the Zagros and the Andes are built. The scatter of small lakes through the ranges is gone, and the sea floor no longer changes from one build to the next.",
+   "sections": [
+    {
+     "name": "Mountains",
+     "items": [
+      "Belts are built of thrust sheets: each ridge has a gentle back and a steeper front facing the plains, runs for a few hundred kilometres and dies out while the next one takes over.",
+      "Wide belts split into parallel ranges with long trench valleys between them, like the Rockies and the Rocky Mountain Trench, measured against today's real ranges until their grain matched.",
+      "The fingerprint-like whorls and ripples at the ends of some belts, and fine stripes running down the middle of others, are gone.",
+      "Mountain crests no longer show thin orange or pale-green squiggles along every ridge line, and high desert crests no longer grow orange sand seas: dune fields now sit in basins, as they do on Earth."
+     ]
+    },
+    {
+     "name": "Lakes",
+     "items": [
+      "The small lakes scattered through mountain belts are gone. Only basins deep enough to be real keep their water; many were artefacts of image compression.",
+      "Lakes in the future's collision belts are the future landscape's own basins and remain."
+     ]
+    },
+    {
+     "name": "Sea floor",
+     "items": [
+      "Seamount chains along hotspot tracks no longer re-roll between neighbouring 5-million-year steps."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.13",
    "date": "25 September 2026",
    "title": "Mountains shaped by erosion, and textures that stop jumping",

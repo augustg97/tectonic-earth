@@ -160,12 +160,27 @@ def rain_for(age, H, W):
 _PLATEROT = None
 
 
-def material(age, H, W):
-    """(3, H, W) unit vectors: where each pixel's crust sat at 0 Ma, z-up.
+class Material:
+    """Where each pixel's crust sat at 0 Ma, PER PLATE.
 
-    Plate slot from _p (nearest), rotation from platerot.json, then each
-    component smoothed over ~1 degree so the frames of two plates blend across
-    their boundary instead of stepping -- belts ARE plate boundaries."""
+    frames: (idx, w, P) per plate -- the flat pixel indices it covers, its
+    blending weight there (a smoothed indicator of the plate, ~1 degree, so
+    the weights of a pixel sum to 1), and those pixels' 0 Ma positions in that
+    plate's own frame. Noise is evaluated in each frame and the VALUES are
+    blended (crust_noise). Blending the coordinates instead -- the first
+    version -- swept the position from one plate's 0 Ma frame to the other's,
+    thousands of km apart, inside a ~300 km strip: the crust stretched 6-46x
+    along every boundary, and any noise on it turned to sub-pixel stripes
+    running down the belts' axes, which are sutures (September 2026)."""
+
+    def __init__(self, H, W, frames):
+        self.H, self.W, self.frames = H, W, frames
+        self.shape = (3, H, W)
+
+
+def material(age, H, W):
+    """Material (above), or plain (3, H, W) unit vectors where no plate field
+    exists. Plate slot from _p (nearest), rotation from platerot.json, z-up."""
     global _PLATEROT
     if _PLATEROT is None:
         _PLATEROT = json.load(open(os.path.join(WEB, "platerot.json")))
@@ -183,32 +198,51 @@ def material(age, H, W):
     ry = np.clip(((np.arange(H) + 0.5) / H * sh).astype(int), 0, sh - 1)
     rx = np.clip(((np.arange(W) + 0.5) / W * sw).astype(int), 0, sw - 1)
     S = slot[ry][:, rx]
-    out = v.copy()
+    # the blending weights, at a quarter of the resolution (they are smooth)
+    q = 4
+    Sq = S[q // 2::q, q // 2::q]
+    sig = max(1.0, H / 180.0) / q
+    vf = v.reshape(3, -1)
+    frames = []
     for k in np.unique(S):
-        q = rot[int(k)] if int(k) < len(rot) else [0.0, 0.0, 1.0, 0.0]
-        ax = np.array(q[:3], np.float32); ang = float(q[3])
+        wq = _g((Sq == k).astype(np.float32), sig)
+        wk = zoom(wq, (H / wq.shape[0], W / wq.shape[1]), order=1, mode="grid-wrap")
+        wk = np.where(S == k, np.maximum(wk, 0.5), wk).ravel()
+        idx = np.flatnonzero(wk > 0.02).astype(np.int32)
+        vv = vf[:, idx]
+        qk = rot[int(k)] if int(k) < len(rot) else [0.0, 0.0, 1.0, 0.0]
+        ax = np.array(qk[:3], np.float32); ang = float(qk[3])
         n = np.linalg.norm(ax)
-        if n < 1e-9 or abs(ang) < 1e-12:
-            continue
-        ax /= n
-        m = S == k
-        vv = v[:, m]
-        c, s = np.cos(ang), np.sin(ang)
-        cr = np.cross(ax[None, :], vv.T).T
-        dt = (ax[:, None] * vv).sum(0)
-        out[:, m] = vv * c + cr * s + ax[:, None] * (dt * (1.0 - c))[None, :]
-    sig = max(1.0, 1.0 / (180.0 / H))
-    out = np.stack([_g(out[i], sig) for i in range(3)])
-    out /= np.maximum(np.linalg.norm(out, axis=0, keepdims=True), 1e-6)
-    return out.astype(np.float32)
+        if n > 1e-9 and abs(ang) > 1e-12:
+            ax /= n
+            c, s_ = np.cos(ang), np.sin(ang)
+            cr = np.cross(ax[None, :], vv.T).T
+            dt = (ax[:, None] * vv).sum(0)
+            vv = vv * c + cr * s_ + ax[:, None] * (dt * (1.0 - c))[None, :]
+        frames.append((idx, wk[idx].astype(np.float32), vv.astype(np.float32)))
+    return Material(H, W, frames)
+
+
+def _blend(mat, fn):
+    """fn(P, idx) -> raw noise per frame (mean 0.5); blended across plates by
+    value, keeping the variance (sum w n / sqrt(sum w^2))."""
+    acc = np.zeros(mat.H * mat.W, np.float64)
+    w2 = np.zeros(mat.H * mat.W, np.float64)
+    for idx, wk, P in mat.frames:
+        acc[idx] += wk * (fn(P.astype(np.float64), idx) - 0.5)
+        w2[idx] += wk.astype(np.float64) ** 2
+    return (acc / np.sqrt(np.maximum(w2, 1e-12))).reshape(mat.H, mat.W)
 
 
 def crust_noise(mat, scale_km, seed, octaves=3):
     """Zero-mean, unit-ish noise of the crust's 0 Ma position, cells ~scale_km."""
     import precambrian as PRE
-    H, W = mat.shape[1:]
-    n = PRE.fbm3(mat.reshape(3, -1).astype(np.float64) * (R_EARTH_KM / scale_km), seed,
-                 octaves=octaves).reshape(H, W)
+    k = R_EARTH_KM / scale_km
+    if isinstance(mat, Material):
+        n = _blend(mat, lambda P, idx: PRE.fbm3(P * k, seed, octaves=octaves))
+    else:
+        H, W = mat.shape[1:]
+        n = PRE.fbm3(mat.reshape(3, -1).astype(np.float64) * k, seed, octaves=octaves).reshape(H, W)
     n = n - n.mean()
     return (n / max(n.std(), 1e-6)).astype(np.float32)
 
@@ -223,77 +257,19 @@ def _hash2(ix, iy, seed):
     return a, b
 
 
-def stripes(mat, across, wavelength_km, seed, mask):
-    """Stripes RUNNING ALONG STRIKE, keyed to the crust: -1..1.
-
-    Phasor noise (the construction the shader's erosion relief uses): every
-    jittered pivot of a grid in the crust's 0 Ma frame emits a cosine across
-    strike, at its own frequency (0.8-1.25x), and the pivots are blended as a
-    phase vector, so the stripes are parallel to the belt, irregular in
-    spacing and continuous. `across` is the across-strike direction already in
-    the material frame (3, H, W). Evaluated on the three axis planes of the
-    material direction and blended by a steep power of it (triplanar)."""
-    H, W = mat.shape[1:]
-    out = np.zeros((H, W), np.float32)
-    idx = np.nonzero(mask.ravel())[0]
-    if idx.size == 0:
-        return out
-    m = mat.reshape(3, -1)[:, idx].astype(np.float64)
-    a = across.reshape(3, -1)[:, idx].astype(np.float64)
-    k = R_EARTH_KM / wavelength_km
-    wts = np.abs(m) ** 12
-    wts /= np.maximum(wts.sum(0, keepdims=True), 1e-12)
-    acc_c = np.zeros(idx.size); acc_s = np.zeros(idx.size); acc_w = np.zeros(idx.size)
-    for ax in range(3):
-        b, c = [(1, 2), (2, 0), (0, 1)][ax]
-        pw = wts[ax]
-        sel = pw > 0.02
-        if not sel.any():
-            continue
-        qx = m[b, sel] * k; qy = m[c, sel] * k
-        nx, ny = a[b, sel], a[c, sel]
-        nn = np.maximum(np.hypot(nx, ny), 1e-9); nx /= nn; ny /= nn
-        cx, cy = np.floor(qx), np.floor(qy)
-        fx, fy = qx - cx, qy - cy
-        pc = np.zeros(sel.sum()); ps = np.zeros(sel.sum()); pwt = np.zeros(sel.sum())
-        for oy in (-1, 0, 1):
-            for ox in (-1, 0, 1):
-                h1, h2 = _hash2(cx + ox, cy + oy, seed + 7 * ax)
-                h3, h4 = _hash2(cx + ox + 101, cy + oy + 37, seed + 7 * ax + 3)
-                dx = fx - ox - (0.25 + 0.5 * h1)
-                dy = fy - oy - (0.25 + 0.5 * h2)
-                wgt = np.maximum(1.0 - (dx * dx + dy * dy) * 0.69444, 0.0) ** 3 * (0.35 + 0.65 * h3)
-                ph = 2.0 * np.pi * (0.8 + 0.45 * h4) * (dx * nx + dy * ny)
-                pc += wgt * np.cos(ph); ps += wgt * np.sin(ph); pwt += wgt
-        acc_c[sel] += pw[sel] * pc; acc_s[sel] += pw[sel] * ps; acc_w[sel] += pw[sel] * pwt
-    l = np.maximum(np.hypot(acc_c, acc_s), 1e-9)
-    conf = np.clip(l / np.maximum(acc_w, 1e-9) / 0.22, 0.0, 1.0)
-    flat = out.ravel()
-    flat[idx] = (acc_c / l * conf).astype(np.float32)
-    return flat.reshape(H, W)
-
-
-def across_material(mat, env, sig=8.0):
-    """The across-strike (downhill) direction of the smoothed envelope, carried
-    into the material frame by differencing the material field along it."""
-    H, W = env.shape
-    e = _g(env, sig)
-    gy, gx = np.gradient(e)                        # per pixel; rows run south
-    lat = 90.0 - (np.arange(H) + 0.5) / H * 180.0
-    cl = np.maximum(np.cos(np.radians(lat)), 0.1)[:, None]
-    # downhill direction in PIXEL space, corrected for the east-west cell width
-    ux, uy = -gx / cl, -gy                        # uphill -> downhill, x stretched by 1/cos
-    n = np.maximum(np.hypot(ux * cl, uy), 1e-12)
-    ux, uy = ux / n, uy / n
-    dmx = np.stack([np.gradient(mat[i], axis=1) for i in range(3)])
-    dmy = np.stack([np.gradient(mat[i], axis=0) for i in range(3)])
-    v = dmx * ux[None] + dmy * uy[None]
-    v /= np.maximum(np.linalg.norm(v, axis=0, keepdims=True), 1e-12)
-    return v.astype(np.float32)
-
-
-STRIKE_BANDS = 0.9      # erodibility contrast of the strike-parallel rock bands (0 off)
+STRIKE_BANDS = 0.0      # retired by the thrust sheets (below); kept for A/B
+# ---- the thrust sheets (the mountain round, third pass) ----
+SHEET_KM = 45.0          # mean spacing of the sheets across strike
+SHEET_U = 1.2            # their weight in the uplift noise (lem un_amp scales it)
+SHEET_K = 1.0            # ...and in the erodibility: weak rock in the strike valleys
+SHEET_FRONT = 0.28       # the share of each sheet's width taken by its steep front
+SHEET2_KM = 140.0        # the MAJOR sheets: structural domains, sub-ranges and the trenches between
+SHEET2_W = 0.8           # their weight beside the minor sheets' 0.6
+SHEET_PH = (0.35, 0.25)   # the phase drifts, in sheet widths: spacing (~600 km), line (~260 km)
+SHEET_LENS = 150.0       # along-strike scale of each minor sheet's strength (its lens length)
+SHEET2_LENS = 450.0      # ...and of each major range's
 STRIKE_N = 3.0          # bands from a belt's foot to its crest
+COH_LO, COH_HI = 0.15, 0.45   # the envelope's strike coherence over which sheets come in
 
 
 def strike_bands(Zw, mat):
@@ -314,6 +290,183 @@ def strike_bands(Zw, mat):
     B = np.clip((env - base) / np.maximum(crest - base, 300.0), 0.0, 1.0)
     ph = 1.2 * crust_noise(mat, 400.0, 131, 2)
     return np.cos(2.0 * np.pi * STRIKE_N * B + ph).astype(np.float32)
+
+
+def strike_potential(Zw, fe, fn):
+    """(u, gate): u in km, a coordinate across strike that increases toward the
+    foreland; gate 0..1, where the belt has a strike to lay sheets along.
+
+    Thrust sheets run along a belt and bend with it, so they are laid on a
+    potential whose gradient is the belt's across-strike direction: the
+    orientation of the smoothed envelope's gradient, averaged as a double angle
+    (an axis has no sign), made sign-consistent by region growing and fitted
+    by weighted least squares (build_foldphase._solve, the solver the fold
+    coordinates use). Its contours run along strike and, unlike the distance
+    from a belt's edge, run straight out past a belt's end instead of wrapping
+    round it. Solved at 512 x 256 (~80 km cells; the potential is smooth) and
+    upsampled. The sign is chosen per connected belt so u increases toward the
+    foreland polarity() found, which is where the sheets verge."""
+    import build_foldphase as BFP
+    from scipy.ndimage import label
+    H, W = Zw.shape
+    h, w = 256, 512
+    fy, fx = H // h, W // w
+    z = np.maximum(Zw, 0.0).reshape(h, fy, w, fx).mean(axis=(1, 3))
+    env = _g(z, 1.0)
+    lat = np.radians(90.0 - (np.arange(h) + 0.5) / h * 180.0)[:, None] * np.ones((1, w))
+    cl = np.maximum(np.cos(lat), 0.15)
+    gy, gx = np.gradient(env)
+    gE = gx / cl                                   # per unit arc east (rows run south)
+    gN = -gy
+    mag = np.hypot(gE, gN)
+    th = np.arctan2(gN, gE)
+    rel = _g(np.abs(z - _g(z, 2.0)), 1.0) + mag * 4.0
+    wgt = np.clip((env - 300.0) / 900.0, 0.0, 1.0) * np.clip(mag / (np.percentile(mag[env > 800], 60) + 1e-6)
+                                                           if (env > 800).any() else 0.0, 0.0, 1.0)
+    c2 = _g(np.cos(2 * th) * wgt, 1.2); s2 = _g(np.sin(2 * th) * wgt, 1.2)
+    th = 0.5 * np.arctan2(s2, c2)
+    ax, ay = np.cos(th), np.sin(th)
+    sg = BFP._consistent_sign(ax, ay, wgt)
+    phi = BFP._solve(sg * ax, sg * ay, wgt, lat)    # radians of arc
+    # sign toward the foreland, per connected belt
+    fe2 = fe.reshape(h, fy, w, fx).mean(axis=(1, 3)); fn2 = fn.reshape(h, fy, w, fx).mean(axis=(1, 3))
+    py, px = np.gradient(phi)
+    dE = px / cl; dN = -py
+    lab, n = label(wgt > 0.05)
+    sgn = np.ones((h, w))
+    for k in range(1, n + 1):
+        m = lab == k
+        d = float((dE[m] * fe2[m] + dN[m] * fn2[m]).sum())
+        if d < 0:
+            sgn[m] = -1.0
+    # spread the per-belt sign smoothly so a belt's surroundings agree with it
+    sg_s = _g(sgn * (wgt > 0.05), 3.0) / np.maximum(_g((wgt > 0.05).astype(float), 3.0), 1e-3)
+    phi = phi * np.where(np.abs(sg_s) > 1e-3, np.sign(sg_s), 1.0)
+    # cubic: linear upsampling left u's gradient constant over 8 x 8 blocks,
+    # and the sheet spacing stepped at every block edge
+    u = zoom(phi * R_EARTH_KM, (H / h, W / w), order=3, mode="grid-wrap")
+
+    # WHERE THERE IS A STRIKE AT ALL. On a dome or a broad plateau the
+    # across-strike direction turns round the high ground, the potential's
+    # contours become concentric, and sheets laid on them drew fingerprint
+    # arcs across the Great Basin in the control. The coherence of the axis
+    # over ~250 km separates the cases: Himalaya 0.96, Zagros 0.87, Andes 0.80,
+    # Tibet's interior 0.73, Rockies and Alps 0.65, against the Utah plateau
+    # 0.41 and the Great Basin 0.05. Sheets came in over 0.35-0.70 while the
+    # sheets' own phase drew the whorls (see _sheet_family); with that fixed
+    # and the rings cut by family_gate, over COH_LO-COH_HI, which admits the
+    # Rockies (0.26 on the envelope) and the Caucasus (0.30).
+    gm = np.hypot(gE, gN)
+    cc = _g(gm * np.cos(2 * np.arctan2(gN, gE)), 3.0)
+    ss = _g(gm * np.sin(2 * np.arctan2(gN, gE)), 3.0)
+    coh = np.hypot(cc, ss) / np.maximum(_g(gm, 3.0), 1e-6)
+    gate = zoom(_smooth01((coh - COH_LO) / (COH_HI - COH_LO)), (H / h, W / w), order=1, mode="grid-wrap")
+    return u.astype(np.float32), np.clip(gate, 0.0, 1.0).astype(np.float32)
+
+
+def potential_geometry(u):
+    """|grad u| (km per km) and the curvature of u's contours (per km), full
+    resolution: the divergence of the unit normal, lightly smoothed (each
+    family smooths it again at its own scale, family_gate)."""
+    H, W = u.shape
+    lat = 90.0 - (np.arange(H) + 0.5) / H * 180.0
+    dy = np.pi * R_EARTH_KM / H
+    dx = (2.0 * np.pi * R_EARTH_KM / W * np.maximum(np.cos(np.radians(lat)), 0.05))[:, None]
+    gn = -np.gradient(u, axis=0) / dy
+    ge = (np.roll(u, -1, 1) - np.roll(u, 1, 1)) * 0.5 / dx
+    g = np.hypot(ge, gn)
+    ne, nn = ge / np.maximum(g, 1e-6), gn / np.maximum(g, 1e-6)
+    div = (np.roll(ne, -1, 1) - np.roll(ne, 1, 1)) * 0.5 / dx - np.gradient(nn, axis=0) / dy
+    return g.astype(np.float32), _g(div, 1.0).astype(np.float32)
+
+
+def family_gate(g, kap, km):
+    """Where a family of sheets `km` apart can be laid on u, 0..1. Not at a
+    vortex's eye, where u's gradient vanishes and its contours are rings; not
+    where they crowd below ~3 px a sheet (aliasing); and not where they curl
+    tighter than ~1 spacing -- round a dome or a plateau the contours close
+    into rings, and sheets on them are whorls. (2-4 spacings cut the
+    sub-belts out of the Andes, the Alps and the Zagros: real belts bend at
+    radii of 300-1000 km.) The fit's gradient is otherwise
+    free to depart from 1: where a belt bends or two meet it spreads or
+    crowds the contours, which changes the spacing but not the linearity (the
+    Zagros sits at 0.3 and is the most linear belt on Earth)."""
+    row_km = np.pi * R_EARTH_KM / g.shape[0]
+    vortex = _smooth01((g - 0.15) / 0.2)
+    per_px = km / np.maximum(g, 1e-3) / row_km
+    alias = _smooth01((per_px - 3.0) / 1.5)
+    # the bend AT THIS FAMILY'S SCALE: the signed curvature averaged over half
+    # a spacing, so the fit's own small wiggles cancel (unsmoothed, the
+    # straight Zagros read as a 160 km radius and lost its sub-belts)
+    k = np.abs(_g(kap, max(1.0, 0.5 * km / row_km)))
+    curl = _smooth01((1.0 / np.maximum(k, 1e-6) / km - 0.75) / 1.0)
+    return (vortex * alias * curl).astype(np.float32)
+
+
+def _lens_noise(mat, n, scale_km, seed):
+    """Unit crust noise drawn independently for every integer sheet index n:
+    the material position is offset by a hash of n, so neighbouring sheets
+    share no pattern and each pinches out on its own."""
+    import precambrian as PRE
+    k = R_EARTH_KM / scale_km
+    nn = n.astype(np.int64).ravel()
+    a, b = _hash2(nn, np.zeros_like(nn), seed)
+    c, _ = _hash2(nn, np.ones_like(nn), seed)
+    off = 1000.0 * np.stack([a, b, c]).astype(np.float64)
+    if isinstance(mat, Material):
+        v = _blend(mat, lambda P, idx: PRE.fbm3(P * k + off[:, idx], seed, octaves=2))
+    else:
+        H, W = mat.shape[1:]
+        v = PRE.fbm3(mat.reshape(3, -1).astype(np.float64) * k + off, seed, octaves=2).reshape(H, W) - 0.5
+    return (v / 0.12).astype(np.float32)                 # value fbm: sd ~0.12
+
+
+def _sheet_family(u, mat, km, seed, lens_km):
+    """One family of thrust sheets on the strike potential u (km).
+
+    The phase is u / km plus SLOW, SMALL terms: a drift of the line (~260 km)
+    and of the spacing (~600 km), ADDED to the phase and a fraction of a cycle
+    in amplitude (SHEET_PH). Dividing u by a spatially varying spacing instead
+    (the first version) made the noise's gradient times u -- thousands of km
+    across a belt -- outweigh u's own, and the sheets came out as moire,
+    bull's-eyes and sub-pixel stripes that no longer followed the strike at
+    all: the fingerprint whorls at the belt ends. And the terms must stay
+    small because the noise is blended across plate boundaries: two plates'
+    values differ by a few units, so a phase of several cycles per unit ramped
+    through several cycles inside the blend and drew fine stripes down every
+    suture (up to 1.1 cycles a pixel against the strike's 0.2).
+
+    Each sheet is a LENS: its own strength along strike, independent of its
+    neighbours' (a noise ~lens_km drawn per sheet), so a ridge rises, runs
+    for a few hundred km and pinches out while the next one takes over en
+    echelon -- the Zagros' whalebacks, the Valley and Ridge -- rather than
+    stripes running the whole length of the belt. Profile 0 at the thrust
+    trace, a gentle back climbing toward the foreland, 1 at the crest, a steep
+    front; zero-mean over a sheet width, continuous across the traces."""
+    phi = (u / km + SHEET_PH[0] * crust_noise(mat, 600.0 * km / 45.0, 141 + seed, 2)
+           + SHEET_PH[1] * crust_noise(mat, 260.0 * km / 45.0, 149 + seed, 2))
+    n = np.floor(phi)
+    t = phi - n
+    f = SHEET_FRONT
+    p = np.where(t < 1.0 - f, (t / (1.0 - f)) ** 0.9, ((1.0 - t) / f) ** 1.3)
+    amp = _smooth01(0.35 + 0.9 * _lens_noise(mat, n, lens_km, 151 + seed))
+    v = p * amp
+    H = mat.shape[1]
+    sig = max(1.0, km / (np.pi * R_EARTH_KM / H))    # one sheet width, in rows
+    return 2.0 * (v - _g(v, sig))
+
+
+def thrust_sheets(u, mat):
+    """About -1..1: thrust sheets, as ridges parallel to the belt, each with a
+    gentle back slope climbing toward the foreland and a steep front facing it,
+    in two families: minor sheets ~45 km apart in lenses ~150 km long, and the
+    major ranges ~140 km apart in lenses ~450 km long, whose traces are the
+    longitudinal valleys between ranges. Keyed to the crust."""
+    gu, kap = potential_geometry(u)
+    sh = 0.6 * _sheet_family(u, mat, SHEET_KM, 0, SHEET_LENS) * family_gate(gu, kap, SHEET_KM)
+    if SHEET2_W > 0.0:
+        sh = sh + SHEET2_W * _sheet_family(u, mat, SHEET2_KM, 40, SHEET2_LENS) * family_gate(gu, kap, SHEET2_KM)
+    return sh.astype(np.float32)
 
 
 def polarity(Z):
@@ -410,7 +563,20 @@ def _table(E, S, tab):
     return (a * (1.0 - t) + b * t).astype(np.float32)
 
 
-def spectral(h, Zw, dom):
+def _band_unit(b, land, den, m, q, floor=1.0):
+    """A band standardised by its own ~400 km local rms (floored: metres for a
+    terrain band, a small fraction of its spread for a unitless one) and mapped
+    onto a real distribution (quantiles q at REAL_P), fitted over mask m."""
+    loc = np.sqrt(_g(b * b * land, REAL_NORM) / den)
+    u = b / np.maximum(loc, floor)
+    if m.sum() > 200:
+        qs = np.percentile(u[m], REAL_P)
+        qs = np.maximum.accumulate(qs + np.arange(qs.size) * 1e-6)
+        u = np.interp(u, qs, q, left=q[0], right=q[-1])
+    return u
+
+
+def spectral(h, Zw, dom, struct=None):
     """Z's envelope above REAL_SIG[-1], plus h's bands matched to real belts:
     each band standardised by its own ~400 km local rms, its distribution
     mapped onto the real one (REAL_Q), and rescaled to the real local rms at
@@ -431,78 +597,155 @@ def spectral(h, Zw, dom):
         m = dom & (Zw > 0)
     for i in range(len(REAL_SIG) - 1):
         b = L[i] - L[i + 1]
-        loc = np.sqrt(_g(b * b * land, REAL_NORM) / den)
-        u = b / np.maximum(loc, 1.0)
-        if m.sum() > 200:
-            qs = np.percentile(u[m], REAL_P)
-            qs = np.maximum.accumulate(qs + np.arange(qs.size) * 1e-6)
-            u = np.interp(u, qs, REAL_Q[i], left=REAL_Q[i][0], right=REAL_Q[i][-1])
+        u = _band_unit(b, land, den, m, REAL_Q[i])
+        if struct is not None and i == 2 and STRUCT_B2 > 0.0:
+            # the major ranges, mixed into the model's own band where there is
+            # a strike (variance kept: both are unit and independent)
+            f2, _f3, gate, _g3 = struct
+            b2 = _g(f2, REAL_SIG[2]) - _g(f2, REAL_SIG[3])
+            s2 = _band_unit(b2, land, den, m, REAL_Q[2], floor=0.05 * float(b2.std()))
+            bg = STRUCT_B2 * gate
+            u = np.sqrt(np.maximum(1.0 - bg * bg, 0.0)) * u + bg * s2
         tgt = _table(E, S, REAL_BANDS[i]) * REAL_GAIN[i]
         new += (u * tgt).astype(np.float32)
+    if struct is not None and STRUCT_B3 > 0.0:
+        _f2, f3, _g2, gate = struct
+        b3 = _g(f3, 4.0) - _g(f3, 8.0)
+        s3 = _band_unit(b3, land, den, m, REAL_Q3, floor=0.05 * float(b3.std()))
+        be = _g(Zw, 4.0) - _g(Zw, 8.0)
+        have = np.sqrt(_g(be * be * land, REAL_NORM) / den)
+        want = _table(E, S, STRUCT_BANDS)
+        amp = np.sqrt(np.maximum(want * want - have * have, 0.0))
+        new += (STRUCT_B3 * gate * amp * s3).astype(np.float32)
     return new.astype(np.float32)
 
 
-def _fill(z):
-    """Depressions filled to their spill level (morphological reconstruction)."""
+# ---- the range scale: structure, not erosion (the mountain round, third pass) ----
+# A fourth band, sigma 4-8 px (wavelengths ~250-500 km): the scale of the
+# morphotectonic sub-belts -- Rockies, Rocky Mountain Trench, Columbia
+# Mountains; Subandes, Eastern Cordillera, Altiplano -- where real belts are
+# most linear (orientation coherence 0.53 against 0.30-0.44 in the finer
+# bands). Above sigma 4 the synthesis kept the source's envelope, which has
+# none of it (the control: 118 m rms against 180, coherence 0.36), and the
+# landscape model cannot make it: a stream-power steady state drains ACROSS
+# strike, down the regional slope, so thrust sheets forced into its uplift
+# only step its transverse profiles (its own bands: coherence 0.31-0.35).
+# At this scale topography is structure -- uplifted sheets and basement
+# blocks, synclinal and fault-bounded trench valleys -- so the band is laid
+# from a family of sub-belts on the strike potential and calibrated to real
+# belts: local rms by regional height and slope (method of REAL_BANDS, by
+# the fourth band of relief.calib's tables), added in quadrature to what the
+# envelope already carries there, distribution mapped to REAL_Q3.
+STRUCT_BANDS = np.array([
+    [46, 55, 70, 77, 123, 116, 181, 181, 219],
+    [112, 96, 111, 112, 124, 150, 195, 182, 220],
+    [168, 164, 156, 171, 166, 198, 228, 200, 223],
+    [175, 248, 243, 242, 248, 269, 282, 284, 290],
+], float)
+REAL_Q3 = np.array([-3.411, -3.146, -2.779, -2.384, -1.96, -1.595, -1.286, -1.085, -0.937, -0.813, -0.708, -0.618, -0.537, -0.464, -0.397, -0.333, -0.273, -0.217, -0.164, -0.112, -0.061, -0.011, 0.041, 0.096, 0.15, 0.205, 0.264, 0.325, 0.387, 0.452, 0.52, 0.593, 0.669, 0.751, 0.84, 0.933, 1.035, 1.147, 1.268, 1.407, 1.567, 1.769, 2.035, 2.438, 2.896, 3.458, 4.271, 5.114, 5.649])
+SHEET3_KM = 300.0        # sub-belt spacing across strike
+SHEET3_LENS = 1000.0     # ...and their length along it
+STRUCT_B2 = 0.55         # share (in amplitude) of the major ranges in the 2-4 band beside the model's own
+STRUCT_B3 = 1.5          # gain on the sub-belts' calibrated band: medians undercount a heavy tail (cf. REAL_GAIN)
+
+
+LV_SMOOTH = os.environ.get("RELIEF_LV_SMOOTH", "1") == "1"
+FILL_OCEAN = os.environ.get("RELIEF_FILL_OCEAN", "1") == "1"
+RAISE_LEVEL = os.environ.get("RELIEF_RAISE_LEVEL", "1") == "1"
+
+
+def _fill_rows(z):
     from skimage.morphology import reconstruction
     seed = z.copy()
     seed[1:-1, :] = z.max()
     return reconstruction(seed, z, method="erosion").astype(np.float32)
 
 
+def _fill(z):
+    """Depressions filled to their spill level, with the lake bake's own
+    outlets: the ocean (z <= 0) and the four grid edges (bake_lakes.
+    fill_depressions). A first version seeded only the top and bottom rows,
+    so wherever land held a pole the whole ocean read as one pit and every
+    coastal basin's spill level with it."""
+    if not FILL_OCEAN:
+        return _fill_rows(np.asarray(z, np.float32))
+    import bake_lakes as _BL
+    return _BL.fill_depressions(np.asarray(z, np.float32)).astype(np.float32)
+
+
 def _lake_view(z):
-    """The elevation as bake_lakes.py sees it: sqrt-encoded to 8 bits, resized to
-    2048 x 1024 with PIL's bilinear filter, decoded."""
+    """The elevation as bake_lakes.py sees it before it fills depressions:
+    sqrt-encoded to 8 bits, resized to 2048 x 1024 with PIL's bilinear filter,
+    decoded, and smoothed by its de-terracing gaussian (sigma 1, mode nearest).
+    The smoothing matters most: it averages a gorge's walls into its outlet,
+    and the first version of this check, without it, left half the new lakes."""
     from fieldpack import enc_elev, dec_elev
+    from scipy.ndimage import gaussian_filter as _gf
     e = (np.clip(enc_elev(z), 0, 1) * 255.0 + 0.5).astype(np.uint8)
     H, W = z.shape
     e2 = np.asarray(Image.fromarray(e).resize((W // 2, H // 2), Image.BILINEAR), np.float32) / 255.0
-    return dec_elev(e2).astype(np.float32)
+    v = dec_elev(e2).astype(np.float32)
+    return _gf(v, sigma=1.0, mode="nearest") if LV_SMOOTH else v
 
 
-def fill_new_pits_coarse(out, Z, w, rounds=3):
-    """The same, at the resolution and encoding the lake bake reads: halving the
-    grid by averaging dams the narrow outlets of the new valleys, and the water
-    balance then fills the dammed reaches with lakes that change from one
-    keyframe to the next (measured: 0.19% -> 1.02% of the 400 Ma belts under
-    water, the source's own basins kept). Each round raises the full-resolution
-    floor of every new coarse hollow to its spill level -- a valley floor
-    sedimented to its outlet -- and re-checks, because the raise is seen through
-    the same averaging."""
+def fill_new_pits_coarse(out, Z, w, rounds=6):
+    """The same cap, at the resolution and encoding the lake bake reads: halving
+    the grid by averaging dams the narrow outlets of the new valleys, and the
+    water balance then fills the dammed reaches with lakes that change from one
+    keyframe to the next (README 7.37). Each round raises the full-resolution
+    floor of every coarse hollow deeper than the source's own there -- a valley
+    floor sedimented toward its outlet -- and re-checks, because the raise is
+    seen through the same averaging."""
     land = Z > 0
     H, W = Z.shape
     lo = np.float32(-50.0)
     b2 = _lake_view(np.where(land, Z, lo))
-    src_pit = (_fill(b2) - b2) > 0.5
+    src_dep = _fill(b2) - b2
     w2 = np.asarray(Image.fromarray(w.astype(np.float32)).resize((W // 2, H // 2), Image.BILINEAR))
     for _r in range(rounds):
         a2 = _lake_view(np.where(land, out, lo))
-        d2 = _fill(a2) - a2
-        new = (d2 > 0.5) & ~src_pit & (w2 > 0.02) & (a2 > 0)
+        f2 = _fill(a2)
+        exc = (f2 - a2) - src_dep
+        new = (exc > 0.5) & (w2 > 0.02) & (a2 > 0)
         if not new.any():
             break
-        up = np.asarray(Image.fromarray(np.where(new, d2, 0.0).astype(np.float32)).resize((W, H), Image.BILINEAR))
-        grow = np.asarray(Image.fromarray(new.astype(np.float32)).resize((W, H), Image.NEAREST)) > 0.5
-        out = np.where(grow & land, out + up * 1.05 + 1.0, out).astype(np.float32)
+        # RAISE TO THE LEVEL, NOT BY THE DEPTH. A narrow valley's raw floor
+        # sits below its smoothed floor, so raising it by the smoothed depth
+        # left most of it under water (27,704 excess cells -> 11,177 after six
+        # rounds at 700 Ma). The floor is filled to the spill level, less the
+        # depth the source allows there -- a dammed valley silted to its outlet
+        # -- over the pit's whole footprint (nearest upsampling, a 3-cell max).
+        if RAISE_LEVEL:
+            tgt = np.where(new, f2 - src_dep + 2.0, -1e9).astype(np.float32)
+            tU = np.asarray(Image.fromarray(tgt).resize((W, H), Image.NEAREST))
+            tU = maximum_filter(tU, size=3, mode=("nearest", "wrap"))
+            out = np.where(land & (tU > out), tU, out).astype(np.float32)
+        else:
+            up = np.asarray(Image.fromarray(np.where(new, exc, 0.0).astype(np.float32)).resize((W, H), Image.BILINEAR))
+            grow = np.asarray(Image.fromarray(new.astype(np.float32)).resize((W, H), Image.NEAREST)) > 0.5
+            out = np.where(grow & land, out + up * 1.05 + 1.0, out).astype(np.float32)
     return out
 
 
 def fill_new_pits(out, Z, w):
-    """Fill the closed hollows the synthesis made, and only those.
+    """Cap every closed hollow in the baked field at the SOURCE's depth there.
 
     The steady-state network drains everywhere by construction; the band
     recombination does not, and its heavy tail cuts the odd deep pit -- which
-    the water-balance lake bake would fill with a lake. A hollow the SOURCE has
-    (the Tarim, the Qaidam, a rift) is a real closed basin and is kept."""
+    the water-balance lake bake would fill with a lake. The first version only
+    filled hollows where the source had none, and exempted any spot where the
+    source had a hollow at all, so a 5 m dip Scotese drew became a 400 m basin
+    and a lake (the 400 and 700 Ma belts, the third pass). A basin the source
+    draws keeps the source's depth; the bake adds none."""
     land = Z > 0
     if not (land & (w > 0.02)).any():
         return out
     lo = np.float32(-50.0)
     a = np.where(land, out, lo).astype(np.float32)
     b = np.where(land, Z, lo).astype(np.float32)
-    fa, fb = _fill(a), _fill(b)
-    new_pit = (fa - a > 0.5) & (fb - b < 0.5) & (w > 0.02) & land
-    return np.where(new_pit, fa, out).astype(np.float32)
+    exc = (_fill(a) - a) - (_fill(b) - b)
+    raise_ = (exc > 0.5) & (w > 0.02) & land
+    return np.where(raise_, out + exc, out).astype(np.float32)
 
 
 def apply(Z, age, tag=None, rain=None, verbose=False):
@@ -533,17 +776,29 @@ def apply(Z, age, tag=None, rain=None, verbose=False):
     # NO STRIKE STRIPES. Stripes along strike (phasor noise in the uplift and
     # the erodibility, keyed to the crust) raised the synthesis' elongation to
     # today's, and drew a maze of wormy ridges doing it -- snow-capped worms
-    # across a synthetic Himalaya in the control. stripes() and
-    # across_material() are kept for the next attempt at thrust sheets.
+    # across a synthetic Himalaya in the control. The thrust sheets below are
+    # what replaced them: laid on a strike potential rather than noise.
     dom = (w > 0.02)
     un = crust_noise(mat, 150.0, 109, 2)
     kn = crust_noise(mat, 50.0, 113, 2)
     if STRIKE_BANDS > 0.0:
         kn = kn + STRIKE_BANDS * strike_bands(Zw, mat)
+    struct = None
+    if SHEET_U > 0.0 or SHEET_K > 0.0 or STRUCT_B2 > 0.0 or STRUCT_B3 > 0.0:
+        u_km, sgate = strike_potential(Zw, fe, fn)
+        gu, kap = potential_geometry(u_km)
+        g1, g2, g3 = (sgate * family_gate(gu, kap, k) for k in (SHEET_KM, SHEET2_KM, SHEET3_KM))
+        f1 = _sheet_family(u_km, mat, SHEET_KM, 0, SHEET_LENS)
+        f2 = _sheet_family(u_km, mat, SHEET2_KM, 40, SHEET2_LENS)
+        sh = 0.6 * f1 * g1 + SHEET2_W * f2 * g2
+        un = 0.4 * un + SHEET_U * sh
+        kn = 0.4 * kn - SHEET_K * sh
+        f3 = _sheet_family(u_km, mat, SHEET3_KM, 80, SHEET3_LENS)
+        struct = (f2, f3, g2, g3)
     _out, h = lem.steady(Zw, w, rain, seed_noise=seed, sweeps=20, cycles=5, skew=skew,
                          u_noise=un, k_noise=kn, un_amp=0.5, kn_amp=0.6, diff_steps=0,
                          verbose=verbose)
-    new = spectral(h, Zw, dom)
+    new = spectral(h, Zw, dom, struct)
     if os.environ.get("RELIEF_DEBUG"):
         np.save(os.environ["RELIEF_DEBUG"] + "_h.npy", h); np.save(os.environ["RELIEF_DEBUG"] + "_zw.npy", Zw)
         np.save(os.environ["RELIEF_DEBUG"] + "_w.npy", w)

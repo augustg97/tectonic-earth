@@ -133,9 +133,11 @@ uniform float uShow;
 /* THE EROSION RELIEF (the mountain round, 2026-09; see eroRelief): x the
    amplitude (?ero=, 0 switches the whole term off), y the gain its slope
    enters the shading normal at (?eroN=), z the share of the sub-grid octaves
-   (?eroF=), w spare. */
+   (?eroF=), w how far the gullies are steered by the field's own +-10 km
+   gradient rather than its +-31 km one (?eroS=). */
 uniform vec4 uEroK;
 uniform float uMatOffK;   // 1: crust-bound texture at the warped position (?matoff=0 for the old grid-keyed A/B)
+uniform vec4 uHsK;        // the land hillshade by scale: x regional compression constant, y fine-band gain
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
@@ -1679,8 +1681,15 @@ void main(){
     }
     gv*=2.0/6.0;                            // ring moment -> gradient, in t1/t2
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
-    // the detail character does not step at the branch.
-    rug=clamp(length(gv)*1.78/460.0,0.0,1.0);
+    // the detail character does not step at the branch. The ring mean less
+    // the centre is its second difference (x4 to the sum of the two axes'),
+    // for the same reason as there: relief, not slope, or crests read flat.
+    float z0p=baseElev(uv);
+    float qP=0.5*0.0156863*sqrt(Z_RANGE*max(z0p,1.0));
+    float lapR=4.0*(sum/6.0-z0p);
+    vec3 dP=vec3(gv*1.78, lapR);
+    dP=sign(dP)*max(abs(dP)-qP,0.0);             // less half a code, as below
+    rug=clamp(length(dP)/460.0,0.0,1.0);
     gEnv3=(t1*gv.x+t2*gv.y)/(r*6.371e6);    // metres over the ring radius -> m/m
     float zb=mix(baseElev(uv), sum/6.0, pw);
     z=elevDetail(zb, matDir(sdir), rug);
@@ -1715,9 +1724,31 @@ void main(){
     }
   } else {
     float rda=3.2/2048.0*PI;
-    float rE=baseElev(uvFromDir(normalize(sdir+Eax*rda)))-baseElev(uvFromDir(normalize(sdir-Eax*rda)));
-    float rN=baseElev(uvFromDir(normalize(sdir+Nax*rda)))-baseElev(uvFromDir(normalize(sdir-Nax*rda)));
-    rug=clamp(length(vec2(rE,rN))/460.0,0.0,1.0);
+    float zEp=baseElev(uvFromDir(normalize(sdir+Eax*rda))), zEm=baseElev(uvFromDir(normalize(sdir-Eax*rda)));
+    float zNp=baseElev(uvFromDir(normalize(sdir+Nax*rda))), zNm=baseElev(uvFromDir(normalize(sdir-Nax*rda)));
+    float rE=zEp-zEm, rN=zNp-zNm;
+    /* LOCAL RELIEF, NOT LOCAL SLOPE. rug was the first difference alone, and
+       a first difference is ZERO on every crest and every valley axis: through
+       a rugged range it read saturated on the flanks and fell to nothing
+       along each ridge and thalweg (?show=6: white with black squiggles).
+       Everything keyed to it followed -- the bare-rock gate put the lowland
+       colour back along the lines (the orange and pale-green squiggles on the
+       belts), and the detail amplitude pulsed with the phase of the ranges.
+       The second difference over the same taps is largest exactly where the
+       first vanishes; for a ridge spacing of four baselines (~125 km) the sum
+       of their squares is the same at crest, flank and floor. */
+    /* And every difference less ONE CODE of the shipped elevation first,
+       (4/255) sqrt(8000 z): on a plain the 8-bit field is a stair of flat
+       terraces a code apart (40 m at 800 m), and a difference straddling a
+       step read a code of relief along every code contour -- the prairie
+       squiggles, and blocks along the texel grid once the second difference
+       joined in. HALF a code: a whole one (77 m at 3 km) also erased the real
+       relief of high plateaus and put the lowland colour on a belt's crest. */
+    float z0r=baseElev(uv);
+    float qR=0.5*0.0156863*sqrt(Z_RANGE*max(z0r,1.0));   // half a code: a whole one flattened real high plateaus
+    vec4 dR=vec4(rE, rN, zEp+zEm-2.0*z0r, zNp+zNm-2.0*z0r);
+    dR=sign(dR)*max(abs(dR)-qR,0.0);
+    rug=clamp(length(dR)/460.0,0.0,1.0);
     gEnv3=(Eax*rE+Nax*rN)/(2.0*rda*6.371e6);
     z=elevAt(uv,rug);
     /* AND THIS ONE KEEPS ITS ANGLE TOO, which is not the obvious choice and is
@@ -2157,6 +2188,52 @@ void main(){
   if(pw>0.004){ vec3 gF3=gAx1*g1+gAx2*g2; gE=dot(gF3,Eax); gN=dot(gF3,Nax);
                 vec3 gM3=gAx1*gMacD.x+gAx2*gMacD.y; gMacD=vec2(dot(gM3,Eax),dot(gM3,Nax)); }
   else { gE=g1; gN=g2; }
+  /* THE LAND HILLSHADE BY SCALE (the mountain round, third pass). Rendered
+     through this shader, today's REAL ranges looked nothing like the satellite
+     imagery they were compared against: lit as 50-150 km patches of saturated
+     light and dark, whole flanks clamped black, and nothing between 20 and 50
+     km -- the scale a range's ridges and valleys are made of. Two reasons,
+     both in the stencil: the gradient differences the field over +-23.5 km,
+     whose response is zero at 47 km and inverted below it, and it exaggerates
+     every scale ~59 times, where a satellite image shows relief at 1x and reads
+     mountains by their valley-scale texture. So on land:
+       1. the regional tilt is soft-compressed (saturating near atan(C/300)),
+          so a steep smooth flank reads as a darker slope, not a black slab;
+       2. the field's own fine band -- the part of a +-1-texel (9.8 km)
+          difference the coarse stencil cannot see -- is added at a lower gain,
+          soft-thresholded by 1.4 quantisation levels so the 8-bit steps on a
+          plain are not lit as terrain. It is what shows the baked relief's
+          thrust sheets and valleys, and the real field's own.
+     ?hsC= the compression constant (0 off), ?hsF= the fine gain (0 off). */
+  /* The field's own gradient over +-1 texel, world tangent vector in m/m: the
+     fine band below, and the direction the erosion relief's gullies are
+     steered by (the valley walls of the field, baked or real). */
+  vec3 gFine3=gEnv3;
+  float fE=0.0, fN=0.0;
+  float daF=1.0/2048.0*PI;
+  if(z>=wl && pw<=0.004){
+    fE=baseElev(uvFromDir(normalize(sdir+Eax*daF)))-baseElev(uvFromDir(normalize(sdir-Eax*daF)));
+    fN=baseElev(uvFromDir(normalize(sdir+Nax*daF)))-baseElev(uvFromDir(normalize(sdir-Nax*daF)));
+    gFine3=(Eax*fE+Nax*fN)/(2.0*daF*6.371e6);
+  }
+  if(z>=wl && pw<=0.004){
+    if(uHsK.x>0.0){
+      vec2 gb=vec2(gE,gN);
+      gb*=1.0/(1.0+length(gb)/uHsK.x);
+      gE=gb.x; gN=gb.y;
+    }
+    if(uHsK.y>0.0){
+      float cE=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
+      float cN=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
+      vec2 res=vec2(fE,fN)*(da/daF)-vec2(cE,cN);
+      float zq=max(baseElev(uv),1.0);
+      float QL=1.4*0.0156863*sqrt(Z_RANGE*zq)*(da/daF);   // 1.4 levels, in coarse units
+      float rl=length(res);
+      res*=max(rl-QL,0.0)/max(rl,1e-4);
+      res*=1.0/(1.0+length(res)/max(uHsK.x*1.4,1.0));
+      gE+=res.x*uHsK.y*(1.0-pwL); gN+=res.y*uHsK.y*(1.0-pwL);
+    }
+  }
   /* THE EROSION RELIEF (see eroRelief above). Once per pixel, after the
      hillshade gradient is final: its HEIGHT goes into z, so the snowline, the
      bare rock and the treeline follow the spurs and valleys; its SLOPE is kept
@@ -2200,7 +2277,16 @@ void main(){
       gEroD=uFore>0.5 ? mix(dA,dB,mixf) : 0.0;
       vec3 Aw=vec3(0.0);
       if(uTect>0.5 && dot(gFold,gFold)>0.25) Aw=normalize(cross(sdir,gFold));
-      vec4 er=eroRelief(matDir(sdir), gEnv3, Aw, a0*gEroD, a0*uEroK.z, sfoot*3.11);
+      /* STEERED BY THE FIELD'S OWN VALLEY WALLS (third pass). With the relief
+         now in the field (baked, or real), the coarse octaves stand down and
+         the fine ones were steered by the +-31 km smooth slope alone: every
+         gully on a flank ran parallel, a zebra the old blotchy shading had
+         hidden. The erosion filter's design is that each octave follows the
+         relief it cuts into -- that is now the field -- so the gullies run down
+         its +-10 km valley walls and branch off its valleys. The smooth slope
+         keeps a share, for where the fine gradient is noise. */
+      vec3 Gst=mix(gEnv3, gFine3, uEroK.w);
+      vec4 er=eroRelief(matDir(sdir), Gst, Aw, a0*gEroD, a0*uEroK.z, sfoot*3.11);
       /* The same promise elevDetail makes: procedural relief may never carve
          new water, so no coastline moves because of it and no valley floor in
          a coastal range fills with sea. */
@@ -2230,10 +2316,14 @@ void main(){
          the belt, and is no longer a slab. (A weight linear in the deficit left
          the half-deficit north-south ridges of 300 Ma at 48 degrees -- still
          past the sun, still slabs.) */
-      float wD=eG*sqrt(gEroD);
-      vec2 gb=vec2(gE,gN);
-      gb*=1.0/(1.0+wD*length(gb)*(1.0/187.0));
-      gE=gb.x; gN=gb.y;
+      /* (Superseded by the land hillshade's own compression above; kept
+         for ?hsC=0, which restores the old unlimited tilt.) */
+      if(uHsK.x<=0.0){
+        float wD=eG*sqrt(gEroD);
+        vec2 gb=vec2(gE,gN);
+        gb*=1.0/(1.0+wD*length(gb)*(1.0/187.0));
+        gE=gb.x; gN=gb.y;
+      }
     }
   }
   /* Sun direction, in the east/north basis the gradient now always uses. c is
@@ -2563,7 +2653,13 @@ void main(){
                        smoothstep(0.42,0.66,lith2));
     float bare=clamp(1.0-h*1.55,0.0,1.0)*clamp(0.45+0.55*(1.0-uVeg),0.0,1.0);
     col=mix(col, rockCol, bare*(0.30+0.35*lith2));
-    float latw=bare*smoothstep(0.45,0.75,hardness)*smoothstep(0.62,0.30,h)*(0.55+0.45*vnoise3(sdir*7.3+91.0));
+    /* ...and on LOW ground: laterite is what hundreds of thousands of years
+       of tropical wet-dry weathering leave on an old, stable lowland surface,
+       not a crest -- where
+       an orogen's crest read as flat it came out laterite-orange (the orange
+       patches on the belts). Faded out between 1.2 and 2.2 km. */
+    float latw=bare*smoothstep(0.45,0.75,hardness)*smoothstep(0.62,0.30,h)*(0.55+0.45*vnoise3(sdir*7.3+91.0))
+              *(1.0-smoothstep(1200.0,2200.0,zp));
     col=mix(col, laterite, clamp(latw,0.0,1.0)*0.44);
 
     /* Drainage. Flat low ground that gets any rain at all collects it, and
@@ -2721,7 +2817,19 @@ void main(){
          low-frequency crust-locked mask supplies that: it decides WHERE a sand
          sea is, while relief and drainage decide how far it reaches. */
       float ergBody=smoothstep(0.40,0.66, fbm3(mdc*3.4+53.0));
-      float erg=desert*still*lowrel*ergBody;
+      /* AND A BASIN TO COLLECT IN. Flat, dry and undrained also describes the
+         top of a range where the relief happens to be gentle, and the crest
+         of a desert orogen came out as orange dune fields at 3 km. A sand sea
+         is a basin's fill -- sand is swept off ground that stands above its
+         surroundings and gathers in ground that sits below them (the Rub al
+         Khali, the Tarim) -- so it fades out where this point
+         stands 100-400 m above the mean of the four +-137 km taps -- and
+         with height: a belt's crest can be a plateau wider than those taps,
+         and every large sand sea on Earth lies below ~1.5 km (the Rub al
+         Khali, the Sahara's, the Taklamakan at 1-1.4, the Badain Jaran at
+         1.2-1.5); the Qaidam's and the Altiplano's dune fields are small. */
+      float sink=(1.0-smoothstep(100.0,400.0,zp-gMac))*(1.0-smoothstep(1500.0,2600.0,zp));
+      float erg=desert*still*lowrel*ergBody*sink;
       float ham=desert*smoothstep(0.16,0.40,rug);
       /* DUNE LINEATION FROM THE WIND (WP-10, B5: the erg half). A sand sea is
          not a wash of colour, it is a corduroy, and that anisotropy is the
