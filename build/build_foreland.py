@@ -330,9 +330,18 @@ def bake(age, quiet=False):
     b = RD.deficit_f(age)
     b = np.zeros_like(r) if b is None else b.astype(r.dtype)
     arr = np.stack([np.round(x * 255).astype(np.uint8) for x in (r, g, b)], -1)
+    # A is the TRENCH (trench_field.py, 3.17): the signed distance to a
+    # subduction trench's axis. Written here too, so a foreland rebake keeps
+    # it; the Precambrian has none (alpha 1, "no trench"). exact=True: the
+    # lossless encoder may not touch the RGB under any alpha.
+    import trench_field as TF
+    a = TF.alpha(age) if age < TF.PRE_FROM else np.ones(arr.shape[:2], np.uint8)
+    if a.shape != arr.shape[:2]:
+        a = np.asarray(Image.fromarray(a).resize((arr.shape[1], arr.shape[0]), Image.NEAREST))
+    arr = np.dstack([arr, a])
     name = _stem(age) + "_f.webp"
     path = os.path.join(FIELDS, name)
-    Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
+    Image.fromarray(arr).save(path, "WEBP", lossless=True, exact=True, method=6)
     cov = 100.0 * float((down > 25.0).mean())
     if not quiet:
         print("  %-22s %5.1f kB  basin %4.2f%% of globe  max %5.0f m  %.1fs"
