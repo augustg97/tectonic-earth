@@ -196,7 +196,7 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 ## State right now
 
 - Last live deploy: **`DATA_V=20260926-0618`**, release 3.15 (close zoom, colour, lakes, the
-  future's names). Before it: 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
+  future's names), commit `0715ef78` (the record is the commit after it). Before it: 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
   `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
   README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
