@@ -67,6 +67,22 @@ def _unit(lon, lat):
 
 
 def trench_points(age):
+    """Trench points as unit vectors in this module's (y-up) convention.
+
+    3.17: for the Phanerozoic the lines are Merdith's SUBDUCTION ZONES carried
+    into the terrain's own (PALEOMAP) frame by trench_field.terrain_lines --
+    plates_time.json holds them in Merdith's frame, which parts from the
+    terrain fast (trench vertices on dry land: 19% at 0 Ma, 33% at 20, 41% at
+    150), so every past arc band stood hundreds of km off its margin. At 0 Ma
+    the two are the same lines. The future's lines are the future engine's own
+    and already in its frame; the Precambrian's stay as they were."""
+    if 0 <= age < 545:
+        import trench_field as TF
+        segs = TF.terrain_lines(int(age))
+        if not segs:
+            return np.zeros((0, 3))
+        P = np.concatenate([np.asarray(p, np.float64) for p, _o in segs])
+        return np.stack([P[:, 0], P[:, 2], P[:, 1]], -1)       # z-up -> y-up
     global _plates
     if _plates is None:
         _plates = json.load(open(PLATES))

@@ -297,6 +297,7 @@ function bindStacks(u,SA,SB){
   u.uFoldOn.value=has('q')?1.0:0.0;
   u.uDrainOn.value=(has('x')&&!_sq.has('nodrain'))?1.0:0.0;
   u.uStkSel.value.set(hA.has('t')?0:1, hA.has('f')?0:1, hA.has('q')?0:1, hA.has('x')?0:1);
+  if(u.uTrench)u.uTrench.value.set(hA.has('f')?1:0, hB.has('f')?1:0, u.uTrench.value.z);
   u.uStkSelB.value.set(hB.has('q')?1:0, hB.has('x')?1:0);
 }
 /* The present frame's lake field holds the REAL lakes, traced from Natural
@@ -1019,6 +1020,7 @@ function initGL(){
     uFoldK:{value:+(_sq.get('fold')||0)},      // fold-belt atlas relief: ships OFF (review 2026-09-03), ?fold=1 to see it
     uPlatK:{value:+(_sq.get('plat')||0)},      // DEM-driven plateau envelope on the atlas: OFF by default (see FRAG reliefEnv), ?plat=1 to try
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
+    uTrench:{value:new THREE.Vector3(0,0,+(_sq.get('trench')??1))},   // subduction trenches from the _f alpha (x,y: keyframe has it; z strength, 0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
     uMatOffK:{value:_sq.get('matoff')==='0'?0:1},   // texture rides the crust through an interval (FRAG gMatOff)
     uEroK2:{value:new THREE.Vector4(+(_sq.get('eroB')??1.5),+(_sq.get('eroR')??0.78),+(_sq.get('eroFa')??2.2),+(_sq.get('eroFb')??4.5))},   // erosion relief below the grid (FRAG): 12 km amplitude x old, ratio per finer octave

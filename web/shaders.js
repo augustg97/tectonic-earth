@@ -158,6 +158,18 @@ float gZSm=-9999.0;
    carries no such field. Set in main, read by oceanColour. */
 float gShelfE=-1.0;
 float gShelfK=99.0;   // the same distance in km, + on the shelf side
+/* THE TRENCH (3.17). Signed distance to a subduction trench's axis, km,
+   positive seaward, from the alpha of each keyframe's _f (build/trench_field.py),
+   and its gradient per uv -- read once per pixel in main, UNWARPED, because a
+   trench belongs to the plate boundary and not to the crust either side of it
+   (the ocean side is the subducting plate, travelling 250-500 km a keyframe).
+   The two keyframes' DISTANCES are blended, so one trench slides between its
+   keyframe positions instead of two fading into each other. baseElev draws
+   the trough, outer rise and (where the overriding side is ocean) the arc
+   from it at every tap, so the colour and the hillshade both see them. */
+float gTrS=0.0, gTrW=0.0, gTrAK=1.0, gTrArcK=1.0;
+vec2 gTrG=vec2(0.0), gTrUv=vec2(0.0);
+uniform vec3 uTrench;   // x: keyframe A has the field, y: B has it, z: strength (?trench=, 0 off)
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
    describe CONTINENTAL-MARGIN processes must fade with it, because in an
@@ -669,8 +681,53 @@ float licGrad(vec3 p, vec3 t, vec3 a, float F, float S, float h){
          + (vnoise3((pa+t*(1.5*S))*F)-vnoise3((pb+t*(1.5*S))*F))*0.6 ) * 0.3125;
 }
 
+/* The trench profile at a tap, from the pixel's distance extended linearly (a
+   distance field is linear at this scale). A trench is 60-100 km wide and
+   1-3 km below the floor it cuts -- deeper where that floor is old and deep;
+   its landward wall is steeper than its seaward one; the plate bulges a few
+   hundred metres 60-120 km out before it bends down (the outer rise); and an
+   intra-oceanic zone carries its volcanic arc 120-200 km behind the trench,
+   which the PaleoDEMs do not draw -- so the arc is added only where the ground
+   behind the trench is deep ocean (on a continental margin the arc is the
+   land already there). Nothing is added to shallow water or land. */
+/* One keyframe's trench distance at uv from the four _f texels around it,
+   bilinear by hand: alpha 1 is "no trench here", and letting the texture
+   filter blend it with a real distance would invent a trench along the edge
+   of every band. Invalid texels drop out of the weights and take the mean so
+   they add no false gradient; cov says how much of the footprint is real. */
+void trTap(sampler2D stk, vec2 uv, out float s, out float cov, out vec2 g){
+  vec2 f=vec2(uv.x*1024.0-0.5, clamp(uv.y,0.0,1.0)*512.0-0.5);
+  vec2 i0=floor(f), t=f-i0;
+  float x0=mod(i0.x,1024.0), x1=mod(i0.x+1.0,1024.0);
+  float y0=clamp(i0.y,0.0,511.0), y1=clamp(i0.y+1.0,0.0,511.0);
+  vec4 a=255.0*vec4(texture2D(stk,vec2((x0+0.5)/1024.0,(y0+0.5)/1024.0)).a,
+                    texture2D(stk,vec2((x1+0.5)/1024.0,(y0+0.5)/1024.0)).a,
+                    texture2D(stk,vec2((x0+0.5)/1024.0,(y1+0.5)/1024.0)).a,
+                    texture2D(stk,vec2((x1+0.5)/1024.0,(y1+0.5)/1024.0)).a);
+  vec4 v=step(1.5,a);
+  vec4 sv=((a-2.0)/253.0*2.0-1.0)*250.0;                 // trench_field.S_KM
+  vec4 w=vec4((1.0-t.x)*(1.0-t.y), t.x*(1.0-t.y), (1.0-t.x)*t.y, t.x*t.y)*v;
+  cov=w.x+w.y+w.z+w.w;
+  float sm=dot(w,sv)/max(cov,1e-4);
+  sv=mix(vec4(sm),sv,v);
+  s=mix(mix(sv.x,sv.y,t.x), mix(sv.z,sv.w,t.x), t.y);
+  g=vec2(mix(sv.y-sv.x, sv.w-sv.z, t.y)*1024.0, mix(sv.z-sv.x, sv.w-sv.y, t.x)*512.0);
+}
+float trenchDz(vec2 uv, float z){
+  vec2 d=uv-gTrUv; d.x-=floor(d.x+0.5);
+  float s=gTrS+dot(gTrG,d);
+  float amp=clamp(1100.0+0.5*(-z-4000.0), 700.0, 2600.0);
+  float sig=s<0.0 ? 17.0 : 30.0;
+  float trough=exp(-s*s/(sig*sig));
+  float rise=0.16*exp(-(s-85.0)*(s-85.0)/1800.0)*step(0.0,s);
+  float arc=1700.0*exp(-(s+165.0)*(s+165.0)/2400.0)*smoothstep(-2700.0,-3600.0,z);
+  amp*=gTrAK; arc*=gTrArcK;   // along-strike variation, once per pixel (main)
+  return gTrW*(smoothstep(-2000.0,-3400.0,z)*amp*(rise-trough) + arc);
+}
 float baseElev(vec2 uv){
-  return mix(decElev(texture2D(elevA,wA(uv)).r), decElev(texture2D(elevB,wB(uv)).r), mixf);
+  float z=mix(decElev(texture2D(elevA,wA(uv)).r), decElev(texture2D(elevB,wB(uv)).r), mixf);
+  if(gTrW>0.001) z+=trenchDz(uv, z);
+  return z;
 }
 /* One octave walk, two accumulations. Plain fbm gives rounded lumps, which is
    right for a floodplain and wrong for a mountain belt — real ranges are
@@ -1598,11 +1655,29 @@ void main(){
      next line already reads the lake field. Once per pixel, from the unwarped
      uv, and every crust-bound sample below goes through wA()/wB(). */
   gWarp=warpAt(uv);
+  if(uTrench.z>0.0 && uTrench.x+uTrench.y>0.5){
+    float sA=0.0, cA=0.0, sB=0.0, cB=0.0; vec2 gA=vec2(0.0), gB=vec2(0.0);
+    if(uTrench.x>0.5) trTap(stkA, uv, sA, cA, gA);
+    if(uTrench.y>0.5) trTap(stkB, uv, sB, cB, gB);
+    float wa=cA*(1.0-mixf), wb=cB*mixf, ws=wa+wb;
+    if(ws>1e-3){ gTrS=(wa*sA+wb*sB)/ws; gTrG=(wa*gA+wb*gB)/ws; gTrW=min(ws,1.0)*uTrench.z; gTrUv=uv; }
+  }
   if(uMat>0.5){
     int slot=int(texture2D(plateA,wA(uv)).r*255.0+0.5);
     vec4 q=uPlateQ[clamp(slot,0,47)];
     gMatAxis=normalize(q.xyz+vec3(0.0,0.0,1e-9)); gMatAng=q.w;
     gMatOff=(dirFromUv(wA(uv))-dirFromUv(uv))*uMatOffK;
+  }
+  /* Neither a trench nor an arc is uniform along strike: a trench deepens and
+     shoals by a kilometre over a few hundred km, and an arc is a chain of
+     volcanoes, not a wall. Keyed to the material coordinate -- on the arc side
+     the overriding plate's, the plate the arc and the inner wall ride -- and
+     computed once here: it varies over 70-300 km, far wider than any stencil,
+     and per tap it cost 3.5 ms on a coastal close-up. */
+  if(gTrW>0.001){
+    vec3 md=matDir(dirFromUv(uv));
+    gTrAK=0.78+0.44*vnoise3(md*22.0);
+    gTrArcK=0.22+0.78*smoothstep(0.40,0.78,vnoise3(md*95.0+vec3(3.7,1.3,-2.1)));
   }
   /* Substrate, read early because elevDetail needs it to decide how much relief
      this ground carries -- see the amplitude note there. */
