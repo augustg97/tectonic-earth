@@ -195,7 +195,15 @@ def _encode(shortening, c2, s2):
 def bake(age, rot, quiet=False):
     from scipy.ndimage import gaussian_filter
     t0 = time.time()
-    dE, dN, cov = BD.displacement(age, TW, TH, rot)
+    if age > 540:
+        # The Precambrian terrain is drawn by craton poses, not by PALEOMAP's
+        # plates (build_preframe): its fabric must come from the motion of the
+        # blocks it draws, or a fold belt runs across a craton that is not
+        # being squeezed and misses the suture that is (3.17).
+        import build_preframe
+        dE, dN, cov, _own = build_preframe.displacement(age, TW, TH)
+    else:
+        dE, dN, cov = BD.displacement(age, TW, TH, rot)
     dE = BD.laplace_fill(dE, cov)
     dN = BD.laplace_fill(dN, cov)
     sh, c2, s2 = strain(dE, dN, TW, TH)

@@ -1285,6 +1285,148 @@ def _fut_enclosed(ctx, lon, lat, max_share):
     return ctx["wart"][k] / max(tot, 1e-9) <= max_share
 
 
+_PRE_CTX = {}
+
+
+def _pre_context(age, nx=720, ny=360):
+    """Craton ownership and land at a Precambrian keyframe, from the shipped
+    elevation field and the same craton geometry that drew it."""
+    import numpy as np
+    from PIL import Image
+    import precambrian as PRE
+    from fieldpack import dec_elev
+    key = int(round(age / 5.0)) * 5
+    if key in _PRE_CTX:
+        return _PRE_CTX[key]
+    name = ("phan_%04d_e.avif" if key <= 540 else "pre_%04d_e.avif") % key
+    path = f"{WEB}/fields/{name}"
+    if not os.path.exists(path):
+        return None
+    e = np.asarray(Image.open(path).convert("L").resize((nx, ny), Image.BILINEAR)).astype(np.float32) / 255.0
+    lon = (np.arange(nx) + 0.5) / nx * 360.0 - 180.0
+    lat = 90.0 - (np.arange(ny) + 0.5) / ny * 180.0
+    LON, LAT = np.meshgrid(lon, lat)
+    lo, la = np.radians(LON), np.radians(LAT)
+    X = np.stack([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)], -1)
+    ctx = dict(owner=PRE.craton_owner(key, nx, ny), land=dec_elev(e) > 0.0, X=X,
+               LON=LON, LAT=LAT, w=np.cos(la))
+    _PRE_CTX[key] = ctx
+    return ctx
+
+
+def _pre_place(ctx, spec):
+    """Where a Precambrian name sits at one keyframe (see features.PRE_CRATON_LABELS)."""
+    import numpy as np
+    import precambrian as PRE
+    from scipy.spatial import cKDTree
+    from scipy.ndimage import label as cclabel
+    X, own, land = ctx["X"], ctx["owner"], ctx["land"]
+
+    def ll(v):
+        v = v / np.linalg.norm(v)
+        return (float(np.degrees(np.arctan2(v[1], v[0]))), float(np.degrees(np.arcsin(np.clip(v[2], -1, 1)))))
+
+    def cells(names, need_land=True):
+        """The cratons' land, preferring its interior (two cells in from any
+        coast) so a name placed at the edge of a block cannot round into the
+        sea; the coast, then the drowned block, only if nothing else is left."""
+        from scipy.ndimage import binary_erosion
+        ks = [PRE.CRATON_NAMES.index(n) for n in names if n in PRE.CRATON_NAMES]
+        m = np.isin(own, ks)
+        if need_land and (m & land).any():
+            inner = m & binary_erosion(land, iterations=2)
+            m = inner if inner.any() else m & land
+        return m
+
+    def centroid(m):
+        c = (X[m] * ctx["w"][m][:, None]).sum(0)
+        return c / max(np.linalg.norm(c), 1e-12)
+
+    def nearest(m, v):
+        d = X[m] @ v
+        return X[m][int(np.argmax(d))]
+
+    if spec.get("landmass"):
+        lab, n = cclabel(land)
+        for y in range(land.shape[0]):
+            a_, b_ = lab[y, 0], lab[y, -1]
+            if a_ and b_ and a_ != b_:
+                lab[lab == b_] = a_
+        if n == 0:
+            return None
+        sz = np.bincount(lab.ravel(), weights=ctx["w"].ravel())
+        sz[0] = 0
+        m = lab == int(np.argmax(sz))
+        return ll(nearest(m, centroid(m)))
+    if "between" in spec:
+        A, B = spec["between"]
+        a, b = cells([A]), cells([B])
+        if not a.any() or not b.any():
+            m = a if a.any() else b
+            return ll(nearest(m, centroid(m))) if m.any() else None
+        Xa, Xb = X[a], X[b]
+        dist, j = cKDTree(Xb).query(Xa[::2])
+        i = int(np.argmin(dist))
+        pa, pb = Xa[::2][i], Xb[j[i]]
+        mid = (pa + pb) / np.linalg.norm(pa + pb)
+        # the suture if the two blocks meet on land there; else A's margin facing B
+        r = int(np.argmax(X.reshape(-1, 3) @ mid))
+        return ll(mid) if land.ravel()[r] else ll(pa)
+    m = cells(spec.get("on", []))
+    if not m.any():
+        return None
+    c = centroid(m)
+    if spec.get("toward"):
+        t = cells([spec["toward"]])
+        if t.any():
+            c = c + 0.6 * (centroid(t) - c)
+            c = c / np.linalg.norm(c)
+    return ll(nearest(m, c))
+
+
+def precambrian_label_pass(out):
+    """Place every name in features.PRE_CRATON_LABELS on the craton the terrain
+    draws, keyframe by keyframe past 540 Ma; blend from the PALEOMAP track over
+    540-600 where the name continues from the Phanerozoic."""
+    import math
+    specs = dict(getattr(features, "PRE_CRATON_LABELS", {}))
+    n = 0
+    for l in out:
+        spec = specs.get(l["n"])
+        if not spec:
+            continue
+        a0, a1 = min(l["a0"], l["a1"]), max(l["a0"], l["a1"])
+        if a1 <= 540:
+            continue
+        young = [t for t in (l.get("tr") or []) if t[0] <= 540]
+        p540 = None
+        if young:
+            p540 = min(young, key=lambda t: abs(t[0] - 540))
+        pts = []
+        for age in range(max(545, int(math.ceil(a0 / 5.0)) * 5), int(a1) + 1, 5):
+            ctx = _pre_context(age)
+            if ctx is None:
+                continue
+            p = _pre_place(ctx, spec)
+            if p is None:
+                continue
+            if p540 is not None and age < 600 and not spec.get("landmass"):
+                w = (age - 540.0) / 60.0
+                d = ((p[0] - p540[1] + 180.0) % 360.0) - 180.0
+                q = (p540[1] + d * w, p540[2] + (p[1] - p540[2]) * w)
+                # the blend only where it lands on land; a name never floats
+                ny, nx = ctx["land"].shape
+                r = int(min(ny - 1, max(0, (90.0 - q[1]) / 180.0 * ny)))
+                c = int(((q[0] + 180.0) % 360.0) / 360.0 * nx) % nx
+                if ctx["land"][r, c]:
+                    p = q
+            pts.append([age, round(((p[0] + 180.0) % 360.0) - 180.0, 1), round(p[1], 1)])
+        if pts:
+            l["tr"] = sorted(young + pts, key=lambda t: t[0])
+            n += 1
+    return n
+
+
 def future_label_pass(out):
     """Place, check and trim every label whose window reaches past the present."""
     import future_motion as FM
@@ -1671,6 +1813,9 @@ def build_labels():
         print(f"  {n_comp} paleocontinents positioned from their modern fragments")
     if n_water:
         print(f"  {n_water} seas and oceans positioned from their margins")
+    n_pre = precambrian_label_pass(out)
+    if n_pre:
+        print(f"  {n_pre} Precambrian names placed on the cratons the terrain draws")
     n_fut = extend_tracks_into_future(out)
     if n_fut:
         print(f"  {n_fut} labels now ride the synthesised future plate motion")

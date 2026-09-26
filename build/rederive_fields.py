@@ -69,10 +69,11 @@ def main():
         future_only = all(a < 0 for a in ALL)
     t0 = time.time()
     st = lambda m: print("[%5.0fs] %s" % (time.time() - t0, m), flush=True)
-    if not future_only and "--ages" not in sys.argv:
+    past = [a for a in ALL if a in PAST]
+    if past:
         with Pool(12) as p:
-            p.map(tect, PAST, chunksize=4)
-        st("tectonic _t: %d" % len(PAST))
+            p.map(tect, past, chunksize=4)
+        st("tectonic _t: %d" % len(past))
     import build_foldphase as BFP, build_drainphase as BDP
     with Pool(12) as p:
         q = [r for r in p.map(BFP.bake, ALL, chunksize=4) if r]

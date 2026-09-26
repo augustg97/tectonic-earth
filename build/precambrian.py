@@ -66,6 +66,76 @@ def fbm3(P, seed, octaves=4, lac=2.07):
 
 
 # ------------------------------------------------------------ generation ----
+def craton_pose(glon, glat, spin):
+    """World <- craton-local rotation for a placement: the shape (and its noise)
+    lives in the local frame, so this one matrix is where the block is."""
+    c = BS.unit(glon, glat)
+    return BS.rodrigues(c, spin) @ BS.rot_from_to(ANCHOR, c)
+
+
+def _craton_caps(placements, T):
+    """For each placed craton: the cells of T (3,N) its cap can reach, their
+    craton-local coordinates L, their angular distance d from its centre
+    (elongated) and the fractal coastline radius rad there. ONE statement of
+    the geometry, read by the terrain (precambrian_grid) and by the crust's
+    own frame (craton_owner), so the two cannot disagree about which block
+    owns a cell (3.17: they did, through two different plate models)."""
+    for name, glon, glat, spin in placements:
+        if name not in CRATON_SHAPE:
+            continue
+        R0, seed = CRATON_SHAPE[name]
+        c = BS.unit(glon, glat)
+        # only touch the cap this craton could possibly reach (errstate: the
+        # Accelerate matmul raises spurious fp flags on large arrays)
+        with np.errstate(all="ignore"):
+            cosd = np.clip(c @ T, -1, 1)
+        near = cosd > np.cos(np.radians(R0 * 1.9))
+        if not near.any():
+            continue
+        idx = np.where(near)[0]
+        Tn = T[:, idx]
+        # craton-local frame: the shape (and its noise) rotates with the block
+        Rloc = craton_pose(glon, glat, spin)
+        with np.errstate(all="ignore"):
+            L = Rloc.T @ Tn
+        d = np.degrees(np.arccos(np.clip(L[0], -1, 1)))
+        # Elongate the block: real cratons are not discs, and a circular base
+        # shape shows through the noise as a suspiciously round outline.
+        bearing = np.arctan2(L[2], L[1])
+        axis = (seed % 7) * 0.4488                      # per-craton orientation
+        d = d * (1.0 + 0.24 * np.cos(2.0 * (bearing - axis)))
+        # fractal coastline: three scales of lobes, gulfs and crenulation
+        rad = R0 * (1.0
+                    + 0.42 * (fbm3(L * 2.2, seed, 3) - 0.5) * 2.0
+                    + 0.17 * (fbm3(L * 5.8, seed + 5, 3) - 0.5) * 2.0
+                    + 0.07 * (fbm3(L * 14.0, seed + 9, 2) - 0.5) * 2.0)
+        yield name, R0, seed, idx, L, d, rad
+
+
+def craton_owner(age, tw=1024, th=512):
+    """(owner (th,tw) int16 index into CRATON_NAMES or -1, reach (th,tw) of
+    the fringe) for a Precambrian age: the craton each cell's crust belongs to,
+    by the same geometry precambrian_grid draws -- the block a cell lies
+    deepest inside, its island-arc fringe included."""
+    placements = BS.pre_placement(age)
+    tlon = (np.arange(tw) + 0.5) / tw * 360 - 180
+    tlat = 90 - (np.arange(th) + 0.5) / th * 180
+    LON, LAT = np.meshgrid(tlon, tlat)
+    T = BS.unit(LON.ravel(), LAT.ravel())
+    owner = np.full(T.shape[1], -1, np.int16)
+    depth = np.full(T.shape[1], -1e9)
+    for name, R0, seed, idx, L, d, rad in _craton_caps(placements, T):
+        dep = (rad + 0.22 * R0) - d                    # > 0 inside the block or its fringe
+        k = CRATON_NAMES.index(name)
+        better = (dep > 0) & (dep > depth[idx])
+        owner[idx] = np.where(better, k, owner[idx])
+        depth[idx] = np.where(better, dep, depth[idx])
+    return owner.reshape(th, tw)
+
+
+CRATON_NAMES = sorted(CRATON_SHAPE)
+
+
 def precambrian_grid(age, tw=1536, th=768, flood=140.0):
     """Elevation grid (th,tw), lat +90..-90 top->bottom, for a Precambrian age."""
     placements = BS.pre_placement(age)
@@ -78,36 +148,7 @@ def precambrian_grid(age, tw=1536, th=768, flood=140.0):
     claims = np.zeros(T.shape[1], np.int16)
     belt = np.zeros(T.shape[1])
 
-    for name, glon, glat, spin in placements:
-        if name not in CRATON_SHAPE:
-            continue
-        R0, seed = CRATON_SHAPE[name]
-        c = BS.unit(glon, glat)
-        # only touch the cap this craton could possibly reach
-        cosd = np.clip(c @ T, -1, 1)
-        near = cosd > np.cos(np.radians(R0 * 1.9))
-        if not near.any():
-            continue
-        idx = np.where(near)[0]
-        Tn = T[:, idx]
-
-        # craton-local frame: the shape (and its noise) rotates with the block
-        Rloc = BS.rodrigues(c, spin) @ BS.rot_from_to(ANCHOR, c)
-        L = Rloc.T @ Tn
-        d = np.degrees(np.arccos(np.clip(L[0], -1, 1)))
-
-        # Elongate the block: real cratons are not discs, and a circular base
-        # shape shows through the noise as a suspiciously round outline.
-        bearing = np.arctan2(L[2], L[1])
-        axis = (seed % 7) * 0.4488                      # per-craton orientation
-        d = d * (1.0 + 0.24 * np.cos(2.0 * (bearing - axis)))
-
-        # fractal coastline: three scales of lobes, gulfs and crenulation
-        rad = R0 * (1.0
-                    + 0.42 * (fbm3(L * 2.2, seed, 3) - 0.5) * 2.0
-                    + 0.17 * (fbm3(L * 5.8, seed + 5, 3) - 0.5) * 2.0
-                    + 0.07 * (fbm3(L * 14.0, seed + 9, 2) - 0.5) * 2.0)
-
+    for name, R0, seed, idx, L, d, rad in _craton_caps(placements, T):
         inside = d < rad
         h = np.clip((rad - d) / (0.30 * R0), 0, 1)      # 0 at the shore, 1 inland
 

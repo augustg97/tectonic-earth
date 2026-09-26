@@ -1021,6 +1021,62 @@ COMPOSITE_BELTS = {
 # because a rigid rotation moves a point continuously. A composite entry is for
 # something that really is scattered; a range in one place should just track.
 
+# THE PRECAMBRIAN NAMES RIDE THE BLOCKS THE MAP DRAWS (3.17). Past 540 Ma the
+# terrain is generated craton by craton (precambrian.py, placed by
+# build_synthetic.PRE_KEYS) and PALEOMAP -- which tracks every other name --
+# puts the same cratons 50-180 degrees elsewhere. A plain label cannot be
+# tracked there at all, so it kept a present-day or hand-typed coordinate and
+# the app's wide terrain search stuck it on whatever land was nearest: the
+# Congo Craton on stray islands at 900 Ma, the Kalahari and West Africa cratons
+# in open ocean at 600, 35 land names on water in all. Each is placed by
+# build_webdata.precambrian_label_pass on its own craton's land at every
+# keyframe:
+#   "on":      [cratons]  -- the land point nearest their centroid
+#   "toward":  craton     -- ...on the side facing this one (a craton's part)
+#   "between": [A, B]     -- the closest approach of A's land to B's: a belt
+#                            is the collision of two blocks, or A's margin
+#                            facing B while they are still apart
+#   "landmass": True      -- the largest connected landmass (a supercontinent)
+# Names on the young side of 540 keep their PALEOMAP tracks and are blended
+# onto the craton placement over 540-600 Ma, as the terrain is.
+PRE_CRATON_LABELS = {
+    "Congo Craton": {"on": ["Congo"]},
+    "Kalahari Craton": {"on": ["Kalahari"]},
+    "West Africa Craton": {"on": ["WestAfrica"]},
+    "Amazonia": {"on": ["Amazonia"]},
+    "Sao Francisco Craton": {"on": ["Congo"], "toward": "Amazonia"},
+    "North China": {"on": ["NChina"]},
+    "South China": {"on": ["SChina"]},
+    "Siberia": {"on": ["Siberia"]},
+    "Yilgarn Craton": {"on": ["Australia"], "toward": "India"},
+    "Australia-East Antarctica": {"on": ["Australia", "EAntarctica"]},
+    "Officer Basin": {"on": ["Australia"]},
+    "Centralian Superbasin": {"on": ["Australia"]},
+    "Adelaide Rift Complex": {"on": ["Australia"], "toward": "EAntarctica"},
+    "Petermann Ranges": {"on": ["Australia"]},
+    "Canadian Shield": {"on": ["Laurentia"]},
+    "White Sea Realm": {"on": ["Baltica"]},
+    "Taoudeni Basin": {"on": ["WestAfrica"]},
+    "Timanian Belt": {"on": ["Baltica"], "toward": "Siberia"},
+    "Baikalian Belt": {"on": ["Siberia"], "toward": "Kazakh"},
+    "Cadomian Belt": {"on": ["WestAfrica"], "toward": "Baltica"},
+    "Transantarctic Mts": {"on": ["EAntarctica"]},
+    "Grenville Belt": {"between": ["Laurentia", "Amazonia"]},
+    "Sveconorwegian Belt": {"between": ["Baltica", "Amazonia"]},
+    "Irumide Belt": {"between": ["Congo", "Kalahari"]},
+    "Damara Belt": {"between": ["Congo", "Kalahari"]},
+    "East African Orogen": {"between": ["Congo", "India"]},
+    "Kuunga Orogen": {"between": ["Australia", "India"]},
+    "Brasiliano Belt": {"between": ["Amazonia", "Congo"]},
+    "Pan-African Belt": {"between": ["WestAfrica", "Congo"]},
+    "Rodinia": {"landmass": True},
+    "Pannotia": {"landmass": True},
+    "Gondwana": {"on": ["Amazonia", "WestAfrica", "Congo", "Kalahari", "Arabia", "India",
+                        "Australia", "EAntarctica"]},
+    "Carolina Terrane": {"on": ["Amazonia"], "toward": "WestAfrica"},
+    "Hoggar Massif": {"on": ["WestAfrica"], "toward": "Congo"},
+}
+
 COMPOSITE_ORDER = ["Pannotia", "Gondwana", "Gondwana (assembling)",
                    "Laurussia (Euramerica)", "Laurentia", "Siberia",
                    "Baltica", "Avalonia", "Cimmeria"]
