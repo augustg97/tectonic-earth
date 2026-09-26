@@ -116,7 +116,40 @@ def ice_masks(z, rf, age, iceT, seaT, lobe=0.0):
     temp = climate_at(age)["temp"]
     zp = np.clip(z, 0, None)
     base = (26.0 - 24.0 * s2 - 26.0 * s2 ** 3) + (temp - TEMP_REF) * (4.0 + 15.0 * s2)
+    # THE SHADER'S 3.16 TERMS, replicated so the two statements stay one:
+    # the mass-elevation effect (the four +-137 km taps: mean and minimum),
+    # the relief measure behind the sub-grid peak spread, and the moisture that
+    # reaches a crest (the wettest rain within ~50 km on high ground).
+    def _taps(a, deg):
+        dy = max(1, int(round(deg / (180.0 / H))))
+        cl = np.maximum(np.cos(np.radians(lat[:, 0])), 0.2)
+        out = []
+        for sgn in (1, -1):
+            out.append(np.roll(a, sgn * dy, axis=0))
+            sh = np.empty_like(a)
+            for i in range(H):
+                dx = max(1, int(round(deg / cl[i] / (360.0 / W))))
+                sh[i] = np.roll(a[i], sgn * dx)
+            out.append(sh)
+        return out
+    zc = np.clip(z, 0, None)
+    t4 = _taps(zc, 14.0 / 2048.0 * 180.0)
+    gmac = sum(t4) / 4.0
+    gmin = np.minimum(np.minimum(t4[0], t4[1]), np.minimum(t4[2], t4[3]))
+    mee = np.minimum((0.25 * np.clip(gmac - 500.0, 0, None) + 0.75 * np.clip(gmin - 500.0, 0, None))
+                     * 0.0011, 5.5) * np.clip((base + 5.0) / 15.0, 0, 1) * (z >= 0.0)
+    base = base + mee
     T = base - zp * 0.0058
+    r4 = _taps(z, 3.2 / 2048.0 * 180.0)
+    qR = 0.5 * 0.0156863 * np.sqrt(Z_RANGE * np.clip(z, 1.0, None))
+    dR = [r4[0] - r4[1], r4[2] - r4[3], r4[0] + r4[1] - 2 * z, r4[2] + r4[3] - 2 * z]
+    dR = [np.sign(d) * np.clip(np.abs(d) - qR, 0, None) for d in dR]
+    rug = np.clip(np.sqrt(sum(d * d for d in dR)) / 460.0, 0, 1)
+    f4 = _taps(rf, 0.45)
+    hi = np.clip((zp - 1800.0) / 800.0, 0, 1)
+    hi = hi * hi * (3 - 2 * hi)
+    rfe = np.where(zp > 1800.0, np.maximum(rf, 0.8 * np.maximum(np.maximum(f4[0], f4[1]),
+                                                                 np.maximum(f4[2], f4[3])) * hi), rf)
 
     land = z >= 0.0
     # There is no accumulation term here any more. One was added -- a swing of
@@ -149,11 +182,17 @@ def ice_masks(z, rf, age, iceT, seaT, lobe=0.0):
     nearS = np.exp(-(dS * dS) / (2.0 * MARGIN_W * MARGIN_W))
     sea_ice = np.clip((dS + lobe * nearS * 1.6) / SEA_RAMP, 0, 1) * (~land)
 
-    arid = 1.0 - np.clip(rf / 0.85, 0, 1)
+    def _ss(a, b, x):
+        t = np.clip((x - a) / (b - a), 0, 1)
+        return t * t * (3 - 2 * t)
+    arid = 1.0 - np.clip(rfe / 0.85, 0, 1)
     ela = np.clip((base - (-5.0 - 7.0 * arid)) / 0.0058, 300.0, 6200.0)
-    glac = np.clip((zp - ela) / 520.0 + 0.08, 0, 1) * land
-    snowfall = np.clip(0.30 + 0.70 * np.clip((rf - 0.04) / 0.38, 0, 1), 0, 1)
-    snow = np.maximum(np.clip((zp - (ela - 380.0)) / 400.0, 0, 1) * snowfall, glac)
+    sig = np.minimum(0.55 * np.clip(zp - gmac, 0, None) + 300.0 * rug, 1000.0) * _ss(1500.0, 3200.0, zp)
+    glac = np.clip((zp - ela + 0.8 * sig) / (520.0 + 1.6 * sig) + 0.08, 0, 1) * land
+    snowline = ela - 380.0
+    snowfall = np.clip(0.30 + 0.70 * _ss(0.015, 0.22, rfe), 0, 1)
+    snowfall = snowfall + (1.0 - snowfall) * np.clip((zp + sig - snowline) / 1100.0, 0, 1) * 0.80
+    snow = np.maximum(np.clip((zp - snowline + sig) / (400.0 + 2.0 * sig), 0, 1) * snowfall, glac)
     return land, land_ice, sea_ice, glac, snow, T
 
 

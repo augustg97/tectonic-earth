@@ -94,12 +94,14 @@ def _future(F, h, w):
     import build_fields as bf
     age0, _pid = realage.present(h, w)
     a0 = np.where(np.isfinite(age0), age0, MAX_AGE).astype(float)
-    frac = float(np.clip(F / 250.0, 0.0, 1.0))
-    warped = bf.future_grid(frac, bf.rasterise_groups(), a0, h, w)
-    # future_grid fills unclaimed cells with its ocean-DEPTH backdrop, which is
-    # far outside any possible age -- so the fill identifies the new crust for
-    # free, with no second pass over the group masks.
-    new = warped < 0.0
+    # 3.16: carried by the future engine directly -- the same plates, the same
+    # collision deformation as the terrain. (Through build_fields.future_grid
+    # the age field was put through the terrain's own erosion and coastal steps,
+    # which are about metres, not millions of years.) Cells no plate claims
+    # come back NaN: new crust.
+    import future_tectonics as FT
+    warped, _own, _src, _E, _cw = FT.render(float(np.clip(F, 0.0, 250.0)), h, w, source=a0)
+    new = np.isnan(warped)
     age = np.where(new, 0.0, warped + F)
     if new.any():
         d = distance_transform_edt(new)

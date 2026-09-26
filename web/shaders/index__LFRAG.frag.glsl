@@ -1,6 +1,7 @@
 precision highp float;
 uniform sampler2D sheetA, sheetB, elevA, elevB, dispA;
 uniform float mixf, uWarp, uMapProj, uMapLon, uSchem;
+uniform vec2 uSheetPx;     // the sheets' size in texels (0: plain bilinear)
 varying vec2 vUv; varying vec3 vVN;
 const float PI=3.14159265359, Z_RANGE=8000.0, V_DEG=12.0;
 float decElev(float e){ float d=e*2.0-1.0; return sign(d)*d*d*Z_RANGE; }
@@ -26,6 +27,37 @@ vec2 warpAt(vec2 uv){
   float cl=max(cos(radians(tlat)),0.15);
   return vec2(dE/(cl*360.0), dN/180.0);
 }
+/* MAGNIFIED SHEETS ARE RESAMPLED BICUBICALLY (3.16). A stepped-down GPU
+   draws the 4096 sheets from a quarter texel per pixel, so mid zoom showed a
+   9.8 km-texel image magnified up to 4x through bilinear filtering: every
+   range a soft blob. Catmull-Rom (nine bilinear taps) keeps the edges the bake
+   drew; it fades in as the magnification passes ~1.1x, so a minified sheet
+   still takes its mip chain. */
+vec4 catmullRom(sampler2D t, vec2 uv){
+  vec2 sp=uv*uSheetPx;
+  vec2 p1=floor(sp-0.5)+0.5;
+  vec2 f=sp-p1;
+  vec2 w0=f*(-0.5+f*(1.0-0.5*f));
+  vec2 w1=1.0+f*f*(-2.5+1.5*f);
+  vec2 w2=f*(0.5+f*(2.0-1.5*f));
+  vec2 w3=f*f*(-0.5+0.5*f);
+  vec2 w12=w1+w2;
+  vec2 p0=(p1-1.0)/uSheetPx, p3=(p1+2.0)/uSheetPx, p12=(p1+w2/w12)/uSheetPx;
+  vec4 r=texture2D(t,vec2(p0.x,p0.y))*w0.x*w0.y + texture2D(t,vec2(p12.x,p0.y))*w12.x*w0.y
+        + texture2D(t,vec2(p3.x,p0.y))*w3.x*w0.y
+        + texture2D(t,vec2(p0.x,p12.y))*w0.x*w12.y + texture2D(t,vec2(p12.x,p12.y))*w12.x*w12.y
+        + texture2D(t,vec2(p3.x,p12.y))*w3.x*w12.y
+        + texture2D(t,vec2(p0.x,p3.y))*w0.x*w3.y + texture2D(t,vec2(p12.x,p3.y))*w12.x*w3.y
+        + texture2D(t,vec2(p3.x,p3.y))*w3.x*w3.y;
+  return r;
+}
+vec4 sheetTap(sampler2D t, vec2 uv, float mag){
+  vec4 b=texture2D(t,uv);
+  if(mag<0.01) return b;
+  vec4 c=clamp(catmullRom(t,uv),0.0,1.0);
+  c.a=b.a;                        // the land/water flag stays the bilinear one
+  return mix(b,c,mag);
+}
 void main(){
   vec2 uv=vUv;
   if(uMapProj>0.5){
@@ -37,7 +69,9 @@ void main(){
   vec2 w=warpAt(uv);
   vec2 ua=uv-mixf*w, ub=uv+(1.0-mixf)*w;
   float h=mix(decElev(texture2D(elevA,ua).r), decElev(texture2D(elevB,ub).r), mixf);
-  vec4 cA=texture2D(sheetA,ua), cB=texture2D(sheetB,ub);
+  float tpp = uSheetPx.x>0.5 ? max(length(dFdx(uv)*uSheetPx), length(dFdy(uv)*uSheetPx)) : 2.0;
+  float mag = 1.0-smoothstep(0.55,0.9,tpp);          // sheet texels per screen pixel
+  vec4 cA=sheetTap(sheetA,ua,mag), cB=sheetTap(sheetB,ub,mag);
   /* THE COASTLINE STAYS SHARP. Where the two sheets disagree about a pixel
      (land in one keyframe, sea in the other) a plain blend would dissolve the
      shoreline across the whole interval. The interpolated height says which

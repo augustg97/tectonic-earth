@@ -1047,7 +1047,10 @@ def extend_tracks_into_future(labels):
 # thing it names, and exist only while that thing does.
 _FUT_CTX = {}
 FUT_BELT_MIN_CELLS = 100      # a zone smaller than this (0.5 deg cells) is a contact, not a belt
-FUT_BELT_P90 = 1500.0         # ...and a belt is a name only while its high ground stands this high
+FUT_BELT_P90 = 1000.0         # ...and a belt is a name only while its high ground stands this high
+                              # (1500 until 3.16 held only Himalaya-scale belts: the Afro-European belt
+                              # stands at 1,300-1,425 m through +25..+100 and was named only at +225)
+FUT_STRAIT_DEG = 1.5          # an enclosed sea's straits: narrower than twice this do not connect it
 FUT_OPEN_OCEAN = 0.60         # water fraction of a ~5 deg box for "open ocean"
 
 
@@ -1085,21 +1088,11 @@ def _future_context(key):
     ar = np.bincount(lab.ravel(), weights=area.ravel())
     ar[0] = 0.0
     big = int(np.argmax(ar))
-    FM._ready()
-    M = FM._MASK
-    gh, gw = M.shape
-    T = BS.unit(LON.ravel(), LAT.ravel())
-    crust = {}
-    for i, g in enumerate(FM._NAMES):
-        if g not in FM._ROT:
-            continue
-        Rm = BF.axis_angle_scale(FM._ROT[g], min(1.0, abs(key) / FM.SPAN_MYR))
-        S = Rm.T @ T
-        slat = np.degrees(np.arcsin(np.clip(S[2], -1, 1)))
-        slon = np.degrees(np.arctan2(S[1], S[0]))
-        yy = np.clip(((90 - slat) / 180 * gh).astype(int), 0, gh - 1)
-        xx = ((slon + 180) / 360 * gw).astype(int) % gw
-        crust[g] = (M[yy, xx] == i).reshape(ny, nx)
+    # which plate's crust each cell carries: the future engine's own owner map
+    # (future_tectonics, 3.16), the same one the terrain was rendered with
+    import future_tectonics as FT
+    _z, owner, _src, _E, _cw = FT.render(abs(key), ny, nx, fray=False)
+    crust = {g: owner == FT.PI[g] for g in FT.PLATES}
     ctx = dict(z=z, zs=zs, land=land, rain=rain, lab=lab, big=big,
                share=float(ar[big] / max(ar.sum(), 1e-9)), LON=LON, LAT=LAT,
                area=area, crust=crust)
@@ -1126,9 +1119,17 @@ def _nearest_of(mask, ctx, lon, lat):
 
 
 def _fut_belt(ctx, a, b):
+    """b may be a tuple of plates: a range raised against whichever of them it
+    meets (East Antarctica meets Australia before Sumatra in this drawing)."""
     import numpy as np
     from scipy.ndimage import maximum_filter, label as cclabel
-    cr = ctx["crust"]
+    cr = dict(ctx["crust"])
+    if isinstance(b, (tuple, list)):
+        parts = [cr[x] for x in b if x in cr]
+        if not parts:
+            return None
+        cr["_b"] = np.logical_or.reduce(parts)
+        b = "_b"
     if a not in cr or b not in cr:
         return None
     land = ctx["land"]
@@ -1249,7 +1250,16 @@ def _fut_enclosed(ctx, lon, lat, max_share):
     import numpy as np
     from scipy.ndimage import label as cclabel
     if "wlab" not in ctx:
+        from scipy.ndimage import binary_erosion
+        # A MEDITERRANEAN IS ENCLOSED. The test counted any one-cell channel as
+        # a connection, so the Indian Ocean's last water, walled in by Africa,
+        # India, Antarctica and South America but for a strait, was never cut
+        # off (Scotese's name for it is the Medi-Pangean Sea). Straits narrower
+        # than ~2 x FUT_STRAIT_DEG are eroded away before the water is labelled.
         water = ctx["z"] < 0
+        k = max(1, int(round(FUT_STRAIT_DEG / (180.0 / water.shape[0]))))
+        yy, xx = np.mgrid[-k:k + 1, -k:k + 1]
+        water = binary_erosion(water, structure=(yy * yy + xx * xx) <= k * k, border_value=1)
         wl, n = cclabel(water)
         for y in range(water.shape[0]):
             p_, q_ = wl[y, 0], wl[y, -1]
@@ -1263,7 +1273,14 @@ def _fut_enclosed(ctx, lon, lat, max_share):
     x = int((lon + 180.0) / 360.0 * nx) % nx
     k = wl[y, x]
     if k == 0:
-        return False
+        # the point sits on water the strait erosion took (near a coast):
+        # read the body of water nearest it
+        r = max(2, int(round(2 * FUT_STRAIT_DEG / (180.0 / ny))))
+        box = wl[max(0, y - r):y + r + 1][:, [(x + d) % nx for d in range(-r, r + 1)]]
+        vals = box[box > 0]
+        if vals.size == 0:
+            return False
+        k = int(np.bincount(vals).argmax())
     tot = ctx["wart"][1:].sum()
     return ctx["wart"][k] / max(tot, 1e-9) <= max_share
 

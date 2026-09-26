@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,13 +10,43 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.12 close zoom and colour, §5.10 mountains (the
-  erosion relief), §5.1b the future series (the collision zone, the future's names), §5.5 lakes,
-  §5.6 the biota subsystem, §6 the gate and the build commands, §7 traps (7.43–7.47 are this
-  round's; 7.38–7.42 and 7.30–7.37 the rounds before), §9 known limits.
+- **Read `README.md` first**: §2 working rules, §5.1b the future series (the plate engine, the
+  future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
+  mountains (the erosion relief), §5.5 lakes, §5.6 the biota subsystem, §6 the gate and the build
+  commands, §7 traps (7.48–7.56 are this round's; 7.43–7.47 and 7.38–7.42 the rounds before), §9
+  known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: close zoom, colour, lakes and the future's names (3.15, 2026-09-26)
+## The latest round: the future engine, the rain anchor, the herringbone (3.16, 2026-09-26)
+
+The user, on 3.15: "yes, download it and fix the rain anchor. And let's address the remaining still
+open items. The future should be improved overall - let's close/narrow the Atlantic, and let's
+ensure that we simulate tectonic hypothetical future movements realistically - e.g., right now
+Australia at +250 still retains its shape, which seems unrealistic."
+
+- **The future is a plate engine (README 5.1b, 7.48–7.52, 7.56).** `build/future_tectonics.py`
+  (plates, kinematics, collision integration, `render`, margins) + `build/future_story.py` (the
+  Scotese 2018 storyline as docks). Continents that overlap push each other apart along the
+  contact, bounded by convergence, the whole leading edge yielding; convergence thickens crust (E).
+  `build_fields.future_grid` reworks strained crust (majority land/sea, E supported at a flexural
+  scale), mends tears, ranks the Pacific's floor lowest, raises Andean arcs off the ocean-facing
+  coasts of `ACTIVE_MARGINS`. The Atlantic closes (+225–250); Australia crumples (46% strained at
+  +250, outline 24% off rigid). States are fingerprinted: edit the story or the integrator and
+  `--integrate` again (~6 min) or every step refuses. Rebuild order: `--integrate` →
+  `bake_future_p.py` → `rebuild_future.py --workers 12` (~13 min) → `rederive_fields.py --future`
+  → `build_plates_future.py` → labels. `build_fields.STAGES = {}` captures the surface after each
+  stage for debugging.
+- **The rain anchor (README 5.13).** `build/rain_anchor.py`: WorldClim 2.1 in git-ignored
+  `data/worldclim` (licence forbids redistribution; only the model-derived calibrated field ships),
+  quantile-mapped, log-ratio correction at ~80 km, carried by the slot rasters, faded out by 35 Myr.
+  Spearman 0.644 → 0.988 over 67 sites; `audit_biomes` fails if the anchored field ranks worse.
+- **The herringbone (README 5.13, 7.55).** Sub-grid erosion octaves: two wavelengths per pivot
+  cell (`?eroC=`), lit at 0.55 per octave (`?eroG=`), steered at 1.0 (`?eroW=`), jitter 0.35
+  (`?eroJ=`) with regional spacing.
+- **Labels.** New: Trans-Antarctic Ocean, Verkhoyansk Ocean, Atlantic Sea, New England and
+  Brazilian volcanic arcs, North Antarctic Range; gone: East African Ocean, Somalia, Afar Seaway.
+
+## The round before: close zoom, colour, lakes and the future's names (3.15, 2026-09-26)
 
 The user, on 3.14: "fix the blurry close zoom and the colours issues. And let's address the future
 era issues and fix the future labels".
@@ -393,14 +423,12 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
    ages after the mirrored lists.
 4. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
-5. **The present-day rain anchor** (README 9, MODEL-GAPS 3.15 "Open"): BC's ranges brown, the
-   Ganges orange, Tibet's snow on the plateau -- the 0 Ma rain field's highland dry bias. The fix
-   that leaves Pangaea dry is an observed precipitation climatology at 0 Ma blended out over the
-   first tens of Myr (delta method). It needs a dataset download, which needs the user's go-ahead.
-6. **Mountains against the Google Earth references** (MODEL-GAPS 3.15 "Open"): the erosion
-   relief's herringbone regularity at close zoom; mid-zoom softness when a stepped-down governor
-   draws the 4096 sheets magnified; the Altiplano's flat interior; broad dark flanks on present-day
-   polar land.
+5. **The future engine's open items** (MODEL-GAPS 3.16 "Open"): a few sheared remnant basins in
+   the Asia–Australia belt at +250 (and two round remnant basins at +150); no subduction of its
+   own (ocean floor is outranked, not consumed).
+6. **Mountains against the Google Earth references**: mid-zoom softness when a stepped-down
+   governor draws the 4096 sheets magnified (bicubic taps gained little; the sheet's texel is the
+   limit). The Altiplano's flat interior is real (a closed basin of salars).
 
 ## Commands to ship
 

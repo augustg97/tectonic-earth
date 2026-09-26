@@ -186,7 +186,9 @@ MARINE_REGIONS = {
     "Sauk Sea", "Zechstein Sea", "Turgai Strait", "Eromanga Sea", "Paratethys",
     "Mozambique Ocean", "Adamastor Ocean", "Ural Ocean", "Tornquist Sea",
     "Neo-Panthalassa", "Sundance Sea", "Trans-Saharan Sea",
-    "Central American Sea", "East African Ocean",
+    "Central American Sea",
+    # the 3.16 future (Scotese 2018 stages)
+    "Trans-Antarctic Ocean", "Verkhoyansk Ocean", "Atlantic Sea",
     # marine features added 2026-07 to end the "every ocean shows the same fauna"
     "Muschelkalk Sea", "Mowry Sea", "Boreal Sea", "Bearpaw Sea", "Neotethys",
     "Nama Sea", "Tippecanoe Sea", "Kaskaskia Sea", "Absaroka Sea",

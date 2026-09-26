@@ -211,6 +211,33 @@ def main():
         bad.append("class overlaps %d, baseline %d" % (fails, BASE_OVERLAPS))
     if rho < BASE_SPEARMAN - 0.004:   # tolerance for solver noise
         bad.append("Spearman %+.3f, baseline %+.3f" % (rho, BASE_SPEARMAN))
+    # THE SHIPPED PRESENT DAY IS ANCHORED (rain_anchor.py, 3.16). Everything
+    # above audits the MODEL -- the solve -- which the anchor deliberately does
+    # not touch, so the Pangaea trade and this baseline stand. What the app
+    # draws at 0 Ma is the model calibrated against observed rainfall; score it
+    # on the same sites, and require that the anchor never ranks them worse
+    # than the model does.
+    import rain_anchor as RA
+    anch = RA.apply(Rf / BF.RF_MAX, 0, Z > 0.0, BF.RF_MAX) * BF.RF_MAX
+    av = []
+    for lon, lat, name, cls, mm in SITES:
+        r = int((90 - lat) / 180 * H)
+        c = int((lon + 180) / 360 * W)
+        av.append(float(np.median(anch[max(r - 2, 0):r + 3, max(c - 2, 0):c + 3])))
+    av = np.array(av)
+    ra = np.argsort(np.argsort(av)).astype(float)
+    rho_a = float(np.corrcoef(ra, rr)[0, 1])
+    fails_a = 0
+    arows = [(cls, v) for (cls, _, _, _), v in zip(rows, av)]
+    for a, b in zip(ORDER, ORDER[1:]):
+        fails_a += min(v for c, v in arows if c == a) <= max(v for c, v in arows if c == b)
+    print("  the SHIPPED present day (anchored to observation): Spearman %+.3f, %d overlapping"
+          " boundaries" % (rho_a, fails_a))
+    for cls in ORDER:
+        vs = sorted(((v, n) for (c, _, n, _), v in zip(rows, av) if c == cls), reverse=True)
+        print("    %-9s %s" % (cls, "  ".join("%s %.3f" % (n, v) for v, n in vs)))
+    if rho_a < rho - 0.004:
+        bad.append("the anchor ranks the sites worse than the model (%+.3f < %+.3f)" % (rho_a, rho))
     if bad:
         print("  MOVED BACKWARDS: " + "; ".join(bad))
         return 1

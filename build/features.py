@@ -169,8 +169,8 @@ LABELS = [
     ("continent", "Antarctica",     135, -82, -250, 160),
     ("continent", "India",           78,  22,    0,  130),
     ("ocean", "Pacific Ocean",     -150,   0,  -60, 160),
-    ("ocean", "Atlantic Ocean",     -30,  10, -250, 175),
-    ("ocean", "Indian Ocean",        75, -30, -250, 120),
+    ("ocean", "Atlantic Ocean",     -30,  10, -215, 175),
+    ("ocean", "Indian Ocean",        75, -30, -150, 120),
     ("ocean", "Southern Ocean",       0, -62,    0,  30),
     ("ocean", "Arctic Ocean",         0,  85, -250,  55),
     ("sea", "Mediterranean",         18,  36,    0,  28),
@@ -285,7 +285,13 @@ LABELS = [
     ("sea", "Mediterranean (closing)", 18, 36, -80,  -20),
     ("orogen", "Afro-European Belt", 20,  34, -250,  -25),
     ("orogen", "Neo-Himalaya",       60,  25, -250, -100),
-    ("orogen", "Trans-Atlantic Belt", 0,  25, -250, -140),
+    ("orogen", "Trans-Atlantic Belt", 0,  25, -250, -220),
+    ("ocean", "Trans-Antarctic Ocean", -120, -75, -200, -95),
+    ("ocean", "Verkhoyansk Ocean", 150, 68, -200, -110),
+    ("sea", "Atlantic Sea", -20, 15, -250, -215),
+    ("orogen", "New England Volcanic Arc", -72, 42, -220, -35),
+    ("orogen", "Brazilian Volcanic Arc", -40, -12, -225, -35),
+    ("orogen", "North Antarctic Range", 90, -70, -250, -150),
     # ---------- filling gaps the era audit turned up ----------
     ("ocean", "Mozambique Ocean",    45,  -5,  550, 800),
     ("ocean", "Adamastor Ocean",    -15, -25,  545, 780),
@@ -475,10 +481,8 @@ LABELS = [
     ("island", "East Tasman Plateau", 156, -44, 0, 80),
 
     ("island", "Zealandia", 172, -43, 0, 80),
-    ("island", "Baja Island", -118, 34, -40, -5),
-    ("island", "Somalia", 48, 0, -100, -15),
+    ("island", "Baja Island", -118, 34, -80, -5),
     # -- ocean --
-    ("ocean", "East African Ocean", 42, -3, -130, -25),
     # -- orogen --
     ("orogen", "Sveconorwegian Belt", 8, 59, 900, 1000),   # southern Norway, not Algeria
     ("orogen", "Sunsas Belt", -60, -20, 940, 1000),
@@ -562,7 +566,6 @@ LABELS = [
     # at 9 Ma (user report, 2026-08-01). One feature, one entry, and the
     # type has to be the one whose snapping rule is right for it.
     ("sea", "Messinian Salt Basin", 16, 37, 5, 6),
-    ("sea", "Afar Seaway", 41, 13, -35, -3),
     ("sea", "Pangaea Proxima Inland Sea", 28, 8, -250, -140),
     # ---------- named palaeolakes (research: lakes are point features at
     # this resolution; sea level and lake level are decoupled) ----------
@@ -743,8 +746,16 @@ FUTURE_LABELS = {
     "Afro-European Belt":  {"belt": ("AFRICA", "EURASIA")},
     "Australasian Belt":   {"belt": ("AUSTRALIA", "EURASIA")},
     "Trans-Atlantic Belt": {"belt": ("AFRICA", "NORTH_AMERICA")},
+    "North Antarctic Range": {"belt": ("ANTARCTICA_E", ("EURASIA", "AUSTRALIA"))},
+    "Trans-Antarctic Ocean": {"between": [(-150.0, -78.0), (-45.0, -77.0), (165.0, -78.0), (-30.0, -80.0)]},
+    "Verkhoyansk Ocean":   {"between": [(172.0, 66.0), (140.0, 68.0)]},
+    # the LAST of the Atlantic: Florida and Angola close it (+250), after
+    # Newfoundland has met Guinea (+225) -- the name follows the water that
+    # closes last, not the first contact
+    "Atlantic Sea":        {"between": [(-80.0, 27.0), (13.0, -9.0)]},
+    "New England Volcanic Arc": {"ride": (-72.5, 42.5), "mountain": True},
+    "Brazilian Volcanic Arc":   {"ride": (-40.5, -12.5), "mountain": True},
     "Himalaya":            {"ride": (85.0, 29.5), "mountain": True},
-    "Somalia":             {"ride": (46.0, 6.0)},
     "Baja Island":         {"ride": (-113.0, 28.0)},
     "Antarctic Ice Sheet": {"ride": (20.0, -84.0)},
     "Pangaea Proxima":     {"landmass": 0.60},
@@ -753,7 +764,10 @@ FUTURE_LABELS = {
     "Arctic Ocean":        {"between": [(-100.0, 72.0), (-40.0, 78.0), (100.0, 75.0), (40.0, 72.0)]},
     # "inland" once the sea is cut off from the world ocean: its water body is
     # at most this share of all the water on the planet
-    "Pangaea Proxima Inland Sea": {"enclosed": 0.05},
+    # the Indian Ocean's last water, walled in by Africa's east coast, India's
+    # west coast and East Antarctica's northern one (Mombasa, Mumbai, Davis)
+    "Pangaea Proxima Inland Sea": {"between": [(40.0, -4.0), (72.8, 19.0), (78.0, -68.6)],
+                                   "enclosed": 0.08},
 }
 
 
@@ -1157,12 +1171,10 @@ DESCRIPTIONS = {
   "other. The alternatives are Novopangaea (the Pacific closes instead), Aurica (both "
   "close) and Amasia (everything gathers over the Arctic). Beyond about 50 million years, "
   "plate motions cannot be projected, only reasoned about.\n\n"
-  "What this drawing does: today's continents are turned rigidly toward Scotese's "
-  "arrangement and packed until they stop overlapping, and mountains rise and wear down "
-  "where they collide. What it does not: the Americas come to within about a thousand "
-  "kilometres of West Africa by +250 Myr without welding to it, so a remnant Atlantic "
-  "survives that Scotese closes, and India slides west along Eurasia instead of staying "
-  "fixed to it.",
+  "How this drawing is made: the first 25 million years continue today's measured plate "
+  "motions (NNR-MORVEL56); after that the plates follow the stages of Scotese's 2018 atlas. "
+  "Continents that meet do not pass through each other: their margins shorten and "
+  "thicken into mountain belts, so outlines crumple and change as they collide.",
  "Rodinia": "A Precambrian supercontinent of the Neoproterozoic world, assembled around a Laurentian core roughly a billion years ago. Its breakup may have helped trigger the Cryogenian glaciations.",
  "Pannotia": "A short-lived latest-Precambrian supercontinent, already coming apart as the Cambrian explosion began.",
  "Gondwana": "The southern supercontinent — South America, Africa, India, Australia and Antarctica as one landmass — which drifted across the South Pole and carried ice sheets with it.",
@@ -1199,11 +1211,32 @@ DESCRIPTIONS = {
  "Pan-African Belt": "The web of sutures created as Gondwana welded together, running through Africa, Arabia and Brazil.",
  "Grenville Belt": "A billion-year-old collisional belt marking Rodinia's assembly, traceable from Mexico through eastern Canada to Scandinavia.",
  "Afro-European Belt": "In the projection, the mountain chain thrown up where Africa finishes closing the Mediterranean against Europe.",
- "Neo-Himalaya": "Where India's crust stays jammed against Eurasia's southern margin in this "
-  "projection -- but sliding west along it toward Arabia, so the belt of thickened crust "
-  "follows the contact west while the old Himalaya behind it wears down. Scotese's "
-  "reconstruction has the collision simply stall; this drawing keeps it moving.",
- "Trans-Atlantic Belt": "The suture in the projection where the Americas rejoin Africa and Europe, closing the Atlantic entirely.",
+ "Neo-Himalaya": "The belt of thickened crust India leaves against Eurasia's southern margin. "
+  "In this projection India keeps pushing for a few tens of millions of years more and "
+  "then stalls (Scotese: \"the collision of India with Asia has stopped\" by +50 Myr), "
+  "so the Tibetan crust widens before it starts to wear down.",
+ "Trans-Atlantic Belt": "The suture where North America rejoins West Africa at +225-250 Myr, closing the "
+  "Atlantic: Newfoundland against Guinea, Florida against south-western Africa, a new "
+  "Himalaya-scale range across what was the Atlantic's floor (Scotese 2018).",
+ "Trans-Antarctic Ocean": "A new ocean opened as West Antarctica rifts from East Antarctica "
+  "along the line of the Ross and Weddell seas, from about +75 Myr, while East Antarctica is "
+  "drawn north. It closes again as West Antarctica is carried back against East Antarctica "
+  "and south-western Australia (+150 to +225, Scotese 2018).",
+ "Verkhoyansk Ocean": "A new ocean in north-east Asia: Chukotka, which rides the North American "
+  "plate, pulls away from Siberia as North America turns back toward Africa (Scotese 2018, "
+  "+125 to +175 Myr).",
+ "Atlantic Sea": "All that is left of the Atlantic once North America and Africa meet: a narrow, "
+  "stagnant sea with no ridge of its own, its last floor going down beneath the Americas, "
+  "between Florida and Angola (+215 to +245 Myr in this drawing; Scotese 2018 keeps it to +250).",
+ "New England Volcanic Arc": "Where the Atlantic's floor starts to subduct beneath North America, "
+  "from about +25 Myr, the coast grows a chain of volcanoes: in Scotese's words, Boston, New "
+  "York City and Washington D.C. are carried skyward by an erupting volcanic mountain chain.",
+ "Brazilian Volcanic Arc": "The South Atlantic's floor subducts beneath eastern South America from "
+  "about +25 Myr, and an Andean-type range grows along the Brazilian coast until the ocean is "
+  "gone.",
+ "North Antarctic Range": "The collisional range raised along the northern margin of equatorial "
+  "Antarctica where it meets north-west Australia and Sumatra -- at +150 Myr in Scotese's 2018 "
+  "reconstruction, from about +195 in this drawing, where the approach is slower.",
 
  # ---- descriptions for the imported features ----
  "Absaroka Sea": "The last great Palaeozoic flooding of North America, oscillating in and out with the "
@@ -1211,9 +1244,6 @@ DESCRIPTIONS = {
  "Adelaide Rift Complex": "A deep rift trough that opened as Laurentia tore away from Australia, filling with "
   "over ten kilometres of sediment. Its upper beds hold the Ediacara fossils that gave "
   "the Ediacaran period its name.",
- "Afar Seaway": "The first stage of Africa's split, as the Red Sea and Gulf of Aden connect through the "
-  "Afar depression and salt water pours into the rift. Much of Afar already sits below "
-  "sea level, held back only by young lava.",
  "African Savanna": "Tropical grassland with scattered trees, expanded by late Miocene drying and by fire. "
   "It is the habitat in which upright walking and the human lineage appeared.",
  "Altiplano": "The world's second-highest plateau, lifted between two branches of the Andes as the "
@@ -1237,8 +1267,9 @@ DESCRIPTIONS = {
   "the planet out of its Eocene hothouse.",
  "Armorica": "A terrane of Gondwanan origin \u2014 Brittany, the Massif Central, Iberia and parts of "
   "Germany \u2014 that crossed the Rheic Ocean and was caught up in the Variscan collision.",
- "Australasian Belt": "Australia's northward sprint ends in collision with Southeast Asia, crushing the "
-  "islands of Indonesia and raising a mountain chain where the Coral Triangle is now.",
+ "Australasian Belt": "Australia's northward sprint ends in collision with south-east Asia, crushing the "
+  "islands of Indonesia, closing the South China Sea and raising a mountain chain where "
+  "the Coral Triangle is now -- Scotese's Sino-Australian mountains.",
  "Australia-East Antarctica": "A single combined block through the Neoproterozoic, sitting next to Laurentia in most "
   "Rodinia reconstructions. Australia and Antarctica stayed joined until 45 million years "
   "ago \u2014 one of the longest-lived continental partnerships on record.",
@@ -1247,9 +1278,10 @@ DESCRIPTIONS = {
   "Point.",
  "Baikal Rift": "A continental rift that has been pulling apart for 25 million years, holding the "
   "world's deepest and oldest lake \u2014 and a fifth of its unfrozen fresh water.",
- "Baja Island": "Baja California and coastal California are already riding north on the Pacific plate "
+ "Baja Island": "Baja California and coastal California already ride north-west on the Pacific plate "
   "along the San Andreas system. Run the motion forward and they detach as a long, narrow "
-  "island off the North American coast.",
+  "island; by +75-100 Myr they reach southern Alaska and are welded to it, adding a "
+  "Californian range to the Alaskan coast (Scotese 2018).",
  "Bearpaw Sea": "The last major flooding of the Western Interior Seaway before it drained, its dark "
   "shales draped over the coal swamps and dinosaur beds of Alberta and Montana.",
  "Benue Trough": "The failed third arm of the rift that split South America from Africa. The other two "
@@ -1294,11 +1326,6 @@ DESCRIPTIONS = {
  "Damara Belt": "The suture where the Congo and Kalahari cratons collided, closing the Adamastor-Khomas "
   "ocean. It carries the classic Snowball Earth glacial and cap-carbonate sections of "
   "Namibia.",
- "East African Ocean": "In the projection, the East African Rift finishes its work: the Somali block tears "
-  "free and a new ocean floods the gap. Basins that are dry rift valleys today become "
-  "abyssal plains. "
-  "This is the older projection; Scotese's 2018 atlas now treats the East African Rift as "
-  "a failed rift that Africa's push into Eurasia squeezes shut.",
  "East African Orogen": "The great north-south suture of Gondwana's assembly, running from Arabia down through "
   "East Africa to Antarctica, formed as the Mozambique Ocean closed.",
  "East African Rift": "A continent splitting in slow motion. The rift floor drops in a chain of long lakes "
@@ -1558,8 +1585,6 @@ DESCRIPTIONS = {
  "Solnhofen Lagoon": "A set of stagnant, hypersaline lagoons behind a reef in the Tethyan archipelago. "
   "Nothing lived on their airless floors, so anything that sank in was preserved "
   "perfectly \u2014 including Archaeopteryx.",
- "Somalia": "The eastern horn of Africa, projected as an island continent after the rift floods "
-  "behind it \u2014 a Madagascar-scale fragment drifting into the Indian Ocean.",
  "Songliao Basin": "A huge rift basin in northeast China holding one of the largest lakes of the "
   "Cretaceous. Its cored sediments give an almost annual record of greenhouse-world "
   "climate.",
@@ -2479,55 +2504,54 @@ PHASES = {
           "water to hold global sea level roughly sixty metres below an ice-free world."),
  ],
 
- "East African Ocean": [
-  (-60, -25, "A young sea flooding the rift that split Africa, narrow and hot, much as the Red Sea "
-             "is today."),
-  (-130, -60, "A fully developed ocean basin with its own spreading ridge, separating the Somali "
-              "fragment from the African mainland."),
- ],
 }
 
 
 # The future: what each name that lives on past the present is doing there, in
 # THIS drawing (build_fields.future_grid), which the future label pass follows.
 _FUTURE_PHASES = {
-    "Atlantic Ocean": [(-250, -1,
-        "Past the present, subduction starts along the Americas' eastern coasts and the Atlantic "
-        "stops widening. In this drawing it narrows as the Americas swing back toward Africa, but a "
-        "remnant more than a thousand kilometres wide survives at +250 Myr; Scotese's reconstruction "
-        "closes it to a narrow, stagnant 'Atlantic Sea'.")],
-    "Indian Ocean": [(-250, -1,
-        "Past the present it shrinks as Antarctica and Australia drive north into it. Its last part is "
-        "trapped inside the assembling supercontinent, and once that water is cut off from the world "
-        "ocean the name hands over to the Pangaea Proxima Inland Sea.")],
+    "Atlantic Ocean": [(-215, -1,
+        "Past the present, subduction starts along the Americas' eastern coasts (+25 Myr) and the "
+        "Atlantic stops widening; from about +100 it narrows as its floor goes down beneath the "
+        "Americas and Africa is drawn west to meet them. By +215 it is closing; what is left is the "
+        "Atlantic Sea.")],
+    "Indian Ocean": [(-150, -1,
+        "Past the present it shrinks as Antarctica is drawn north across it; by +150 Myr it is "
+        "walled in on three sides. From about +225 its last water, cut off from the world ocean "
+        "but for a strait, is the Pangaea Proxima Inland Sea.")],
     "Arctic Ocean": [(-250, -1,
-        "As North America and Eurasia swing south toward the equator in this projection, the Arctic "
-        "basin opens out into the world ocean over the pole.")],
+        "North America pulls away from Siberia and the two sides of the Arctic separate, opening the "
+        "Verkhoyansk Ocean across north-east Asia.")],
     "Pacific Ocean": [(-60, -1,
         "Past the present the Pacific keeps its ring of subduction while the continents gather on the "
         "far side of the globe; from +60 Myr it is named Neo-Panthalassa.")],
     "Africa": [(-250, -1,
-        "The fixed point of the projection: the other continents converge on it, and by the end of the "
-        "series it lies at the heart of Pangaea Proxima.")],
+        "Pushes north into Europe, closing the Mediterranean and the Red Sea by +50 Myr; welded to "
+        "Eurasia after that, it is drawn west from +100 and ends at the heart of Pangaea Proxima, "
+        "with North America against its west coast and South America against its southern tip.")],
     "Eurasia": [(-250, -1,
-        "Swings south toward the equator, closing the Mediterranean against Africa and taking the "
-        "Australian collision on its south-eastern flank.")],
+        "Takes Africa, Arabia, India and Australia against its southern flank one after another, and "
+        "from +100 Myr is drawn west with Africa toward the Americas.")],
     "North America": [(-250, -1,
-        "Turns back toward Africa as subduction consumes the Atlantic. In this drawing it ends about a "
-        "thousand kilometres short of West Africa; in Scotese's reconstruction Newfoundland and "
-        "Greenland collide with it.")],
+        "Drifts west for a few tens of millions of years, then turns back as its Atlantic margin "
+        "starts to subduct, pulls away from Siberia and closes the Atlantic: by +250 Myr Greenland "
+        "and Newfoundland are against West Africa and Florida against south-western Africa.")],
     "South America": [(-250, -1,
-        "Swings south and east round the southern tip of Africa and into Antarctica, raising a new belt "
-        "where the two meet.")],
+        "Its Atlantic coast turns into a subduction zone and a volcanic arc; it swings south and east "
+        "round the southern tip of Africa, and by +250 Myr its eastern margin is welded to southern "
+        "Africa and East Antarctica.")],
     "Australia": [(-250, -1,
-        "Collides with Eurasia's south-eastern margin -- the Australasian Belt -- and later with "
-        "Antarctica as the Indian Ocean closes.")],
+        "Drives north into Indonesia and south-east China, closing the South China Sea by about +75 "
+        "Myr and crushing the islands between -- the Australasian Belt. Welded to Asia after that; "
+        "West Antarctica arrives against its south-west coast at +225.")],
     "Antarctica": [(-250, -1,
-        "Leaves the pole in this projection, losing its ice sheet early, and drifts north into temperate "
-        "latitudes to dock against Africa, Australia and South America.")],
+        "Leaves the pole and splits: West Antarctica rifts away from about +75 Myr, opening the "
+        "Trans-Antarctic Ocean, while East Antarctica is drawn north into the tropics toward "
+        "Sumatra and north-west Australia (Scotese has them meet at +150; in this drawing the "
+        "collision builds from about +195). Its ice is gone long before.")],
     "Himalaya": [(-95, -1,
-        "Past the present the range starts to wear down. India's push continues only as it slides west "
-        "along Eurasia's margin, and the belt that keeps growing, farther west, is the Neo-Himalaya.")],
+        "India's push stalls by about +50 Myr and the range begins to wear down: under half its height "
+        "by +125 in Scotese's reconstruction, and the size of the Appalachians by +200.")],
 }
 for _n, _ph in _FUTURE_PHASES.items():
     PHASES.setdefault(_n, []).extend(_ph)

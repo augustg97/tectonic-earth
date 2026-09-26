@@ -147,32 +147,32 @@ Where there is no structure to match — bare abyssal plain — **no motion is c
 
 ### 5.1b The future series
 
-The present DEM carried by rigid per-group rotations toward `GROUP_TARGET`. Two things about it are worth stating because both were wrong until July 2026.
+**3.16: a plate engine, not a warp.** Until 3.15 the future was the present DEM carried on rigid rotations of five plate groups toward authored targets (`GROUP_TARGET`, relaxed apart by `_packed_targets`), with collision zones drawn as synthetic domes where two groups overlapped. Nothing in it could bend: Australia arrived at +250 Myr in exactly today's outline, and the Atlantic never closed because closing it would have laid the Americas on Africa. `build/future_tectonics.py` replaces it.
 
-**The targets are packed, not authored-raw.** `future_grid` resolved two groups landing on the same ground with `out = np.maximum(out, z)` — high ground wins — so the lower of the two was deleted, and what got deleted was coastal plain, shelf and continental interior. Measured: land **148 → 93 Mkm²** across 250 Myr, a 37% loss, against 5.5% for a rotation that conserves area by construction; ground below 1 km fell 45% while land above 2 km stayed flat. Instrumenting the claim masks pinned it: at +250 Myr **53.3 Mkm² of land sat on top of other land** against a total deficit of 58.0, so 92% of the loss was groups interpenetrating and nothing else.
+- **Eleven plates** from PB2002 (Bird 2003): Africa (with Somalia -- the East African Rift fails, Scotese 2018), Arabia, Eurasia (with the Sunda, Amur, Okhotsk and Philippine Sea blocks), India, Australia (with Zealandia), East and West Antarctica, North and South America (each with its ocean-side microplates), the Pacific, and Baja California carved off the Pacific's continental cells. The Pacific carries no continent. West Antarctica is the Antarctic plate's continent on the Pacific side of the Transantarctic Mountains' front (`TAM_FRONT`, Cape Adare to the Filchner) plus the plate's ocean floor nearer to it than to East Antarctica (a Voronoi split on the sphere); until 3.16 it was a lon/lat box, and a box opens as a box -- the Trans-Antarctic Ocean came out as a band along a parallel and two meridians (§7.51's lesson again).
+- **Kinematics.** Each plate's rotation is a C1 Hermite spline in rotation-vector space through keyframe rotations, starting from its NNR-MORVEL56 angular velocity: the first 25 Myr continue today's measured motions. After that `build/future_story.py` authors Scotese's stages (Atlas of Future Plate Tectonic Reconstructions, 2018) as docks -- named present-day points fitted onto their partners by a Wahba solve: Australia's Jayapura and Broome against Taiwan and the Sunda shelf (+60), East Antarctica's Davis and Queen Maud Land against Sumatra (+150), West Antarctica rifting away and returning against south-west Australia (+225), South America's Recife and Mar del Plata round the Cape to Agulhas and Queen Maud Land (+250), North America's St John's and Miami against Guinea and Luanda (+250), Baja to Alaska (+90). Continents move 0-6 cm/yr, peaking near 9 as the Atlantic closes.
+- **Deformation.** Every plate carries an inverse map W (the material point at each position of its own frame) and an excess crustal thickness E, on a 0.5° grid, integrated at 1 Myr steps from 0 to 250 (`--integrate`, ~6 min). Where two plates' continents overlap after a step, each yields its share (`ALPHA`, the weaker plate more) by being pushed back down the gradient of its depth inside the other (the contact direction, which always separates them -- the relative velocity does not, §7.48), by no more than the step's own convergence (§7.48), with the push applied to the plate's whole leading edge within `W_DEF` = 700 km -- its marginal seas with its continents (§7.49). The push's convergence thickens the crust (E += (1 - `LOSS`) × -div u), E above 0.95 spreads (collapse), and E decays with τ = 160 Myr. Past `D_MAX` = 1,000 km of shortening a plate stops yielding (underthrusting and escape take the rest).
+- **The state is stamped with its storyline.** `fingerprint()` hashes the keyframe rotations, the constants and the integrator's own source; `load_state` refuses a state integrated under a different one (§7.56).
 
-No collision rule fixes that — whichever cell you keep, the other has nowhere to go. `_packed_targets` instead treats each group as a disc of its own land radius and relaxes the *authored* targets until they only touch, mass-weighted (so a small block docks against a large one rather than shoving it aside) and sprung back toward the authored arrangement (so what changes is the packing, not the reconstruction). Raw land now runs **150.5 → 133.1 Mkm², −11.6%** against a 5.5% rasterisation floor, land above 1 km is flat at 29.9 → 29.4, and mean land elevation rises 56 m instead of 212.
+`build_fields.future_grid` then builds each keyframe's surface from `FT.render`, which carries the present DEM on the maps:
 
-The same relaxation fixes the separate finding that the assembly ended too tight: **r90 60° → 76.6°**, against PALEOMAP's own 76°.
+1. **Claims.** Continental crust outranks oceanic, and oceanic outranks the Pacific's floor, which goes down at every trench round it (§7.50); within a rank a cell goes to the plate it lies deeper inside, so an unresolved overlap splits along its medial line -- a suture -- instead of interleaving the two terrains ridge by ridge. A cell nothing but a hole or the Pacific's floor claims, enclosed by other plates' crust, is a tear and is mended from its surroundings (§7.50).
+2. **Compressed crust is low-passed** before it is sampled, at the pyramid level its compression asks for, so a shortened belt comes out as the mass it now is and not as aliased stripes.
+3. **Reworked crust.** Where the map's distortion (log stretch ratio plus log area change, from the deformation gradient's singular values) passes 0.35-1.0, the carried surface keeps its regional height and loses its detail, and whether it is land or sea is the majority's over ~2°: enclosed seas close, sheared-out slivers of continent sink.
+4. Antarctica's bed rebounds ~650 m as it leaves the pole; slivers between two colliding plates are welded; inherited relief erodes (S3: the Himalaya under half their height by +125, Scotese), except on the Ring of Fire margins Scotese keeps active; **Andean arcs** rise on the Americas' Atlantic coasts from +25 (Scotese: "Boston, New York City and Washington D.C. are carried skyward by an erupting volcanic mountain chain"), at the Cape from +75 and on East Antarctica's trailing edges from +150 -- measured from the coast in each margin's box that faces the ocean going down beneath it (§7.51); E lifts the crust isostatically (`H_ISO` 5.3 km per unit) under a tanh plateau ceiling near 5.5 km; young rifted margins subside and coasts are worked (S5, S7). The relief bake (§5.10) then grows the belts' own ranges.
 
-**The collision zone is a landform (2026-09).** Where two groups' footprints interpenetrate, the overlap *is* the collision zone -- its width is the shortening -- and until this round its uplift was `gaussian_filter(overlap, 3°)²`: a dome over every patch, in the shape of the overlap rather than of an orogen. Measured on the shipped +250 Myr field it was what the user called clumps: more land above 2 km than today (12.1 Mkm² against 8.7) and almost none above 4 km (0.37 against 2.69), the summit 4.9 km. `_zone_orogen()` now builds the zone's own geometry: a **plateau** that rises across the zone's margin and is flat inside, the way Tibet's is; a **main range** along the zone's medial axis (`skimage.morphology.medial_axis`), as wide as the zone is, present only where the zone is wide enough to carry one and pruned to the axis's spine so a roundish zone does not grow a starfish (§7.32); a broad **swell** round the zone outside its plateau; and along-strike **segmentation** keyed to the crust's own present-day position, so massifs and saddles ride their plates. Calibrated on the 2048-row field that ships, the uplands stay where the user signed them off and the high tail moves into chains:
+What it draws: the Red Sea and the Mediterranean close by +50; India's push stalls; Australia drives into south-east Asia, closes the South China Sea and crumples -- at +250 46% of its crust is strained, 30% heavily, its area shortened from 10.8 to 8.7 Mkm² and its outline 24% different from a rigid rotation of today's; West Antarctica rifts away from +75 (the Trans-Antarctic Ocean) and comes back; East Antarctica goes north and meets Sumatra at +150; the Atlantic narrows from +100 and closes by +225-250 with Newfoundland against Guinea and Florida against Angola; Pangaea Proxima forms round Africa.
 
-| +250 Myr, Mkm² | >1 km | >2 km | >3 km | >4 km | >5 km | max |
-|---|---|---|---|---|---|---|
-| today (0 Ma) | 30.2 | 8.7 | 4.3 | 2.7 | -- | 6.7 km |
-| domes (until 3.11) | 27.1 | 12.1 | 3.8 | 0.37 | -- | 4.9 km |
-| zone orogen | 26.1 | 13.0 | 4.7 | 2.5 | 1.0 | 6.5 km |
+The sea floor rides the same maps (`oceanage._future` renders the present age field through `FT.render`), the plate-boundary overlay is drawn from the same ownership and motions (`build_plates_future.py`: ridge, trench or transform by the relative motion across each edge, sutures that no longer move not drawn, plates that move as one named as one, Scotese's subduction zones as trenches off their margins), and the labels ride `FT.advance`. After any change to the storyline or the integrator: `future_tectonics.py --integrate`, then `bake_future_p.py` (the export reads its slots), `rebuild_future.py --workers 12`, `rederive_fields.py --future`, `build_plates_future.py`, the labels.
 
-The shader's erosion relief (§5.10) then cuts them into ranges; the relief deficit on the future's smooth belts runs from 0.07 at +50 Myr to 0.70 at +250.
-
-**The future's names are placed on the future (3.15).** Future labels used to be present-day names carried forward on their plates, and several ended up on the wrong ground or on nothing: an "Amasia" over a world where the Americas never reach Asia, a Pan-Asian Rift nothing draws, the Pangaea Proxima Inland Sea named while it was still open ocean. `build_webdata.future_label_pass` now places every name that reaches into the future against the future terrain itself, keyframe by keyframe (`FUTURE_LABELS` in `features.py` says how): a collision belt at the top quartile of the zone where two groups' main bodies meet (`belt`), a crust point carried on its group (`ride`), the largest landmass and its most arid interior (`landmass`, `interior`, the pole of inaccessibility among ground under 0.2 of rainfall), an ocean held between named coasts (`between`) or a sea only once it is enclosed (`enclosed`). A name is shown only over the longest run of keyframes where its feature exists (a continuing name must hold from +5), and one that never validates is dropped rather than drawn on the wrong thing -- the Trans-Atlantic Belt, since this drawing's Americas stop ~1,000 km short of Africa. Cards and phases for the future's oceans and continents say what this drawing does and where it differs from Scotese's 2018 atlas (the Atlantic narrows but stays open; the East African Rift is the older projection) and Farnsworth et al. (2023).
+**The future's names are placed on the future (3.15).** Future labels used to be present-day names carried forward on their plates, and several ended up on the wrong ground or on nothing: an "Amasia" over a world where the Americas never reach Asia, a Pan-Asian Rift nothing draws, the Pangaea Proxima Inland Sea named while it was still open ocean. `build_webdata.future_label_pass` now places every name that reaches into the future against the future terrain itself, keyframe by keyframe (`FUTURE_LABELS` in `features.py` says how): a collision belt at the top quartile of the zone where two groups' main bodies meet (`belt`), a crust point carried on its group (`ride`), the largest landmass and its most arid interior (`landmass`, `interior`, the pole of inaccessibility among ground under 0.2 of rainfall), an ocean held between named coasts (`between`) or a sea only once it is enclosed (`enclosed`). A name is shown only over the longest run of keyframes where its feature exists (a continuing name must hold from +5), and one that never validates is dropped rather than drawn on the wrong thing. In 3.16 the names follow the engine's stages: the East African Ocean, the Somali island and the Afar Seaway are gone (the rift fails); the Trans-Antarctic Ocean, the Verkhoyansk Ocean, the Atlantic Sea (the last of the Atlantic, held between Florida and Angola), the New England and Brazilian volcanic arcs and the North Antarctic Range are new; the Trans-Atlantic Belt names the suture from +220; the inland sea is held between Africa's, India's and East Antarctica's coasts and named only once it is cut off. The cards and phases say what this drawing does and cite Scotese's 2018 atlas and Farnsworth et al. (2023).
 
 ### 5.2 Paleogeography
 
 Three eras, three sources (`build_fields.py`):
 
 - **Phanerozoic 0–540 Ma** — Scotese & Wright PALEOMAP PaleoDEMs, 6-arc-minute, straight through.
-- **Future 0 → +250 Myr** — the *present* DEM rigidly rotated by plate group. At age 0 every rotation is the identity, so the future series begins as an exact copy of the present frame, inherits its full detail, and leaves no seam.
+- **Future 0 → +250 Myr** — the *present* DEM carried by the future plate engine (§5.1b): rigid plates that deform where they collide. At age 0 every map is the identity, so the future series begins as an exact copy of the present frame, inherits its full detail, and leaves no seam.
 - **Precambrian 540–1000 Ma** — generated cratons (`precambrian.py`), blended onto the real 540 Ma DEM across the youngest 60 Myr so the handoff is continuous rather than popping.
 
 Precambrian coastlines are **generated, not copied**. An earlier version cut cratons out of the modern DEM with lon/lat bounding boxes, which read as rectangles — jittering the edge of a rectangle still leaves a rectangle. Nothing about a 900 Ma coastline is known well enough to trace, so each craton's radius is modulated by three octaves of 3D noise in the craton's own rotating frame.
@@ -228,7 +228,7 @@ Measured against the surveyed grid the isochron model correlates only **0.41** (
 
 Past ~180 Ma essentially no ocean crust survives, so there is nothing left to reconstruct and the model carries it alone. The two are blended by spreading the *difference* rather than the values — preferring one where it exists would put a step of tens of Myr along the edge, and since depth goes as √age that step would draw itself on the sea floor as a wall.
 
-**The future** is not extrapolated. Asked for a negative time pyGPlates does not refuse — it runs Merdith up to 250 Myr past the end of the model and returns a complete, plausible-looking field in which every number is invented. Instead the future carries today's age field on the same rigid per-group rotations the future *terrain* already uses, plus elapsed time; unclaimed ground is new ocean, young.
+**The future** is not extrapolated. Asked for a negative time pyGPlates does not refuse — it runs Merdith up to 250 Myr past the end of the model and returns a complete, plausible-looking field in which every number is invented. Instead the future carries today's age field on the same plate maps the future *terrain* uses (§5.1b), plus elapsed time; unclaimed ground is new ocean, young.
 
 **What falls out of age:**
 
@@ -592,7 +592,13 @@ At zoom 1.35 a pixel is ~0.85 km and a texel of the elevation field 8–11 pixel
 
 **Colour.** The blocks on the Canadian prairie were the elevation codec (§7.44): AVIF transform-block edges carry ~1 code (0.96 against 0.31 inside a block, 3.1× at 16 texels), `rug` read them, and at the prairie's 350 m aridity-lowered treeline its bare-rock gate painted alpine scree in rectangles. Decisions by relief read `rugC` (1.5 codes allowed); the hillshade and the detail's amplitude keep `rug` (half a code), which plateaus need. And the band between the cold treeline and the one drought lowered now asks for a range's relief (`rugC` 0.30–0.60) -- past a cold treeline a hill is alpine, past a dry one only a mountain range is; a dry plain is steppe, and the biome colour already says so. The dry Andes keep their bare cordillera. **Arid basin floors are pale** (`?floor=`): flat dry ground standing below the mean of the four ±137 km taps takes a pale alluvium, paler toward a playa, under the ergs and hamada and off the high plateaus (2.2–3.4 km fade). The local-low test for marsh and rivers allows 1.25 codes for the same reason as `rugC`.
 
-**What the renderer cannot fix.** BC's ranges draw brown where they are forested to the treeline, the Ganges plain orange, and Tibet's snow sits on the plateau instead of the Himalayan crest: the present-day rain field reads 0.024 over the Columbia Mountains (real ~0.30), 0.03–0.12 on the Ganges plain and 0.000 on the Himalayan crest against 0.005 on the plateau, so the ELA's aridity term is maxed on both and latitude alone puts the snowline lower on the plateau. That is the climate solve's highland dry bias (§9), and the lever that would fix it globally is the one that keeps Pangaea dry.
+**What the renderer could not fix (fixed in 3.16, §5.13).** BC's ranges drew brown where they are forested to the treeline, the Ganges plain orange, and Tibet's snow sat on the plateau instead of the Himalayan crest: the present-day rain field read 0.024 over the Columbia Mountains (real ~0.30), 0.03–0.12 on the Ganges plain and 0.000 on the Himalayan crest against 0.005 on the plateau, so the ELA's aridity term was maxed on both and latitude alone put the snowline lower on the plateau. That is the climate solve's highland dry bias, and the lever that would fix it globally is the one that keeps Pangaea dry -- so 3.16 anchors the present day to observation instead.
+
+### 5.13 The present-day rain anchor, and the herringbone (3.16)
+
+**The rain anchor** (`build/rain_anchor.py`) is the delta method palaeoclimate work leans on: the model's error at the present is measured against observation and removed from nearby times in proportion to how like today they are. WorldClim 2.1's 1970-2000 annual precipitation (Fick & Hijmans 2017; 10 arc-minutes, in the git-ignored `data/worldclim`, never shipped -- its licence forbids redistribution) is area-averaged onto the rain grid and **quantile-mapped onto the model's own land distribution**, so the palette keeps the distribution it was calibrated on and only the geography of wet and dry changes. The correction is the log ratio of the two, smoothed over land at ~80 km: the model keeps its own windward and lee structure below that and takes the observed amount region by region. At age t the correction is carried to where the crust is (the slot raster `_p` and `platerot.json`, the shader's own rotations) and applied at weight 1 within 5 Myr of the present, fading to 0 by 35 Myr on both sides; `export()` and `bake_rain.py` apply it after the rain resize. Past 35 Myr the model stands alone, so Pangaea is exactly as dry as the user chose (`audit_biomes.py`, 2026-08-09). Against the 67 sites the shipped present day ranks at **Spearman 0.988** (the solve alone: 0.644), and `audit_biomes` now fails if the anchored field ever ranks worse than the model. The Columbia Mountains read 0.205 (was 0.015), the Ganges at Patna 0.240 (0.041), the Himalayan front 0.196 (0.015), Lhasa 0.051 (0.000): BC is forested, the Ganges green, and the glacier line is on the crest.
+
+**The herringbone.** At close zoom the erosion relief's sub-grid octaves (§5.10, §5.12) drew short hard dashes, each running straight down the wall of the gully above -- fishbone on every flank (`?show=13`). Three causes, three levers (`uEroK3`, `?eroG= ?eroW= ?eroJ= ?eroC=`): each octave below 12 km was lit at the same amplitude ratio that gives it the relief the colour decisions need, which made its walls 1.56x steeper than the one above and the finest octave drawn out-shaded the rest -- it is now lit at 0.55 of the one above (its height is unchanged); its walls steered the next octave at 1.8x the flank's fall, so tributaries met their valleys square -- 1.0 below 12 km, so they slant downstream; and, the one that mattered (§7.55), at one cycle per pivot cell a gully's phase jumps every wavelength, because the strongest pivot changes every cell -- below 12 km a cell is two wavelengths across, at two cycles, with the pivots' spacing and heading jitter cut to 0.35 and the spacing varying by region (blocks of four cells share one, 0.8-1.25x) so a uniform slope is not combed at one pitch. The same nine pivots a pixel; the flanks now read as continuous valleys off the crests.
 
 ## 6. Build and deploy
 
@@ -1235,6 +1241,89 @@ re-takes every shot older than the shader, the app, the fields, the labels or th
 it, before those audits run, and stops the build if one does not land. **A test's input has a date;
 check it before reading its verdict.**
 
+### 7.48 Push colliding plates apart along the contact, by no more than they converged
+
+The first collision rule pushed each plate back along the relative velocity and resolved the whole
+standing overlap every Myr. An oblique or sliding contact is never separated by a push along the
+motion -- the push runs along the boundary -- and an overlap that cannot be undone (an island
+engulfed, two plates welded after they met) was re-pushed a little further every step, for a hundred
+steps: North America's Chukotka ended 3,800 km inside Siberia, in smears thousands of km long.
+Each plate is now pushed down the gradient of its depth inside the other, which always separates
+them, and by no more than the step's own convergence. **A correction applied every step must be
+bounded by what that step did, or it integrates its own residue.**
+
+### 7.49 Push the plate, not only its continents
+
+The overlap is between continents, and the push was applied to continental cells only. Across
+Indonesia -- a hundred small blocks between marginal seas -- every block was shoved back while the
+sea floor of the same plate round it stayed, which sheared every block's edge; over 150 Myr that
+combed Asia and Australia into each other in long feathers of land and sea, with the new ocean
+backdrop in the cracks. The push now moves the plate's whole leading edge within `W_DEF`. **What
+decides WHERE a force acts and what it moves are different masks.**
+
+### 7.50 A hole in the claims is filled by whoever lies beneath
+
+After the push, some cells in a collision zone are claimed by no plate at all (the frames were
+pushed over another plate's material), and the renderer gave them the new-ocean backdrop -- or, worse,
+the Pacific's floor, which is carried rigidly north-west for 150 Myr and so lies under all of East
+Asia, claiming every gap the continents leave. Neither was visible to any rule downstream: an
+unclaimed or Pacific cell has no strain of the plates round it. The Pacific now ranks below every
+other plate's ocean (it goes down at every trench round it), and a weak cell enclosed by strong
+crust is a tear, mended from its surroundings. **A fallback claimant must be the one physics puts
+underneath, and a gap inside a plate is not an ocean.**
+
+### 7.51 The box chooses the stretch of coast; the facing chooses the coast
+
+The Andean arcs rose by distance from ANY coast inside a lon/lat box. The New England arc's box
+runs to 83 W, where the Gulf of Mexico is ~250 km away, so the arc stood up across Georgia and the
+box's own edge became a 1,000 km ruler-straight scarp, carried with North America all the way to
+Pangaea Proxima. Each margin now has a facing azimuth and half-angle, the arc is measured from the
+box's coast whose outward normal faces the ocean going down beneath it, and the box fades over its
+outer 3°. **Anything rectangular in the input comes out rectangular after any amount of rotation.**
+
+### 7.52 Store the rotation the consumer applies
+
+The shader's material coordinate applies the stored rotation to a pixel's current position to find
+where that crust is today, so the past stores age -> present. The future bake stored present ->
+future, the forward rotation: every crust-bound texture in the future slid the wrong way, twice as
+far each keyframe, and looked plausible doing it -- both directions give a smooth track. The
+future's quaternions are now `logm(R(t).T)`. **Read the rotation's direction off the code that
+applies it, not the code that makes it, and test it against something that moves (§7.33).**
+
+### 7.53 A validator's replica of the shader drifts from the shader
+
+`ice_audit` reimplements the shader's snow and glacier terms in numpy to measure drawn ice. Several
+rounds of shader changes (the mass-elevation effect, sub-grid peaks, the snowfall ramp) went in
+without it, and the audit measured an ice the app no longer drew. Rebuilt term by term. **A
+replica is a second statement of the same fact (see the memory "two statements check each
+other"): change both in the same commit, and diff them when either moves.**
+
+### 7.54 What is under the ice paints through it
+
+Bare-rock tone, the erosion tone, the atlas and dissection tones and the grain normal were computed
+for the ground and composited under an ice fraction that was not everywhere 1 -- so Antarctica
+showed grey bedrock patches and half of Greenland drew black where the relief's tone reached through
+thin ice. `thruIce` now gates every ground term by how much ice is on top. **A layer above is a
+gate on every layer below, not one blend at the end.**
+
+### 7.55 One cycle per pivot cell breaks every gully once a wavelength
+
+The erosion relief's stripes are a phase-vector sum of pivots, each drawing a stripe through
+itself; the strongest pivot changes every cell, and at one cycle per cell the phase jumps once a
+wavelength along any gully. At close zoom that was the herringbone: dashes a wavelength long.
+Reducing the pivots' jitter changed nothing measurable; cells two wavelengths across at two cycles
+each made the gullies continuous at the same nine pivots a pixel. **Find which scale a pattern's
+length is tied to before tuning the parameters that only look like its cause.**
+
+### 7.56 A stale integrated state loads fine
+
+The future engine's deformation is integrated once (`--integrate`, ~6 min) and read by every later
+step. Edit the storyline or the collision code and forget to re-integrate, and every keyframe still
+renders: the plates simply carry the old collisions under the new motions. The saved states now
+carry a fingerprint of the rotations, the constants and the integrator's own source, and
+`load_state` refuses a mismatch. **A cache must be keyed on everything that made it, including
+code.**
+
 ## 8. Sources
 
 | role | source |
@@ -1271,6 +1360,7 @@ check it before reading its verdict.**
 
 - **The late Ediacaran draws too little land ice, and that is the price of one reference frame.** `ice_audit` wants 2-10% of land under ice at 570 Ma, for the cool interval after the Gaskiers glaciation; the model draws **0.3%**. It is not the ice model. Pinning the generated Precambrian world to PALEOMAP at the handoff -- so that Siberia and Laurentia stop drifting away from their own names (section 7.14) -- also adopts PALEOMAP's Ediacaran latitudes, and they are tropical: at 570 Ma **60% of all land lies within 30 degrees of the equator and only 7% above 60**, against 46%/16% at 545 and 42%/16% at 650. There is barely any high-latitude land to freeze. The literature figure assumes continents further poleward than this frame puts them. Warming the ice threshold until the number matched would be a compensating error hiding a geography disagreement, so it is recorded instead, and `audit_all` allows exactly this one finding.
 
+- **The future engine has no subduction of its own (3.16).** Ocean floor persists wherever its plate carries it and is only outranked where plates overlap -- continents over oceans, oceans over the Pacific's floor, which goes down at every trench round it -- so a closing ocean disappears at the medial line of the overlap rather than at a trench, and the overlay draws a mid-ocean convergent edge only where no active margin faces it. Collision zones keep a few sheared remnant basins where the crust they carried was as much sea as land (the Asia-Australia belt at +250 most of all). The storyline is one reading of Scotese's 2018 stages, with slower approaches in places (East Antarctica reaches Australia and Sumatra near +195, not +150); like every projection past ~50 Myr it is reasoned, not forecast.
 - **Hotspot chains are generic**, smeared along plate motion, rather than modelled per plume with an explicit island-formation-and-subsidence history.
 - **The biota cards are composed from a registry, and these are their limits.** (The three-tier panel — exception-curated → province assemblage → global list — is gone; §5.6.) All 38,036 card-ages pass the gate, which means no organism is outside its lifetime, its crust or its declared range, and none is under the wrong body form. It does not mean every card is the best card:
   - *Depth is uneven, and measured.* The registry holds 1,565 taxa. Class- and order-level entries on marine cards, measured by `build/measure_generic.py` on the shipped `life.json` (marine slot-ages; the 3.7–3.8 figures used an unrecorded counting and are not comparable): 20% of Cenozoic, 25% of Mesozoic, 25% of late Palaeozoic (28% in 3.8), 22% of early Palaeozoic (38% in 3.9), 38% of Precambrian (51%) — the Cryogenian and the small-shelly interval, where the record itself is thin. The curated record's own class-level names ("Ammonoidea", "Fusulinida") are replaced by genera where the registry has them at home there (`taxa_src/upgrade_curated.py`, re-run after any batch): class-level curated slot-ages 6,188 → 2,840; what remains is mostly the Tonian oceans' acritarchs and cyanobacteria and the vent Archaea, which are the honest answer. The earliest Cambrian shelf (541–521 Ma) is one list on every continent, because the small shelly fauna was. Cenozoic and Mesozoic land are well served; Ordovician–Silurian land is cryptospore crust by design.
@@ -1286,7 +1376,7 @@ check it before reading its verdict.**
 
 - **Present-day biota**: 110 labels carry a curated list; every other present-day card is composed from the registry for its own crust, habitat and latitude.
 
-- **The present-day rainfall runs dry over highlands and the monsoon, and colours BC, the Ganges and Tibet's snow wrong (3.15).** Against 67 sites with real annual precipitation the shipped 0 Ma field ranks at Spearman 0.644: the Columbia Mountains read 0.024 (real ~0.30), the Ganges plain 0.03–0.12 (real 1–2 m a year), Lhasa 0.003, the Himalayan crest 0.000. The ranges draw brown, the Ganges orange, and the glacier line lands on the plateau. The orographic strip that drains the air over high ground is the same lever that keeps Pangaea's interior dry, a trade the user chose (`audit_biomes.py`, 2026-08-09); a physical orographic mode that lifts moisture over ranges was built and measured (`render.OROG_MODE`), and it wets Pangaea's interior from 17% to 58% above 0.2, so it is not shipped. The fix that does not touch deep time is an observed present-day anchor (a precipitation climatology blended out over the first few tens of Myr, the delta method), which needs a dataset the repository does not hold.
+- **The climate solve runs dry over highlands and the monsoon; the present day is anchored to observation instead (3.16).** Against 67 sites the solve alone ranks at Spearman 0.644 at 0 Ma (the Columbia Mountains 0.024 against a real ~0.30, the Ganges 0.03-0.12, the Himalayan crest 0.000). The orographic strip that causes it is the lever that keeps Pangaea's interior dry, a trade the user chose (`audit_biomes.py`, 2026-08-09); a physical orographic mode (`render.OROG_MODE`) wets Pangaea from 17% to 58% above 0.2 and is not shipped. The rain anchor (§5.13) corrects the present and fades out by 35 Myr (anchored: 0.988), so from ~35 Ma back and ~+35 Myr on the dry bias over highlands is the model's own.
 
 ---
 

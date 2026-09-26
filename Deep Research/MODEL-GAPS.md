@@ -8259,3 +8259,50 @@ gone, the Inland Sea is named from +230 when it closes. The pass exposed `biota.
   polar frame's light (east Baffin); unchanged by this round, by construction.
 - *The future's geography*: the Atlantic never closes and India slides west along Eurasia; the
   contact-packing and docking prototypes did not converge (scratch only). The names now say so.
+
+## THE FUTURE ENGINE ROUND (2026-09-26, 3.16): plates that bend, a present anchored to observed rain, and gullies that run
+
+The user, on 3.15: "download it and fix the rain anchor. And let's address the remaining still
+open items. The future should be improved overall - let's close/narrow the Atlantic, and let's
+ensure that we simulate tectonic hypothetical future movements realistically - e.g., right now
+Australia at +250 still retains its shape, which seems unrealistic."
+
+**The future is a plate engine (README 5.1b).** `future_tectonics.py` + `future_story.py`: eleven
+PB2002 plates on Hermite rotation splines from NNR-MORVEL56, docked through Scotese's 2018 stages
+by Wahba fits of named points; per-plate inverse maps W and excess thickness E integrated at 1 Myr.
+The old per-group warp is gone. Land stays 143-148 Mkm2 across 250 Myr (today 148); ground above
+2 km grows to 16.7 Mkm2 by +250 as four belts stand at once (today 8.7); peaks near 6 km.
+- *Australia.* At +250 46% of its crust is strained (distortion > 0.35), 30% heavily (> 1), its
+  area shortened 10.8 -> 8.7 Mkm2 and its outline 24% off a rigid rotation of today's.
+- *The Atlantic* narrows from +100 and closes: Newfoundland-Guinea +225, Florida-Angola +250.
+- *Collisions went wrong four ways before they went right* (README 7.48-7.51): pushed along the
+  relative velocity they smeared Chukotka 3,800 km into Siberia; resolving the whole overlap each
+  step re-pushed what could not be undone; pushing only continents combed Indonesia into feathers
+  of land and sea; and the renderer let tears and the Pacific's carried floor show through the
+  collision zones as a ladder of abyssal cracks. Found by rendering owner / strain / thickening /
+  stage-by-stage land-sea maps side by side (`build_fields.STAGES`), not from the globe.
+- *Box-edged margins* stood as ruler-straight scarps (83 W through Georgia); arcs are measured from
+  the coast that faces their ocean now (README 7.51).
+- The future plate overlay was the July advected network; it is drawn from the engine now
+  (`build_plates_future.py`), and the future platerot stored the forward rotation (README 7.52).
+- *West Antarctica* was a lon/lat box of the Antarctic plate, and the Trans-Antarctic Ocean opened
+  as a band along a parallel and two meridians; it is split along the Transantarctic front now,
+  its ocean floor by a Voronoi to the nearer continent.
+
+**The present-day rain anchor (README 5.13).** WorldClim 2.1 (downloaded with the user's go-ahead,
+kept in git-ignored `data/`, never shipped) quantile-mapped onto the model's land distribution; the
+log-ratio correction smoothed at ~80 km over land, carried by the slot rasters and faded out by
+35 Myr. Spearman against 67 sites 0.644 -> 0.988; Pangaea untouched (the user's 2026-08-09 choice).
+
+**The herringbone (README 5.13, 7.55).** One cycle per pivot cell broke every gully once a
+wavelength; below 12 km the cells are two wavelengths across, lit on a falling spectrum (0.55 per
+octave), steered at 1.0, jitter 0.35, spacing varying by region.
+
+**Open:**
+- *The Asia-Australia belt at +250* still shows a few sheared remnant basins; the rework takes the
+  majority's land or sea over ~2 degrees, which leaves the ones that are as much sea as land.
+- *The engine has no subduction of its own:* ocean floor persists wherever it is carried and is
+  only outranked (continents over oceans over the Pacific). A mid-ocean convergent edge is drawn in
+  the overlay only when no active margin faces it.
+- *Mid-zoom softness on a stepped-down GPU* (the 4096 sheets magnified): bicubic sheet taps gained
+  little, the sheet's 9.8 km texel is the limit.

@@ -29,6 +29,7 @@ from build_fields import polar_lowpass
 import epeiric as EP
 import paleo_tracks
 import precambrian as PRE
+import rain_anchor as RA
 
 
 def rain_for(age, z, rec):
@@ -67,6 +68,9 @@ def main():
     ages = ([a for a in range(0, 541, BF.STEP)]
             + [a for a in range(-BF.STEP, -251, -BF.STEP)]
             + [a for a in range(540 + BF.STEP, 1001, BF.STEP)])
+    if "--ages" in sys.argv:
+        want = {int(x) for x in sys.argv[sys.argv.index("--ages") + 1].split(",")}
+        ages = [a for a in ages if a in want]
     tags = {}
     for a in ages:
         tags[a] = "fut" if a < 0 else ("phan" if a <= 540 else "pre")
@@ -78,6 +82,8 @@ def main():
         rain = np.asarray(Image.fromarray(
             (np.clip(Rf / BF.RF_MAX, 0, 1) * 255).astype(np.uint8)).resize(
             (BF.RAIN_W, BF.RAIN_H), Image.LANCZOS)) / 255.0
+        # the present-day anchor, exactly as export() applies it
+        rain = RA.apply(rain, age, RA.land_mask(zc[::-1], BF.RAIN_H, BF.RAIN_W), BF.RF_MAX)
         r = BF._gray(polar_lowpass(rain))
         path = os.path.join(BF.OUT, "%s_%04d_r.webp" % (tags[age], abs(age)))
         BF._save(r, path, BF.RAIN_Q)

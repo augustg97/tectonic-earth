@@ -54,12 +54,25 @@ def fore(a):
 
 
 def main():
+    """--future: only the 50 future keyframes (after rebuild_future.py, which
+    writes their _t itself); the past's _t and the present-day lakes are
+    left alone."""
     from multiprocessing import Pool
+    global ALL
+    future_only = "--future" in sys.argv
+    if future_only:
+        ALL = list(range(-250, 0, 5))
+    # --ages A,B,...: only these (e.g. the 0-35 Ma the rain anchor rewrote;
+    # lakes and surface drainage read the rain field)
+    if "--ages" in sys.argv:
+        ALL = [int(x) for x in sys.argv[sys.argv.index("--ages") + 1].split(",")]
+        future_only = all(a < 0 for a in ALL)
     t0 = time.time()
     st = lambda m: print("[%5.0fs] %s" % (time.time() - t0, m), flush=True)
-    with Pool(12) as p:
-        p.map(tect, PAST, chunksize=4)
-    st("tectonic _t: %d" % len(PAST))
+    if not future_only and "--ages" not in sys.argv:
+        with Pool(12) as p:
+            p.map(tect, PAST, chunksize=4)
+        st("tectonic _t: %d" % len(PAST))
     import build_foldphase as BFP, build_drainphase as BDP
     with Pool(12) as p:
         q = [r for r in p.map(BFP.bake, ALL, chunksize=4) if r]
@@ -73,9 +86,10 @@ def main():
     with Pool(12) as p:
         p.map(lakes, ALL, chunksize=4)
     st("lakes _w: %d" % len(ALL))
-    import subprocess
-    subprocess.check_call([sys.executable, "bake_present_lakes.py"])
-    st("present-day lakes (Natural Earth) rewritten")
+    if not future_only and 0 in ALL:
+        import subprocess
+        subprocess.check_call([sys.executable, "bake_present_lakes.py"])
+        st("present-day lakes (Natural Earth) rewritten")
     with Pool(12) as p:
         p.map(fore, ALL, chunksize=4)
     st("foreland + deficit _f: %d" % len(ALL))
@@ -86,7 +100,7 @@ def main():
     stale = []
     for a in ALL:
         te = os.path.getmtime(F + stem(a) + "_e.avif")
-        kinds = ("q", "x", "d", "w", "f") + (("t",) if a >= 0 and a < 1000 else ())
+        kinds = ("q", "x", "d", "w", "f") + (("t",) if a < 1000 else ())
         for k in kinds:
             p = F + stem(a) + "_" + k + ".webp"
             if not os.path.exists(p) or os.path.getmtime(p) < te:

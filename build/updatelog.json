@@ -2,6 +2,37 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.16",
+   "date": "26 September 2026",
+   "title": "A future that moves like plates, and the present's real rainfall",
+   "summary": "The next 250 million years are now driven by plates that bend where they collide: the Atlantic closes, North America ends up against West Africa, and Australia crumples into Asia instead of arriving in today's shape. Today's rainfall is anchored to observations, so British Columbia is forested, the Ganges plain green and the Himalaya's snow is on the crest. Up close, mountain flanks show continuous valleys instead of a herringbone of dashes.",
+   "sections": [
+    {
+     "name": "The future",
+     "items": [
+      "The future is driven by eleven plates that follow today's measured motions for 25 million years and then the stages of Scotese's Pangaea Proxima. Where continents meet they shorten and thicken into mountain belts, so their outlines change.",
+      "The Atlantic stops widening, narrows from about +100 million years and closes: Newfoundland meets Guinea and Florida meets Angola, raising a range where the ocean was. New volcanic ranges rise along the Americas' Atlantic coasts as its floor starts to sink beneath them.",
+      "Australia drives into south-east Asia, closes the South China Sea and is crushed against it: by +250 million years nearly half of it is squeezed and its outline has changed by a quarter.",
+      "Antarctica leaves the pole and splits: West Antarctica rifts away, opening the Trans-Antarctic Ocean, and comes back; East Antarctica goes north and collides with Sumatra at +150 million years.",
+      "The plate boundaries layer shows the future's own plates: ridges, trenches and transforms from how the plates move, with continents that have welded together shown as one plate.",
+      "New names follow the new geography: the Trans-Antarctic and Verkhoyansk oceans, the Atlantic Sea, the New England and Brazilian volcanic arcs and the North Antarctic Range; the East African Ocean and the Somali island are gone, because the East African Rift fails in this reconstruction."
+     ]
+    },
+    {
+     "name": "Colours",
+     "items": [
+      "Today's rainfall is calibrated to observed rainfall, so British Columbia's ranges are forested, the Ganges plain is green and the Himalaya's snow sits on the crest instead of the Tibetan plateau. The calibration fades out over the first 35 million years either side of today, so Pangaea is as dry as before."
+     ]
+    },
+    {
+     "name": "Close zoom",
+     "items": [
+      "Mountain flanks show continuous valleys running off the crests instead of short dashes in a herringbone, and the spacing of the gullies varies from place to place."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.15",
    "date": "26 September 2026",
    "title": "Sharp ground up close, cleaner colours, and a future that is named where it is",

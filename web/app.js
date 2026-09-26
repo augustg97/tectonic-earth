@@ -356,13 +356,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260926-0618';
-const FIELD_V='20260926-lakes';   // bumped: the lake fields re-baked (overflow breaches, humid deep floors, record-named lakes, contour shores)
+const DATA_V='20260926-1126';
+const FIELD_V='20260926-future';   // bumped: the future re-baked by the plate engine (3.16), and 0-35 Ma rain anchored to observation with its lakes and drainage
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260926a';
+const IMAGERY_V='20260926b';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -1022,9 +1022,12 @@ function initGL(){
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
     uMatOffK:{value:_sq.get('matoff')==='0'?0:1},   // texture rides the crust through an interval (FRAG gMatOff)
     uEroK2:{value:new THREE.Vector4(+(_sq.get('eroB')??1.5),+(_sq.get('eroR')??0.78),+(_sq.get('eroFa')??2.2),+(_sq.get('eroFb')??4.5))},   // erosion relief below the grid (FRAG): 12 km amplitude x old, ratio per finer octave
+    uEroK3:{value:new THREE.Vector4(+(_sq.get('eroG')??0.55),+(_sq.get('eroW')??1.0),+(_sq.get('eroJ')??0.35),+(_sq.get('eroC')??2.0))},   // ...their shading ratio per octave below 12 km, their walls' steering weight, their pivots' jitter (the herringbone round)
     uShadeK:{value:new THREE.Vector4(+(_sq.get('shF')??0.3),0,0,0)},   // land faces turned from the sun keep this share of the cosine (FRAG)
     uNearK2:{value:new THREE.Vector4(+(_sq.get('ngC')??1),+(_sq.get('ngF')??0.5),0,0)},   // close-zoom fade of the land grain's coarse normal-noise octaves (FRAG)
     uFloorK:{value:+(_sq.get('floor')??1)},   // pale arid basin floors (FRAG)
+    uPeakK:{value:+(_sq.get('peak')??1)},   // sub-grid peaks in the snow/glacier ramps (FRAG)
+    uMeeK:{value:+(_sq.get('mee')??1)},   // the mass-elevation effect on temperature (FRAG)
     uNearK:{value:new THREE.Vector4(+(_sq.get('near')??1),+(_sq.get('nearK')??0.35),+(_sq.get('nearA')??2.5),+(_sq.get('nearB')??6))},   // close-zoom detail slope (FRAG): on, share of the base exaggeration, footprint ramp km
     uHsK:{value:new THREE.Vector4(+(_sq.get('hsC')??220),+(_sq.get('hsF')??0.8),0,0)},   // the land hillshade by scale (FRAG): regional compression, fine-band gain
     uEroK:{value:new THREE.Vector4(+(_sq.get('ero')||1),+(_sq.get('eroN')||60),+(_sq.get('eroF')||0.7),+(_sq.get('eroS')??0.8))},   // the erosion relief (FRAG eroRelief): amplitude (0 off), normal gain, sub-grid share
@@ -1048,8 +1051,9 @@ function initGL(){
   liteMat=new THREE.ShaderMaterial({uniforms:{
     sheetA:{value:null},sheetB:{value:null},
     elevA:U.elevA,elevB:U.elevB,dispA:U.dispA,mixf:U.mixf,uWarp:U.uWarp,
-    uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,uDisp:U.uDisp},
-    vertexShader:VERT,fragmentShader:LFRAG});
+    uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,uDisp:U.uDisp,
+    uSheetPx:{value:new THREE.Vector2(0,0)}},
+    vertexShader:VERT,fragmentShader:LFRAG,extensions:{derivatives:true}});
   previewMat=new THREE.ShaderMaterial({uniforms:{
     uPreview:{value:null},uFrames:{value:new THREE.Vector2(0,0)},mixf:{value:0},
     uMapProj:U.uMapProj,uMapLon:U.uMapLon,uSchem:U.uSchem,
@@ -2550,13 +2554,25 @@ document.querySelectorAll('.panel .ph').forEach(h=>{
 function showEraPlate(d){
   const p=DATA.plates.find(x=>x.name===d.n);
   if(p&&presentFade()>0.4){showPlate(p,d.lon,d.lat);return;}
-  openInfo({name:d.n,tag:'Plate · '+fmtAge(Math.round(state.age)),
-    rows:[['Relative size',d.s>2?`${d.s}`:'small'],
-          ['Position',`${Math.abs(d.lat).toFixed(0)}°${d.lat>=0?'N':'S'} ${Math.abs(d.lon).toFixed(0)}°${d.lon>=0?'E':'W'}`]],
-    desc:'A plate in this reconstruction, tracked back from the surveyed present-day '+
-         'plate model and carried along the measured motion field. Plates merge going '+
-         'backwards as their relative motion falls to nothing, so there are fewer of '+
-         'them the deeper you go.'});
+  /* The past's plates are Merdith et al. (2021) resolved with pyGPlates
+     (build_plates_gplates.py); the future's are the future engine's own
+     (build_plates_future.py), where plates that have stopped moving against
+     each other are one plate, listed in d.m. */
+  const fut=state.age<0, rows=[];
+  if(d.a)rows.push(['Area',`${d.a>=10?d.a.toFixed(0):d.a.toFixed(1)} million km²`]);
+  else if(d.s>2)rows.push(['Relative size',`${d.s}`]);
+  rows.push(['Position',`${Math.abs(d.lat).toFixed(0)}°${d.lat>=0?'N':'S'} ${Math.abs(d.lon).toFixed(0)}°${d.lon>=0?'E':'W'}`]);
+  if(fut&&d.m&&d.m.length>1)rows.push(['Moving as one',d.m.join(', ')]);
+  openInfo({name:d.n,tag:'Plate · '+fmtAge(Math.round(state.age)),rows,
+    desc:fut?'A plate in this projection of the future: today\'s plates carried on today\'s '+
+         'measured motions for the first 25 million years, then along the stages of '+
+         'Scotese\'s Pangaea Proxima. Where continents have collided and stopped moving '+
+         'against each other they ride one plate, so there are fewer plates the further '+
+         'ahead you go. Boundaries are classed by how the plates move across them: '+
+         'opening (ridge), closing (trench) or sliding past (transform).'
+        :'A plate in Merdith et al. (2021)\'s full-plate model of the last billion years, '+
+         'resolved at this age: its boundaries are the model\'s own ridges, subduction '+
+         'zones and transforms, carried on its rotations.'});
 }
 
 function featureDesc(n){const d={
@@ -3565,7 +3581,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260926a';
+const SHEET_V='20260926b';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
@@ -4153,6 +4169,7 @@ function loop(now,force){
   if(lite){
     const sa=SHEETS.get(f.i), sb=SHEETS.get(f.j);
     liteMat.uniforms.sheetA.value=sa.tex; liteMat.uniforms.sheetB.value=sb.tex;
+    { const sw=_sq.get('bicubic')==='0'?0:Math.min(sa.w||SHEET_W, sb.w||SHEET_W); liteMat.uniforms.uSheetPx.value.set(sw, sw/2); }   // ?bicubic=0: plain bilinear (A/B)
     sa.u=++_sheetClock; sb.u=++_sheetClock; _liteFrames++;
   }
   // overlays visibility & fade

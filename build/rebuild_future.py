@@ -23,75 +23,10 @@ TW, TH = BT.TW, BT.TH
 
 
 def bake_future_disp(age, frac, gid, Zsrc):
-    """Write fut_XXXX_v.webp: how far the crust moves to the next keyframe.
-
-    The future frames shipped no displacement field, so the app cross-faded
-    them -- the very double-exposure H1 was built to end, still happening in
-    the future era. It is derivable exactly: every group turns about ONE axis
-    by an angle proportional to frac, so the rotation carrying the crust from
-    one keyframe to the next is a rotation about that same axis by the angle
-    difference. Same convention as build_displacement (apply the interval
-    rotation to this grid's own directions, store east/north in the tangent
-    frame), so the shader needs no new code. B is the tear channel, which
-    only the tectonic bake consumes; it stays neutral here because the
-    future fabric is derived from the belt instead.
-    """
-    import numpy as np
-    from PIL import Image
-    import build_displacement as BD
-    owner = BF.LAST_BELT.get("owner")
-    if owner is None:
-        return None
-    VW, VH = BD.VW, BD.VH
-    # this grid's own directions
-    lon = (np.arange(VW) + 0.5) / VW * 360 - 180
-    lat = 90 - (np.arange(VH) + 0.5) / VH * 180
-    LON, LAT = np.meshgrid(lon, lat)
-    V0 = BF.BS.unit(LON.ravel(), LAT.ravel())
-    # owner map came back at the last future_grid resolution; sample it here
-    oh, ow = owner.shape
-    oy = np.clip(((90 - LAT) / 180 * oh).astype(int), 0, oh - 1)
-    ox = (((LON + 180) / 360 * ow).astype(int)) % ow
-    own = owner[oy, ox].ravel()
-    packed = BF._packed_targets(gid, Zsrc)
-    gh, gw = gid.shape
-    glon = (np.arange(gw) + 0.5) / gw * 360 - 180
-    glat = 90 - (np.arange(gh) + 0.5) / gh * 180
-    GLON, GLAT = np.meshgrid(glon, glat)
-    dfrac = float(STEP) / 250.0
-    V1 = V0.copy()
-    for i, g in enumerate(BF.GROUPS):
-        m = own == i
-        if not m.any():
-            continue
-        gm = gid == i
-        if not gm.any():
-            continue
-        s = BF.BS.unit(GLON[gm], GLAT[gm]).mean(axis=1); s /= np.linalg.norm(s)
-        tl, tb, spin = packed[g]
-        t = BF.BS.unit(tl, tb)
-        Rfull = BF.BS.rodrigues(t, spin) @ BF.BS.rot_from_to(s, t)
-        # axis and total angle of the group's whole journey
-        ang = float(np.arccos(np.clip((np.trace(Rfull) - 1.0) / 2.0, -1.0, 1.0)))
-        if ang < 1e-9:
-            continue
-        ax = np.array([Rfull[2, 1] - Rfull[1, 2],
-                       Rfull[0, 2] - Rfull[2, 0],
-                       Rfull[1, 0] - Rfull[0, 1]]) / (2.0 * np.sin(ang))
-        V1[:, m] = BD.PF.rodrigues(V0[:, m].T, ax, ang * dfrac).T
-    dot = np.clip((V0 * V1).sum(0), -1.0, 1.0)
-    gc = np.degrees(np.arccos(dot))
-    tang = V1 - dot * V0
-    nrm = np.maximum(np.linalg.norm(tang, axis=0), 1e-15)
-    dirn = tang / nrm
-    e, n = BD._tangent_basis(LON.ravel(), LAT.ravel())
-    dE = (gc * (dirn.T * e).sum(-1)).reshape(VH, VW)
-    dN = (gc * (dirn.T * n).sum(-1)).reshape(VH, VW)
-    arr = BD._encode(dE, dN, np.zeros_like(dE))
-    Image.fromarray(arr).save(
-        os.path.join(BF.OUT, "fut_%04d_v.webp" % abs(age)), "WEBP",
-        lossless=True, method=6)
-    return float(np.abs(np.stack([dE, dN])).max())
+    """fut_XXXX_v.webp: how far the crust moves to the next keyframe (3.16:
+    the future engine's own plate kinematics; see bake_future_v.bake)."""
+    import bake_future_v
+    return bake_future_v.bake(age, quiet=True)
 
 
 def bake_future_fabric(age, frac):
@@ -132,38 +67,69 @@ def bake_future_fabric(age, frac):
     return float((sh > 0.045).mean()) * 100.0
 
 
+_G = {}
+
+
+def _setup():
+    """Per worker: the present-day source DEM, resampled once."""
+    if not _G:
+        idx = index_dems()
+        avail = np.array(sorted(idx.keys()))
+        z0 = read_dem(idx[float(avail[np.argmin(np.abs(avail - 0))])])
+        _G["gid"] = BF.rasterise_groups()
+        _G["Zsrc"] = resample_dem(z0, 900, 1800)
+    return _G
+
+
+def one(age):
+    """Rebuild one future keyframe; returns its report line. Independent of
+    every other keyframe (the engine's integrated state is read, not built),
+    so the ages can run on separate workers."""
+    G = _setup()
+    gid, Zsrc = G["gid"], G["Zsrc"]
+    ts = time.time()
+    frac = abs(age) / 250.0
+    gh = BF.future_grid(frac, gid, Zsrc, BF.ELEV_H, BF.ELEV_W)
+    gl = BF.future_grid(frac, gid, Zsrc, BF.CLIM_H, BF.CLIM_W)
+    sl = sealevel_for(age)
+    gh = gh - sl
+    gl = gl - sl
+    BF.export(age, gh, gl[::-1], "fut")
+    act = bake_future_fabric(age, frac)     # reads BF.LAST_BELT from the future_grid above
+    dmax = bake_future_disp(age, frac, gid, Zsrc)
+    land = float((gh > 0).sum()) / gh.size * 100.0
+    return (f"  {age:+5d} Myr  land {land:5.2f}%  max {gh.max():6.0f} m  "
+            f"fabric {act if act is not None else -1:.1f}%  "
+            f"disp {dmax if dmax is not None else -1:.2f}deg  [{time.time()-ts:.0f}s]")
+
+
 def main():
+    """../venv/bin/python rebuild_future.py [--workers N] [ages...]"""
     t0 = time.time()
-    idx = index_dems()
-    avail = np.array(sorted(idx.keys()))
-    z0 = read_dem(idx[float(avail[np.argmin(np.abs(avail - 0))])])
-
-    print("rasterising group mask at 0.125 deg ...", flush=True)
-    gid = BF.rasterise_groups()
-    Zsrc = resample_dem(z0, 900, 1800)
-    print(f"mask {gid.shape}  source {Zsrc.shape}  [{time.time()-t0:.0f}s]", flush=True)
-
+    args = sys.argv[1:]
+    workers = 1
+    if "--workers" in args:
+        i = args.index("--workers")
+        workers = int(args[i + 1])
+        del args[i:i + 2]
+    ages = [int(a) for a in args] or list(range(-STEP, -251, -STEP))
+    # THE ELEVATION PASS BELOW ORDERS THE HIGH-RES GRID BEFORE THE CLIMATE ONE,
+    # AND bake_future_fabric reads the belt the SECOND future_grid call left in
+    # BF.LAST_BELT -- both within one worker, so the pairing holds per age.
+    print(f"future rebuild: {len(ages)} keyframes on {workers} worker(s)", flush=True)
     n = 0
-    for age in range(-STEP, -251, -STEP):
-        ts = time.time()
-        frac = abs(age) / 250.0
-        gh = BF.future_grid(frac, gid, Zsrc, BF.ELEV_H, BF.ELEV_W)
-        gl = BF.future_grid(frac, gid, Zsrc, BF.CLIM_H, BF.CLIM_W)
-        sl = sealevel_for(age)
-        gh = gh - sl
-        gl = gl - sl
-        BF.export(age, gh, gl[::-1], "fut")
-        act = bake_future_fabric(age, frac)
-        dmax = bake_future_disp(age, frac, gid, Zsrc)
-        n += 1
-        land = float((gh > 0).sum()) / gh.size * 100.0
-        print(f"  {age:+5d} Myr  land {land:5.2f}%  max {gh.max():6.0f} m  "
-              f"fabric {act if act is not None else -1:.1f}%  "
-              f"disp {dmax if dmax is not None else -1:.2f}deg  "
-              f"[{time.time()-ts:.0f}s]  ({n}/50)", flush=True)
-
+    if workers <= 1:
+        for age in ages:
+            n += 1
+            print(one(age) + f"  ({n}/{len(ages)})", flush=True)
+    else:
+        from multiprocessing import Pool
+        with Pool(workers) as pool:
+            for line in pool.imap_unordered(one, ages):
+                n += 1
+                print(line + f"  ({n}/{len(ages)})", flush=True)
     print(f"future: {n} keyframes rebuilt in {(time.time()-t0)/60:.1f} min", flush=True)
-    return 0
+    return 0 if n == len(ages) else 1
 
 
 if __name__ == "__main__":

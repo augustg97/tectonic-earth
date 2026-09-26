@@ -28,65 +28,27 @@ VW, VH = BD.VW, BD.VH
 STEP = BF.STEP
 
 
-def owner_map(frac, gid, Zsrc):
-    """Which group's crust sits under each cell of the VWxVH grid."""
-    lon = (np.arange(VW) + 0.5) / VW * 360 - 180
-    lat = 90 - (np.arange(VH) + 0.5) / VH * 180
-    LON, LAT = np.meshgrid(lon, lat)
-    T = BF.BS.unit(LON.ravel(), LAT.ravel())
-    gh, gw = gid.shape
-    glon = (np.arange(gw) + 0.5) / gw * 360 - 180
-    glat = 90 - (np.arange(gh) + 0.5) / gh * 180
-    GLON, GLAT = np.meshgrid(glon, glat)
-    packed = BF._packed_targets(gid, Zsrc)
-    owner = np.full(T.shape[1], -1, np.int16)
-    best = np.full(T.shape[1], -9999.0)
-    rots = {}
-    for i, g in enumerate(BF.GROUPS):
-        m = gid == i
-        if not m.any() or g not in packed:
-            continue
-        s = BF.BS.unit(GLON[m], GLAT[m]).mean(axis=1); s /= np.linalg.norm(s)
-        tl, tb, spin = packed[g]
-        t = BF.BS.unit(tl, tb)
-        Rfull = BF.BS.rodrigues(t, spin) @ BF.BS.rot_from_to(s, t)
-        Rm = BF.axis_angle_scale(Rfull, frac)
-        S = Rm.T @ T
-        slat = np.degrees(np.arcsin(np.clip(S[2], -1, 1)))
-        slon = np.degrees(np.arctan2(S[1], S[0]))
-        gy = np.clip(((90 - slat) / 180 * gh).astype(int), 0, gh - 1)
-        gx = ((slon + 180) / 360 * gw).astype(int) % gw
-        claims = gid[gy, gx] == i
-        # highest ground wins the cell, exactly as future_grid resolves it
-        z = np.where(claims, BF._bilerp(Zsrc, slat, slon), -9999.0)
-        take = z > best
-        owner[take] = i
-        best[take] = z[take]
-        rots[i] = Rfull
-    return owner, rots
-
-
-def bake(age, gid, Zsrc, quiet=False):
+def bake(age, gid=None, Zsrc=None, quiet=False):
+    """fut_XXXX_v.webp from future_tectonics (3.16): each cell's crust moves by
+    its owning plate's rotation from this keyframe to the next one ahead,
+    R_g(t + STEP) R_g(t)^T -- the plates' own smooth kinematics, no raster
+    differencing. New ocean between plates is filled by the Laplace solve."""
+    import future_tectonics as FT
     t0 = time.time()
-    frac = abs(age) / 250.0
-    owner, rots = owner_map(frac, gid, Zsrc)
+    myr = abs(age)
+    _z, own, _src, _E, _cw = FT.render(myr, VH, VW, fray=False)
+    owner = own.ravel()
     lon = (np.arange(VW) + 0.5) / VW * 360 - 180
     lat = 90 - (np.arange(VH) + 0.5) / VH * 180
     LON, LAT = np.meshgrid(lon, lat)
     V0 = BF.BS.unit(LON.ravel(), LAT.ravel())
     V1 = V0.copy()
-    dfrac = float(STEP) / 250.0
-    for i, Rfull in rots.items():
+    for i, p in enumerate(FT.PLATES):
         m = owner == i
         if not m.any():
             continue
-        ang = float(np.arccos(np.clip((np.trace(Rfull) - 1.0) / 2.0, -1.0, 1.0)))
-        if ang < 1e-9:
-            continue
-        ax = np.array([Rfull[2, 1] - Rfull[1, 2],
-                       Rfull[0, 2] - Rfull[2, 0],
-                       Rfull[1, 0] - Rfull[0, 1]]) / (2.0 * np.sin(ang))
-        V1[:, m] = BD.PF.rodrigues(V0[:, m].T, ax, ang * dfrac).T
+        Rint = FT.rot(p, myr + STEP) @ FT.rot(p, myr).T
+        V1[:, m] = Rint @ V0[:, m]
     dot = np.clip((V0 * V1).sum(0), -1.0, 1.0)
     gc = np.degrees(np.arccos(dot))
     tang = V1 - dot * V0
@@ -94,39 +56,28 @@ def bake(age, gid, Zsrc, quiet=False):
     e, n = BD._tangent_basis(LON.ravel(), LAT.ravel())
     dE = (gc * (dirn.T * e).sum(-1)).reshape(VH, VW)
     dN = (gc * (dirn.T * n).sum(-1)).reshape(VH, VW)
-    # Unclaimed cells are new ocean opened between the drifting groups. A hard
-    # zero there sits against 2 degrees of motion at the plate edge, and the
-    # shader warps its samples by this field -- so the discontinuity would tear
-    # the texture along every margin. Filled from the covered values by the
-    # same Laplace solve the Phanerozoic path uses, which makes the new floor
-    # move with the plates that opened it.
+    # Unclaimed cells are new ocean opened between the drifting plates: filled
+    # from the covered values by the same Laplace solve the Phanerozoic path
+    # uses, so the new floor moves with the plates that opened it.
     cov = (owner >= 0).reshape(VH, VW)
     dE = BD.laplace_fill(dE, cov)
     dN = BD.laplace_fill(dN, cov)
     arr = BD._encode(dE, dN, np.zeros_like(dE))
-    path = os.path.join(BF.OUT, "fut_%04d_v.webp" % abs(age))
+    path = os.path.join(BF.OUT, "fut_%04d_v.webp" % myr)
     Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
     if not quiet:
         print("  %+5d Myr  max %.2f deg  covered %5.1f%%  %5.1f kB  [%.0fs]"
-              % (age, float(np.abs(np.stack([dE, dN])).max()),
+              % (-myr, float(np.abs(np.stack([dE, dN])).max()),
                  100.0 * float((owner >= 0).mean()),
                  os.path.getsize(path) / 1024.0, time.time() - t0), flush=True)
-    return True
+    return float(np.abs(np.stack([dE, dN])).max())
 
 
 def main():
     t0 = time.time()
-    gid = BF.rasterise_groups()
-    idx = BF.index_dems()
-    avail = np.array(sorted(idx.keys()))
-    z0 = BF.read_dem(idx[float(avail[np.argmin(np.abs(avail - 0))])])
-    Zsrc = BF.resample_dem(z0, 900, 1800)
-    print("baking future displacement at %dx%d" % (VW, VH), flush=True)
-    n = 0
     for age in range(-STEP, -251, -STEP):
-        bake(age, gid, Zsrc)
-        n += 1
-    print("DONE %d fields in %.1f min" % (n, (time.time() - t0) / 60.0), flush=True)
+        bake(age)
+    print("DONE future displacement fields in %.1f min" % ((time.time() - t0) / 60.0), flush=True)
     return 0
 
 

@@ -195,11 +195,15 @@ uniform vec4 uHsK;        // the land hillshade by scale: x regional compression
 uniform vec4 uNearK2;     // close-zoom land grain: x fade of its 44 and 16 km normal-noise octaves, y of the 6 km one
 uniform vec4 uShadeK;     // x: the sky's share of the sun's cosine on land faces turned away (0 = the old flat floor)
 uniform vec4 uEroK2;     // the erosion relief's sub-grid octaves: x amplitude of the 12 km octave (x the old), y amplitude ratio per finer octave
+uniform vec4 uEroK3;     // ...and their LIGHT: x shading ratio per sub-grid octave below 12 km (?eroG=), y how hard their walls steer the next (?eroW=), z their pivots' spacing and heading jitter (?eroJ=), w wavelengths per pivot cell (?eroC=)
 uniform float uFloorK;    // pale arid basin floors (?floor=0 off)
+uniform float uPeakK;     // sub-grid peaks in the snow and glacier ramps (?peak=0 off)
+uniform float uMeeK;      // the mass-elevation effect (?mee=0 off)
 uniform vec4 uNearK;      // close-zoom detail slope: x on, y share of the base exaggeration, z/w footprint ramp (km)
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
+vec4 gDbgV=vec4(0.0); // ?show=17..20: snow, sub-grid peak spread/1 km, mass-elevation warming/6 C, aridity
 float gNearW=0.0;  // close-zoom weight (1 where a pixel is ~1 km), set in main with the land gradient
 float gZSm=-9999.0;
 /* How much of the wide submarine stencil is actually sea (iteration 30).
@@ -349,6 +353,8 @@ float gEroOwn=0.0, gEroD=0.0, gEroH=0.0;
 vec3 gAlb=vec3(0.0); float gShd=1.0;
 float gEroA=0.0;   // the erosion relief's first-octave amplitude here, to normalise its tone
 float gIceDeep=0.0; // how far inside a land ice sheet this pixel is (0 margin, 1 deep), set in the ice block
+float gIceA=0.0;    // the land-ice opacity the ice block painted (0 bare ground .. 1 a solid sheet)
+float gSnowC=0.0;   // the snow and glacier cover the land block painted (for the steep-rock term)
 /* matRot turns a VECTOR (a gradient, a direction along the ground) into the
    material frame: rotation only. matDir turns a POSITION: moved first to where
    this crust sat at keyframe A, then rotated. Adding that offset to a gradient
@@ -1074,7 +1080,7 @@ vec2 eroHash(vec2 p){
    heads +-25 degrees off the local downhill, so neighbouring valleys differ in
    spacing, depth and course and beat against each other the way real
    transverse drainages do. */
-vec3 eroPlane(vec2 p, vec2 n){
+vec3 eroPlane(vec2 p, vec2 n, float jit, float cpc){
   vec2 ip=floor(p), fp=p-ip;
   vec3 acc=vec3(0.0);
   for(int j=-1;j<=1;j++){
@@ -1089,9 +1095,14 @@ vec3 eroPlane(vec2 p, vec2 n){
          transverse valleys bend and converge rather than run as the parallel
          rungs of a ladder, and the blend of slightly crossing stripes is what
          makes two of them meet. */
-      float ja=(eroHash(ip+o+vec2(5.3,71.9)).x-0.5)*0.87;
+      float ja=(eroHash(ip+o+vec2(5.3,71.9)).x-0.5)*0.87*jit;
       vec2 nj=n*cos(ja)+vec2(-n.y,n.x)*sin(ja);
-      float ph=6.2831853*(0.78+0.52*hq.y)*dot(d,nj);
+      /* (below the grid, where the pivots barely jitter, the SPACING varies
+         by region instead: blocks of 4x4 cells share one, 0.8-1.25x, so a
+         uniform slope is not combed at one pitch from end to end -- dissection
+         density follows the rock, and the rock changes every hundred km) */
+      float fr=mix(0.8+0.45*eroHash(floor((ip+o)*0.25)+vec2(91.7,13.3)).x, 1.0, jit);
+      float ph=6.2831853*cpc*fr*mix(1.04, 0.78+0.52*hq.y, jit)*dot(d,nj);
       acc+=vec3(cos(ph),sin(ph),1.0)*w;
     }
   }
@@ -1104,11 +1115,11 @@ vec3 eroPlane(vec2 p, vec2 n){
    weights. Returns the blended (cos, sin) and a confidence that fades the rare
    points where the pivots cancel -- the fork of a stripe -- flat instead of
    letting them flicker. */
-vec3 eroOct(vec3 m, vec3 n3, vec3 aw){
+vec3 eroOct(vec3 m, vec3 n3, vec3 aw, float jit, float cpc){
   vec3 a=vec3(0.0);
-  if(aw.x>0.02) a+=aw.x*eroPlane(m.yz, normalize(n3.yz+vec2(1e-7,0.0)));
-  if(aw.y>0.02) a+=aw.y*eroPlane(m.zx, normalize(n3.zx+vec2(1e-7,0.0)));
-  if(aw.z>0.02) a+=aw.z*eroPlane(m.xy, normalize(n3.xy+vec2(1e-7,0.0)));
+  if(aw.x>0.02) a+=aw.x*eroPlane(m.yz, normalize(n3.yz+vec2(1e-7,0.0)), jit, cpc);
+  if(aw.y>0.02) a+=aw.y*eroPlane(m.zx, normalize(n3.zx+vec2(1e-7,0.0)), jit, cpc);
+  if(aw.z>0.02) a+=aw.z*eroPlane(m.xy, normalize(n3.xy+vec2(1e-7,0.0)), jit, cpc);
   float l=length(a.xy);
   return vec3(a.xy/max(l,1e-6), smoothstep(0.04,0.22,l/max(a.z,1e-6)));
 }
@@ -1192,7 +1203,21 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
       vec3 t=S-msd*dot(S,msd);
       t=t/max(length(t),1e-9);
       vec3 n=cross(msd,t);
-      vec3 e=eroOct(msd*(6371.0/L)+vec3(float(k)*7.31,float(k)*3.17,float(k)*5.53), n, aw);
+      /* BELOW THE GRID A GULLY RUNS THE LENGTH OF ITS WALL. The spacing and
+         heading jitter that keeps the 96 and 48 km octaves from reading as a
+         grating at globe zoom broke a 12 km gully after about one wavelength
+         at close zoom -- the dashes of the herringbone. Real first-order
+         valleys run crest to floor, many wavelengths, and bend with the
+         slope that steers them; so below 12 km the jitter is uEroK3.z of it.
+         The jitter was not what broke them, though (measured: ?eroJ=0.35 left
+         the dashes as they were). Each pivot draws its stripe through itself
+         and the strongest pivot changes every cell, so at one cycle a cell
+         the phase jumps once a wavelength along any gully. Below 12 km the
+         cells are uEroK3.w wavelengths across, at as many cycles each: the
+         same nine pivots a pixel, and gullies that many wavelengths long. */
+      float jit=k>=3 ? uEroK3.z : 1.0;
+      float cpc=k>=3 ? uEroK3.w : 1.0;
+      vec3 e=eroOct(msd*(6371.0/(L*cpc))+vec3(float(k)*7.31,float(k)*3.17,float(k)*5.53), n, aw, jit, cpc);
       /* PLANAR WALLS, NOT A SINE. A valley cut into rock is a V with straight
          sides and a sharp crest between two of them; a sine has neither, and
          lit alone it reads as corrugated sheet. asin(k cos) is a triangle wave
@@ -1215,7 +1240,18 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
          one high gain would stack seven saturated octaves into black-and-white
          static: a shaded relief map exaggerates less the finer it looks. The
          gain goes as the square root of the wavelength, 1 at 96 km. */
-      gr+=(ae*dtri*kk*sqrt(L*(1.0/96.0)))*n;
+      /* THE SUB-GRID OCTAVES ARE LIT ON A FALLING SPECTRUM (the herringbone
+         round, 3.16). Their HEIGHT keeps 0.78 per octave -- the snowline, the
+         bare rock and the treeline need the relief -- but lit at the same
+         ratio each finer octave's walls are 1.56x steeper, and with the gain
+         falling only as sqrt(L) the finest octave drawn out-shaded all the
+         rest: short hard dashes, each run straight down the wall of the one
+         above -- a herringbone on every Himalayan flank at close zoom
+         (?show=13). Real shaded relief is led by its main valleys, the finer
+         dissection a texture on their walls: below 12 km each octave is lit
+         at uEroK3.x of the one above. */
+      float shK=k>3 ? pow(uEroK3.x, float(k-3)) : 1.0;
+      gr+=(ae*dtri*kk*sqrt(L*(1.0/96.0))*shK)*n;
       /* The STEERING slope is this wall's own, which the triangle already makes
          flat across the wall (Johansen's straight gullies): a wall steers the
          next octave straight down it all the way across, instead of fading to
@@ -1223,7 +1259,11 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
          one. Weighted 1.8: a wall is steeper than the flank it is cut into,
          and it is the wall a tributary follows, so the coarse valleys must
          out-vote the flank in the steering or nothing branches. */
-      gi+=(1.8*aS*mask*kk*dtri)*n;
+      /* (Below 12 km the walls steer at uEroK3.y instead: at 1.8 a tributary
+         ran straight down its valley's wall and met it square -- the other
+         half of the herringbone. With the flank's own fall counting for more,
+         it slants downstream and joins at the acute angle real drainage does.) */
+      gi+=((k>=3 ? uEroK3.y : 1.8)*aS*mask*kk*dtri)*n;
       /* The next octave lives mostly on this one's walls: a ridge crest and a
          valley floor are where tributaries end, not where they run. Weighted
          by how much this octave actually cut here, so an octave the deficit
@@ -1710,7 +1750,15 @@ void main(){
      crowding begins and arrive gradually. 0.78 is 51 degrees and 0.89 is 63 --
      by which point columns are already 1.6x and 2.2x over-sampled. Spread over
      30-plus degrees there is no edge left to see. */
-  float pwL=smoothstep(0.780,0.9860,abs(sdir.y));
+  /* ...EXCEPT THE LIGHT (3.16). pwL turns the sun from the north-west of the
+     local frame into the world-fixed ring frame, and it began at 51 degrees
+     with the sampling correction: across 51-80 the light's direction swung
+     with longitude, so whole coasts were lit from behind -- east Baffin, lit
+     from the east-south-east, drew as a flat dark band 300 km long (?show=15),
+     the "dark bare-rock areas on present-day polar land". The light needs the
+     ring frame only where north-west stops meaning anything, at the pole
+     itself, so it turns over 72-88 degrees; the sampling keeps its wide ramp. */
+  float pwL=smoothstep(0.9511,0.9994,abs(sdir.y));
   float pw=smoothstep(0.890,0.9990,abs(sdir.y));
   /* PIXEL FOOTPRINT on the sphere (fidelity round iter 5). Fine sea-floor
      texture -- 2-5 km abyssal hills, ridged creases -- undersamples into
@@ -1753,7 +1801,7 @@ void main(){
      metres per metre, and the mean of the four macro taps (+/-137 km): what
      the erosion relief is steered and sized by. Both come from taps the
      branches below already take, so nothing is read twice. */
-  vec3 gEnv3=vec3(0.0); float gMac=0.0;
+  vec3 gEnv3=vec3(0.0); float gMac=0.0; float gMacMin=0.0;
   /* The macro (+/-137 km) difference on land, in the branch frame, kept apart
      so an ice sheet can keep the regional slope and drop the bed's relief. */
   vec2 gMacD=vec2(0.0);
@@ -1953,6 +2001,7 @@ void main(){
     g1+=(mE1-mE2)*0.50*gMacroW;
     g2+=(mN1-mN2)*0.50*gMacroW;
     gMac=0.25*(mE1+mE2+mN1+mN2);
+    gMacMin=min(min(mE1,mE2),min(mN1,mN2));   // the massif's interior (the mass-elevation effect)
     gMacD=vec2(mE1-mE2, mN1-mN2)*gMacroW;
   }
     /* DEEP WATER: take the same gradient over a wider baseline too, and blend
@@ -2351,12 +2400,18 @@ void main(){
     fN=baseElev(uvFromDir(normalize(sdir+Nax*daF)))-baseElev(uvFromDir(normalize(sdir-Nax*daF)));
     gFine3=(Eax*fE+Nax*fN)/(2.0*daF*6.371e6);
   }
+  /* THE COMPRESSION RUNS IN BOTH LATITUDE BRANCHES (3.16). It sat inside the
+     sub-63 condition with the fine band, which needs the +-1-texel taps that
+     branch has; the compression needs nothing but the gradient. Above 63
+     degrees a broad flank facing away from the polar frame's light was lit at
+     the full regional tilt and drew as a dark slab -- east Baffin, the
+     "dark bare-rock areas on present-day polar land". */
+  if(z>=wl && uHsK.x>0.0){
+    vec2 gb=vec2(gE,gN);
+    gb*=1.0/(1.0+length(gb)/uHsK.x);
+    gE=gb.x; gN=gb.y;
+  }
   if(z>=wl && pw<=0.004){
-    if(uHsK.x>0.0){
-      vec2 gb=vec2(gE,gN);
-      gb*=1.0/(1.0+length(gb)/uHsK.x);
-      gE=gb.x; gN=gb.y;
-    }
     if(uHsK.y>0.0){
       float cE=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
       float cN=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
@@ -2470,7 +2525,27 @@ void main(){
   float _cl=length(c); c = _cl>1e-4 ? c/_cl : vec2(1.0,0.0);
   vec2 Lh=mix(vec2(-0.55,0.55), -0.55*c + 0.55*vec2(-c.y,c.x), pwL);
   float zp=max(z,0.0);
-  float T=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2)-zp*0.0058;
+  /* THE MASS-ELEVATION EFFECT (3.16). The lapse rate above is the free air's;
+     a high plateau heats its own air, so its surface stands several degrees
+     warmer than the free atmosphere at the same height -- measured ~4-6 C over
+     interior Tibet, ~1-2 C in the Alps -- which is why the Tibetan treeline and
+     snowline are the highest on Earth. Without it the plateau was too cold,
+     snow lay across its interior while the Himalayan crest stood bare, and the
+     Alps glaciated from ~2,700 m against a real ~2,900. Keyed to the mean of the
+     four +-137 km taps (the massif, not the peak) and, weighted three to one,
+     their minimum (how far inside it this point is): a plateau interior, high
+     on every side, takes ~4.5 C; a crest with a plain on one side, under 1 C
+     -- measured by the mean alone, the Himalayan crest took 3.8 C and lost all
+     its snow, and the south-side ELA there is ~5,600 m, which the lapse rate
+     alone already gives.
+     1.1 C per km above 500 m, capped at 5.5; faded out in polar climates,
+     where an ice sheet cools its air rather than heating it. It moves the
+     snowline, the glacier line and the treeline with the temperature.
+     ?mee=0 removes it. */
+  float T0sl=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
+  float mee = z>=wl ? uMeeK*min((0.25*max(gMac-500.0,0.0)+0.75*max(gMacMin-500.0,0.0))*0.0011, 5.5)
+                      *clamp((T0sl+5.0)/15.0,0.0,1.0) : 0.0;
+  float T=T0sl+mee-zp*0.0058;
   /* Surface process: drainage, substrate, fetch. Interpolated between
      keyframes like everything else, so a river migrates with its valley
      instead of cross-fading between two of them. */
@@ -3083,8 +3158,27 @@ void main(){
        (The aridity term is named "arid" not "dry": "dry" is the tan land
        colour three lines up, and reusing that name silently breaks the
        whole shader.) */
-    float T0=(26.0-24.0*s2-26.0*s2*s2*s2)+(uTemp-TEMP_REF)*(4.0+15.0*s2);
-    float arid=1.0-clamp(Rf/0.85,0.0,1.0);
+    float T0=T0sl+mee;                     // the mass-elevation effect raises every line keyed to T0
+    /* THE MOISTURE THAT REACHES A CREST (3.16). Orographic rain peaks on the
+       windward slope below a crest, and a 26 km rain grid books it there; the
+       crest itself still takes much of it as snow -- the monsoon feeds the
+       Himalayan crest's glaciers and the rain shadow begins BEHIND it. Read at
+       its own texel the crest sat on the dry side of that step (0.05 against
+       0.4 on the slope below) and the continuous snow line the Himalaya shows
+       from orbit was a scatter of specks. On high ground the glacier line and
+       the snowfall take the wettest rain within ~50 km at 0.8 weight; the
+       treeline and the vegetation keep their own texel's. */
+    float RfE=Rf;
+    if(zp>1800.0){
+      float cl=sqrt(max(1.0-s2,0.04));
+      vec2 oE=vec2(0.45/360.0/cl, 0.0), oN=vec2(0.0, 0.45/180.0);
+      float r1=mix(texture2D(rainA,wA(uv+oE)).r, texture2D(rainB,wB(uv+oE)).r, mixf);
+      float r2=mix(texture2D(rainA,wA(uv-oE)).r, texture2D(rainB,wB(uv-oE)).r, mixf);
+      float r3=mix(texture2D(rainA,wA(uv+oN)).r, texture2D(rainB,wB(uv+oN)).r, mixf);
+      float r4=mix(texture2D(rainA,wA(uv-oN)).r, texture2D(rainB,wB(uv-oN)).r, mixf);
+      RfE=max(Rf, 0.8*RF_MAX*max(max(r1,r2),max(r3,r4))*smoothstep(1800.0,2600.0,zp));
+    }
+    float arid=1.0-clamp(RfE/0.85,0.0,1.0);
     /* The -5.0 is calibrated, not chosen. At +1.0 this put the wet mid-latitude
        ELA near 1,700 m -- the Alps glaciate from 1,700 m in this model and from
        about 2,900 in the world -- and the app carried seven times the mountain
@@ -3135,7 +3229,19 @@ void main(){
        The elevation is filtered properly now, so the ordinary ELA solve behaves
        at the pole and the special case is gone: polar ice is real ice, on real
        ground, shading like the rest of the map. */
-    float glac=clamp((zp-ela)/520.0+tongue+0.08,0.0,1.0);
+    /* PEAKS THE GRID CANNOT SEE (3.16). A 10 km cell of the Himalayan crest
+       reads 5,000-5,800 m while its peaks stand at 7,000-8,800: the cell is
+       partly above the glacier line even when its mean is not. So on rugged
+       high ground the ramp widens by the unresolved relief (sigS, a standard
+       deviation, from rug), about the same centre -- rugged ranges carry ice
+       and snow on their peaks, a smooth plateau at the same mean height does
+       not, which is the pattern from orbit. The spread is sized by how far the
+       point stands above its massif (zp - gMac) and by its ruggedness: ~1 km on
+       the Himalayan crest, where 10 km cells run from 4.5 km valleys to 7.5 km
+       peaks, ~0.8 in the Karakoram, under 0.2 on the plateau interior.
+       ?peak=0 restores the plain ramp. */
+    float sigS=uPeakK*min(0.55*max(zp-gMac,0.0)+300.0*rug, 1000.0)*smoothstep(1500.0,3200.0,zp);
+    float glac=clamp((zp-ela+0.8*sigS)/(520.0+1.6*sigS)+tongue+0.08,0.0,1.0);
     /* Perennial snow sits BELOW the glacier line. A glacier needs enough snow
        to survive the summer and then keep piling until it flows; snow only
        needs to survive the summer, which it manages a few hundred metres
@@ -3155,7 +3261,13 @@ void main(){
        where the real one is closer to 5), and widening the snow band on top of
        that would hang snow on Andean peaks that are bare all year. */
     float snowline=ela-380.0;
-    float snowfall=clamp(0.30+0.70*smoothstep(0.04,0.42,Rf),0.0,1.0);
+    /* THE RAMP IN MILLIMETRES (3.16). On the model's scale -- which the rain
+       anchor's quantile mapping pins to observation -- 0.04 is ~300 mm and
+       0.42 ~1,500, so a range needed 1.5 m of precipitation before its snow
+       showed in full; the ELA above already charges dryness. 0.015-0.22 is
+       ~130 mm to ~1,000: the Atacama's volcanoes (<50 mm) stay at the floor,
+       a 500 mm crest shows most of its snow. */
+    float snowfall=clamp(0.30+0.70*smoothstep(0.015,0.22,RfE),0.0,1.0);
     /* ...BUT ABOVE THE LINE THAT GATE HAS ALREADY BEEN PASSED. The ELA is where
        accumulation balances ablation, and it already carries the climate --
        scaling snow by CURRENT rainfall on top of it counts the same aridity
@@ -3168,11 +3280,12 @@ void main(){
        Faded in over a kilometre of excess height, so an arid massif sitting
        near its own line still comes out brown; the Atacama's six-kilometre
        volcanoes are the control and they stay bare. */
-    snowfall=mix(snowfall,1.0,clamp((zp-snowline)/1100.0,0.0,1.0)*0.80);
+    snowfall=mix(snowfall,1.0,clamp((zp+sigS-snowline)/1100.0,0.0,1.0)*0.80);   // the peaks' excess, sigS below
     // Same story as the glacier above: the polar temperature-only substitution
     // that used to sit here was a disc, so it is gone. Snow is the ELA band
     // everywhere, and the filtered elevation keeps it clean at the pole.
-    float snow=clamp((zp-snowline)/400.0+tongue*0.6,0.0,1.0)*snowfall;
+    float snow=clamp((zp-snowline+sigS)/(400.0+2.0*sigS)+tongue*0.6,0.0,1.0)*snowfall;
+    gDbgV=vec4(snow, sigS/1000.0, mee/6.0, arid);
     snow=max(snow,glac);
     /* The snowfield edge takes the same multi-scale fraying as the ice-sheet
        margin: a snowline is a fractal boundary of aspect, wind and shade, not
@@ -3292,6 +3405,7 @@ void main(){
        widen the spread BETWEEN biome stops, narrow the drift WITHIN each. */
     col=mix(col, vec3(0.867,0.898,0.929), snow*0.82);
     col=mix(col, vec3(0.965,0.976,0.988), glac);
+    gSnowC=max(snow*0.82, glac);
   }
 
   // ice: a continuous ramp so sheets advance and retreat instead of popping
@@ -3382,6 +3496,7 @@ void main(){
          terrain and only genuinely cold interiors read as sheet. */
       float iceAlpha=landIce*(0.30+0.70*smoothstep(0.15,2.4,iceIm));
       col=mix(col, iceCol, iceAlpha);
+      gIceA=iceAlpha;
     }
   }else{
     /* Sea ice is PACK ice, and it forms MORE readily than an ice sheet, not
@@ -3513,7 +3628,11 @@ void main(){
   /* The erosion relief's slope joins here. Under an ice sheet the surface is
      the ice, not the valleys cut into the rock beneath it: a whisper stays,
      as the bed does in the sheet's own colour above. */
-  float eroIce=1.0-0.85*landIce;
+  /* A range that breaks through the sheet (the bed 0.8-1.6 km above the four
+     +-137 km taps: the Transantarctic Mountains, not the buried Gamburtsevs)
+     keeps its relief under every ice term below and its rock above (3.16). */
+  float nunIce=smoothstep(800.0,1600.0,zp-gMac);
+  float eroIce=1.0-landIce*mix(0.85,1.0,gIceDeep)*(1.0-nunIce);
   /* AN ICE SHEET IS A LOW-PASS FILTER ON ITS BED. Ice a kilometre or more thick
      carries only the bed's longest wavelengths to its surface, so inside a sheet
      the shading keeps the REGIONAL slope (the +/-137 km macro difference, put in
@@ -3523,9 +3642,19 @@ void main(){
      Cryogenian snowball drew as dark rocky ridges through its ice. The margin
      (gIceDeep near 0) keeps the bed, as thin ice and nunataks do. Today's sheets
      are drawn by their surface in the DEM, which is already smooth. */
+  /* ...AND AN ICE DOME IS NEARLY FLAT (3.16). Keeping the regional slope at
+     the terrain's exaggeration lit a sheet's gentle dome like a mountain
+     flank: Greenland's surface -- the DEM carries it, 0.3-1 degree slopes --
+     drew with a grey half 1,000 km across, and Antarctica's bed (the DEM
+     carries the bed there) with grey swathes where no ice surface slopes that
+     way. The macro term carries the regional slope at ~3x the local one's
+     weight, so Greenland's 0.33-degree dome became a 36-degree tilt even at a
+     fifth (?show=15: its west half black). Deep inside a sheet the shading
+     keeps 5% of the regional slope -- a dome reads as a gentle gradient of
+     light, ~10 degrees at most -- and nothing finer; nunataks keep theirs. */
   if(z>=wl && landIce>0.001){
-    float fIce=0.80*landIce*gIceDeep;
-    vec2 gSm=gMacD*(2.4/14.0+0.5);
+    float fIce=landIce*gIceDeep*(1.0-nunIce)*0.95;
+    vec2 gSm=gMacD*(2.4/14.0+0.5)*mix(1.0,0.05,gIceDeep);
     gE=mix(gE, gSm.x, fIce); gN=mix(gN, gSm.y, fIce);
   }
   vec3 nrm=normalize(vec3(-(gE+gEroE*eroIce), gN+gEroN*eroIce, vex));
@@ -3558,6 +3687,30 @@ void main(){
        coherence. The mountain model that replaces this is plan B of WP-10. */
     float slope=1.0-clamp(nrm.z,0.0,1.0);
     float bare=smoothstep(0.12,0.42,slope)*clamp(zp/380.0,0.12,1.0);
+    /* ...BUT NOT THROUGH AN ICE SHEET (3.16). This runs after the ice, and the
+       present-day DEM gives Antarctica as BEDROCK: every steep face of the
+       buried subglacial ranges was painted rock over the sheet -- grey patches
+       across the whole interior, the "dark bare-rock areas on present-day
+       polar land", which July's renders did not have. What breaks through a
+       real sheet is a range that stands well above its surroundings (the
+       Transantarctic Mountains; the Gamburtsevs, 1 km above theirs, are
+       buried), so under ice the bed must stand 0.8-1.6 km above the four
+       +-137 km taps. The valley and atlas tones below take the same gate. */
+    float thruIce=1.0-gIceA*(1.0-nunIce);
+    bare*=thruIce;
+    /* ...and not over a snowfield or a glacier (3.16). This runs after the
+       snow, so every steep face above the snowline was repainted rock at up
+       to 60% -- the Himalayan crest, snow-covered in the model, drew grey.
+       Only the steepest faces shed their snow; on a glaciated crest most of
+       the surface is white. */
+    bare*=1.0-0.75*gSnowC;
+    /* A nunatak is rock by its STANDING, not its lit slope: the regional-tilt
+       compression that keeps a flank from clamping black also takes a
+       2 km range front to ~34 degrees, under this slope ramp, and the
+       Transantarctic Mountains -- dark rock ridges with white outlet glaciers
+       across them, from orbit -- went white. Where the bed breaks through a
+       sheet, broken or steep ground is rock. */
+    bare=max(bare, nunIce*gIceA*max(smoothstep(0.30,0.70,rugC), smoothstep(0.05,0.18,slope)));
     vec3 rockc=mix(vec3(0.404,0.365,0.318), vec3(0.525,0.475,0.404), vnoise3(matDir(sdir)*33.0));
     col=mix(col, rockc, bare*0.6);
     /* THE VALLEYS AS TONE (the erosion relief). Shading alone cannot show a
@@ -3570,7 +3723,7 @@ void main(){
        which the retired atlas carried for the same reason. */
     if(gEroOwn>0.003){
       float et=clamp(gEroH/max(gEroA,60.0),-1.0,1.0);
-      col*=1.0+et*0.13*gEroOwn;
+      col*=1.0+et*0.13*gEroOwn*thruIce;
     }
     /* Hydrology: drainage, marshes and delta plains. We cannot know the courses
        of ancient rivers, but water obeys the terrain and climate we DO
@@ -3721,14 +3874,14 @@ void main(){
            patch's own height, valleys darker and crests lighter, is the same
            albedo cue the reference carries at continental zoom -- derived
            from an eroded surface, not from the contour loops of a noise. */
-        col*=1.0+ar.x*0.55*ga*uAtlasK.y*eB;
+        col*=1.0+ar.x*0.55*ga*uAtlasK.y*eB*thruIce;
       }
       float gd=dissectGate(zp,rugC);
       if(gd>0.005){
         vec3 dr=dissectRelief(msd, gHard);
         float ampD=gd*3.2*uAtlasK.w;        // 3.2 and 0.32: twice the first cut, the display review of 2026-09-03 (?plainsK=2 then)
         nx+=dr.y*ampD; ny+=dr.z*ampD;
-        col*=1.0+dr.x*0.32*gd*uAtlasK.w;
+        col*=1.0+dr.x*0.32*gd*uAtlasK.w*thruIce;
       }
     }
     /* DUNE CRESTS IN THE NORMAL (WP-10 B5, the erg half): the across-slope of
@@ -3780,7 +3933,10 @@ void main(){
        Fade it further on genuinely flat ground, which is where the reference
        is quietest and where isotropic noise reads most obviously as noise. */
     float flatq=1.0-smoothstep(0.14,0.46,rugC);
-    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0-0.70*flatq)*(1.0+0.55*closeG));
+    /* Under an ice sheet none of this is the surface (3.16): the grain, the
+       drainage carved into the bed, the atlas, dissection and dune relief all
+       belong to ground the ice covers; nunataks keep theirs. */
+    nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0-0.70*flatq)*(1.0+0.55*closeG)*thruIce);
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
        Real ocean floor is corrugated: long, low hills 2-5 km across, elongated
@@ -4986,7 +5142,8 @@ void main(){
             : clamp(dot(normalize(vec3(-gEroE, gEroN, 300.0)), normalize(vec3(Lh,0.63))),0.0,1.0);
     col=vec3(clamp(v,0.0,1.0));
     if(uShow>13.5) col = uShow<14.5 ? gAlb : uShow<15.5 ? vec3(clamp(gShd*0.62,0.0,1.0))
-                     : vec3(vnoise3(matDir(sdir)*30.0), vnoise3(matDir(sdir)*30.0+7.0), 0.5);
+                     : uShow<16.5 ? vec3(vnoise3(matDir(sdir)*30.0), vnoise3(matDir(sdir)*30.0+7.0), 0.5)
+                     : vec3(clamp(uShow<17.5 ? gDbgV.x : uShow<18.5 ? gDbgV.y : uShow<19.5 ? gDbgV.z : gDbgV.w, 0.0, 1.0));
   }
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }
@@ -4994,6 +5151,7 @@ void main(){
 LFRAG:`precision highp float;
 uniform sampler2D sheetA, sheetB, elevA, elevB, dispA;
 uniform float mixf, uWarp, uMapProj, uMapLon, uSchem;
+uniform vec2 uSheetPx;     // the sheets' size in texels (0: plain bilinear)
 varying vec2 vUv; varying vec3 vVN;
 const float PI=3.14159265359, Z_RANGE=8000.0, V_DEG=12.0;
 float decElev(float e){ float d=e*2.0-1.0; return sign(d)*d*d*Z_RANGE; }
@@ -5019,6 +5177,37 @@ vec2 warpAt(vec2 uv){
   float cl=max(cos(radians(tlat)),0.15);
   return vec2(dE/(cl*360.0), dN/180.0);
 }
+/* MAGNIFIED SHEETS ARE RESAMPLED BICUBICALLY (3.16). A stepped-down GPU
+   draws the 4096 sheets from a quarter texel per pixel, so mid zoom showed a
+   9.8 km-texel image magnified up to 4x through bilinear filtering: every
+   range a soft blob. Catmull-Rom (nine bilinear taps) keeps the edges the bake
+   drew; it fades in as the magnification passes ~1.1x, so a minified sheet
+   still takes its mip chain. */
+vec4 catmullRom(sampler2D t, vec2 uv){
+  vec2 sp=uv*uSheetPx;
+  vec2 p1=floor(sp-0.5)+0.5;
+  vec2 f=sp-p1;
+  vec2 w0=f*(-0.5+f*(1.0-0.5*f));
+  vec2 w1=1.0+f*f*(-2.5+1.5*f);
+  vec2 w2=f*(0.5+f*(2.0-1.5*f));
+  vec2 w3=f*f*(-0.5+0.5*f);
+  vec2 w12=w1+w2;
+  vec2 p0=(p1-1.0)/uSheetPx, p3=(p1+2.0)/uSheetPx, p12=(p1+w2/w12)/uSheetPx;
+  vec4 r=texture2D(t,vec2(p0.x,p0.y))*w0.x*w0.y + texture2D(t,vec2(p12.x,p0.y))*w12.x*w0.y
+        + texture2D(t,vec2(p3.x,p0.y))*w3.x*w0.y
+        + texture2D(t,vec2(p0.x,p12.y))*w0.x*w12.y + texture2D(t,vec2(p12.x,p12.y))*w12.x*w12.y
+        + texture2D(t,vec2(p3.x,p12.y))*w3.x*w12.y
+        + texture2D(t,vec2(p0.x,p3.y))*w0.x*w3.y + texture2D(t,vec2(p12.x,p3.y))*w12.x*w3.y
+        + texture2D(t,vec2(p3.x,p3.y))*w3.x*w3.y;
+  return r;
+}
+vec4 sheetTap(sampler2D t, vec2 uv, float mag){
+  vec4 b=texture2D(t,uv);
+  if(mag<0.01) return b;
+  vec4 c=clamp(catmullRom(t,uv),0.0,1.0);
+  c.a=b.a;                        // the land/water flag stays the bilinear one
+  return mix(b,c,mag);
+}
 void main(){
   vec2 uv=vUv;
   if(uMapProj>0.5){
@@ -5030,7 +5219,9 @@ void main(){
   vec2 w=warpAt(uv);
   vec2 ua=uv-mixf*w, ub=uv+(1.0-mixf)*w;
   float h=mix(decElev(texture2D(elevA,ua).r), decElev(texture2D(elevB,ub).r), mixf);
-  vec4 cA=texture2D(sheetA,ua), cB=texture2D(sheetB,ub);
+  float tpp = uSheetPx.x>0.5 ? max(length(dFdx(uv)*uSheetPx), length(dFdy(uv)*uSheetPx)) : 2.0;
+  float mag = 1.0-smoothstep(0.55,0.9,tpp);          // sheet texels per screen pixel
+  vec4 cA=sheetTap(sheetA,ua,mag), cB=sheetTap(sheetB,ub,mag);
   /* THE COASTLINE STAYS SHARP. Where the two sheets disagree about a pixel
      (land in one keyframe, sea in the other) a plain blend would dissolve the
      shoreline across the whole interval. The interpolated height says which
@@ -5457,8 +5648,8 @@ const SPEED=+(q.get('speed')||2), SPIN=q.has('spin')?+q.get('spin'):(REDUCED?0:0
 const FPS=+(q.get('fps')||(REDUCED?10:30));
 let CLOUDS=q.get('clouds')!=='0';
 const WEATHER=q.get('weather')!=='0'&&!REDUCED;
-const SHEET_V='20260926a', FIELD_V='20260926-lakes', IMAGERY_V='20260926a';
-const DATA_V='20260926-0618';   // stamped by build/stamp_data_version.py (its own line, as the stamp expects)
+const SHEET_V='20260926b', FIELD_V='20260926-future', IMAGERY_V='20260926b';
+const DATA_V='20260926-1126';   // stamped by build/stamp_data_version.py (its own line, as the stamp expects)
 let SHEET_DIR='sheets2048/';   // the lean set this page runs on; sheets/ (4096, the app's) if it is all the site ships
 // asset bases (D4): directories the field and sheet files sit in when hosted off the page; see index.html
 const _base=(q,w)=>{const v=new URLSearchParams(location.search).get(q);const b=v!=null?v:(window[w]||'');return b&&!b.endsWith('/')?b+'/':b;};

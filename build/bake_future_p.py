@@ -34,16 +34,20 @@ SLOTS = 48
 STEP = BF.STEP
 
 
-def bake(age, gid, Zsrc, quiet=False):
+def bake(age, gid=None, Zsrc=None, quiet=False):
+    """Slots and rotations for one future keyframe, from future_tectonics (3.16).
+
+    The slot is the plate that owns each cell (the engine's owner map); the
+    rotation is the one the shader's matDir needs: from where the crust sits
+    at this keyframe BACK TO TODAY, exactly what build_platefield stores for the
+    past (age -> 0 Ma). Until 3.15 this stored the forward rotation (today ->
+    keyframe), so every future texture moved the wrong way round its axis --
+    at twice the plate's speed relative to the crust it belonged to.
+    """
+    import future_tectonics as FT
     t0 = time.time()
-    frac = abs(age) / 250.0
-    owner, rots = BV.owner_map(frac, gid, Zsrc)   # computed at BV's VW x VH
-    own = owner.reshape(BV.VH, BV.VW)
-    if (BV.VH, BV.VW) != (PH, PW):
-        yi = (np.arange(PH) * BV.VH // PH)[:, None]
-        xi = (np.arange(PW) * BV.VW // PW)[None, :]
-        own = own[yi, xi]
-    # unclaimed cells inherit the nearest claimed slot
+    myr = abs(age)
+    _z, own, _src, _E, _cw = FT.render(myr, PH, PW, fray=True)
     miss = own < 0
     if miss.any() and (~miss).any():
         _, idx = distance_transform_edt(miss, return_indices=True)
@@ -52,43 +56,34 @@ def bake(age, gid, Zsrc, quiet=False):
         own = np.zeros_like(own)
     arr = np.zeros((PH, PW, 3), np.uint8)
     arr[:, :, 0] = np.clip(own, 0, SLOTS - 1).astype(np.uint8)
-    path = os.path.join(BF.OUT, "fut_%04d_p.webp" % abs(age))
+    path = os.path.join(BF.OUT, "fut_%04d_p.webp" % myr)
     Image.fromarray(arr).save(path, "WEBP", lossless=True, method=6)
-
     quats = []
-    for i, g in enumerate(BF.GROUPS):
-        R = rots.get(i)
-        if R is None:
-            quats.append([0.0, 0.0, 1.0, 0.0]); continue
-        ang = float(np.arccos(np.clip((np.trace(R) - 1.0) / 2.0, -1.0, 1.0)))
+    for p in FT.PLATES:
+        r = FT.logm(FT.rot(p, myr).T)          # keyframe -> today
+        ang = float(np.linalg.norm(r))
         if ang < 1e-9:
             quats.append([0.0, 0.0, 1.0, 0.0]); continue
-        ax = np.array([R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]]) \
-            / (2.0 * np.sin(ang))
+        ax = r / ang
         quats.append([round(float(ax[0]), 6), round(float(ax[1]), 6),
-                      round(float(ax[2]), 6), round(float(ang * frac), 6)])
+                      round(float(ax[2]), 6), round(ang, 6)])
     while len(quats) < SLOTS:
         quats.append([0.0, 0.0, 1.0, 0.0])
     if not quiet:
         print("  %+5d Myr  slots used %2d  %5.1f kB  [%.0fs]"
-              % (age, int(own.max()) + 1, os.path.getsize(path) / 1024.0,
+              % (-myr, int(own.max()) + 1, os.path.getsize(path) / 1024.0,
                  time.time() - t0), flush=True)
     return quats
 
 
 def main():
     t0 = time.time()
-    gid = BF.rasterise_groups()
-    idx = BF.index_dems()
-    avail = np.array(sorted(idx.keys()))
-    Zsrc = BF.resample_dem(BF.read_dem(idx[float(avail[np.argmin(np.abs(avail))])]),
-                           900, 1800)
     ppath = os.path.join(BF.OUT, "..", "platerot.json")
     data = json.load(open(ppath))
     print("baking future material coordinates at %dx%d" % (PW, PH), flush=True)
     n = 0
     for age in range(-STEP, -251, -STEP):
-        data["rot"][str(age)] = bake(age, gid, Zsrc)
+        data["rot"][str(age)] = bake(age)
         n += 1
     json.dump(data, open(ppath, "w"), separators=(",", ":"))
     print("DONE %d fields + %d rotation tables in %.1f min"
