@@ -357,7 +357,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260926-2144';
+const DATA_V='20260926-2210';
 const FIELD_V='20260926-317';   // bumped: trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes

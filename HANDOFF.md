@@ -18,7 +18,21 @@ Paste this whole file as the first message of a new session.
   known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: subduction, weather that moves, cards that vary (3.17, 2026-09-26)
+## The latest fix: clouds that read as clouds (3.18, 2026-09-26)
+
+The user, on the live 3.17: "something is now clearly wrong with our plates - there is a white shade
+or pattern that appears and moves with our continents, it is unclear if these are supposed to be
+clouds or parts of the land." It was 3.17's stratocumulus decks (README 7.65): grown in every gulf,
+bay, seaway and shelf sea with land to its east, drawn with a Worley-cell mesh to a coast-set edge.
+`index__CFRAG`: a deck now needs deep water (-1.5 to -3.5 km ramp), open ocean to the west (land
+share 8-38 degrees west under ~0.1) and a coast upwind, and it thickens the existing weather field with
+a sheet from the same noise family (no cells). Verified on the user's five scenes (850, 370, 270, 160
+Ma and the Tonian bay), at hemisphere zoom at six ages, and by a mask replica over twelve ages
+(decks off California, Peru, the Canaries, Namibia, W Australia today; the western margins of each
+era's continents before). The other pale shapes in the screenshots were terrain (a submarine plateau
+at 270 Ma, a basin seen through thin cloud at 160 Ma) and the UI panel's backdrop edge.
+
+## The round before: subduction, weather that moves, cards that vary (3.17, 2026-09-26)
 
 The user, on 3.16: "Let's make some more general systematic improvements ... a fluttering effect in
 the Tonian ... smoother land movements, natural coastlines ... dynamic land and sea crust movements

@@ -8356,3 +8356,9 @@ cards, the same green and red algae on every Cryogenian shelf.
   broken ridge, not islands.
 - *The overlay's Palaeozoic and Ediacaran residual* (README 9): 530-540 Ma is worse reframed.
 - *Deep-time land fauna and Precambrian shelves are thin by nature*; the registry cannot fix that.
+
+**3.18, the same day: the decks were ground, to the eye.** On the live release the user saw "a white
+shade or pattern that ... moves with our continents". The decks had formed wherever land lay to the
+east -- every gulf, bay and shelf sea -- and carried a texture no other cloud had. Now: deep water, open
+ocean to the west, a coast upwind; drawn as thickened weather (README 7.65).
+

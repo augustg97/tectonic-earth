@@ -6931,45 +6931,46 @@ void main(){
   float fl=(cn(sphere(lon,lat)*4.0+vec3(7.0,3.0,9.0))-0.5)*9.0+(cn(sphere(lon,lat)*11.0+vec3(2.0,6.0,1.0))-0.5)*4.0;
   float sub=smoothstep(5.0,17.0,al+fl)*(1.0-smoothstep(27.0,42.0,al+0.7*fl));
   if(uWind.x>0.0&&uWind.w>0.0&&sub*(1.0-land)>0.001){
-    /* How near the coast upwind of the trades -- land to the EAST -- as a
-       smooth falloff over ~20 degrees; the water right at the shore is kept
-       clear (the deck forms a little offshore). Skipped wherever no deck is
-       possible, which is most of the globe. */
+    /* WHERE A DECK REALLY FORMS (3.17, revised). Marine stratocumulus sits
+       over the cold current along the EASTERN edge of an OPEN ocean -- Peru,
+       Namibia, California -- under the subsiding air of the subtropical high.
+       The first version asked only for land to the east, so it laid decks in
+       every gulf, bay, seaway and shelf sea of every age, drawn with a mesh of
+       cells along a hard coastal edge: a white shape that rode the continents
+       and read as part of the land. Now it needs deep water beneath, open
+       ocean to the WEST (the fetch the trades cross), and a coast upwind. */
     float cs=1.0/max(0.35,cos(lat));
-    // the share of eight points 2.5-20 degrees to the east that are land: a
-    // continuous measure of how near (and how big) the upwind coast is
-    // (the distances are jittered by a smooth noise of half a step, so the
-    // eight thresholds interleave into one gradient instead of drawing eight
-    // terraces parallel to the coast)
+    float hz; { float a=texture2D(elevA,uv).r*2.0-1.0; hz=sign(a)*a*a*8000.0;
+      if(mixf>0.00001){ float b=texture2D(elevB,uv).r*2.0-1.0; hz=mix(hz,sign(b)*b*b*8000.0,mixf); } }
+    float deepK=smoothstep(-1500.0,-3500.0,hz);
     float jit=(cn(sphere(lon,lat)*55.0+vec3(8.0,2.0,6.0))-0.5)*2.6+(cn(sphere(lon,lat)*140.0+vec3(1.0,9.0,4.0))-0.5)*1.2;
-    // ten points 1.5-19.5 degrees east, spread +-0.8 degrees in latitude too,
-    // on a land ramp across the slope: the deck's edge follows the coast's
-    // trend, not its every headland (eight sharp samples drew it as a stair)
-    float lE=0.0;
-    for(int k=0;k<10;k++){
+    float lW=0.0;
+    for(int k=0;k<6;k++){
       float fk=float(k);
-      lE+=deckLand(uv+vec2((1.5+2.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*1.6/180.0));
+      lW+=deckLand(uv-vec2((8.0+6.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*3.0/180.0));
     }
-    lE*=0.1;
-    float shore=1.0-smoothstep(0.30,0.80,deckLand(uv+vec2(0.6/360.0*cs,0.0)));
-    // an irregular outer edge: the deck frays into the open ocean, it is not cut
+    float openW=1.0-smoothstep(0.06,0.30,lW/6.0);
+    float lE=0.0;
+    if(deepK*openW>0.001){
+      for(int k=0;k<10;k++){
+        float fk=float(k);
+        lE+=deckLand(uv+vec2((1.5+2.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*1.6/180.0));
+      }
+      lE*=0.1;
+    }
+    float shore=1.0-smoothstep(0.20,0.75,deckLand(uv+vec2(0.9/360.0*cs,0.0)));
     float fray=0.65*(cn(sphere(lon,lat)*3.0+vec3(5.0,9.0,2.0))-0.5)+0.35*(cn(sphere(lon,lat)*8.0+vec3(1.0,3.0,7.0))-0.5);
-    float sc=(1.0-land)*sub*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
+    float sc=(1.0-land)*sub*deepK*openW*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
     if(sc>0.001){
-      /* Closed cells some 30-50 km across, drifting with the trades that
-         carry the deck toward the equator, and thinning to open cells and
-         clear rifts toward its outer edge -- the texture a stratocumulus
-         sheet has from orbit. */
-      vec2 xy=vec2((lon-W.x*t*0.3/max(cos(lat),0.3))*cos(lat),lat-W.y*t*0.3)*270.0;
-      float cells=mix(0.62,1.0,cellsAt(xy))*mix(0.80,1.0,cellsAt(xy*0.31+vec2(17.0,5.0)));
-      // cells under a pixel are their mean, not a shimmer
-      float cfw=max(fwidth(xy.x),fwidth(xy.y));
-      cells=mix(cells,0.74,smoothstep(0.35,1.2,cfw));
-      float thin=smoothstep(0.20,0.65,cn(sphere(lon,lat)*9.0+vec3(2.0,4.0,8.0)));
-      // dense near the coast, breaking into open cells and rifts offshore
+      /* THE DECK IS CLOUD LIKE THE REST: it thickens the weather already
+         there and adds a soft sheet from the same noise family, carried
+         equatorward with the trades -- no mesh of cells, no edge of its own
+         (the cells read as a crackle glaze on the sea at every zoom). */
+      vec3 pd=sphere(lon-W.x*t*0.3/max(cos(lat),0.3),lat-W.y*t*0.3);
+      float sheet=smoothstep(0.28,0.78,0.55*cn(pd*18.0+vec3(3.0,7.0,1.0))+0.45*cn(pd*52.0+vec3(9.0,2.0,5.0)));
       float core=smoothstep(0.10,0.60,lE+0.20*fray);
-      cloud.x+=uWind.w*sc*cells*mix(0.6,2.0,core)*mix(0.35,1.0,max(thin,core));
-      cloud.y=max(cloud.y,0.25*sc*cells);
+      cloud.x=cloud.x*(1.0+0.7*sc)+uWind.w*sc*(0.20+0.70*sheet)*mix(0.55,1.25,core);
+      cloud.y=max(cloud.y,0.20*sc*sheet);
     }
   }
   /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
@@ -7566,7 +7567,7 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260926-2144';
+const DATA_V='20260926-2210';
 const FIELD_V='20260926-317';   // bumped: trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
