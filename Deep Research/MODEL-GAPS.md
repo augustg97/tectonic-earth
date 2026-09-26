@@ -8306,3 +8306,53 @@ octave), steered at 1.0, jitter 0.35, spacing varying by region.
   the overlay only when no active margin faces it.
 - *Mid-zoom softness on a stepped-down GPU* (the 4096 sheets magnified): bicubic sheet taps gained
   little, the sheet's 9.8 km texel is the limit.
+
+## THE PHOTOREALISM ROUND (2026-09-26, 3.17): the Precambrian's own motion, weather, subduction, the waterline and cards that vary
+
+The user, on 3.16: "Let's make some more general systematic improvements ... there is a fluttering
+effect in the Tonian ... smoother land movements, natural coastlines and inland features, and
+dynamic land and sea crust movements ... We should model subduction and all other planetary systems
+and subsystems that are needed ... the divide between deep sea floor and shallower crust is good but
+looks a bit fuzzy ... retain and improve the accuracy of our cards, flora/fauna ... we shouldn't have
+e.g. the same butterfly species over and over again ... clouds ... pop in, and they don't move and
+form new clouds." (README 5.14, 7.57-7.64)
+
+**The Tonian flutter was two models of one world.** The generated Precambrian terrain moves by the
+authored craton poses; its warp and crust frame were PALEOMAP's (50-180 degrees elsewhere before
+540 Ma), so continents slid one way inside an interval and snapped back at every keyframe. Both now
+come from the poses (`build_preframe.py`); crossing jump 16.5 -> 2.1 at 900 Ma. The Precambrian's
+names are placed on the cratons (labels on water 35 -> 2).
+
+**Weather.** Clouds are advected by a zonal wind model with eddies, renewed in overlapping cycles,
+lifted over high ground, and laid as stratocumulus decks off the cold west coasts; no pop at a
+preview. +0.5-0.8 ms.
+
+**The ocean floor.** The shelf break is a signed distance drawn as a one-pixel edge (`shelf_edge.py`).
+Subduction trenches are drawn at every Phanerozoic and future age from a signed distance in `_f`'s
+alpha (`trench_field.py`): trough, inner wall, outer rise, and an arc behind intra-oceanic zones.
+Measured: the PaleoDEMs have no trench past ~5 Ma (Peru-Chile at 22 S is a smooth -4,300 m ramp at
+10-40 Ma); the plate model's lines were in another frame (next item).
+
+**Found: the boundary set was in Merdith's frame for every past age.** `plates_time.json` feeds the
+overlay, the arc channel and was about to feed the trenches; trench vertices on dry land 19% at 0 Ma,
+33% at 20, 41% at 150; the 100 Ma Cordilleran trench ran down the middle of North America. Lines are
+now carried to the present on their overriding plate and out on PALEOMAP's rotation (trenches, arcs:
+old-vs-new arc band IoU 0.01 at 100 Ma), the overlay is rubber-sheeted (24 -> 18% on land, averaged),
+and the Precambrian overlay comes from the craton model. A slot index had been used as a plate id on
+the way (the Andean trench thrown 1,100 km into the Pacific: README 7.58).
+
+**The waterline.** Coasts shifted sideways by a coherent 5-40 km fractal in the coastal zone only.
+
+**Cards.** +378 regional genera (registry 1,943), rotating province markers, near-ties broken by a
+stable per-card hash. Distinct card lists 6,173 -> 12,855; most labels sharing one list 16 -> 7.
+Remaining repetition is honest scarcity: springtails and mites on 76-85% of the 325-400 Ma land
+cards, the same green and red algae on every Cryogenian shelf.
+
+**Still open.**
+- *No fjords.* The waterline warp is isotropic; drowned glacial valleys need the erosion relief to be
+  allowed below sea level near glaciated coasts, which the no-new-water rule forbids today.
+- *Past arcs are not drawn as volcanoes.* The arc channel suppresses fold ridges; a cone model for
+  the edifices is still the next step (`build_arc.py`'s note), and on the sea floor the arc is a
+  broken ridge, not islands.
+- *The overlay's Palaeozoic and Ediacaran residual* (README 9): 530-540 Ma is worse reframed.
+- *Deep-time land fauna and Precambrian shelves are thin by nature*; the registry cannot fix that.

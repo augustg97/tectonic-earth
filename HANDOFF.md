@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,14 +10,48 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.1b the future series (the plate engine, the
-  future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
+- **Read `README.md` first**: §2 working rules, §5.14 this round (the Precambrian's own motion,
+  weather, the shelf break, subduction trenches, the overlay's frame, the waterline, varied cards),
+  §5.1b the future series (the plate engine, the future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
   mountains (the erosion relief), §5.5 lakes, §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.48–7.56 are this round's; 7.43–7.47 and 7.38–7.42 the rounds before), §9
+  commands, §7 traps (7.57–7.64 are this round's; 7.48–7.56 and 7.43–7.47 the rounds before), §9
   known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: the future engine, the rain anchor, the herringbone (3.16, 2026-09-26)
+## The latest round: subduction, weather that moves, cards that vary (3.17, 2026-09-26)
+
+The user, on 3.16: "Let's make some more general systematic improvements ... a fluttering effect in
+the Tonian ... smoother land movements, natural coastlines ... dynamic land and sea crust movements
+... model subduction ... the divide between deep sea floor and shallower crust ... looks a bit fuzzy
+... the flora/fauna ... could be diversified - we shouldn't have e.g. the same butterfly species over
+and over again ... clouds ... pop in, and they don't move and form new clouds."
+
+- **The Tonian flutter (README 5.14).** The Precambrian's warp and crust frame were PALEOMAP's while
+  its terrain is the authored craton poses; both now come from the poses (`build_preframe.py`, then
+  `rederive_fields.py --ages 545,...,995`). Crossing jump 16.5 -> 2.1 at 900 Ma. The Precambrian's
+  names sit on their cratons (`features.PRE_CRATON_LABELS`).
+- **Weather (5.14).** `index__CFRAG`: clouds advected by trades/westerlies/polar easterlies with
+  eddies, renewed in cycles, orographic cloud, stratocumulus off cold west coasts; `?wind= ?wcyc=
+  ?orog= ?scu=`; no pop at a preview.
+- **Sea floor (5.14).** The shelf break is a signed distance in `_w`'s blue (`shelf_edge.py`).
+  **Subduction trenches** from a signed distance in `_f`'s alpha (`trench_field.py`): unwarped,
+  blended as a distance, trough + inner wall + outer rise + arc behind intra-oceanic zones; lines are
+  Merdith's carried into PALEOMAP's frame and snapped to the margin foot. `?trench=0` off.
+  `build_foreland.py` writes the alpha too. The Caspian is back at 0 Ma.
+- **The frame finding (7.57, 7.58).** `plates_time.json` was Merdith's frame at every past age: the
+  arc channel (`build_arc.py`, now on the carried lines), the overlay (`reframe_plates.py`, run after
+  `build_plates_gplates.py` every time) and the Precambrian overlay (`pre_boundaries.py`, from the
+  craton model) are all fixed. A slot index is not a plate id.
+- **The waterline (5.14, 7.63).** `uCoast`: coasts shifted sideways by a coherent few-km fractal in
+  the coastal zone. `?coast=0` off.
+- **Cards (5.14, 7.61, 7.62).** +378 regional genera (three `taxa_src/*_regional.py` batches; registry
+  1,943); one province marker leads per section, rotated by label; near-ties broken by a stable hash.
+  Distinct lists 6,173 -> 12,855. Read `audit_biota.py --placements` after any batch: this round's
+  reading boxed ~60 genera to their localities (Hațeg, the Gobi, Lufeng, Jehol, the Wealden...).
+- **Measured, not changed:** keyframe crossings in the Phanerozoic show no jump (frame-to-frame change
+  at a crossing within the interval's own spread at 100, 250, 400 Ma).
+
+## The round before: the future engine, the rain anchor, the herringbone (3.16, 2026-09-26)
 
 The user, on 3.15: "yes, download it and fix the rain anchor. And let's address the remaining still
 open items. The future should be improved overall - let's close/narrow the Atlantic, and let's

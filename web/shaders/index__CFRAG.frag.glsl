@@ -50,6 +50,16 @@ vec2 climateAt(vec2 q){
   float land=smoothstep(-80.0,160.0,h);
   return vec2(land,rain);
 }
+/* Land for the deck's coast test, on a ramp across the continental slope
+   (-2,500 m to +300 m) instead of at the waterline: summed over offsets, a
+   sharp land test copies the coastline's every step into the deck's edge. */
+float deckLand(vec2 q){
+  q=vec2(fract(q.x),clamp(q.y,0.001,0.999));
+  float a=texture2D(elevA,q).r*2.0-1.0;
+  float h=sign(a)*a*a*8000.0;
+  if(mixf>0.00001){ float b=texture2D(elevB,q).r*2.0-1.0; h=mix(h,sign(b)*b*b*8000.0,mixf); }
+  return smoothstep(-2500.0,300.0,h);
+}
 vec2 satelliteWeather(float lon,float lat,float gain,float dry){
   // One unbroken observed cloud field preserves real fronts, spirals and
   // clear slots. Only bounded residual flow deforms it; strain cannot grow.
@@ -234,7 +244,11 @@ void main(){
     cloud.x+=uWind.z*oc*(0.1+2.4*cu)*gain;
     cloud.y=max(cloud.y,0.4*oc*cu);
   }
-  float sub=smoothstep(9.0,16.0,al)*(1.0-smoothstep(30.0,40.0,al));
+  /* The deck's latitudes, ragged: it breaks into trade cumulus along an
+     irregular edge, never along a parallel (a clean band edge read as a ruled
+     line from a hemisphere away). */
+  float fl=(cn(sphere(lon,lat)*4.0+vec3(7.0,3.0,9.0))-0.5)*9.0+(cn(sphere(lon,lat)*11.0+vec3(2.0,6.0,1.0))-0.5)*4.0;
+  float sub=smoothstep(5.0,17.0,al+fl)*(1.0-smoothstep(27.0,42.0,al+0.7*fl));
   if(uWind.x>0.0&&uWind.w>0.0&&sub*(1.0-land)>0.001){
     /* How near the coast upwind of the trades -- land to the EAST -- as a
        smooth falloff over ~20 degrees; the water right at the shore is kept
@@ -247,10 +261,16 @@ void main(){
     // eight thresholds interleave into one gradient instead of drawing eight
     // terraces parallel to the coast)
     float jit=(cn(sphere(lon,lat)*55.0+vec3(8.0,2.0,6.0))-0.5)*2.6+(cn(sphere(lon,lat)*140.0+vec3(1.0,9.0,4.0))-0.5)*1.2;
+    // ten points 1.5-19.5 degrees east, spread +-0.8 degrees in latitude too,
+    // on a land ramp across the slope: the deck's edge follows the coast's
+    // trend, not its every headland (eight sharp samples drew it as a stair)
     float lE=0.0;
-    for(int k=1;k<=8;k++)lE+=climateAt(uv+vec2((2.5*float(k)+jit)/360.0*cs,0.0)).x;
-    lE*=0.125;
-    float shore=smoothstep(0.02,0.20,1.0-climateAt(uv+vec2(0.8/360.0*cs,0.0)).x);
+    for(int k=0;k<10;k++){
+      float fk=float(k);
+      lE+=deckLand(uv+vec2((1.5+2.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*1.6/180.0));
+    }
+    lE*=0.1;
+    float shore=1.0-smoothstep(0.30,0.80,deckLand(uv+vec2(0.6/360.0*cs,0.0)));
     // an irregular outer edge: the deck frays into the open ocean, it is not cut
     float fray=0.65*(cn(sphere(lon,lat)*3.0+vec3(5.0,9.0,2.0))-0.5)+0.35*(cn(sphere(lon,lat)*8.0+vec3(1.0,3.0,7.0))-0.5);
     float sc=(1.0-land)*sub*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
@@ -261,10 +281,13 @@ void main(){
          sheet has from orbit. */
       vec2 xy=vec2((lon-W.x*t*0.3/max(cos(lat),0.3))*cos(lat),lat-W.y*t*0.3)*270.0;
       float cells=mix(0.62,1.0,cellsAt(xy))*mix(0.80,1.0,cellsAt(xy*0.31+vec2(17.0,5.0)));
+      // cells under a pixel are their mean, not a shimmer
+      float cfw=max(fwidth(xy.x),fwidth(xy.y));
+      cells=mix(cells,0.74,smoothstep(0.35,1.2,cfw));
       float thin=smoothstep(0.20,0.65,cn(sphere(lon,lat)*9.0+vec3(2.0,4.0,8.0)));
       // dense near the coast, breaking into open cells and rifts offshore
       float core=smoothstep(0.10,0.60,lE+0.20*fray);
-      cloud.x+=uWind.w*sc*cells*mix(0.8,3.4,core)*mix(0.35,1.0,max(thin,core));
+      cloud.x+=uWind.w*sc*cells*mix(0.6,2.0,core)*mix(0.35,1.0,max(thin,core));
       cloud.y=max(cloud.y,0.25*sc*cells);
     }
   }
