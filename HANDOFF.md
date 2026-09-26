@@ -273,10 +273,12 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260926-2144`**, release 3.17 (subduction trenches, the overlay in
-  the terrain's frame, the Precambrian's own motion, moving weather, the crisp shelf break, the
-  waterline, +378 regional taxa), commit `c4c35dc3` (the record is the commit after it), verified
-  live (the `_f` alpha and the reframed `plates_time.json` served; no console errors). Before it:
+- Last live deploy: **`DATA_V=20260926-2210`**, release 3.18 (the stratocumulus decks only where
+  they form, drawn as ordinary cloud), commit `b07d3e2c` (the record is the commit after it),
+  verified live (the new cloud shader served; the 1000 Ma West African coast clear of the frosted
+  sheet; no console errors). Before it: 3.17, `DATA_V=20260926-2144`, `c4c35dc3` (subduction
+  trenches, the overlay in the terrain's frame, the Precambrian's own motion, moving weather, the
+  crisp shelf break, the waterline, +378 regional taxa). Before that:
   3.16, `DATA_V=20260926-1126`, `c9b93685`; 3.15, `DATA_V=20260926-0618`, `0715ef78`; 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
   `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
