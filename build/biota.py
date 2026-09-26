@@ -58,6 +58,7 @@ import math
 import os
 import re
 import sys
+import zlib
 
 from biota_forms import FORMS, chain
 
@@ -1079,9 +1080,21 @@ def _score(e, age, habs):
 # taxon's share of the cards in each 5 Myr bin; the second charges a taxon
 # above USE_FREE of them USE_K points per unit of excess, so it stays where it
 # fits best and the next-best taxa of each place come through. Curated lists
-# and province markers are not charged.
-USE_BIN, USE_FREE, USE_K = 5, 0.15, 90.0
+# and each card's leading province marker are not charged.
+USE_BIN, USE_FREE, USE_K, USE_CAP, USE_ITERS = 5, 0.15, 90.0, 90.0, 1
 _USE_PEN = {}
+
+# PROVINCE MARKERS (3.17). A province lists up to eight markers, and every
+# eligible one used to lead every card in the province -- so after the
+# registry grew, Ginkgo and Araucaria still stood on 75% of the cards at 150 Ma
+# and one plankter on every Devonian sea card. Now PROV_LEAD marker in each of
+# the fauna and flora sections leads each card (microbes and plankton lead
+# nothing: nobody knows a province by its acritarch), chosen by a stable hash of the label name
+# (zlib.crc32, not hash(), which is salted per process) so neighbouring labels
+# lead with different markers; the others compete as fill with PROV_BONUS
+# points' head start and the usage charge, and win wherever the place has
+# nothing more particular to show.
+PROV_LEAD, PROV_BONUS = 1, 45.0
 
 
 def _usage_pen(age, e):
@@ -1099,8 +1112,19 @@ def _section(e):
     return "other"
 
 
-def _pick(cands, quota, age, habs, chosen):
-    """Greedy, best first, with a penalty for repeating a body form."""
+#: NEAR-TIES BY PLACE (3.17). Every card scores its candidates alike, so where
+#: two genera are about as good -- two Devonian acritarchs, two Jurassic ferns --
+#: every card in the world took the same one, and the usage charge only swapped
+#: which (Girvanella on all 40 cards at 400 Ma in one pass, Leiosphaeridia on all
+#: 40 in the next). Among candidates within PICK_TIE points of the best, a card
+#: takes the one its own stable hash names, so neighbouring labels differ while
+#: nothing clearly worse is ever chosen.
+PICK_TIE = 12.0
+
+
+def _pick(cands, quota, age, habs, chosen, seed=0):
+    """Greedy, best first, with a penalty for repeating a body form; near-ties
+    are broken by `seed` (a stable hash of the card), not by name."""
     forms, genera, reps = {}, set(), set()
     for e in chosen:
         forms[e["form"]] = forms.get(e["form"], 0) + 1
@@ -1121,6 +1145,10 @@ def _pick(cands, quota, age, habs, chosen):
                 best, bs = (e, base), s
         if best is None:
             break
+        near = sorted((t for t in pool if t[1] - 30.0 * forms.get(t[0]["form"], 0) >= bs - PICK_TIE
+                       and t[1] < 400.0), key=lambda t: t[0]["n"])
+        if len(near) > 1 and best[1] < 400.0:        # curated and leading markers are not ties
+            best = near[(seed + len(out)) % len(near)]
         pool.remove(best)
         out.append(best[0])
         forms[best[0]["form"]] = forms.get(best[0]["form"], 0) + 1
@@ -1228,7 +1256,10 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
         # ice), and the model must not furnish the place with plausible neighbours
         if only and ranked:
             return ranked
-        # 2. the province's markers, where they really were and when
+        # 2. the province's markers, where they really were and when. ONE per
+        # section leads the card, so every card still reads as its province; the
+        # rest compete as fill with a head start (see PROV_LEAD).
+        mk = []
         for name in prov_markers:
             e = get(name)
             if e is None:
@@ -1243,7 +1274,18 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
                 continue
             seen.add(e["n"])
             src[e["n"]] = "province"
-            ranked.append((e, 500.0 + _score(e, age, habs)))
+            mk.append(e)
+        lead = set()
+        for sec in ("fauna", "flora"):       # a province is known by its animals and plants
+            ms = sorted((e for e in mk if _section(e) == sec), key=lambda e: (-_score(e, age, habs), e["n"]))
+            if ms:
+                h = zlib.crc32(lab["n"].encode("utf-8"))
+                lead.update(ms[(h + i) % len(ms)]["n"] for i in range(min(PROV_LEAD, len(ms))))
+        for e in mk:
+            if e["n"] in lead:
+                ranked.append((e, 500.0 + _score(e, age, habs)))
+            else:
+                ranked.append((e, _score(e, age, habs) + PROV_BONUS - _usage_pen(age, e)))
         # 3. everything else the registry places here and now
         if home is not None:
             for e in _placed(home, age, want):
@@ -1310,7 +1352,8 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
             by["fauna"] = sorted(real + gen[:1], key=lambda t: (-t[1], t[0]["n"]))
         chosen, groups = [], []
         for k in ("fauna", "flora", "other"):
-            got = _pick(by[k], have[k], age, habs, chosen)
+            got = _pick(by[k], have[k], age, habs, chosen,
+                        seed=zlib.crc32((lab["n"] + "|" + k).encode("utf-8")))
             chosen += got
             # a Lagerstaette is where the animals were found, not one of them
             got = [e for e in got if not e.get("assemblage")] + \
@@ -1429,25 +1472,34 @@ def curated_at(spans, age):
 
 
 def build_cards(labels, prov_recs, prov_runs, curated, icons, features=None, log=print):
-    """Two passes (see _USE_PEN): measure fill usage, then compose balanced."""
+    """Balanced composition (see _USE_PEN): compose, measure each taxon's share
+    of the cards in every bin, raise the charge on the over-used, compose again."""
     global _USE_PEN
     _USE_PEN = {}
-    table, cards, stats = _build_cards(labels, prov_recs, prov_runs, curated, icons, features,
-                                       log=lambda *a, **k: None)
-    use, ncard = {}, {}
-    for c in cards.values():
-        per_bin = {}
-        for r in c["r"]:
-            for a in range(r[0], r[1] + 1):
-                b = int(a // USE_BIN)
-                per_bin.setdefault(b, set()).update(i for _k, ids in r[4] for i in ids)
-        for b, ids in per_bin.items():
-            ncard[b] = ncard.get(b, 0) + 1
-            for i in ids:
-                use[(b, table[i]["n"])] = use.get((b, table[i]["n"]), 0) + 1
-    _USE_PEN = {k: USE_K * (v / ncard[k[0]] - USE_FREE) for k, v in use.items()
-                if ncard.get(k[0], 0) >= 6 and v / ncard[k[0]] > USE_FREE}
-    _PLACED.clear()
+    for _it in range(USE_ITERS):
+        table, cards, _stats = _build_cards(labels, prov_recs, prov_runs, curated, icons, features,
+                                            log=lambda *a, **k: None)
+        use, ncard = {}, {}
+        for c in cards.values():
+            per_bin = {}
+            for r in c["r"]:
+                for a in range(r[0], r[1] + 1):
+                    b = int(a // USE_BIN)
+                    per_bin.setdefault(b, set()).update(i for _k, ids in r[4] for i in ids)
+            for b, ids in per_bin.items():
+                ncard[b] = ncard.get(b, 0) + 1
+                for i in ids:
+                    use[(b, table[i]["n"])] = use.get((b, table[i]["n"]), 0) + 1
+        # dual ascent: a taxon still above its fair share is charged more, one
+        # still below it is forgiven some, and no charge exceeds USE_CAP -- so
+        # an over-used genus can step aside for the next genus, never for a
+        # phylum-level name the score already ranks far below it
+        for k, v in use.items():
+            if ncard.get(k[0], 0) < 6:
+                continue
+            pen = _USE_PEN.get(k, 0.0) + USE_K * (v / ncard[k[0]] - USE_FREE)
+            _USE_PEN[k] = min(USE_CAP, max(0.0, pen))
+        _PLACED.clear()
     return _build_cards(labels, prov_recs, prov_runs, curated, icons, features, log=log)
 
 

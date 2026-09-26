@@ -1,0 +1,8195 @@
+{
+ "taxa": {
+  "Adalatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 72,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "The 'crazy beast': a badger-sized gondwanatherian with a skeleton so odd it is hard to compare with any other mammal.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Gondwanatheria"
+   },
+   "pbdb": {
+    "asked": "Adalatherium",
+    "matched": "Adalatherium",
+    "exact": true,
+    "oid": "txn:419514",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Adalatheriidae",
+    "genus": "Adalatherium",
+    "regions": {
+     "mg": 1
+    }
+   },
+   "box": [
+    [
+     43,
+     51,
+     -26,
+     -11.5
+    ]
+   ]
+  },
+  "Aetosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 225,
+   "lad": 205,
+   "range": [
+    "eu-s",
+    "gl",
+    "na-w"
+   ],
+   "note": "A small aetosaur, a metre to a metre and a half long, armoured in rows of plates; one slab holds 24 juveniles buried together.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Aetosauria",
+    "family": "Stagonolepididae"
+   },
+   "pbdb": {
+    "asked": "Aetosaurus",
+    "matched": "Aetosaurus",
+    "exact": true,
+    "oid": "txn:38269",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 227.3,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stagonolepididae",
+    "genus": "Aetosaurus",
+    "regions": {
+     "eu-s": 5,
+     "gl": 1
+    }
+   }
+  },
+  "Alanqa": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 100,
+   "lad": 95,
+   "range": [
+    "af-n"
+   ],
+   "note": "An azhdarchoid pterosaur with a straight, pointed, spear-like beak and a wingspan of about six metres.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Azhdarchidae"
+   },
+   "pbdb": {
+    "asked": "Alanqa",
+    "matched": "Alanqa",
+    "exact": true,
+    "oid": "txn:167134",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Azhdarchidae",
+    "genus": "Alanqa",
+    "regions": {
+     "af-n": 4
+    }
+   },
+   "box": [
+    [
+     -8,
+     5,
+     28,
+     33
+    ]
+   ]
+  },
+  "Albertosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 71,
+   "lad": 68,
+   "range": [
+    "na-w"
+   ],
+   "note": "A nine-metre tyrannosaur; a bone bed of 26 individuals of all ages suggests it lived, or at least died, in groups.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "pbdb": {
+    "asked": "Albertosaurus",
+    "matched": "Albertosaurus",
+    "exact": true,
+    "oid": "txn:38607",
+    "rank": "genus",
+    "extant": false,
+    "noc": 32,
+    "fea": 85.7,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Albertosaurus",
+    "regions": {
+     "na-w": 31,
+     "na-e": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   }
+  },
+  "Alioramus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 70,
+   "lad": 68,
+   "range": [
+    "as-c"
+   ],
+   "note": "A long-snouted tyrannosaur with a row of bony bumps along its nose -- a slender cousin of the giant Tarbosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "pbdb": {
+    "asked": "Alioramus",
+    "matched": "Alioramus",
+    "exact": true,
+    "oid": "txn:38609",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Alioramus",
+    "regions": {
+     "as-c": 1,
+     "as-ne": 1,
+     "as-s": 1
+    }
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Amphitherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 168,
+   "lad": 165,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A tiny Middle Jurassic mammal known from jaws found at Stonesfield in Oxfordshire -- among the first Mesozoic mammals ever recognised.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dryolestida",
+    "family": "Amphitheriidae"
+   },
+   "pbdb": {
+    "asked": "Amphitherium",
+    "matched": "Amphitherium",
+    "exact": true,
+    "oid": "txn:39880",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Amphitheriidae",
+    "genus": "Amphitherium",
+    "regions": {
+     "eu-n": 4
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Anchisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 195,
+   "lad": 190,
+   "range": [
+    "na-e"
+   ],
+   "note": "A two-metre sauropodomorph whose bones, found in 1818, were the first dinosaur skeleton discovered in North America -- though not recognised as one for decades.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Anchisauridae"
+   },
+   "pbdb": {
+    "asked": "Anchisaurus",
+    "matched": "Anchisaurus",
+    "exact": true,
+    "oid": "txn:38637",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 201.4,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Anchisaurus",
+    "regions": {
+     "na-e": 5
+    }
+   },
+   "box": [
+    [
+     -74,
+     -71,
+     41,
+     43
+    ]
+   ]
+  },
+  "Anomopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 250,
+   "lad": 240,
+   "range": [
+    "eu"
+   ],
+   "note": "A tall fern of the red Buntsandstein plains -- among the first plants to re-vegetate a landscape that the end-Permian extinction had stripped bare.",
+   "cls": {
+    "class": "Polypodiopsida"
+   },
+   "pbdb": {
+    "asked": "Anomopteris",
+    "matched": "Anomopteris",
+    "exact": true,
+    "oid": "txn:273509",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 251.902,
+    "lla": 227.3,
+    "phylum": "Pteridophyta",
+    "class": "Pteropsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Anomopteris",
+    "regions": {
+     "eu-s": 9,
+     "as-ne": 2,
+     "eu-n": 1
+    },
+    "fea_r": 251.35,
+    "lla_r": 232.15
+   }
+  },
+  "Araripesuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 115,
+   "lad": 88,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-n"
+   ],
+   "note": "A small, long-legged, dog-like crocodyliform that ran on land across Cretaceous Gondwana, found from Brazil and Niger to Patagonia.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodyliformes",
+    "family": "Uruguaysuchidae"
+   },
+   "pbdb": {
+    "asked": "Araripesuchus",
+    "matched": "Araripesuchus",
+    "exact": true,
+    "oid": "txn:38390",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 121.4,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Uruguaysuchidae",
+    "genus": "Araripesuchus",
+    "regions": {
+     "af-n": 8,
+     "sa-s": 5,
+     "sa-n": 3,
+     "af-w": 2,
+     "af-e": 1,
+     "mg": 1
+    },
+    "fea_r": 116.38,
+    "lla_r": 69.1
+   }
+  },
+  "Asilisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 245,
+   "lad": 242,
+   "range": [
+    "af-e"
+   ],
+   "note": "A metre-long silesaurid, a close cousin of the dinosaurs, from the Anisian -- proof that the dinosaur line had split off at least ten million years before the first dinosaur fossils.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Archosauria",
+    "family": "Silesauridae"
+   },
+   "pbdb": {
+    "asked": "Asilisaurus",
+    "matched": "Asilisaurus",
+    "exact": true,
+    "oid": "txn:164324",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 247,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Silesauridae",
+    "genus": "Asilisaurus",
+    "regions": {
+     "af-e": 4
+    }
+   }
+  },
+  "Asteriornis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "gamebird",
+   "fad": 67,
+   "lad": 66.7,
+   "range": [
+    "eu-n"
+   ],
+   "note": "The 'wonderchicken': the oldest skull of a modern bird, a quail-sized relative of both chickens and ducks from the last Cretaceous shores of Europe.",
+   "hab": [
+    "coast"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Galliformes"
+   },
+   "pbdb": {
+    "asked": "Asteriornis",
+    "matched": "Asteriornis",
+    "exact": true,
+    "oid": "txn:413463",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Asteriornis",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Atlasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 168,
+   "lad": 163,
+   "range": [
+    "af-n"
+   ],
+   "note": "A fifteen-metre sauropod of the Moroccan High Atlas with unusually long legs for its body -- a brachiosaur-like build reached independently.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   },
+   "pbdb": {
+    "asked": "Atlasaurus",
+    "matched": "Atlasaurus",
+    "exact": true,
+    "oid": "txn:53041",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Atlasaurus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     -10,
+     0,
+     29.5,
+     34
+    ]
+   ]
+  },
+  "Aucasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 84,
+   "lad": 80,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A six-metre abelisaurid with tiny arms and low bumps instead of horns, known from one of the most complete abelisaurid skeletons.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Abelisauridae"
+   },
+   "pbdb": {
+    "asked": "Aucasaurus",
+    "matched": "Aucasaurus",
+    "exact": true,
+    "oid": "txn:54523",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Abelisauridae",
+    "genus": "Aucasaurus",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Bajadasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 140,
+   "lad": 130,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A dicraeosaurid with very long, forward-curving spines on its neck -- a defensive palisade, or the frame of a display.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Dicraeosauridae"
+   },
+   "pbdb": {
+    "asked": "Bajadasaurus",
+    "matched": "Bajadasaurus",
+    "exact": true,
+    "oid": "txn:381349",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 139.1,
+    "lla": 132.6,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dicraeosauridae",
+    "genus": "Bajadasaurus",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Balaur": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A stocky island paravian of Hațeg -- a dromaeosaur or a flightless bird -- with two big sickle claws on each foot.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   },
+   "pbdb": {
+    "asked": "Balaur",
+    "matched": "Balaur",
+    "exact": true,
+    "oid": "txn:170642",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Balaur",
+    "regions": {
+     "eu-s": 2
+    }
+   },
+   "box": [
+    [
+     20,
+     27,
+     44,
+     48
+    ]
+   ]
+  },
+  "Barapasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 190,
+   "lad": 178,
+   "range": [
+    "in"
+   ],
+   "note": "One of the earliest true sauropods, fourteen metres long, from a single Early Jurassic bone bed in central India holding at least six individuals.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   },
+   "pbdb": {
+    "asked": "Barapasaurus",
+    "matched": "Barapasaurus",
+    "exact": true,
+    "oid": "txn:38656",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Barapasaurus",
+    "regions": {
+     "in": 2
+    }
+   },
+   "box": [
+    [
+     78,
+     81.5,
+     17,
+     20.5
+    ]
+   ]
+  },
+  "Baurusuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 84,
+   "lad": 70,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A deep-snouted land crocodyliform with blade-like teeth, one of the top predators of the Late Cretaceous of Brazil, where big theropods were scarce.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodyliformes",
+    "family": "Baurusuchidae"
+   },
+   "pbdb": {
+    "asked": "Baurusuchus",
+    "matched": "Baurusuchus",
+    "exact": true,
+    "oid": "txn:38394",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Baurusuchidae",
+    "genus": "Baurusuchus",
+    "regions": {
+     "sa-s": 5
+    }
+   }
+  },
+  "Beipiaosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 125,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A two-metre therizinosaur with long, stiff filament feathers, among the first dinosaurs found with a feathery coat.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Therizinosauridae"
+   },
+   "pbdb": {
+    "asked": "Beipiaosaurus",
+    "matched": "Beipiaosaurus",
+    "exact": true,
+    "oid": "txn:68240",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Beipiaosaurus",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Berberosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 183,
+   "lad": 175,
+   "range": [
+    "af-n"
+   ],
+   "note": "A five-metre early ceratosaur of the Toarcian High Atlas, near the root of the line that led to the abelisaurids.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Abelisauridae"
+   },
+   "pbdb": {
+    "asked": "Berberosaurus",
+    "matched": "Berberosaurus",
+    "exact": true,
+    "oid": "txn:109007",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 192.9,
+    "lla": 174.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratosauridae",
+    "genus": "Berberosaurus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     -10,
+     0,
+     29.5,
+     34
+    ]
+   ]
+  },
+  "Bienotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 199,
+   "lad": 190,
+   "range": [
+    "as-s"
+   ],
+   "note": "A rabbit-sized tritylodontid, a gnawing plant-eater among the last of the non-mammal cynodonts.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Tritylodontidae"
+   },
+   "pbdb": {
+    "asked": "Bienotherium",
+    "matched": "Bienotherium",
+    "exact": true,
+    "oid": "txn:39209",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 201.4,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Tritylodontidae",
+    "genus": "Bienotherium",
+    "regions": {
+     "as-s": 6
+    }
+   },
+   "box": [
+    [
+     99,
+     106,
+     23,
+     27.5
+    ]
+   ]
+  },
+  "Borealestes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 168,
+   "lad": 165,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A shrew-sized docodont of the Middle Jurassic lagoon shores, known from nearly complete skeletons from the Isle of Skye.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Docodonta",
+    "family": "Docodontidae"
+   },
+   "pbdb": {
+    "asked": "Borealestes",
+    "matched": "Borealestes",
+    "exact": true,
+    "oid": "txn:39774",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Docodonta",
+    "family": "Docodontidae",
+    "genus": "Borealestes",
+    "regions": {
+     "eu-n": 4
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Buitreraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 100,
+   "lad": 96,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A chicken-sized, long-snouted dromaeosaur of the southern unenlagiine branch, which probably caught small prey and fish.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Unenlagiidae"
+   },
+   "pbdb": {
+    "asked": "Buitreraptor",
+    "matched": "Buitreraptor",
+    "exact": true,
+    "oid": "txn:68201",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 113.2,
+    "lla": 110.1,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Buitreraptor",
+    "regions": {
+     "sa-s": 3
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Candeleros Formation, late Albian-early Cenomanian (Leanza et al. 2004); the PBDB bins its collections older"
+  },
+  "Caudipteryx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 125,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A peacock-sized oviraptorosaur with a fan of long feathers on its tail and short feathered arms -- a dinosaur built for display, not flight.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Oviraptorosauria"
+   },
+   "pbdb": {
+    "asked": "Caudipteryx",
+    "matched": "Caudipteryx",
+    "exact": true,
+    "oid": "txn:66065",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Caudipteryx",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Centrosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 76.5,
+   "lad": 75.5,
+   "range": [
+    "na-w"
+   ],
+   "note": "The commonest horned dinosaur of the Dinosaur Park Formation; one bone bed in Alberta holds thousands, probably drowned together crossing a river in flood.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ceratopsia",
+    "family": "Ceratopsidae"
+   },
+   "pbdb": {
+    "asked": "Centrosaurus",
+    "matched": "Centrosaurus",
+    "exact": true,
+    "oid": "txn:38854",
+    "rank": "genus",
+    "extant": false,
+    "noc": 57,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratopsidae",
+    "genus": "Centrosaurus",
+    "regions": {
+     "na-w": 57
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   }
+  },
+  "Chasmosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 76.5,
+   "lad": 75.5,
+   "range": [
+    "na-w"
+   ],
+   "note": "A horned dinosaur with a long, heart-shaped frill framing skin-covered windows -- a display structure rather than a shield.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ceratopsia",
+    "family": "Ceratopsidae"
+   },
+   "pbdb": {
+    "asked": "Chasmosaurus",
+    "matched": "Chasmosaurus",
+    "exact": true,
+    "oid": "txn:38855",
+    "rank": "genus",
+    "extant": false,
+    "noc": 21,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratopsidae",
+    "genus": "Chasmosaurus",
+    "regions": {
+     "na-w": 21
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   }
+  },
+  "Citipati": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-c"
+   ],
+   "note": "An emu-sized oviraptorid known from adults sitting on their nests, arms spread over the eggs like a brooding bird, smothered by sand where they sat.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Oviraptoridae"
+   },
+   "pbdb": {
+    "asked": "Citipati",
+    "matched": "Citipati",
+    "exact": true,
+    "oid": "txn:57023",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Oviraptoridae",
+    "genus": "Citipati",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Clathropteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 230,
+   "lad": 165,
+   "range": [
+    "eu",
+    "gl",
+    "as-ne",
+    "as-s",
+    "as-c",
+    "na-e",
+    "sa-s"
+   ],
+   "note": "A dipterid fern whose large leaves spread like the fingers of a hand, meshed with a fine grid of veins -- a hallmark of the humid Late Triassic and Early Jurassic in both hemispheres.",
+   "w": 1,
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Gleicheniales",
+    "family": "Dipteridaceae"
+   },
+   "pbdb": {
+    "asked": "Clathropteris",
+    "matched": "Clathropteris",
+    "exact": true,
+    "oid": "txn:273514",
+    "rank": "genus",
+    "extant": false,
+    "noc": 302,
+    "fea": 241.464,
+    "lla": 137.05,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Polypodiaceae",
+    "genus": "Clathropteris",
+    "regions": {
+     "as-s": 83,
+     "as-c": 82,
+     "eu-n": 32,
+     "as-ne": 28,
+     "as-n": 21,
+     "eu-s": 18,
+     "gl": 17,
+     "sa-s": 5,
+     "na-e": 4,
+     "as-w": 4,
+     "na-n": 2,
+     "as-sb": 2,
+     "as-ic": 2,
+     "na-w": 1,
+     "ar": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 168.1
+   }
+  },
+  "Concavenator": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 127,
+   "lad": 125,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A six-metre carcharodontosaurid with a strange tall hump over its hips, raised on two lengthened vertebrae.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Carcharodontosauridae"
+   },
+   "pbdb": {
+    "asked": "Concavenator",
+    "matched": "Concavenator",
+    "exact": true,
+    "oid": "txn:170753",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Carcharodontosauridae",
+    "genus": "Concavenator",
+    "regions": {
+     "eu-s": 1
+    }
+   },
+   "box": [
+    [
+     -9.5,
+     3.5,
+     36,
+     44
+    ]
+   ]
+  },
+  "Coniopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 190,
+   "lad": 110,
+   "range": [
+    "eu",
+    "gl",
+    "as-n",
+    "as-c",
+    "as-ne",
+    "as-s",
+    "na-n"
+   ],
+   "note": "A ground fern of the Dicksoniaceae, the tree ferns' low-growing kin, and the commonest fern of the Middle Jurassic of Laurasia, carpeting delta flats from England to Siberia and northern China.",
+   "w": 1,
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Cyatheales",
+    "family": "Dicksoniaceae"
+   },
+   "pbdb": {
+    "asked": "Coniopteris",
+    "matched": "Coniopteris",
+    "exact": true,
+    "oid": "txn:56101",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1177,
+    "fea": 251.902,
+    "lla": 93.9,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Cyatheales",
+    "family": "Cyatheaceae",
+    "genus": "Coniopteris",
+    "regions": {
+     "as-n": 343,
+     "as-c": 339,
+     "as-ne": 211,
+     "eu-n": 85,
+     "as-s": 46,
+     "na-w": 37,
+     "as-w": 29,
+     "in": 21,
+     "eu-s": 15,
+     "au-e": 14,
+     "an": 8,
+     "ca": 7,
+     "na-n": 7,
+     "sa-s": 6,
+     "nz": 6,
+     "mg": 1,
+     "sa-n": 1,
+     "af-s": 1
+    },
+    "fea_r": 188.05,
+    "lla_r": 117.3
+   }
+  },
+  "Corythosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 77,
+   "lad": 75.5,
+   "range": [
+    "na-w"
+   ],
+   "note": "A helmet-crested duckbill nine metres long; mummified skeletons keep the imprint of its pebbly skin.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Corythosaurus",
+    "matched": "Corythosaurus",
+    "exact": true,
+    "oid": "txn:38760",
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Corythosaurus",
+    "regions": {
+     "na-w": 29
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   }
+  },
+  "Credneria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 100,
+   "lad": 72,
+   "range": [
+    "eu",
+    "na-w",
+    "na-e"
+   ],
+   "note": "Large leaves of Late Cretaceous trees related to the planes -- part of the broadleaf forest that spread through the northern continents after the mid-Cretaceous.",
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Proteales"
+   },
+   "pbdb": {
+    "asked": "Credneria",
+    "matched": "Credneria",
+    "exact": true,
+    "oid": "txn:56052",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 100.5,
+    "lla": 37.71,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Proteales",
+    "family": "Platanaceae",
+    "genus": "Credneria",
+    "regions": {
+     "na-w": 10,
+     "as-ne": 1
+    },
+    "fea_r": 97.2,
+    "lla_r": 42.89
+   }
+  },
+  "Cryolophosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 194,
+   "lad": 188,
+   "range": [
+    "an"
+   ],
+   "note": "A six-metre predator with a crest running across its skull from side to side, from the Early Jurassic of the Transantarctic Mountains -- dug out at 4,000 metres, 650 km from the South Pole.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Cryolophosaurus",
+    "matched": "Cryolophosaurus",
+    "exact": true,
+    "oid": "txn:64371",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Cryolophosaurus",
+    "regions": {
+     "an": 1
+    }
+   }
+  },
+  "Cyclotosaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 235,
+   "lad": 205,
+   "range": [
+    "eu",
+    "gl",
+    "as-ic"
+   ],
+   "note": "A three-metre capitosaur whose ear notch closed into a ring -- a top predator of Late Triassic lakes and rivers from Europe to Greenland and Thailand.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Mastodonsauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Cyclotosaurus",
+    "matched": "Cyclotosaurus",
+    "exact": true,
+    "oid": "txn:37095",
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 247,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Cyclotosauridae",
+    "genus": "Cyclotosaurus",
+    "regions": {
+     "eu-s": 14,
+     "eu-n": 13,
+     "gl": 1,
+     "as-ic": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 203.55
+   }
+  },
+  "Czekanowskia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ginkgo",
+   "fad": 200,
+   "lad": 100,
+   "range": [
+    "as-n",
+    "as-c",
+    "as-ne",
+    "eu",
+    "gl"
+   ],
+   "note": "A shrub of the extinct Czekanowskiales, near relatives of Ginkgo, whose needle-thin leaves grew in bunches on short shoots; it covered the cool, wet lowlands of Jurassic Siberia and Mongolia in deciduous thickets.",
+   "w": 1,
+   "cls": {
+    "class": "Ginkgoopsida",
+    "order": "Czekanowskiales",
+    "family": "Czekanowskiaceae"
+   },
+   "pbdb": {
+    "asked": "Czekanowskia",
+    "matched": "Czekanowskia",
+    "exact": true,
+    "oid": "txn:157150",
+    "rank": "genus",
+    "extant": false,
+    "noc": 584,
+    "fea": 251.902,
+    "lla": 113.2,
+    "phylum": "Ginkgophyta",
+    "class": "Ginkgoopsida",
+    "order": "Czekanowskiales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Czekanowskia",
+    "regions": {
+     "as-n": 239,
+     "as-c": 133,
+     "as-ne": 95,
+     "eu-n": 42,
+     "gl": 17,
+     "as-w": 16,
+     "na-w": 14,
+     "as-s": 11,
+     "eu-s": 10,
+     "na-n": 2,
+     "sa-s": 2,
+     "in": 2,
+     "au-e": 1
+    },
+    "fea_r": 216.5,
+    "lla_r": 146.15
+   }
+  },
+  "Dacentrurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 154,
+   "lad": 146,
+   "range": [
+    "eu"
+   ],
+   "note": "A stegosaur up to eight metres long with paired spikes rather than broad plates along its back -- the commonest stegosaur of Late Jurassic Europe.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "pbdb": {
+    "asked": "Dacentrurus",
+    "matched": "Dacentrurus",
+    "exact": true,
+    "oid": "txn:38808",
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 154.8,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Dacentrurus",
+    "regions": {
+     "eu-s": 27,
+     "eu-n": 2,
+     "na-w": 2
+    },
+    "fea_r": 152.0,
+    "lla_r": 140.07
+   }
+  },
+  "Dakosaurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seacroc",
+   "fad": 155,
+   "lad": 137,
+   "range": [
+    "eu",
+    "ca",
+    "sa-s"
+   ],
+   "note": "A metriorhynchid sea crocodile with a deep, short skull and serrated teeth -- a macropredator that fed on marine reptiles, the killer whale of its seas.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Thalattosuchia",
+    "family": "Metriorhynchidae"
+   },
+   "pbdb": {
+    "asked": "Dakosaurus",
+    "matched": "Dakosaurus",
+    "exact": true,
+    "oid": "txn:36588",
+    "rank": "genus",
+    "extant": false,
+    "noc": 37,
+    "fea": 165.3,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Metriorhynchidae",
+    "genus": "Dakosaurus",
+    "regions": {
+     "eu-s": 17,
+     "eu-n": 11,
+     "sa-s": 7,
+     "ca": 1,
+     "na-w": 1
+    },
+    "fea_r": 158.15,
+    "lla_r": 120.48
+   }
+  },
+  "Darwinopterus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 161,
+   "lad": 159,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A pterosaur that combined the long tail of the early kind with the head and neck of the later -- a 'modular' intermediate; one was preserved with an egg.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Wukongopteridae"
+   },
+   "pbdb": {
+    "asked": "Darwinopterus",
+    "matched": "Darwinopterus",
+    "exact": true,
+    "oid": "txn:157945",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 168.2,
+    "lla": 152.21,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Darwinopterus",
+    "regions": {
+     "as-ne": 4
+    }
+   },
+   "box": [
+    [
+     115,
+     124,
+     39,
+     43
+    ]
+   ]
+  },
+  "Daspletosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 77,
+   "lad": 74,
+   "range": [
+    "na-w"
+   ],
+   "note": "A heavily built nine-metre tyrannosaur of Campanian Alberta and Montana, a forerunner of Tyrannosaurus in build and bite.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "pbdb": {
+    "asked": "Daspletosaurus",
+    "matched": "Daspletosaurus",
+    "exact": true,
+    "oid": "txn:38608",
+    "rank": "genus",
+    "extant": false,
+    "noc": 21,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Daspletosaurus",
+    "regions": {
+     "na-w": 21
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   }
+  },
+  "Deltadromeus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 96,
+   "lad": 93,
+   "range": [
+    "af-n"
+   ],
+   "note": "A long-limbed, eight-metre theropod of the mid-Cretaceous river systems of North Africa -- a fast runner beside the fish-eating Spinosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Deltadromeus",
+    "matched": "Deltadromeus",
+    "exact": true,
+    "oid": "txn:65366",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Noasauridae",
+    "genus": "Deltadromeus",
+    "regions": {
+     "as-w": 4,
+     "af-n": 2
+    }
+   },
+   "box": [
+    [
+     -8,
+     5,
+     28,
+     33
+    ]
+   ]
+  },
+  "Dicraeosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 157,
+   "lad": 150,
+   "range": [
+    "af-e"
+   ],
+   "note": "A short-necked sauropod with a double row of tall spines along its neck and back, which may have held up a ridge or sail.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Dicraeosauridae"
+   },
+   "pbdb": {
+    "asked": "Dicraeosaurus",
+    "matched": "Dicraeosaurus",
+    "exact": true,
+    "oid": "txn:38668",
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 161.5,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dicraeosauridae",
+    "genus": "Dicraeosaurus",
+    "regions": {
+     "af-e": 18,
+     "af-s": 1
+    },
+    "fea_r": 150.7,
+    "lla_r": 146.15
+   }
+  },
+  "Dictyophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 230,
+   "lad": 165,
+   "range": [
+    "eu",
+    "gl",
+    "as-ne",
+    "as-s",
+    "as-ic",
+    "as-c",
+    "na-w",
+    "ca",
+    "sa-s",
+    "au-e",
+    "an"
+   ],
+   "note": "A dipterid fern with a fan of broad, net-veined leaflets. Its only living relatives are the umbrella ferns of South-East Asian clearings; in the Late Triassic and Early Jurassic the family was one of the commonest on Earth.",
+   "w": 1,
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Gleicheniales",
+    "family": "Dipteridaceae"
+   },
+   "pbdb": {
+    "asked": "Dictyophyllum",
+    "matched": "Dictyophyllum",
+    "exact": true,
+    "oid": "txn:386451",
+    "rank": "genus",
+    "extant": false,
+    "noc": 297,
+    "fea": 247,
+    "lla": 113.2,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Gleicheniales",
+    "family": "Dipteridaceae",
+    "genus": "Dictyophyllum",
+    "regions": {
+     "as-s": 82,
+     "eu-n": 52,
+     "as-c": 39,
+     "as-ne": 31,
+     "gl": 20,
+     "eu-s": 20,
+     "sa-s": 18,
+     "as-w": 9,
+     "in": 5,
+     "as-n": 4,
+     "au-e": 3,
+     "as-sb": 3,
+     "nz": 3,
+     "na-av": 1,
+     "na-n": 1,
+     "na-w": 1,
+     "ar": 1,
+     "mg": 1,
+     "as-ic": 1,
+     "na-e": 1,
+     "af-s": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 158.9
+   }
+  },
+  "Didelphodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 69,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "An otter-sized metatherian of the last of the Cretaceous with one of the strongest bites for its size of any mammal -- it crushed snails and small vertebrates.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Metatheria",
+    "family": "Stagodontidae"
+   },
+   "pbdb": {
+    "asked": "Didelphodon",
+    "matched": "Didelphodon",
+    "exact": true,
+    "oid": "txn:40007",
+    "rank": "genus",
+    "extant": false,
+    "noc": 96,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stagodontidae",
+    "genus": "Didelphodon",
+    "regions": {
+     "na-w": 95,
+     "na-e": 1
+    },
+    "fea_r": 74.8,
+    "lla_r": 69.1
+   }
+  },
+  "Dilong": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 127,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A two-metre early tyrannosauroid with a coat of protofeathers -- evidence that the tyrannosaur line was fuzzy from the start.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Proceratosauridae"
+   },
+   "pbdb": {
+    "asked": "Dilong",
+    "matched": "Dilong",
+    "exact": true,
+    "oid": "txn:58835",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Dilong",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Dimorphodon": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 199,
+   "lad": 191,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A big-headed early pterosaur with a 1.4-metre wingspan and two kinds of teeth; its legs and claws suggest it climbed well and hunted on the ground as much as in the air.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Dimorphodontidae"
+   },
+   "pbdb": {
+    "asked": "Dimorphodon",
+    "matched": "Dimorphodon",
+    "exact": true,
+    "oid": "txn:38464",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 201.4,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Dimorphodontidae",
+    "genus": "Dimorphodon",
+    "regions": {
+     "eu-n": 2,
+     "na-e": 1
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Docodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 155,
+   "lad": 148,
+   "range": [
+    "na-w"
+   ],
+   "note": "A shrew-sized docodont with complex grinding molars -- a side branch of the mammals that could chew as well as shear.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Docodonta",
+    "family": "Docodontidae"
+   },
+   "pbdb": {
+    "asked": "Docodon",
+    "matched": "Docodon",
+    "exact": true,
+    "oid": "txn:39775",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 154.8,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Docodonta",
+    "family": "Docodontidae",
+    "genus": "Docodon",
+    "regions": {
+     "na-w": 15
+    },
+    "fea_r": 148.95,
+    "lla_r": 146.15
+   }
+  },
+  "Dorygnathus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 184,
+   "lad": 180,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A long-tailed pterosaur of the Toarcian with a one-metre wingspan and interlocking fangs at the tip of its jaws for seizing fish.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Rhamphorhynchidae"
+   },
+   "pbdb": {
+    "asked": "Dorygnathus",
+    "matched": "Dorygnathus",
+    "exact": true,
+    "oid": "txn:38472",
+    "rank": "genus",
+    "extant": false,
+    "noc": 37,
+    "fea": 184.2,
+    "lla": 182.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Rhamphorhynchidae",
+    "genus": "Dorygnathus",
+    "regions": {
+     "eu-s": 34,
+     "eu-n": 3
+    },
+    "fea_r": 183.55,
+    "lla_r": 183.55
+   }
+  },
+  "Dreadnoughtus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 77,
+   "lad": 66,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A titanosaur about 26 metres long, known from a remarkably complete skeleton -- and still growing when it died.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Dreadnoughtus",
+    "matched": "Dreadnoughtus",
+    "exact": true,
+    "oid": "txn:304823",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Dreadnoughtus",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Dryosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 155,
+   "lad": 148,
+   "range": [
+    "na-w"
+   ],
+   "note": "A three-metre, long-legged, fast plant-eater of the Morrison plains -- a gazelle among the giants.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Dryosauridae"
+   },
+   "pbdb": {
+    "asked": "Dryosaurus",
+    "matched": "Dryosaurus",
+    "exact": true,
+    "oid": "txn:38731",
+    "rank": "genus",
+    "extant": false,
+    "noc": 24,
+    "fea": 154.8,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dryosauridae",
+    "genus": "Dryosaurus",
+    "regions": {
+     "na-w": 21,
+     "eu-s": 2,
+     "eu-n": 1
+    },
+    "fea_r": 153.5,
+    "lla_r": 146.15
+   }
+  },
+  "Dysalotosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 155,
+   "lad": 150,
+   "range": [
+    "af-e"
+   ],
+   "note": "A small, fast ornithopod found by the hundreds in one bone bed -- a herd of all ages killed together, perhaps by drought.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Dryosauridae"
+   },
+   "pbdb": {
+    "asked": "Dysalotosaurus",
+    "matched": "Dysalotosaurus",
+    "exact": true,
+    "oid": "txn:56513",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 152.21,
+    "lla": 149.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dryosauridae",
+    "genus": "Dysalotosaurus",
+    "regions": {
+     "af-e": 1
+    }
+   }
+  },
+  "Effigia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 212,
+   "lad": 205,
+   "range": [
+    "na-w"
+   ],
+   "note": "A toothless, beaked, two-legged reptile of the crocodile line that looks exactly like an ostrich dinosaur -- 80 million years before the ostrich dinosaurs.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pseudosuchia",
+    "family": "Shuvosauridae"
+   },
+   "pbdb": {
+    "asked": "Effigia",
+    "matched": "Effigia",
+    "exact": true,
+    "oid": "txn:70614",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 205.7,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Shuvosauridae",
+    "genus": "Effigia",
+    "regions": {
+     "na-w": 1
+    }
+   }
+  },
+  "Eileanchelys": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "turtle",
+   "fad": 168,
+   "lad": 166,
+   "range": [
+    "eu-n"
+   ],
+   "note": "One of the earliest water-dwelling turtles, from the Middle Jurassic lagoons of the Isle of Skye -- evidence that turtles took to the water early.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudinata"
+   },
+   "realms": [
+    "fresh"
+   ],
+   "pbdb": {
+    "asked": "Eileanchelys",
+    "matched": "Eileanchelys",
+    "exact": true,
+    "oid": "txn:252658",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Eileanchelys",
+    "regions": {
+     "eu-n": 1
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Eocarcharia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 115,
+   "lad": 110,
+   "range": [
+    "af-n"
+   ],
+   "note": "A carcharodontosaurid with a thick bony brow over each eye, an early relative of the giant Carcharodontosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Carcharodontosauridae"
+   },
+   "pbdb": {
+    "asked": "Eocarcharia",
+    "matched": "Eocarcharia",
+    "exact": true,
+    "oid": "txn:123317",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 121.4,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Carcharodontosauridae",
+    "genus": "Eocarcharia",
+    "regions": {
+     "af-n": 2
+    }
+   },
+   "box": [
+    [
+     0,
+     15,
+     12,
+     22
+    ]
+   ]
+  },
+  "Eomaia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 125,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A ten-centimetre climbing mammal preserved with its fur; once called the oldest eutherian, it is now placed just off the placental line.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Eutheria",
+    "family": "Eomaiidae"
+   },
+   "pbdb": {
+    "asked": "Eomaia",
+    "matched": "Eomaia",
+    "exact": true,
+    "oid": "txn:67562",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Eomaia",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Eotyrannus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 127,
+   "lad": 122,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A four-metre, long-armed, lightly built early tyrannosauroid -- a sketch of Tyrannosaurus sixty million years before it.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauroidea"
+   },
+   "pbdb": {
+    "asked": "Eotyrannus",
+    "matched": "Eotyrannus",
+    "exact": true,
+    "oid": "txn:68315",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 132.6,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Eotyrannus",
+    "regions": {
+     "eu-n": 1
+    }
+   },
+   "box": [
+    [
+     -6,
+     7,
+     49.5,
+     53
+    ]
+   ]
+  },
+  "Equisetites arenaceus": {
+   "rank": "species",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 240,
+   "lad": 215,
+   "range": [
+    "eu"
+   ],
+   "note": "A giant Triassic horsetail with stems up to ten centimetres thick and several metres tall -- the scouring rush scaled up, standing in reed beds along the river plains.",
+   "hab": [
+    "wetland",
+    "river",
+    "lake"
+   ],
+   "cls": {
+    "class": "Equisetopsida",
+    "order": "Equisetales",
+    "family": "Equisetaceae"
+   },
+   "pbdb": {
+    "asked": "Equisetites arenaceus",
+    "matched": "Equisetites",
+    "exact": false,
+    "oid": "txn:135895",
+    "rank": "genus",
+    "extant": false,
+    "noc": 887,
+    "fea": 298.9,
+    "lla": 66,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Equisetales",
+    "family": "Equisetaceae",
+    "genus": "Equisetites",
+    "regions": {
+     "as-n": 218,
+     "as-c": 192,
+     "as-ne": 143,
+     "as-s": 71,
+     "eu-n": 70,
+     "eu-s": 63,
+     "as-w": 27,
+     "sa-s": 21,
+     "gl": 20,
+     "na-n": 20,
+     "na-e": 8,
+     "na-w": 8,
+     "in": 5,
+     "as-ic": 3,
+     "nz": 3,
+     "an": 2,
+     "au-e": 2,
+     "as-sb": 2,
+     "ar": 2,
+     "sa-n": 2,
+     "na-av": 1,
+     "ca": 1,
+     "mg": 1,
+     "af-s": 1,
+     "af-e": 1
+    },
+    "fea_r": 242.0,
+    "lla_r": 123.59
+   }
+  },
+  "Erythrosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 247,
+   "lad": 242,
+   "range": [
+    "af-s"
+   ],
+   "note": "A five-metre, big-headed archosauriform, the heaviest land predator of the early Middle Triassic -- a sign of how fast large hunters came back after the end-Permian extinction.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Archosauriformes",
+    "family": "Erythrosuchidae"
+   },
+   "pbdb": {
+    "asked": "Erythrosuchus",
+    "matched": "Erythrosuchus",
+    "exact": true,
+    "oid": "txn:38227",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 247,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Erythrosuchidae",
+    "genus": "Erythrosuchus",
+    "regions": {
+     "af-s": 6
+    }
+   }
+  },
+  "Euoplocephalus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 76.5,
+   "lad": 75,
+   "range": [
+    "na-w"
+   ],
+   "note": "A six-metre ankylosaurid armoured down to its eyelids, with a heavy bony club at the end of its tail.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Ankylosauridae"
+   },
+   "pbdb": {
+    "asked": "Euoplocephalus",
+    "matched": "Euoplocephalus",
+    "exact": true,
+    "oid": "txn:38838",
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ankylosauridae",
+    "genus": "Euoplocephalus",
+    "regions": {
+     "na-w": 17,
+     "as-c": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   }
+  },
+  "Euparkeria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 247,
+   "lad": 242,
+   "range": [
+    "af-s"
+   ],
+   "note": "A 60-centimetre, lightly armoured reptile close to the root of the archosaurs, the group of crocodiles, pterosaurs and dinosaurs. It could probably rise onto its hind legs to run.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Archosauriformes",
+    "family": "Euparkeriidae"
+   },
+   "pbdb": {
+    "asked": "Euparkeria",
+    "matched": "Euparkeria",
+    "exact": true,
+    "oid": "txn:38240",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 247,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Euparkeria",
+    "regions": {
+     "af-s": 2
+    }
+   }
+  },
+  "Eustreptospondylus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 165,
+   "lad": 162,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A five-metre megalosauroid of the Callovian, found in marine clay near Oxford -- its body had drifted from one of the islands that Jurassic Europe was broken into.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Megalosauridae"
+   },
+   "pbdb": {
+    "asked": "Eustreptospondylus",
+    "matched": "Eustreptospondylus",
+    "exact": true,
+    "oid": "txn:38580",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 165.3,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Megalosauridae",
+    "genus": "Eustreptospondylus",
+    "regions": {
+     "eu-n": 1
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Falcarius": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 139,
+   "lad": 133,
+   "range": [
+    "na-w"
+   ],
+   "note": "A four-metre early therizinosaur, known from thousands of bones in one bone bed -- caught between a meat-eating theropod and the pot-bellied plant-eaters to come.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Therizinosauria"
+   },
+   "pbdb": {
+    "asked": "Falcarius",
+    "matched": "Falcarius",
+    "exact": true,
+    "oid": "txn:65779",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 143.1,
+    "lla": 132.6,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Falcarius",
+    "regions": {
+     "na-w": 2
+    }
+   }
+  },
+  "Frenelopsis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 140,
+   "lad": 90,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w",
+    "af-n",
+    "ar",
+    "as-ne",
+    "as-s",
+    "sa-n"
+   ],
+   "note": "A cheirolepid conifer with jointed, almost leafless succulent stems -- a salt-tolerant tree of Cretaceous coastal flats and lagoon margins, a mangrove before mangroves.",
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cheirolepidiaceae"
+   },
+   "pbdb": {
+    "asked": "Frenelopsis",
+    "matched": "Frenelopsis",
+    "exact": true,
+    "oid": "txn:178839",
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 241.464,
+    "lla": 66,
+    "phylum": "Equisetophyta",
+    "class": "Equisetopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cheirolepidiaceae",
+    "genus": "Frenelopsis",
+    "regions": {
+     "eu-s": 11,
+     "as-s": 10,
+     "as-ne": 3,
+     "as-sb": 3,
+     "na-w": 2,
+     "na-e": 1,
+     "ca": 1,
+     "sa-s": 1,
+     "in": 1
+    },
+    "fea_r": 152.3,
+    "lla_r": 74.8
+   }
+  },
+  "Fruitafossor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 152,
+   "lad": 150,
+   "range": [
+    "na-w"
+   ],
+   "note": "A chipmunk-sized burrowing mammal of the Late Jurassic with simple peg teeth like an aardvark's -- probably a digger into insect nests.",
+   "cls": {
+    "class": "Mammalia",
+    "family": "Fruitafossoridae"
+   },
+   "pbdb": {
+    "asked": "Fruitafossor",
+    "matched": "Fruitafossor",
+    "exact": true,
+    "oid": "txn:91355",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 154.8,
+    "lla": 145.06,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Fruitafossor",
+    "regions": {
+     "na-w": 2
+    }
+   }
+  },
+  "Fukuiraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 125,
+   "lad": 115,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A four-metre megaraptoran with large hand claws, from the Early Cretaceous of Japan.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Megaraptora"
+   },
+   "pbdb": {
+    "asked": "Fukuiraptor",
+    "matched": "Fukuiraptor",
+    "exact": true,
+    "oid": "txn:66356",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 132.6,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Neovenatoridae",
+    "genus": "Fukuiraptor",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     129,
+     146,
+     30,
+     46
+    ]
+   ]
+  },
+  "Gargoyleosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 154,
+   "lad": 150,
+   "range": [
+    "na-w"
+   ],
+   "note": "One of the first ankylosaurs, three metres long, with a skull roof of fused armour and a body studded with cone-shaped spikes.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Ankylosauridae"
+   },
+   "pbdb": {
+    "asked": "Gargoyleosaurus",
+    "matched": "Gargoyleosaurus",
+    "exact": true,
+    "oid": "txn:63703",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 152.21,
+    "lla": 145.06,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Nodosauridae",
+    "genus": "Gargoyleosaurus",
+    "regions": {
+     "na-w": 1
+    }
+   }
+  },
+  "Gasosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 170,
+   "lad": 163,
+   "range": [
+    "as-s"
+   ],
+   "note": "A four-metre tetanuran of the Middle Jurassic of Sichuan, named for the gas company whose digging found it.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Gasosaurus",
+    "matched": "Gasosaurus",
+    "exact": true,
+    "oid": "txn:52766",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 170.9,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Gasosaurus",
+    "regions": {
+     "as-s": 1
+    }
+   },
+   "box": [
+    [
+     102,
+     110,
+     28,
+     33
+    ]
+   ]
+  },
+  "Gastonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 126,
+   "lad": 122,
+   "range": [
+    "na-w"
+   ],
+   "note": "A five-metre, heavily spiked polacanthid, found in the same Utah bone bed as the giant raptor Utahraptor.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Nodosauridae"
+   },
+   "pbdb": {
+    "asked": "Gastonia",
+    "matched": "Gastonia",
+    "exact": true,
+    "oid": "txn:63700",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 137.05,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Nodosauridae",
+    "genus": "Gastonia",
+    "regions": {
+     "na-w": 3
+    }
+   }
+  },
+  "Gerrothorax": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 240,
+   "lad": 201.4,
+   "range": [
+    "eu",
+    "gl"
+   ],
+   "note": "A flat, broad-headed plagiosaurid amphibian that lay on lake beds like a flatfish, gulping prey that swam over it; it kept external gills all its life.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Plagiosauridae"
+   },
+   "realms": [
+    "fresh"
+   ],
+   "pbdb": {
+    "asked": "Gerrothorax",
+    "matched": "Gerrothorax",
+    "exact": true,
+    "oid": "txn:37170",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 247,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Plagiosauridae",
+    "genus": "Gerrothorax",
+    "regions": {
+     "eu-s": 8,
+     "eu-n": 4,
+     "gl": 3
+    },
+    "fea_r": 239.23,
+    "lla_r": 203.55
+   }
+  },
+  "Glossophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ginkgo",
+   "fad": 237,
+   "lad": 220,
+   "range": [
+    "eu-s",
+    "as-c"
+   ],
+   "note": "A ginkgophyte with long, tongue-shaped leaves instead of fans -- one of several experiments in the Ginkgo line that did not outlast the Triassic.",
+   "cls": {
+    "class": "Ginkgoopsida",
+    "order": "Ginkgoales"
+   },
+   "pbdb": {
+    "asked": "Glossophyllum",
+    "matched": "Glossophyllum",
+    "exact": true,
+    "oid": "txn:157192",
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 264.28,
+    "lla": 174.7,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Leuthardtiaceae",
+    "genus": "Arberophyllum",
+    "regions": {
+     "as-ne": 19,
+     "eu-n": 12,
+     "as-s": 10,
+     "as-n": 9,
+     "as-c": 8,
+     "eu-s": 2,
+     "as-w": 1
+    },
+    "fea_r": 253.02,
+    "lla_r": 203.55
+   }
+  },
+  "Goniopholis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 150,
+   "lad": 125,
+   "range": [
+    "eu"
+   ],
+   "note": "A broad-snouted crocodyliform of Late Jurassic and Early Cretaceous swamps -- among the first to look and live like the alligators of today.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodyliformes",
+    "family": "Goniopholididae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Goniopholis",
+    "matched": "Goniopholis",
+    "exact": true,
+    "oid": "txn:38360",
+    "rank": "genus",
+    "extant": false,
+    "noc": 99,
+    "fea": 168.2,
+    "lla": 83.6,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Goniopholididae",
+    "genus": "Goniopholis",
+    "regions": {
+     "na-w": 38,
+     "eu-n": 33,
+     "eu-s": 23,
+     "af-e": 2,
+     "na-e": 2,
+     "as-w": 1
+    },
+    "fea_r": 152.0,
+    "lla_r": 116.38
+   },
+   "place_ok": true,
+   "conf_note": "the Morrison 'Goniopholis' species are now Amphicotylus and Eutretauranosuchus (Allen 2010); Goniopholis proper is European"
+  },
+  "Gorgosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 76.6,
+   "lad": 75,
+   "range": [
+    "na-w"
+   ],
+   "note": "A lighter, longer-legged tyrannosaur, the commonest big predator in one of the richest dinosaur faunas known.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "pbdb": {
+    "asked": "Gorgosaurus",
+    "matched": "Gorgosaurus",
+    "exact": true,
+    "oid": "txn:53193",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Gorgosaurus",
+    "regions": {
+     "na-w": 19,
+     "na-e": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   }
+  },
+  "Hadrocodium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 199,
+   "lad": 190,
+   "range": [
+    "as-s"
+   ],
+   "note": "A two-gram mammaliaform with a large brain for its size and the ear bones separated from the jaw, as in true mammals.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Mammaliaformes"
+   },
+   "pbdb": {
+    "asked": "Hadrocodium",
+    "matched": "Hadrocodium",
+    "exact": true,
+    "oid": "txn:91337",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 199.5,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Hadrocodium",
+    "regions": {
+     "as-s": 1
+    }
+   },
+   "box": [
+    [
+     99,
+     106,
+     23,
+     27.5
+    ]
+   ]
+  },
+  "Haramiyavia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 208,
+   "lad": 201.4,
+   "range": [
+    "gl"
+   ],
+   "note": "A mouse-sized haramiyid of the latest Triassic with many-cusped grinding teeth -- part of the first wave of mammal-like animals.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Haramiyida",
+    "family": "Haramiyaviidae"
+   },
+   "pbdb": {
+    "asked": "Haramiyavia",
+    "matched": "Haramiyavia",
+    "exact": true,
+    "oid": "txn:178262",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 205.7,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Haramiyaviidae",
+    "genus": "Haramiyavia",
+    "regions": {
+     "gl": 1
+    }
+   }
+  },
+  "Heidiphyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 237,
+   "lad": 205,
+   "range": [
+    "af-s",
+    "sa-s",
+    "an",
+    "au-e"
+   ],
+   "note": "Strap-leaved conifer shrubs of the voltzialean line, the commonest plant on many Late Triassic Gondwanan floodplains: thickets of it lined the channels while Dicroidium forest stood behind.",
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Voltziales",
+    "family": "Voltziaceae"
+   },
+   "pbdb": {
+    "asked": "Heidiphyllum",
+    "matched": "Heidiphyllum",
+    "exact": true,
+    "oid": "txn:386467",
+    "rank": "genus",
+    "extant": false,
+    "noc": 55,
+    "fea": 241.464,
+    "lla": 227.3,
+    "phylum": "Spermatophyta",
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Heidiphyllum",
+    "regions": {
+     "af-s": 44,
+     "sa-s": 9,
+     "nz": 1,
+     "an": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 219.2
+   }
+  },
+  "Hesperosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 156,
+   "lad": 150,
+   "range": [
+    "na-w"
+   ],
+   "note": "A short-skulled stegosaur of the early Morrison with low, oval back plates; one skeleton preserves the horny sheath that covered a plate.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "pbdb": {
+    "asked": "Hesperosaurus",
+    "matched": "Hesperosaurus",
+    "exact": true,
+    "oid": "txn:68158",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 157.9,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Hesperosaurus",
+    "regions": {
+     "na-w": 8
+    },
+    "fea_r": 152.0,
+    "lla_r": 148.95
+   }
+  },
+  "Homoeosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 152,
+   "lad": 145,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A slender sphenodontian of the Solnhofen lagoon shores -- a cousin of the living tuatara, whose group was then one of the most varied among small reptiles.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Rhynchocephalia",
+    "family": "Sphenodontidae"
+   },
+   "pbdb": {
+    "asked": "Homoeosaurus",
+    "matched": "Homoeosaurus",
+    "exact": true,
+    "oid": "txn:92232",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 152.21,
+    "lla": 139.1,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Sphenodontia",
+    "family": "Homoeosauridae",
+    "genus": "Homoeosaurus",
+    "regions": {
+     "eu-s": 8,
+     "eu-n": 1
+    },
+    "fea_r": 150.7,
+    "lla_r": 141.1
+   }
+  },
+  "Hyperodapedon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhynchosaur",
+   "fad": 237,
+   "lad": 225,
+   "range": [
+    "eu-n",
+    "in",
+    "sa-s",
+    "af-s",
+    "af-e",
+    "mg"
+   ],
+   "note": "A pig-sized rhynchosaur with a hooked beak and grinding plates of teeth. In the Carnian it was so common that it makes up most of the fossils in the same beds in Scotland, India, Brazil and Argentina.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Rhynchosauria",
+    "family": "Hyperodapedontidae"
+   },
+   "pbdb": {
+    "asked": "Hyperodapedon",
+    "matched": "Hyperodapedon",
+    "exact": true,
+    "oid": "txn:38210",
+    "rank": "genus",
+    "extant": false,
+    "noc": 52,
+    "fea": 237,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Rhynchosauria",
+    "family": "Rhynchosauridae",
+    "genus": "Hyperodapedon",
+    "regions": {
+     "sa-s": 30,
+     "in": 12,
+     "eu-n": 4,
+     "af-s": 3,
+     "na-w": 1,
+     "af-e": 1,
+     "na-av": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 221.35
+   }
+  },
+  "Iberomesornis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "earlybird",
+   "fad": 127,
+   "lad": 125,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A sparrow-sized enantiornithine of the Barremian wetlands -- one of the 'opposite birds' that were the commonest birds of the Cretaceous.",
+   "cls": {
+    "class": "Aves",
+    "order": "Enantiornithes"
+   },
+   "pbdb": {
+    "asked": "Iberomesornis",
+    "matched": "Iberomesornis",
+    "exact": true,
+    "oid": "txn:65830",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Iberomesornis",
+    "regions": {
+     "eu-s": 2
+    }
+   },
+   "box": [
+    [
+     -9.5,
+     3.5,
+     36,
+     44
+    ]
+   ]
+  },
+  "Irritator": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 115,
+   "lad": 110,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A spinosaurid with a long, crocodile-like fishing snout; its name records the irritation of scientists given a skull that fossil dealers had 'improved' with plaster.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Spinosauridae"
+   },
+   "pbdb": {
+    "asked": "Irritator",
+    "matched": "Irritator",
+    "exact": true,
+    "oid": "txn:64272",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 119.57,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Spinosauridae",
+    "genus": "Irritator",
+    "regions": {
+     "sa-n": 1
+    }
+   }
+  },
+  "Ischigualastia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 233,
+   "lad": 229,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A hippo-sized dicynodont that shared its floodplain with the first dinosaurs -- among the last big beaked herbivores of a line that had been on land since the Permian.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dicynodontia",
+    "family": "Stahleckeriidae"
+   },
+   "pbdb": {
+    "asked": "Ischigualastia",
+    "matched": "Ischigualastia",
+    "exact": true,
+    "oid": "txn:39029",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 233.6,
+    "lla": 227.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Kannemeyeriiformes",
+    "family": "Stahleckeriidae",
+    "genus": "Ischigualastia",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Istiodactylus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 126,
+   "lad": 122,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A pterosaur with a five-metre wingspan and a rounded beak edged with interlocking triangular teeth -- perhaps a scavenger.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Istiodactylidae"
+   },
+   "pbdb": {
+    "asked": "Istiodactylus",
+    "matched": "Istiodactylus",
+    "exact": true,
+    "oid": "txn:135362",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Istiodactylus",
+    "regions": {
+     "eu-n": 5,
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     -6,
+     7,
+     49.5,
+     53
+    ]
+   ]
+  },
+  "Jeholopterus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 165,
+   "lad": 160,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A frog-mouthed anurognathid pterosaur covered in fuzz, which hawked insects at dusk in the Jurassic forests of northern China.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Anurognathidae"
+   },
+   "pbdb": {
+    "asked": "Jeholopterus",
+    "matched": "Jeholopterus",
+    "exact": true,
+    "oid": "txn:138743",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 165.3,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Anurognathidae",
+    "genus": "Jeholopterus",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     115,
+     124,
+     39,
+     43
+    ]
+   ]
+  },
+  "Jeholosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 125,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A metre-long, fast, bipedal plant-eater with pointed front teeth -- possibly an omnivore -- from the forests of the Jehol.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Jeholosauridae"
+   },
+   "pbdb": {
+    "asked": "Jeholosaurus",
+    "matched": "Jeholosaurus",
+    "exact": true,
+    "oid": "txn:68236",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Thescelosauridae",
+    "genus": "Jeholosaurus",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Juramaia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 161,
+   "lad": 159,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A shrew-sized climber of the Late Jurassic claimed as the oldest eutherian -- the line leading to placental mammals -- though its age and its place in the tree are debated.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Eutheria"
+   },
+   "pbdb": {
+    "asked": "Juramaia",
+    "matched": "Juramaia",
+    "exact": true,
+    "oid": "txn:196927",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 168.2,
+    "lla": 152.21,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Juramaia",
+    "regions": {
+     "as-ne": 2
+    }
+   },
+   "box": [
+    [
+     115,
+     124,
+     39,
+     43
+    ]
+   ]
+  },
+  "Kannemeyeria": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 247,
+   "lad": 237,
+   "range": [
+    "af-s"
+   ],
+   "note": "A three-metre, beaked dicynodont, the big plant-eater of the Middle Triassic; a tall crest on its skull anchored the jaw muscles that sheared tough seed-fern leaves.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dicynodontia",
+    "family": "Kannemeyeriidae"
+   },
+   "pbdb": {
+    "asked": "Kannemeyeria",
+    "matched": "Kannemeyeria",
+    "exact": true,
+    "oid": "txn:39030",
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 251.902,
+    "lla": 233.6,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Kannemeyeriiformes",
+    "family": "Kannemeyeriidae",
+    "genus": "Kannemeyeria",
+    "regions": {
+     "af-s": 14,
+     "af-e": 2,
+     "sa-s": 2
+    },
+    "fea_r": 244.23,
+    "lla_r": 237.53
+   }
+  },
+  "Kaprosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 96,
+   "lad": 93,
+   "range": [
+    "af-n"
+   ],
+   "note": "The 'boar croc': a land-going crocodyliform with three pairs of tusk-like fangs and an armoured snout, perhaps for ramming.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodyliformes",
+    "family": "Mahajangasuchidae"
+   },
+   "pbdb": {
+    "asked": "Kaprosuchus",
+    "matched": "Kaprosuchus",
+    "exact": true,
+    "oid": "txn:157806",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Mahajangasuchidae",
+    "genus": "Kaprosuchus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     0,
+     15,
+     12,
+     22
+    ]
+   ]
+  },
+  "Karaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "salamander",
+   "fad": 157,
+   "lad": 152,
+   "range": [
+    "as-c"
+   ],
+   "note": "One of the oldest true salamanders, twenty centimetres long, from the lake beds of the Late Jurassic of Kazakhstan.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Caudata",
+    "family": "Karauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Karaurus",
+    "matched": "Karaurus",
+    "exact": true,
+    "oid": "txn:37342",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 161.5,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Caudata",
+    "family": "Karauridae",
+    "genus": "Karaurus",
+    "regions": {
+     "as-c": 1
+    }
+   },
+   "box": [
+    [
+     68,
+     72,
+     42,
+     44.5
+    ]
+   ]
+  },
+  "Kayentachelys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "turtle",
+   "fad": 190,
+   "lad": 185,
+   "range": [
+    "na-w"
+   ],
+   "note": "One of the oldest turtles with a modern-looking shell and jaw, from the Early Jurassic of Arizona.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudinata"
+   },
+   "pbdb": {
+    "asked": "Kayentachelys",
+    "matched": "Kayentachelys",
+    "exact": true,
+    "oid": "txn:67321",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 201.4,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kayentachelys",
+    "regions": {
+     "na-w": 12
+    },
+    "fea_r": 197.15,
+    "lla_r": 191.85
+   },
+   "box": [
+    [
+     -114,
+     -107,
+     34.5,
+     38
+    ]
+   ]
+  },
+  "Kayentatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 190,
+   "lad": 185,
+   "range": [
+    "na-w"
+   ],
+   "note": "A beaver-sized tritylodontid, a plant-eating near-mammal; one was found with 38 babies -- a reptile-sized litter in an animal close to mammals.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Tritylodontidae"
+   },
+   "pbdb": {
+    "asked": "Kayentatherium",
+    "matched": "Kayentatherium",
+    "exact": true,
+    "oid": "txn:39213",
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 201.4,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Tritylodontidae",
+    "genus": "Kayentatherium",
+    "regions": {
+     "na-w": 10
+    },
+    "fea_r": 197.15,
+    "lla_r": 191.85
+   },
+   "box": [
+    [
+     -114,
+     -107,
+     34.5,
+     38
+    ]
+   ]
+  },
+  "Kileskus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 168,
+   "lad": 165,
+   "range": [
+    "as-n"
+   ],
+   "note": "A small early tyrannosauroid from the Middle Jurassic of Siberia, a proceratosaurid like Guanlong.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Proceratosauridae"
+   },
+   "pbdb": {
+    "asked": "Kileskus",
+    "matched": "Kileskus",
+    "exact": true,
+    "oid": "txn:185192",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Proceratosauridae",
+    "genus": "Kileskus",
+    "regions": {
+     "as-n": 2
+    }
+   },
+   "box": [
+    [
+     84,
+     96,
+     53,
+     58
+    ]
+   ]
+  },
+  "Kotasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 190,
+   "lad": 180,
+   "range": [
+    "in"
+   ],
+   "note": "A nine-metre early sauropod from a single Early Jurassic bone bed in India, with the lightly built limbs of a transitional form.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   },
+   "pbdb": {
+    "asked": "Kotasaurus",
+    "matched": "Kotasaurus",
+    "exact": true,
+    "oid": "txn:66497",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kotasaurus",
+    "regions": {
+     "in": 2
+    }
+   },
+   "box": [
+    [
+     78,
+     81.5,
+     17,
+     20.5
+    ]
+   ]
+  },
+  "Kryptobaatar": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-c"
+   ],
+   "note": "A mouse-sized multituberculate of the Gobi dunes -- one of the rodent-like mammals that outnumber all others in the Late Cretaceous.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Multituberculata",
+    "family": "Djadochtatheriidae"
+   },
+   "pbdb": {
+    "asked": "Kryptobaatar",
+    "matched": "Kryptobaatar",
+    "exact": true,
+    "oid": "txn:39842",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Multituberculata",
+    "family": "Djadochtatheriidae",
+    "genus": "Kryptobaatar",
+    "regions": {
+     "as-ne": 8,
+     "as-c": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Kuehneotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 205,
+   "lad": 195,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A tiny insect-eater known from teeth washed into cave fissures on limestone islands of the Early Jurassic sea; its triangle of cusps is an early step toward the teeth of all later mammals.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Symmetrodonta",
+    "family": "Kuehneotheriidae"
+   },
+   "pbdb": {
+    "asked": "Kuehneotherium",
+    "matched": "Kuehneotherium",
+    "exact": true,
+    "oid": "txn:39864",
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 205.7,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Kuehneotheriidae",
+    "genus": "Kuehneotherium",
+    "regions": {
+     "eu-n": 6,
+     "eu-s": 3,
+     "gl": 1
+    },
+    "fea_r": 203.55,
+    "lla_r": 197.15
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Kulindadromeus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 170,
+   "lad": 164,
+   "range": [
+    "as-n"
+   ],
+   "note": "A metre-and-a-half plant-eater from Transbaikalia whose body was covered in filaments and whose legs had scales -- a sign that feather-like fuzz was widespread among dinosaurs.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Neornithischia"
+   },
+   "pbdb": {
+    "asked": "Kulindadromeus",
+    "matched": "Kulindadromeus",
+    "exact": true,
+    "oid": "txn:300572",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kulindadromeus",
+    "regions": {
+     "as-n": 3
+    }
+   },
+   "box": [
+    [
+     108,
+     122,
+     49,
+     55
+    ]
+   ]
+  },
+  "Lambeosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 76,
+   "lad": 75,
+   "range": [
+    "na-w"
+   ],
+   "note": "A duckbill with a hatchet-shaped hollow crest that housed its nasal passages -- probably a resonator for deep calls.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Lambeosaurus",
+    "matched": "Lambeosaurus",
+    "exact": true,
+    "oid": "txn:38763",
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Lambeosaurus",
+    "regions": {
+     "na-w": 19
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   }
+  },
+  "Lepidopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 260,
+   "lad": 201.4,
+   "range": [
+    "eu",
+    "gl",
+    "af-s",
+    "mg",
+    "an",
+    "au-e",
+    "as-n",
+    "sa-s"
+   ],
+   "note": "Peltasperm seed ferns with pimpled leaves and seeds carried under umbrella-like discs. One of the few plant lines to ride through the end-Permian extinction, they mark the earliest Triassic and again the Rhaetian, just before the end-Triassic extinction took them.",
+   "w": 1,
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae"
+   },
+   "pbdb": {
+    "asked": "Lepidopteris",
+    "matched": "Lepidopteris",
+    "exact": true,
+    "oid": "txn:157186",
+    "rank": "genus",
+    "extant": false,
+    "noc": 128,
+    "fea": 266.9,
+    "lla": 174.7,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae",
+    "genus": "Lepidopteris",
+    "regions": {
+     "af-s": 41,
+     "eu-n": 22,
+     "gl": 12,
+     "as-s": 12,
+     "in": 9,
+     "as-c": 8,
+     "au-e": 6,
+     "eu-s": 4,
+     "as-ne": 4,
+     "mg": 4,
+     "as-n": 3,
+     "sa-s": 2,
+     "na-n": 1
+    },
+    "fea_r": 259.21,
+    "lla_r": 203.55
+   }
+  },
+  "Lesothosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 200,
+   "lad": 190,
+   "range": [
+    "af-s"
+   ],
+   "note": "A metre-long, lightly built early ornithischian, fast and bipedal, with leaf-shaped teeth; two found curled together suggest it may have slept out the dry seasons in shelter.",
+   "cls": {
+    "class": "Ornithischia",
+    "family": "Lesothosauridae"
+   },
+   "pbdb": {
+    "asked": "Lesothosaurus",
+    "matched": "Lesothosaurus",
+    "exact": true,
+    "oid": "txn:57573",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 201.4,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Lesothosaurus",
+    "regions": {
+     "af-s": 9
+    },
+    "fea_r": 197.15,
+    "lla_r": 197.15
+   }
+  },
+  "Lexovisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 166,
+   "lad": 163,
+   "range": [
+    "eu"
+   ],
+   "note": "A stegosaur of the Middle Jurassic of England and France with tall spines on its shoulders and tail.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "pbdb": {
+    "asked": "Lexovisaurus",
+    "matched": "Lexovisaurus",
+    "exact": true,
+    "oid": "txn:38812",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 165.3,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Lexovisaurus",
+    "regions": {
+     "eu-n": 2,
+     "eu-s": 1
+    }
+   },
+   "box": [
+    [
+     -7,
+     6,
+     43,
+     55
+    ]
+   ]
+  },
+  "Limusaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 161,
+   "lad": 157,
+   "range": [
+    "as-c"
+   ],
+   "note": "A toothless ceratosaur whose young had teeth and lost them as they grew into beaked plant-eaters -- a change no other dinosaur is known to have made.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Noasauridae"
+   },
+   "pbdb": {
+    "asked": "Limusaurus",
+    "matched": "Limusaurus",
+    "exact": true,
+    "oid": "txn:148870",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 161.5,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Noasauridae",
+    "genus": "Limusaurus",
+    "regions": {
+     "as-c": 3
+    }
+   },
+   "box": [
+    [
+     82,
+     93,
+     43,
+     47.5
+    ]
+   ]
+  },
+  "Lisowicia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dicynodont",
+   "fad": 211,
+   "lad": 205,
+   "range": [
+    "eu-n"
+   ],
+   "note": "An elephant-sized dicynodont of the latest Triassic -- perhaps nine tonnes, walking erect -- the last and largest of a line that had been on land since the Permian.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dicynodontia",
+    "family": "Stahleckeriidae"
+   },
+   "pbdb": {
+    "asked": "Lisowicia",
+    "matched": "Lisowicia",
+    "exact": true,
+    "oid": "txn:409767",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 227.3,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Kannemeyeriiformes",
+    "family": "Stahleckeriidae",
+    "genus": "Lisowicia",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Lurdusaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 115,
+   "lad": 110,
+   "range": [
+    "af-n"
+   ],
+   "note": "A squat, heavy iguanodontian of Niger with a thumb spike and a body built low like a hippo's -- perhaps half-aquatic.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Iguanodontia"
+   },
+   "pbdb": {
+    "asked": "Lurdusaurus",
+    "matched": "Lurdusaurus",
+    "exact": true,
+    "oid": "txn:64410",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 113.2,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Lurdusaurus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     0,
+     15,
+     12,
+     22
+    ]
+   ]
+  },
+  "Lycoptera": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "bigfish",
+   "fad": 130,
+   "lad": 120,
+   "range": [
+    "as-ne",
+    "as-n"
+   ],
+   "note": "A small bony-tongued fish that filled the Jehol lakes by the million -- the commonest vertebrate fossil of the Early Cretaceous of north-east Asia.",
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Osteoglossiformes",
+    "family": "Lycopteridae"
+   },
+   "pbdb": {
+    "asked": "Lycoptera",
+    "matched": "Lycoptera",
+    "exact": true,
+    "oid": "txn:197683",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 143.1,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Lycopteriformes",
+    "family": "Lycopteridae",
+    "genus": "Lycoptera",
+    "regions": {
+     "as-ne": 16,
+     "as-n": 1
+    },
+    "fea_r": 127.0,
+    "lla_r": 117.3
+   }
+  },
+  "Magyarosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A dwarf titanosaur of the Hațeg island, six metres long and about the weight of a horse -- a sauropod shrunk by island life.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Magyarosaurus",
+    "matched": "Magyarosaurus",
+    "exact": true,
+    "oid": "txn:52883",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Magyarosaurus",
+    "regions": {
+     "eu-s": 11
+    },
+    "fea_r": 69.1,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     20,
+     27,
+     44,
+     48
+    ]
+   ]
+  },
+  "Maiasaura": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 77,
+   "lad": 76,
+   "range": [
+    "na-w"
+   ],
+   "note": "The 'good mother lizard': nesting colonies of this duckbill, nests a body-length apart and nestlings with worn teeth, first showed that dinosaurs fed their young.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Maiasaura",
+    "matched": "Maiasaura",
+    "exact": true,
+    "oid": "txn:38765",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Maiasaura",
+    "regions": {
+     "na-w": 7
+    }
+   }
+  },
+  "Malawisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 125,
+   "lad": 113,
+   "range": [
+    "af-e"
+   ],
+   "note": "An early titanosaur, one of the first known from a skull -- a clue to how the last great group of sauropods began.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Malawisaurus",
+    "matched": "Malawisaurus",
+    "exact": true,
+    "oid": "txn:57455",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 121.4,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Malawisaurus",
+    "regions": {
+     "af-e": 8
+    },
+    "fea_r": 117.3,
+    "lla_r": 117.3
+   }
+  },
+  "Mansourasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 80,
+   "lad": 75,
+   "range": [
+    "af-n"
+   ],
+   "note": "A titanosaur of Campanian Egypt, the first good Late Cretaceous dinosaur from mainland Africa, whose kin link its fauna to Europe's.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Mansourasaurus",
+    "matched": "Mansourasaurus",
+    "exact": true,
+    "oid": "txn:366664",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mansourasaurus",
+    "regions": {
+     "as-w": 1
+    }
+   },
+   "box": [
+    [
+     25,
+     35,
+     22,
+     30
+    ]
+   ]
+  },
+  "Mantellisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 126,
+   "lad": 122,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A lighter cousin of Iguanodon, about seven metres long, and the commonest large plant-eater of the Barremian of the Isle of Wight and Belgium.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Iguanodontia"
+   },
+   "pbdb": {
+    "asked": "Mantellisaurus",
+    "matched": "Mantellisaurus",
+    "exact": true,
+    "oid": "txn:104634",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 143.1,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mantellisaurus",
+    "regions": {
+     "eu-n": 9,
+     "eu-s": 8
+    },
+    "fea_r": 132.25,
+    "lla_r": 120.48
+   },
+   "box": [
+    [
+     -6,
+     7,
+     49.5,
+     53
+    ]
+   ]
+  },
+  "Mapusaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 97,
+   "lad": 93,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A twelve-metre carcharodontosaurid; a bone bed of seven individuals of different ages hints that it hunted the giant sauropods in groups.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Carcharodontosauridae"
+   },
+   "pbdb": {
+    "asked": "Mapusaurus",
+    "matched": "Mapusaurus",
+    "exact": true,
+    "oid": "txn:77205",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 110.1,
+    "lla": 106.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Carcharodontosauridae",
+    "genus": "Mapusaurus",
+    "regions": {
+     "sa-s": 1
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Huincul Formation, Cenomanian-Turonian (~97-93 Ma); the PBDB's Albian date is a collection binning"
+  },
+  "Masiakasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "A two-metre noasaurid whose front teeth jutted forward almost horizontally -- probably for snatching fish and small prey.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Noasauridae"
+   },
+   "pbdb": {
+    "asked": "Masiakasaurus",
+    "matched": "Masiakasaurus",
+    "exact": true,
+    "oid": "txn:56388",
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Noasauridae",
+    "genus": "Masiakasaurus",
+    "regions": {
+     "mg": 29
+    },
+    "fea_r": 69.1,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     43,
+     51,
+     -26,
+     -11.5
+    ]
+   ]
+  },
+  "Mastodonsaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 242,
+   "lad": 235,
+   "range": [
+    "eu"
+   ],
+   "note": "One of the largest amphibians that ever lived: a six-metre, flat-headed temnospondyl of Middle Triassic lakes, with fangs that poked up through holes in the top of its snout.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Mastodonsauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Mastodonsaurus",
+    "matched": "Mastodonsaurus",
+    "exact": true,
+    "oid": "txn:37108",
+    "rank": "genus",
+    "extant": false,
+    "noc": 28,
+    "fea": 247,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mastodonsaurus",
+    "regions": {
+     "eu-s": 17,
+     "eu-n": 11
+    },
+    "fea_r": 244.23,
+    "lla_r": 238.24
+   }
+  },
+  "Mawsonia": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "coelacanth",
+   "fad": 150,
+   "lad": 95,
+   "range": [
+    "sa-n",
+    "sa-s",
+    "af-n",
+    "af-w"
+   ],
+   "note": "A giant coelacanth of the rivers and lagoons of Gondwana -- up to five metres long and more, the largest coelacanth known.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Coelacanthiformes",
+    "family": "Mawsoniidae"
+   },
+   "pbdb": {
+    "asked": "Mawsonia",
+    "matched": "Mawsonia",
+    "exact": true,
+    "oid": "txn:68074",
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 161.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Coelacanthiformes",
+    "family": "Mawsoniidae",
+    "genus": "Mawsonia",
+    "regions": {
+     "sa-n": 15,
+     "as-w": 8,
+     "af-n": 6,
+     "sa-s": 4,
+     "af-w": 1
+    },
+    "fea_r": 152.3,
+    "lla_r": 97.2
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB also bins collections to western Asia; the range keeps the documented Gondwanan core"
+  },
+  "Megazostrodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 201.4,
+   "lad": 190,
+   "range": [
+    "af-s"
+   ],
+   "note": "A ten-centimetre, shrew-like morganucodontan of the earliest Jurassic -- one of the first near-mammals: nocturnal, insect-eating and probably furred.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Morganucodonta",
+    "family": "Megazostrodontidae"
+   },
+   "pbdb": {
+    "asked": "Megazostrodon",
+    "matched": "Megazostrodon",
+    "exact": true,
+    "oid": "txn:39752",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 201.4,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Morganucodonta",
+    "family": "Megazostrodontidae",
+    "genus": "Megazostrodon",
+    "regions": {
+     "af-s": 2
+    }
+   }
+  },
+  "Minmi": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 125,
+   "lad": 115,
+   "range": [
+    "au-e"
+   ],
+   "note": "A small ankylosaur, about three metres long, from the Early Cretaceous of Queensland, with extra bony rods along its backbone.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria"
+   },
+   "pbdb": {
+    "asked": "Minmi",
+    "matched": "Minmi",
+    "exact": true,
+    "oid": "txn:52879",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 132.6,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ankylosauridae",
+    "genus": "Minmi",
+    "regions": {
+     "au-e": 2
+    }
+   }
+  },
+  "Miragaia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 152,
+   "lad": 148,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A stegosaur with a neck of at least seventeen vertebrae -- longer for its body than some sauropods' -- from the Late Jurassic of Portugal.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "pbdb": {
+    "asked": "Miragaia",
+    "matched": "Miragaia",
+    "exact": true,
+    "oid": "txn:142524",
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 154.8,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Dacentrurus",
+    "regions": {
+     "eu-s": 27,
+     "eu-n": 2,
+     "na-w": 2
+    },
+    "fea_r": 152.0,
+    "lla_r": 140.07
+   }
+  },
+  "Monolophosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 165,
+   "lad": 158,
+   "range": [
+    "as-c"
+   ],
+   "note": "A five-metre theropod with a single hollow crest running from its nose to behind its eyes, from the Junggar Basin, then a well-watered lowland.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Monolophosaurus",
+    "matched": "Monolophosaurus",
+    "exact": true,
+    "oid": "txn:64121",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 165.3,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Monolophosaurus",
+    "regions": {
+     "as-c": 1
+    }
+   },
+   "box": [
+    [
+     82,
+     93,
+     43,
+     47.5
+    ]
+   ]
+  },
+  "Mussaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 194,
+   "lad": 192,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A six-metre sauropodomorph named 'mouse lizard' for its tiny hatchlings; nest sites with eggs and young of many ages show it lived in herds.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha"
+   },
+   "pbdb": {
+    "asked": "Mussaurus",
+    "matched": "Mussaurus",
+    "exact": true,
+    "oid": "txn:38643",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 199.5,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mussaurus",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Mystriosuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 222,
+   "lad": 205,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A slender-snouted phytosaur of the Late Triassic Tethys coasts; some lie in marine limestones, so it may have fished at sea as well as in rivers.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Phytosauria",
+    "family": "Phytosauridae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb": {
+    "asked": "Mystriosuchus",
+    "matched": "Mystriosuchus",
+    "exact": true,
+    "oid": "txn:38296",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 227.3,
+    "lla": 199.5,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Parasuchidae",
+    "genus": "Mystriosuchus",
+    "regions": {
+     "eu-s": 9,
+     "eu-n": 3
+    },
+    "fea_r": 216.5,
+    "lla_r": 200.45
+   }
+  },
+  "Najash": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "snake",
+   "fad": 100,
+   "lad": 96,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A snake with a hip bone and working hind legs, from the Cenomanian of Patagonia -- evidence that snakes lost their legs on land, not in the sea.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "Najashidae"
+   },
+   "pbdb": {
+    "asked": "Najash",
+    "matched": "Najash",
+    "exact": true,
+    "oid": "txn:80918",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 113.2,
+    "lla": 110.1,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Squamata",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Najash",
+    "regions": {
+     "sa-s": 3
+    }
+   },
+   "pbdb_ok": true,
+   "conf_note": "Candeleros Formation, late Albian-early Cenomanian; the PBDB bins its collections older"
+  },
+  "Nelumbites": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "waterlily",
+   "fad": 113,
+   "lad": 95,
+   "range": [
+    "na-e"
+   ],
+   "note": "An early relative of the lotus: round leaves held on central stalks above the water of oxbow lakes, 110 million years before the sacred lotus -- the line has hardly changed since.",
+   "hab": [
+    "lake",
+    "wetland",
+    "river"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Proteales",
+    "family": "Nelumbonaceae"
+   },
+   "pbdb": {
+    "asked": "Nelumbites",
+    "matched": "Nelumbites",
+    "exact": true,
+    "oid": "txn:54072",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 113.2,
+    "lla": 110.1,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Nymphaeales",
+    "family": "Nymphaeaceae",
+    "genus": "Nelumbites",
+    "regions": {
+     "na-e": 2
+    }
+   }
+  },
+  "Neovenator": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 127,
+   "lad": 122,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A seven-metre allosauroid, the top predator of the Barremian of the Isle of Wight; its snout was threaded with nerve canals, perhaps for sensing prey.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Neovenatoridae"
+   },
+   "pbdb": {
+    "asked": "Neovenator",
+    "matched": "Neovenator",
+    "exact": true,
+    "oid": "txn:64119",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Neovenatoridae",
+    "genus": "Neovenator",
+    "regions": {
+     "eu-n": 1
+    }
+   },
+   "box": [
+    [
+     -6,
+     7,
+     49.5,
+     53
+    ]
+   ]
+  },
+  "Nilssonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cycad",
+   "fad": 230,
+   "lad": 66,
+   "range": [
+    {
+     "t": [
+      230,
+      100
+     ],
+     "in": [
+      "na",
+      "gl",
+      "eu",
+      "as-n",
+      "as-c",
+      "as-ne",
+      "as-s",
+      "an",
+      "in",
+      "au-e"
+     ]
+    },
+    {
+     "t": [
+      100,
+      66
+     ],
+     "in": [
+      "na-w",
+      "na-n",
+      "as-n",
+      "as-ne"
+     ]
+    }
+   ],
+   "note": "Cycad-like leaves with the blade set on top of the midrib. The plant that bore them, long taken for a cycad, was deciduous and grew as far north as the Cretaceous Arctic.",
+   "w": 1,
+   "cls": {
+    "class": "Cycadopsida",
+    "order": "Nilssoniales",
+    "family": "Nilssoniaceae"
+   },
+   "pbdb": {
+    "asked": "Nilssonia",
+    "matched": "Nilssonia",
+    "exact": true,
+    "oid": "txn:169172",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1017,
+    "fea": 274.4,
+    "lla": 66,
+    "phylum": "Cycadophyta",
+    "class": "Cycadopsida",
+    "order": "Cycadales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Nilsonia",
+    "regions": {
+     "as-c": 325,
+     "eu-n": 142,
+     "as-ne": 132,
+     "as-s": 102,
+     "as-n": 101,
+     "eu-s": 63,
+     "na-w": 50,
+     "as-w": 35,
+     "in": 31,
+     "na-n": 8,
+     "sa-s": 6,
+     "af-s": 4,
+     "au-e": 4,
+     "nz": 4,
+     "ca": 2,
+     "an": 2,
+     "as-sb": 2,
+     "sa-n": 2,
+     "ar": 1,
+     "as-ic": 1
+    },
+    "fea_r": 219.2,
+    "lla_r": 106.85
+   }
+  },
+  "Olorotitan": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 67,
+   "lad": 66,
+   "range": [
+    "as-n"
+   ],
+   "note": "A swan-necked lambeosaurine with a fan-shaped crest, from the very end of the Cretaceous on the Amur.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Olorotitan",
+    "matched": "Olorotitan",
+    "exact": true,
+    "oid": "txn:72094",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Olorotitan",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     125,
+     135,
+     47,
+     52
+    ]
+   ]
+  },
+  "Omeisaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 165,
+   "lad": 158,
+   "range": [
+    "as-s"
+   ],
+   "note": "A fifteen-to-twenty-metre sauropod with a neck of seventeen vertebrae, one of the mamenchisaurids that kept East Asia's giants distinct while it was cut off from the rest of Pangaea.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Mamenchisauridae"
+   },
+   "pbdb": {
+    "asked": "Omeisaurus",
+    "matched": "Omeisaurus",
+    "exact": true,
+    "oid": "txn:38702",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 174.7,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Mamenchisauridae",
+    "genus": "Omeisaurus",
+    "regions": {
+     "as-s": 12,
+     "as-ne": 1
+    },
+    "fea_r": 168.1,
+    "lla_r": 146.15
+   },
+   "box": [
+    [
+     102,
+     110,
+     28,
+     33
+    ]
+   ]
+  },
+  "Onchopristis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "ray",
+   "fad": 113,
+   "lad": 93,
+   "range": [
+    "af-n",
+    "na-w"
+   ],
+   "note": "A sawskate up to eight metres long with barbed tooth-spikes along its saw -- in North Africa, the fish Spinosaurus is thought to have hunted.",
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Rajiformes",
+    "family": "Sclerorhynchidae"
+   },
+   "pbdb": {
+    "asked": "Onchopristis",
+    "matched": "Onchopristis",
+    "exact": true,
+    "oid": "txn:96159",
+    "rank": "genus",
+    "extant": false,
+    "noc": 58,
+    "fea": 125.77,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Sclerorhynchiformes",
+    "family": "Sclerorhynchidae",
+    "genus": "Onchopristis",
+    "regions": {
+     "af-n": 18,
+     "na-e": 12,
+     "as-w": 10,
+     "eu-s": 8,
+     "na-w": 7,
+     "in": 1,
+     "na-av": 1,
+     "sa-n": 1
+    },
+    "fea_r": 118.5,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     -10,
+     32,
+     20,
+     34
+    ],
+    [
+     -100,
+     -93,
+     29,
+     34
+    ]
+   ],
+   "place_ok": true,
+   "conf_note": "O. numida of the North African rivers and O. dunklei of Texas; the PBDB's European and Asian records are other sclerorhynchids"
+  },
+  "Opisthocoelicaudia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 70,
+   "lad": 68,
+   "range": [
+    "as-c"
+   ],
+   "note": "A twelve-metre titanosaur known from a headless skeleton; its tail vertebrae suggest it could rear up on its tail like a tripod.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Opisthocoelicaudia",
+    "matched": "Opisthocoelicaudia",
+    "exact": true,
+    "oid": "txn:38698",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Saltasauridae",
+    "genus": "Opisthocoelicaudia",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Oviraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-c"
+   ],
+   "note": "Found on a nest in 1923 and named 'egg thief', it was later shown to be brooding its own eggs -- a toothless, beaked oviraptorosaur of the Gobi dunes.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Oviraptoridae"
+   },
+   "pbdb": {
+    "asked": "Oviraptor",
+    "matched": "Oviraptor",
+    "exact": true,
+    "oid": "txn:38559",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 89.8,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Oviraptoridae",
+    "genus": "Oviraptor",
+    "regions": {
+     "as-ne": 2,
+     "as-c": 1
+    }
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Pachyrhinosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 73.5,
+   "lad": 69,
+   "range": [
+    "na-w",
+    "na-n"
+   ],
+   "note": "A horned dinosaur with a thick bony boss where a nose horn would be; it herded as far north as Alaska's North Slope, through months of polar darkness.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ceratopsia",
+    "family": "Ceratopsidae"
+   },
+   "pbdb": {
+    "asked": "Pachyrhinosaurus",
+    "matched": "Pachyrhinosaurus",
+    "exact": true,
+    "oid": "txn:38858",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratopsidae",
+    "genus": "Pachyrhinosaurus",
+    "regions": {
+     "na-w": 13,
+     "na-n": 3
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     -162,
+     -110,
+     48,
+     72
+    ]
+   ]
+  },
+  "Paracyclotosaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 245,
+   "lad": 237,
+   "range": [
+    "au-e",
+    "in",
+    "af-s"
+   ],
+   "note": "A two-and-a-half-metre capitosaur of Gondwana's Middle Triassic rivers; a complete skeleton was dug out of a Sydney brick pit.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Mastodonsauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Paracyclotosaurus",
+    "matched": "Paracyclotosaurus",
+    "exact": true,
+    "oid": "txn:37099",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 247,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Paracyclotosaurus",
+    "regions": {
+     "au-e": 1,
+     "af-s": 1,
+     "in": 1
+    }
+   }
+  },
+  "Patagosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 182,
+   "lad": 177,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A fifteen-metre sauropod of the Early to Middle Jurassic, found with juveniles in a lake-margin community that also held the predator Piatnitzkysaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Cetiosauridae"
+   },
+   "pbdb": {
+    "asked": "Patagosaurus",
+    "matched": "Patagosaurus",
+    "exact": true,
+    "oid": "txn:38662",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 182.9,
+    "lla": 168.6,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Cetiosauridae",
+    "genus": "Patagosaurus",
+    "regions": {
+     "sa-s": 4
+    }
+   }
+  },
+  "Pelecanimimus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 127,
+   "lad": 125,
+   "range": [
+    "eu-s"
+   ],
+   "note": "An early ostrich-dinosaur with more than 200 tiny teeth, the most of any theropod, and a throat pouch preserved in the rock.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ornithomimosauria"
+   },
+   "pbdb": {
+    "asked": "Pelecanimimus",
+    "matched": "Pelecanimimus",
+    "exact": true,
+    "oid": "txn:64117",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pelecanimimus",
+    "regions": {
+     "eu-s": 1
+    }
+   },
+   "box": [
+    [
+     -9.5,
+     3.5,
+     36,
+     44
+    ]
+   ]
+  },
+  "Phlebopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 230,
+   "lad": 100,
+   "range": [
+    "eu",
+    "gl",
+    "na-w",
+    "as-ne",
+    "as-s",
+    "as-c",
+    "sa-s",
+    "an",
+    "in"
+   ],
+   "note": "A fern of the Matoniaceae, a family now reduced to two genera on Malaysian mountains, but widespread from the Late Triassic to the mid-Cretaceous -- often the first ground cover on fresh river sands.",
+   "w": 1,
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Gleicheniales",
+    "family": "Matoniaceae"
+   },
+   "pbdb": {
+    "asked": "Phlebopteris",
+    "matched": "Phlebopteris",
+    "exact": true,
+    "oid": "txn:54079",
+    "rank": "genus",
+    "extant": false,
+    "noc": 286,
+    "fea": 247,
+    "lla": 110.1,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Gleicheniales",
+    "family": "Matoniaceae",
+    "genus": "Phlebopteris",
+    "regions": {
+     "eu-n": 74,
+     "as-c": 65,
+     "eu-s": 36,
+     "as-s": 18,
+     "na-w": 17,
+     "as-n": 17,
+     "in": 15,
+     "as-ne": 14,
+     "as-w": 11,
+     "gl": 7,
+     "af-n": 4,
+     "na-av": 2,
+     "na-n": 1,
+     "na-e": 1,
+     "au-e": 1,
+     "ar": 1,
+     "mg": 1,
+     "sa-n": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 131.0
+   }
+  },
+  "Phuwiangosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 130,
+   "lad": 125,
+   "range": [
+    "as-ic"
+   ],
+   "note": "A twenty-metre titanosaur-line sauropod of the Early Cretaceous of north-east Thailand.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Titanosauria"
+   },
+   "pbdb": {
+    "asked": "Phuwiangosaurus",
+    "matched": "Phuwiangosaurus",
+    "exact": true,
+    "oid": "txn:56409",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 125.77,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Euhelopodidae",
+    "genus": "Phuwiangosaurus",
+    "regions": {
+     "as-ic": 15
+    },
+    "fea_r": 123.59,
+    "lla_r": 117.3
+   }
+  },
+  "Piatnitzkysaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 182,
+   "lad": 177,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A four-to-five-metre megalosauroid, one of the southern cousins of Megalosaurus from the Early to Middle Jurassic of Patagonia.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Piatnitzkysauridae"
+   },
+   "pbdb": {
+    "asked": "Piatnitzkysaurus",
+    "matched": "Piatnitzkysaurus",
+    "exact": true,
+    "oid": "txn:38592",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 182.9,
+    "lla": 180.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Piatnitzkysauridae",
+    "genus": "Piatnitzkysaurus",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Podozamites": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 230,
+   "lad": 100,
+   "range": [
+    "as-n",
+    "as-c",
+    "as-ne",
+    "as-s",
+    "eu",
+    "gl",
+    "na-n"
+   ],
+   "note": "A conifer with broad, lance-shaped leaves spaced along slender shoots that it shed whole each autumn -- the typical tree of the seasonally cold Jurassic forests of Siberia and East Asia.",
+   "w": 1,
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Voltziales"
+   },
+   "pbdb": {
+    "asked": "Podozamites",
+    "matched": "Podozamites",
+    "exact": true,
+    "oid": "txn:277344",
+    "rank": "genus",
+    "extant": false,
+    "noc": 928,
+    "fea": 283.3,
+    "lla": 66,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Podocarpaceae",
+    "genus": "Podozamites",
+    "regions": {
+     "as-c": 217,
+     "as-n": 194,
+     "as-ne": 178,
+     "as-s": 117,
+     "eu-n": 72,
+     "na-n": 32,
+     "eu-s": 29,
+     "as-w": 29,
+     "na-w": 19,
+     "na-e": 10,
+     "sa-s": 6,
+     "sa-n": 4,
+     "na-av": 3,
+     "ca": 3,
+     "as-sb": 3,
+     "ar": 2,
+     "nz": 2,
+     "an": 2,
+     "in": 2,
+     "af-s": 1,
+     "af-n": 1,
+     "au-e": 1,
+     "gl": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 117.3
+   }
+  },
+  "Polacanthus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 130,
+   "lad": 122,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A four-to-five-metre armoured dinosaur with spikes along its flanks and a solid shield of fused armour over its hips.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Nodosauridae"
+   },
+   "pbdb": {
+    "asked": "Polacanthus",
+    "matched": "Polacanthus",
+    "exact": true,
+    "oid": "txn:52784",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 139.1,
+    "lla": 100.5,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Nodosauridae",
+    "genus": "Polacanthus",
+    "regions": {
+     "eu-n": 12,
+     "eu-s": 4
+    },
+    "fea_r": 134.82,
+    "lla_r": 103.4
+   },
+   "box": [
+    [
+     -6,
+     7,
+     49.5,
+     53
+    ]
+   ]
+  },
+  "Prestosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 238,
+   "lad": 232,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A seven-metre crocodile-line predator with a deep skull, walking erect on pillar legs -- the top carnivore of the Middle to Late Triassic river plains of southern Brazil.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pseudosuchia",
+    "family": "Prestosuchidae"
+   },
+   "pbdb": {
+    "asked": "Prestosuchus",
+    "matched": "Prestosuchus",
+    "exact": true,
+    "oid": "txn:38257",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 241.464,
+    "lla": 227.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Prestosuchus",
+    "regions": {
+     "sa-s": 9
+    },
+    "fea_r": 239.23,
+    "lla_r": 219.2
+   }
+  },
+  "Proceratosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 167,
+   "lad": 165,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A three-metre, nose-crested early tyrannosauroid from the Bathonian of England, near the root of the tyrannosaur line.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Proceratosauridae"
+   },
+   "pbdb": {
+    "asked": "Proceratosaurus",
+    "matched": "Proceratosaurus",
+    "exact": true,
+    "oid": "txn:38602",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 168.2,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Proceratosauridae",
+    "genus": "Proceratosaurus",
+    "regions": {
+     "eu-n": 1
+    }
+   },
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Proganochelys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "turtle",
+   "fad": 210,
+   "lad": 205,
+   "range": [
+    "eu",
+    "as-ic"
+   ],
+   "note": "One of the first turtles with a complete shell: a metre-long, toothless reptile with a spiked, clubbed tail, which could not yet pull its head in.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudinata",
+    "family": "Proganochelyidae"
+   },
+   "pbdb": {
+    "asked": "Proganochelys",
+    "matched": "Proganochelys",
+    "exact": true,
+    "oid": "txn:37585",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 227.3,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Proganochelys",
+    "regions": {
+     "eu-s": 4,
+     "eu-n": 2,
+     "na-w": 2,
+     "gl": 1
+    },
+    "fea_r": 216.5,
+    "lla_r": 203.55
+   }
+  },
+  "Prosalirus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "frog",
+   "fad": 190,
+   "lad": 185,
+   "range": [
+    "na-w"
+   ],
+   "note": "The oldest known frog with the long hind legs and hips of a jumper, from the Early Jurassic of Arizona.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Prosalirus",
+    "matched": "Prosalirus",
+    "exact": true,
+    "oid": "txn:156389",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Salientia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Prosalirus",
+    "regions": {
+     "na-w": 1
+    }
+   },
+   "box": [
+    [
+     -114,
+     -107,
+     34.5,
+     38
+    ]
+   ]
+  },
+  "Protosuchus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "crocodile",
+   "fad": 203,
+   "lad": 192,
+   "range": [
+    "na-w",
+    "na-av",
+    "af-s"
+   ],
+   "note": "A metre-long crocodylomorph of the Early Jurassic with long legs for running on land -- the kind of animal all crocodiles descend from.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylomorpha",
+    "family": "Protosuchidae"
+   },
+   "pbdb": {
+    "asked": "Protosuchus",
+    "matched": "Protosuchus",
+    "exact": true,
+    "oid": "txn:38334",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 205.7,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Protosuchidae",
+    "genus": "Protosuchus",
+    "regions": {
+     "na-av": 6,
+     "af-s": 5,
+     "na-w": 4,
+     "eu-n": 1
+    },
+    "fea_r": 202.6,
+    "lla_r": 197.15
+   },
+   "box": [
+    [
+     -114,
+     -107,
+     34.5,
+     38
+    ],
+    [
+     -66.5,
+     -63,
+     44.8,
+     46
+    ],
+    [
+     26,
+     31,
+     -31,
+     -28
+    ]
+   ]
+  },
+  "Qantassaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 125,
+   "lad": 115,
+   "range": [
+    "au-e"
+   ],
+   "note": "A small, short-faced ornithopod of the polar forests of Early Cretaceous Victoria, then well inside the Antarctic Circle.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda"
+   },
+   "pbdb": {
+    "asked": "Qantassaurus",
+    "matched": "Qantassaurus",
+    "exact": true,
+    "oid": "txn:66575",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 125.77,
+    "lla": 121.4,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Qantassaurus",
+    "regions": {
+     "au-e": 2
+    }
+   }
+  },
+  "Rahonavis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "A raven-sized paravian with a sickle claw like a raptor-dinosaur's and long wing bones with quill knobs -- it could probably fly.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Rahonavis",
+    "matched": "Rahonavis",
+    "exact": true,
+    "oid": "txn:64132",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Rahonavis",
+    "regions": {
+     "mg": 2
+    }
+   },
+   "box": [
+    [
+     43,
+     51,
+     -26,
+     -11.5
+    ]
+   ]
+  },
+  "Rissikia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 247,
+   "lad": 201.4,
+   "range": [
+    "af-s",
+    "an",
+    "au-e",
+    "sa-s"
+   ],
+   "note": "An early podocarp relative with flat needles in two ranks, like a yew's -- evidence that the southern conifer family that still dominates New Zealand and the Andes was already Gondwanan in the Triassic.",
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Podocarpaceae"
+   },
+   "pbdb": {
+    "asked": "Rissikia",
+    "matched": "Rissikia",
+    "exact": true,
+    "oid": "txn:386477",
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 247,
+    "lla": 143.1,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Podocarpaceae",
+    "genus": "Rissikia",
+    "regions": {
+     "af-s": 15,
+     "au-e": 4,
+     "sa-s": 2,
+     "an": 1
+    },
+    "fea_r": 242.0,
+    "lla_r": 152.3
+   }
+  },
+  "Ruffordia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 145,
+   "lad": 110,
+   "range": [
+    "eu",
+    "na-e",
+    "as-ne",
+    "as-n"
+   ],
+   "note": "A climbing schizaeaceous fern with finely divided fronds, one of the characteristic ferns of the Early Cretaceous floodplains of Laurasia.",
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Schizaeales",
+    "family": "Anemiaceae"
+   },
+   "pbdb": {
+    "asked": "Ruffordia",
+    "matched": "Ruffordia",
+    "exact": true,
+    "oid": "txn:414128",
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 165.3,
+    "lla": 41.03,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Schizaeales",
+    "family": "Schizaeaceae",
+    "genus": "Ruffordia",
+    "regions": {
+     "as-ne": 15,
+     "as-s": 3,
+     "eu-n": 2,
+     "sa-n": 2,
+     "eu-s": 2,
+     "na-w": 1,
+     "sa-s": 1,
+     "as-c": 1,
+     "mg": 1,
+     "nz": 1,
+     "na-e": 1
+    },
+    "fea_r": 152.3,
+    "lla_r": 106.85
+   }
+  },
+  "Rugops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 96,
+   "lad": 93,
+   "range": [
+    "af-n"
+   ],
+   "note": "A six-metre abelisaurid with a wrinkled, pitted face -- perhaps more a scavenger than a hunter.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Abelisauridae"
+   },
+   "pbdb": {
+    "asked": "Rugops",
+    "matched": "Rugops",
+    "exact": true,
+    "oid": "txn:71394",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 100.5,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Abelisauridae",
+    "genus": "Rugops",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     0,
+     15,
+     12,
+     22
+    ]
+   ]
+  },
+  "Sagenopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 230,
+   "lad": 100,
+   "range": [
+    "eu",
+    "gl",
+    "as-n",
+    "as-c",
+    "as-ne",
+    "as-s",
+    "na",
+    "an",
+    "in",
+    "au-e",
+    "sa-s"
+   ],
+   "note": "Leaves of the caytonialean seed ferns, four leaflets on a stalk like a clover; their seeds grew enclosed in small berry-like capsules (Caytonia), once argued to be close to the origin of flowering plants.",
+   "w": 1,
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Caytoniales",
+    "family": "Caytoniaceae"
+   },
+   "aka": [
+    "Caytonia"
+   ],
+   "pbdb": {
+    "asked": "Sagenopteris",
+    "matched": "Sagenopteris",
+    "exact": true,
+    "oid": "txn:56127",
+    "rank": "genus",
+    "extant": false,
+    "noc": 293,
+    "fea": 293.52,
+    "lla": 93.9,
+    "phylum": "Ginkgophyta",
+    "class": "Ginkgoopsida",
+    "order": "Caytoniales",
+    "family": "Caytoniaceae",
+    "genus": "Sagenopteris",
+    "regions": {
+     "eu-n": 52,
+     "as-c": 50,
+     "na-w": 45,
+     "as-s": 26,
+     "as-w": 22,
+     "as-ne": 21,
+     "eu-s": 20,
+     "sa-s": 14,
+     "in": 11,
+     "as-n": 11,
+     "gl": 7,
+     "ca": 3,
+     "sa-n": 3,
+     "na-av": 2,
+     "na-n": 2,
+     "an": 2,
+     "na-e": 1,
+     "au-e": 1
+    },
+    "fea_r": 232.15,
+    "lla_r": 116.38
+   }
+  },
+  "Saichania": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 75,
+   "lad": 70,
+   "range": [
+    "as-c"
+   ],
+   "note": "A Mongolian ankylosaurid of the arid Late Cretaceous, with looping nasal passages that may have cooled or moistened the air it breathed.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Ankylosauridae"
+   },
+   "pbdb": {
+    "asked": "Saichania",
+    "matched": "Saichania",
+    "exact": true,
+    "oid": "txn:38834",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 100.5,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ankylosauridae",
+    "genus": "Saichania",
+    "regions": {
+     "as-ne": 3,
+     "as-c": 2
+    }
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Santanaraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 115,
+   "lad": 110,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A small coelurosaur, one of the few dinosaurs preserved with soft tissue -- muscle fibres and skin among its bones.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Coelurosauria"
+   },
+   "pbdb": {
+    "asked": "Santanaraptor",
+    "matched": "Santanaraptor",
+    "exact": true,
+    "oid": "txn:53939",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 119.57,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Santanaraptor",
+    "regions": {
+     "sa-n": 1
+    }
+   }
+  },
+  "Sapindopsis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 113,
+   "lad": 98,
+   "range": [
+    "na-e"
+   ],
+   "note": "Among the first flowering-plant leaves to look like a tree's -- lobed, leathery and compound -- from early relatives of the plane trees that colonised disturbed river banks in the Albian.",
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Proteales",
+    "family": "Platanaceae"
+   },
+   "pbdb": {
+    "asked": "Sapindopsis",
+    "matched": "Sapindopsis",
+    "exact": true,
+    "oid": "txn:53051",
+    "rank": "genus",
+    "extant": false,
+    "noc": 49,
+    "fea": 113.2,
+    "lla": 93.9,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Sapindales",
+    "family": "Sapindaceae",
+    "genus": "Sapindopsis",
+    "regions": {
+     "na-e": 30,
+     "na-w": 18,
+     "as-w": 1
+    },
+    "fea_r": 121.8,
+    "lla_r": 97.2
+   }
+  },
+  "Sarahsaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 192,
+   "lad": 186,
+   "range": [
+    "na-w"
+   ],
+   "note": "A four-metre sauropodomorph with big clawed hands -- evidence that the early long-necks reached North America from the south more than once.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha"
+   },
+   "pbdb": {
+    "asked": "Sarahsaurus",
+    "matched": "Sarahsaurus",
+    "exact": true,
+    "oid": "txn:171910",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 199.5,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Massospondylidae",
+    "genus": "Sarahsaurus",
+    "regions": {
+     "na-w": 2
+    }
+   },
+   "box": [
+    [
+     -114,
+     -107,
+     34.5,
+     38
+    ]
+   ]
+  },
+  "Saurolophus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 70,
+   "lad": 68,
+   "range": [
+    "na-w",
+    "as-c"
+   ],
+   "note": "A solid-crested duckbill found on both sides of the Late Cretaceous land bridge across the Bering region, in Alberta and in Mongolia.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Saurolophus",
+    "matched": "Saurolophus",
+    "exact": true,
+    "oid": "txn:38768",
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Saurolophus",
+    "regions": {
+     "as-ne": 20,
+     "na-w": 15,
+     "as-c": 3
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     -118,
+     -108,
+     49,
+     55
+    ],
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Sauropelta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ankylosaur",
+   "fad": 116,
+   "lad": 108,
+   "range": [
+    "na-w"
+   ],
+   "note": "A five-metre nodosaur with long spikes on its neck and shoulders, the commonest armoured dinosaur of the Albian of Montana and Wyoming.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ankylosauria",
+    "family": "Nodosauridae"
+   },
+   "pbdb": {
+    "asked": "Sauropelta",
+    "matched": "Sauropelta",
+    "exact": true,
+    "oid": "txn:38827",
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 121.4,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Nodosauridae",
+    "genus": "Sauropelta",
+    "regions": {
+     "na-w": 34
+    },
+    "fea_r": 110.95,
+    "lla_r": 102.0
+   }
+  },
+  "Sauroposeidon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 113,
+   "lad": 110,
+   "range": [
+    "na-w"
+   ],
+   "note": "A brachiosaurid with a twelve-metre neck that could reach seventeen metres up -- one of the tallest dinosaurs, from the Albian coastal plain of Oklahoma and Texas.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Brachiosauridae"
+   },
+   "pbdb": {
+    "asked": "Sauroposeidon",
+    "matched": "Sauroposeidon",
+    "exact": true,
+    "oid": "txn:66616",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 121.4,
+    "lla": 93.9,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sauroposeidon",
+    "regions": {
+     "na-e": 3,
+     "na-w": 3
+    }
+   }
+  },
+  "Scytophyllum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 245,
+   "lad": 215,
+   "range": [
+    "eu",
+    "as-c",
+    "as-n"
+   ],
+   "note": "A peltasperm seed fern with long, leathery, deeply toothed leaves -- the characteristic plant of Middle and Late Triassic floras from the Alps to Central Asia and the Urals.",
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae"
+   },
+   "pbdb": {
+    "asked": "Scytophyllum",
+    "matched": "Scytophyllum",
+    "exact": true,
+    "oid": "txn:157187",
+    "rank": "genus",
+    "extant": false,
+    "noc": 36,
+    "fea": 251.902,
+    "lla": 201.4,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae",
+    "genus": "Scytophyllum",
+    "regions": {
+     "eu-n": 13,
+     "as-n": 8,
+     "as-c": 6,
+     "eu-s": 4,
+     "as-ne": 2,
+     "af-s": 1,
+     "ar": 1,
+     "sa-s": 1
+    },
+    "fea_r": 249.45,
+    "lla_r": 203.55
+   }
+  },
+  "Semionotus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "fish",
+   "fad": 225,
+   "lad": 195,
+   "range": [
+    "na-e",
+    "na-av",
+    "eu"
+   ],
+   "note": "Deep-bodied, armour-scaled fishes that split into species flocks in the rift lakes that opened as Pangaea began to break apart -- as cichlids have in the African lakes today.",
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Semionotiformes",
+    "family": "Semionotidae"
+   },
+   "pbdb": {
+    "asked": "Semionotus",
+    "matched": "Semionotus",
+    "exact": true,
+    "oid": "txn:35162",
+    "rank": "genus",
+    "extant": false,
+    "noc": 67,
+    "fea": 250.8,
+    "lla": 132.6,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Semionotiformes",
+    "family": "Semionotidae",
+    "genus": "Semionotus",
+    "regions": {
+     "na-e": 33,
+     "na-w": 14,
+     "eu-s": 10,
+     "au-e": 4,
+     "na-av": 2,
+     "eu-n": 2,
+     "as-sb": 1,
+     "af-s": 1
+    },
+    "fea_r": 244.23,
+    "lla_r": 196.2
+   }
+  },
+  "Shunosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 170,
+   "lad": 160,
+   "range": [
+    "as-s"
+   ],
+   "note": "A ten-metre sauropod with a spiked bony club on the end of its tail -- one of the commonest dinosaurs of the Middle Jurassic of Sichuan.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   },
+   "pbdb": {
+    "asked": "Shunosaurus",
+    "matched": "Shunosaurus",
+    "exact": true,
+    "oid": "txn:38660",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 174.7,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Shunosaurus",
+    "regions": {
+     "as-s": 5
+    }
+   },
+   "box": [
+    [
+     102,
+     110,
+     28,
+     33
+    ]
+   ]
+  },
+  "Siamosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spinosaur",
+   "fad": 130,
+   "lad": 125,
+   "range": [
+    "as-ic"
+   ],
+   "note": "A spinosaurid known from its conical, fluted fish-catching teeth, from the Early Cretaceous rivers of Thailand.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Spinosauridae"
+   },
+   "pbdb": {
+    "asked": "Siamosaurus",
+    "matched": "Siamosaurus",
+    "exact": true,
+    "oid": "txn:56418",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 125.77,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Spinosauridae",
+    "genus": "Siamosaurus",
+    "regions": {
+     "as-ic": 7,
+     "as-ne": 1
+    },
+    "fea_r": 123.59,
+    "lla_r": 119.48
+   }
+  },
+  "Siderops": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 185,
+   "lad": 175,
+   "range": [
+    "au-e"
+   ],
+   "note": "A two-and-a-half-metre temnospondyl of the Early Jurassic -- a late survivor of the big amphibians in the cool rivers of southern Gondwana.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Chigutisauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Siderops",
+    "matched": "Siderops",
+    "exact": true,
+    "oid": "txn:37155",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 201.4,
+    "lla": 174.7,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Chigutisauridae",
+    "genus": "Siderops",
+    "regions": {
+     "af-s": 1,
+     "au-e": 1
+    }
+   }
+  },
+  "Silesaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 232,
+   "lad": 226,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A slim, two-metre dinosaur cousin with a beak-tipped jaw; droppings attributed to it are full of small beetles, so it ate insects as well as plants.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Archosauria",
+    "family": "Silesauridae"
+   },
+   "pbdb": {
+    "asked": "Silesaurus",
+    "matched": "Silesaurus",
+    "exact": true,
+    "oid": "txn:81775",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 233.6,
+    "lla": 227.3,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Silesauridae",
+    "genus": "Silesaurus",
+    "regions": {
+     "eu-n": 3
+    }
+   }
+  },
+  "Sinornithosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 125,
+   "lad": 122,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A turkey-sized feathered dromaeosaur of the Jehol forests; its fossils keep pigment cells that suggest reddish-brown and black plumage.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Dromaeosauridae"
+   },
+   "pbdb": {
+    "asked": "Sinornithosaurus",
+    "matched": "Sinornithosaurus",
+    "exact": true,
+    "oid": "txn:68204",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 125.77,
+    "lla": 119.57,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Dromaeosauridae",
+    "genus": "Sinornithosaurus",
+    "regions": {
+     "as-ne": 3
+    }
+   },
+   "box": [
+    [
+     115,
+     127,
+     39,
+     45
+    ]
+   ]
+  },
+  "Sinosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 199,
+   "lad": 190,
+   "range": [
+    "as-s"
+   ],
+   "note": "A five-metre crested theropod of the Lufeng beds, the Asian cousin of Dilophosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Sinosaurus",
+    "matched": "Sinosaurus",
+    "exact": true,
+    "oid": "txn:38266",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 201.4,
+    "lla": 192.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sinosaurus",
+    "regions": {
+     "as-s": 16
+    },
+    "fea_r": 200.45,
+    "lla_r": 196.2
+   },
+   "box": [
+    [
+     99,
+     106,
+     23,
+     27.5
+    ]
+   ]
+  },
+  "Sinraptor": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 161,
+   "lad": 157,
+   "range": [
+    "as-c"
+   ],
+   "note": "A seven-to-eight-metre metriacanthosaurid; bite wounds on its skull show that big theropods fought one another face to face.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Metriacanthosauridae"
+   },
+   "pbdb": {
+    "asked": "Sinraptor",
+    "matched": "Sinraptor",
+    "exact": true,
+    "oid": "txn:54820",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 168.2,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Metriacanthosauridae",
+    "genus": "Sinraptor",
+    "regions": {
+     "as-c": 1,
+     "as-s": 1
+    }
+   },
+   "box": [
+    [
+     82,
+     93,
+     43,
+     47.5
+    ]
+   ]
+  },
+  "Smilosuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 225,
+   "lad": 212,
+   "range": [
+    "na-w"
+   ],
+   "note": "A seven-metre phytosaur, crocodile-shaped but not a crocodile: its nostrils sat on a mound in front of its eyes, not at the tip of its snout.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Phytosauria",
+    "family": "Phytosauridae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Smilosuchus",
+    "matched": "Smilosuchus",
+    "exact": true,
+    "oid": "txn:159237",
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 237,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Parasuchidae",
+    "genus": "Smilosuchus",
+    "regions": {
+     "na-w": 22
+    },
+    "fea_r": 221.35,
+    "lla_r": 216.5
+   }
+  },
+  "Sordes": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 157,
+   "lad": 150,
+   "range": [
+    "as-c"
+   ],
+   "note": "A small pterosaur whose fossils first showed that pterosaurs were furred: its body was covered in hair-like fibres.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Rhamphorhynchidae"
+   },
+   "pbdb": {
+    "asked": "Sordes",
+    "matched": "Sordes",
+    "exact": true,
+    "oid": "txn:38478",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 161.5,
+    "lla": 154.8,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Rhamphorhynchidae",
+    "genus": "Sordes",
+    "regions": {
+     "as-c": 1
+    }
+   },
+   "box": [
+    [
+     68,
+     72,
+     42,
+     44.5
+    ]
+   ]
+  },
+  "Spinophorosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 170,
+   "lad": 166,
+   "range": [
+    "af-n"
+   ],
+   "note": "A thirteen-metre early sauropod of the Middle Jurassic of Niger, once reconstructed with tail spikes like Shunosaurus's.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda"
+   },
+   "pbdb": {
+    "asked": "Spinophorosaurus",
+    "matched": "Spinophorosaurus",
+    "exact": true,
+    "oid": "txn:176574",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 170.9,
+    "lla": 165.3,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Spinophorosaurus",
+    "regions": {
+     "af-n": 1
+    }
+   },
+   "box": [
+    [
+     0,
+     15,
+     12,
+     22
+    ]
+   ]
+  },
+  "Stagonolepis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 232,
+   "lad": 225,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A three-metre aetosaur: an armoured, pig-snouted plant-eater of the crocodile line, rooting in the soil of Late Triassic river plains.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Aetosauria",
+    "family": "Stagonolepididae"
+   },
+   "pbdb": {
+    "asked": "Stagonolepis",
+    "matched": "Stagonolepis",
+    "exact": true,
+    "oid": "txn:38271",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 237,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stagonolepididae",
+    "genus": "Stagonolepis",
+    "regions": {
+     "na-w": 7,
+     "eu-n": 5,
+     "eu-s": 1
+    },
+    "fea_r": 230.45,
+    "lla_r": 216.5
+   },
+   "place_ok": true,
+   "conf_note": "the Chinle species S. wellesi is now Calyptosuchus; Stagonolepis proper is Scottish and Polish"
+  },
+  "Staurikosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 233,
+   "lad": 225,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A two-metre, slender predator among the first dinosaurs of all -- like Herrerasaurus, a hunter from the time when dinosaurs were still a small part of the fauna.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Herrerasauridae"
+   },
+   "pbdb": {
+    "asked": "Staurikosaurus",
+    "matched": "Staurikosaurus",
+    "exact": true,
+    "oid": "txn:38508",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 237,
+    "lla": 227.3,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Herrerasauridae",
+    "genus": "Staurikosaurus",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Stereognathus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 168,
+   "lad": 165,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A tritylodontid -- a plant-eating near-mammal -- among the last of its line, from the Bathonian of England and Scotland.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Tritylodontidae"
+   },
+   "pbdb": {
+    "asked": "Stereognathus",
+    "matched": "Stereognathus",
+    "exact": true,
+    "oid": "txn:39216",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 168.2,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Tritylodontidae",
+    "genus": "Stereognathus",
+    "regions": {
+     "eu-n": 10,
+     "as-n": 5
+    },
+    "fea_r": 166.75,
+    "lla_r": 117.3
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB's Asian referrals are unverified; the genus rests on the Bathonian of Britain",
+   "box": [
+    [
+     -7,
+     2,
+     50,
+     58.7
+    ]
+   ]
+  },
+  "Struthiomimus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 76,
+   "lad": 66,
+   "range": [
+    "na-w"
+   ],
+   "note": "A toothless, fast ornithomimid four metres long, built like an ostrich, of the Late Cretaceous plains of western North America.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Ornithomimidae"
+   },
+   "pbdb": {
+    "asked": "Struthiomimus",
+    "matched": "Struthiomimus",
+    "exact": true,
+    "oid": "txn:38545",
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ornithomimidae",
+    "genus": "Struthiomimus",
+    "regions": {
+     "na-w": 18
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   }
+  },
+  "Styracosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ceratopsian",
+   "fad": 75.5,
+   "lad": 75,
+   "range": [
+    "na-w"
+   ],
+   "note": "A horned dinosaur with a crown of long spikes around its frill and a single tall nose horn; bone beds show it lived in herds.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ceratopsia",
+    "family": "Ceratopsidae"
+   },
+   "pbdb": {
+    "asked": "Styracosaurus",
+    "matched": "Styracosaurus",
+    "exact": true,
+    "oid": "txn:38860",
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ceratopsidae",
+    "genus": "Styracosaurus",
+    "regions": {
+     "na-w": 10
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   }
+  },
+  "Talenkauen": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 75,
+   "lad": 68,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A four-metre elasmarian ornithopod with thin bony plates along its ribs -- one of a family of southern plant-eaters that reached Antarctica and Australia.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Elasmaria"
+   },
+   "pbdb": {
+    "asked": "Talenkauen",
+    "matched": "Talenkauen",
+    "exact": true,
+    "oid": "txn:67276",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Talenkauen",
+    "regions": {
+     "sa-s": 2
+    }
+   }
+  },
+  "Tawa": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smalltheropod",
+   "fad": 215,
+   "lad": 212,
+   "range": [
+    "na-w"
+   ],
+   "note": "A two-metre early theropod from New Mexico -- one of the fossils showing that dinosaurs spread north from southern Pangaea within a few million years of their origin.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda"
+   },
+   "pbdb": {
+    "asked": "Tawa",
+    "matched": "Tawa",
+    "exact": true,
+    "oid": "txn:159718",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 227.3,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tawa",
+    "regions": {
+     "na-w": 3
+    }
+   }
+  },
+  "Tazoudasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 182,
+   "lad": 175,
+   "range": [
+    "af-n"
+   ],
+   "note": "A nine-metre early sauropod of the Toarcian, known from a skeleton preserved almost complete, skull and all.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Vulcanodontidae"
+   },
+   "pbdb": {
+    "asked": "Tazoudasaurus",
+    "matched": "Tazoudasaurus",
+    "exact": true,
+    "oid": "txn:68535",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 192.9,
+    "lla": 174.7,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tazoudasaurus",
+    "regions": {
+     "af-n": 2
+    }
+   },
+   "box": [
+    [
+     -10,
+     0,
+     29.5,
+     34
+    ]
+   ]
+  },
+  "Teleocrater": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 247,
+   "lad": 242,
+   "range": [
+    "af-e"
+   ],
+   "note": "A long-necked carnivore two to three metres long, one of the earliest members of the bird line of archosaurs -- still walking on all fours, with a crocodile-like ankle, before dinosaurs existed.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Archosauria",
+    "family": "Aphanosauria"
+   },
+   "pbdb": {
+    "asked": "Teleocrater",
+    "matched": "Teleocrater",
+    "exact": true,
+    "oid": "txn:38307",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 247,
+    "lla": 241.464,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Teleocrater",
+    "regions": {
+     "af-e": 3
+    }
+   }
+  },
+  "Telmatosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A small, primitive duckbill of the Hațeg island in the latest Cretaceous -- dwarfed, like much of the island's fauna, and a relic of an older lineage.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Telmatosaurus",
+    "matched": "Telmatosaurus",
+    "exact": true,
+    "oid": "txn:64068",
+    "rank": "genus",
+    "extant": false,
+    "noc": 23,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Telmatosauridae",
+    "genus": "Telmatosaurus",
+    "regions": {
+     "eu-s": 23
+    },
+    "fea_r": 69.1,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     20,
+     27,
+     44,
+     48
+    ]
+   ]
+  },
+  "Tempskya": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "treefern",
+   "fad": 125,
+   "lad": 90,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu",
+    "as-ne",
+    "as-c",
+    "sa-s"
+   ],
+   "note": "A tree fern that built its 'trunk' from a mass of its own tangled stems and roots, up to half a metre thick -- a way of growing tall that no living plant uses.",
+   "cls": {
+    "class": "Polypodiopsida",
+    "family": "Tempskyaceae"
+   },
+   "pbdb": {
+    "asked": "Tempskya",
+    "matched": "Tempskya",
+    "exact": true,
+    "oid": "txn:207953",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 132.6,
+    "lla": 89.8,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tempskyaceae",
+    "genus": "Tempskya",
+    "regions": {
+     "na-w": 14,
+     "au-e": 1,
+     "eu-s": 1
+    },
+    "fea_r": 121.8,
+    "lla_r": 95.15
+   }
+  },
+  "Thrinaxodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "cynodont",
+   "fad": 251.9,
+   "lad": 247,
+   "range": [
+    "af-s",
+    "an"
+   ],
+   "note": "A cat-sized cynodont of the earliest Triassic that lived in burrows -- one was found curled up in its tunnel beside an injured amphibian. Its ribs suggest a diaphragm, a step toward the mammalian way of breathing.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Cynodontia",
+    "family": "Thrinaxodontidae"
+   },
+   "pbdb": {
+    "asked": "Thrinaxodon",
+    "matched": "Thrinaxodon",
+    "exact": true,
+    "oid": "txn:39179",
+    "rank": "genus",
+    "extant": false,
+    "noc": 18,
+    "fea": 251.902,
+    "lla": 247,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Thrinaxodon",
+    "regions": {
+     "af-s": 16,
+     "an": 2
+    },
+    "fea_r": 249.45,
+    "lla_r": 249.45
+   }
+  },
+  "Tianyulong": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 161,
+   "lad": 158,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A cat-sized heterodontosaurid with long bristle-like filaments along its back and tail.",
+   "cls": {
+    "class": "Ornithischia",
+    "family": "Heterodontosauridae"
+   },
+   "pbdb": {
+    "asked": "Tianyulong",
+    "matched": "Tianyulong",
+    "exact": true,
+    "oid": "txn:143495",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 168.2,
+    "lla": 152.21,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Heterodontosauridae",
+    "genus": "Tianyulong",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     115,
+     124,
+     39,
+     43
+    ]
+   ]
+  },
+  "Titanoptera": {
+   "rank": "order",
+   "realm": "land",
+   "form": "grasshopper",
+   "fad": 245,
+   "lad": 201.4,
+   "range": [
+    "as-c",
+    "au-e"
+   ],
+   "note": "Giant Triassic relatives of grasshoppers with wings spanning up to 36 centimetres and grasping forelegs; patches on their wings may have flashed or rattled like a cicada's.",
+   "cls": {
+    "class": "Insecta",
+    "order": "Titanoptera"
+   },
+   "pbdb": {
+    "asked": "Titanoptera",
+    "matched": "Titanoptera",
+    "exact": true,
+    "oid": "txn:192772",
+    "rank": "suborder",
+    "extant": false,
+    "noc": 48,
+    "fea": 314.6,
+    "lla": 205.7,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Orthoptera",
+    "family": null,
+    "genus": null,
+    "regions": {
+     "as-c": 28,
+     "eu-n": 11,
+     "au-e": 6,
+     "as-ne": 2,
+     "eu-s": 1
+    },
+    "fea_r": 278.85,
+    "lla_r": 239.23
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB's Permian eu-n collections are tcholmanvissiids, a stem group outside the Triassic giants",
+   "box": [
+    [
+     69.5,
+     72.5,
+     39.5,
+     41
+    ],
+    [
+     150,
+     154,
+     -29,
+     -26
+    ]
+   ]
+  },
+  "Torvosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 155,
+   "lad": 148,
+   "range": [
+    "na-w",
+    "eu-s"
+   ],
+   "note": "A ten-metre megalosaurid, one of the largest predators of the Late Jurassic, on both sides of the young Atlantic; its eggs, with embryos inside, were found in Portugal.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Megalosauridae"
+   },
+   "pbdb": {
+    "asked": "Torvosaurus",
+    "matched": "Torvosaurus",
+    "exact": true,
+    "oid": "txn:38587",
+    "rank": "genus",
+    "extant": false,
+    "noc": 28,
+    "fea": 165.3,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Megalosauridae",
+    "genus": "Torvosaurus",
+    "regions": {
+     "na-w": 9,
+     "eu-s": 9,
+     "af-e": 3,
+     "sa-s": 3,
+     "eu-n": 3,
+     "as-ne": 1
+    },
+    "fea_r": 153.55,
+    "lla_r": 146.15
+   }
+  },
+  "Triadobatrachus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "frog",
+   "fad": 251,
+   "lad": 249,
+   "range": [
+    "mg"
+   ],
+   "note": "The oldest frog-like animal known: a ten-centimetre salientian of the Early Triassic, with a frog's skull but still a short tail and a long back.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Salientia",
+    "family": "Triadobatrachidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Triadobatrachus",
+    "matched": "Triadobatrachus",
+    "exact": true,
+    "oid": "txn:37421",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 251.902,
+    "lla": 248.6,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Salientia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Triadobatrachus",
+    "regions": {
+     "mg": 1
+    }
+   },
+   "box": [
+    [
+     43,
+     51,
+     -26,
+     -11.5
+    ]
+   ]
+  },
+  "Trilophosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 230,
+   "lad": 215,
+   "range": [
+    "na-w"
+   ],
+   "note": "A stout, beaked reptile two metres long with broad three-cusped cheek teeth -- a Late Triassic plant-eater that looks like a lizard but belongs to the archosaur side of the reptile tree.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Allokotosauria",
+    "family": "Trilophosauridae"
+   },
+   "pbdb": {
+    "asked": "Trilophosaurus",
+    "matched": "Trilophosaurus",
+    "exact": true,
+    "oid": "txn:38204",
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 237,
+    "lla": 205.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Trilophosaurus",
+    "regions": {
+     "na-w": 31
+    },
+    "fea_r": 221.35,
+    "lla_r": 216.5
+   }
+  },
+  "Tsintaosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hadrosaur",
+   "fad": 76,
+   "lad": 70,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A Chinese lambeosaurine with a tall, forward-pointing crest -- long thought a single unicorn horn, since rebuilt as a larger hollow crest.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Hadrosauridae"
+   },
+   "pbdb": {
+    "asked": "Tsintaosaurus",
+    "matched": "Tsintaosaurus",
+    "exact": true,
+    "oid": "txn:38778",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Hadrosauridae",
+    "genus": "Tsintaosaurus",
+    "regions": {
+     "as-ne": 4
+    }
+   },
+   "box": [
+    [
+     114,
+     123,
+     34,
+     38.5
+    ]
+   ]
+  },
+  "Tuojiangosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stegosaur",
+   "fad": 165,
+   "lad": 157,
+   "range": [
+    "as-s"
+   ],
+   "note": "A seven-metre stegosaur of the Late Jurassic of Sichuan with pointed plates in pairs along its back.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Stegosauria",
+    "family": "Stegosauridae"
+   },
+   "pbdb": {
+    "asked": "Tuojiangosaurus",
+    "matched": "Tuojiangosaurus",
+    "exact": true,
+    "oid": "txn:38806",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 168.2,
+    "lla": 161.5,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stegosauridae",
+    "genus": "Tuojiangosaurus",
+    "regions": {
+     "as-s": 1
+    }
+   },
+   "box": [
+    [
+     102,
+     110,
+     28,
+     33
+    ]
+   ]
+  },
+  "Tupandactylus": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 115,
+   "lad": 112,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A tapejarid pterosaur with an enormous sail-like head crest, taller than its skull was long.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Tapejaridae"
+   },
+   "pbdb": {
+    "asked": "Tupandactylus",
+    "matched": "Tupandactylus",
+    "exact": true,
+    "oid": "txn:163702",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 119.57,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Tapejaridae",
+    "genus": "Tupandactylus",
+    "regions": {
+     "sa-n": 3
+    }
+   }
+  },
+  "Tupuxuara": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "pterosaur",
+   "fad": 115,
+   "lad": 110,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A thalassodromid pterosaur with a five-metre wingspan and a tall, rounded head crest, from the lagoon beds of north-east Brazil.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Thalassodromidae"
+   },
+   "pbdb": {
+    "asked": "Tupuxuara",
+    "matched": "Tupuxuara",
+    "exact": true,
+    "oid": "txn:95396",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 119.57,
+    "lla": 113.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Pterosauria",
+    "family": "Thalassodromidae",
+    "genus": "Tupuxuara",
+    "regions": {
+     "sa-n": 5
+    }
+   }
+  },
+  "Turiasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sauropod",
+   "fad": 152,
+   "lad": 145,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A turiasaurian sauropod of the latest Jurassic of eastern Spain, some thirty metres long and perhaps forty tonnes -- one of the largest animals ever to live in Europe.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropoda",
+    "family": "Turiasauria"
+   },
+   "pbdb": {
+    "asked": "Turiasaurus",
+    "matched": "Turiasaurus",
+    "exact": true,
+    "oid": "txn:91327",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 154.8,
+    "lla": 143.1,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Turiasaurus",
+    "regions": {
+     "eu-s": 5
+    }
+   }
+  },
+  "Typothorax": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archosaur",
+   "fad": 222,
+   "lad": 205,
+   "range": [
+    "na-w"
+   ],
+   "note": "A broad, flat-backed aetosaur -- a three-metre armoured plant-eater of the crocodile line, common on the Late Triassic floodplains of the American Southwest.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Aetosauria",
+    "family": "Stagonolepididae"
+   },
+   "pbdb": {
+    "asked": "Typothorax",
+    "matched": "Typothorax",
+    "exact": true,
+    "oid": "txn:64792",
+    "rank": "genus",
+    "extant": false,
+    "noc": 90,
+    "fea": 227.3,
+    "lla": 201.4,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Stagonolepididae",
+    "genus": "Typothorax",
+    "regions": {
+     "na-w": 89,
+     "in": 1
+    },
+    "fea_r": 216.5,
+    "lla_r": 203.55
+   }
+  },
+  "Vegavis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "waterfowl",
+   "fad": 67,
+   "lad": 66,
+   "range": [
+    "an"
+   ],
+   "note": "The oldest undisputed member of the modern bird groups: a relative of ducks and geese from the last of the Cretaceous in Antarctica, with a voice box that could honk.",
+   "cls": {
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "Vegaviidae"
+   },
+   "pbdb": {
+    "asked": "Vegavis",
+    "matched": "Vegavis",
+    "exact": true,
+    "oid": "txn:81021",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vegavis",
+    "regions": {
+     "an": 3
+    }
+   }
+  },
+  "Vieraella": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "frog",
+   "fad": 188,
+   "lad": 183,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A three-centimetre frog from the Early Jurassic of Patagonia, one of the oldest that looks entirely modern.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Anura"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Vieraella",
+    "matched": "Vieraella",
+    "exact": true,
+    "oid": "txn:37425",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 184.2,
+    "lla": 170.9,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Anura",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Vieraella",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Vintana": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 72,
+   "lad": 66,
+   "range": [
+    "mg"
+   ],
+   "note": "A groundhog-sized gondwanatherian, one of an extinct southern group of mammals, known from a single remarkable skull.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Gondwanatheria",
+    "family": "Sudamericidae"
+   },
+   "pbdb": {
+    "asked": "Vintana",
+    "matched": "Vintana",
+    "exact": true,
+    "oid": "txn:331044",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 72.2,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Sudamericidae",
+    "genus": "Vintana",
+    "regions": {
+     "mg": 2
+    }
+   },
+   "box": [
+    [
+     43,
+     51,
+     -26,
+     -11.5
+    ]
+   ]
+  },
+  "Yunnanosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "prosauropod",
+   "fad": 199,
+   "lad": 183,
+   "range": [
+    "as-s"
+   ],
+   "note": "A seven-metre sauropodomorph of the Lufeng beds with self-sharpening, spoon-shaped teeth like a sauropod's.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Sauropodomorpha",
+    "family": "Yunnanosauridae"
+   },
+   "pbdb": {
+    "asked": "Yunnanosaurus",
+    "matched": "Yunnanosaurus",
+    "exact": true,
+    "oid": "txn:56630",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 201.4,
+    "lla": 184.2,
+    "phylum": "Chordata",
+    "class": "Saurischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Yunnanosaurus",
+    "regions": {
+     "as-s": 17
+    },
+    "fea_r": 200.45,
+    "lla_r": 188.55
+   },
+   "box": [
+    [
+     99,
+     106,
+     23,
+     27.5
+    ]
+   ]
+  },
+  "Zalambdalestes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 75,
+   "lad": 71,
+   "range": [
+    "as-c"
+   ],
+   "note": "A long-snouted, long-legged hopper twenty centimetres long -- an early eutherian built like an elephant shrew.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Eutheria",
+    "family": "Zalambdalestidae"
+   },
+   "pbdb": {
+    "asked": "Zalambdalestes",
+    "matched": "Zalambdalestes",
+    "exact": true,
+    "oid": "txn:40217",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Zalambdalestidae",
+    "genus": "Zalambdalestes",
+    "regions": {
+     "as-ne": 11
+    },
+    "fea_r": 77.9,
+    "lla_r": 77.9
+   },
+   "box": [
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Zalmoxes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "ornithopod",
+   "fad": 70,
+   "lad": 66,
+   "range": [
+    "eu-s"
+   ],
+   "note": "A pig-sized rhabdodontid, one of the dwarfed dinosaurs of the Hațeg island whose small size first suggested 'island dwarfing' to Baron Nopcsa a century ago.",
+   "cls": {
+    "class": "Ornithischia",
+    "order": "Ornithopoda",
+    "family": "Rhabdodontidae"
+   },
+   "pbdb": {
+    "asked": "Zalmoxes",
+    "matched": "Zalmoxes",
+    "exact": true,
+    "oid": "txn:66740",
+    "rank": "genus",
+    "extant": false,
+    "noc": 44,
+    "fea": 83.6,
+    "lla": 66,
+    "phylum": "Chordata",
+    "class": "Ornithischia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Zalmoxes",
+    "regions": {
+     "eu-s": 44
+    },
+    "fea_r": 77.9,
+    "lla_r": 69.1
+   },
+   "box": [
+    [
+     20,
+     27,
+     44,
+     48
+    ]
+   ]
+  },
+  "Zhuchengtyrannus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "theropod",
+   "fad": 74,
+   "lad": 70,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A ten-metre tyrannosaur of Shandong, from bone beds that also hold the giant duckbill Shantungosaurus.",
+   "cls": {
+    "class": "Saurischia",
+    "order": "Theropoda",
+    "family": "Tyrannosauridae"
+   },
+   "pbdb": {
+    "asked": "Zhuchengtyrannus",
+    "matched": "Zhuchengtyrannus",
+    "exact": true,
+    "oid": "txn:182140",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 83.6,
+    "lla": 72.2,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Tyrannosauridae",
+    "genus": "Zhuchengtyrannus",
+    "regions": {
+     "as-ne": 1
+    }
+   },
+   "box": [
+    [
+     114,
+     123,
+     34,
+     38.5
+    ]
+   ]
+  }
+ }
+}

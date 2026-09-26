@@ -21,7 +21,8 @@ def E(name, rank, realm, form, fad, lad, rng, note, hab=None, lat=None, w=None, 
     if rep: e["rep"] = rep
     if realms: e["realms"] = realms
     if aka: e["aka"] = aka
-    if box: e["box"] = box if isinstance(box[0], (list, tuple)) else [box]
+    # a list of boxes, one box, or time-sliced boxes ({"t": [old, young], "box": [...]})
+    if box: e["box"] = box if isinstance(box[0], (list, tuple, dict)) else [box]
     if fill is False: e["fill"] = False
     if pic: e["pic"] = pic
     if assemblage: e["assemblage"] = True

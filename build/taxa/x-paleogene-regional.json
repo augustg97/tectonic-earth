@@ -1,0 +1,2680 @@
+{
+ "taxa": {
+  "Ailuravus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rodent",
+   "fad": 50,
+   "lad": 46,
+   "range": [
+    "eu"
+   ],
+   "note": "A squirrel-like early rodent nearly a metre long with its bushy tail, preserved at Messel with leaves in its gut.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Ischyromyidae"
+   },
+   "pbdb": {
+    "asked": "Ailuravus",
+    "matched": "Ailuravus",
+    "exact": true,
+    "oid": "txn:41392",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Rodentia",
+    "family": "Ischyromyidae",
+    "genus": "Ailuravus",
+    "regions": {
+     "eu-n": 7,
+     "eu-s": 4
+    },
+    "fea_r": 52.03,
+    "lla_r": 39.37
+   }
+  },
+  "Anthropornis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "penguin",
+   "fad": 45,
+   "lad": 33,
+   "range": [
+    "an"
+   ],
+   "note": "A giant penguin of the Eocene of Antarctica, 1.7 metres tall and up to 90 kilograms, with a bend in its flipper bone.",
+   "hab": [
+    "coast",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "Spheniscidae"
+   },
+   "pbdb": {
+    "asked": "Anthropornis",
+    "matched": "Anthropornis",
+    "exact": true,
+    "oid": "txn:39712",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 41.03,
+    "lla": 15.98,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Sphenisciformes",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Anthropornis",
+    "regions": {
+     "an": 13
+    },
+    "fea_r": 39.37,
+    "lla_r": 21.64
+   }
+  },
+  "Apidium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 34,
+   "lad": 29,
+   "range": [
+    "af-n"
+   ],
+   "note": "A squirrel-monkey-sized early anthropoid of the Fayum, a leaper in the trees that fringed the Oligocene rivers.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Parapithecidae"
+   },
+   "pbdb": {
+    "asked": "Apidium",
+    "matched": "Apidium",
+    "exact": true,
+    "oid": "txn:40857",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 33.9,
+    "lla": 27.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Parapithecidae",
+    "genus": "Apidium",
+    "regions": {
+     "as-w": 5,
+     "af-n": 1,
+     "ar": 1
+    }
+   }
+  },
+  "Archaeotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "entelodont",
+   "fad": 38,
+   "lad": 28,
+   "range": [
+    "na-w"
+   ],
+   "note": "A cow-sized entelodont, a 'hell pig' of the Oligocene plains; bite marks show it stored the carcasses of early camels to eat later.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Entelodontidae"
+   },
+   "pbdb": {
+    "asked": "Archaeotherium",
+    "matched": "Archaeotherium",
+    "exact": true,
+    "oid": "txn:42366",
+    "rank": "genus",
+    "extant": false,
+    "noc": 67,
+    "fea": 37,
+    "lla": 16.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Entelodontidae",
+    "genus": "Archaeotherium",
+    "regions": {
+     "na-w": 66,
+     "na-e": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 24.0
+   }
+  },
+  "Arctocyon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 60,
+   "lad": 56,
+   "range": [
+    "eu",
+    "na-w"
+   ],
+   "note": "A bear-sized arctocyonid with blunt teeth and a heavy tail -- an omnivore of the Paleocene forests on both sides of the North Atlantic.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "family": "Arctocyonidae"
+   },
+   "pbdb": {
+    "asked": "Arctocyon",
+    "matched": "Arctocyon",
+    "exact": true,
+    "oid": "txn:42200",
+    "rank": "genus",
+    "extant": false,
+    "noc": 95,
+    "fea": 66,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Procreodi",
+    "family": "Arctocyonidae",
+    "genus": "Arctocyon",
+    "regions": {
+     "na-w": 93,
+     "eu-s": 2
+    },
+    "fea_r": 62.15,
+    "lla_r": 56.75
+   }
+  },
+  "Bemalambda": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pantodont",
+   "fad": 63,
+   "lad": 61,
+   "range": [
+    "as-s"
+   ],
+   "note": "A dog-sized pantodont of the earliest Paleocene of South China, one of the first mammals to take over the plant-eating roles the dinosaurs had left.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pantodonta",
+    "family": "Bemalambdidae"
+   },
+   "pbdb": {
+    "asked": "Bemalambda",
+    "matched": "Bemalambda",
+    "exact": true,
+    "oid": "txn:40561",
+    "rank": "genus",
+    "extant": false,
+    "noc": 14,
+    "fea": 66,
+    "lla": 59.24,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cimolesta",
+    "family": "Bemalambdidae",
+    "genus": "Bemalambda",
+    "regions": {
+     "as-s": 14
+    },
+    "fea_r": 63.83,
+    "lla_r": 60.45
+   }
+  },
+  "Borealosuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 72,
+   "lad": 50,
+   "range": [
+    "na-w",
+    "na-e",
+    "na-n"
+   ],
+   "note": "A long-snouted crocodilian that crossed the end-Cretaceous extinction and lived on in the warm Paleocene rivers of North America.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia"
+   },
+   "pbdb": {
+    "asked": "Borealosuchus",
+    "matched": "Borealosuchus",
+    "exact": true,
+    "oid": "txn:110899",
+    "rank": "genus",
+    "extant": false,
+    "noc": 135,
+    "fea": 83.6,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Borealosuchus",
+    "regions": {
+     "na-w": 125,
+     "na-e": 5,
+     "na-av": 5
+    },
+    "fea_r": 77.9,
+    "lla_r": 48.5
+   }
+  },
+  "Branisella": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 26,
+   "lad": 25,
+   "range": [
+    "sa-n"
+   ],
+   "note": "The oldest known New World monkey, from Bolivia -- descended from African primates that had crossed the Atlantic, probably on floating vegetation.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates"
+   },
+   "pbdb": {
+    "homonym": "Branisella, a Silurian-Devonian brachiopod; the monkey is Branisella boliviana Hoffstetter 1969"
+   }
+  },
+  "Champsosaurus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 75,
+   "lad": 50,
+   "range": [
+    "na-w",
+    "na-n",
+    "eu"
+   ],
+   "note": "A gharial-snouted choristodere -- not a crocodile at all -- that fished the rivers of the latest Cretaceous and Paleocene, and came through the extinction that ended the dinosaurs.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Choristodera",
+    "family": "Champsosauridae"
+   },
+   "pbdb": {
+    "asked": "Champsosaurus",
+    "matched": "Champsosaurus",
+    "exact": true,
+    "oid": "txn:37786",
+    "rank": "genus",
+    "extant": false,
+    "noc": 232,
+    "fea": 100.5,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Choristodera",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Champsosaurus",
+    "regions": {
+     "na-w": 228,
+     "eu-s": 2,
+     "na-n": 1,
+     "eu-n": 1
+    },
+    "fea_r": 77.9,
+    "lla_r": 59.2
+   }
+  },
+  "Chriacus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 64,
+   "lad": 54,
+   "range": [
+    "na-w"
+   ],
+   "note": "A raccoon-sized arctocyonid with a long tail and grasping feet -- a climbing omnivore of the Paleocene forests.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "family": "Arctocyonidae"
+   },
+   "pbdb": {
+    "asked": "Chriacus",
+    "matched": "Chriacus",
+    "exact": true,
+    "oid": "txn:42203",
+    "rank": "genus",
+    "extant": false,
+    "noc": 166,
+    "fea": 66,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Procreodi",
+    "family": "Arctocyonidae",
+    "genus": "Chriacus",
+    "regions": {
+     "na-w": 166
+    },
+    "fea_r": 62.15,
+    "lla_r": 52.03
+   }
+  },
+  "Cinnamomum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 60,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      60,
+      5.3
+     ],
+     "in": [
+      "na",
+      "eu",
+      "as"
+     ]
+    },
+    {
+     "t": [
+      5.3,
+      0
+     ],
+     "in": [
+      "as-s",
+      "as-ic",
+      "as-sb",
+      "in",
+      "as-ne"
+     ]
+    }
+   ],
+   "note": "Cinnamon and camphor laurels, whose three-veined leaves are among the commonest fossils of the warm Paleogene and Miocene forests of Europe and North America; today they grow wild only in tropical and subtropical Asia.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "lat": [
+    {
+     "t": [
+      60,
+      5.3
+     ],
+     "lat": [
+      0,
+      60
+     ]
+    },
+    {
+     "t": [
+      5.3,
+      0
+     ],
+     "lat": [
+      0,
+      36
+     ]
+    }
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Laurales",
+    "family": "Lauraceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       68,
+       146,
+       -10,
+       36
+      ]
+     ]
+    }
+   ],
+   "pbdb": {
+    "asked": "Cinnamomum",
+    "matched": "Cinnamomum",
+    "exact": true,
+    "oid": "txn:54617",
+    "rank": "genus",
+    "extant": true,
+    "noc": 179,
+    "fea": 100.5,
+    "lla": 0,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Laurales",
+    "family": "Lauraceae",
+    "genus": "Cinnamomum",
+    "regions": {
+     "na-w": 63,
+     "as-ne": 29,
+     "eu-n": 21,
+     "as-s": 14,
+     "in": 14,
+     "eu-s": 11,
+     "na-e": 9,
+     "as-sb": 9,
+     "sa-s": 4,
+     "as-ic": 2,
+     "sa-n": 1,
+     "na-av": 1,
+     "au-e": 1
+    },
+    "fea_r": 83.25,
+    "lla_r": 1.68
+   }
+  },
+  "Diplocynodon": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "crocodile",
+   "fad": 50,
+   "lad": 15,
+   "range": [
+    "eu"
+   ],
+   "note": "A small alligator relative, the common crocodilian of Europe's lakes and rivers from the Eocene to the Miocene.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "Diplocynodontidae"
+   },
+   "pbdb": {
+    "asked": "Diplocynodon",
+    "matched": "Diplocynodon",
+    "exact": true,
+    "oid": "txn:38427",
+    "rank": "genus",
+    "extant": false,
+    "noc": 130,
+    "fea": 83.6,
+    "lla": 0.129,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Crocodylia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Diplocynodon",
+    "regions": {
+     "eu-s": 106,
+     "eu-n": 15,
+     "na-w": 4,
+     "as-w": 3,
+     "na-e": 1,
+     "as-s": 1
+    },
+    "fea_r": 52.03,
+    "lla_r": 13.85
+   }
+  },
+  "Diplomystus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "cod",
+   "fad": 55,
+   "lad": 45,
+   "range": [
+    "na-w"
+   ],
+   "note": "A herring relative of the Eocene lakes of Wyoming, often fossilised with a smaller fish -- Knightia -- in its mouth.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Clupeiformes",
+    "family": "Ellimmichthyidae"
+   },
+   "pbdb": {
+    "asked": "Diplomystus",
+    "matched": "Diplomystus",
+    "exact": true,
+    "oid": "txn:134509",
+    "rank": "genus",
+    "extant": false,
+    "noc": 25,
+    "fea": 143.1,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Ellimmichthyiformes",
+    "family": "Armigatidae",
+    "genus": "Diplomystus",
+    "regions": {
+     "na-w": 13,
+     "as-ne": 6,
+     "eu-s": 2,
+     "af-n": 1,
+     "af-w": 1,
+     "nz": 1,
+     "eu-n": 1
+    },
+    "fea_r": 134.44,
+    "lla_r": 44.95
+   },
+   "place_ok": true,
+   "conf_note": "the genus as used here is the Green River D. dentatus; Old World and Cretaceous referrals belong to other ellimmichthyids"
+  },
+  "Ekaltadeta": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 25,
+   "lad": 15,
+   "range": [
+    "au-e"
+   ],
+   "note": "A 'killer kangaroo': a rat-kangaroo relative with serrated slicing premolars, probably an omnivore that took small animals.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Hypsiprymnodontidae"
+   },
+   "pbdb": {
+    "asked": "Ekaltadeta",
+    "matched": "Ekaltadeta",
+    "exact": true,
+    "oid": "txn:94077",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 15.98,
+    "lla": 7.246,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Ekaltadeta",
+    "regions": {
+     "au-e": 3
+    }
+   }
+  },
+  "Eosimias": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "monkey",
+   "fad": 45,
+   "lad": 40,
+   "range": [
+    "as-s",
+    "as-ne"
+   ],
+   "note": "A tiny early anthropoid from the Eocene of China, small enough to sit in a hand -- evidence that the monkey-and-ape line began in Asia.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Eosimiidae"
+   },
+   "pbdb": {
+    "asked": "Eosimias",
+    "matched": "Eosimias",
+    "exact": true,
+    "oid": "txn:92597",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 56,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Eosimiidae",
+    "genus": "Eosimias",
+    "regions": {
+     "as-ne": 5,
+     "as-s": 1
+    }
+   }
+  },
+  "Eritherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 60,
+   "lad": 58,
+   "range": [
+    "af-n"
+   ],
+   "note": "The oldest known proboscidean: a fox-sized animal from the Paleocene of Morocco, 55 million years before the mammoths.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea"
+   },
+   "pbdb": {
+    "asked": "Eritherium",
+    "matched": "Eritherium",
+    "exact": true,
+    "oid": "txn:157501",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 59.24,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Eritherium",
+    "regions": {
+     "af-n": 1
+    }
+   }
+  },
+  "Glyptostrobus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 70,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      70,
+      2.6
+     ],
+     "in": [
+      "na",
+      "eu",
+      "as-n",
+      "as-ne",
+      "as-s",
+      "gl"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "as-s",
+      "as-ic"
+     ]
+    }
+   ],
+   "note": "The Chinese swamp cypress. In the Paleocene and Eocene it lined swamps and coal-forming mires across the northern continents; today a few hundred wild trees survive in southern China, Vietnam and Laos.",
+   "hab": [
+    "wetland",
+    "river",
+    "lake",
+    "forest"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cupressaceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       104,
+       120,
+       18,
+       27
+      ]
+     ]
+    }
+   ],
+   "pbdb": {
+    "asked": "Glyptostrobus",
+    "matched": "Glyptostrobus",
+    "exact": true,
+    "oid": "txn:55253",
+    "rank": "genus",
+    "extant": true,
+    "noc": 321,
+    "fea": 89.8,
+    "lla": 0,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": "Glyptostrobus",
+    "regions": {
+     "na-w": 189,
+     "eu-n": 78,
+     "as-n": 20,
+     "as-ne": 18,
+     "eu-s": 8,
+     "as-c": 4,
+     "na-e": 1,
+     "na-n": 1,
+     "as-sb": 1,
+     "as-ic": 1
+    },
+    "fea_r": 69.1,
+    "lla_r": 8.48
+   }
+  },
+  "Gobiatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "uintathere",
+   "fad": 45,
+   "lad": 40,
+   "range": [
+    "as-c"
+   ],
+   "note": "A hornless dinocerate with a big, bulbous snout, from the Middle Eocene of Mongolia.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dinocerata",
+    "family": "Uintatheriidae"
+   },
+   "pbdb": {
+    "asked": "Gobiatherium",
+    "matched": "Gobiatherium",
+    "exact": true,
+    "oid": "txn:40608",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Dinocerata",
+    "family": "Uintatheriidae",
+    "genus": "Gobiatherium",
+    "regions": {
+     "as-ne": 5,
+     "as-c": 3,
+     "as-s": 1
+    },
+    "fea_r": 52.03,
+    "lla_r": 42.89
+   },
+   "box": [
+    [
+     95,
+     115,
+     40,
+     46
+    ]
+   ]
+  },
+  "Heliobatis": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "ray",
+   "fad": 52,
+   "lad": 48,
+   "range": [
+    "na-w"
+   ],
+   "note": "A freshwater stingray of the Eocene Green River lakes -- a sea animal living far inland.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Myliobatiformes",
+    "family": "Dasyatidae"
+   },
+   "pbdb": {
+    "asked": "Heliobatis",
+    "matched": "Heliobatis",
+    "exact": true,
+    "oid": "txn:52956",
+    "rank": "genus",
+    "extant": true,
+    "noc": 409,
+    "fea": 132.6,
+    "lla": 0,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Myliobatiformes",
+    "family": "Dasyatidae",
+    "genus": "Dasyatis",
+    "regions": {
+     "eu-s": 121,
+     "af-n": 63,
+     "eu-n": 60,
+     "na-e": 53,
+     "in": 24,
+     "af-e": 20,
+     "sa-n": 13,
+     "na-w": 11,
+     "ca": 10,
+     "as-c": 7,
+     "sa-s": 7,
+     "af-w": 5,
+     "ar": 3,
+     "as-ne": 3,
+     "as-sb": 2,
+     "as-w": 2,
+     "na-av": 2,
+     "au-e": 1,
+     "as-ic": 1,
+     "nz": 1
+    },
+    "fea_r": 69.1,
+    "lla_r": 1.68
+   }
+  },
+  "Heomys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rodent",
+   "fad": 61,
+   "lad": 59,
+   "range": [
+    "as-s"
+   ],
+   "note": "A small gnawing mammal from the Paleocene of China, close to the common ancestor of rodents and rabbits.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Mixodontia",
+    "family": "Eurymylidae"
+   },
+   "pbdb": {
+    "asked": "Heomys",
+    "matched": "Heomys",
+    "exact": true,
+    "oid": "txn:41360",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 66,
+    "lla": 59.24,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Glires",
+    "family": "Eurymylidae",
+    "genus": "Heomys",
+    "regions": {
+     "as-s": 2
+    }
+   }
+  },
+  "Heptodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "tapir",
+   "fad": 52,
+   "lad": 48,
+   "range": [
+    "na-w"
+   ],
+   "note": "An early tapir the size of a small pony, still without the trunk -- a body plan the line then kept for fifty million years.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Helaletidae"
+   },
+   "pbdb": {
+    "asked": "Heptodon",
+    "matched": "Heptodon",
+    "exact": true,
+    "oid": "txn:43095",
+    "rank": "genus",
+    "extant": false,
+    "noc": 111,
+    "fea": 56,
+    "lla": 45.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Heptodon",
+    "regions": {
+     "na-w": 108,
+     "as-ne": 2,
+     "as-s": 1
+    },
+    "fea_r": 53.55,
+    "lla_r": 48.5
+   }
+  },
+  "Hoplophoneus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sabertooth",
+   "fad": 38,
+   "lad": 28,
+   "range": [
+    "na-w"
+   ],
+   "note": "A leopard-sized nimravid 'false sabre-tooth', with a bony flange on its jaw to guard its long canines.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Nimravidae"
+   },
+   "pbdb": {
+    "asked": "Hoplophoneus",
+    "matched": "Hoplophoneus",
+    "exact": true,
+    "oid": "txn:41041",
+    "rank": "genus",
+    "extant": false,
+    "noc": 49,
+    "fea": 37.71,
+    "lla": 18.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Carnivora",
+    "family": "Nimravidae",
+    "genus": "Hoplophoneus",
+    "regions": {
+     "na-w": 38,
+     "eu-s": 10,
+     "as-sb": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 24.0
+   },
+   "place_ok": true,
+   "conf_note": "the European referrals are other nimravids (Eusmilus); Hoplophoneus proper is North American"
+  },
+  "Hyrachyus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 50,
+   "lad": 42,
+   "range": [
+    "na-w",
+    "eu",
+    "as-ne",
+    "as-s"
+   ],
+   "note": "A tapir-sized, hornless early rhinocerotoid, widespread across the Eocene northern continents.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Hyrachyidae"
+   },
+   "pbdb": {
+    "asked": "Hyrachyus",
+    "matched": "Hyrachyus",
+    "exact": true,
+    "oid": "txn:43141",
+    "rank": "genus",
+    "extant": false,
+    "noc": 188,
+    "fea": 56,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Hyrachyidae",
+    "genus": "Hyrachyus",
+    "regions": {
+     "na-w": 141,
+     "eu-n": 20,
+     "eu-s": 13,
+     "as-ne": 11,
+     "as-s": 2,
+     "ca": 1
+    },
+    "fea_r": 52.03,
+    "lla_r": 39.37
+   }
+  },
+  "Hyracodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 38,
+   "lad": 30,
+   "range": [
+    "na-w"
+   ],
+   "note": "A long-legged 'running rhinoceros', pony-sized and hornless, built for speed on the open Oligocene plains.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Hyracodontidae"
+   },
+   "pbdb": {
+    "asked": "Hyracodon",
+    "matched": "Hyracodon",
+    "exact": true,
+    "oid": "txn:43155",
+    "rank": "genus",
+    "extant": false,
+    "noc": 111,
+    "fea": 45.9,
+    "lla": 18.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Hyracodontidae",
+    "genus": "Hyracodon",
+    "regions": {
+     "na-w": 110,
+     "na-e": 1
+    },
+    "fea_r": 38.35,
+    "lla_r": 30.65
+   }
+  },
+  "Indohyus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "deer",
+   "fad": 49,
+   "lad": 47,
+   "range": [
+    "in"
+   ],
+   "note": "A raccoon-sized, chevrotain-like artiodactyl with thick, dense leg bones for wading -- the closest known relative of whales.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Raoellidae"
+   },
+   "pbdb": {
+    "asked": "Indohyus",
+    "matched": "Indohyus",
+    "exact": true,
+    "oid": "txn:42349",
+    "rank": "genus",
+    "extant": false,
+    "noc": 15,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Raoellidae",
+    "genus": "Indohyus",
+    "regions": {
+     "in": 13,
+     "as-s": 2
+    },
+    "fea_r": 52.03,
+    "lla_r": 42.89
+   }
+  },
+  "Leptictidium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "smallmammal",
+   "fad": 48,
+   "lad": 37,
+   "range": [
+    "eu"
+   ],
+   "note": "A long-tailed, long-snouted insectivore that ran on its hind legs through the undergrowth of the Eocene forests of Europe.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Leptictida",
+    "family": "Pseudorhyncocyonidae"
+   },
+   "pbdb": {
+    "asked": "Leptictidium",
+    "matched": "Leptictidium",
+    "exact": true,
+    "oid": "txn:40267",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 56,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pseudorhyncocyonidae",
+    "genus": "Leptictidium",
+    "regions": {
+     "eu-s": 7,
+     "eu-n": 5
+    },
+    "fea_r": 52.03,
+    "lla_r": 35.8
+   }
+  },
+  "Leptomeryx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "deer",
+   "fad": 38,
+   "lad": 26,
+   "range": [
+    "na-w"
+   ],
+   "note": "A small, hornless ruminant like a chevrotain, one of the commonest mammals of the Oligocene plains of North America.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Leptomerycidae"
+   },
+   "pbdb": {
+    "asked": "Leptomeryx",
+    "matched": "Leptomeryx",
+    "exact": true,
+    "oid": "txn:42607",
+    "rank": "genus",
+    "extant": false,
+    "noc": 143,
+    "fea": 39.7,
+    "lla": 18.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Leptomerycidae",
+    "genus": "Leptomeryx",
+    "regions": {
+     "na-w": 142,
+     "na-e": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 27.1
+   }
+  },
+  "Liquidambar": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "broadleaf",
+   "fad": 50,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      50,
+      2.6
+     ],
+     "in": [
+      "na",
+      "eu",
+      "as-ne",
+      "as-s",
+      "as-w"
+     ]
+    },
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "in": [
+      "na-e",
+      "ca",
+      "as-s",
+      "as-w"
+     ]
+    }
+   ],
+   "note": "Sweetgums, star-leaved trees that spread across the northern continents in the Paleogene; the ice ages cut them back to three refuges -- eastern North America, south-west Turkey and southern China.",
+   "hab": [
+    "forest"
+   ],
+   "cls": {
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Altingiaceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -98,
+       -73,
+       14,
+       41
+      ],
+      [
+       26,
+       32,
+       36,
+       38.5
+      ],
+      [
+       98,
+       122,
+       20,
+       34
+      ]
+     ]
+    }
+   ],
+   "pbdb": {
+    "asked": "Liquidambar",
+    "matched": "Liquidambar",
+    "exact": true,
+    "oid": "txn:54637",
+    "rank": "genus",
+    "extant": true,
+    "noc": 168,
+    "fea": 100.5,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Saxifragales",
+    "family": "Hamamelidaceae",
+    "genus": "Liquidambar",
+    "regions": {
+     "eu-n": 55,
+     "as-ne": 24,
+     "na-w": 21,
+     "eu-s": 17,
+     "na-n": 16,
+     "na-e": 13,
+     "ca": 5,
+     "na-av": 5,
+     "as-c": 4,
+     "as-n": 3,
+     "as-s": 3,
+     "sa-s": 1,
+     "as-w": 1
+    },
+    "fea_r": 44.95,
+    "lla_r": 2.67
+   },
+   "lat": [
+    {
+     "t": [
+      50,
+      34
+     ],
+     "lat": [
+      0,
+      65
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      50
+     ]
+    }
+   ]
+  },
+  "Litokoala": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "koala",
+   "fad": 25,
+   "lad": 12,
+   "range": [
+    "au-e"
+   ],
+   "note": "An early koala of the Miocene rainforests, smaller than today's and with a less specialised diet.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Phascolarctidae"
+   },
+   "pbdb": {
+    "asked": "Litokoala",
+    "matched": "Litokoala",
+    "exact": true,
+    "oid": "txn:40175",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 27.3,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Phascolarctidae",
+    "genus": "Litokoala",
+    "regions": {
+     "au-e": 7
+    }
+   }
+  },
+  "Mayulestes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sparassodont",
+   "fad": 64,
+   "lad": 62,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A weasel-sized early sparassodont, a climbing predator at the root of South America's marsupial-line carnivores.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Sparassodonta",
+    "family": "Mayulestidae"
+   },
+   "pbdb": {
+    "asked": "Mayulestes",
+    "matched": "Mayulestes",
+    "exact": true,
+    "oid": "txn:246572",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 66,
+    "lla": 61.66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Mayulestidae",
+    "genus": "Mayulestes",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Mesonyx": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "mesonychid",
+   "fad": 50,
+   "lad": 43,
+   "range": [
+    "na-w",
+    "as-ne"
+   ],
+   "note": "A wolf-sized mesonychid with hoofed toes and crushing teeth -- a running, hoofed carnivore unlike anything alive.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Mesonychia",
+    "family": "Mesonychidae"
+   },
+   "pbdb": {
+    "asked": "Mesonyx",
+    "matched": "Mesonyx",
+    "exact": true,
+    "oid": "txn:42923",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Acreodi",
+    "family": "Mesonychidae",
+    "genus": "Mesonyx",
+    "regions": {
+     "na-w": 12,
+     "as-ne": 2,
+     "as-c": 2
+    },
+    "fea_r": 48.5,
+    "lla_r": 42.8
+   }
+  },
+  "Mioplosus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "reeffish",
+   "fad": 52,
+   "lad": 48,
+   "range": [
+    "na-w"
+   ],
+   "note": "A perch-like predatory fish of the Green River lakes, sometimes preserved choking on its last meal.",
+   "hab": [
+    "lake"
+   ],
+   "cls": {
+    "class": "Actinopterygii",
+    "order": "Perciformes"
+   },
+   "pbdb": {
+    "asked": "Mioplosus",
+    "matched": "Mioplosus",
+    "exact": true,
+    "oid": "txn:36088",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 56,
+    "lla": 51.1,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Perciformes",
+    "family": "Percidae",
+    "genus": "Mioplosus",
+    "regions": {
+     "na-w": 3
+    }
+   }
+  },
+  "Nambaroo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "kangaroo",
+   "fad": 25,
+   "lad": 15,
+   "range": [
+    "au-e"
+   ],
+   "note": "A small early kangaroo that probably bounded on all fours rather than hopping on two feet.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Balbaridae"
+   },
+   "pbdb": {
+    "asked": "Nambaroo",
+    "matched": "Nambaroo",
+    "exact": true,
+    "oid": "txn:40154",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 27.3,
+    "lla": 11.63,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Balbaridae",
+    "genus": "Nambaroo",
+    "regions": {
+     "au-e": 6
+    }
+   }
+  },
+  "Notharctus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 50,
+   "lad": 46,
+   "range": [
+    "na-w"
+   ],
+   "note": "A lemur-like adapiform primate of the Eocene forests of Wyoming, leaping between branches with a long tail.",
+   "hab": [
+    "forest",
+    "rainforest"
+   ],
+   "cls": {
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Notharctidae"
+   },
+   "pbdb": {
+    "asked": "Notharctus",
+    "matched": "Notharctus",
+    "exact": true,
+    "oid": "txn:40764",
+    "rank": "genus",
+    "extant": false,
+    "noc": 107,
+    "fea": 56,
+    "lla": 39.7,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Notharctidae",
+    "genus": "Notharctus",
+    "regions": {
+     "na-w": 107
+    },
+    "fea_r": 53.55,
+    "lla_r": 48.5
+   }
+  },
+  "Oxyaena": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyaenodont",
+   "fad": 56,
+   "lad": 50,
+   "range": [
+    "na-w"
+   ],
+   "note": "A wolverine-like oxyaenid, one of the first large mammal predators, of the earliest Eocene of North America.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Oxyaenodonta",
+    "family": "Oxyaenidae"
+   },
+   "pbdb": {
+    "asked": "Oxyaena",
+    "matched": "Oxyaena",
+    "exact": true,
+    "oid": "txn:40961",
+    "rank": "genus",
+    "extant": false,
+    "noc": 146,
+    "fea": 59.24,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Oxyaenidae",
+    "genus": "Oxyaena",
+    "regions": {
+     "na-w": 137,
+     "eu-n": 4,
+     "eu-s": 3,
+     "as-ne": 2
+    },
+    "fea_r": 53.55,
+    "lla_r": 52.03
+   }
+  },
+  "Pakicetus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "archaeocete",
+   "fad": 50,
+   "lad": 48,
+   "range": [
+    "in"
+   ],
+   "note": "The earliest whale: a wolf-sized, four-legged land animal of the Eocene of Pakistan, with the ear bones that mark every whale since.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Pakicetidae"
+   },
+   "realms": [
+    "land",
+    "fresh"
+   ],
+   "pbdb": {
+    "asked": "Pakicetus",
+    "matched": "Pakicetus",
+    "exact": true,
+    "oid": "txn:42935",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 56,
+    "lla": 41.03,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cetacea",
+    "family": "Pakicetidae",
+    "genus": "Pakicetus",
+    "regions": {
+     "in": 8
+    },
+    "fea_r": 44.55,
+    "lla_r": 44.55
+   }
+  },
+  "Palaeochiropteryx": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "bat",
+   "fad": 48,
+   "lad": 46,
+   "range": [
+    "eu"
+   ],
+   "note": "One of the earliest bats: its stomach contents show it hunted moths near the forest floor, and its ear bones show it could echolocate.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Palaeochiropterygidae"
+   },
+   "pbdb": {
+    "asked": "Palaeochiropteryx",
+    "matched": "Palaeochiropteryx",
+    "exact": true,
+    "oid": "txn:40634",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Chiroptera",
+    "family": "Palaeochiropterygidae",
+    "genus": "Palaeochiropteryx",
+    "regions": {
+     "eu-s": 5,
+     "na-w": 1
+    }
+   }
+  },
+  "Palaeolagus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rabbit",
+   "fad": 38,
+   "lad": 26,
+   "range": [
+    "na-w"
+   ],
+   "note": "An early rabbit of the White River beds, already almost modern -- the rabbit body plan has barely changed in 35 million years.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Lagomorpha",
+    "family": "Leporidae"
+   },
+   "pbdb": {
+    "asked": "Palaeolagus",
+    "matched": "Palaeolagus",
+    "exact": true,
+    "oid": "txn:42184",
+    "rank": "genus",
+    "extant": false,
+    "noc": 241,
+    "fea": 39.7,
+    "lla": 16.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Lagomorpha",
+    "family": "Leporidae",
+    "genus": "Palaeolagus",
+    "regions": {
+     "na-w": 239,
+     "na-e": 2
+    },
+    "fea_r": 35.45,
+    "lla_r": 24.0
+   }
+  },
+  "Palaeomastodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "proboscidean",
+   "fad": 36,
+   "lad": 30,
+   "range": [
+    "af-n"
+   ],
+   "note": "A long-jawed early proboscidean of the Fayum swamps, with short tusks above and below -- a step between Moeritherium and the mastodons.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Palaeomastodontidae"
+   },
+   "pbdb": {
+    "asked": "Palaeomastodon",
+    "matched": "Palaeomastodon",
+    "exact": true,
+    "oid": "txn:43251",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 37.71,
+    "lla": 23.04,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Proboscidea",
+    "family": "Palaeomastodontidae",
+    "genus": "Palaeomastodon",
+    "regions": {
+     "ar": 3,
+     "as-w": 2,
+     "af-n": 1
+    }
+   }
+  },
+  "Palaeosyops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "brontothere",
+   "fad": 50,
+   "lad": 46,
+   "range": [
+    "na-w"
+   ],
+   "note": "A heavy, hornless brontothere, a browser in the warm Eocene forests before the giant horned kinds.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Brontotheriidae"
+   },
+   "pbdb": {
+    "asked": "Palaeosyops",
+    "matched": "Palaeosyops",
+    "exact": true,
+    "oid": "txn:43053",
+    "rank": "genus",
+    "extant": false,
+    "noc": 65,
+    "fea": 56,
+    "lla": 45.9,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Brontotheriidae",
+    "genus": "Palaeosyops",
+    "regions": {
+     "na-w": 65
+    },
+    "fea_r": 48.5,
+    "lla_r": 48.5
+   }
+  },
+  "Palaeotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horse",
+   "fad": 45,
+   "lad": 30,
+   "range": [
+    "eu"
+   ],
+   "note": "A horse relative that looked more like a tapir, from pony- to horse-sized, which browsed the Eocene forests of Europe's islands.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Palaeotheriidae"
+   },
+   "pbdb": {
+    "asked": "Palaeotherium",
+    "matched": "Palaeotherium",
+    "exact": true,
+    "oid": "txn:49711",
+    "rank": "genus",
+    "extant": false,
+    "noc": 157,
+    "fea": 56,
+    "lla": 27.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Palaeotheriidae",
+    "genus": "Palaeotherium",
+    "regions": {
+     "eu-s": 109,
+     "eu-n": 48
+    },
+    "fea_r": 44.95,
+    "lla_r": 35.8
+   }
+  },
+  "Pantolambda": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pantodont",
+   "fad": 63,
+   "lad": 60,
+   "range": [
+    "na-w"
+   ],
+   "note": "A sheep-sized early pantodont, one of the first mammals to grow large after the dinosaurs -- a heavy-limbed browser of the Paleocene swamp forests.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pantodonta",
+    "family": "Pantolambdidae"
+   },
+   "pbdb": {
+    "asked": "Pantolambda",
+    "matched": "Pantolambda",
+    "exact": true,
+    "oid": "txn:40565",
+    "rank": "genus",
+    "extant": false,
+    "noc": 24,
+    "fea": 63.4,
+    "lla": 57.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cimolesta",
+    "family": "Pantolambdidae",
+    "genus": "Pantolambda",
+    "regions": {
+     "na-w": 24
+    },
+    "fea_r": 62.15,
+    "lla_r": 59.2
+   }
+  },
+  "Patriofelis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyaenodont",
+   "fad": 50,
+   "lad": 43,
+   "range": [
+    "na-w"
+   ],
+   "note": "A lion-sized oxyaenid with a short, heavy skull -- the top predator of the Middle Eocene of Wyoming.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Oxyaenodonta",
+    "family": "Oxyaenidae"
+   },
+   "pbdb": {
+    "asked": "Patriofelis",
+    "matched": "Patriofelis",
+    "exact": true,
+    "oid": "txn:40963",
+    "rank": "genus",
+    "extant": false,
+    "noc": 23,
+    "fea": 51.1,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Oxyaenidae",
+    "genus": "Patriofelis",
+    "regions": {
+     "na-w": 23
+    },
+    "fea_r": 48.5,
+    "lla_r": 42.89
+   }
+  },
+  "Plesiadapis": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lemur",
+   "fad": 60,
+   "lad": 55,
+   "range": [
+    "na-w",
+    "eu"
+   ],
+   "note": "A squirrel-like relative of primates with big gnawing incisors -- one of the few Paleocene mammals found on both sides of the young North Atlantic.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Plesiadapiformes",
+    "family": "Plesiadapidae"
+   },
+   "pbdb": {
+    "asked": "Plesiadapis",
+    "matched": "Plesiadapis",
+    "exact": true,
+    "oid": "txn:40738",
+    "rank": "genus",
+    "extant": false,
+    "noc": 230,
+    "fea": 66,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Primates",
+    "family": "Plesiadapidae",
+    "genus": "Plesiadapis",
+    "regions": {
+     "na-w": 206,
+     "eu-s": 18,
+     "eu-n": 6
+    },
+    "fea_r": 59.2,
+    "lla_r": 53.66
+   }
+  },
+  "Pleuraspidotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "condylarth",
+   "fad": 59,
+   "lad": 57,
+   "range": [
+    "eu"
+   ],
+   "note": "A small hoofed mammal of the Paleocene of France, known from hundreds of individuals in a single quarry.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "family": "Pleuraspidotheriidae"
+   },
+   "pbdb": {
+    "asked": "Pleuraspidotherium",
+    "matched": "Pleuraspidotherium",
+    "exact": true,
+    "oid": "txn:42264",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 59.24,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Condylarthra",
+    "family": "Pleuraspidotheriidae",
+    "genus": "Pleuraspidotherium",
+    "regions": {
+     "eu-s": 3
+    }
+   }
+  },
+  "Poebrotherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "camel",
+   "fad": 38,
+   "lad": 30,
+   "range": [
+    "na-w"
+   ],
+   "note": "A goat-sized early camel of the White River plains -- camels began in North America and stayed there for 35 million years.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae"
+   },
+   "pbdb": {
+    "asked": "Poebrotherium",
+    "matched": "Poebrotherium",
+    "exact": true,
+    "oid": "txn:42547",
+    "rank": "genus",
+    "extant": false,
+    "noc": 66,
+    "fea": 41.03,
+    "lla": 23.1,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Artiodactyla",
+    "family": "Camelidae",
+    "genus": "Poebrotherium",
+    "regions": {
+     "na-w": 65,
+     "ca": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 32.85
+   }
+  },
+  "Presbyornis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "waterfowl",
+   "fad": 62,
+   "lad": 50,
+   "range": [
+    "na-w",
+    "as-c"
+   ],
+   "note": "A long-legged early relative of ducks that nested in vast colonies on the shores of Eocene soda lakes -- a duck's head on a flamingo's body.",
+   "hab": [
+    "lake",
+    "wetland"
+   ],
+   "cls": {
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "Presbyornithidae"
+   },
+   "pbdb": {
+    "asked": "Presbyornis",
+    "matched": "Presbyornis",
+    "exact": true,
+    "oid": "txn:39622",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 60.9,
+    "lla": 33.9,
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Anseriformes",
+    "family": "Presbyornithidae",
+    "genus": "Presbyornis",
+    "regions": {
+     "na-w": 5,
+     "as-ne": 2,
+     "na-e": 1,
+     "na-n": 1
+    },
+    "fea_r": 57.62,
+    "lla_r": 44.95
+   },
+   "box": [
+    [
+     -112,
+     -104,
+     39,
+     45
+    ],
+    [
+     90,
+     115,
+     40,
+     48
+    ]
+   ]
+  },
+  "Proborhyaena": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "sparassodont",
+   "fad": 29,
+   "lad": 26,
+   "range": [
+    "sa-s",
+    "sa-n"
+   ],
+   "note": "A bear-sized sparassodont, a marsupial-line predator of the Oligocene with ever-growing canines.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Sparassodonta",
+    "family": "Proborhyaenidae"
+   },
+   "pbdb": {
+    "asked": "Proborhyaena",
+    "matched": "Proborhyaena",
+    "exact": true,
+    "oid": "txn:40033",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 29,
+    "lla": 21,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Sparassodonta",
+    "family": "Proborhyaenidae",
+    "genus": "Proborhyaena",
+    "regions": {
+     "sa-s": 6,
+     "sa-n": 1
+    }
+   }
+  },
+  "Prodinoceras": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "uintathere",
+   "fad": 60,
+   "lad": 56,
+   "range": [
+    "as-c",
+    "as-ne"
+   ],
+   "note": "An early dinocerate from the Paleocene of Mongolia and China -- a tapir-sized ancestor of the horned, tusked uintatheres.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Dinocerata",
+    "family": "Uintatheriidae"
+   },
+   "pbdb": {
+    "asked": "Prodinoceras",
+    "matched": "Prodinoceras",
+    "exact": true,
+    "oid": "txn:40595",
+    "rank": "genus",
+    "extant": false,
+    "noc": 13,
+    "fea": 59.24,
+    "lla": 48.07,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Dinocerata",
+    "family": "Prodinoceratidae",
+    "genus": "Prodinoceras",
+    "regions": {
+     "as-ne": 7,
+     "as-c": 6
+    },
+    "fea_r": 57.62,
+    "lla_r": 52.03
+   },
+   "box": [
+    [
+     90,
+     120,
+     35,
+     48
+    ]
+   ]
+  },
+  "Pucadelphys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "opossum",
+   "fad": 64,
+   "lad": 62,
+   "range": [
+    "sa-n"
+   ],
+   "note": "A mouse-sized marsupial relative from the earliest Paleocene of Bolivia, found as groups of complete skeletons -- perhaps families killed together.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Metatheria",
+    "family": "Pucadelphyidae"
+   },
+   "pbdb": {
+    "asked": "Pucadelphys",
+    "matched": "Pucadelphys",
+    "exact": true,
+    "oid": "txn:246332",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 66,
+    "lla": 61.66,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Pucadelphyidae",
+    "genus": "Pucadelphys",
+    "regions": {
+     "sa-s": 1
+    }
+   }
+  },
+  "Sabal": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "palm",
+   "fad": 66,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      66,
+      5.3
+     ],
+     "in": [
+      "na",
+      "eu",
+      "ca"
+     ]
+    },
+    {
+     "t": [
+      5.3,
+      0
+     ],
+     "in": [
+      "na-e",
+      "ca"
+     ]
+    }
+   ],
+   "note": "Palmettos: fan palms that grew in the Eocene as far north as southern England and the Pacific Northwest; today they reach only the south-eastern United States, Mexico and the Caribbean.",
+   "lat": [
+    {
+     "t": [
+      66,
+      56
+     ],
+     "lat": [
+      0,
+      52
+     ]
+    },
+    {
+     "t": [
+      56,
+      45
+     ],
+     "lat": [
+      0,
+      60
+     ]
+    },
+    {
+     "t": [
+      45,
+      34
+     ],
+     "lat": [
+      0,
+      50
+     ]
+    },
+    {
+     "t": [
+      34,
+      0
+     ],
+     "lat": [
+      0,
+      37
+     ]
+    }
+   ],
+   "cls": {
+    "class": "Liliopsida",
+    "order": "Arecales",
+    "family": "Arecaceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -100,
+       -75,
+       14,
+       36.5
+      ],
+      [
+       -86,
+       -60,
+       10,
+       24
+      ]
+     ]
+    }
+   ],
+   "pbdb": {
+    "asked": "Sabal",
+    "matched": "Sabal",
+    "exact": true,
+    "oid": "txn:338231",
+    "rank": "genus",
+    "extant": true,
+    "noc": 66,
+    "fea": 83.6,
+    "lla": 0.0117,
+    "phylum": "Angiospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Arecaceae",
+    "genus": "Sabal",
+    "regions": {
+     "na-w": 31,
+     "eu-n": 15,
+     "as-ne": 11,
+     "na-e": 3,
+     "eu-s": 3,
+     "in": 3
+    },
+    "fea_r": 63.83,
+    "lla_r": 10.53
+   }
+  },
+  "Saghatherium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyrax",
+   "fad": 35,
+   "lad": 30,
+   "range": [
+    "af-n",
+    "ar"
+   ],
+   "note": "A small hyrax of the Fayum -- from a time when hyraxes, not antelopes, were Africa's main grazers and browsers.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Hyracoidea",
+    "family": "Saghatheriidae"
+   },
+   "pbdb": {
+    "asked": "Saghatherium",
+    "matched": "Saghatherium",
+    "exact": true,
+    "oid": "txn:43297",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 37.71,
+    "lla": 27.3,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Hyracoidea",
+    "family": "Pliohyracidae",
+    "genus": "Saghatherium",
+    "regions": {
+     "as-w": 6,
+     "ar": 1,
+     "af-n": 1
+    },
+    "fea_r": 32.51,
+    "lla_r": 30.6
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB's as-w collections are Dhofar, Oman -- Arabian crust, ranged ar"
+  },
+  "Stylemys": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "tortoise",
+   "fad": 38,
+   "lad": 28,
+   "range": [
+    "na-w"
+   ],
+   "note": "A land tortoise of the Oligocene plains, common enough that its shells weather out of the White River badlands by the hundred.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae"
+   },
+   "pbdb": {
+    "asked": "Stylemys",
+    "matched": "Stylemys",
+    "exact": true,
+    "oid": "txn:37743",
+    "rank": "genus",
+    "extant": false,
+    "noc": 38,
+    "fea": 41.03,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Testudines",
+    "family": "Testudinidae",
+    "genus": "Stylemys",
+    "regions": {
+     "na-w": 35,
+     "ca": 1,
+     "eu-s": 1,
+     "as-c": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 10.95
+   }
+  },
+  "Subhyracodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhino",
+   "fad": 36,
+   "lad": 30,
+   "range": [
+    "na-w"
+   ],
+   "note": "A hornless, cow-sized rhinoceros of the White River plains -- North America had rhinos of its own until five million years ago.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae"
+   },
+   "pbdb": {
+    "asked": "Subhyracodon",
+    "matched": "Subhyracodon",
+    "exact": true,
+    "oid": "txn:43225",
+    "rank": "genus",
+    "extant": false,
+    "noc": 59,
+    "fea": 41.03,
+    "lla": 18.5,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Perissodactyla",
+    "family": "Rhinocerotidae",
+    "genus": "Subhyracodon",
+    "regions": {
+     "na-w": 56,
+     "na-e": 2,
+     "ca": 1
+    },
+    "fea_r": 35.45,
+    "lla_r": 25.17
+   }
+  },
+  "Taxodium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "conifer",
+   "fad": 65,
+   "lad": 0,
+   "range": [
+    {
+     "t": [
+      65,
+      5.3
+     ],
+     "in": [
+      "na",
+      "eu",
+      "as-n",
+      "as-ne",
+      "gl"
+     ]
+    },
+    {
+     "t": [
+      5.3,
+      0
+     ],
+     "in": [
+      "na-e",
+      "na-w",
+      "ca"
+     ]
+    }
+   ],
+   "note": "The bald cypress, whose buttressed trunks and 'knees' stand in swamp water. In the Paleogene it grew across the northern continents; today only in the south-eastern United States and Mexico.",
+   "hab": [
+    "wetland",
+    "river",
+    "lake"
+   ],
+   "cls": {
+    "class": "Pinopsida",
+    "order": "Pinales",
+    "family": "Cupressaceae"
+   },
+   "box": [
+    {
+     "t": [
+      2.6,
+      0
+     ],
+     "box": [
+      [
+       -100,
+       -74,
+       24,
+       40.5
+      ],
+      [
+       -110,
+       -95,
+       14,
+       30
+      ]
+     ]
+    }
+   ],
+   "pbdb": {
+    "asked": "Taxodium",
+    "matched": "Taxodium",
+    "exact": true,
+    "oid": "txn:55063",
+    "rank": "genus",
+    "extant": true,
+    "noc": 272,
+    "fea": 161.5,
+    "lla": 0.0117,
+    "phylum": "Gymnospermae",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Coniferales",
+    "family": "Cupressaceae",
+    "genus": "Taxodium",
+    "regions": {
+     "eu-n": 113,
+     "na-e": 59,
+     "na-w": 58,
+     "as-n": 21,
+     "as-ne": 14,
+     "as-c": 4,
+     "eu-s": 3
+    },
+    "fea_r": 69.1,
+    "lla_r": 4.47
+   }
+  },
+  "Thomashuxleya": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "notoungulate",
+   "fad": 45,
+   "lad": 40,
+   "range": [
+    "sa-s"
+   ],
+   "note": "A sheep-sized notoungulate -- one of South America's native hoofed mammals, which evolved in isolation for sixty million years.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "family": "Isotemnidae"
+   },
+   "pbdb": {
+    "asked": "Thomashuxleya",
+    "matched": "Thomashuxleya",
+    "exact": true,
+    "oid": "txn:43367",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 56,
+    "lla": 37.71,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Notoungulata",
+    "family": "Isotemnidae",
+    "genus": "Thomashuxleya",
+    "regions": {
+     "sa-s": 20
+    },
+    "fea_r": 52.0,
+    "lla_r": 39.37
+   }
+  },
+  "Titanohyrax": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "hyrax",
+   "fad": 35,
+   "lad": 30,
+   "range": [
+    "af-n",
+    "ar"
+   ],
+   "note": "A hyrax as heavy as a small rhinoceros, the giant of the hyraxes that then held Africa's plant-eating niches.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Hyracoidea",
+    "family": "Titanohyracidae"
+   },
+   "pbdb": {
+    "asked": "Titanohyrax",
+    "matched": "Titanohyrax",
+    "exact": true,
+    "oid": "txn:43308",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 56,
+    "lla": 23.04,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Hyracoidea",
+    "family": "Titanohyracidae",
+    "genus": "Titanohyrax",
+    "regions": {
+     "as-w": 6,
+     "af-n": 4,
+     "eu-s": 1
+    },
+    "fea_r": 48.52,
+    "lla_r": 28.47
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB's as-w collections are Dhofar, Oman -- Arabian crust, ranged ar"
+  },
+  "Titanoides": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pantodont",
+   "fad": 60,
+   "lad": 57,
+   "range": [
+    "na-w"
+   ],
+   "note": "A bear-sized pantodont with long tusk-like canines and clawed feet -- a Paleocene browser, among the largest mammals of its time.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Pantodonta",
+    "family": "Titanoideidae"
+   },
+   "pbdb": {
+    "asked": "Titanoides",
+    "matched": "Titanoides",
+    "exact": true,
+    "oid": "txn:40572",
+    "rank": "genus",
+    "extant": false,
+    "noc": 40,
+    "fea": 66,
+    "lla": 56,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Cimolesta",
+    "family": "Titanoideidae",
+    "genus": "Titanoides",
+    "regions": {
+     "na-w": 40
+    },
+    "fea_r": 59.2,
+    "lla_r": 56.75
+   }
+  },
+  "Wakaleo": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "marsupiallion",
+   "fad": 23,
+   "lad": 12,
+   "range": [
+    "au-e"
+   ],
+   "note": "A dog-sized marsupial lion of the Miocene rainforests of Queensland, with blade-like premolars for slicing meat.",
+   "cls": {
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Thylacoleonidae"
+   },
+   "pbdb": {
+    "asked": "Wakaleo",
+    "matched": "Wakaleo",
+    "exact": true,
+    "oid": "txn:94075",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 27.3,
+    "lla": 5.333,
+    "phylum": "Chordata",
+    "class": "Mammalia",
+    "order": "Diprotodontia",
+    "family": "Thylacoleonidae",
+    "genus": "Wakaleo",
+    "regions": {
+     "au-e": 12
+    },
+    "fea_r": 21.64,
+    "lla_r": 8.48
+   }
+  }
+ }
+}

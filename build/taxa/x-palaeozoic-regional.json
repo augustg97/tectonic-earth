@@ -1,0 +1,5208 @@
+{
+ "taxa": {
+  "Acantherpestes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 310,
+   "lad": 300,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "A spiny millipede of the coal forests, up to thirty centimetres long -- smaller kin of the giant Arthropleura.",
+   "cls": {
+    "class": "Myriapoda",
+    "order": "Diplopoda",
+    "family": "Euphoberiidae"
+   },
+   "pbdb": {
+    "asked": "Acantherpestes",
+    "matched": "Acantherpestes",
+    "exact": true,
+    "oid": "txn:291102",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 318.7,
+    "lla": 307,
+    "phylum": "Arthropoda",
+    "class": "Myriapoda",
+    "order": "Euphoberiida",
+    "family": "Euphoberiidae",
+    "genus": "Acantherpestes",
+    "regions": {
+     "na-e": 7,
+     "eu-s": 4,
+     "eu-n": 1
+    },
+    "fea_r": 311.1,
+    "lla_r": 308.6
+   }
+  },
+  "Acutiramus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 425,
+   "lad": 415,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "A two-metre pterygotid sea scorpion with long pincers, among the largest arthropods of the Silurian.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Pterygotidae"
+   },
+   "pbdb": {
+    "asked": "Acutiramus",
+    "matched": "Acutiramus",
+    "exact": true,
+    "oid": "txn:18948",
+    "rank": "genus",
+    "extant": false,
+    "noc": 32,
+    "fea": 425,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Pterygotidae",
+    "genus": "Acutiramus",
+    "regions": {
+     "eu-s": 19,
+     "na-e": 9,
+     "na-av": 2,
+     "af-n": 1,
+     "au-e": 1
+    },
+    "fea_r": 421.16,
+    "lla_r": 411.82
+   }
+  },
+  "Aegirocassis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 480,
+   "lad": 476,
+   "range": [
+    "af-n"
+   ],
+   "note": "A two-metre radiodont that filtered plankton with comb-like head limbs -- the gentle giant of the Early Ordovician Fezouata sea.",
+   "cls": {
+    "class": "Dinocaridida",
+    "order": "Radiodonta",
+    "family": "Hurdiidae"
+   },
+   "pbdb": {
+    "asked": "Aegirocassis",
+    "matched": "Aegirocassis",
+    "exact": true,
+    "oid": "txn:465436",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 486.4,
+    "lla": 477.1,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Radiodonta",
+    "family": "Hurdiidae",
+    "genus": "Aegirocassis",
+    "regions": {
+     "af-n": 1
+    }
+   }
+  },
+  "Alethopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 325,
+   "lad": 285,
+   "range": [
+    "na",
+    "eu",
+    "af-n",
+    "as-ne",
+    "as-s"
+   ],
+   "note": "Leaflets joined at their bases in long, strap-like rows -- the foliage of Medullosa, a seed fern whose seeds could be as large as a hen's egg.",
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Medullosales",
+    "family": "Alethopteridaceae"
+   },
+   "pbdb": {
+    "asked": "Alethopteris",
+    "matched": "Pecopteris (Alethopteris)",
+    "exact": true,
+    "oid": "txn:125733",
+    "rank": "subgenus",
+    "extant": false,
+    "noc": 234,
+    "fea": 323.4,
+    "lla": 119.57,
+    "phylum": "Pteridophyta",
+    "class": "Pteropsida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pecopteris",
+    "regions": {
+     "na-e": 100,
+     "as-ne": 41,
+     "na-av": 24,
+     "eu-n": 15,
+     "eu-s": 14,
+     "na-w": 13,
+     "in": 12,
+     "as-c": 4,
+     "as-w": 2,
+     "as-s": 2,
+     "as-sb": 2,
+     "af-n": 2,
+     "ca": 1,
+     "as-ic": 1,
+     "au-e": 1
+    },
+    "fea_r": 333.13,
+    "lla_r": 232.15
+   },
+   "lat": [
+    0,
+    35
+   ],
+   "avoid": [
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
+   ]
+  },
+  "Amphibamus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 310,
+   "lad": 307,
+   "range": [
+    "na-e"
+   ],
+   "note": "A ten-centimetre, salamander-shaped dissorophoid of the Pennsylvanian coal swamps, close to the ancestry of frogs and salamanders.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Amphibamidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Amphibamus",
+    "matched": "Amphibamus",
+    "exact": true,
+    "oid": "txn:37019",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 309.8,
+    "lla": 307.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Amphibamidae",
+    "genus": "Amphibamus",
+    "regions": {
+     "na-e": 4
+    }
+   }
+  },
+  "Amplectobelua": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 518,
+   "lad": 510,
+   "range": [
+    "as-s"
+   ],
+   "note": "A radiodont with pincer-like grasping claws, one of the top predators of the Chengjiang sea.",
+   "cls": {
+    "class": "Dinocaridida",
+    "order": "Radiodonta",
+    "family": "Amplectobeluidae"
+   },
+   "pbdb": {
+    "asked": "Amplectobelua",
+    "matched": "Amplectobelua",
+    "exact": true,
+    "oid": "txn:142080",
+    "rank": "genus",
+    "extant": false,
+    "noc": 29,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Radiodonta",
+    "family": "Amplectobeluidae",
+    "genus": "Amplectobelua",
+    "regions": {
+     "as-s": 26,
+     "na-w": 3
+    },
+    "fea_r": 518.5,
+    "lla_r": 500.75
+   }
+  },
+  "Arandaspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ostracoderm",
+   "fad": 480,
+   "lad": 470,
+   "range": [
+    "au-e"
+   ],
+   "note": "One of the oldest fishes with a bony skeleton: a jawless, finless, armoured swimmer of the Early Ordovician sea over central Australia.",
+   "cls": {
+    "class": "Pteraspidomorphi",
+    "order": "Arandaspida",
+    "family": "Arandaspididae"
+   },
+   "pbdb": {
+    "asked": "Arandaspis",
+    "matched": "Arandaspis",
+    "exact": true,
+    "oid": "txn:34155",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 477.1,
+    "lla": 458.2,
+    "phylum": "Chordata",
+    "class": "Pteraspidomorpha",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Arandaspididae",
+    "genus": "Arandaspis",
+    "regions": {
+     "au-e": 4
+    }
+   }
+  },
+  "Archaeolithophyllum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 315,
+   "lad": 295,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "A leafy calcareous red alga that grew in thickets on Pennsylvanian shelves, building the 'phylloid algal mounds' that now hold oil.",
+   "cls": {
+    "class": "Rhodophyta"
+   },
+   "pbdb": {
+    "asked": "Archaeolithophyllum",
+    "matched": "Archaeolithophyllum",
+    "exact": true,
+    "oid": "txn:54351",
+    "rank": "genus",
+    "extant": false,
+    "noc": 45,
+    "fea": 346.7,
+    "lla": 259.857,
+    "phylum": "Rhodophyta",
+    "class": "Florideophyceae",
+    "order": "Cryptonemiales",
+    "family": "Archaeolithophyllaceae",
+    "genus": "Archaeolithophyllum",
+    "regions": {
+     "na-e": 19,
+     "eu-s": 10,
+     "na-w": 5,
+     "eu-n": 4,
+     "as-ic": 2,
+     "na-n": 1,
+     "in": 1,
+     "af-n": 1,
+     "as-w": 1,
+     "na-av": 1
+    },
+    "fea_r": 335.1,
+    "lla_r": 262.07
+   }
+  },
+  "Archaeothyris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pelycosaur",
+   "fad": 308,
+   "lad": 304,
+   "range": [
+    "na-av"
+   ],
+   "note": "One of the oldest synapsids, the line leading to mammals: a fifty-centimetre, lizard-shaped insect-eater found inside a fossil tree stump in Nova Scotia.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Pelycosauria",
+    "family": "Ophiacodontidae"
+   },
+   "pbdb": {
+    "asked": "Archaeothyris",
+    "matched": "Archaeothyris",
+    "exact": true,
+    "oid": "txn:38885",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 314.6,
+    "lla": 307.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Ophiacodontidae",
+    "genus": "Archaeothyris",
+    "regions": {
+     "na-av": 1,
+     "eu-s": 1,
+     "na-e": 1
+    }
+   }
+  },
+  "Armenoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 470,
+   "lad": 450,
+   "range": [
+    "as-ne",
+    "na",
+    "as-n"
+   ],
+   "note": "An actinocerid nautiloid whose chambers are threaded by a thick, beaded siphuncle -- common in the warm Middle Ordovician seas of North China and Laurentia.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Actinocerida",
+    "family": "Armenoceratidae"
+   },
+   "pbdb": {
+    "asked": "Armenoceras",
+    "matched": "Armenoceras",
+    "exact": true,
+    "oid": "txn:12660",
+    "rank": "genus",
+    "extant": false,
+    "noc": 122,
+    "fea": 486.85,
+    "lla": 247,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Actinocerida",
+    "family": "Armenoceratidae",
+    "genus": "Armenoceras",
+    "regions": {
+     "as-ne": 32,
+     "na-n": 24,
+     "na-e": 24,
+     "as-n": 14,
+     "eu-n": 10,
+     "na-w": 5,
+     "as-s": 4,
+     "as-c": 4,
+     "as-sb": 3,
+     "as-w": 1,
+     "au-e": 1
+    },
+    "fea_r": 472.55,
+    "lla_r": 427.8
+   }
+  },
+  "Autunia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 305,
+   "lad": 265,
+   "range": [
+    "eu",
+    "na-w",
+    "na-e",
+    "af-n"
+   ],
+   "note": "A peltasperm seed fern whose leaf, long called Callipteris, is the classic sign of the base of the Permian in the red beds of Europe -- a plant of drier ground than the coal swamps.",
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae"
+   },
+   "aka": [
+    "Callipteris"
+   ],
+   "pbdb": {
+    "asked": "Autunia",
+    "matched": "Autunia",
+    "exact": true,
+    "oid": "txn:157183",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 298.9,
+    "lla": 274.4,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae",
+    "genus": "Autunia",
+    "regions": {
+     "na-e": 4,
+     "eu-s": 2,
+     "eu-n": 2
+    },
+    "fea_r": 296.21,
+    "lla_r": 283.96
+   },
+   "lat": [
+    0,
+    40
+   ]
+  },
+  "Aysheaia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobopod",
+   "fad": 508,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "A velvet-worm-like lobopodian of the Burgess Shale, often found among the sponges it may have fed on.",
+   "cls": {
+    "class": "Lobopodia",
+    "family": "Aysheaiidae"
+   },
+   "pbdb": {
+    "asked": "Aysheaia",
+    "matched": "Aysheaia",
+    "exact": true,
+    "oid": "txn:18881",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 509.7,
+    "lla": 505.3,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Aysheaiidae",
+    "genus": "Aysheaia",
+    "regions": {
+     "na-w": 6
+    }
+   }
+  },
+  "Bailiella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 508,
+   "lad": 497,
+   "range": [
+    "as-ne",
+    "eu-s",
+    "eu-n",
+    "na-av"
+   ],
+   "note": "An eyeless conocoryphid trilobite, of Middle Cambrian seas from North China to Avalonia and Bohemia.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Conocoryphidae"
+   },
+   "pbdb": {
+    "asked": "Bailiella",
+    "matched": "Bailiella",
+    "exact": true,
+    "oid": "txn:20327",
+    "rank": "genus",
+    "extant": false,
+    "noc": 28,
+    "fea": 508.2,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Ptychopariida",
+    "family": "Conocoryphidae",
+    "genus": "Bailiella",
+    "regions": {
+     "eu-s": 10,
+     "na-av": 8,
+     "as-ne": 7,
+     "as-s": 1,
+     "af-n": 1,
+     "eu-n": 1
+    },
+    "fea_r": 505.5,
+    "lla_r": 498.75
+   },
+   "avoid": [
+    "Baltica",
+    "Fennoscandian Shield",
+    "Tornquist Sea",
+    "Oslo Rift"
+   ]
+  },
+  "Balanerpeton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "temnospondyl",
+   "fad": 340,
+   "lad": 335,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A small land-going temnospondyl with an eardrum -- among the first tetrapods that could hear sound travelling through air.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Dendrerpetontidae"
+   },
+   "pbdb": {
+    "asked": "Balanerpeton",
+    "matched": "Balanerpeton",
+    "exact": true,
+    "oid": "txn:227174",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 335.9,
+    "lla": 330.3,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Balanerpeton",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Baltisphaeridium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 480,
+   "lad": 445,
+   "range": [
+    "eu-n",
+    "as-c",
+    "na-e",
+    "ar"
+   ],
+   "note": "A spiny acritarch -- the resting cyst of an Ordovician plankter -- used to date the Ordovician rocks of Baltica.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Baltisphaeridium",
+    "matched": "Baltisphaeridium",
+    "exact": true,
+    "oid": "txn:260235",
+    "rank": "genus",
+    "extant": false,
+    "noc": 70,
+    "fea": 1000,
+    "lla": 23.04,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Baltisphaeridium",
+    "regions": {
+     "eu-n": 29,
+     "ar": 14,
+     "as-n": 11,
+     "na-e": 5,
+     "eu-s": 2,
+     "sa-n": 2,
+     "sa-s": 2,
+     "in": 2,
+     "an": 1,
+     "na-n": 1,
+     "af-w": 1
+    },
+    "fea_r": 522.65,
+    "lla_r": 69.1
+   }
+  },
+  "Blackwelderia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 500,
+   "lad": 497,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A damesellid trilobite with long spines fanning from its tail, typical of the Guzhangian seas of North China.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Damesellidae"
+   },
+   "pbdb": {
+    "asked": "Blackwelderia",
+    "matched": "Blackwelderia",
+    "exact": true,
+    "oid": "txn:19782",
+    "rank": "genus",
+    "extant": false,
+    "noc": 88,
+    "fea": 504.5,
+    "lla": 494.2,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Lichida",
+    "family": "Damesellidae",
+    "genus": "Blackwelderia",
+    "regions": {
+     "as-ne": 65,
+     "as-c": 17,
+     "as-s": 3,
+     "au-e": 2,
+     "as-ic": 1
+    },
+    "fea_r": 498.75,
+    "lla_r": 498.25
+   }
+  },
+  "Buenellus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 518,
+   "lad": 515,
+   "range": [
+    "gl"
+   ],
+   "note": "An olenellid trilobite, the commonest in the Sirius Passet beds on the northern edge of Cambrian Laurentia.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Olenellidae"
+   },
+   "pbdb": {
+    "asked": "Buenellus",
+    "matched": "Buenellus",
+    "exact": true,
+    "oid": "txn:19119",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 521,
+    "lla": 509.7,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Redlichiida",
+    "family": "Nevadiidae",
+    "genus": "Buenellus",
+    "regions": {
+     "gl": 3
+    }
+   }
+  },
+  "Cacops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "temnospondyl",
+   "fad": 280,
+   "lad": 272,
+   "range": [
+    "na-w"
+   ],
+   "note": "A stocky, armour-backed amphibian with a large eardrum notch -- a land-going temnospondyl of the Early Permian, probably active at night.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Dissorophidae"
+   },
+   "pbdb": {
+    "asked": "Cacops",
+    "matched": "Cacops",
+    "exact": true,
+    "oid": "txn:37025",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 290.1,
+    "lla": 274.4,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Dissorophidae",
+    "genus": "Cacops",
+    "regions": {
+     "na-e": 6
+    }
+   }
+  },
+  "Canadaspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 515,
+   "lad": 505,
+   "range": [
+    "na-w",
+    "as-s"
+   ],
+   "note": "One of the commonest Burgess Shale arthropods: a bivalved, shrimp-like bottom-feeder that also lived in the Chengjiang sea.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Hymenocarina",
+    "family": "Canadaspididae"
+   },
+   "pbdb": {
+    "asked": "Canadaspis",
+    "matched": "Canadaspis",
+    "exact": true,
+    "oid": "txn:22218",
+    "rank": "genus",
+    "extant": false,
+    "noc": 52,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Canadaspidida",
+    "family": "Canadaspididae",
+    "genus": "Canadaspis",
+    "regions": {
+     "na-w": 37,
+     "as-s": 14,
+     "as-ic": 1
+    },
+    "fea_r": 518.5,
+    "lla_r": 500.75
+   }
+  },
+  "Cardiola": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "clam",
+   "fad": 430,
+   "lad": 420,
+   "range": [
+    "eu-s",
+    "af-n",
+    "eu-n"
+   ],
+   "note": "A small, ribbed bivalve of the Silurian, abundant in the dark limestones of Bohemia and North Africa.",
+   "cls": {
+    "class": "Bivalvia",
+    "order": "Praecardiida",
+    "family": "Cardiolidae"
+   },
+   "pbdb": {
+    "asked": "Cardiola",
+    "matched": "Cardiola",
+    "exact": true,
+    "oid": "txn:16171",
+    "rank": "genus",
+    "extant": false,
+    "noc": 136,
+    "fea": 443.1,
+    "lla": 342.9,
+    "phylum": "Mollusca",
+    "class": "Bivalvia",
+    "order": "Cyrtodontida",
+    "family": "Cardiolidae",
+    "genus": "Cardiola",
+    "regions": {
+     "eu-s": 76,
+     "eu-n": 29,
+     "af-n": 27,
+     "na-e": 3,
+     "as-s": 1
+    },
+    "fea_r": 431.75,
+    "lla_r": 411.82
+   }
+  },
+  "Ceraurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 460,
+   "lad": 445,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "A spiny cheirurid trilobite of the Trenton limestone seas, sometimes preserved with its legs.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Cheiruridae"
+   },
+   "pbdb": {
+    "asked": "Ceraurus",
+    "matched": "Ceraurus",
+    "exact": true,
+    "oid": "txn:21491",
+    "rank": "genus",
+    "extant": false,
+    "noc": 184,
+    "fea": 471.3,
+    "lla": 443.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Cheiruridae",
+    "genus": "Ceraurus",
+    "regions": {
+     "na-e": 146,
+     "na-n": 24,
+     "na-w": 9,
+     "eu-n": 4,
+     "as-ne": 1
+    },
+    "fea_r": 464.75,
+    "lla_r": 447.55
+   }
+  },
+  "Clymenia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 368,
+   "lad": 359,
+   "range": [
+    "eu",
+    "af-n",
+    "au-w",
+    "as-c"
+   ],
+   "note": "A clymeniid ammonoid, whose siphuncle ran along the inner side of the shell -- the reverse of every other ammonoid -- living only in the last ten million years of the Devonian.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Clymeniida",
+    "family": "Clymeniidae"
+   },
+   "pbdb": {
+    "homonym": "Clymenia Savigny, a living maldanid polychaete; the ammonoid is Clymenia Muenster 1834"
+   }
+  },
+  "Coelurosauravus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 258,
+   "lad": 252,
+   "range": [
+    "mg",
+    "eu"
+   ],
+   "note": "The first gliding reptile: a lizard-sized weigeltisaurid that spread wings of skin on rods of bone growing from its flanks.",
+   "cls": {
+    "class": "Reptilia",
+    "family": "Weigeltisauridae"
+   },
+   "pbdb": {
+    "asked": "Coelurosauravus",
+    "matched": "Coelurosauravus",
+    "exact": true,
+    "oid": "txn:37779",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Eosuchia",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Coelurosauravus",
+    "regions": {
+     "mg": 3,
+     "eu-n": 1
+    }
+   }
+  },
+  "Crassigyrinus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 335,
+   "lad": 325,
+   "range": [
+    "eu-n",
+    "na-e"
+   ],
+   "note": "A two-metre, big-mouthed stem tetrapod with tiny forelimbs -- back in the water, an ambush hunter of the Mississippian lakes.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Crassigyrinidae"
+   },
+   "pbdb": {
+    "asked": "Crassigyrinus",
+    "matched": "Crassigyrinus",
+    "exact": true,
+    "oid": "txn:36967",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 335.9,
+    "lla": 323.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Crassigyrinidae",
+    "genus": "Crassigyrinus",
+    "regions": {
+     "na-e": 3,
+     "eu-n": 2
+    }
+   }
+  },
+  "Crotalocrinites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 430,
+   "lad": 425,
+   "range": [
+    "eu-n",
+    "na-e",
+    "as-n"
+   ],
+   "note": "A Silurian crinoid whose arms fused into a web, a filtering fan; it grew in meadows on Silurian reefs.",
+   "cls": {
+    "class": "Crinoidea",
+    "order": "Monobathrida",
+    "family": "Crotalocrinitidae"
+   },
+   "pbdb": {
+    "asked": "Crotalocrinites",
+    "matched": "Crotalocrinites",
+    "exact": true,
+    "oid": "txn:32120",
+    "rank": "genus",
+    "extant": false,
+    "noc": 30,
+    "fea": 443.1,
+    "lla": 410.62,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea",
+    "order": "Cyathocrinida",
+    "family": "Crotalocrinitidae",
+    "genus": "Crotalocrinites",
+    "regions": {
+     "na-e": 16,
+     "eu-n": 5,
+     "as-n": 5,
+     "au-e": 2,
+     "as-c": 1,
+     "as-ne": 1
+    },
+    "fea_r": 435.75,
+    "lla_r": 416.32
+   }
+  },
+  "Crussolum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 410,
+   "lad": 380,
+   "range": [
+    "eu-n",
+    "na-e"
+   ],
+   "note": "One of the oldest centipedes, known from its legs in the Rhynie chert and the Gilboa forest -- already a venomous hunter of the early undergrowth.",
+   "cls": {
+    "class": "Myriapoda",
+    "order": "Scutigeromorpha"
+   },
+   "pbdb": {
+    "asked": "Crussolum",
+    "matched": "Crussolum",
+    "exact": true,
+    "oid": "txn:350549",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 422.7,
+    "lla": 382.31,
+    "phylum": "Arthropoda",
+    "class": "Chilopoda",
+    "order": "Scutigeromorpha",
+    "family": "Crussolidae",
+    "genus": "Crussolum",
+    "regions": {
+     "eu-n": 3,
+     "na-e": 1
+    }
+   }
+  },
+  "Cyclolobus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 260,
+   "lad": 252,
+   "range": [
+    "in",
+    "mg",
+    "as-w"
+   ],
+   "note": "One of the last of the Palaeozoic ammonoids, a Late Permian form with a finely frilled suture, from the Salt Range and Madagascar.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Cyclolobidae"
+   },
+   "pbdb": {
+    "asked": "Cyclolobus",
+    "matched": "Cyclolobus",
+    "exact": true,
+    "oid": "txn:13671",
+    "rank": "genus",
+    "extant": false,
+    "noc": 37,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Cyclolobidae",
+    "genus": "Cyclolobus",
+    "regions": {
+     "in": 20,
+     "au-w": 3,
+     "gl": 3,
+     "ar": 2,
+     "mg": 2,
+     "as-ne": 2,
+     "as-w": 2,
+     "as-c": 2,
+     "na-w": 1
+    },
+    "fea_r": 257.0,
+    "lla_r": 253.02
+   }
+  },
+  "Damesella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 505,
+   "lad": 500,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A spiny-tailed damesellid trilobite of the late Middle Cambrian of North China and Korea.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Damesellidae"
+   },
+   "pbdb": {
+    "asked": "Damesella",
+    "matched": "Damesella",
+    "exact": true,
+    "oid": "txn:19793",
+    "rank": "genus",
+    "extant": false,
+    "noc": 16,
+    "fea": 506.5,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Lichida",
+    "family": "Damesellidae",
+    "genus": "Damesella",
+    "regions": {
+     "as-ne": 9,
+     "as-s": 5,
+     "in": 2
+    },
+    "fea_r": 500.75,
+    "lla_r": 491.93
+   }
+  },
+  "Deiphon": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 430,
+   "lad": 425,
+   "range": [
+    "eu-s",
+    "eu-n",
+    "na-e"
+   ],
+   "note": "A cheirurid trilobite with a swollen, globe-shaped head and long spines -- perhaps a swimmer in open water.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Cheiruridae"
+   },
+   "pbdb": {
+    "asked": "Deiphon",
+    "matched": "Deiphon",
+    "exact": true,
+    "oid": "txn:21529",
+    "rank": "genus",
+    "extant": false,
+    "noc": 53,
+    "fea": 449.5,
+    "lla": 422.7,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Cheiruridae",
+    "genus": "Deiphon",
+    "regions": {
+     "eu-n": 19,
+     "na-n": 16,
+     "na-e": 12,
+     "eu-s": 5,
+     "gl": 1
+    },
+    "fea_r": 441.8,
+    "lla_r": 425.85
+   }
+  },
+  "Delitzschala": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 325,
+   "lad": 320,
+   "range": [
+    "eu"
+   ],
+   "note": "One of the oldest winged insects, a palaeodictyopteran from the Early Carboniferous -- flight had begun, 150 million years before any other animal flew.",
+   "cls": {
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Spilapteridae"
+   },
+   "pbdb": {
+    "asked": "Delitzschala",
+    "matched": "Delitzschala",
+    "exact": true,
+    "oid": "txn:245900",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 326.9,
+    "lla": 323.6,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Spilapteridae",
+    "genus": "Delitzschala",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Diadectes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 305,
+   "lad": 275,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "One of the first large plant-eaters on land: a three-metre, barrel-bodied tetrapod with broad cheek teeth, close to the ancestry of reptiles.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Diadectomorpha",
+    "family": "Diadectidae"
+   },
+   "pbdb": {
+    "asked": "Diadectes",
+    "matched": "Diadectes",
+    "exact": true,
+    "oid": "txn:37247",
+    "rank": "genus",
+    "extant": false,
+    "noc": 68,
+    "fea": 303.7,
+    "lla": 266.9,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Diadectidae",
+    "genus": "Diadectes",
+    "regions": {
+     "na-e": 51,
+     "na-w": 16,
+     "eu-n": 1
+    },
+    "fea_r": 296.21,
+    "lla_r": 278.85
+   }
+  },
+  "Dicranurus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 420,
+   "lad": 395,
+   "range": [
+    "af-n",
+    "na-w",
+    "na-e",
+    "eu-s",
+    "au-e"
+   ],
+   "note": "A spiny odontopleurid trilobite with two long horns curling back from its head like a ram's.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Odontopleurida",
+    "family": "Odontopleuridae"
+   },
+   "pbdb": {
+    "asked": "Dicranurus",
+    "matched": "Dicranurus",
+    "exact": true,
+    "oid": "txn:19795",
+    "rank": "genus",
+    "extant": false,
+    "noc": 22,
+    "fea": 461.1,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Odontopleurida",
+    "family": "Odontopleuridae",
+    "genus": "Dicranurus",
+    "regions": {
+     "eu-s": 10,
+     "af-n": 5,
+     "au-e": 3,
+     "na-e": 3,
+     "as-s": 1
+    },
+    "fea_r": 417.86,
+    "lla_r": 397.66
+   }
+  },
+  "Dipterus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lungfish",
+   "fad": 390,
+   "lad": 375,
+   "range": [
+    "eu-n"
+   ],
+   "note": "An early lungfish of the Middle Devonian lake of northern Scotland, whose crushing tooth plates are almost those of a living lungfish.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Dipnoi",
+    "family": "Dipteridae"
+   },
+   "pbdb": {
+    "asked": "Dipterus",
+    "matched": "Dipterus",
+    "exact": true,
+    "oid": "txn:34888",
+    "rank": "genus",
+    "extant": false,
+    "noc": 34,
+    "fea": 393.47,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Dipteriformes",
+    "family": "Dipteridae",
+    "genus": "Dipterus",
+    "regions": {
+     "eu-n": 30,
+     "na-w": 2,
+     "ar": 1,
+     "na-e": 1
+    },
+    "fea_r": 390.71,
+    "lla_r": 365.5
+   }
+  },
+  "Drepanura": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 499,
+   "lad": 496,
+   "range": [
+    "as-ne"
+   ],
+   "note": "A trilobite whose broad, hooked tail shield is the 'swallow stone' of Shandong, collected as a curiosity in China for a thousand years.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Damesellidae"
+   },
+   "pbdb": {
+    "asked": "Drepanura",
+    "matched": "Drepanura",
+    "exact": true,
+    "oid": "txn:19798",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 506.5,
+    "lla": 486.85,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Lichida",
+    "family": "Damesellidae",
+    "genus": "Neodrepanura",
+    "regions": {
+     "as-ne": 17,
+     "as-s": 2,
+     "as-c": 1
+    },
+    "fea_r": 498.75,
+    "lla_r": 491.93
+   }
+  },
+  "Echinosphaerites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 465,
+   "lad": 450,
+   "range": [
+    "eu-n",
+    "na-e"
+   ],
+   "note": "A cystoid echinoderm, a spiny ball on a short stalk, so abundant in the Middle Ordovician of Baltica that its skeletons form whole beds of limestone.",
+   "cls": {
+    "class": "Echinodermata",
+    "order": "Rhombifera",
+    "family": "Echinosphaeritidae"
+   },
+   "pbdb": {
+    "asked": "Echinosphaerites",
+    "matched": "Echinosphaerites",
+    "exact": true,
+    "oid": "txn:30959",
+    "rank": "genus",
+    "extant": false,
+    "noc": 99,
+    "fea": 486.4,
+    "lla": 443.1,
+    "phylum": "Echinodermata",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rhombifera",
+    "family": "Echinosphaeritidae",
+    "genus": "Echinosphaerites",
+    "regions": {
+     "eu-n": 58,
+     "na-e": 23,
+     "eu-s": 9,
+     "af-n": 6,
+     "as-s": 1,
+     "na-w": 1,
+     "as-c": 1
+    },
+    "fea_r": 466.7,
+    "lla_r": 447.0
+   }
+  },
+  "Elginerpeton": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 375,
+   "lad": 368,
+   "range": [
+    "eu-n"
+   ],
+   "note": "One of the earliest tetrapods, known from jaws and limb bones from the Late Devonian of Scotland -- a metre and a half long and still mostly in the water.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Elginerpetontidae"
+   },
+   "pbdb": {
+    "asked": "Elginerpeton",
+    "matched": "Elginerpeton",
+    "exact": true,
+    "oid": "txn:242708",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 375.2,
+    "lla": 372.15,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Elginerpetontidae",
+    "genus": "Elginerpeton",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Epiphyton": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 530,
+   "lad": 360,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A shrub-like calcified microbe that framed reefs with the archaeocyaths in the Cambrian and again in the Late Devonian.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Cyanobacteria"
+   },
+   "pbdb": {
+    "asked": "Epiphyton",
+    "matched": "Epiphyton",
+    "exact": true,
+    "oid": "txn:84255",
+    "rank": "genus",
+    "extant": false,
+    "noc": 145,
+    "fea": 635,
+    "lla": 358.86,
+    "phylum": "Rhodophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Ludloviaceae",
+    "genus": "Epiphyton",
+    "regions": {
+     "as-n": 49,
+     "eu-s": 18,
+     "as-s": 12,
+     "na-w": 11,
+     "as-ne": 11,
+     "au-e": 9,
+     "na-e": 9,
+     "as-c": 7,
+     "na-n": 6,
+     "af-n": 5,
+     "eu-n": 4,
+     "in": 1,
+     "au-w": 1,
+     "an": 1,
+     "as-sb": 1
+    },
+    "fea_r": 518.5,
+    "lla_r": 377.23
+   }
+  },
+  "Erbenochile": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 400,
+   "lad": 395,
+   "range": [
+    "af-n"
+   ],
+   "note": "A trilobite with towering eyes crowned by a sunshade -- evidence that it lived in bright, shallow water.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Acastidae"
+   },
+   "pbdb": {
+    "asked": "Erbenochile",
+    "matched": "Erbenochile",
+    "exact": true,
+    "oid": "txn:157868",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 410.62,
+    "lla": 387.95,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Erbenochile",
+    "regions": {
+     "af-n": 3
+    }
+   }
+  },
+  "Euproops": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "horseshoecrab",
+   "fad": 315,
+   "lad": 295,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "A small horseshoe crab of the coal-swamp pools, with spined edges to its shield -- a freshwater cousin of the living Limulus.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Xiphosurida",
+    "family": "Euproopidae"
+   },
+   "pbdb": {
+    "asked": "Euproops",
+    "matched": "Euproops",
+    "exact": true,
+    "oid": "txn:259128",
+    "rank": "genus",
+    "extant": false,
+    "noc": 39,
+    "fea": 326.9,
+    "lla": 300.3,
+    "phylum": "Arthropoda",
+    "class": "Xiphosura",
+    "order": "Xiphosurida",
+    "family": "Belinuridae",
+    "genus": "Euproops",
+    "regions": {
+     "eu-n": 19,
+     "na-e": 14,
+     "na-av": 5,
+     "na-w": 1
+    },
+    "fea_r": 317.8,
+    "lla_r": 305.35
+   }
+  },
+  "Falcatus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "shark",
+   "fad": 326,
+   "lad": 318,
+   "range": [
+    "na-w"
+   ],
+   "note": "A thirty-centimetre shark of the Bear Gulch lagoon; males carried a spine curving forward over the head like a sickle, used, it seems, in courtship.",
+   "cls": {
+    "class": "Chondrichthyes",
+    "order": "Symmoriiformes",
+    "family": "Falcatidae"
+   },
+   "pbdb": {
+    "asked": "Falcatus",
+    "matched": "Falcatus",
+    "exact": true,
+    "oid": "txn:34440",
+    "rank": "genus",
+    "extant": false,
+    "noc": 9,
+    "fea": 330.3,
+    "lla": 323.4,
+    "phylum": "Chordata",
+    "class": "Chondrichthyes",
+    "order": "Symmoriiformes",
+    "family": "Falcatidae",
+    "genus": "Falcatus",
+    "regions": {
+     "na-w": 8,
+     "eu-n": 1
+    },
+    "fea_r": 325.25,
+    "lla_r": 325.25
+   }
+  },
+  "Frankea": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 470,
+   "lad": 450,
+   "range": [
+    "af-n",
+    "eu-s",
+    "sa-s",
+    "ar",
+    "as-w"
+   ],
+   "note": "A peri-Gondwanan acritarch with long branching spines, a marker of the cold high-latitude Ordovician seas off North Africa and Iberia.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Acritarcha"
+   }
+  },
+  "Fuxianhuia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 518,
+   "lad": 515,
+   "range": [
+    "as-s"
+   ],
+   "note": "An arthropod of the Chengjiang sea whose brain and nerves were fossilised -- evidence that complex arthropod brains already existed in the Early Cambrian.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Fuxianhuiida",
+    "family": "Fuxianhuiidae"
+   },
+   "pbdb": {
+    "asked": "Fuxianhuia",
+    "matched": "Fuxianhuia",
+    "exact": true,
+    "oid": "txn:19036",
+    "rank": "genus",
+    "extant": false,
+    "noc": 21,
+    "fea": 521,
+    "lla": 514.5,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Fuxianhuiida",
+    "family": "Fuxianhuiidae",
+    "genus": "Fuxianhuia",
+    "regions": {
+     "as-s": 21
+    },
+    "fea_r": 522.65,
+    "lla_r": 517.75
+   }
+  },
+  "Gigantoproductus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 340,
+   "lad": 325,
+   "range": [
+    "eu",
+    "af-n",
+    "as-c",
+    "as-s"
+   ],
+   "note": "The largest brachiopod ever: a productid up to thirty centimetres wide, lying in dense shell beds on the Mississippian sea floor.",
+   "cls": {
+    "class": "Brachiopoda",
+    "order": "Productida",
+    "family": "Monticuliferidae"
+   },
+   "pbdb": {
+    "asked": "Gigantoproductus",
+    "matched": "Gigantoproductus",
+    "exact": true,
+    "oid": "txn:27406",
+    "rank": "genus",
+    "extant": false,
+    "noc": 61,
+    "fea": 346.7,
+    "lla": 318.7,
+    "phylum": "Brachiopoda",
+    "class": "Strophomenata",
+    "order": "Productida",
+    "family": "Monticuliferidae",
+    "genus": "Gigantoproductus",
+    "regions": {
+     "eu-n": 39,
+     "as-c": 5,
+     "as-w": 4,
+     "as-s": 3,
+     "na-w": 3,
+     "af-n": 2,
+     "au-e": 2,
+     "na-av": 2,
+     "eu-s": 1
+    },
+    "fea_r": 339.15,
+    "lla_r": 324.5
+   }
+  },
+  "Gigantoscorpio": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "scorpion",
+   "fad": 340,
+   "lad": 330,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A Mississippian scorpion some 35 centimetres long from the lake shores of Scotland -- one of the first scorpions certainly built for land.",
+   "cls": {
+    "class": "Arachnida",
+    "order": "Scorpiones"
+   },
+   "pbdb": {
+    "asked": "Gigantoscorpio",
+    "matched": "Gigantoscorpio",
+    "exact": true,
+    "oid": "txn:243113",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 353.7,
+    "lla": 330.3,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Scorpiones",
+    "family": "Gigantoscorpionidae",
+    "genus": "Gigantoscorpio",
+    "regions": {
+     "eu-n": 3
+    }
+   }
+  },
+  "Gloeocapsomorpha prisca": {
+   "rank": "species",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 460,
+   "lad": 450,
+   "range": [
+    "eu-n",
+    "na-e",
+    "na-w",
+    "as-c"
+   ],
+   "note": "A colonial microbe, probably a cyanobacterium, whose Ordovician blooms made the kukersite oil shale of Estonia -- which still fuels the country's power stations.",
+   "cls": {
+    "class": "Cyanobacteria"
+   }
+  },
+  "Graeophonus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "spider",
+   "fad": 315,
+   "lad": 300,
+   "range": [
+    "na-e",
+    "eu"
+   ],
+   "note": "A whip spider of the coal forests, with long raptorial forelegs -- the arachnid order has barely changed since.",
+   "cls": {
+    "class": "Arachnida",
+    "order": "Amblypygi",
+    "family": "Graeophonidae"
+   },
+   "pbdb": {
+    "asked": "Graeophonus",
+    "matched": "Graeophonus",
+    "exact": true,
+    "oid": "txn:272587",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 316.9,
+    "lla": 314.6,
+    "phylum": "Arthropoda",
+    "class": "Arachnida",
+    "order": "Amblypygi",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Graeophonus",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Greererpeton": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 335,
+   "lad": 325,
+   "range": [
+    "na-e"
+   ],
+   "note": "A long-bodied colosteid with a flat skull and the lateral-line grooves of a fish -- an eel-like hunter that never really left the water.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Colosteidae"
+   },
+   "pbdb": {
+    "asked": "Greererpeton",
+    "matched": "Greererpeton",
+    "exact": true,
+    "oid": "txn:36977",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 330.3,
+    "lla": 323.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Colosteidae",
+    "genus": "Greererpeton",
+    "regions": {
+     "na-e": 4,
+     "na-av": 1
+    }
+   }
+  },
+  "Harpes": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 400,
+   "lad": 375,
+   "range": [
+    "eu-s",
+    "af-n",
+    "eu-n",
+    "na-e"
+   ],
+   "note": "A trilobite with a broad, pitted horseshoe brim around its head -- probably a sieve for sifting food from the mud.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Harpetida",
+    "family": "Harpetidae"
+   },
+   "pbdb": {
+    "asked": "Harpes",
+    "matched": "Harpes",
+    "exact": true,
+    "oid": "txn:20537",
+    "rank": "genus",
+    "extant": false,
+    "noc": 46,
+    "fea": 471.3,
+    "lla": 382.31,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Harpetida",
+    "family": "Harpetidae",
+    "genus": "Harpes",
+    "regions": {
+     "eu-n": 20,
+     "eu-s": 8,
+     "na-n": 7,
+     "af-n": 4,
+     "as-n": 2,
+     "as-sb": 2,
+     "as-c": 1,
+     "sa-n": 1,
+     "au-e": 1
+    },
+    "fea_r": 457.7,
+    "lla_r": 389.23
+   }
+  },
+  "Hebertella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 455,
+   "lad": 445,
+   "range": [
+    "na-e",
+    "na-w"
+   ],
+   "note": "A ribbed orthid brachiopod, one of the commonest shells of the Late Ordovician seas of Laurentia.",
+   "cls": {
+    "class": "Brachiopoda",
+    "order": "Orthida",
+    "family": "Plaesiomyidae"
+   },
+   "pbdb": {
+    "asked": "Hebertella",
+    "matched": "Hebertella",
+    "exact": true,
+    "oid": "txn:26796",
+    "rank": "genus",
+    "extant": false,
+    "noc": 817,
+    "fea": 477.1,
+    "lla": 432.9,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Orthida",
+    "family": "Plectorthidae",
+    "genus": "Hebertella",
+    "regions": {
+     "na-e": 805,
+     "na-w": 4,
+     "eu-n": 4,
+     "sa-s": 1,
+     "eu-s": 1,
+     "na-n": 1,
+     "au-e": 1
+    },
+    "fea_r": 454.15,
+    "lla_r": 447.55
+   }
+  },
+  "Heliophyllum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "horncoral",
+   "fad": 405,
+   "lad": 375,
+   "range": [
+    "na-e",
+    "na-w",
+    "eu",
+    "as-c"
+   ],
+   "note": "A large solitary horn coral of the Middle Devonian whose fine growth ridges, counted as days, show about 400 days in a Devonian year.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Rugosa",
+    "family": "Zaphrentidae"
+   },
+   "pbdb": {
+    "asked": "Heliophyllum",
+    "matched": "Heliophyllum",
+    "exact": true,
+    "oid": "txn:5489",
+    "rank": "genus",
+    "extant": false,
+    "noc": 181,
+    "fea": 443.1,
+    "lla": 372.15,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Stauriida",
+    "family": "Zaphrentidae",
+    "genus": "Heliophyllum",
+    "regions": {
+     "na-e": 131,
+     "as-c": 22,
+     "eu-s": 9,
+     "na-w": 9,
+     "as-n": 3,
+     "eu-n": 3,
+     "af-n": 2,
+     "na-n": 1,
+     "au-e": 1
+    },
+    "fea_r": 399.28,
+    "lla_r": 381.2
+   }
+  },
+  "Hibbertopterus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "eurypterid",
+   "fad": 360,
+   "lad": 300,
+   "range": [
+    {
+     "t": [
+      360,
+      345
+     ],
+     "in": [
+      "af-s"
+     ]
+    },
+    {
+     "t": [
+      345,
+      300
+     ],
+     "in": [
+      "eu-n",
+      "na-w"
+     ]
+    }
+   ],
+   "note": "A giant sweep-feeding sea scorpion as long as a person, which raked lake and river beds with its spined limbs; one of its walking trackways runs six metres across a Scottish sandstone.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Hibbertopteridae"
+   },
+   "pbdb": {
+    "asked": "Hibbertopterus",
+    "matched": "Hibbertopterus",
+    "exact": true,
+    "oid": "txn:18973",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 365.2,
+    "lla": 303.7,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Hibbertopteridae",
+    "genus": "Hibbertopterus",
+    "regions": {
+     "eu-n": 3,
+     "na-w": 1
+    }
+   }
+  },
+  "Holoptychius": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 385,
+   "lad": 359,
+   "range": [
+    "eu-n",
+    "na-e",
+    "gl",
+    "as-n",
+    "an",
+    "au-e"
+   ],
+   "note": "A porolepiform lobe-finned fish up to two and a half metres long, with big rounded scales and fangs -- one of the commonest large fishes of Late Devonian rivers.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Porolepiformes",
+    "family": "Holoptychiidae"
+   },
+   "pbdb": {
+    "asked": "Holoptychius",
+    "matched": "Holoptychius",
+    "exact": true,
+    "oid": "txn:149971",
+    "rank": "genus",
+    "extant": false,
+    "noc": 47,
+    "fea": 393.47,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Porolepidiformes",
+    "family": "Holoptychiidae",
+    "genus": "Holoptychius",
+    "regions": {
+     "eu-n": 31,
+     "na-e": 8,
+     "na-w": 5,
+     "au-e": 1,
+     "na-n": 1,
+     "gl": 1
+    },
+    "fea_r": 380.65,
+    "lla_r": 362.03
+   }
+  },
+  "Horneophyton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A small plant of the Rhynie hot-spring marsh with a lumpy underground corm and a spore capsule with a central column like a moss's -- from before the vascular plants settled their plan.",
+   "cls": {
+    "class": "Horneophytopsida",
+    "order": "Horneophytales",
+    "family": "Horneophytaceae"
+   },
+   "pbdb": {
+    "asked": "Horneophyton",
+    "matched": "Horneophyton",
+    "exact": true,
+    "oid": "txn:409636",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Psilophytophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Horneophyton",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Hurdia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "radiodont",
+   "fad": 508,
+   "lad": 500,
+   "range": [
+    "na-w",
+    "eu-s",
+    "as-s"
+   ],
+   "note": "A radiodont with a long, hood-like carapace over its head -- first described piecemeal as several different animals.",
+   "cls": {
+    "class": "Dinocaridida",
+    "order": "Radiodonta",
+    "family": "Hurdiidae"
+   },
+   "pbdb": {
+    "asked": "Hurdia",
+    "matched": "Hurdia",
+    "exact": true,
+    "oid": "txn:7373",
+    "rank": "genus",
+    "extant": false,
+    "noc": 32,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Radiodonta",
+    "family": "Hurdiidae",
+    "genus": "Hurdia",
+    "regions": {
+     "na-w": 29,
+     "as-s": 2,
+     "eu-s": 1
+    },
+    "fea_r": 507.5,
+    "lla_r": 501.75
+   }
+  },
+  "Illaenus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 470,
+   "lad": 445,
+   "range": [
+    "eu-n",
+    "as-n",
+    "as-c",
+    "na-e",
+    "na-w"
+   ],
+   "note": "A smooth, rounded trilobite that lay half-buried in the sea floor with only its eyes showing -- common on the Ordovician shelves of Baltica.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Illaenidae"
+   },
+   "pbdb": {
+    "asked": "Illaenus",
+    "matched": "Illaenus",
+    "exact": true,
+    "oid": "txn:19582",
+    "rank": "genus",
+    "extant": false,
+    "noc": 579,
+    "fea": 488.9,
+    "lla": 422.7,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Illaenidae",
+    "genus": "Illaenus",
+    "regions": {
+     "eu-n": 227,
+     "na-e": 122,
+     "as-s": 58,
+     "na-w": 45,
+     "as-c": 37,
+     "eu-s": 29,
+     "na-n": 19,
+     "as-ne": 18,
+     "sa-s": 12,
+     "as-sb": 6,
+     "as-n": 3,
+     "au-e": 2,
+     "as-ic": 1
+    },
+    "fea_r": 474.2,
+    "lla_r": 447.0
+   }
+  },
+  "Isoxys": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 520,
+   "lad": 505,
+   "range": [
+    "as-s",
+    "au-e",
+    "na-w",
+    "gl",
+    "eu-s",
+    "as-n"
+   ],
+   "note": "A bivalved Cambrian arthropod with big stalked eyes and spines fore and aft -- a swimming predator found in almost every Cambrian Lagerstätte.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Isoxyida",
+    "family": "Isoxyidae"
+   },
+   "pbdb": {
+    "asked": "Isoxys",
+    "matched": "Isoxys",
+    "exact": true,
+    "oid": "txn:19075",
+    "rank": "genus",
+    "extant": false,
+    "noc": 117,
+    "fea": 538.8,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Isoxyida",
+    "family": "Isoxyidae",
+    "genus": "Isoxys",
+    "regions": {
+     "as-s": 91,
+     "na-w": 14,
+     "au-e": 5,
+     "gl": 2,
+     "as-ne": 2,
+     "as-n": 1,
+     "na-n": 1,
+     "as-w": 1
+    },
+    "fea_r": 518.5,
+    "lla_r": 505.5
+   }
+  },
+  "Jaekelopterus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "eurypterid",
+   "fad": 395,
+   "lad": 390,
+   "range": [
+    "eu-n",
+    "na-w"
+   ],
+   "note": "The largest arthropod known: a sea scorpion some two and a half metres long, known from a 46-centimetre claw, hunting in Early Devonian estuaries.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Pterygotidae"
+   },
+   "realms": [
+    "fresh",
+    "sea"
+   ],
+   "pbdb": {
+    "asked": "Jaekelopterus",
+    "matched": "Jaekelopterus",
+    "exact": true,
+    "oid": "txn:18976",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 432.9,
+    "lla": 387.95,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Pterygotidae",
+    "genus": "Jaekelopterus",
+    "regions": {
+     "eu-n": 2,
+     "na-w": 2,
+     "na-e": 1,
+     "eu-s": 1,
+     "au-e": 1
+    }
+   }
+  },
+  "Kerygmachela": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobopod",
+   "fad": 518,
+   "lad": 515,
+   "range": [
+    "gl"
+   ],
+   "note": "A gilled lobopodian of Sirius Passet with swimming flaps and two long, spined head limbs -- a snapshot of the step from lobopodians to arthropods.",
+   "cls": {
+    "class": "Lobopodia",
+    "family": "Kerygmachelidae"
+   },
+   "pbdb": {
+    "asked": "Kerygmachela",
+    "matched": "Kerygmachela",
+    "exact": true,
+    "oid": "txn:7374",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 521,
+    "lla": 515.3,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Radiodonta",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Kerygmachela",
+    "regions": {
+     "gl": 2
+    }
+   }
+  },
+  "Koninckopora": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 345,
+   "lad": 325,
+   "range": [
+    "eu",
+    "af-n",
+    "as",
+    "na-w",
+    "au-e"
+   ],
+   "note": "A dasyclad green alga whose calcified branches make up part of many Mississippian limestones.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Chlorophyta",
+    "order": "Dasycladales"
+   },
+   "pbdb": {
+    "asked": "Koninckopora",
+    "matched": "Koninckopora",
+    "exact": true,
+    "oid": "txn:111057",
+    "rank": "genus",
+    "extant": false,
+    "noc": 63,
+    "fea": 346.7,
+    "lla": 323.4,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "Dasycladales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Koninckopora",
+    "regions": {
+     "eu-n": 54,
+     "na-av": 3,
+     "eu-s": 2,
+     "af-n": 2,
+     "as-n": 1,
+     "au-e": 1
+    },
+    "fea_r": 343.3,
+    "lla_r": 335.1
+   }
+  },
+  "Kunmingella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 520,
+   "lad": 510,
+   "range": [
+    "as-s"
+   ],
+   "note": "A millimetre-sized bivalved bradoriid, the most abundant animal of the Chengjiang sea, sometimes preserved with eggs under its shell.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Bradoriida",
+    "family": "Kunmingellidae"
+   },
+   "pbdb": {
+    "asked": "Kunmingella",
+    "matched": "Kunmingella",
+    "exact": true,
+    "oid": "txn:22869",
+    "rank": "genus",
+    "extant": false,
+    "noc": 53,
+    "fea": 521,
+    "lla": 514.5,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Bradoriida",
+    "family": "Kunmingellidae",
+    "genus": "Kunmingella",
+    "regions": {
+     "as-s": 51,
+     "as-ne": 2
+    },
+    "fea_r": 518.5,
+    "lla_r": 517.75
+   }
+  },
+  "Leanchoilia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 515,
+   "lad": 505,
+   "range": [
+    "as-s",
+    "na-w"
+   ],
+   "note": "A megacheiran arthropod with long, whip-tipped 'great appendages' in front, fossilised with its nervous system in the Chengjiang beds.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Megacheira",
+    "family": "Leanchoiliidae"
+   },
+   "pbdb": {
+    "asked": "Leanchoilia",
+    "matched": "Leanchoilia",
+    "exact": true,
+    "oid": "txn:22105",
+    "rank": "genus",
+    "extant": false,
+    "noc": 65,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Megacheira",
+    "order": "Leanchoiliida",
+    "family": "Leanchoiliidae",
+    "genus": "Leanchoilia",
+    "regions": {
+     "as-s": 42,
+     "na-w": 23
+    },
+    "fea_r": 518.5,
+    "lla_r": 500.75
+   }
+  },
+  "Lepidophloios": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 330,
+   "lad": 300,
+   "range": [
+    "eu",
+    "na-e",
+    "na-w",
+    "na-av"
+   ],
+   "note": "A scale tree of the coal swamps whose leaf cushions overlapped like the scales of a cone; it grew as one tall pole, branched once into a crown, shed its spores and died.",
+   "hab": [
+    "wetland",
+    "forest"
+   ],
+   "cls": {
+    "class": "Lycopsida",
+    "order": "Lepidodendrales",
+    "family": "Lepidodendraceae"
+   },
+   "pbdb": {
+    "asked": "Lepidophloios",
+    "matched": "Lepidophloios",
+    "exact": true,
+    "oid": "txn:125634",
+    "rank": "genus",
+    "extant": false,
+    "noc": 64,
+    "fea": 358.86,
+    "lla": 298.9,
+    "phylum": "Lycophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Lepidodendrales",
+    "family": "Lepidodendraceae",
+    "genus": "Lepidophloios",
+    "regions": {
+     "na-e": 43,
+     "eu-n": 12,
+     "na-av": 5,
+     "na-n": 3,
+     "na-w": 1
+    },
+    "fea_r": 337.9,
+    "lla_r": 309.4
+   },
+   "lat": [
+    0,
+    35
+   ]
+  },
+  "Leptophloeum": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lycopod",
+   "fad": 383,
+   "lad": 359,
+   "range": [
+    "as-s",
+    "as-ne",
+    "as-c",
+    "au-e",
+    "an",
+    "sa-n",
+    "af-s",
+    "eu"
+   ],
+   "note": "A Late Devonian tree lycopsid with bark patterned in diamonds -- one of the few trees found across Gondwana and the northern continents alike.",
+   "cls": {
+    "class": "Lycopsida",
+    "family": "Leptophloeaceae"
+   },
+   "pbdb": {
+    "asked": "Leptophloeum",
+    "matched": "Leptophloeum",
+    "exact": true,
+    "oid": "txn:250228",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 372.15,
+    "lla": 274.4,
+    "phylum": "Lycopodophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Leptophloeum",
+    "regions": {
+     "af-s": 4,
+     "as-c": 1,
+     "au-e": 1,
+     "as-ne": 1
+    }
+   }
+  },
+  "Leverhulmia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "myriapod",
+   "fad": 411,
+   "lad": 405,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A many-legged myriapod of the Rhynie hot-spring marsh, one of the first animals to walk on land among the first plants.",
+   "cls": {
+    "class": "Myriapoda"
+   },
+   "pbdb": {
+    "asked": "Leverhulmia",
+    "matched": "Leverhulmia",
+    "exact": true,
+    "oid": "txn:350546",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 413.02,
+    "lla": 410.62,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Leverhulmia",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Lithostrotion": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "horncoral",
+   "fad": 345,
+   "lad": 325,
+   "range": [
+    "eu",
+    "na",
+    "af-n",
+    "as",
+    "au-e"
+   ],
+   "note": "A colonial rugose coral whose bundled columns built thickets on the warm Mississippian limestone shelves.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Rugosa",
+    "family": "Lithostrotionidae"
+   },
+   "pbdb": {
+    "asked": "Lithostrotion",
+    "matched": "Lithostrotion",
+    "exact": true,
+    "oid": "txn:5588",
+    "rank": "genus",
+    "extant": false,
+    "noc": 237,
+    "fea": 358.86,
+    "lla": 293.52,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Stauriida",
+    "family": "Lithostrotionidae",
+    "genus": "Lithostrotion",
+    "regions": {
+     "eu-n": 109,
+     "af-n": 46,
+     "na-w": 31,
+     "as-s": 13,
+     "na-n": 12,
+     "au-e": 9,
+     "as-c": 7,
+     "as-n": 4,
+     "eu-s": 2,
+     "as-ne": 2,
+     "na-av": 1,
+     "na-e": 1
+    },
+    "fea_r": 343.3,
+    "lla_r": 326.85
+   }
+  },
+  "Lycaenops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "gorgonopsian",
+   "fad": 260,
+   "lad": 254,
+   "range": [
+    "af-s"
+   ],
+   "note": "A wolf-sized gorgonopsian with long sabre canines, the kind of predator that hunted dicynodonts across the Late Permian Karoo.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Gorgonopsia",
+    "family": "Gorgonopsidae"
+   },
+   "pbdb": {
+    "asked": "Lycaenops",
+    "matched": "Lycaenops",
+    "exact": true,
+    "oid": "txn:39120",
+    "rank": "genus",
+    "extant": false,
+    "noc": 19,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Gorgonopidae",
+    "genus": "Lycaenops",
+    "regions": {
+     "af-s": 15,
+     "af-e": 4
+    },
+    "fea_r": 257.0,
+    "lla_r": 255.88
+   }
+  },
+  "Lyginopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 330,
+   "lad": 310,
+   "range": [
+    "eu",
+    "na"
+   ],
+   "note": "A scrambling seed fern with glandular hairs on its stems, one of the first plants whose seed-bearing life was worked out from fossils.",
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Lyginopteridales",
+    "family": "Lyginopteridaceae"
+   },
+   "pbdb": {
+    "asked": "Lyginopteris",
+    "matched": "Lyginopteris",
+    "exact": true,
+    "oid": "txn:125739",
+    "rank": "genus",
+    "extant": false,
+    "noc": 50,
+    "fea": 358.86,
+    "lla": 298.9,
+    "phylum": "Gymnospermae",
+    "class": "Lyginopteridopsida",
+    "order": "Lyginopteridales",
+    "family": "Lyginopteridaceae",
+    "genus": "Lyginopteris",
+    "regions": {
+     "na-e": 22,
+     "eu-n": 14,
+     "eu-s": 9,
+     "as-w": 5
+    },
+    "fea_r": 341.13,
+    "lla_r": 313.05
+   }
+  },
+  "Maclurites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seasnail",
+   "fad": 470,
+   "lad": 445,
+   "range": [
+    "na-e",
+    "na-w",
+    "eu-n",
+    "as-n"
+   ],
+   "note": "A big, flat-coiled gastropod with a heavy lid, lying on the Ordovician sea floor like a stone -- its shells stud limestones from Tennessee to Scotland.",
+   "cls": {
+    "class": "Gastropoda",
+    "family": "Macluritidae"
+   },
+   "pbdb": {
+    "asked": "Maclurites",
+    "matched": "Maclurites",
+    "exact": true,
+    "oid": "txn:8511",
+    "rank": "genus",
+    "extant": false,
+    "noc": 322,
+    "fea": 488.9,
+    "lla": 443.1,
+    "phylum": "Mollusca",
+    "class": "Gastropoda",
+    "order": "Euomphalina",
+    "family": "Macluritidae",
+    "genus": "Maclurites",
+    "regions": {
+     "na-e": 149,
+     "na-n": 48,
+     "na-w": 37,
+     "as-ne": 30,
+     "eu-n": 16,
+     "au-e": 13,
+     "sa-s": 10,
+     "as-c": 8,
+     "as-s": 4,
+     "as-n": 4,
+     "in": 1,
+     "gl": 1,
+     "as-sb": 1
+    },
+    "fea_r": 479.08,
+    "lla_r": 447.35
+   }
+  },
+  "Mariopteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 320,
+   "lad": 300,
+   "range": [
+    "eu",
+    "na",
+    "af-n",
+    "as-ne",
+    "as-s"
+   ],
+   "note": "A climbing seed fern that hung on tree ferns and scale trees by hooked frond tips -- the lianas of the coal forests.",
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Callistophytales",
+    "family": "Mariopteridaceae"
+   },
+   "pbdb": {
+    "asked": "Mariopteris",
+    "matched": "Mariopteris",
+    "exact": true,
+    "oid": "txn:157276",
+    "rank": "genus",
+    "extant": false,
+    "noc": 78,
+    "fea": 330.3,
+    "lla": 264.28,
+    "phylum": "Tracheophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Medullosaceae",
+    "genus": "Mariopteris",
+    "regions": {
+     "na-e": 52,
+     "na-av": 10,
+     "eu-s": 4,
+     "as-ne": 4,
+     "as-w": 3,
+     "na-w": 2,
+     "eu-n": 2,
+     "as-sb": 1
+    },
+    "fea_r": 341.13,
+    "lla_r": 278.85
+   }
+  },
+  "Mastopora": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 470,
+   "lad": 445,
+   "range": [
+    "na-e",
+    "eu-n",
+    "as-n",
+    "as-c"
+   ],
+   "note": "A ball-shaped dasyclad green alga of the Ordovician, like a small calcified sea-grape, common on the carbonate shelves of Laurentia and Baltica.",
+   "cls": {
+    "class": "Chlorophyta",
+    "order": "Dasycladales"
+   },
+   "pbdb": {
+    "asked": "Mastopora",
+    "matched": "Mastopora",
+    "exact": true,
+    "oid": "txn:410758",
+    "rank": "genus",
+    "extant": false,
+    "noc": 78,
+    "fea": 471.3,
+    "lla": 56,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "Dasycladales",
+    "family": "Dasycladaceae",
+    "genus": "Cyclocrinites",
+    "regions": {
+     "eu-n": 40,
+     "na-e": 26,
+     "as-n": 4,
+     "na-n": 3,
+     "as-c": 2,
+     "in": 2,
+     "na-w": 1
+    },
+    "fea_r": 455.4,
+    "lla_r": 424.7
+   },
+   "lat": [
+    0,
+    45
+   ]
+  },
+  "Materpiscis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "placoderm",
+   "fad": 382,
+   "lad": 378,
+   "range": [
+    "au-w"
+   ],
+   "note": "A 25-centimetre ptyctodont placoderm of the Gogo reef preserved with an embryo and its umbilical cord -- the oldest known live birth.",
+   "cls": {
+    "class": "Placodermi",
+    "order": "Ptyctodontida",
+    "family": "Ptyctodontidae"
+   },
+   "pbdb": {
+    "asked": "Materpiscis",
+    "matched": "Materpiscis",
+    "exact": true,
+    "oid": "txn:502451",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 382.31,
+    "lla": 379,
+    "phylum": "Chordata",
+    "class": "Placodermi",
+    "order": "Ptyctodontiformes",
+    "family": "Ptyctodontidae",
+    "genus": "Materpiscis",
+    "regions": {
+     "au-w": 1
+    }
+   }
+  },
+  "Mazothairos": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 310,
+   "lad": 307,
+   "range": [
+    "na-e"
+   ],
+   "note": "A palaeodictyopteran with a wingspan of up to half a metre and a sucking beak, from the coal-swamp nodules of Illinois.",
+   "cls": {
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Homoiopteridae"
+   },
+   "pbdb": {
+    "asked": "Mazothairos",
+    "matched": "Mazothairos",
+    "exact": true,
+    "oid": "txn:232568",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 309.8,
+    "lla": 307.4,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Homoiopteridae",
+    "genus": "Mazothairos",
+    "regions": {
+     "na-e": 1
+    }
+   }
+  },
+  "Mcnamaraspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "placoderm",
+   "fad": 382,
+   "lad": 378,
+   "range": [
+    "au-w"
+   ],
+   "note": "A half-metre arthrodire placoderm of the Gogo reef, preserved in three dimensions in limestone nodules -- the state fossil of Western Australia.",
+   "cls": {
+    "class": "Placodermi",
+    "order": "Arthrodira",
+    "family": "Camuropiscidae"
+   },
+   "pbdb": {
+    "asked": "Mcnamaraspis",
+    "matched": "Mcnamaraspis",
+    "exact": true,
+    "oid": "txn:34363",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 382.31,
+    "lla": 379,
+    "phylum": "Chordata",
+    "class": "Placodermi",
+    "order": "Arthrodira",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Mcnamaraspis",
+    "regions": {
+     "au-w": 1
+    }
+   }
+  },
+  "Megalograptus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 455,
+   "lad": 445,
+   "range": [
+    "na-e"
+   ],
+   "note": "One of the largest Ordovician sea scorpions, more than a metre long, with spiny grasping forelimbs.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Megalograptidae"
+   },
+   "pbdb": {
+    "asked": "Megalograptus",
+    "matched": "Megalograptus",
+    "exact": true,
+    "oid": "txn:18982",
+    "rank": "genus",
+    "extant": false,
+    "noc": 8,
+    "fea": 458.2,
+    "lla": 443.1,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Megalograptidae",
+    "genus": "Megalograptus",
+    "regions": {
+     "na-e": 8
+    },
+    "fea_r": 450.6,
+    "lla_r": 446.35
+   }
+  },
+  "Meganeuropsis": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 290,
+   "lad": 279,
+   "range": [
+    "na-w"
+   ],
+   "note": "The largest insect known: a griffinfly with wings spanning 71 centimetres, which hunted other insects over the Early Permian coastal plain of Kansas.",
+   "cls": {
+    "class": "Insecta",
+    "order": "Meganisoptera",
+    "family": "Meganeuridae"
+   },
+   "pbdb": {
+    "asked": "Meganeuropsis",
+    "matched": "Meganeuropsis",
+    "exact": true,
+    "oid": "txn:176627",
+    "rank": "genus",
+    "extant": false,
+    "noc": 4,
+    "fea": 290.1,
+    "lla": 283.3,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Meganisoptera",
+    "family": "Meganeuridae",
+    "genus": "Meganeuropsis",
+    "regions": {
+     "na-e": 4
+    }
+   }
+  },
+  "Mizzia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 275,
+   "lad": 255,
+   "range": [
+    "na-w",
+    "as-s",
+    "eu-s",
+    "as-ic",
+    "as-w"
+   ],
+   "note": "A green alga built of chains of calcified beads, one of the main sediment-makers of the Permian reef lagoons, from the Capitan reef of Texas to the Tethys.",
+   "lat": [
+    0,
+    35
+   ],
+   "cls": {
+    "class": "Chlorophyta",
+    "order": "Dasycladales"
+   },
+   "pbdb": {
+    "asked": "Mizzia",
+    "matched": "Mizzia",
+    "exact": true,
+    "oid": "txn:56429",
+    "rank": "genus",
+    "extant": false,
+    "noc": 103,
+    "fea": 303.7,
+    "lla": 56,
+    "phylum": "Chlorophyta",
+    "class": "Chlorophyceae",
+    "order": "Dasycladales",
+    "family": "Dasycladaceae",
+    "genus": "Mizzia",
+    "regions": {
+     "eu-s": 25,
+     "as-c": 20,
+     "as-s": 17,
+     "na-w": 13,
+     "as-w": 12,
+     "as-ne": 7,
+     "af-n": 4,
+     "as-sb": 2,
+     "as-ic": 2,
+     "ar": 1
+    },
+    "fea_r": 278.85,
+    "lla_r": 253.02
+   }
+  },
+  "Nankinolithus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 455,
+   "lad": 445,
+   "range": [
+    "as-s",
+    "eu"
+   ],
+   "note": "A trinucleid trilobite with a broad, pitted fringe around its head -- a sieve for filtering food from the Late Ordovician mud.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Trinucleidae"
+   },
+   "pbdb": {
+    "asked": "Nankinolithus",
+    "matched": "Nankinolithus",
+    "exact": true,
+    "oid": "txn:20071",
+    "rank": "genus",
+    "extant": false,
+    "noc": 67,
+    "fea": 478.8,
+    "lla": 443.1,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Trinucleida",
+    "family": "Trinucleidae",
+    "genus": "Nankinolithus",
+    "regions": {
+     "as-s": 33,
+     "eu-n": 18,
+     "eu-s": 10,
+     "as-c": 3,
+     "na-e": 2,
+     "as-ne": 1
+    },
+    "fea_r": 453.85,
+    "lla_r": 446.3
+   }
+  },
+  "Naraoia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 518,
+   "lad": 505,
+   "range": [
+    "as-s",
+    "na-w"
+   ],
+   "note": "A soft-shelled, trilobite-like arthropod without eyes or a segmented back -- a naraoiid, common in both the Chengjiang and the Burgess seas.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Nektaspida",
+    "family": "Naraoiidae"
+   },
+   "pbdb": {
+    "asked": "Naraoia",
+    "matched": "Naraoia",
+    "exact": true,
+    "oid": "txn:19104",
+    "rank": "genus",
+    "extant": false,
+    "noc": 104,
+    "fea": 521,
+    "lla": 419.62,
+    "phylum": "Arthropoda",
+    "class": "Nektaspidida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Naraoiidae",
+    "genus": "Naraoia",
+    "regions": {
+     "as-s": 57,
+     "na-w": 43,
+     "eu-s": 2,
+     "na-e": 2
+    },
+    "fea_r": 518.5,
+    "lla_r": 500.75
+   }
+  },
+  "Neoschwagerina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 270,
+   "lad": 260,
+   "range": [
+    "as-s",
+    "as-sb",
+    "as-ic",
+    "as-w",
+    "eu-s",
+    "na-w"
+   ],
+   "note": "A spindle-shaped fusulinid with a maze of inner walls, the mark of the Middle Permian Tethys -- found in North America only in terranes rafted in from that ocean.",
+   "cls": {
+    "class": "Foraminifera",
+    "order": "Fusulinida",
+    "family": "Neoschwagerinidae"
+   },
+   "pbdb": {
+    "asked": "Neoschwagerina",
+    "matched": "Neoschwagerina",
+    "exact": true,
+    "oid": "txn:247361",
+    "rank": "genus",
+    "extant": false,
+    "noc": 178,
+    "fea": 283.3,
+    "lla": 254.14,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Neoschwagerinidae",
+    "genus": "Neoschwagerina",
+    "regions": {
+     "as-ne": 101,
+     "eu-s": 17,
+     "ar": 13,
+     "as-n": 13,
+     "af-n": 8,
+     "eu-n": 7,
+     "as-w": 6,
+     "as-c": 6,
+     "as-s": 6,
+     "as-sb": 1
+    },
+    "fea_r": 272.1,
+    "lla_r": 262.07
+   }
+  },
+  "Neuropteris": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 323,
+   "lad": 295,
+   "range": [
+    "na-e",
+    "na-w",
+    "na-av",
+    "eu",
+    "af-n",
+    "as-ne",
+    "as-s"
+   ],
+   "note": "Tongue-shaped leaflets of the medullosan seed ferns, small trees whose fronds reached several metres; they are the commonest plant fossil in the ironstone nodules of the coal measures.",
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Medullosales"
+   },
+   "pbdb": {
+    "asked": "Neuropteris",
+    "matched": "Neuropteris",
+    "exact": true,
+    "oid": "txn:157275",
+    "rank": "genus",
+    "extant": false,
+    "noc": 408,
+    "fea": 358.86,
+    "lla": 143.1,
+    "phylum": "Tracheophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Medullosaceae",
+    "genus": "Neuropteris",
+    "regions": {
+     "na-e": 191,
+     "as-ne": 54,
+     "eu-s": 51,
+     "na-av": 34,
+     "eu-n": 26,
+     "na-w": 19,
+     "as-s": 10,
+     "as-c": 7,
+     "as-w": 5,
+     "af-n": 5,
+     "ca": 4,
+     "as-sb": 1,
+     "sa-n": 1
+    },
+    "fea_r": 341.13,
+    "lla_r": 259.21
+   },
+   "lat": [
+    0,
+    35
+   ],
+   "avoid": [
+    "Amuria",
+    "Central Asian Orogenic Belt",
+    "Mongol-Okhotsk Ocean"
+   ]
+  },
+  "Nuia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "seaweed",
+   "fad": 485,
+   "lad": 455,
+   "range": [
+    "na",
+    "as-n",
+    "as-c",
+    "sa-s"
+   ],
+   "note": "Tiny calcified rods, probably a green alga, that make up much of the Early Ordovician lime sands of Laurentia and Siberia.",
+   "cls": {
+    "class": "Chlorophyta"
+   },
+   "pbdb": {
+    "asked": "Nuia",
+    "matched": "Nuia",
+    "exact": true,
+    "oid": "txn:155294",
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 488.3,
+    "lla": 358.86,
+    "phylum": "Cyanobacteria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Nuia",
+    "regions": {
+     "na-w": 12,
+     "na-e": 6,
+     "as-n": 5,
+     "as-s": 5,
+     "as-c": 3,
+     "sa-s": 1,
+     "au-e": 1
+    },
+    "fea_r": 481.98,
+    "lla_r": 403.25
+   },
+   "lat": [
+    0,
+    40
+   ]
+  },
+  "Ogygiocarella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 465,
+   "lad": 455,
+   "range": [
+    "eu-n",
+    "sa-s",
+    "af-n"
+   ],
+   "note": "A large, flat asaphid trilobite of Avalonia and the Gondwanan margin -- the 'Welsh trilobite', the first trilobite ever figured in print, in 1698.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Ogygiocarididae"
+   },
+   "pbdb": {
+    "asked": "Ogygiocarella",
+    "matched": "Ogygiocarella",
+    "exact": true,
+    "oid": "txn:20090",
+    "rank": "genus",
+    "extant": false,
+    "noc": 85,
+    "fea": 486.85,
+    "lla": 456.8,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Asaphida",
+    "family": "Asaphidae",
+    "genus": "Ogygiocaris",
+    "regions": {
+     "eu-n": 63,
+     "sa-s": 15,
+     "eu-s": 4,
+     "af-n": 2,
+     "na-e": 1
+    },
+    "fea_r": 473.25,
+    "lla_r": 458.85
+   }
+  },
+  "Ophiacodon": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pelycosaur",
+   "fad": 305,
+   "lad": 280,
+   "range": [
+    "na-w",
+    "na-e",
+    "eu"
+   ],
+   "note": "A two-to-three-metre synapsid with a long, deep skull -- probably a fish-eater of the Early Permian rivers and swamps.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Pelycosauria",
+    "family": "Ophiacodontidae"
+   },
+   "pbdb": {
+    "asked": "Ophiacodon",
+    "matched": "Ophiacodon",
+    "exact": true,
+    "oid": "txn:38888",
+    "rank": "genus",
+    "extant": false,
+    "noc": 82,
+    "fea": 303.7,
+    "lla": 274.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Ophiacodontidae",
+    "genus": "Ophiacodon",
+    "regions": {
+     "na-e": 61,
+     "na-w": 20,
+     "eu-n": 1
+    },
+    "fea_r": 296.9,
+    "lla_r": 278.85
+   }
+  },
+  "Orobates": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 296,
+   "lad": 287,
+   "range": [
+    "eu"
+   ],
+   "note": "A metre-long diadectid known from its skeleton and its own footprints -- enough to rebuild its gait as a robot, which showed it walked more upright than expected.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Diadectomorpha",
+    "family": "Diadectidae"
+   },
+   "pbdb": {
+    "asked": "Orobates",
+    "matched": "Orobates",
+    "exact": true,
+    "oid": "txn:154059",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 298.9,
+    "lla": 293.52,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Diadectidae",
+    "genus": "Orobates",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Pambdelurion": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "lobopod",
+   "fad": 518,
+   "lad": 515,
+   "range": [
+    "gl"
+   ],
+   "note": "A half-metre gilled lobopodian of Sirius Passet, walking and swimming at once, with frontal claws -- a relative of the radiodonts.",
+   "cls": {
+    "class": "Lobopodia"
+   },
+   "pbdb": {
+    "asked": "Pambdelurion",
+    "matched": "Pambdelurion",
+    "exact": true,
+    "oid": "txn:490832",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 521,
+    "lla": 516,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "Dinocaridida",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pambdelurion",
+    "regions": {
+     "gl": 1
+    }
+   }
+  },
+  "Panderichthys": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 385,
+   "lad": 380,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A lobe-finned fish of the Middle Devonian lagoons with a flat head, no dorsal fins and the beginnings of fingers in its fin bones.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Panderichthyidae"
+   },
+   "pbdb": {
+    "asked": "Panderichthys",
+    "matched": "Panderichthys",
+    "exact": true,
+    "oid": "txn:34944",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 387.95,
+    "lla": 372.15,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteolepidiformes",
+    "family": "Panderichthyidae",
+    "genus": "Panderichthys",
+    "regions": {
+     "eu-n": 4,
+     "gl": 1
+    }
+   }
+  },
+  "Parafusulina": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "largeforam",
+   "fad": 280,
+   "lad": 265,
+   "range": [
+    "na-w",
+    "as",
+    "eu-s"
+   ],
+   "note": "A large fusulinid: a single cell shaped like a grain of rice, up to a few centimetres long, so common that some Permian limestones are made of little else.",
+   "cls": {
+    "class": "Foraminifera",
+    "order": "Fusulinida",
+    "family": "Schwagerinidae"
+   },
+   "pbdb": {
+    "asked": "Parafusulina",
+    "matched": "Parafusulina",
+    "exact": true,
+    "oid": "txn:2060",
+    "rank": "genus",
+    "extant": false,
+    "noc": 348,
+    "fea": 298.9,
+    "lla": 259.857,
+    "phylum": "Foraminifera",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Foraminifera",
+    "family": "Schwagerinidae",
+    "genus": "Parafusulina",
+    "regions": {
+     "as-ne": 214,
+     "na-w": 70,
+     "eu-n": 20,
+     "as-c": 12,
+     "as-s": 12,
+     "ca": 5,
+     "ar": 4,
+     "as-w": 3,
+     "as-ic": 3,
+     "as-n": 2,
+     "sa-n": 1,
+     "na-n": 1,
+     "as-sb": 1
+    },
+    "fea_r": 286.7,
+    "lla_r": 265.59
+   }
+  },
+  "Pareiasaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pareiasaur",
+   "fad": 260,
+   "lad": 255,
+   "range": [
+    "af-s"
+   ],
+   "note": "A cow-sized, armour-studded plant-eater with leaf-shaped teeth -- one of the pareiasaurs, the largest herbivores of the Late Permian.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Parareptilia",
+    "family": "Pareiasauridae"
+   },
+   "pbdb": {
+    "asked": "Pareiasaurus",
+    "matched": "Pareiasaurus",
+    "exact": true,
+    "oid": "txn:37564",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 264.28,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pareiasaurus",
+    "regions": {
+     "af-s": 16,
+     "af-e": 1
+    },
+    "fea_r": 262.07,
+    "lla_r": 255.88
+   }
+  },
+  "Pederpes": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "stemtetrapod",
+   "fad": 350,
+   "lad": 346,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A metre-long tetrapod from Romer's Gap -- the stretch after the Devonian that had yielded almost no land vertebrates -- with feet that point forward, built for walking.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Whatcheeriidae"
+   },
+   "pbdb": {
+    "asked": "Pederpes",
+    "matched": "Pederpes",
+    "exact": true,
+    "oid": "txn:179033",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 353.7,
+    "lla": 346.7,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Whatcheeriidae",
+    "genus": "Pederpes",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Pertica": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 400,
+   "lad": 390,
+   "range": [
+    "na-e",
+    "na-av"
+   ],
+   "note": "A trimerophyte that grew a main stem with side branches in a spiral -- the first hint of the trunk-and-branch plan of trees.",
+   "cls": {
+    "class": "Trimerophytopsida",
+    "order": "Trimerophytales"
+   },
+   "pbdb": {
+    "asked": "Pertica",
+    "matched": "Pertica",
+    "exact": true,
+    "oid": "txn:55188",
+    "rank": "genus",
+    "extant": false,
+    "noc": 5,
+    "fea": 419.62,
+    "lla": 387.95,
+    "phylum": "Tracheophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pertica",
+    "regions": {
+     "na-e": 5
+    }
+   }
+  },
+  "Petrolacosaurus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 304,
+   "lad": 300,
+   "range": [
+    "na-w"
+   ],
+   "note": "A forty-centimetre, long-limbed reptile of the latest Carboniferous, one of the first diapsids -- the line that later gave lizards, crocodiles, dinosaurs and birds.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Araeoscelidia",
+    "family": "Petrolacosauridae"
+   },
+   "pbdb": {
+    "asked": "Petrolacosaurus",
+    "matched": "Petrolacosaurus",
+    "exact": true,
+    "oid": "txn:37771",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 306,
+    "lla": 303.7,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "Araeoscelidia",
+    "family": "Petrolacosauridae",
+    "genus": "Petrolacosaurus",
+    "regions": {
+     "na-e": 2
+    }
+   }
+  },
+  "Phylladoderma": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 270,
+   "lad": 252,
+   "range": [
+    "eu-n",
+    "as-n",
+    "as-c"
+   ],
+   "note": "A peltasperm seed fern with long, tongue-shaped leaves, typical of the Late Permian floras of the Russian platform and Angara.",
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Peltaspermales",
+    "family": "Peltaspermaceae"
+   },
+   "pbdb": {
+    "asked": "Phylladoderma",
+    "matched": "Phylladoderma",
+    "exact": true,
+    "oid": "txn:157199",
+    "rank": "genus",
+    "extant": false,
+    "noc": 62,
+    "fea": 283.3,
+    "lla": 251.902,
+    "phylum": "Peltaspermophyta",
+    "class": "Peltaspermopsida",
+    "order": "Peltaspermales",
+    "family": "Cardiolepidaceae",
+    "genus": "Phylladoderma",
+    "regions": {
+     "eu-n": 35,
+     "as-n": 26,
+     "as-s": 1
+    },
+    "fea_r": 270.65,
+    "lla_r": 253.02
+   }
+  },
+  "Phyllotheca": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "horsetail",
+   "fad": 290,
+   "lad": 240,
+   "range": [
+    "in",
+    "au",
+    "af-s",
+    "an",
+    "sa-s",
+    "as-n"
+   ],
+   "note": "A sphenophyte of the Glossopteris swamps with whorls of long, narrow leaves joined at the base into a collar -- the southern counterpart of Calamites.",
+   "hab": [
+    "wetland",
+    "river",
+    "lake",
+    "forest"
+   ],
+   "cls": {
+    "class": "Equisetopsida",
+    "order": "Equisetales",
+    "family": "Phyllothecaceae"
+   },
+   "pbdb": {
+    "asked": "Phyllotheca",
+    "matched": "Phyllotheca",
+    "exact": true,
+    "oid": "txn:271011",
+    "rank": "genus",
+    "extant": false,
+    "noc": 285,
+    "fea": 298.9,
+    "lla": 161.5,
+    "phylum": "Pteridophyta",
+    "class": "Polypodiopsida",
+    "order": "Equisetales",
+    "family": "Phyllothecaceae",
+    "genus": "Phyllotheca",
+    "regions": {
+     "as-n": 59,
+     "in": 40,
+     "as-ne": 32,
+     "au-e": 31,
+     "af-s": 30,
+     "eu-n": 30,
+     "sa-s": 22,
+     "na-w": 12,
+     "as-c": 12,
+     "eu-s": 4,
+     "an": 4,
+     "as-s": 4,
+     "af-e": 3,
+     "au-w": 1,
+     "mg": 1
+    },
+    "fea_r": 291.81,
+    "lla_r": 214.35
+   }
+  },
+  "Pleurodictyum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 410,
+   "lad": 380,
+   "range": [
+    "eu",
+    "af-n",
+    "na-e",
+    "sa",
+    "au"
+   ],
+   "note": "A small, disc-shaped tabulate coral colony that often grew around a worm living in its base.",
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Tabulata",
+    "family": "Micheliniidae"
+   },
+   "pbdb": {
+    "asked": "Pleurodictyum",
+    "matched": "Pleurodictyum",
+    "exact": true,
+    "oid": "txn:4996",
+    "rank": "genus",
+    "extant": false,
+    "noc": 189,
+    "fea": 443.1,
+    "lla": 339.9,
+    "phylum": "Cnidaria",
+    "class": "Anthozoa",
+    "order": "Favositida",
+    "family": "Micheliniidae",
+    "genus": "Pleurodictyum",
+    "regions": {
+     "na-e": 80,
+     "au-e": 27,
+     "eu-s": 23,
+     "eu-n": 16,
+     "sa-n": 13,
+     "af-s": 7,
+     "sa-s": 6,
+     "nz": 5,
+     "na-w": 4,
+     "as-w": 3,
+     "as-c": 2,
+     "af-n": 1,
+     "as-s": 1,
+     "af-w": 1
+    },
+    "fea_r": 427.8,
+    "lla_r": 362.03
+   }
+  },
+  "Promissum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "conodont",
+   "fad": 446,
+   "lad": 443,
+   "range": [
+    "af-s"
+   ],
+   "note": "The conodont animal preserved whole: forty centimetres long, eel-like, with big eyes and muscle blocks, from a shale laid down under the end-Ordovician ice.",
+   "cls": {
+    "class": "Conodonta",
+    "order": "Prioniodontida",
+    "family": "Balognathidae"
+   },
+   "pbdb": {
+    "asked": "Promissum",
+    "matched": "Promissum",
+    "exact": true,
+    "oid": "txn:324250",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 445.2,
+    "lla": 443.1,
+    "phylum": "Chordata",
+    "class": "Conodonta",
+    "order": "Prioniodontida",
+    "family": "Balognathidae",
+    "genus": "Promissum",
+    "regions": {
+     "af-s": 1
+    }
+   }
+  },
+  "Proterogyrinus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "reptiliomorph",
+   "fad": 335,
+   "lad": 325,
+   "range": [
+    "na-e",
+    "eu-n"
+   ],
+   "note": "A two-metre anthracosaur of the Mississippian, a long-bodied predator of the swamps from West Virginia to Scotland.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Embolomeri",
+    "family": "Proterogyrinidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Proterogyrinus",
+    "matched": "Proterogyrinus",
+    "exact": true,
+    "oid": "txn:37183",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 326.9,
+    "lla": 323.6,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Proterogyrinidae",
+    "genus": "Proterogyrinus",
+    "regions": {
+     "na-e": 2
+    }
+   }
+  },
+  "Psilophyton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "rhyniophyte",
+   "fad": 408,
+   "lad": 390,
+   "range": [
+    "na-e",
+    "na-av",
+    "eu",
+    "as-s"
+   ],
+   "note": "A trimerophyte of the Early Devonian: leafless stems that forked and forked again to a metre tall -- the stock from which ferns, horsetails and seed plants branched.",
+   "cls": {
+    "class": "Trimerophytopsida",
+    "order": "Trimerophytales"
+   },
+   "pbdb": {
+    "asked": "Psilophyton",
+    "matched": "Psilophyton",
+    "exact": true,
+    "oid": "txn:55173",
+    "rank": "genus",
+    "extant": false,
+    "noc": 97,
+    "fea": 419.62,
+    "lla": 316.9,
+    "phylum": "Psilophytophyta",
+    "class": "Psilophytopsida",
+    "order": "Psilophytales",
+    "family": "Psilophytaceae",
+    "genus": "Psilophyton",
+    "regions": {
+     "na-e": 35,
+     "eu-n": 30,
+     "eu-s": 18,
+     "na-w": 5,
+     "na-av": 3,
+     "as-n": 3,
+     "as-ic": 1,
+     "as-s": 1,
+     "sa-n": 1
+    },
+    "fea_r": 406.55,
+    "lla_r": 370.59
+   }
+  },
+  "Pteraspis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ostracoderm",
+   "fad": 415,
+   "lad": 400,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A jawless fish with a streamlined armoured head shield ending in a long snout, and wing-like spines behind its head that steadied it as it swam.",
+   "cls": {
+    "class": "Pteraspidomorphi",
+    "order": "Heterostraci",
+    "family": "Pteraspididae"
+   },
+   "realms": [
+    "sea",
+    "fresh"
+   ],
+   "pbdb": {
+    "asked": "Pteraspis",
+    "matched": "Pteraspis",
+    "exact": true,
+    "oid": "txn:34199",
+    "rank": "genus",
+    "extant": false,
+    "noc": 17,
+    "fea": 419.62,
+    "lla": 387.95,
+    "phylum": "Chordata",
+    "class": "Pteraspidomorpha",
+    "order": "Pteraspidiformes",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Pteraspis",
+    "regions": {
+     "eu-n": 16,
+     "sa-n": 1
+    },
+    "fea_r": 416.32,
+    "lla_r": 390.71
+   }
+  },
+  "Renalcis": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 530,
+   "lad": 360,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A calcified microbe growing as clusters of tiny chambered lumps -- a builder of reefs beside the archaeocyath sponges in the Cambrian and the stromatoporoids in the Devonian.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Cyanobacteria"
+   },
+   "pbdb": {
+    "asked": "Renalcis",
+    "matched": "Renalcis",
+    "exact": true,
+    "oid": "txn:136684",
+    "rank": "genus",
+    "extant": false,
+    "noc": 231,
+    "fea": 635,
+    "lla": 243.43,
+    "phylum": "Cyanobacteria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Chabakoviacea",
+    "genus": "Renalcis",
+    "regions": {
+     "as-n": 61,
+     "na-e": 23,
+     "na-w": 23,
+     "eu-s": 19,
+     "eu-n": 16,
+     "na-n": 16,
+     "au-e": 15,
+     "as-s": 14,
+     "af-n": 14,
+     "as-ne": 12,
+     "as-c": 11,
+     "au-w": 3,
+     "an": 2,
+     "in": 1,
+     "as-ic": 1
+    },
+    "fea_r": 523.25,
+    "lla_r": 343.3
+   }
+  },
+  "Rhacophyton": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "fern",
+   "fad": 370,
+   "lad": 359,
+   "range": [
+    "na-e",
+    "eu-n"
+   ],
+   "note": "A fern-like plant of the latest Devonian that grew in dense thickets on floodplains -- and burned: charcoal from its wildfires is common in its beds.",
+   "cls": {
+    "class": "Polypodiopsida",
+    "order": "Stauropteridales",
+    "family": "Rhacophytaceae"
+   },
+   "pbdb": {
+    "asked": "Rhacophyton",
+    "matched": "Rhacophyton",
+    "exact": true,
+    "oid": "txn:249909",
+    "rank": "genus",
+    "extant": false,
+    "noc": 31,
+    "fea": 387.95,
+    "lla": 358.86,
+    "phylum": "Pteridophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Rhacophytales",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rhacophyton",
+    "regions": {
+     "na-e": 19,
+     "eu-n": 12
+    },
+    "fea_r": 377.23,
+    "lla_r": 341.13
+   }
+  },
+  "Rhinesuchus": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "temnospondyl",
+   "fad": 260,
+   "lad": 255,
+   "range": [
+    "af-s"
+   ],
+   "note": "A two-metre, flat-headed temnospondyl of the Late Permian rivers -- one of the big amphibians that the end-Permian extinction nearly ended.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Rhinesuchidae"
+   },
+   "realms": [
+    "fresh",
+    "land"
+   ],
+   "pbdb": {
+    "asked": "Rhinesuchus",
+    "matched": "Rhinesuchus",
+    "exact": true,
+    "oid": "txn:37070",
+    "rank": "genus",
+    "extant": false,
+    "noc": 10,
+    "fea": 264.28,
+    "lla": 247,
+    "phylum": "Chordata",
+    "class": "Amphibia",
+    "order": "Temnospondyli",
+    "family": "Rhinesuchidae",
+    "genus": "Rhinesuchus",
+    "regions": {
+     "af-s": 6,
+     "eu-n": 3,
+     "in": 1
+    },
+    "fea_r": 262.07,
+    "lla_r": 249.45
+   },
+   "place_ok": true,
+   "conf_note": "the PBDB's Russian and Indian referrals are doubtful; the genus rests on Karoo material"
+  },
+  "Rothpletzella": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cyano",
+   "fad": 440,
+   "lad": 370,
+   "range": [
+    "cosmo"
+   ],
+   "note": "Fine calcified filaments that crusted over corals and stromatoporoids on the reefs of the Silurian and Devonian.",
+   "lat": [
+    0,
+    40
+   ],
+   "cls": {
+    "class": "Cyanobacteria"
+   },
+   "pbdb": {
+    "asked": "Rothpletzella",
+    "matched": "Rothpletzella",
+    "exact": true,
+    "oid": "txn:84241",
+    "rank": "genus",
+    "extant": false,
+    "noc": 87,
+    "fea": 516,
+    "lla": 152.21,
+    "phylum": "Cyanobacteria",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Rothpletzella",
+    "regions": {
+     "eu-n": 33,
+     "as-s": 13,
+     "as-n": 8,
+     "au-e": 8,
+     "eu-s": 8,
+     "na-w": 5,
+     "na-e": 4,
+     "au-w": 4,
+     "as-c": 2,
+     "af-n": 2
+    },
+    "fea_r": 446.3,
+    "lla_r": 341.3
+   }
+  },
+  "Sawdonia": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "zosterophyll",
+   "fad": 410,
+   "lad": 390,
+   "range": [
+    "na-e",
+    "na-av",
+    "eu"
+   ],
+   "note": "A spiny, leafless zosterophyll whose stems uncoiled like fern fiddleheads -- a cousin of the lycopods.",
+   "cls": {
+    "class": "Zosterophyllopsida",
+    "order": "Sawdoniales",
+    "family": "Sawdoniaceae"
+   }
+  },
+  "Scutellum": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 420,
+   "lad": 380,
+   "range": [
+    "eu-s",
+    "af-n",
+    "eu-n"
+   ],
+   "note": "A trilobite with a broad, fan-shaped, ribbed tail shield -- a characteristic dweller of Silurian and Devonian reefs.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Scutelluidae"
+   },
+   "pbdb": {
+    "asked": "Scutellum",
+    "matched": "Scutellum",
+    "exact": true,
+    "oid": "txn:19684",
+    "rank": "genus",
+    "extant": false,
+    "noc": 115,
+    "fea": 458.2,
+    "lla": 372.15,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Corynexochida",
+    "family": "Styginidae",
+    "genus": "Scutellum",
+    "regions": {
+     "eu-n": 39,
+     "eu-s": 25,
+     "na-e": 11,
+     "as-c": 8,
+     "as-n": 7,
+     "au-e": 6,
+     "na-n": 5,
+     "as-ne": 4,
+     "na-w": 4,
+     "as-s": 3,
+     "af-n": 3
+    },
+    "fea_r": 446.3,
+    "lla_r": 377.23
+   }
+  },
+  "Scyphocrinites": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "crinoid",
+   "fad": 422,
+   "lad": 415,
+   "range": [
+    "eu-s",
+    "af-n",
+    "na-e",
+    "as-s",
+    "eu-n"
+   ],
+   "note": "A crinoid that floated from a gas-filled bulb instead of rooting on the sea floor; drifting colonies of it cover whole bedding planes at the Silurian-Devonian boundary.",
+   "cls": {
+    "class": "Crinoidea",
+    "order": "Cladida",
+    "family": "Scyphocrinitidae"
+   },
+   "pbdb": {
+    "asked": "Scyphocrinites",
+    "matched": "Scyphocrinites",
+    "exact": true,
+    "oid": "txn:31844",
+    "rank": "genus",
+    "extant": false,
+    "noc": 76,
+    "fea": 469.4,
+    "lla": 393.47,
+    "phylum": "Echinodermata",
+    "class": "Crinoidea",
+    "order": "Monobathrida",
+    "family": "Scyphocrinitidae",
+    "genus": "Scyphocrinites",
+    "regions": {
+     "eu-s": 35,
+     "af-n": 20,
+     "eu-n": 9,
+     "na-e": 7,
+     "as-c": 2,
+     "as-sb": 2,
+     "as-n": 1
+    },
+    "fea_r": 423.16,
+    "lla_r": 408.09
+   }
+  },
+  "Sidneyia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 508,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "A thirteen-centimetre Burgess Shale predator whose gut held crushed trilobites and hyoliths.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Artiopoda",
+    "family": "Sidneyiidae"
+   },
+   "pbdb": {
+    "asked": "Sidneyia",
+    "matched": "Sidneyia",
+    "exact": true,
+    "oid": "txn:19033",
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 515.3,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "Artiopoda",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sidneyia",
+    "regions": {
+     "na-w": 29,
+     "na-e": 2,
+     "as-ne": 1,
+     "as-s": 1
+    },
+    "fea_r": 510.5,
+    "lla_r": 501.75
+   }
+  },
+  "Sinoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "orthocone",
+   "fad": 460,
+   "lad": 450,
+   "range": [
+    "as-s"
+   ],
+   "note": "A long, straight-shelled nautiloid of the Late Ordovician of South China, whose sectioned shells make the 'pagoda stones' of Chinese decorative stone.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Orthocerida",
+    "family": "Orthoceratidae"
+   },
+   "pbdb": {
+    "asked": "Sinoceras",
+    "matched": "Sinoceras",
+    "exact": true,
+    "oid": "txn:12601",
+    "rank": "genus",
+    "extant": false,
+    "noc": 44,
+    "fea": 468,
+    "lla": 449.5,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Orthocerida",
+    "family": "Orthoceratidae",
+    "genus": "Sinoceras",
+    "regions": {
+     "as-s": 34,
+     "as-ne": 5,
+     "as-c": 3,
+     "as-sb": 1,
+     "in": 1
+    },
+    "fea_r": 463.1,
+    "lla_r": 453.85
+   }
+  },
+  "Slimonia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "eurypterid",
+   "fad": 430,
+   "lad": 420,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A metre-long Silurian sea scorpion with a broad body and a spiked tail, from the lagoons of southern Scotland.",
+   "cls": {
+    "class": "Merostomata",
+    "order": "Eurypterida",
+    "family": "Slimonidae"
+   },
+   "pbdb": {
+    "asked": "Slimonia",
+    "matched": "Slimonia",
+    "exact": true,
+    "oid": "txn:18997",
+    "rank": "genus",
+    "extant": false,
+    "noc": 11,
+    "fea": 443.1,
+    "lla": 413.02,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Eurypterida",
+    "family": "Slimoniidae",
+    "genus": "Slimonia",
+    "regions": {
+     "eu-n": 6,
+     "eu-s": 3,
+     "sa-n": 1,
+     "as-s": 1
+    },
+    "fea_r": 435.75,
+    "lla_r": 416.32
+   }
+  },
+  "Sphenopteridium": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "seedfern",
+   "fad": 355,
+   "lad": 325,
+   "range": [
+    "eu",
+    "na",
+    "af-n",
+    "au-e",
+    "as-s"
+   ],
+   "note": "A Mississippian seed fern with finely divided, wedge-lobed fronds, among the first seed plants to spread across the continents.",
+   "lat": [
+    0,
+    50
+   ],
+   "cls": {
+    "class": "Pteridospermatopsida",
+    "order": "Lyginopteridales"
+   },
+   "pbdb": {
+    "asked": "Sphenopteridium",
+    "matched": "Sphenopteridium",
+    "exact": true,
+    "oid": "txn:404089",
+    "rank": "genus",
+    "extant": false,
+    "noc": 27,
+    "fea": 365.2,
+    "lla": 264.28,
+    "phylum": "Pteridophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Sphenopteridium",
+    "regions": {
+     "eu-n": 6,
+     "na-e": 5,
+     "na-w": 3,
+     "na-av": 3,
+     "as-ne": 3,
+     "sa-n": 3,
+     "eu-s": 2,
+     "as-c": 2
+    },
+    "fea_r": 352.78,
+    "lla_r": 269.34
+   }
+  },
+  "Stenodictya": {
+   "rank": "genus",
+   "realm": "air",
+   "form": "dragonfly",
+   "fad": 310,
+   "lad": 300,
+   "range": [
+    "eu"
+   ],
+   "note": "A palaeodictyopteran with patterned, net-veined wings and a beak for sucking plant juices, from the coal forests of France.",
+   "cls": {
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Dictyoneuridae"
+   },
+   "pbdb": {
+    "asked": "Stenodictya",
+    "matched": "Stenodictya",
+    "exact": true,
+    "oid": "txn:208430",
+    "rank": "genus",
+    "extant": false,
+    "noc": 20,
+    "fea": 303.7,
+    "lla": 298.9,
+    "phylum": "Arthropoda",
+    "class": "Insecta",
+    "order": "Palaeodictyoptera",
+    "family": "Dictyoneuridae",
+    "genus": "Stenodictya",
+    "regions": {
+     "eu-s": 20
+    },
+    "fea_r": 301.3,
+    "lla_r": 300.6
+   }
+  },
+  "Stricklandia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "brachiopod",
+   "fad": 440,
+   "lad": 430,
+   "range": [
+    "eu-n",
+    "na-e",
+    "na-w",
+    "as-n"
+   ],
+   "note": "A large pentamerid brachiopod of the Llandovery whose changing shape through time is used to date Silurian rocks.",
+   "cls": {
+    "class": "Brachiopoda",
+    "order": "Pentamerida",
+    "family": "Stricklandiidae"
+   },
+   "pbdb": {
+    "asked": "Stricklandia",
+    "matched": "Stricklandia",
+    "exact": true,
+    "oid": "txn:28307",
+    "rank": "genus",
+    "extant": false,
+    "noc": 217,
+    "fea": 443.1,
+    "lla": 382.31,
+    "phylum": "Brachiopoda",
+    "class": "Rhynchonellata",
+    "order": "Pentamerida",
+    "family": "Stricklandiidae",
+    "genus": "Stricklandia",
+    "regions": {
+     "eu-n": 159,
+     "na-e": 36,
+     "as-c": 7,
+     "as-s": 6,
+     "eu-s": 5,
+     "as-n": 3,
+     "na-av": 1
+    },
+    "fea_r": 441.95,
+    "lla_r": 435.75
+   }
+  },
+  "Tetradium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "tabulate",
+   "fad": 465,
+   "lad": 445,
+   "range": [
+    "na",
+    "as-n",
+    "as-c",
+    "au"
+   ],
+   "note": "A colonial coral (or perhaps an alga) of the Ordovician with tubes divided into four, forming mounds in the warm lagoons of Laurentia and Siberia.",
+   "cls": {
+    "class": "Anthozoa",
+    "order": "Tabulata",
+    "family": "Tetradiidae"
+   },
+   "pbdb": {
+    "asked": "Tetradium",
+    "matched": "Tetradium",
+    "exact": true,
+    "oid": "txn:5083",
+    "rank": "genus",
+    "extant": false,
+    "noc": 224,
+    "fea": 471.3,
+    "lla": 443.1,
+    "phylum": "Rhodophyta",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Tetradium",
+    "regions": {
+     "na-e": 176,
+     "au-e": 34,
+     "as-c": 6,
+     "as-n": 3,
+     "as-s": 2,
+     "na-n": 2,
+     "as-ne": 1
+    },
+    "fea_r": 457.7,
+    "lla_r": 447.55
+   }
+  },
+  "Tiktaalik": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "lobefin",
+   "fad": 377,
+   "lad": 374,
+   "range": [
+    "na-n"
+   ],
+   "note": "The 'fishapod': a three-metre lobe-finned fish with a neck, a flat head and fins with wrist bones, from Late Devonian river deposits now on Ellesmere Island.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Tetrapodomorpha",
+    "family": "Elpistostegidae"
+   },
+   "pbdb": {
+    "asked": "Tiktaalik",
+    "matched": "Tiktaalik",
+    "exact": true,
+    "oid": "txn:77132",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 382.31,
+    "lla": 372.15,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Osteolepidiformes",
+    "family": "Panderichthyidae",
+    "genus": "Tiktaalik",
+    "regions": {
+     "na-n": 2
+    }
+   }
+  },
+  "Titanophoneus": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "dinocephalian",
+   "fad": 267,
+   "lad": 262,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A carnivorous dinocephalian two and a half metres long, with long canines and a heavy skull -- a top predator of the Middle Permian before the gorgonopsians took over.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Dinocephalia",
+    "family": "Anteosauridae"
+   },
+   "pbdb": {
+    "asked": "Titanophoneus",
+    "matched": "Titanophoneus",
+    "exact": true,
+    "oid": "txn:38960",
+    "rank": "genus",
+    "extant": false,
+    "noc": 7,
+    "fea": 266.9,
+    "lla": 259.857,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Anteosauridae",
+    "genus": "Titanophoneus",
+    "regions": {
+     "eu-n": 7
+    }
+   }
+  },
+  "Tornoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 390,
+   "lad": 360,
+   "range": [
+    "na-e",
+    "na-w",
+    "eu",
+    "af-n",
+    "as-s",
+    "au-w"
+   ],
+   "note": "A small, smooth goniatite with a zigzag suture, one of the commonest ammonoids of the Middle and Late Devonian seas.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Tornoceratidae"
+   },
+   "pbdb": {
+    "asked": "Tornoceras",
+    "matched": "Tornoceras",
+    "exact": true,
+    "oid": "txn:13918",
+    "rank": "genus",
+    "extant": false,
+    "noc": 196,
+    "fea": 387.95,
+    "lla": 358.86,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Tornoceratidae",
+    "genus": "Tornoceras",
+    "regions": {
+     "eu-n": 77,
+     "na-e": 59,
+     "au-w": 35,
+     "as-n": 10,
+     "af-n": 7,
+     "na-w": 4,
+     "eu-s": 3,
+     "as-s": 1
+    },
+    "fea_r": 385.13,
+    "lla_r": 365.5
+   }
+  },
+  "Trimerus": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 435,
+   "lad": 380,
+   "range": [
+    "na-e",
+    "eu-n",
+    "sa-s",
+    "au-e"
+   ],
+   "note": "A large, smooth homalonotid trilobite with a triangular head, which ploughed through the Silurian and Devonian mud.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Homalonotidae"
+   },
+   "pbdb": {
+    "asked": "Trimerus",
+    "matched": "Trimerus",
+    "exact": true,
+    "oid": "txn:21805",
+    "rank": "genus",
+    "extant": false,
+    "noc": 72,
+    "fea": 443.1,
+    "lla": 372.15,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Homalonotidae",
+    "genus": "Trimerus",
+    "regions": {
+     "na-e": 34,
+     "sa-s": 13,
+     "au-e": 12,
+     "eu-n": 3,
+     "sa-n": 3,
+     "eu-s": 3,
+     "af-n": 2,
+     "as-w": 1,
+     "af-s": 1
+    },
+    "fea_r": 434.6,
+    "lla_r": 385.13
+   }
+  },
+  "Varanops": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "pelycosaur",
+   "fad": 280,
+   "lad": 272,
+   "range": [
+    "na-w"
+   ],
+   "note": "A lightly built, monitor-like synapsid predator a metre and a half long -- one of the last of the early branch of the mammal line.",
+   "cls": {
+    "class": "Synapsida",
+    "order": "Pelycosauria",
+    "family": "Varanopidae"
+   },
+   "pbdb": {
+    "asked": "Varanops",
+    "matched": "Varanops",
+    "exact": true,
+    "oid": "txn:38897",
+    "rank": "genus",
+    "extant": false,
+    "noc": 3,
+    "fea": 290.1,
+    "lla": 274.4,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "Cotylosauria",
+    "family": "Varanopidae",
+    "genus": "Varanops",
+    "regions": {
+     "na-e": 3
+    }
+   }
+  },
+  "Vauxia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "sponge",
+   "fad": 508,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "A branching Burgess Shale sponge with a fibrous skeleton -- one of the oldest demosponges.",
+   "cls": {
+    "class": "Porifera",
+    "order": "Demospongiae",
+    "family": "Vauxiidae"
+   },
+   "pbdb": {
+    "asked": "Vauxia",
+    "matched": "Vauxia",
+    "exact": true,
+    "oid": "txn:2943",
+    "rank": "genus",
+    "extant": false,
+    "noc": 33,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Porifera",
+    "class": "Demospongiae",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Vauxiidae",
+    "genus": "Vauxia",
+    "regions": {
+     "na-w": 29,
+     "as-s": 3,
+     "gl": 1
+    },
+    "fea_r": 518.5,
+    "lla_r": 501.75
+   }
+  },
+  "Ventastega": {
+   "rank": "genus",
+   "realm": "fresh",
+   "form": "stemtetrapod",
+   "fad": 373,
+   "lad": 371,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A Late Devonian stem tetrapod from Latvia, between Tiktaalik and Acanthostega -- probably with limbs, still with a fish's tail fin.",
+   "cls": {
+    "class": "Sarcopterygii",
+    "order": "Stegocephalia"
+   },
+   "pbdb": {
+    "asked": "Ventastega",
+    "matched": "Ventastega",
+    "exact": true,
+    "oid": "txn:226306",
+    "rank": "genus",
+    "extant": false,
+    "noc": 2,
+    "fea": 372.15,
+    "lla": 358.86,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Ventastega",
+    "regions": {
+     "eu-n": 2
+    }
+   }
+  },
+  "Veryhachium": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "acritarch",
+   "fad": 480,
+   "lad": 260,
+   "range": [
+    "cosmo"
+   ],
+   "note": "A three-to-six-pointed star of an acritarch, the resting cyst of a Palaeozoic plankter, found in marine rocks from the Ordovician to the Permian.",
+   "hab": [
+    "pelagic",
+    "shelf"
+   ],
+   "cls": {
+    "class": "Acritarcha"
+   },
+   "pbdb": {
+    "asked": "Veryhachium",
+    "matched": "Veryhachium",
+    "exact": true,
+    "oid": "txn:277124",
+    "rank": "genus",
+    "extant": false,
+    "noc": 160,
+    "fea": 486.4,
+    "lla": 56,
+    "phylum": "NO_PHYLUM_SPECIFIED",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Veryhachium",
+    "regions": {
+     "eu-n": 63,
+     "eu-s": 42,
+     "ar": 35,
+     "na-e": 8,
+     "af-w": 4,
+     "sea": 3,
+     "an": 3,
+     "mg": 1,
+     "in": 1
+    },
+    "fea_r": 440.85,
+    "lla_r": 97.2
+   }
+  },
+  "Waagenoceras": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "ammonite",
+   "fad": 275,
+   "lad": 265,
+   "range": [
+    "na-w",
+    "eu-s",
+    "as-ic"
+   ],
+   "note": "A goniatite with an intricately frilled suture, from the Middle Permian reef seas of west Texas, Sicily and Timor.",
+   "cls": {
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Cyclolobidae"
+   },
+   "pbdb": {
+    "asked": "Waagenoceras",
+    "matched": "Waagenoceras",
+    "exact": true,
+    "oid": "txn:13935",
+    "rank": "genus",
+    "extant": false,
+    "noc": 72,
+    "fea": 274.4,
+    "lla": 259.857,
+    "phylum": "Mollusca",
+    "class": "Cephalopoda",
+    "order": "Goniatitida",
+    "family": "Cyclolobidae",
+    "genus": "Waagenoceras",
+    "regions": {
+     "na-w": 49,
+     "eu-s": 7,
+     "ar": 4,
+     "as-ne": 3,
+     "as-s": 3,
+     "af-n": 2,
+     "au-w": 1,
+     "as-w": 1,
+     "as-c": 1,
+     "ca": 1
+    },
+    "fea_r": 270.65,
+    "lla_r": 262.07
+   }
+  },
+  "Walliserops": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "trilobite",
+   "fad": 400,
+   "lad": 395,
+   "range": [
+    "af-n"
+   ],
+   "note": "A phacopid trilobite with a long three-pronged trident on its head, perhaps used by males in contests.",
+   "cls": {
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Acastidae"
+   },
+   "pbdb": {
+    "asked": "Walliserops",
+    "matched": "Walliserops",
+    "exact": true,
+    "oid": "txn:358912",
+    "rank": "genus",
+    "extant": false,
+    "noc": 6,
+    "fea": 410.62,
+    "lla": 387.95,
+    "phylum": "Arthropoda",
+    "class": "Trilobita",
+    "order": "Phacopida",
+    "family": "Acastidae",
+    "genus": "Walliserops",
+    "regions": {
+     "af-n": 6
+    }
+   }
+  },
+  "Waptia": {
+   "rank": "genus",
+   "realm": "sea",
+   "form": "cambrianarthropod",
+   "fad": 508,
+   "lad": 505,
+   "range": [
+    "na-w"
+   ],
+   "note": "A shrimp-like Burgess Shale arthropod that brooded its eggs under its carapace -- the oldest direct evidence of parental care.",
+   "cls": {
+    "class": "Arthropoda",
+    "order": "Hymenocarina",
+    "family": "Waptiidae"
+   },
+   "pbdb": {
+    "asked": "Waptia",
+    "matched": "Waptia",
+    "exact": true,
+    "oid": "txn:22095",
+    "rank": "genus",
+    "extant": false,
+    "noc": 46,
+    "fea": 521,
+    "lla": 497,
+    "phylum": "Arthropoda",
+    "class": "NO_CLASS_SPECIFIED",
+    "order": "Waptiida",
+    "family": "Waptiidae",
+    "genus": "Waptia",
+    "regions": {
+     "na-w": 26,
+     "as-s": 20
+    },
+    "fea_r": 518.5,
+    "lla_r": 501.75
+   },
+   "place_ok": true,
+   "conf_note": "the Chengjiang 'Waptia ovata' is now Chuandianella; Waptia proper is the Burgess Shale species"
+  },
+  "Westlothiana": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "reptiliomorph",
+   "fad": 340,
+   "lad": 335,
+   "range": [
+    "eu-n"
+   ],
+   "note": "A slender twenty-centimetre tetrapod from a Mississippian lake shore in Scotland, once hailed as the earliest reptile and now placed just outside the amniotes.",
+   "cls": {
+    "class": "Amphibia",
+    "order": "Reptiliomorpha"
+   },
+   "pbdb": {
+    "asked": "Westlothiana",
+    "matched": "Westlothiana",
+    "exact": true,
+    "oid": "txn:179031",
+    "rank": "genus",
+    "extant": false,
+    "noc": 1,
+    "fea": 335.9,
+    "lla": 330.3,
+    "phylum": "Chordata",
+    "class": "Osteichthyes",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "NO_FAMILY_SPECIFIED",
+    "genus": "Westlothiana",
+    "regions": {
+     "eu-n": 1
+    }
+   }
+  },
+  "Youngina": {
+   "rank": "genus",
+   "realm": "land",
+   "form": "lizard",
+   "fad": 256,
+   "lad": 252,
+   "range": [
+    "af-s"
+   ],
+   "note": "A small, lizard-shaped diapsid of the latest Permian, close to the common ancestor of lizards and archosaurs; young were found huddled together in a burrow.",
+   "cls": {
+    "class": "Reptilia",
+    "order": "Younginiformes",
+    "family": "Younginidae"
+   },
+   "pbdb": {
+    "asked": "Youngina",
+    "matched": "Youngina",
+    "exact": true,
+    "oid": "txn:37800",
+    "rank": "genus",
+    "extant": false,
+    "noc": 12,
+    "fea": 259.857,
+    "lla": 251.902,
+    "phylum": "Chordata",
+    "class": "Reptilia",
+    "order": "NO_ORDER_SPECIFIED",
+    "family": "Younginidae",
+    "genus": "Youngina",
+    "regions": {
+     "af-s": 12
+    },
+    "fea_r": 255.88,
+    "lla_r": 255.88
+   }
+  }
+ }
+}
