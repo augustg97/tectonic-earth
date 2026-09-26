@@ -168,6 +168,7 @@ float gShelfK=99.0;   // the same distance in km, + on the shelf side
    from it at every tap, so the colour and the hillshade both see them. */
 float gTrS=0.0, gTrW=0.0, gTrAK=1.0, gTrArcK=1.0;
 vec2 gTrG=vec2(0.0), gTrUv=vec2(0.0);
+uniform vec2 uCoast;    // natural waterline: x strength (?coast=, 0 off), y lateral scale in km (?coastkm=)
 uniform vec3 uTrench;   // x: keyframe A has the field, y: B has it, z: strength (?trench=, 0 off)
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
@@ -1966,6 +1967,38 @@ void main(){
     rug=clamp(length(dR)/460.0,0.0,1.0);
     gEnv3=(Eax*rE+Nax*rN)/(2.0*rda*6.371e6);
     z=elevAt(uv,rug);
+    /* THE WATERLINE, NATURAL (3.17). Every coast was the zero contour of a
+       ~10 km field -- smooth at every scale under ~20 km, Norway with no
+       fjords, every palaeo-coast a generalised curve -- because the procedural
+       relief is barred from moving it: noise at the waterline speckled every
+       shore with specks and tide-pools. This moves the waterline SIDEWAYS
+       instead, by a first-order domain warp: the regional slope times a
+       lateral displacement of a few km, from three octaves of 40, 20 and 10 km
+       only -- headlands and bays, never specks. Rugged ground (hard substrate)
+       gets the larger displacement, soft sediment coasts the smaller. Keyed to
+       the material coordinate, so the pattern rides the rock and the shore
+       wanders across it as the sea rises and falls. The pixel only: the
+       shading keeps the base field's slope, and nothing far from the
+       waterline changes. */
+    /* Only in the coastal zone: the four taps 31 km out must include both land
+       and sea, or a mountain front's regional slope floods pools on the flat
+       plain at its foot and raises islets far out on a shelf. The slope is
+       capped for the same reason: 62 km of baseline that reaches a range
+       overstates how steep the shore itself is. */
+    float nWt=step(zEp,wl)+step(zEm,wl)+step(zNp,wl)+step(zNm,wl);
+    bool coastal = z<wl ? nWt<3.5 : nWt>0.5;
+    if(uCoast.x>0.0 && coastal && abs(z-wl)<160.0){
+      float gm=min(length(vec2(rE,rN))/(2.0*rda*6371.0), 30.0);   // m per km
+      float wk=uCoast.y*mix(0.45,1.35,gHard);                 // km
+      float band=clamp(gm*wk*2.6, 4.0, 160.0);
+      float kw=1.0-smoothstep(0.55*band, band, abs(z-wl));
+      if(kw>0.0){
+        vec3 mc=matDir(sdir);
+        float cn3=(vnoise3(mc*160.0)-0.5)*1.0+(vnoise3(mc*320.0+vec3(5.1,2.3,7.7))-0.5)*0.55
+                 +(vnoise3(mc*640.0+vec3(1.9,8.3,3.1))-0.5)*0.30;
+        z+=clamp(gm*wk*cn3*2.2, -0.8*band, 0.8*band)*kw*uCoast.x;
+      }
+    }
     /* AND THIS ONE KEEPS ITS ANGLE TOO, which is not the obvious choice and is
        worth the note. The tempting move when the grid doubles is to halve the
        gradient baseline and "use" the new resolution. Measured, that makes the
