@@ -387,7 +387,9 @@ def bake_one(epath, stats=False):
     # the feature silently does not ship.
     dry = _EP.messinian_mask(depth.shape, float(age), Z)
     gch = (np.clip(dry, 0.0, 1.0) * 255.0 + 0.5).astype(np.uint8)
-    rgb = np.dstack([enc, gch, np.zeros_like(enc)])
+    # B is the shelf break as a signed distance (shelf_edge.py, 3.17)
+    import shelf_edge as _SE
+    rgb = np.dstack([enc, gch, _SE.channel(Z)])
     Image.fromarray(rgb, "RGB").save(wpath, "WEBP", lossless=True, method=6)
     if stats:
         lake = depth > 0

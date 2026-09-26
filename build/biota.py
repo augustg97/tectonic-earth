@@ -1071,6 +1071,23 @@ def _score(e, age, habs):
     return s
 
 
+# CROSS-CARD BALANCE (3.17). Each card is composed on its own, so the taxa
+# that are valid almost everywhere -- Ginkgo and Araucaria through the Jurassic,
+# Girvanella through the early Palaeozoic -- won almost everywhere: 78% of the
+# cards at 150 Ma showed the same two plants, 100% at 400 Ma the same alga.
+# build_cards composes every card twice. The first pass measures each fill
+# taxon's share of the cards in each 5 Myr bin; the second charges a taxon
+# above USE_FREE of them USE_K points per unit of excess, so it stays where it
+# fits best and the next-best taxa of each place come through. Curated lists
+# and province markers are not charged.
+USE_BIN, USE_FREE, USE_K = 5, 0.15, 90.0
+_USE_PEN = {}
+
+
+def _usage_pen(age, e):
+    return _USE_PEN.get((int(age // USE_BIN), e["n"]), 0.0)
+
+
 def _section(e):
     k = e.get("kind")
     if e.get("assemblage"):
@@ -1238,7 +1255,7 @@ def compose(lab, age, home, prov_markers=(), curated=None, exception=False, only
                     continue
                 seen.add(e["n"])
                 src[e["n"]] = "registry"
-                ranked.append((e, _score(e, age, habs)))
+                ranked.append((e, _score(e, age, habs) - _usage_pen(age, e)))
         return ranked
 
     def split(ranked, n_total=N_TOTAL, sea=False):
@@ -1412,6 +1429,29 @@ def curated_at(spans, age):
 
 
 def build_cards(labels, prov_recs, prov_runs, curated, icons, features=None, log=print):
+    """Two passes (see _USE_PEN): measure fill usage, then compose balanced."""
+    global _USE_PEN
+    _USE_PEN = {}
+    table, cards, stats = _build_cards(labels, prov_recs, prov_runs, curated, icons, features,
+                                       log=lambda *a, **k: None)
+    use, ncard = {}, {}
+    for c in cards.values():
+        per_bin = {}
+        for r in c["r"]:
+            for a in range(r[0], r[1] + 1):
+                b = int(a // USE_BIN)
+                per_bin.setdefault(b, set()).update(i for _k, ids in r[4] for i in ids)
+        for b, ids in per_bin.items():
+            ncard[b] = ncard.get(b, 0) + 1
+            for i in ids:
+                use[(b, table[i]["n"])] = use.get((b, table[i]["n"]), 0) + 1
+    _USE_PEN = {k: USE_K * (v / ncard[k[0]] - USE_FREE) for k, v in use.items()
+                if ncard.get(k[0], 0) >= 6 and v / ncard[k[0]] > USE_FREE}
+    _PLACED.clear()
+    return _build_cards(labels, prov_recs, prov_runs, curated, icons, features, log=log)
+
+
+def _build_cards(labels, prov_recs, prov_runs, curated, icons, features=None, log=print):
     """(taxa_table, cards, stats) for life.json.
 
     cards[label] = {"r": [[a_lo, a_hi, tier, prov_id, groups, shared?], ...],

@@ -1135,7 +1135,9 @@ function initGL(){
       uNz:mat.uniforms.uNz,   // the baked noise lattice, shared with the terrain
       uWeatherTime:{value:0}, uEra:{value:state.age}, uRainReady:{value:0},
       uCloudDetail:{value:_cloudNeutral}, uCloudDetailBlend:{value:0},
-      uCloud:{value:0}, uShadow:{value:0}, uCloudMap:{value:0}},
+      uCloud:{value:0}, uShadow:{value:0}, uCloudMap:{value:0},
+      // the weather (3.17): wind speed (0 = the 3.16 rigid drift), renewal cycle s, orographic cloud, stratocumulus
+      uWind:{value:new THREE.Vector4(+(_sq.get('wind')??1),+(_sq.get('wcyc')??60),+(_sq.get('orog')??1),+(_sq.get('scu')??1))}},
     vertexShader:CVERT, fragmentShader:CFRAG});
   clouds=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64),cmat);
   clouds.renderOrder=2; clouds.layers.set(CLOUD_LAYER);
@@ -4205,11 +4207,18 @@ function loop(now,force){
      whenever a preview or a still stands in; the image itself fades in from
      the noise fallback as it lands. uRainReady is 1 only while the rainfall
      bound matches the elevation bound. */
-  const cloudsWanted=TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&!f.preview;
+  /* NO POP (3.17). The deck used to leave the instant a preview or a still
+     stood in -- every scrub, every jump, every interval playback outran its
+     fields -- and fade back over 1.4 s: clouds popping in and out. The deck
+     does not need the requested pair, only SOME pair for its land and rain
+     (uRainReady says whether the rain matches), so it stays once any pair is
+     bound, and leaves as smoothly as it arrives when it does go. */
+  const cloudsWanted=TectonicPolicy.cloudsVisible(state)&&_surface.mode==='full'&&_bound.eA>=0;
   if(cloudsWanted)loadCloudImage();
   const cu=clouds.material.uniforms;
   if(_cloudTex)cu.uCloudDetailBlend.value=Math.min(1,cu.uCloudDetailBlend.value+Math.min(rawMs,100)/1400);
-  loop._cloudFade=cloudsWanted?Math.min(1,(loop._cloudFade||0)+Math.min(rawMs,100)/1400):0;
+  loop._cloudFade=cloudsWanted?Math.min(1,(loop._cloudFade||0)+Math.min(rawMs,100)/1400)
+                              :Math.max(0,(loop._cloudFade||0)-Math.min(rawMs,100)/900);
   cu.uEra.value=state.age;
   cu.uRainReady.value=(_bound.eA>=0&&_bound.rA===_bound.eA&&_bound.rB===_bound.eB)?1:0;
   const cloudsOn=cloudsWanted&&loop._cloudFade>0.001;

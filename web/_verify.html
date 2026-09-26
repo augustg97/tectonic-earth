@@ -33,9 +33,10 @@ const bakeArgs = q.get('bake') ? '&lite=1&noshipped=1&bakefull=1&sheet=' + (q.ge
 const ambientArgs = q.get('ambient') ? ['age','speed','clouds','weather','fps','spin','paused'].filter(k => q.has(k)).map(k => '&' + k + '=' + encodeURIComponent(q.get(k))).join('') : '';
 document.getElementById('app').src = (q.get('app') || 'index.html') + '?run=verify&cb=' + Date.now() + passthrough + bakeArgs + ambientArgs;
 const shots = (q.get('shots') || '').split(';').filter(Boolean).map(s => {
-  const [name, lon, lat, age, zoom, gtilt, head] = s.split(',');
+  const [name, lon, lat, age, zoom, gtilt, head, wt] = s.split(',');
   return {name, lon: +lon, lat: +lat, age: +age, zoom: zoom ? +zoom : null,
-          gtilt: gtilt ? +gtilt : null, head: head ? +head : null};
+          gtilt: gtilt ? +gtilt : null, head: head ? +head : null,
+          wt: (wt != null && wt !== '') ? +wt : null};   // 8th field: the weather clock, seconds
 });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const W = () => document.getElementById('app').contentWindow;
@@ -738,7 +739,9 @@ const W = () => document.getElementById('app').contentWindow;
         calm = (m.pendingDecodes === 0 && m.tried === last) ? calm + 1 : 0;
         last = m.tried;
       }
+      if (s.wt != null && A.gl.clouds) A.gl.clouds.material.uniforms.uWeatherTime.value = s.wt;
       A.step();
+      if (s.wt != null && A.gl.clouds) A.gl.clouds.material.uniforms.uWeatherTime.value = s.wt;
       const r = await A.shoot(s.name, +(q.get('shotsize') || 760), undefined, undefined,
                               {labels: q.get('nolabels') ? false : true});
       console.log('shot', s.name, JSON.stringify({aim: aim.ok, off: aim.offNDC, quick: true, tried: last, saved: !!r.saved, err: r.error || null}));

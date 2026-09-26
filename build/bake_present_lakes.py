@@ -107,6 +107,56 @@ def _encode(mask, deep):
     return (enc_depth(depth) * 255.0 + 0.5).astype(np.uint8), depth
 
 
+LAND110 = os.path.join(os.path.dirname(__file__), "..", "data", "ne_110m_land.geojson")
+
+
+def caspian_ring():
+    """The Caspian's shoreline: Natural Earth files it as a SEA, so it is not in
+    the lakes set at all, and the 0 Ma PaleoDEM draws its basin as dry land at
+    exactly 0 m -- the largest lake on Earth was simply missing from the
+    present day (3.17). Its outline is the one interior ring of the 110m land
+    polygons; Chaikin-smoothed so a 52-point outline does not draw straight
+    100 km edges."""
+    d = json.load(open(LAND110))
+    best = None
+    for f in d["features"]:
+        g = f["geometry"]
+        for poly in (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]):
+            for ring in poly[1:]:
+                xs = [p[0] for p in ring]
+                ys = [p[1] for p in ring]
+                cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
+                if 45.0 < cx < 56.0 and 36.0 < cy < 48.0:
+                    best = ring
+    if best is None:
+        return None
+    pts = [tuple(p) for p in best]
+    for _ in range(3):
+        out = []
+        for i in range(len(pts) - 1):
+            (x0, y0), (x1, y1) = pts[i], pts[i + 1]
+            out += [(0.75 * x0 + 0.25 * x1, 0.75 * y0 + 0.25 * y1),
+                    (0.25 * x0 + 0.75 * x1, 0.25 * y0 + 0.75 * y1)]
+        out.append(out[0])
+        pts = out
+    return pts
+
+
+def caspian_depth(mask):
+    """Depth by basin: the North Caspian a shelf a few metres deep, the Middle
+    basin down to ~750 m in the Derbent Depression, the Apsheron sill, and the
+    South basin to ~1,000 m -- limited near every shore by a slope."""
+    lat = 90.0 - (np.arange(H) + 0.5) / H * 180.0
+    L = np.repeat(lat[:, None], W, 1)
+    cap = np.where(L >= 45.0, 8.0,
+          np.where(L >= 44.0, 8.0 + (45.0 - L) * 142.0,
+          np.where(L >= 41.2, 150.0 + 600.0 * np.exp(-((L - 42.4) / 0.9) ** 2),
+          np.where(L >= 40.6, 200.0,
+                   200.0 + 800.0 * np.clip((40.6 - L) / 1.5, 0.0, 1.0)))))
+    edt = distance_transform_edt(mask)
+    return np.where(mask > 0, np.minimum(cap, edt * 60.0), 0.0)
+
+
 def main():
     feats = json.load(open(LAKES))["features"]
     mask = np.zeros((H, W), np.uint8)          # every lake
@@ -131,11 +181,34 @@ def main():
         else:
             old |= m
     enc, depth = _encode(mask, deep)
-    Image.fromarray(enc, "L").save(os.path.join(FIELDS, "phan_0000_w.webp"),
-                                   "WEBP", lossless=True, method=6)
     enc_old, _ = _encode(old, deep)
-    Image.fromarray(enc_old, "L").save(os.path.join(FIELDS, "phan_0000_wold.webp"),
-                                       "WEBP", lossless=True, method=6)
+    ring = caspian_ring()
+    if ring is not None:
+        cm = rasterize([[ring]])
+        cd = caspian_depth(cm)
+        cenc = (enc_depth(cd) * 255.0 + 0.5).astype(np.uint8)
+        enc = np.where(cm > 0, np.maximum(enc, cenc), enc)
+        enc_old = np.where(cm > 0, np.maximum(enc_old, cenc), enc_old)
+        depth = np.where(cm > 0, np.maximum(depth, cd), depth)
+        mask = mask | cm
+        kept += 1
+        print(f"  the Caspian added from the 110m land ring: {int(cm.sum())} px, max {cd.max():.0f} m")
+    # RGB, as bake_lakes writes: a grayscale file decodes with G == R, and G is
+    # the DRY-BASIN mask -- every present-day lake read its own depth as salt
+    # flat (up to 0.42) until 3.17. G is 0 today; B is the shelf break.
+    import shelf_edge as _SE
+    from fieldpack import dec_elev
+    try:
+        import pillow_avif  # noqa: F401
+    except ImportError:
+        pass
+    ez = Image.open(os.path.join(FIELDS, "phan_0000_e.avif")).convert("RGB").resize((W, H), Image.BILINEAR)
+    shelf = _SE.channel(dec_elev(np.asarray(ez)[..., 0].astype(np.float32) / 255.0))
+    zero = np.zeros_like(enc)
+    Image.fromarray(np.dstack([enc, zero, shelf])).save(
+        os.path.join(FIELDS, "phan_0000_w.webp"), "WEBP", lossless=True, method=6)
+    Image.fromarray(np.dstack([enc_old, zero, shelf])).save(
+        os.path.join(FIELDS, "phan_0000_wold.webp"), "WEBP", lossless=True, method=6)
     print(f"present: {kept} real lakes rasterized  max depth {depth.max():.0f} m  "
           f"cover {100.0*(mask>0).mean():.2f}% of grid  -> phan_0000_w.webp")
     print(f"  of which {young} are Holocene/glacial and are held back to the "

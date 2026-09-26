@@ -152,6 +152,12 @@ float gFineFade;   // per-fragment footprint fade, set in main before elevDetail
 vec4 gDbgV=vec4(0.0); // ?show=17..20: snow, sub-grid peak spread/1 km, mass-elevation warming/6 C, aridity
 float gNearW=0.0;  // close-zoom weight (1 where a pixel is ~1 km), set in main with the land gradient
 float gZSm=-9999.0;
+/* THE SHELF BREAK, CRISP (3.17): 0..1 across the -180 m isobath of a denoised
+   bathymetry, antialiased to about a pixel at any zoom, from the signed
+   distance baked into _w.b (build/shelf_edge.py); -1 where a keyframe's file
+   carries no such field. Set in main, read by oceanColour. */
+float gShelfE=-1.0;
+float gShelfK=99.0;   // the same distance in km, + on the shelf side
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
    describe CONTINENTAL-MARGIN processes must fade with it, because in an
@@ -1318,7 +1324,19 @@ vec3 oceanColour(float z, vec3 sd, float latd){
 
      Same span for a sixth of the cost, because the shape now matches where the
      reference actually puts its contrast. */
-  float t=clamp((z + 5500.0)/4500.0, 0.0, 1.0);
+  /* THE SLOPE, NARROWED (3.17). The ~10 km depth field spreads a continental
+     slope a few km wide over 30-50 km, and since the ramp below saturates
+     above -1000 m the whole smear drew at the brightest abyss tone: a pale
+     halo round every shelf. Seaward of the break, and only where the regional
+     gradient says SLOPE (a marginal plateau like the Blake, -800 m for 300
+     km, is left alone), the depth the palette reads steepens toward the
+     abyss with distance from the break -- most of the way by ~25 km. */
+  float zc=z;
+  if(gShelfE>=0.0 && gShelfK<0.0){
+    float away=smoothstep(2.0,26.0,-gShelfK)*smoothstep(40.0,110.0,gWide);
+    zc=mix(z, min(z,-3200.0), 0.85*away*smoothstep(-150.0,-900.0,z));
+  }
+  float t=clamp((zc + 5500.0)/4500.0, 0.0, 1.0);
   /* 0.220 + 1.200, a 6.45x linear span, up from 2.29x (iteration 136).
      Widening this alone was a bad trade -- it bought depth contrast by pushing
      the >250 km variance share off the reference. Paired with dropping the age
@@ -1486,11 +1504,20 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      0.78 -> 0.81 on the Bahamas against a 0.98 target -- a marginal gain that is
      not worth a visible artefact, so it comes out until the cause is understood.
      See MODEL-GAPS iteration 49 for what was ruled out. */
+  /* THE BREAK FROM A DISTANCE FIELD (3.17). The 60 km window above keeps the
+     lace off the margin but drags the abyss into every shelf and the shelf
+     out over the slope: a halo ~100 km wide where the real break is a line.
+     Where the baked shelf-break distance exists, the shelf side may not read
+     deeper than the break, and every shelf term is cut at the break's own
+     antialiased edge -- the palette's grading stays smooth, its boundary does
+     not. */
+  float sE=1.0;
+  if(gShelfE>=0.0){ zsb=mix(zsb, max(zsb,-170.0), gShelfE); sE=gShelfE; }
   float botRet = exp(zsb/70.0);                      // two-way attenuation
   float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
-  c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
+  c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92)*sE);
   // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
-  float shelf=smoothstep(-700.0,-40.0,zsb);
+  float shelf=smoothstep(-700.0,-40.0,zsb)*sE;
   float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
   /* Toned right down against the reference. This mottle runs at a ~60 degree
      scale, so it was painting broad green-blue patches across whole basins --
@@ -1528,8 +1555,8 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      reason: these are floor colours, and you only see the floor where light
      gets back off it. Without that gate the sequence fires on any peak that
      happens to reach the right depth, wherever it is. */
-  c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,z)*0.26);
-  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet));
+  c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,zc)*0.26);
+  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet)*sE);
   c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
   c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
 
@@ -1630,7 +1657,17 @@ void main(){
      below the water surface, so setting that surface to -2800 m leaves the
      deep depocentres flooded and everything above them a salt flat, following
      the real bathymetry with no separate lake mask at all. */
-  float dryb=max(texture2D(waterA,wA(uv)).g, texture2D(waterB,wB(uv)).g)*uDry;
+  vec4 wqa=texture2D(waterA,wA(uv)), wqb=texture2D(waterB,wB(uv));
+  float dryb=max(wqa.g, wqb.g)*uDry;
+  /* The shelf break as a distance: warped with the crust like the lake depth,
+     interpolated between the two keyframes as a distance (so the edge moves
+     smoothly instead of cross-fading), thresholded at one pixel. 0 in either
+     file means "no field", and the palette keeps its smoothed-depth edge. */
+  if(wqa.b>0.002 && wqb.b>0.002){
+    float sdk=(mix(wqa.b,wqb.b,mixf)*255.0-128.0)*(40.0/127.0);   // km, + on the shelf side
+    gShelfE=clamp(0.5+sdk/(1.3*max(fwidth(sdk),0.05)),0.0,1.0);
+    gShelfK=sdk;
+  }
   wl = dryb>0.5 ? -2350.0 : 0.0;   // brine surface; deeper ground floods itself
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
@@ -5250,6 +5287,10 @@ uniform sampler2D rainA,rainB,elevA,elevB,uNz,uCloudDetail;
 uniform float mixf,uWeatherTime,uCloud,uShadow,uCloudMap,uMapLon,uRainReady,uEra,uTemp;
 uniform float uSnowball;   // the era's ice line at the equator (1) damps the whole deck: a frozen ocean feeds little cloud
 uniform float uCloudDetailBlend;
+/* THE WEATHER (3.17): x the wind's speed (0 restores the 3.16 rigid drift,
+   ?wind=), y the renewal cycle in weather seconds (?wcyc=), z orographic
+   cloud (?orog=), w marine stratocumulus (?scu=). */
+uniform vec4 uWind;
 varying vec2 vUv;varying vec3 vN;
 const float PI=3.14159265359;
 /*@cnoise*/
@@ -5287,6 +5328,85 @@ vec2 satelliteWeather(float lon,float lat,float gain,float dry){
   float tau=2.8*pow(d,1.25)*gain;
   float height=pow(max(broad,0.0),1.4)*gain;
   return vec2(tau,height);
+}
+/* THE WIND THE DECK RIDES (3.17), east and north in radians of arc per
+   weather second. Until 3.16 the whole field turned east as one rigid shell,
+   so tropical cloud ran with the westerlies and nothing ever sheared, swirled
+   or converged. The surface circulation of a rotating planet has three
+   bands -- the trades blowing west and converging on the equatorial trough,
+   the westerlies peaking near 45 degrees, weak polar easterlies -- and the
+   storms of the westerly belt turn inside them. The eddies are the curl of a
+   drifting stream function, so they swirl without piling cloud up. */
+float whash(float n){return fract(sin(n*12.9898+78.233)*43758.5453);}
+vec2 windAt(float lon,float lat,float t){
+  float d=abs(degrees(lat));
+  float u=mix(-0.42,1.0,smoothstep(16.0,30.0,d));
+  u=mix(u,-0.22,smoothstep(58.0,72.0,d));
+  float v=-sign(lat)*0.16*smoothstep(1.0,7.0,d)*(1.0-smoothstep(14.0,28.0,d));
+  float storm=0.35+0.65*exp(-pow((d-48.0)/16.0,2.0));
+  vec3 base=vec3(5.3,11.7,2.9);
+  float drift=t*0.0035,e=0.03;
+  float p0=cn(sphere(lon-drift,lat)*2.4+base);
+  float pE=cn(sphere(lon-drift+e/max(cos(lat),0.2),lat)*2.4+base);
+  float pN=cn(sphere(lon-drift,lat+e)*2.4+base);
+  vec2 g=vec2(pE-p0,pN-p0)/e;
+  vec2 eddy=vec2(-g.y,g.x)*0.30*storm;
+  return (vec2(u,v)+eddy)*0.0042*uWind.x;
+}
+/* CLOUD CARRIED BY THAT WIND, RENEWED AS IT GOES (3.17). A field advected
+   without end stretches into threads, so the satellite structure is carried
+   for one renewal cycle and then replaced: two phases half a cycle apart,
+   each fading in, drifting with the local wind and fading out, their weights
+   summing to one. Each new cycle draws its cloud from a different stretch of
+   the observed field (the same latitude band, so storm tracks stay storm
+   tracks), and the cycle's phase varies slowly across the globe, so systems
+   form and dissipate region by region instead of the sky pulsing at once. */
+/* Closed convective cells, F2-F1 of a jittered point lattice (Worley): the
+   bright polygons with dark rims a stratocumulus sheet shows from orbit. 2-D
+   in the local (east, north) plane -- the decks lie between 10 and 40 degrees,
+   where that plane is undistorted enough. Returns 0 on a rim, 1 mid-cell. */
+vec2 whash2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}
+float cellsAt(vec2 x){
+  vec2 i=floor(x),f=fract(x);
+  float d1=8.0,d2=8.0;
+  for(int yy=-1;yy<=1;yy++)for(int xx=-1;xx<=1;xx++){
+    vec2 o=vec2(float(xx),float(yy));
+    vec2 r=o+0.15+0.7*whash2(i+o)-f;
+    float d=dot(r,r);
+    if(d<d1){d2=d1;d1=d;}else if(d<d2){d2=d;}
+  }
+  return smoothstep(0.0,0.35,sqrt(d2)-sqrt(d1));
+}
+vec2 flowWeather(float lon,float lat,float t,float gain,float dry,vec2 W){
+  float T=max(uWind.y,5.0);
+  float ph=0.45*cn(sphere(lon,lat)*1.3+vec3(19.0,2.0,7.0));
+  float cl=max(cos(lat),0.2);
+  vec2 acc=vec2(0.0);
+  for(int i=0;i<2;i++){
+    float s=t/T+0.5*float(i)+ph;
+    float cyc=floor(s);
+    float tau=s-cyc;
+    float w=1.0-abs(2.0*tau-1.0);
+    float k=cyc*2.0+float(i);
+    float oLon=whash(k*1.13+3.7)*6.2831853+sin(uEra*0.003)*0.9;
+    float oLat=(whash(k*2.71+9.1)-0.5)*0.10;
+    float age=tau*T;
+    float sLon=lon-W.x*age/cl+oLon;
+    float sLat=clamp(lat-W.y*age+oLat,-1.55,1.55);
+    vec2 q=vec2(sLon/(2.0*PI)+0.5,sLat/PI+0.5);
+    float raw=texture2D(uCloudDetail,q).r;
+    float broad=texture2D(uCloudDetail,q,2.0).r;
+    float dd=smoothstep(0.025+dry*0.045,0.98,raw);
+    acc+=w*vec2(2.8*pow(dd,1.25),pow(max(broad,0.0),1.4));
+  }
+  return acc*gain;
+}
+float elevAtUv(vec2 q){
+  q=vec2(fract(q.x),clamp(q.y,0.001,0.999));
+  float a=texture2D(elevA,q).r*2.0-1.0;
+  float h=sign(a)*a*a*8000.0;
+  if(mixf>0.00001){float b=texture2D(elevB,q).r*2.0-1.0;h=mix(h,sign(b)*b*b*8000.0,mixf);}
+  return h;
 }
 vec2 fallbackWeather(float lon,float lat,float gain){
   vec3 p=sphere(lon-uWeatherTime*0.004,lat);
@@ -5328,11 +5448,82 @@ void main(){
      continents; a snowball world loses most of it. */
   float zonal=0.80+0.30*exp(-pow(lat/0.16,2.0))+0.25*exp(-pow((al-52.0)/13.0,2.0))-0.30*exp(-pow((al-24.0)/9.0,2.0));
   gain*=zonal*(1.0-0.45*uSnowball);
+  /* THE AIR MEETS THE GROUND (3.17). Wind driven up a range lifts and
+     cools and clouds over the windward slopes; the same air sinks down the
+     lee and clears -- the rain shadow's cloud. And off the subtropical west
+     coasts of whatever continents the era has, cold upwelled water under
+     the subsiding air of the highs holds a bright low deck of stratocumulus:
+     California, Peru, Namibia today. */
+  vec2 W=windAt(lon,lat,t);
+  float orog=1.0,up=0.0;
+  if(uWind.x>0.0&&uWind.z>0.0){
+    vec2 Wd=W/max(length(W),1e-6);
+    float dx=(1.2/360.0)/max(0.35,cos(lat)),dy=1.2/180.0;
+    vec2 gh=vec2(elevAtUv(uv+vec2(dx,0.0))-elevAtUv(uv-vec2(dx,0.0)),
+                 elevAtUv(uv+vec2(0.0,dy))-elevAtUv(uv-vec2(0.0,dy)))/(2.0*1.2*111.0);
+    up=dot(Wd,gh)*land;                             // metres of climb per km along the wind
+    orog=clamp(1.0+uWind.z*(0.95*smoothstep(0.4,5.0,up)-0.60*smoothstep(0.4,5.0,-up)),0.35,2.0);
+  }
   vec2 cloud;
-  if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
-  else{
-    cloud=fallbackWeather(lon,lat,gain);
-    if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
+  if(uWind.x<=0.0){
+    if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
+    else{
+      cloud=fallbackWeather(lon,lat,gain);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
+    }
+  } else {
+    if(uCloudDetailBlend>=1.0)cloud=flowWeather(lon,lat,t,gain,dry,W);
+    else{
+      cloud=fallbackWeather(lon,lat,gain);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,flowWeather(lon,lat,t,gain,dry,W),uCloudDetailBlend);
+    }
+  }
+  cloud.x*=orog;
+  /* ...and the ranges hold cloud of their own: a cap over the windward crest
+     and a belt along the slope, as thick as the air is wet -- the cloud
+     forest on the Andes' Amazon flank, the caps on the Cascades and the
+     Southern Alps in the westerlies. Its own cumulus texture, carried with
+     the wind, so it seethes rather than sits. */
+  if(uWind.x>0.0&&uWind.z>0.0&&up>0.3){
+    vec3 po=sphere(lon-W.x*t*0.4/max(cos(lat),0.3),lat-W.y*t*0.4);
+    float cu=smoothstep(0.35,0.80,0.6*cn(po*60.0+vec3(4.0,1.0,6.0))+0.4*cn(po*160.0+vec3(2.0,8.0,3.0)));
+    float oc=smoothstep(0.3,4.0,up)*mix(0.25,1.0,wet)*(1.0-0.5*uSnowball);
+    cloud.x+=uWind.z*oc*(0.1+2.4*cu)*gain;
+    cloud.y=max(cloud.y,0.4*oc*cu);
+  }
+  float sub=smoothstep(9.0,16.0,al)*(1.0-smoothstep(30.0,40.0,al));
+  if(uWind.x>0.0&&uWind.w>0.0&&sub*(1.0-land)>0.001){
+    /* How near the coast upwind of the trades -- land to the EAST -- as a
+       smooth falloff over ~20 degrees; the water right at the shore is kept
+       clear (the deck forms a little offshore). Skipped wherever no deck is
+       possible, which is most of the globe. */
+    float cs=1.0/max(0.35,cos(lat));
+    // the share of eight points 2.5-20 degrees to the east that are land: a
+    // continuous measure of how near (and how big) the upwind coast is
+    // (the distances are jittered by a smooth noise of half a step, so the
+    // eight thresholds interleave into one gradient instead of drawing eight
+    // terraces parallel to the coast)
+    float jit=(cn(sphere(lon,lat)*55.0+vec3(8.0,2.0,6.0))-0.5)*2.6+(cn(sphere(lon,lat)*140.0+vec3(1.0,9.0,4.0))-0.5)*1.2;
+    float lE=0.0;
+    for(int k=1;k<=8;k++)lE+=climateAt(uv+vec2((2.5*float(k)+jit)/360.0*cs,0.0)).x;
+    lE*=0.125;
+    float shore=smoothstep(0.02,0.20,1.0-climateAt(uv+vec2(0.8/360.0*cs,0.0)).x);
+    // an irregular outer edge: the deck frays into the open ocean, it is not cut
+    float fray=0.65*(cn(sphere(lon,lat)*3.0+vec3(5.0,9.0,2.0))-0.5)+0.35*(cn(sphere(lon,lat)*8.0+vec3(1.0,3.0,7.0))-0.5);
+    float sc=(1.0-land)*sub*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
+    if(sc>0.001){
+      /* Closed cells some 30-50 km across, drifting with the trades that
+         carry the deck toward the equator, and thinning to open cells and
+         clear rifts toward its outer edge -- the texture a stratocumulus
+         sheet has from orbit. */
+      vec2 xy=vec2((lon-W.x*t*0.3/max(cos(lat),0.3))*cos(lat),lat-W.y*t*0.3)*270.0;
+      float cells=mix(0.62,1.0,cellsAt(xy))*mix(0.80,1.0,cellsAt(xy*0.31+vec2(17.0,5.0)));
+      float thin=smoothstep(0.20,0.65,cn(sphere(lon,lat)*9.0+vec3(2.0,4.0,8.0)));
+      // dense near the coast, breaking into open cells and rifts offshore
+      float core=smoothstep(0.10,0.60,lE+0.20*fray);
+      cloud.x+=uWind.w*sc*cells*mix(0.8,3.4,core)*mix(0.35,1.0,max(thin,core));
+      cloud.y=max(cloud.y,0.25*sc*cells);
+    }
   }
   /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
      day in transport; on its own nothing ever forms or dies. A smooth

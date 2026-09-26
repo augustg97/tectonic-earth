@@ -151,6 +151,12 @@ float gFineFade;   // per-fragment footprint fade, set in main before elevDetail
 vec4 gDbgV=vec4(0.0); // ?show=17..20: snow, sub-grid peak spread/1 km, mass-elevation warming/6 C, aridity
 float gNearW=0.0;  // close-zoom weight (1 where a pixel is ~1 km), set in main with the land gradient
 float gZSm=-9999.0;
+/* THE SHELF BREAK, CRISP (3.17): 0..1 across the -180 m isobath of a denoised
+   bathymetry, antialiased to about a pixel at any zoom, from the signed
+   distance baked into _w.b (build/shelf_edge.py); -1 where a keyframe's file
+   carries no such field. Set in main, read by oceanColour. */
+float gShelfE=-1.0;
+float gShelfK=99.0;   // the same distance in km, + on the shelf side
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
    describe CONTINENTAL-MARGIN processes must fade with it, because in an
@@ -1317,7 +1323,19 @@ vec3 oceanColour(float z, vec3 sd, float latd){
 
      Same span for a sixth of the cost, because the shape now matches where the
      reference actually puts its contrast. */
-  float t=clamp((z + 5500.0)/4500.0, 0.0, 1.0);
+  /* THE SLOPE, NARROWED (3.17). The ~10 km depth field spreads a continental
+     slope a few km wide over 30-50 km, and since the ramp below saturates
+     above -1000 m the whole smear drew at the brightest abyss tone: a pale
+     halo round every shelf. Seaward of the break, and only where the regional
+     gradient says SLOPE (a marginal plateau like the Blake, -800 m for 300
+     km, is left alone), the depth the palette reads steepens toward the
+     abyss with distance from the break -- most of the way by ~25 km. */
+  float zc=z;
+  if(gShelfE>=0.0 && gShelfK<0.0){
+    float away=smoothstep(2.0,26.0,-gShelfK)*smoothstep(40.0,110.0,gWide);
+    zc=mix(z, min(z,-3200.0), 0.85*away*smoothstep(-150.0,-900.0,z));
+  }
+  float t=clamp((zc + 5500.0)/4500.0, 0.0, 1.0);
   /* 0.220 + 1.200, a 6.45x linear span, up from 2.29x (iteration 136).
      Widening this alone was a bad trade -- it bought depth contrast by pushing
      the >250 km variance share off the reference. Paired with dropping the age
@@ -1485,11 +1503,20 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      0.78 -> 0.81 on the Bahamas against a 0.98 target -- a marginal gain that is
      not worth a visible artefact, so it comes out until the cause is understood.
      See MODEL-GAPS iteration 49 for what was ruled out. */
+  /* THE BREAK FROM A DISTANCE FIELD (3.17). The 60 km window above keeps the
+     lace off the margin but drags the abyss into every shelf and the shelf
+     out over the slope: a halo ~100 km wide where the real break is a line.
+     Where the baked shelf-break distance exists, the shelf side may not read
+     deeper than the break, and every shelf term is cut at the break's own
+     antialiased edge -- the palette's grading stays smooth, its boundary does
+     not. */
+  float sE=1.0;
+  if(gShelfE>=0.0){ zsb=mix(zsb, max(zsb,-170.0), gShelfE); sE=gShelfE; }
   float botRet = exp(zsb/70.0);                      // two-way attenuation
   float shelfLift = smoothstep(-260.0,-60.0,zsb);   // the shelf break itself
-  c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92));
+  c=mix(c, shallow, clamp(botRet*0.80 + shelfLift*0.22, 0.0, 0.92)*sE);
   // Biology: shelf + cold high-latitude bands, away from the gyres, mottled.
-  float shelf=smoothstep(-700.0,-40.0,zsb);
+  float shelf=smoothstep(-700.0,-40.0,zsb)*sE;
   float band=smoothstep(0.30,0.62,abs(sin(radians(latd))));
   /* Toned right down against the reference. This mottle runs at a ~60 degree
      scale, so it was painting broad green-blue patches across whole basins --
@@ -1527,8 +1554,8 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      reason: these are floor colours, and you only see the floor where light
      gets back off it. Without that gate the sequence fires on any peak that
      happens to reach the right depth, wherever it is. */
-  c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,z)*0.26);
-  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet));
+  c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,zc)*0.26);
+  c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet)*sE);
   c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
   c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
 
@@ -1629,7 +1656,17 @@ void main(){
      below the water surface, so setting that surface to -2800 m leaves the
      deep depocentres flooded and everything above them a salt flat, following
      the real bathymetry with no separate lake mask at all. */
-  float dryb=max(texture2D(waterA,wA(uv)).g, texture2D(waterB,wB(uv)).g)*uDry;
+  vec4 wqa=texture2D(waterA,wA(uv)), wqb=texture2D(waterB,wB(uv));
+  float dryb=max(wqa.g, wqb.g)*uDry;
+  /* The shelf break as a distance: warped with the crust like the lake depth,
+     interpolated between the two keyframes as a distance (so the edge moves
+     smoothly instead of cross-fading), thresholded at one pixel. 0 in either
+     file means "no field", and the palette keeps its smoothed-depth edge. */
+  if(wqa.b>0.002 && wqb.b>0.002){
+    float sdk=(mix(wqa.b,wqb.b,mixf)*255.0-128.0)*(40.0/127.0);   // km, + on the shelf side
+    gShelfE=clamp(0.5+sdk/(1.3*max(fwidth(sdk),0.05)),0.0,1.0);
+    gShelfK=sdk;
+  }
   wl = dryb>0.5 ? -2350.0 : 0.0;   // brine surface; deeper ground floods itself
   float lat=90.0-uv.y*180.0;
   // Distance from the pole, 1 in the open, 0 at the singularity. Used to fade
