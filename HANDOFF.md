@@ -259,15 +259,18 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260926-1126`**, release 3.16 (the future plate engine, the rain
-  anchor, the herringbone), commit `c9b93685` (the record is the commit after it). Before it: 3.15,
-  `DATA_V=20260926-0618`, `0715ef78`; 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
+- Last live deploy: **`DATA_V=20260926-2144`**, release 3.17 (subduction trenches, the overlay in
+  the terrain's frame, the Precambrian's own motion, moving weather, the crisp shelf break, the
+  waterline, +378 regional taxa), commit `c4c35dc3` (the record is the commit after it), verified
+  live (the `_f` alpha and the reframed `plates_time.json` served; no console errors). Before it:
+  3.16, `DATA_V=20260926-1126`, `c9b93685`; 3.15, `DATA_V=20260926-0618`, `0715ef78`; 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
   `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
   README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
   desert heart (7.6E 23.4S); the old 2E 45S frame sat on the temperate belt.
-- Cache versions: `FIELD_V='20260926-lakes'`, `SHEET_V='20260926a'`, `IMAGERY_V='20260926a'`
-  (in `web/app.js` AND `web/ambient.html`).
+- Cache versions: `FIELD_V='20260926-317'`, `SHEET_V='20260926c'`, `IMAGERY_V='20260926c'`
+  (in `web/app.js` AND `web/ambient.html`). Backups of the 3.16 `_f`, `_t` and both sheet sets were
+  kept in the session scratchpad only.
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline (label windows 2: Gondwana, Kazakhstania, the
