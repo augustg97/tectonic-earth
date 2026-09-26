@@ -172,6 +172,13 @@ def main():
         out[str(age)] = {"b": runs, "p": plates}
         total += sum(len(r["p"]) for r in runs)
     json.dump(out, open(path, "w"), separators=(",", ":"))
+    # 3.17: this is MERDITH'S frame. Keep it as the raw input of
+    # reframe_plates.py, which moves the Phanerozoic keyframes onto the
+    # terrain's (PALEOMAP) frame -- run it after this, every time.
+    raw = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "plates_time_merdith.json")
+    os.makedirs(os.path.dirname(raw), exist_ok=True)
+    json.dump(out, open(raw, "w"), separators=(",", ":"))
+    print("  raw Merdith frame kept at cache/plates_time_merdith.json -- now run reframe_plates.py")
 
     sz = os.path.getsize(path) / 1e6
     nb = np.mean([len(out[str(a)]["b"]) for a in range(0, 1001, STEP)])
