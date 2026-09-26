@@ -110,7 +110,7 @@ CLIMATE = [
     # across ninety million years of keyframes.
     (1000,  0.10, None, None, 0.00, 0.55),  # Rodinia
     # ---- Future (Pangaea Proxima scenario, Scotese geography; climate after
-    # Farnsworth et al. 2024, whose reconstruction IS this one -- Scotese is a
+    # Farnsworth et al. 2023, whose reconstruction IS this one -- Scotese is a
     # co-author). The old table showed a merely-warm supercontinent with
     # vegetation near-modern (veg 0.85 at +250). That is wrong in the direction
     # that matters: the assembling supercontinent -- plus modest solar
@@ -296,7 +296,7 @@ SYSTEM = [
     (750,    20.0,  2900,    0.8),
     (850,    21.0,  3600,    0.5),
     (1000,   20.0,  5600,    0.3),
-    # future: recentred on Farnsworth et al. 2024 for Pangaea Proxima. Their
+    # future: recentred on Farnsworth et al. 2023 for Pangaea Proxima. Their
     # central case is ~24 C global (land ~29-30 C, interior monthly >50 C) with
     # background CO2 in the 410-816 ppm range (~621 central), NOT the 27 C /
     # 1800 ppm the old table used -- which paired their worst-case temperature

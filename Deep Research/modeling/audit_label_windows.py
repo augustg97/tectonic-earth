@@ -88,6 +88,10 @@ def run():
             continue
         typ, name, lon, lat, a0, a1 = row[0], row[1], row[2], row[3], row[4], row[5]
         base, top = max(a0, a1), min(a0, a1)
+        # a body of water is never a crustal block: the loose prefix match
+        # below read "Indian Ocean" as the India craton
+        if typ in ("ocean", "sea"):
+            continue
         key, kind = resolve(name)
         if key is None:
             continue
@@ -100,7 +104,12 @@ def run():
                              f"drawn back to {base:g} Ma but {key} is only identifiable "
                              f"from ~{b.first:g} Ma ({base-b.first:.0f} Myr too early)",
                              f"set a0 no older than {b.first:g}"))
-            if top < b.last - SLACK:
+            # last == 0 means the block SURVIVES to the present, not that it
+            # ends there: the app's future carries every living block on, and
+            # build_webdata.future_label_pass checks each future window
+            # against the future terrain itself. Only a block that ended in
+            # the past can be drawn too late.
+            if b.last > 0 and top < b.last - SLACK:
                 out.append(F("EXISTS", "MED", name,
                              f"drawn to {top:g} Ma but {key} ends at {b.last:g} Ma", ""))
             # a terrane's name usually means something only after it rifted

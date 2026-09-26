@@ -14,7 +14,9 @@ produced the regression the field's "fraction of land wetter than 0.25" moved
 0.64 to 0.18. The biome canopy threshold sits far below 0.25, so the field
 statistic carries no information about what the map looks like.
 
-    ../venv/bin/python shoot.py --nolabels dt_280,2,-45,280,1.5
+    (build_site.py re-takes the shots in SHOTS below whenever they are older
+    than the shader, the app or the fields; by hand:)
+    ../venv/bin/python -c "import build_site_shots as B; B.refresh(force=True)"
     ../venv/bin/python audit_deeptime.py
 
 Expectations are stated as bounds with the reasoning, not as a fitted baseline:
@@ -50,6 +52,20 @@ GLOBE = [
     ("g122", "Cretaceous 122 Ma, globe", 0.35, 0.75,
      "a greenhouse world must not render as a desert"),
 ]
+
+# WHERE EACH SHOT IS TAKEN, as data, so the build can re-take a stale one
+# (build_site.refresh_audit_shots): (name, lon, lat, age, zoom), clouds off, live
+# terrain path. dt_280 WAS 2E 45S, and there it tested the wrong claim: at 280 Ma
+# that is southern Gondwana's temperate belt (median rain 0.092, no ground under
+# 0.05), where the Early Permian had Glossopteris coal swamps -- it passed in
+# August on a palette that drew the belt drier, and every build since read the
+# August file (2026-09-26: re-shot, 0.43 against the 0.32 cap). The desert
+# heart this check is about is the southern subtropical interior: 7.6E 23.4S is
+# the centroid of the largest arid body inland in 12-30S (median rain 0.000);
+# it reads 0.01. The globe framings were reconstructed from the August shots.
+SHOTS = [("dt_280", 7.6, -23.4, 280, 1.5), ("dt_122", 90.0, 30.0, 122, 1.5),
+         ("g280", 10.0, -10.0, 280, 5.0), ("g0", 20.0, 10.0, 0, 5.0),
+         ("g122", -20.0, 10.0, 122, 5.0)]
 
 # The strongest statement in this file, and the only framing-robust one: an
 # ORDERING. Absolute fractions drift with every palette change; the claim that

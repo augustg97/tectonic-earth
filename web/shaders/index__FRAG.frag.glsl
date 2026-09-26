@@ -137,9 +137,15 @@ uniform float uShow;
 uniform vec4 uEroK;
 uniform float uMatOffK;   // 1: crust-bound texture at the warped position (?matoff=0 for the old grid-keyed A/B)
 uniform vec4 uHsK;        // the land hillshade by scale: x regional compression constant, y fine-band gain
+uniform vec4 uNearK2;     // close-zoom land grain: x fade of its 44 and 16 km normal-noise octaves, y of the 6 km one
+uniform vec4 uShadeK;     // x: the sky's share of the sun's cosine on land faces turned away (0 = the old flat floor)
+uniform vec4 uEroK2;     // the erosion relief's sub-grid octaves: x amplitude of the 12 km octave (x the old), y amplitude ratio per finer octave
+uniform float uFloorK;    // pale arid basin floors (?floor=0 off)
+uniform vec4 uNearK;      // close-zoom detail slope: x on, y share of the base exaggeration, z/w footprint ramp (km)
 uniform float uBasin;
 uniform float uAtlasOn;
 float gFineFade;   // per-fragment footprint fade, set in main before elevDetail runs
+float gNearW=0.0;  // close-zoom weight (1 where a pixel is ~1 km), set in main with the land gradient
 float gZSm=-9999.0;
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
@@ -1080,12 +1086,27 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
      belt 150-300 km wide the spacing of its outlets (Hovius 1996: about half
      the half-width) -- and it branches off the massifs as the first visible
      level of the tree. */
-  float h=0.0, L=96.0, amp=1.0, mask=1.0;
+  /* THE SUB-GRID OCTAVES (12 km and finer) HAVE THEIR OWN SPECTRUM (the
+     crispness round). Halving per octave is constant slope, right for the
+     coarse ones the grid can hold; below the grid it left the 6 km octave at
+     +-60 m in the Alps, where real relief inside a 10 km cell is +-400 -- so
+     the snowline, the bare rock and the treeline followed smooth contours and
+     close zoom drew colour as soft blobs. The 12 km octave now starts at 1.5x
+     and each finer one keeps 0.78 of the one above (?eroB= ?eroR=; 1 and 0.5
+     restore the old spectrum): 12 km 180 m, 6 km 140, 3 km 110 at full
+     amplitude. The shading gain still falls as sqrt(L), so a finer octave's
+     steeper walls are lit about as strongly as a coarser one's. */
+  float h=0.0, L=96.0, amp=1.0, mask=1.0, ampF=0.125*uEroK2.x;
   vec3 gr=vec3(0.0), gi=vec3(0.0);
   for(int k=0;k<8;k++){
     /* A gully narrower than about three pixels is not drawn: it would alias,
        and the sheets (a texel is 9.8 km) carry the 96, 48 and 24 km octaves. */
-    float fade=smoothstep(2.2,4.5,L/pxKm);
+    /* (?eroFa= ?eroFb= move the ramp. pxKm is fwidth-based, 1.4-2x a pixel,
+       so 2.2-4.5 wants 6-9 real pixels a wavelength and the 3 km octave never
+       draws even at the closest zoom. 1.8-3.6 draws it, and was measured: a
+       finer grain on each valley wall, and +3.5 ms a frame at zoom 1.35 at
+       2560x1440 on the M5 Ultra (14.7 -> 18.3, median of three) -- not bought.) */
+    float fade=smoothstep(uEroK2.z,uEroK2.w,L/pxKm);
     if(fade<0.01) break;
     /* THE COARSE OCTAVES ARE 96, 48 AND 24 km, AND 12 km IS ALWAYS DRAWN (the
        second pass). The baked relief (relief.py) now carries the belt's form
@@ -1093,7 +1114,7 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
        and every real one -- only octaves the grid cannot hold are grown: the
        12 km octave is below its Nyquist (two texels are 20 km) and gives the
        baked valleys their crisp walls instead of a bilinear smear. */
-    float a=(k<3 ? aC : aF)*amp;
+    float a=k<3 ? aC*amp : aF*ampF;
     /* THE STRUCTURE IS NOT THE DEPTH. How deep a coarse valley is DRAWN is the
        deficit's decision; how strongly it ORGANISES the gullies below it is
        not -- a tributary runs down its valley's wall whether or not the source
@@ -1105,7 +1126,7 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
        walls that steer (Gw is the field's own gradient), so a coarse octave
        steers only as much as it is drawn: a synthetic 48 km valley network
        steering the gullies across a baked one would draw two drainages at once. */
-    float aS=(k<3 ? aC : aF)*amp;
+    float aS=k<3 ? aC*amp : aF*ampF;
     if(max(a,aS)*fade>0.5){
       /* Steer by the slope of the terrain cut so far (the branching), plus a
          whisper across strike that only matters where that slope vanishes --
@@ -1152,10 +1173,11 @@ vec4 eroRelief(vec3 msd, vec3 Gw, vec3 Aw, float aC, float aF, float pxKm){
          valley floor are where tributaries end, not where they run. Weighted
          by how much this octave actually cut here, so an octave the deficit
          switched off does not confine the ones below it. */
-      float rel=clamp(aS/max(aF*amp,1.0),0.0,1.0);
+      float rel=clamp(aS/max(aF*(k<3 ? amp : ampF),1.0),0.0,1.0);
       mask*=mix(1.0, smoothstep(0.0,0.55,abs(e.y)), 0.60*rel);
     }
     L*=0.5; amp*=0.5;
+    if(k>=3) ampF*=uEroK2.y;
   }
   return vec4(h, matDirInv(gr));
 }
@@ -1644,6 +1666,11 @@ void main(){
      mip in spirit for texture that never had mips. */
   float sfoot=length(fwidth(sdir))*2048.0;
   gFineFade=1.0-smoothstep(3.2,8.5,sfoot)*0.85;
+  /* Close zoom, as a weight: 1 where a pixel is under ~2.5 km, 0 past ~6 (the
+     crispness round). Both latitude branches read it -- the land gradient
+     below, the grain in the colour block -- so it is set before they split;
+     set inside one branch, everything above 63 degrees kept the old clouds. */
+  gNearW=uNearK.x>0.0 ? 1.0-smoothstep(uNearK.z,uNearK.w,sfoot*3.11) : 0.0;
   /* World-fixed tangent frame for the cap. Built from the X axis, NOT from east:
      a frame that spins around the pole would make neighbouring pixels sample
      different points and re-introduce the very jitter this removes. */
@@ -1651,6 +1678,21 @@ void main(){
   t1 = _tl>1e-4 ? t1/_tl : vec3(0.0,0.0,1.0);
   vec3 t2=cross(sdir,t1);
   float rug, gE, gN, z;
+  /* rugC: THE SAME RELIEF, LESS THE FIELD'S WHOLE ERROR, for decisions (the
+     colour round). rug allows half a code, the quantisation step, because the
+     hillshade needs every metre of a high plateau's real relief. But the
+     elevation ships as lossy AVIF, and its transform blocks add about a code
+     more at their edges: on the Alberta prairie the x-step across a 16-texel
+     block boundary averages 0.96 codes against 0.31 inside a block (3.1x;
+     2.0x at 8 texels), and a code there is 36 m. Where real relief is a code
+     or two, those edges ARE rug -- blocks and stripes along the texel grid --
+     and every threshold keyed to it drew them: bare rock above an aridity-
+     lowered treeline, alluvium, erg and hamada, the dissection gate. A
+     threshold turns a one-code step into a hard edge, so anything that
+     DECIDES by relief reads rugC, which allows a code and a half; anything
+     that merely scales with it (the hillshade, the detail's amplitude) keeps
+     rug. Lossless elevation would remove the cause at 5.2x the bytes. */
+  float rugC;
   vec3 gAx1, gAx2; float g1, g2, gMacroW;
   /* The base field's own gradient over +/-31 km as a world tangent vector in
      metres per metre, and the mean of the four macro taps (+/-137 km): what
@@ -1687,6 +1729,8 @@ void main(){
     float qP=0.5*0.0156863*sqrt(Z_RANGE*max(z0p,1.0));
     float lapR=4.0*(sum/6.0-z0p);
     vec3 dP=vec3(gv*1.78, lapR);
+    vec3 dPc=sign(dP)*max(abs(dP)-3.0*qP,0.0);   // a code and a half: rugC, above
+    rugC=clamp(length(dPc)/460.0,0.0,1.0);
     dP=sign(dP)*max(abs(dP)-qP,0.0);             // less half a code, as below
     rug=clamp(length(dP)/460.0,0.0,1.0);
     gEnv3=(t1*gv.x+t2*gv.y)/(r*6.371e6);    // metres over the ring radius -> m/m
@@ -1714,12 +1758,22 @@ void main(){
        remains), is safe at 90 degrees exactly. Land only, mirroring the
        submarine base-only gradient decision. */
     if(zb>=wl){
-      float ddc=2.4/2048.0*PI;
-      float dT1=elevDetail(zb, matDir(normalize(sdir+t1*ddc)), rug)
-               -elevDetail(zb, matDir(normalize(sdir-t1*ddc)), rug);
-      float dT2=elevDetail(zb, matDir(normalize(sdir+t2*ddc)), rug)
-               -elevDetail(zb, matDir(normalize(sdir-t2*ddc)), rug);
-      g1+=dT1*0.5; g2+=dT2*0.5;
+      if(gNearW<0.999){
+        float ddc=2.4/2048.0*PI;
+        float dT1=elevDetail(zb, matDir(normalize(sdir+t1*ddc)), rug)
+                 -elevDetail(zb, matDir(normalize(sdir-t1*ddc)), rug);
+        float dT2=elevDetail(zb, matDir(normalize(sdir+t2*ddc)), rug)
+                 -elevDetail(zb, matDir(normalize(sdir-t2*ddc)), rug);
+        g1+=dT1*0.5*(1.0-gNearW); g2+=dT2*0.5*(1.0-gNearW);
+      }
+      /* ...and at close zoom its own slope over ~a pixel, as in the branch
+         below, in this branch's units (a difference over the ring radius r). */
+      if(gNearW>0.001){
+        float dl=max(0.7*sfoot*3.11, 0.35)*(1.0/6371.0);
+        float kN=(r/dl)*uNearK.y*gNearW;
+        g1+=(elevDetail(zb, matDir(normalize(sdir+t1*dl)), rug)-z)*kN;
+        g2+=(elevDetail(zb, matDir(normalize(sdir+t2*dl)), rug)-z)*kN;
+      }
     }
   } else {
     float rda=3.2/2048.0*PI;
@@ -1746,6 +1800,8 @@ void main(){
     float z0r=baseElev(uv);
     float qR=0.5*0.0156863*sqrt(Z_RANGE*max(z0r,1.0));   // half a code: a whole one flattened real high plateaus
     vec4 dR=vec4(rE, rN, zEp+zEm-2.0*z0r, zNp+zNm-2.0*z0r);
+    vec4 dRc=sign(dR)*max(abs(dR)-3.0*qR,0.0);  // a code and a half: rugC, above
+    rugC=clamp(length(dRc)/460.0,0.0,1.0);
     dR=sign(dR)*max(abs(dR)-qR,0.0);
     rug=clamp(length(dR)/460.0,0.0,1.0);
     gEnv3=(Eax*rE+Nax*rN)/(2.0*rda*6.371e6);
@@ -1780,8 +1836,33 @@ void main(){
       g1=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
       g2=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
     }else{
-      g1=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
-      g2=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+      /* THE DETAIL'S OWN SLOPE AT CLOSE ZOOM (the crispness round). These four
+         taps difference base AND detail 47 km apart, and for the base that is
+         a gradient; for the detail's octaves finer than the baseline it is
+         two unrelated samples of noise. At globe zoom that is the grain the
+         land is meant to have, a pixel wide. At close zoom a pixel is ~1 km
+         and it draws as 5-20 km clouds of light and shade that belong to no
+         hill -- no lit side, no shadowed side, and a third of the ground
+         clamped flat at hs=0 (?show=15 at zoom 1.35, the Po plain as mottled
+         as the Alps). So as the footprint shrinks the far taps read the base
+         only, and the detail joins through its gradient over ~a pixel, which
+         the difference itself low-passes at the pixel (a forward difference
+         of half-width dl passes nothing finer than ~2 px). The base holds
+         constant across the near taps, so only the detail is differenced. */
+      float wNr=gNearW;
+      if(wNr<0.999){
+        g1=elevAt(uvFromDir(normalize(sdir+Eax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Eax*da)),rug);
+        g2=elevAt(uvFromDir(normalize(sdir+Nax*da)),rug)-elevAt(uvFromDir(normalize(sdir-Nax*da)),rug);
+      }
+      if(wNr>0.001){
+        float b1=baseElev(uvFromDir(normalize(sdir+Eax*da)))-baseElev(uvFromDir(normalize(sdir-Eax*da)));
+        float b2=baseElev(uvFromDir(normalize(sdir+Nax*da)))-baseElev(uvFromDir(normalize(sdir-Nax*da)));
+        float dl=max(0.7*sfoot*3.11, 0.35)*(1.0/6371.0);
+        float nE=elevDetail(z0r, matDir(normalize(sdir+Eax*dl)), rug)-z;
+        float nN=elevDetail(z0r, matDir(normalize(sdir+Nax*dl)), rug)-z;
+        float kN=(2.0*da/dl)*uNearK.y;
+        g1=mix(g1, b1+nE*kN, wNr); g2=mix(g2, b2+nN*kN, wNr);
+      }
     }
 
   }
@@ -2668,7 +2749,7 @@ void main(){
        interior into basins and uplands instead of one field. */
     // NOT named "flat": that is a GLSL interpolation qualifier and using it as
     // an identifier is a syntax error, which shows up only as a black globe.
-    float flatn=clamp(1.0-rug*2.6,0.0,1.0);
+    float flatn=clamp(1.0-rugC*2.6,0.0,1.0);
     float lowl=clamp((900.0-zp)/1100.0,0.0,1.0);
     float allu=flatn*lowl*clamp(h*1.8,0.0,1.0);
     col=mix(col, mix(vec3(0.373,0.404,0.267), vec3(0.267,0.361,0.220), h), allu*0.30);
@@ -2807,7 +2888,7 @@ void main(){
          which is why the Grand Erg and the Tanezrouft are smooth sheets while
          the Hoggar and Tibesti stand out of them as dark massifs. */
       float still=1.0-smoothstep(0.06,0.26,drain);
-      float lowrel=1.0-smoothstep(0.05,0.19,rug);   // 'flat' is a GLSL reserved word
+      float lowrel=1.0-smoothstep(0.05,0.19,rugC);   // 'flat' is a GLSL reserved word
       /* AN ERG IS A BODY, NOT A SPECKLE. Gating on relief alone scattered sand
          wherever the ground happened to be locally smooth, and the first render
          came back mottled. Real sand seas are a few named things the size of
@@ -2829,7 +2910,7 @@ void main(){
          1.2-1.5); the Qaidam's and the Altiplano's dune fields are small. */
       float sink=(1.0-smoothstep(100.0,400.0,zp-gMac))*(1.0-smoothstep(1500.0,2600.0,zp));
       float erg=desert*still*lowrel*ergBody*sink;
-      float ham=desert*smoothstep(0.16,0.40,rug);
+      float ham=desert*smoothstep(0.16,0.40,rugC);
       /* DUNE LINEATION FROM THE WIND (WP-10, B5: the erg half). A sand sea is
          not a wash of colour, it is a corduroy, and that anisotropy is the
          single most recognisable thing about an erg from orbit. The term this
@@ -2893,6 +2974,22 @@ void main(){
                       clamp(0.30+erg*0.95,0.0,1.0));
       ergCol*=1.0+dune*0.20;
       vec3 hamCol=vec3(0.404,0.369,0.318)*(1.0+(fine*0.22+duri*0.15));
+      /* PALE BASIN FLOORS (the colour round). A desert from orbit is bright
+         floors between dark ranges -- the Great Basin's bajadas and playas,
+         the Lut, the Tarim's rim, the Chad basin -- because a floor is fresh
+         alluvium, gravel and salt, while a range is weathered, varnished rock.
+         Here a floor that was not a sand sea kept the base desert tan, the
+         same tone as the slopes above it, and the eye lost the basin. So flat
+         arid ground standing below the mean of the four +-137 km taps takes a
+         pale alluvium, paler toward a playa the lower it sits; ergs and
+         hamada are laid over it below. rugC keeps it off broken ground and
+         the codec's blocks (see rugC); the height fade keeps it off Tibet and
+         the Altiplano, whose tones are tuned apart. */
+      float bfloor=desert*smoothstep(40.0,-260.0,zp-gMac)*(1.0-smoothstep(0.08,0.30,rugC))
+                  *(1.0-smoothstep(2200.0,3400.0,zp))*uFloorK;
+      vec3 alluv=mix(vec3(0.745,0.690,0.576), vec3(0.851,0.824,0.757), smoothstep(-150.0,-520.0,zp-gMac));
+      alluv*=1.0+(fine*0.10+duri*0.08);
+      col=mix(col, alluv, clamp(bfloor*0.55,0.0,0.55));
       col=mix(col, ergCol, clamp(erg*0.82,0.0,0.82));
       col=mix(col, hamCol, clamp(ham*0.58,0.0,0.58));
     }
@@ -3061,8 +3158,10 @@ void main(){
        contrast did not move at all (34.0 -> 34.1), i.e. still the brown smear
        this whole gap is about. Against the Himalaya's 43.5 -> 46.0, that is the
        tell: the band never reached the ground there. */
+    float tlNoise=(vnoise3(sdir*150.0+19.0)-0.5)*260.0+(fbm3(sdir*34.0+61.0)-0.5)*220.0;
+    float tlineT=clamp(tline+tlNoise, 350.0, 5200.0);   // the cold treeline alone (see alp below)
     tline-=(1.0-clamp(Rf*2.4,0.0,1.0))*1350.0;
-    tline+=(vnoise3(sdir*150.0+19.0)-0.5)*260.0+(fbm3(sdir*34.0+61.0)-0.5)*220.0;
+    tline+=tlNoise;
     /* Clamp AFTER the aridity term, not before. Clamping first and subtracting
        second drives the line NEGATIVE wherever the ground is both cold and dry,
        and central Siberia is both: the treeline floored at 600 m, lost 1,190 m
@@ -3086,7 +3185,19 @@ void main(){
        strips ground to stone is relief. The exception is genuinely high ground,
        where a plateau is bare however smooth it is, which is why Tibet has to
        survive this gate and the Siberian plateau must not. */
-    alp*=max(smoothstep(0.10,0.34,rug), smoothstep(3200.0,4200.0,zp));
+    /* ...AND ABOVE A TREELINE THAT DROUGHT LOWERED, IT NEEDS A RANGE (the
+       colour round). The aridity term above was calibrated on a cordillera --
+       the dry Andes at 32 S, bare rock and salt from 1.6 km -- but it lowers
+       the line wherever the rain is thin, and on a dry plain it reaches the
+       350 m floor: the Alberta prairie at 600 m stood "above the treeline",
+       and every escarpment, coulee and codec block on it drew as alpine scree
+       in pale rectangles. Past a cold treeline a hill is alpine; past a dry
+       one only a mountain range is -- a dry plain with a scarp on it is
+       steppe, and the biome colour already says so. So the band between the
+       two lines asks for a range's relief, and the cold line keeps its own. */
+    float alpT=clamp((zp-tlineT)/300.0,0.0,1.0);
+    alp=max(alpT*max(smoothstep(0.10,0.34,rugC), smoothstep(3200.0,4200.0,zp)),
+            alp*max(smoothstep(0.30,0.60,rugC), smoothstep(3200.0,4200.0,zp)));
     /* Bare rock is not one grey. The reference shows pale scree and snow-dusted
        benches against near-black shadowed cliffs, and it is that SPREAD, not the
        average tone, that makes a range read from orbit. The old band was a flat
@@ -3096,7 +3207,7 @@ void main(){
        is cliff and shadow, smooth high ground is scree, till and bench. */
     vec3 scree=vec3(0.596,0.567,0.532);
     vec3 cliff=vec3(0.427,0.400,0.376);
-    vec3 alpRock=mix(scree, cliff, smoothstep(0.18,0.62,rug));
+    vec3 alpRock=mix(scree, cliff, smoothstep(0.18,0.62,rugC));
     alpRock*=1.0-smoothstep(0.0,2200.0,zp-tline)*0.10;
     alpRock*=1.0+(fine*0.22+fine2*0.15+duri*0.12);
     /* KEEP THE GEOLOGY'S HUE. A neutral grey turned the Tibetan Plateau grey,
@@ -3204,7 +3315,7 @@ void main(){
       float showBed=mix(0.42,0.10,iceDeep);
       iceCol*=mix(1.0-showBed*0.9, 1.0+showBed*0.35, lum);
       // crevasse hatching where the bed is rough near the margin
-      float crev=smoothstep(0.25,0.75,rug)*(1.0-iceDeep);
+      float crev=smoothstep(0.25,0.75,rugC)*(1.0-iceDeep);
       iceCol*=1.0-crev*(0.5-vnoise3(mdi*760.0+29.0))*0.16;
       /* Confidence-graded OPACITY. The old 6-degree ramp hid a truth: ground
          within a degree of the threshold is not a solid sheet, it is patchy
@@ -3363,6 +3474,7 @@ void main(){
     gE=mix(gE, gSm.x, fIce); gN=mix(gN, gSm.y, fIce);
   }
   vec3 nrm=normalize(vec3(-(gE+gEroE*eroIce), gN+gEroN*eroIce, vex));
+  vec3 nrmS=normalize(vec3(-gE, gN, vex));   // without the erosion relief: the flank its gullies are cut into (the shadow term, below)
 
   if(z>=wl){
     /* Slope-aware bare rock. Steep faces shed soil and vegetation and show
@@ -3424,7 +3536,16 @@ void main(){
     float zc=baseElev(uv);
     float ring=(baseElev(uvFromDir(normalize(sdir+Eax*rvA)))+baseElev(uvFromDir(normalize(sdir-Eax*rvA)))
                +baseElev(uvFromDir(normalize(sdir+Nax*rvA)))+baseElev(uvFromDir(normalize(sdir-Nax*rvA))))*0.25;
-    float below=clamp((ring-zc)/85.0,0.0,1.0);       // how far into a local low
+    /* LESS THE FIELD'S OWN QUANTUM (the colour round). On a high plain the
+       8-bit field is a stair of flat terraces a code apart -- 36 m at 650 m --
+       and a pixel on the lower tread near a riser sees the ring one code above
+       it: 0.42 here, a full marsh. The prairie drew as dark rectangles with
+       pale river rims laid out along the texel rows (Alberta and Saskatchewan
+       at zoom 1.35). The same allowance rug and the hillshade make, at 1.25
+       codes: a single riser can put the four-tap ring at most one code above
+       its centre, and a real incised low is tens of codes deep. */
+    float qBl=1.25*0.0156863*sqrt(Z_RANGE*max(zc,1.0));
+    float below=clamp((ring-zc-qBl)/85.0,0.0,1.0);   // how far into a local low
     float supply=clamp((Rf-0.10)/0.60,0.0,1.0);      // rainfall available to run off
     float warm=clamp((T+2.0)/6.0,0.0,1.0);           // liquid water, not frozen
     float flatf=1.0-smoothstep(0.05,0.24,slope);     // valley floors and plains
@@ -3463,10 +3584,21 @@ void main(){
        scales at ~44, ~16 and ~6 km bracket the gap. Single-octave vnoise3, not
        fbm3: five octaves buy nothing at these sizes and the per-pixel budget is
        real -- six fbm3 taps once failed to LINK on software GL. */
-    float nx=vnoise3(msd*145.0+1.0)-0.5;
-    float ny=vnoise3(msd*145.0+9.0)-0.5;
-    nx+=(vnoise3(msd*400.0+3.0)-0.5)*0.62 + (vnoise3(msd*1100.0+5.0)-0.5)*0.48;
-    ny+=(vnoise3(msd*400.0+17.0)-0.5)*0.62 + (vnoise3(msd*1100.0+23.0)-0.5)*0.48;
+    /* ...A GRAIN, NOT A LANDSCAPE, and only while it is a grain (the
+       crispness round). These are random TILTS, not the slope of any height:
+       at globe zoom the 44 and 16 km octaves are a pixel or two across and
+       read as texture, but at zoom 1.35 a pixel is ~1 km and they are 20-50 px
+       clouds of light and shade with no lit side and no shadowed one -- the
+       mottle ?show=15 drew over the Po plain as thickly as over the Alps. As
+       the footprint shrinks (gNearW, the ramp the land gradient uses) the two
+       coarse octaves stand down and the 6 km one halves; the relief at those
+       scales is now the field's, the detail's own gradient and the erosion
+       relief's, all of which are slopes of a surface. ?ngC= ?ngF= scale it. */
+    float gq=1.0-gNearW*uNearK2.x, gq2=1.0-gNearW*uNearK2.y;
+    float nx=(vnoise3(msd*145.0+1.0)-0.5)*gq;
+    float ny=(vnoise3(msd*145.0+9.0)-0.5)*gq;
+    nx+=(vnoise3(msd*400.0+3.0)-0.5)*0.62*gq + (vnoise3(msd*1100.0+5.0)-0.5)*0.48*gq2;
+    ny+=(vnoise3(msd*400.0+17.0)-0.5)*0.62*gq + (vnoise3(msd*1100.0+23.0)-0.5)*0.48*gq2;
     /* One more octave that exists only near the ground (fidelity round iter
        9): ~2.4 km grain, faded in by the same pixel-footprint measure the
        ocean fades out by -- so a close pass over Laurentia reads rock, not
@@ -3536,7 +3668,7 @@ void main(){
            from an eroded surface, not from the contour loops of a noise. */
         col*=1.0+ar.x*0.55*ga*uAtlasK.y*eB;
       }
-      float gd=dissectGate(zp,rug);
+      float gd=dissectGate(zp,rugC);
       if(gd>0.005){
         vec3 dr=dissectRelief(msd, gHard);
         float ampD=gd*3.2*uAtlasK.w;        // 3.2 and 0.32: twice the first cut, the display review of 2026-09-03 (?plainsK=2 then)
@@ -3592,7 +3724,7 @@ void main(){
        because the existing rug gate bottoms out at 0.36 and never goes lower.
        Fade it further on genuinely flat ground, which is where the reference
        is quietest and where isotropic noise reads most obviously as noise. */
-    float flatq=1.0-smoothstep(0.14,0.46,rug);
+    float flatq=1.0-smoothstep(0.14,0.46,rugC);
     nrm=normalize(nrm+vec3(nx,ny,0.0)*(0.36+0.50*rug)*(1.0-0.70*flatq)*(1.0+0.55*closeG));
   } else {
     /* ABYSSAL-HILL FABRIC -- the sea floor's answer to the land's relief grain.
@@ -4515,15 +4647,34 @@ void main(){
      near-reference, the shade span was not. Land floor drops and gain rises
      (~25% more contrast); the SEA keeps the 0.70 floor the lace forensics
      were built on -- that constant is load-bearing evidence. */
+  /* A SHADOWED FACE IS NOT ONE TONE (the crispness round). hs clamps at zero,
+     so every facet turned more than ~51 degrees from the sun shaded exactly
+     the floor: a whole flank facing away drew as one flat grey slab, and the
+     gullies cut into it -- which turn part of it toward the sun and part
+     further away -- vanished inside it (BC at zoom 1.35, ?show=15). A face in
+     shadow is still lit by the sky, and the sky is brightest round the sun, so
+     it keeps a fraction of the same cosine below zero. Land only; the sea's
+     shade is its own evidence (see below).
+     MEASURED AGAINST THE FLANK, NOT ZERO. Taken against zero, a whole flank
+     turned away (east Baffin, under the polar frame's light) just went darker
+     as a slab: 4% of that framing fell below luminance 90, against 0.1%, and
+     capping the term 15 degrees past the terminator still left 3%. What was
+     wanted is the gullies' variation INSIDE the shadow, so the term is the
+     difference between this pixel's cosine and that of the smooth normal the
+     erosion relief is cut into (nrmS): a smooth shadowed flank keeps exactly
+     its old floor and the walls cut into it read either side of it. The
+     function stays continuous where a wall turns back into the sun. */
+  vec3 Ld=normalize(vec3(Lh, 0.63));
+  float hsL = hs + uShadeK.x*(min(dot(nrm, Ld), 0.0) - min(dot(nrmS, Ld), 0.0));
   float shade = z<wl ? clamp(0.70+0.62*hs, 0.0, 1.34)
-                     : clamp(0.63+0.74*hs, 0.0, 1.24);
+                     : clamp(0.63+0.74*hsL, 0.0, 1.24);
   /* Bare rock has no canopy to scatter light between the faces, so an alpine
      slope is lit hard and shadowed hard where a forested one is not. Widening
      the response ONLY inside the band is what turns a grey wash into ridges. */
   /* Tuned DOWN from 0.40+1.22 at gAlp*0.80, which was measured and looked it:
      Tibet rendered as a black-and-white photocopy, image contrast 43.5 -> 51.2.
      Bare rock takes light harder than forest, but it is still rock, not enamel. */
-  shade = mix(shade, clamp(0.56+0.96*hs, 0.0, 1.44), gAlp*0.55);
+  shade = mix(shade, clamp(0.56+0.96*hsL, 0.0, 1.44), gAlp*0.55);
   // Shelves keep their relief, but damp shading toward the abyss: there is no
   // real detail down there and it would only amplify compression blocking.
   // Keep relief on the seafloor all the way down (gentler than land), instead

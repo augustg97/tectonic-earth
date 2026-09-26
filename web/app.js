@@ -356,13 +356,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260926-0235';
-const FIELD_V='20260925-sheets';   // bumped: thrust sheets and the range scale in _e (relief.py), lakes only in resolvable basins, and everything derived
+const DATA_V='20260926-0618';
+const FIELD_V='20260926-lakes';   // bumped: the lake fields re-baked (overflow breaches, humid deep floors, record-named lakes, contour shores)
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260925c';
+const IMAGERY_V='20260926a';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -1021,6 +1021,11 @@ function initGL(){
     uArcK:{value:+(_sq.get('arc')||1)},        // belt type: arcs lose the fold ridges (0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
     uMatOffK:{value:_sq.get('matoff')==='0'?0:1},   // texture rides the crust through an interval (FRAG gMatOff)
+    uEroK2:{value:new THREE.Vector4(+(_sq.get('eroB')??1.5),+(_sq.get('eroR')??0.78),+(_sq.get('eroFa')??2.2),+(_sq.get('eroFb')??4.5))},   // erosion relief below the grid (FRAG): 12 km amplitude x old, ratio per finer octave
+    uShadeK:{value:new THREE.Vector4(+(_sq.get('shF')??0.3),0,0,0)},   // land faces turned from the sun keep this share of the cosine (FRAG)
+    uNearK2:{value:new THREE.Vector4(+(_sq.get('ngC')??1),+(_sq.get('ngF')??0.5),0,0)},   // close-zoom fade of the land grain's coarse normal-noise octaves (FRAG)
+    uFloorK:{value:+(_sq.get('floor')??1)},   // pale arid basin floors (FRAG)
+    uNearK:{value:new THREE.Vector4(+(_sq.get('near')??1),+(_sq.get('nearK')??0.35),+(_sq.get('nearA')??2.5),+(_sq.get('nearB')??6))},   // close-zoom detail slope (FRAG): on, share of the base exaggeration, footprint ramp km
     uHsK:{value:new THREE.Vector4(+(_sq.get('hsC')??220),+(_sq.get('hsF')??0.8),0,0)},   // the land hillshade by scale (FRAG): regional compression, fine-band gain
     uEroK:{value:new THREE.Vector4(+(_sq.get('ero')||1),+(_sq.get('eroN')||60),+(_sq.get('eroF')||0.7),+(_sq.get('eroS')??0.8))},   // the erosion relief (FRAG eroRelief): amplitude (0 off), normal gain, sub-grid share
     uNz:{value:bakeNoiseLUT()},
@@ -3560,7 +3565,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260925c';
+const SHEET_V='20260926a';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){

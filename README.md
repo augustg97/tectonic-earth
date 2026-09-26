@@ -165,6 +165,8 @@ The same relaxation fixes the separate finding that the assembly ended too tight
 
 The shader's erosion relief (§5.10) then cuts them into ranges; the relief deficit on the future's smooth belts runs from 0.07 at +50 Myr to 0.70 at +250.
 
+**The future's names are placed on the future (3.15).** Future labels used to be present-day names carried forward on their plates, and several ended up on the wrong ground or on nothing: an "Amasia" over a world where the Americas never reach Asia, a Pan-Asian Rift nothing draws, the Pangaea Proxima Inland Sea named while it was still open ocean. `build_webdata.future_label_pass` now places every name that reaches into the future against the future terrain itself, keyframe by keyframe (`FUTURE_LABELS` in `features.py` says how): a collision belt at the top quartile of the zone where two groups' main bodies meet (`belt`), a crust point carried on its group (`ride`), the largest landmass and its most arid interior (`landmass`, `interior`, the pole of inaccessibility among ground under 0.2 of rainfall), an ocean held between named coasts (`between`) or a sea only once it is enclosed (`enclosed`). A name is shown only over the longest run of keyframes where its feature exists (a continuing name must hold from +5), and one that never validates is dropped rather than drawn on the wrong thing -- the Trans-Atlantic Belt, since this drawing's Americas stop ~1,000 km short of Africa. Cards and phases for the future's oceans and continents say what this drawing does and where it differs from Scotese's 2018 atlas (the Atlantic narrows but stays open; the East African Rift is the older projection) and Farnsworth et al. (2023).
+
 ### 5.2 Paleogeography
 
 Three eras, three sources (`build_fields.py`):
@@ -260,6 +262,8 @@ Ancient river courses are not known, so none are drawn from a map. As a check, t
 **Sand seas** (WP-10 B5, the erg half). An erg is a corduroy, and its lineation follows the resultant wind. The climate model's winds are zonal by latitude band (`fetch` above), and a surface wind is turned by the Coriolis force, so the trades blow from the north-east and the westerlies from the south-west: the *line* is NE–SW everywhere north of the equator and NW–SE south of it, which is the trend of the Rub' al Khali's uruq and of the Kalahari's and the Simpson's dunes. The shader smears value noise along that line at two scales — 11 km cells for the dune-field corridors that survive at continental zoom, and 5.8 km cells over ±5 cells for the dunes themselves, ridged into sharp crests and faded in by the pixel footprint — as tone (crests light, interdune corridors dark) and as slope in the shading normal. The direction comes from the present latitude, the pattern is welded to the crust, and the erg mask (dry, still, flat, and a sand-sea body) is unchanged — which is the open item: the body is a crust-locked noise, and drawn as a mask (`?show=1`) it is zero over the whole Arabian peninsula and, on Tibet, on only in the Tarim. `?erg=0` switches the lineation off, `?erg=K` scales it.
 
 Lakes are baked separately (`bake_lakes.py`, `bake_present_lakes.py`) and the geologically young ones are handled explicitly: the Great Lakes are ~14 ka old, and interpolating them out of the present frame left them sitting there in the Pliocene, 4 Myr either side of today. A second present-day lake field *without* them is swapped in outside the window they actually occupy.
+
+**Three rules decide which basins keep water (3.15).** *An overflowing basin is breached*: a keyframe is millions of years, and an outlet that carries a continental river cuts down, so a basin whose budget supports more lake than lies below its spill, and at least `BREACH_Q` = 600 cells of it, keeps only its deep tectonic core. Filling them to the lip had put 845,000 km² of shallow lake in the Congo and 419,000 in the Amazon at 5 Ma and the blotchy lowland lakes of the future; the breach is set by discharge, not overflow alone, so a rift lake's modest overflow (Tanganyika 160 cells, the soda lakes 265) does not trip it. *A deep floor needs a wet catchment*: the permanent fill of deep basins scales with the catchment's humidity index up to `HUM_DEEP` = 0.30, so a 130 m desert basin is no longer flooded to a tenth of its depth. *The record outranks the sky where it names a lake*: within a `lake` label's window, the basin under its plate-tracked position keeps its full deep floor, is not breached and keeps bodies of any size (the climate solve runs dry over interiors, the trade that keeps Pangaea a desert). Water under the record's own lake labels went 29 → 25 → 28 label-keyframes with that rule, Pebas at 10 Ma newly wet; Uinta at 50 Ma, Baikal at 30 and Tanganyika at 10 keep small lakes at the edges of their windows. The rule authors nothing -- a basin the DEM lacks holds nothing -- and it reads the tracks from `web/labels.json`, so labels are built before lakes. Shores are measured against the σ-1 surface, not the 8-bit one, so a lowland lake's edge follows a contour instead of the terrace outline. Lake cover roughly halves at most ages (+250 Myr 0.41 → 0.17% of cells, 150 Ma 1.02 → 0.30%).
 
 ### 5.6 Events, features and life
 
@@ -576,6 +580,19 @@ Three things came over from Tectonic Atlas (September 2026), selectively — its
 | round 2: smoke test | 32 / 32 | 32 / 32 |
 
 The rAF frame interval of sheet-path playback (67–83 ms median here, against 25–29 ms for the forced frame) is the per-frame work of playback — the warm uploads for the terrain material, which binds on every path, two sheet strips a frame and the decodes' insertions — on a machine another session's Chromes were also using; one frame in twenty is 250–300 ms. Lazy binding of the terrain material while the sheets draw is the lever left.
+
+### 5.12 Close zoom and colour (3.15)
+
+At zoom 1.35 a pixel is ~0.85 km and a texel of the elevation field 8–11 pixels, so close zoom is whatever the shader invents below the grid. Drawn with the colour taken out (`?show=15`), the land was covered in soft 5–50 km clouds of light and shade -- the Po plain as thickly as the Alps -- with whole patches clamped flat at the shade floor. Four things made them, and none was a slope of any surface:
+
+1. **The detail's slope was a difference of noise.** The land gradient differences base AND procedural detail over ±23.5 km; for the base that is a gradient, for the detail's octaves finer than the baseline it is two unrelated samples of noise. As the footprint shrinks (`gNearW`, 1 below a ~2.5 km footprint, 0 past 6; `?near=` `?nearK=` `?nearA=` `?nearB=`) the far taps read the base only and the detail joins through its own forward difference over ~0.7 of a pixel, at 0.35 of the base's exaggeration. Both latitude branches; set inside one, everything above 63° kept the clouds (§7.46).
+2. **The grain was random tilts.** The land grain perturbs the normal with independent value noise at 44, 16 and 6 km: a pixel-wide texture at globe zoom, 20–50 px clouds at close zoom. The two coarse octaves stand down with `gNearW` and the 6 km one halves (`?ngC=` `?ngF=`).
+3. **A shadowed flank was one tone.** `hs` clamps at zero, so every face turned more than ~51° from the light shaded exactly the floor. Land keeps 0.3 of the cosine below zero (`?shF=`), measured against the smooth normal the erosion relief is cut into (`nrmS`), so a smooth flank in shadow keeps its old floor and only the walls cut into it vary around it. Measured against zero, east Baffin went darker as a slab (dark pixels 0.1 → 4%).
+4. **The relief below the grid was a fifth of real.** The erosion relief halved its amplitude per octave all the way down, which left the 6 km octave at ±60 m in the Alps where real relief inside a 10 km cell is ±400; the snowline, bare rock and treeline followed smooth contours. The sub-grid octaves now have their own spectrum: 12 km at 1.5× the old, 0.78 per finer octave (`?eroB=` `?eroR=`). The anti-alias ramp stays at 2.2–4.5 footprints (`?eroFa=` `?eroFb=`): 1.8–3.6 draws the 3 km octave at the closest zoom, and cost +3.5 ms a frame at 2560×1440 on the M5 Ultra (14.7 → 18.3 ms, median of three) for a finer grain on each wall. With the old ramp the new close-zoom frame measured the same as 3.14's (14.8 against 14.7 ms); mid and globe zoom draw from the sheets and are untouched.
+
+**Colour.** The blocks on the Canadian prairie were the elevation codec (§7.44): AVIF transform-block edges carry ~1 code (0.96 against 0.31 inside a block, 3.1× at 16 texels), `rug` read them, and at the prairie's 350 m aridity-lowered treeline its bare-rock gate painted alpine scree in rectangles. Decisions by relief read `rugC` (1.5 codes allowed); the hillshade and the detail's amplitude keep `rug` (half a code), which plateaus need. And the band between the cold treeline and the one drought lowered now asks for a range's relief (`rugC` 0.30–0.60) -- past a cold treeline a hill is alpine, past a dry one only a mountain range is; a dry plain is steppe, and the biome colour already says so. The dry Andes keep their bare cordillera. **Arid basin floors are pale** (`?floor=`): flat dry ground standing below the mean of the four ±137 km taps takes a pale alluvium, paler toward a playa, under the ergs and hamada and off the high plateaus (2.2–3.4 km fade). The local-low test for marsh and rivers allows 1.25 codes for the same reason as `rugC`.
+
+**What the renderer cannot fix.** BC's ranges draw brown where they are forested to the treeline, the Ganges plain orange, and Tibet's snow sits on the plateau instead of the Himalayan crest: the present-day rain field reads 0.024 over the Columbia Mountains (real ~0.30), 0.03–0.12 on the Ganges plain and 0.000 on the Himalayan crest against 0.005 on the plateau, so the ELA's aridity term is maxed on both and latitude alone puts the snowline lower on the plateau. That is the climate solve's highland dry bias (§9), and the lever that would fix it globally is the one that keeps Pangaea dry.
 
 ## 6. Build and deploy
 
@@ -1168,6 +1185,56 @@ fourth band (σ 4–8 px) is laid from sub-belts and calibrated to real belts; t
 coherence in the 1–2, 2–4 and 4–8 px bands came to 0.43/0.44/0.51 against the real 0.38/0.44/0.53. **Ask which process
 sets a scale before asking a model of another process to produce it.**
 
+### 7.43 A difference of noise across a wide baseline is not a slope
+
+The land hillshade differenced base plus procedural detail over ±23.5 km. For the base that is a
+smoothed gradient; for every detail octave finer than the baseline it is two unrelated samples of
+noise, which varies across the screen at the noise's own scale and belongs to no hill -- no lit side,
+no shadowed one. At globe zoom that reads as grain a pixel wide; at close zoom it was 5–20 km clouds
+over the Po plain as thickly as over the Alps, and so were the grain's random normal tilts (§5.12).
+**Take each band's slope over a baseline matched to the band, or let it stand down when it is no
+longer finer than a pixel.** `?show=15` (lighting only) is the view that shows it.
+
+### 7.44 A threshold on a lossy field's derivative must clear the codec's error
+
+`rug` allowed half a code for the 8-bit quantisation. The elevation is AVIF, and its transform
+blocks add about a code at their edges (0.96 against 0.31 inside a block on the Alberta prairie,
+3.1× at 16 texels, 2.0× at 8). Where real relief is a code or two, the block edges were `rug`, and
+every threshold on it -- bare rock, alluvium, erg and hamada, the dissection gate -- drew
+rectangles. Lossless would remove the cause at 5.2× the bytes (about +200 MB); a threshold turns a
+one-code step into a hard edge, so decisions read `rugC` with the whole error allowed while
+quantities that merely scale keep `rug`. **Measure the step energy on block boundaries against
+off-boundary before blaming the model (§7.13).**
+
+### 7.45 A track's first entry is not the present
+
+`biota.label_point` took a label's present-day point as `tr[0]`, which held while every track
+started at 0 Ma. A name that continues into the future carries its future points ahead of it
+(−95 … 0 … 55), so the Himalaya's "present" became its +95 Myr position at 12° N and six Tibetan
+taxa fell outside their ranges (`audit_biota`, 0 → 6). The interpolators that clamp at the
+youngest end were right by construction; the one that meant "today" was not. **Look up the entry
+for the age you mean.**
+
+### 7.46 A weight set inside one branch is zero in the other
+
+The close-zoom weight was first computed inside the sub-63° branch of the land gradient, and the
+grain that reads it lives in the colour block, which both branches reach -- so above 63° it stayed
+zero, and the Arctic kept every cloud the fix removed elsewhere, with no error and no warning. A
+per-pixel quantity that describes the camera, not the branch, is set before the branch.
+
+### 7.47 A validator that reads a file tests the file
+
+`audit_deeptime`, `audit_island_biomes` and `audit_land_grain` measure screenshots on disk. From
+9 August to 26 September they read the same August files while the shader changed under them, and
+every build printed their passes. Re-shot, the Permian check failed (0.43 green against a 0.32 cap)
+-- and the failure was the framing's, not the map's: 2E 45S at 280 Ma is southern Gondwana's
+temperate belt (median rain 0.092), where the Early Permian had coal swamps, and it had passed in
+August only because an older palette drew that belt drier; the model's own desert heart, 7.6E 23.4S,
+reads 0.01. Both halves were invisible while the file was stale. `build_site_shots.refresh()` now
+re-takes every shot older than the shader, the app, the fields, the labels or the audit that frames
+it, before those audits run, and stops the build if one does not land. **A test's input has a date;
+check it before reading its verdict.**
+
 ## 8. Sources
 
 | role | source |
@@ -1178,7 +1245,7 @@ sets a scale before asking a model of another process to produce it.**
 | Present plate motions | NNR-MORVEL56 (Argus, Gordon & DeMets, 2011) |
 | Present boundaries | Bird, P. (2003), PB2002 · *G³* 4(3) |
 | Sea-floor depth | GDH1 plate model (Stein, C. A. & Stein, S., 1992, *Nature* 359, 123–129); von Kármán roughness model for abyssal hills |
-| Future climate | Farnsworth, A. et al. (2024), *Nature Geoscience* 17, 1109–1116 |
+| Future climate | Farnsworth, A. et al. (2023), *Nature Geoscience* 16, 901–908 |
 | Solar model | Gough, D. O. (1981), *Solar Physics* 74, 21–34 |
 | Impacts | Impact Earth database (Osinski et al.) and Schmieder & Kring (2020) |
 | Intervals | ICS chart v2024/12 |
@@ -1218,6 +1285,8 @@ sets a scale before asking a model of another process to produce it.**
 - **We and Blakey agree about how much continent there was, and disagree about how much of it was dry.** This is the honest shape of the two largest remaining disagreements with an independent reconstruction, and they turn out to be one disagreement. At 525 Ma our land is 10.1 points below his — the biggest single-age gap in the whole audit — but **land plus shelf agrees to 1.0 point** (31.7% against 32.7%). Same continents, different shoreline. From 360 Ma back the same thing shows as us drawing 3–11 points *more* shelf sea than he does. Our own Cambrian series is smooth and tracks our eustatic curve (18.6% land at 540 Ma → 16.6% at 525 → 17.2% at 500), while his drops eleven points in 25 Myr against his own neighbours — so where the two differ at 525 Ma, the anomaly is not on our side. Recorded rather than tuned: this is two published reconstructions disagreeing about flooding, not a defect.
 
 - **Present-day biota**: 110 labels carry a curated list; every other present-day card is composed from the registry for its own crust, habitat and latitude.
+
+- **The present-day rainfall runs dry over highlands and the monsoon, and colours BC, the Ganges and Tibet's snow wrong (3.15).** Against 67 sites with real annual precipitation the shipped 0 Ma field ranks at Spearman 0.644: the Columbia Mountains read 0.024 (real ~0.30), the Ganges plain 0.03–0.12 (real 1–2 m a year), Lhasa 0.003, the Himalayan crest 0.000. The ranges draw brown, the Ganges orange, and the glacier line lands on the plateau. The orographic strip that drains the air over high ground is the same lever that keeps Pangaea's interior dry, a trade the user chose (`audit_biomes.py`, 2026-08-09); a physical orographic mode that lifts moisture over ranges was built and measured (`render.OROG_MODE`), and it wets Pangaea's interior from 17% to 58% above 0.2, so it is not shipped. The fix that does not touch deep time is an observed present-day anchor (a precipitation climatology blended out over the first few tens of Myr, the delta method), which needs a dataset the repository does not hold.
 
 ---
 

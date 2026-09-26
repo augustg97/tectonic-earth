@@ -58,6 +58,83 @@ AREA_K = 0.55           # overall lake-size scale (tune abundance)
 # least this fraction of its own depth once it is this deep, independent of the
 # year's water budget. Shallow basins get NO floor and live or die by climate.
 DEEP_LO, DEEP_HI, DEEP_MAX = 90.0, 320.0, 0.60
+# ...but only where there is water to keep them: the floor is scaled by the
+# catchment's humidity index, full above this. A hyper-arid basin holds what its
+# water budget supports and no more -- without this a flat desert basin 130 m
+# deep was flooded to a tenth of its depth across 670,000 km2 at 150 Ma, and a
+# 500 m plateau hole in the +250 Myr belt, under 0.01 of rainfall, was a lake.
+HUM_DEEP = 0.30
+# AN OVERFLOWING BASIN IS BREACHED. Where the water budget tops the spill, the
+# outflow cuts down its outlet, and a keyframe is millions of years: a shallow
+# basin that overflows drains, and only a deep tectonic core keeps standing
+# water (Tanganyika, Baikal). Filling every such basin to its lip put the
+# wettest lowlands of every era under giant shallow lakes -- 845,000 km2 in the
+# Congo and 419,000 km2 in the Amazon at 5 Ma (median depth 21-36 m), 1.7
+# million km2 at 150 Ma -- exactly where the real rivers are strongest. The
+# present day ships real lake outlines and is unaffected.
+#
+# The breach is set by the DISCHARGE, not by overflowing alone: an outlet cuts
+# down in proportion to what flows through it, so a basin draining a continental
+# river incises fast while a rift lake's modest overflow does not. Measured as
+# the lake area the budget could support (inflow over evaporation, in cells of
+# ~380 km2): the Congo and Amazon basins at 5 Ma ~2,950, the +250 Myr lowland
+# lakes 1,340-3,710, against Tanganyika 160 and the East African soda lakes 265
+# (overflow ratio alone does not separate them: Amazon 2.2, the rift 1.6).
+BREACH_OVERFLOW = True
+BREACH_Q = 600.0
+
+# THE RECORD NAMES SOME BASINS AS LAKES, AND THERE IT OUTRANKS THE MODEL'S SKY.
+# The two rules above read the catchment's humidity from the climate solve, and
+# that solve runs dry over interiors (it is the same lever that keeps Pangaea a
+# desert, a trade the user chose). Where the geological record itself names a
+# lake -- a "lake" label, inside its own window, at its plate-tracked position
+# -- the basin under it is not asked whether the model thinks it is wet enough:
+# its deep floor is not scaled down and it is not breached. Measured when the
+# two rules landed, water under the record's own lake labels fell from 29
+# label-keyframes to 25 (Songliao at 110 and 135 Ma, the Jehol lakes at 130
+# and 135, Uinta at 50, Baikal at 30, Tanganyika at 10), every one of them a
+# basin the model called too dry to keep. This authors no lake: a basin the DEM
+# does not have still holds nothing. Reads the tracks from web/labels.json, so
+# the labels must be built before the lakes (build_webdata, then this).
+RECORD_R_DEG = 1.2
+_RECORD = None
+
+
+def _record_lakes():
+    global _RECORD
+    if _RECORD is None:
+        import json
+        _RECORD = []
+        p = os.path.join(os.path.dirname(__file__), "..", "web", "labels.json")
+        if os.path.exists(p):
+            for it in json.load(open(p)):
+                if it.get("t") == "lake":
+                    tr = it.get("tr") or [[0, it["lon"], it["lat"]]]
+                    _RECORD.append((min(it["a0"], it["a1"]), max(it["a0"], it["a1"]),
+                                    [(float(a), float(lo), float(la)) for a, lo, la in tr]))
+    return _RECORD
+
+
+def record_points(age):
+    """(lon, lat) of every record-named lake whose window holds this age, at its
+    tracked position then (tracks run from the present into the past)."""
+    pts = []
+    for a0, a1, tr in _record_lakes():
+        if not (a0 - 2.5 <= age <= a1 + 2.5):
+            continue
+        ages = [t[0] for t in tr]
+        if age <= ages[0]:
+            pts.append((tr[0][1], tr[0][2])); continue
+        for i in range(1, len(tr)):
+            if tr[i][0] >= age:
+                f = (age - tr[i - 1][0]) / max(tr[i][0] - tr[i - 1][0], 1e-6)
+                dl = ((tr[i][1] - tr[i - 1][1] + 540.0) % 360.0) - 180.0
+                pts.append((((tr[i - 1][1] + f * dl + 540.0) % 360.0) - 180.0,
+                            tr[i - 1][2] + f * (tr[i][2] - tr[i - 1][2])))
+                break
+        else:
+            pts.append((tr[-1][1], tr[-1][2]))
+    return pts
 
 # A few notable lakes sit in basins too shallow for the 20 km global DEM to
 # resolve (glacially scoured lows, chiefly), so they never emerge from the fill.
@@ -188,6 +265,21 @@ def lake_depth(Z, Rf, T, age=0.0):
     evap_b[1:nb + 1] = np.maximum(1e-3, nd_mean(evap, markers, labels))
     target = np.zeros(nb + 2)                            # lake area the budget supports
     target[1:nb + 1] = AREA_K * inflow[1:nb + 1] / evap_b[1:nb + 1]
+    hum_b = np.zeros(nb + 2, np.float32)                 # the catchment's humidity index
+    hum_b[1:nb + 1] = nd_mean(hum, catch, labels)
+    # basins the record names as lakes at this age (see RECORD_R_DEG above)
+    recorded = set()
+    rr = max(1, int(round(RECORD_R_DEG / 180.0 * h)))
+    for lon, lat in record_points(age):
+        y = int(np.clip((90.0 - lat) / 180.0 * h, 0, h - 1))
+        x = int(((lon + 180.0) / 360.0 * w)) % w
+        if T[y, x] < -10.0:        # a subglacial lake (Vostok) is under ice, not open water
+            continue
+        cols = np.arange(x - rr, x + rr + 1) % w
+        win = markers[max(0, y - rr):y + rr + 1][:, cols]
+        recorded.update(int(v) for v in np.unique(win) if 1 <= v <= nb)
+        if 1 <= catch[y, x] <= nb:
+            recorded.add(int(catch[y, x]))
 
     # Per basin, take the HIGHER of two water levels: the one the water budget
     # sustains against evaporation, and a deep-basin floor (permanent lakes) --
@@ -212,17 +304,29 @@ def lake_depth(Z, Rf, T, age=0.0):
         depth_basin = sp - floor
         # deep-basin floor: fill at least this fraction of the basin's depth
         deep_frac = DEEP_MAX * np.clip((depth_basin - DEEP_LO) / (DEEP_HI - DEEP_LO), 0.0, 1.0)
+        if b not in recorded:
+            deep_frac *= float(np.clip(hum_b[b] / HUM_DEEP, 0.0, 1.0))
         lvl_deep = floor + deep_frac * depth_basin
         # water-budget level: raise until submerged area == supported area
         lvl_bal = floor
+        cum = np.cumsum(ac)
         if target[b] > 0.0:
-            cum = np.cumsum(ac)
             k = min(int(np.searchsorted(cum, min(target[b], cum[-1]))), len(zc) - 1)
             lvl_bal = zc[k]
-        level[b] = min(max(lvl_bal, lvl_deep), sp)
+        below_spill = float(cum[min(int(np.searchsorted(zc, sp, side="right")), len(zc)) - 1]) if len(zc) else 0.0
+        if BREACH_OVERFLOW and b not in recorded and target[b] >= below_spill and target[b] >= BREACH_Q:
+            level[b] = min(lvl_deep, sp)          # overflowing: the outlet is cut, the deep core stays
+        else:
+            level[b] = min(max(lvl_bal, lvl_deep), sp)
 
     Lcell = level[flat].reshape(h, w)
-    depth = np.maximum(0.0, Lcell - Z)
+    # Depth against the SMOOTHED surface, not the 8-bit one: a lake floor is a
+    # few flat terraces a code apart (26 m at 350 m), and depth measured on them
+    # jumped a whole code at every terrace edge, so the shoreline was the terrace
+    # outline -- rectangular protrusions and stair-steps along the grid on every
+    # lowland lake. Against Zs the depth tapers across the edge and the shore
+    # follows a contour.
+    depth = np.maximum(0.0, Lcell - Zs)
     depth[Z < 0.0] = 0.0
     # keep a lake body if it is large enough OR deep enough
     lbl, nlab = cclabel(depth >= DMIN)
@@ -231,6 +335,12 @@ def lake_depth(Z, Rf, T, age=0.0):
         area = nd_sum(np.ones_like(depth), lbl, ids)
         dmax = nd_max(depth, lbl, ids)
         keep = np.concatenate([[False], (area >= MIN_AREA) | (dmax >= KEEP_DEEP)])
+        # ...or if the record names it: the size rule clears the DEM's speckle,
+        # and a lake the record names is not speckle at any size (Uinta at 50 Ma
+        # was 3 cells, Baikal at 30 Ma one: the lake's first, small stages)
+        if recorded:
+            on_rec = np.isin(catch, np.fromiter(recorded, np.int64)) & (lbl > 0)
+            keep[np.unique(lbl[on_rec])] = True
         depth[~keep[lbl]] = 0.0
     # notable lakes the global DEM can't resolve, added at their known basins
     depth = np.maximum(depth, seed_depth(Z, age))

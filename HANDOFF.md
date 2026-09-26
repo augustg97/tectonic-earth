@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,12 +10,43 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.10 mountains (the erosion relief), §5.1b the
-  future series (the collision zone), §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.38–7.42 are this round's; 7.30–7.37 the two before), §9 known limits.
+- **Read `README.md` first**: §2 working rules, §5.12 close zoom and colour, §5.10 mountains (the
+  erosion relief), §5.1b the future series (the collision zone, the future's names), §5.5 lakes,
+  §5.6 the biota subsystem, §6 the gate and the build commands, §7 traps (7.43–7.47 are this
+  round's; 7.38–7.42 and 7.30–7.37 the rounds before), §9 known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: mountains, third pass (3.14, 2026-09-25)
+## The latest round: close zoom, colour, lakes and the future's names (3.15, 2026-09-26)
+
+The user, on 3.14: "fix the blurry close zoom and the colours issues. And let's address the future
+era issues and fix the future labels".
+
+- **Close zoom (README 5.12, 7.43, 7.46).** `?show=15` at zoom 1.35 showed 5–50 km clouds of light
+  and shade over plains and mountains alike, from four terms that were not slopes: the detail
+  differenced 47 km apart, random-tilt grain at 44/16/6 km, shadowed faces clamped to one floor,
+  and sub-grid relief a fifth of real. Now: the detail's own slope over ~a pixel as the footprint
+  shrinks (`gNearW`; `?near=` `?nearK=`), the coarse grain stands down (`?ngC=` `?ngF=`), shadowed
+  land keeps 0.3 of the cosine against the smooth flank (`?shF=`, `nrmS`), the erosion relief's
+  sub-grid octaves start 1.5× and keep 0.78 (`?eroB=` `?eroR=`). Frame cost unchanged at the old
+  anti-alias ramp; `?eroFa=1.8&eroFb=3.6` draws the 3 km octave for +3.5 ms (not shipped).
+- **Colour (README 5.12, 7.44).** The prairie's rectangles were AVIF block edges read by `rug`
+  under a 350 m aridity-lowered treeline: decisions read `rugC` (1.5 codes), and the band a drought
+  lowered needs a range. Arid basin floors are pale (`?floor=`). BC's brown ranges, the orange
+  Ganges and Tibet's snow are the present-day rain field (README 9) and are NOT fixed.
+- **Lakes (README 5.5).** Overflow breaches by discharge (`BREACH_Q`), deep floors scale with the
+  catchment's humidity (`HUM_DEEP`), the record's lake labels keep their basins (`record_points`,
+  reads `web/labels.json`, so labels before lakes), shores against the σ-1 surface.
+- **The future's names (README 5.1b).** `build_webdata.future_label_pass` + `features.FUTURE_LABELS`
+  place every future name on the future terrain and window it to where it validates. Amasia and the
+  Pan-Asian Rift removed; Trans-Atlantic Belt dropped by the pass; cards say where this drawing
+  differs from Scotese 2018 and Farnsworth et al. (2023, not 2024). Two latent bugs it exposed:
+  `biota.label_point` read `tr[0]` as today (7.45), and the label-window audit read "survives to
+  the present" as "ends at 0 Ma".
+- **Three render audits had read August screenshots for seven weeks (7.47).** Re-shot, the Permian
+  desert check failed on a frame that sat on the temperate belt; the model's desert heart reads 0.01
+  green. `build_site` now re-takes stale shots before those audits run.
+
+## The round before: mountains, third pass (3.14, 2026-09-25)
 
 The user, on 3.13, with three Google Earth views (BC Coast Mountains and the Rockies, the Basin and
 Range, the Himalaya and Tibet): "add thrust-sheet structure so the ranges look more linear, and
@@ -164,14 +195,18 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260926-0235`**, release 3.14 (thrust sheets and the range scale;
-  belt lakes; a deterministic sea floor), commit `977ca9e8` (the record is the commit after it). Before it:
-  3.13, `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
-- Cache versions: `FIELD_V='20260925-sheets'`, `SHEET_V='20260925c'`, `IMAGERY_V='20260925c'`
+- Last live deploy: **`DATA_V=20260926-0618`**, release 3.15 (close zoom, colour, lakes, the
+  future's names). Before it: 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
+  `DATA_V=20260925-1925`, `8119fd30`; 3.12, `DATA_V=20260925-0752`, `08d2f435`.
+- The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
+  README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
+  desert heart (7.6E 23.4S); the old 2E 45S frame sat on the temperate belt.
+- Cache versions: `FIELD_V='20260926-lakes'`, `SHEET_V='20260926a'`, `IMAGERY_V='20260926a'`
   (in `web/app.js` AND `web/ambient.html`).
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
-- `audit_all.py --quick`: all validators at baseline. Biota: 14 hard checks at 0; parent-form
+- `audit_all.py --quick`: all validators at baseline (label windows 2: Gondwana, Kazakhstania, the
+  known pair; the audit now treats a block alive today as alive in the future). Biota: 14 hard checks at 0; parent-form
   drawings **0** (ratchet at 0); curated exceptions **12**. The frame gate is skipped under `--quick`.
 - Registry: **1,565 taxa** in 26 files; 744 illustrations shipped. ~560 taxa carry a box,
   avoid list, sliced latitude, dated habitat or block-level range. The curated record
@@ -358,11 +393,14 @@ Plus the standing ones: a process backgrounded with `&` inside a tool call dies 
    ages after the mirrored lists.
 4. **The future series' foreland fields are illustrative** (baked from synthesised belts). Fine
    as long as README §9 says so.
-5. **Mountains against the Google Earth references** (MODEL-GAPS, third pass, "Open"): crispness at
-   mid zoom (the real DEM's 10–20 km ranges render as soft blobs); tone (desert basin floors should
-   be the palest ground, humid ranges forested to the treeline); Tibet's snow is on the plateau
-   rather than the Himalayan front; the Altiplano's flat interior; the future's blocky lowland
-   lakes; dark bare-rock areas on present-day polar land.
+5. **The present-day rain anchor** (README 9, MODEL-GAPS 3.15 "Open"): BC's ranges brown, the
+   Ganges orange, Tibet's snow on the plateau -- the 0 Ma rain field's highland dry bias. The fix
+   that leaves Pangaea dry is an observed precipitation climatology at 0 Ma blended out over the
+   first tens of Myr (delta method). It needs a dataset download, which needs the user's go-ahead.
+6. **Mountains against the Google Earth references** (MODEL-GAPS 3.15 "Open"): the erosion
+   relief's herringbone regularity at close zoom; mid-zoom softness when a stepped-down governor
+   draws the 4096 sheets magnified; the Altiplano's flat interior; broad dark flanks on present-day
+   polar land.
 
 ## Commands to ship
 

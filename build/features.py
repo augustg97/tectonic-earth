@@ -161,18 +161,18 @@ def hotspots():
 # checks one against the other should not find two different answers.
 LABELS = [
     # ---------- present / Cenozoic ----------
-    ("continent", "North America", -100,  45,  -30,  150),
-    ("continent", "South America",  -60, -15,  -30, 110),
-    ("continent", "Africa",          20,   5,  -40, 150),
-    ("continent", "Eurasia",         90,  55,  -20,  250),
-    ("continent", "Australia",      135, -25,  -20,  45),
-    ("continent", "Antarctica",     135, -82,  -40, 160),
+    ("continent", "North America", -100,  45, -250,  150),
+    ("continent", "South America",  -60, -15, -250, 110),
+    ("continent", "Africa",          20,   5, -250, 150),
+    ("continent", "Eurasia",         90,  55, -250,  250),
+    ("continent", "Australia",      135, -25, -250,  45),
+    ("continent", "Antarctica",     135, -82, -250, 160),
     ("continent", "India",           78,  22,    0,  130),
-    ("ocean", "Pacific Ocean",     -150,   0,  -10, 160),
-    ("ocean", "Atlantic Ocean",     -30,  10,    0, 175),
-    ("ocean", "Indian Ocean",        75, -30,    0, 120),
+    ("ocean", "Pacific Ocean",     -150,   0,  -60, 160),
+    ("ocean", "Atlantic Ocean",     -30,  10, -250, 175),
+    ("ocean", "Indian Ocean",        75, -30, -250, 120),
     ("ocean", "Southern Ocean",       0, -62,    0,  30),
-    ("ocean", "Arctic Ocean",         0,  85,    0,  55),
+    ("ocean", "Arctic Ocean",         0,  85, -250,  55),
     ("sea", "Mediterranean",         18,  36,    0,  28),
     # (45,45) back-advected to 37 N at 34 Ma, which is inside the Alpine belt
     # rather than north of it. The Paratethys was the basin BEHIND the rising
@@ -180,7 +180,7 @@ LABELS = [
     # the Pannonian/Black Sea side instead of the Caspian, which drags it east
     # and south.
     ("sea", "Paratethys",            32,  46,   5,  34),
-    ("orogen", "Himalaya",           85,  30,    0,  55),
+    ("orogen", "Himalaya",           85,  30,  -95,  55),
     ("orogen", "Andes",             -70, -20,    0,  60),
     ("orogen", "Rocky Mountains",  -112,  43,    0,  60),
     ("orogen", "Alps",               10,  46,    0,  35),
@@ -283,7 +283,7 @@ LABELS = [
     # suture its card promises. A name reading "sea" over dry mountains is the
     # app contradicting itself, so the window ends where the water does.
     ("sea", "Mediterranean (closing)", 18, 36, -80,  -20),
-    ("orogen", "Afro-European Belt", 20,  34, -200,  -50),
+    ("orogen", "Afro-European Belt", 20,  34, -250,  -25),
     ("orogen", "Neo-Himalaya",       60,  25, -250, -100),
     ("orogen", "Trans-Atlantic Belt", 0,  25, -250, -140),
     # ---------- filling gaps the era audit turned up ----------
@@ -343,7 +343,6 @@ LABELS = [
     ("continent", "West Africa Craton", -12, -5, 545, 1000),
     ("continent", "Australia-East Antarctica", 130, -30, 700, 1000),
     ("continent", "Sao Francisco Craton", -42, -13, 545, 950),
-    ("continent", "Amasia", 70, 75, -250, -150),
     # -- desert --
     ("desert", "Rotliegend Desert", 9.5, 52.8, 288, 299),   # the Lower Saxony basin
     ("desert", "Coconino Erg", -105, 6, 272, 285),
@@ -494,7 +493,7 @@ LABELS = [
     ("orogen", "Cape Fold Belt", 21, -33, 0, 290),
     ("orogen", "Qinling-Dabie Belt", 110, 25, 0, 250),
     ("orogen", "Sierra Nevada Arc", -119, 37, 0, 160),
-    ("orogen", "Australasian Belt", 128, 3, -80, -10),
+    ("orogen", "Australasian Belt", 128, 3, -250, -10),
     # -- plateau --
     ("plateau", "Tibetan Plateau", 88, 33, 0, 40),
     ("plateau", "Colorado Plateau", -111, 37, 0, 30),
@@ -522,7 +521,6 @@ LABELS = [
     ("rift", "East African Rift", 36, 2, 0, 30),
     ("rift", "Red Sea Rift", 38, 20, 0, 25),
     ("rift", "Baikal Rift", 108, 53, 0, 25),
-    ("rift", "Pan-Asian Rift", 80, 55, -90, -15),
     # -- sea --
     ("sea", "Bitter Springs Sea", 118, -15, 780, 812),
     ("sea", "Nama Sea", 16, -35, 538, 551),
@@ -721,6 +719,42 @@ LABELS = [
     ("region", "Sahul", 140, -12, 0.01, 2.6),
     ("region", "Doggerland", 3, 55, 0.008, 0.02),
 ]
+
+
+# ---------- the future: how each name finds its place ----------
+# Every name visible past the present is placed from the SAME kinematics that
+# built the future terrain (build_fields.future_grid via future_motion), then
+# checked against that terrain at every keyframe; its window is trimmed to the
+# ages where the ground actually carries it (build_webdata.future_label_pass).
+# Kinds:
+#   belt      the collision zone of this pair of plate groups: its largest
+#             connected zone, on its top-quartile high ground; a name only while
+#             that ground stands above 1.5 km
+#   ride      a present-day crust anchor carried forward on its own plate
+#   landmass  the largest landmass, once it holds this share of all land
+#   interior  the dry point of the largest landmass farthest from any coast
+#   between   present-day margins, each carried on its own plate: the ocean is
+#             the gap BETWEEN them, so its name sits in the water nearest their
+#             centroid, while that water is still open ocean
+# Names not listed here that reach into the future (continents, seas with
+# tracks) keep their tracks and are only checked and trimmed.
+FUTURE_LABELS = {
+    "Neo-Himalaya":        {"belt": ("EURASIA", "INDIA")},
+    "Afro-European Belt":  {"belt": ("AFRICA", "EURASIA")},
+    "Australasian Belt":   {"belt": ("AUSTRALIA", "EURASIA")},
+    "Trans-Atlantic Belt": {"belt": ("AFRICA", "NORTH_AMERICA")},
+    "Himalaya":            {"ride": (85.0, 29.5), "mountain": True},
+    "Somalia":             {"ride": (46.0, 6.0)},
+    "Baja Island":         {"ride": (-113.0, 28.0)},
+    "Antarctic Ice Sheet": {"ride": (20.0, -84.0)},
+    "Pangaea Proxima":     {"landmass": 0.60},
+    "Proxima Interior Desert": {"interior": 0.25},
+    "Atlantic Ocean":      {"between": [(-70.0, 40.0), (-40.0, -8.0), (-15.0, 25.0), (10.0, 0.0)]},
+    "Arctic Ocean":        {"between": [(-100.0, 72.0), (-40.0, 78.0), (100.0, 75.0), (40.0, 72.0)]},
+    # "inland" once the sea is cut off from the world ocean: its water body is
+    # at most this share of all the water on the planet
+    "Pangaea Proxima Inland Sea": {"enclosed": 0.05},
+}
 
 
 def labels():
@@ -1098,7 +1132,9 @@ DESCRIPTIONS = {
  "Iapetus Ocean": "The ocean between Laurentia and Baltica whose closure raised the Caledonian and Appalachian mountains — a mountain belt now split across the Atlantic.",
  "Rheic Ocean": "Opened behind Avalonia as it rifted from Gondwana, then closed as Gondwana and Laurussia converged to finish Pangaea.",
  "Mirovia": "The ocean encircling Rodinia. Its name means 'global' — beyond the supercontinent there was little else.",
- "Neo-Panthalassa": "The projected world-ocean on the far side of the next supercontinent, as the Atlantic closes and the Pacific's descendants take over.",
+ "Neo-Panthalassa": "The projected world-ocean on the far side of the next supercontinent, the "
+  "Pacific's descendant as the continents gather on the other side of the globe. Scotese "
+  "calls it the Propanthalassic Ocean.",
  # seas
  "Mediterranean": "The last surviving scrap of Tethys, squeezed between Africa and Europe and slowly being closed by their convergence.",
  "Mediterranean (closing)": "Africa's northward push is shutting this basin. In the projection it becomes a suture with mountains, not a sea.",
@@ -1112,20 +1148,21 @@ DESCRIPTIONS = {
  "Pangaea": "The last true supercontinent: nearly all land fused into one mass reaching pole to pole. Its interior lay so far from any ocean that it became one of the most arid landscapes in Earth's history.",
  # WHOSE future this is, which the card did not say. It matters: four are
  # published and they disagree about which ocean closes.
- "Pangaea Proxima": "A projected future supercontinent, assembled as the Atlantic closes "
-  "and the continents crowd back together around Africa.\n\n"
+ "Pangaea Proxima": "A projected future supercontinent, assembled as the continents crowd back "
+  "together around Africa.\n\n"
   "This is one of four published futures, not a forecast. It follows C. R. Scotese's "
-  "Pangaea Ultima reconstruction, in which the Atlantic closes again \u2014 introversion \u2014 "
-  "and it is the one drawn here because Farnsworth et al. (2024) modelled the climate on "
-  "exactly this geometry, so the map and the temperature readout agree with each other. "
-  "The alternatives are Novopangaea (the Pacific closes instead), Aurica (both close) and "
-  "Amasia (everything gathers over the Arctic). Beyond about 50 million years, plate "
-  "motions cannot be projected, only reasoned about.\n\n"
-  "One honest limit on the drawing: this series rotates today's topography and has no "
-  "mechanism to raise a mountain range, so the collisional belt Scotese draws between "
-  "Africa and Eurasia cannot appear here. Land above 2 km is flat across the whole "
-  "future series \u2014 8.7 to 8.6 million km\u00b2 \u2014 where a real assembly would be building "
-  "a Himalaya.",
+  "Pangaea Proxima (first named Pangaea Ultima), in which the Atlantic closes again \u2014 "
+  "introversion \u2014 and it is the one drawn here because Farnsworth et al. (2023) modelled "
+  "the climate on this geometry, so the map and the temperature readout agree with each "
+  "other. The alternatives are Novopangaea (the Pacific closes instead), Aurica (both "
+  "close) and Amasia (everything gathers over the Arctic). Beyond about 50 million years, "
+  "plate motions cannot be projected, only reasoned about.\n\n"
+  "What this drawing does: today's continents are turned rigidly toward Scotese's "
+  "arrangement and packed until they stop overlapping, and mountains rise and wear down "
+  "where they collide. What it does not: the Americas come to within about a thousand "
+  "kilometres of West Africa by +250 Myr without welding to it, so a remnant Atlantic "
+  "survives that Scotese closes, and India slides west along Eurasia instead of staying "
+  "fixed to it.",
  "Rodinia": "A Precambrian supercontinent of the Neoproterozoic world, assembled around a Laurentian core roughly a billion years ago. Its breakup may have helped trigger the Cryogenian glaciations.",
  "Pannotia": "A short-lived latest-Precambrian supercontinent, already coming apart as the Cambrian explosion began.",
  "Gondwana": "The southern supercontinent — South America, Africa, India, Australia and Antarctica as one landmass — which drifted across the South Pole and carried ice sheets with it.",
@@ -1162,7 +1199,10 @@ DESCRIPTIONS = {
  "Pan-African Belt": "The web of sutures created as Gondwana welded together, running through Africa, Arabia and Brazil.",
  "Grenville Belt": "A billion-year-old collisional belt marking Rodinia's assembly, traceable from Mexico through eastern Canada to Scandinavia.",
  "Afro-European Belt": "In the projection, the mountain chain thrown up where Africa finishes closing the Mediterranean against Europe.",
- "Neo-Himalaya": "The projected continuation of Himalayan building as the remaining Tethyan gap is consumed.",
+ "Neo-Himalaya": "Where India's crust stays jammed against Eurasia's southern margin in this "
+  "projection -- but sliding west along it toward Arabia, so the belt of thickened crust "
+  "follows the contact west while the old Himalaya behind it wears down. Scotese's "
+  "reconstruction has the collision simply stall; this drawing keeps it moving.",
  "Trans-Atlantic Belt": "The suture in the projection where the Americas rejoin Africa and Europe, closing the Atlantic entirely.",
 
  # ---- descriptions for the imported features ----
@@ -1179,9 +1219,6 @@ DESCRIPTIONS = {
  "Altiplano": "The world's second-highest plateau, lifted between two branches of the Andes as the "
   "crust thickened above the subducting Nazca plate. Its uplift began around 25 million "
   "years ago.",
- "Amasia": "A rival forecast: instead of the Atlantic closing, the Pacific does, and the northern "
-  "continents crowd together over the Arctic. Which future happens depends on whether the "
-  "Atlantic develops subduction zones.",
  "Amazon Rainforest": "The largest rainforest on Earth, established once the Andes rose high enough to turn "
   "the Amazon's drainage eastward and drain the old Pebas wetland.",
  "Amundsen Basin": "A broad epicratonic sea on Rodinia's northwestern margin, whose Shaler Supergroup "
@@ -1259,7 +1296,9 @@ DESCRIPTIONS = {
   "Namibia.",
  "East African Ocean": "In the projection, the East African Rift finishes its work: the Somali block tears "
   "free and a new ocean floods the gap. Basins that are dry rift valleys today become "
-  "abyssal plains.",
+  "abyssal plains. "
+  "This is the older projection; Scotese's 2018 atlas now treats the East African Rift as "
+  "a failed rift that Africa's push into Eurasia squeezes shut.",
  "East African Orogen": "The great north-south suture of Gondwana's assembly, running from Arabia down through "
   "East Africa to Antarctica, formed as the Mozambique Ocean closed.",
  "East African Rift": "A continent splitting in slow motion. The rift floor drops in a chain of long lakes "
@@ -1470,12 +1509,10 @@ DESCRIPTIONS = {
   "walked out onto land.",
  "Oslo Rift": "A Permian rift through southern Norway, filled with lava and coarse alkaline "
   "intrusions. It is the type locality for a whole family of igneous rocks.",
- "Pan-Asian Rift": "A projected rift reopening the old suture that joined Europe to Asia. In the Aurica "
-  "model it becomes an ocean and Asia splits in two \u2014 one of several competing futures, "
-  "and far from certain.",
  "Pangaea Proxima Inland Sea": "A remnant sea trapped inside the next supercontinent as the Indian Ocean closes \u2014 the "
   "deepest scar in an otherwise fused landmass, and the only water for thousands of "
-  "kilometres.",
+  "kilometres. Named here once it is cut off from the world ocean; Scotese calls it the "
+  "Medi-Pangean Sea.",
  "Pebas Mega-Wetland": "Before the Amazon ran east, western Amazonia was the Pebas system: around a million square kilometres of shallow lake, swamp and slow river, fed by the rising Andes and draining north to the Caribbean, with tides reaching far inland and the sea flooding in from time to time. It lasted through the Miocene, roughly 21 to 8 million years ago, until Andean uplift finally tipped the continent the other way and set the modern east-flowing Amazon.\n\nIt was the richest freshwater ecosystem South America has known. Its endemic snails and mussels radiated into hundreds of species found nowhere else, and its water held giants: Purussaurus, a caiman twelve metres long, the shovel-jawed Mourasuchus, slender fish-eating gharials, and Stupendemys, the largest freshwater turtle that ever lived, its shell more than three metres across.",
  "Permian Basin": "A tropical sea that slowly strangled. Through the Permian a deep basin "
   "on Pangaea's western margin was progressively cut off from the open ocean by its own "
@@ -2449,6 +2486,51 @@ PHASES = {
               "fragment from the African mainland."),
  ],
 }
+
+
+# The future: what each name that lives on past the present is doing there, in
+# THIS drawing (build_fields.future_grid), which the future label pass follows.
+_FUTURE_PHASES = {
+    "Atlantic Ocean": [(-250, -1,
+        "Past the present, subduction starts along the Americas' eastern coasts and the Atlantic "
+        "stops widening. In this drawing it narrows as the Americas swing back toward Africa, but a "
+        "remnant more than a thousand kilometres wide survives at +250 Myr; Scotese's reconstruction "
+        "closes it to a narrow, stagnant 'Atlantic Sea'.")],
+    "Indian Ocean": [(-250, -1,
+        "Past the present it shrinks as Antarctica and Australia drive north into it. Its last part is "
+        "trapped inside the assembling supercontinent, and once that water is cut off from the world "
+        "ocean the name hands over to the Pangaea Proxima Inland Sea.")],
+    "Arctic Ocean": [(-250, -1,
+        "As North America and Eurasia swing south toward the equator in this projection, the Arctic "
+        "basin opens out into the world ocean over the pole.")],
+    "Pacific Ocean": [(-60, -1,
+        "Past the present the Pacific keeps its ring of subduction while the continents gather on the "
+        "far side of the globe; from +60 Myr it is named Neo-Panthalassa.")],
+    "Africa": [(-250, -1,
+        "The fixed point of the projection: the other continents converge on it, and by the end of the "
+        "series it lies at the heart of Pangaea Proxima.")],
+    "Eurasia": [(-250, -1,
+        "Swings south toward the equator, closing the Mediterranean against Africa and taking the "
+        "Australian collision on its south-eastern flank.")],
+    "North America": [(-250, -1,
+        "Turns back toward Africa as subduction consumes the Atlantic. In this drawing it ends about a "
+        "thousand kilometres short of West Africa; in Scotese's reconstruction Newfoundland and "
+        "Greenland collide with it.")],
+    "South America": [(-250, -1,
+        "Swings south and east round the southern tip of Africa and into Antarctica, raising a new belt "
+        "where the two meet.")],
+    "Australia": [(-250, -1,
+        "Collides with Eurasia's south-eastern margin -- the Australasian Belt -- and later with "
+        "Antarctica as the Indian Ocean closes.")],
+    "Antarctica": [(-250, -1,
+        "Leaves the pole in this projection, losing its ice sheet early, and drifts north into temperate "
+        "latitudes to dock against Africa, Australia and South America.")],
+    "Himalaya": [(-95, -1,
+        "Past the present the range starts to wear down. India's push continues only as it slides west "
+        "along Eurasia's margin, and the belt that keeps growing, farther west, is the Neo-Himalaya.")],
+}
+for _n, _ph in _FUTURE_PHASES.items():
+    PHASES.setdefault(_n, []).extend(_ph)
 
 
 def phases():

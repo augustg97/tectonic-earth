@@ -318,7 +318,7 @@ def export(age, Z_hi, z_for_climate, tag):
 #
 # RE-AIMED 2026-07-27 against the reconstruction this future is supposed to be.
 # Measured as bearings from Africa at +250 Myr, against Scotese's Pangaea Ultima
-# -- the geometry Farnsworth et al. (2024) modelled the climate on, which is why
+# -- the geometry Farnsworth et al. (2023) modelled the climate on, which is why
 # it is the one drawn here:
 #
 #                     was    now   published

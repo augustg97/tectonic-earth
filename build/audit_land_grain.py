@@ -78,6 +78,9 @@ ZOOM = 1.4
 KMPX = 2.0 * 6.30 * 111.0 / 760.0
 # (name, shot, lon, lat). Ruggedness is READ FROM THE FIELD at run time, never
 # hard-coded, so the ranking cannot go stale against a re-bake.
+# (name, lon, lat, age, zoom) -- re-taken by build_site when stale (see audit_deeptime)
+SHOTS = [("gl_alpsC", 8.0, 46.5, 0, 1.4), ("gl_wsibC", 68.0, 60.0, 0, 1.4),
+         ("gl_amazC", -60.0, -3.0, 0, 1.4), ("gl_sahfC", 10.0, 22.0, 0, 1.4)]
 SITES = [("Alps", "gl_alpsC", 8.0, 46.5),
          ("W Siberia", "gl_wsibC", 68.0, 60.0),
          ("Amazon", "gl_amazC", -60.0, -3.0),

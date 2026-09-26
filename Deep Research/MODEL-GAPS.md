@@ -8202,3 +8202,60 @@ sand sea lies below ~1.5 km).
 - *Tibet* renders with broad snow on the plateau interior and a dark snowless Himalayan front, the
   reverse of the reference; and present-day polar land shows large dark bare-rock areas.
 - *The Altiplano* is too ridged: its flat interior between the cordilleras is not modelled.
+
+## THE CRISPNESS AND COLOUR ROUND (2026-09-26, 3.15): clouds that belonged to no hill, codec blocks read as relief, and a future named where it is
+
+The user, on 3.14 live: fix the blurry close zoom and the colours; address the future era's issues
+and fix the future labels.
+
+**The blur was four shading terms that were not slopes (README 5.12, 7.43).** Drawn with the colour
+out (`?show=15`) at zoom 1.35, the land was 5-50 km clouds of light and shade over the Po plain as
+over the Alps. (1) The land gradient differenced base AND detail over +-23.5 km -- for the detail's
+fine octaves, two unrelated noise samples; (2) the land grain was independent random tilts at 44/16/6
+km; (3) every face past ~51 degrees from the light shaded the floor; (4) the erosion relief below the
+grid was a fifth of real (the 6 km octave +-60 m in the Alps). At close zoom the far taps now read
+the base only and the detail joins through its own slope over ~a pixel; the grain's coarse octaves
+stand down; shadowed faces keep 0.3 of the cosine measured against the smooth flank (against zero,
+east Baffin went dark as a slab: pixels under 90 went 0.1 -> 4%); the sub-grid octaves start 1.5x
+higher and keep 0.78 per octave. A set-inside-one-branch weight left the Arctic untouched until it
+moved before the branch (7.46). Cost: none at the old anti-alias ramp (14.8 against 14.7 ms, zoom
+1.35, 2560x1440, M5 Ultra); the relaxed ramp that draws the 3 km octave cost +3.5 ms and is off.
+
+**The prairie's blocks were the elevation codec (README 7.44).** Step energy on 16-texel block
+boundaries 0.96 codes against 0.31 inside (3.1x; 2.0x at 8), `rug` read it, and at the prairie's
+350 m aridity-lowered treeline the bare-rock gate drew alpine scree in rectangles. Decisions by
+relief read `rugC` (1.5 codes allowed); a drought-lowered treeline's band needs a range's relief.
+Forcing rug to zero in the colour block removed the blocks entirely, which is how the term was
+found. Lossless elevation is 5.2x the bytes (about +200 MB).
+
+**Pale floors.** Flat arid ground below the mean of the +-137 km taps takes a pale alluvium, paler
+toward a playa: the Dasht-e Kavir and the Lut read cream between dark ranges, the Great Basin
+floors lift.
+
+**Lakes (README 5.5).** Overflow breaches when the budget supports >= 600 cells (the Congo and Amazon
+5 Ma shallow lakes, the future's blotchy lowland lakes); a deep floor scales with catchment humidity
+(desert basins); the record's own lake labels keep their basins' deep floor and small bodies (water
+under them 29 -> 25 -> 28 label-keyframes; Pebas newly wet). Shores against the smoothed surface.
+Lake cover roughly halves (+250 Myr 0.41 -> 0.17% of cells).
+
+**Future names (README 5.1b).** `future_label_pass` places every future name on the future terrain
+(belt, ride, landmass, interior, between, enclosed) and shows it only while it validates; the
+Trans-Atlantic Belt is dropped (the Americas stop ~1,000 km short), Amasia and the Pan-Asian Rift are
+gone, the Inland Sea is named from +230 when it closes. The pass exposed `biota.label_point` reading
+`tr[0]` as today (README 7.45) and the label-window audit reading "survives to the present" as
+"ends at 0 Ma" (it also matched "Indian Ocean" to the India craton); all three fixed.
+
+**Open:**
+- *The present-day rain field (README 9).* BC's ranges brown, the Ganges orange, Tibet's snow on the
+  plateau: the 0 Ma field reads 0.024 over the Columbia Mountains, 0.000 on the Himalayan crest.
+  Only an observed anchor (a present-day precipitation climatology, blended out over the first tens
+  of Myr) fixes it without wetting Pangaea; it needs a dataset the repository does not hold.
+- *Mid-zoom softness on a stepped-down GPU.* When the governor steps the render scale down, the
+  sheets engage from a quarter texel a pixel, so mid zoom can show a 4096 sheet (9.8 km a texel)
+  magnified up to 4x; crispness there is the sheet's, not the shader's.
+- *The erosion relief's regularity.* At close zoom its gullies read as a herringbone of similar
+  width and spacing, strongest at +250 Myr and 300 Ma; real dissection is dendritic.
+- *Present-day polar land* still shows broad dark flanks where a whole slope faces away from the
+  polar frame's light (east Baffin); unchanged by this round, by construction.
+- *The future's geography*: the Atlantic never closes and India slides west along Eurasia; the
+  contact-packing and docking prototypes did not converge (scratch only). The names now say so.

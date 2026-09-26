@@ -1034,6 +1034,351 @@ def extend_tracks_into_future(labels):
     return n
 
 
+# ---------- the future pass ----------
+# Every name visible past the present, placed from the kinematics that built the
+# future terrain and checked against that terrain at every keyframe. See
+# features.FUTURE_LABELS for the kinds. WHY: the future-only names were static
+# coordinates authored for a generic Pangaea Proxima story, and the synthesised
+# motion is not that story in detail -- India slides west along Eurasia instead
+# of colliding again, the Americas close to within ~10 degrees of Africa rather
+# than welding to it -- so "Trans-Atlantic Belt" stood in open ocean, "Neo-
+# Himalaya" on a plain 20 degrees from any mountain, and "Amasia" (a rival
+# scenario this map does not draw) on the Arctic abyss. A name has to follow the
+# thing it names, and exist only while that thing does.
+_FUT_CTX = {}
+FUT_BELT_MIN_CELLS = 100      # a zone smaller than this (0.5 deg cells) is a contact, not a belt
+FUT_BELT_P90 = 1500.0         # ...and a belt is a name only while its high ground stands this high
+FUT_OPEN_OCEAN = 0.60         # water fraction of a ~5 deg box for "open ocean"
+
+
+def _future_context(key):
+    """Future keyframe `key` (< 0) on a 0.5 degree grid: elevation (raw and
+    ~1 degree smoothed), land, rainfall, landmass labels (merged across the
+    antimeridian) and which plate group's crust each cell carries."""
+    if key in _FUT_CTX:
+        return _FUT_CTX[key]
+    import numpy as np
+    from PIL import Image
+    from scipy.ndimage import gaussian_filter, label as cclabel
+    import future_motion as FM
+    import build_fields as BF
+    import build_synthetic as BS
+    z = elev_grid(key)
+    if z is None:
+        _FUT_CTX[key] = None
+        return None
+    ny, nx = z.shape
+    zs = gaussian_filter(z, 1.0, mode=("nearest", "wrap"))
+    land = z > 0.0
+    rp = os.path.join(WEB, "fields", "fut_%04d_r.webp" % abs(key))
+    rain = (np.asarray(Image.open(rp).convert("L").resize((nx, ny), Image.BILINEAR), np.float32)
+            / 255.0 * 1.3) if os.path.exists(rp) else np.ones_like(z)
+    lab, n = cclabel(land)
+    for y in range(ny):                      # one landmass across the antimeridian
+        a, b = lab[y, 0], lab[y, -1]
+        if a and b and a != b:
+            lab[lab == b] = a
+    lat = 90.0 - (np.arange(ny) + 0.5) / ny * 180.0
+    lon = (np.arange(nx) + 0.5) / nx * 360.0 - 180.0
+    LON, LAT = np.meshgrid(lon, lat)
+    area = np.cos(np.radians(LAT))
+    ar = np.bincount(lab.ravel(), weights=area.ravel())
+    ar[0] = 0.0
+    big = int(np.argmax(ar))
+    FM._ready()
+    M = FM._MASK
+    gh, gw = M.shape
+    T = BS.unit(LON.ravel(), LAT.ravel())
+    crust = {}
+    for i, g in enumerate(FM._NAMES):
+        if g not in FM._ROT:
+            continue
+        Rm = BF.axis_angle_scale(FM._ROT[g], min(1.0, abs(key) / FM.SPAN_MYR))
+        S = Rm.T @ T
+        slat = np.degrees(np.arcsin(np.clip(S[2], -1, 1)))
+        slon = np.degrees(np.arctan2(S[1], S[0]))
+        yy = np.clip(((90 - slat) / 180 * gh).astype(int), 0, gh - 1)
+        xx = ((slon + 180) / 360 * gw).astype(int) % gw
+        crust[g] = (M[yy, xx] == i).reshape(ny, nx)
+    ctx = dict(z=z, zs=zs, land=land, rain=rain, lab=lab, big=big,
+               share=float(ar[big] / max(ar.sum(), 1e-9)), LON=LON, LAT=LAT,
+               area=area, crust=crust)
+    _FUT_CTX[key] = ctx
+    return ctx
+
+
+def _ll_mean(lons, lats, w=None):
+    import numpy as np
+    la, lo = np.radians(lats), np.radians(lons)
+    v = np.stack([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
+    if w is not None:
+        v = v * w
+    m = v.sum(axis=1)
+    m /= max(np.linalg.norm(m), 1e-12)
+    return (math.degrees(math.atan2(m[1], m[0])), math.degrees(math.asin(max(-1.0, min(1.0, m[2])))))
+
+
+def _nearest_of(mask, ctx, lon, lat):
+    import numpy as np
+    if not mask.any():
+        return None
+    return _nearest_cell((ctx["LON"][mask], ctx["LAT"][mask]), lon, lat)
+
+
+def _fut_belt(ctx, a, b):
+    import numpy as np
+    from scipy.ndimage import maximum_filter, label as cclabel
+    cr = ctx["crust"]
+    if a not in cr or b not in cr:
+        return None
+    land = ctx["land"]
+
+    def main_body(m):
+        # a SUTURE is where two continents' main bodies meet: an island or a
+        # stray fragment of one group's crust lying near the other's coast is
+        # not a collision belt (at +150 Myr one such speck put "Trans-Atlantic
+        # Belt" in the middle of a still-wide-open Atlantic)
+        lab, n = cclabel(m)
+        if n == 0:
+            return m
+        for y in range(m.shape[0]):
+            p_, q_ = lab[y, 0], lab[y, -1]
+            if p_ and q_ and p_ != q_:
+                lab[lab == q_] = p_
+        sz = np.bincount(lab.ravel())
+        sz[0] = 0
+        return lab == int(np.argmax(sz))
+
+    na = maximum_filter(main_body(cr[a] & land).astype(np.uint8), size=9, mode=("nearest", "wrap")) > 0
+    nb = maximum_filter(main_body(cr[b] & land).astype(np.uint8), size=9, mode=("nearest", "wrap")) > 0
+    zone = na & nb & land
+    if zone.sum() < FUT_BELT_MIN_CELLS:
+        return None
+    lab, n = cclabel(zone)
+    comp = lab == (int(np.argmax(np.bincount(lab.ravel())[1:])) + 1)
+    if comp.sum() < FUT_BELT_MIN_CELLS:
+        return None
+    zz = ctx["zs"][comp]
+    if float(np.percentile(zz, 90)) < FUT_BELT_P90:
+        return None
+    top = comp & (ctx["zs"] >= np.percentile(zz, 75))
+    c = _ll_mean(ctx["LON"][top], ctx["LAT"][top], ctx["area"][top])
+    q = _nearest_of(top, ctx, c[0], c[1])
+    return (q[0], q[1]) if q else None
+
+
+def _fut_landmass(ctx, share):
+    if ctx["share"] < share:
+        return None
+    L = ctx["lab"] == ctx["big"]
+    c = _ll_mean(ctx["LON"][L], ctx["LAT"][L], ctx["area"][L])
+    q = _nearest_of(L, ctx, c[0], c[1])
+    return (q[0], q[1]) if q else None
+
+
+def _fut_interior(ctx, max_rain):
+    import numpy as np
+    from scipy.ndimage import distance_transform_edt
+    L = ctx["lab"] == ctx["big"]
+    if ctx["share"] < 0.5:
+        return None
+    nx = L.shape[1]
+    pad = np.concatenate([L[:, -nx // 2:], L, L[:, :nx // 2]], axis=1)
+    d = distance_transform_edt(pad)[:, nx // 2: nx // 2 + nx] * (111.2 * 180.0 / L.shape[0])
+    cand = L & (ctx["rain"] <= max_rain)
+    if not cand.any():
+        cand = L
+    k = int(np.argmax(np.where(cand, d, -1.0)))
+    y, x = divmod(k, nx)
+    if d[y, x] < 600.0:
+        return None
+    return (float(ctx["LON"][y, x]), float(ctx["LAT"][y, x]))
+
+
+def _fut_land(ctx, lon, lat, reach=6.0, mountain=False):
+    """The point, if it is solidly on land (and high, for a range), else the
+    nearest such point within `reach` degrees, else None."""
+    import numpy as np
+    from scipy.ndimage import uniform_filter
+    land = ctx["land"]
+    solid = uniform_filter(land.astype(np.float32), size=5, mode=("nearest", "wrap")) >= 0.65
+    ok = solid & land
+    if mountain:
+        ok &= ctx["zs"] >= FUT_BELT_P90
+    q = _nearest_of(ok, ctx, lon, lat)
+    if q is None or q[2] > reach:
+        return None
+    return (q[0], q[1])
+
+
+# Basins the reconstruction CLOSES: their name must not be snapped to whatever
+# water is left, it ends where its own water ends (cf. NO_WATER_SNAP below).
+FUT_NO_SNAP = {"Mediterranean (closing)"}
+
+
+def _fut_water(key, ctx, lon, lat, prev, need_open, strict=False):
+    import numpy as np
+    if strict:
+        z = ctx["z"]
+        ny, nx = z.shape
+        y = int(np.clip((90.0 - lat) / 180.0 * ny, 0, ny - 1))
+        x = int((lon + 180.0) / 360.0 * nx) % nx
+        box = z[max(0, y - 1):y + 2][:, [(x + d) % nx for d in (-1, 0, 1)]]
+        return (lon, lat) if float((box < 0).mean()) >= 0.5 else None
+    w = nearest_water(key, lon, lat, prefer=prev)
+    if w is None:
+        return None
+    # a sea's name may nudge onto its water, not hop to the next sea over
+    if _arc(lon, lat, w[0], w[1]) > (15.0 if need_open else 8.0):
+        return None
+    if need_open:
+        z = ctx["z"]
+        ny, nx = z.shape
+        y = int(np.clip((90.0 - w[1]) / 180.0 * ny, 0, ny - 1))
+        x = int((w[0] + 180.0) / 360.0 * nx) % nx
+        k = 5
+        cols = [(x + d) % nx for d in range(-k, k + 1)]
+        box = z[max(0, y - k):y + k + 1][:, cols]
+        if float((box < 0).mean()) < FUT_OPEN_OCEAN:
+            return None
+    return w
+
+
+def _fut_enclosed(ctx, lon, lat, max_share):
+    """Is the water body at this point a sea cut off from the world ocean?"""
+    import numpy as np
+    from scipy.ndimage import label as cclabel
+    if "wlab" not in ctx:
+        water = ctx["z"] < 0
+        wl, n = cclabel(water)
+        for y in range(water.shape[0]):
+            p_, q_ = wl[y, 0], wl[y, -1]
+            if p_ and q_ and p_ != q_:
+                wl[wl == q_] = p_
+        ctx["wlab"] = wl
+        ctx["wart"] = np.bincount(wl.ravel(), weights=ctx["area"].ravel())
+    wl = ctx["wlab"]
+    ny, nx = wl.shape
+    y = int(np.clip((90.0 - lat) / 180.0 * ny, 0, ny - 1))
+    x = int((lon + 180.0) / 360.0 * nx) % nx
+    k = wl[y, x]
+    if k == 0:
+        return False
+    tot = ctx["wart"][1:].sum()
+    return ctx["wart"][k] / max(tot, 1e-9) <= max_share
+
+
+def future_label_pass(out):
+    """Place, check and trim every label whose window reaches past the present."""
+    import future_motion as FM
+    spec_all = dict(getattr(features, "FUTURE_LABELS", {}))
+    water_specs = dict(getattr(features, "COMPOSITE_WATER", {}))
+    keys = list(range(-FUTURE_STEP, -251, -FUTURE_STEP))
+    report = []
+    for l in out:
+        lo_w, hi_w = min(l["a0"], l["a1"]), max(l["a0"], l["a1"])
+        if lo_w >= 0:
+            continue
+        spec = spec_all.get(l["n"], {})
+        land_kind = l["t"] not in ("sea", "ocean")
+        tr = sorted(l.get("tr") or [], key=lambda t: t[0])
+        past = [t for t in tr if t[0] >= 0]
+        fut_old = {int(round(t[0])): (t[1], t[2]) for t in tr if t[0] < 0}
+        young = past[0] if past else None
+        margins = None
+        if "between" in spec:
+            margins = spec["between"]
+        elif not land_kind and l["n"] in water_specs and "modern" in water_specs[l["n"]]:
+            margins = water_specs[l["n"]]["modern"]
+        pts, prev = {}, None
+        for key in keys:
+            if key < lo_w:
+                break
+            if key > hi_w:                 # a future-only name starts where its window does
+                continue
+            ctx = _future_context(key)
+            if ctx is None:
+                continue
+            myr = -key
+            p = None
+            if "belt" in spec:
+                p = _fut_belt(ctx, *spec["belt"])
+            elif "landmass" in spec:
+                p = _fut_landmass(ctx, spec["landmass"])
+            elif "interior" in spec:
+                p = _fut_interior(ctx, spec["interior"])
+            elif "ride" in spec:
+                a = FM.advance(spec["ride"][0], spec["ride"][1], myr)
+                if a is not None:
+                    p = _fut_land(ctx, a[0], a[1], mountain=bool(spec.get("mountain")))
+            elif margins:
+                adv = [FM.advance(mlon, mlat, myr) for mlon, mlat in margins]
+                adv = [q for q in adv if q is not None]
+                if adv:
+                    c = _ll_mean([q[0] for q in adv], [q[1] for q in adv])
+                    p = _fut_water(key, ctx, c[0], c[1], prev, need_open=(l["t"] == "ocean"))
+            elif key in fut_old or young is not None:
+                base = fut_old.get(key) or (young[1], young[2])
+                if land_kind:
+                    p = _fut_land(ctx, base[0], base[1], mountain=(l["t"] == "orogen"))
+                else:
+                    p = _fut_water(key, ctx, base[0], base[1], prev, need_open=(l["t"] == "ocean"),
+                                   strict=l["n"] in FUT_NO_SNAP)
+            if p is not None and "enclosed" in spec and not _fut_enclosed(ctx, p[0], p[1], spec["enclosed"]):
+                p = None
+            if p is not None:
+                pts[key] = (round(((p[0] + 180.0) % 360.0) - 180.0, 1), round(p[1], 1))
+                if not land_kind:
+                    prev = p
+        # the longest run of consecutive valid keyframes; a name continuing from
+        # the present must start at the present
+        run, best, cur = [], [], []
+        for key in keys:
+            if key < lo_w:
+                break
+            if key > hi_w:
+                continue
+            if key in pts:
+                cur.append(key)
+            else:
+                if len(cur) > len(best):
+                    best = cur
+                cur = []
+        if len(cur) > len(best):
+            best = cur
+        continuing = hi_w >= 0
+        if continuing and best and best[0] != keys[0]:
+            best = []
+        if continuing and not best:
+            l["a0"] = 0 if l["a0"] <= l["a1"] else l["a0"]
+            l["tr"] = past if past else l.get("tr")
+            if not l["tr"]:
+                l.pop("tr", None)
+            report.append((l["n"], "ends at the present"))
+            continue
+        if not best:
+            l["_drop"] = True
+            report.append((l["n"], "DROPPED: no keyframe carries it"))
+            continue
+        new_lo = min(best)
+        new_hi = max(best) if not continuing else hi_w
+        if l["a0"] <= l["a1"]:
+            l["a0"], l["a1"] = new_lo, new_hi
+        else:
+            l["a1"], l["a0"] = new_lo, new_hi
+        fut = [[k, pts[k][0], pts[k][1]] for k in sorted(best)]
+        l["tr"] = fut + past
+        if len(l["tr"]) < 2:
+            l["tr"].append([l["tr"][0][0] + (1 if l["tr"][0][0] < 0 else -1), l["tr"][0][1], l["tr"][0][2]])
+        report.append((l["n"], "%+d..%+d Myr" % (-max(best), -new_lo) if not continuing
+                       else "now..%+d Myr" % (-new_lo)))
+    dropped = [l["n"] for l in out if l.get("_drop")]
+    out[:] = [l for l in out if not l.get("_drop")]
+    for n, r in sorted(report):
+        print("    future: %-30s %s" % (n, r))
+    return len(report), dropped
+
+
 def build_labels():
     out = features.labels()
     desc = features.descriptions()
@@ -1312,6 +1657,9 @@ def build_labels():
     n_fut = extend_tracks_into_future(out)
     if n_fut:
         print(f"  {n_fut} labels now ride the synthesised future plate motion")
+    n_fp, dropped_fp = future_label_pass(out)
+    print(f"  future pass: {n_fp} names placed and checked against the future terrain"
+          + (f"; dropped (nothing carries them): {', '.join(dropped_fp)}" if dropped_fp else ""))
     if untracked_bad_coord:
         print(f"  {len(untracked_bad_coord)} labels left untracked — their coord is "
               f"not a present-day position: "

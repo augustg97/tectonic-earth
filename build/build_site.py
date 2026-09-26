@@ -68,6 +68,15 @@ if os.environ.get("SKIP_AUDIT") != "1":
     # blocking a deploy on a missing screenshot, and the round that changes the
     # climate is the round that owes it fresh ones.
     _here = os.path.dirname(os.path.abspath(__file__))
+    # ...AND THE SHOTS THEY READ ARE RE-TAKEN WHEN STALE (2026-09-26). For seven
+    # weeks these three audits measured files from 9 and 11 August while the
+    # shader changed under them, and the Permian check "passed" on an August
+    # picture. A shot older than the shader, the app or any field is no test;
+    # build_site_shots re-takes those (clouds off, live path) or stops here.
+    import build_site_shots
+    if not build_site_shots.refresh():
+        raise SystemExit("build_site: the render audits' shots could not be re-taken "
+                         "(above). SKIP_AUDIT=1 overrides.")
     # audit_dem_spikes reads every shipped elevation field, so it is the one
     # that catches a source-DEM fill value reaching the screen -- which it did:
     # +10500 m in the Challenger Deep rendered as a tan desert island in the

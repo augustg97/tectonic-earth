@@ -921,7 +921,14 @@ def label_point(lab):
     says nothing about today's map."""
     tr = lab.get("tr")
     if tr:
-        return (tr[0][1], tr[0][2]) if tr[0][0] <= 0.011 else None
+        # the PRESENT entry, not the first: a name that continues into the
+        # future carries its future points ahead of it (-95 ... 0 ... 55), and
+        # reading tr[0] put the Himalaya's present at its +95 Myr position,
+        # 12 N, outside every Tibetan taxon's range (the 3.15 future pass)
+        for t in tr:
+            if abs(t[0]) <= 0.011:
+                return (t[1], t[2])
+        return None
     if lab.get("lon") is None:
         return None
     if min(lab.get("a0", 0), lab.get("a1", 0)) <= 0.011 or \

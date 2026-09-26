@@ -160,6 +160,48 @@ def _sea_recharge(ocean, W):
     return SEA_RECHARGE * (SEA_MIN + (1.0 - SEA_MIN) * np.clip(openness / 0.55, 0.0, 1.0))
 
 
+# OROGRAPHY BY THE LIFT, NOT BY THE COLUMN (the colour round, 2026-09). The
+# strip below took ORO_DRAIN x (rise / 300 m) of the parcel's moisture PER
+# COLUMN, capped at 75%: a loss rate of 1/353 m of climb, when condensation
+# removes vapour at about 1/(scale height ~2.3 km) and only a precipitation
+# efficiency of it falls -- ~13x too fast. A gradual 2 km climb kept
+# exp(-2000/353) = 0.3% of its water, so every plateau and range came out
+# desert: measured at present day against real annual rainfall, Mexico City
+# 0.006 (800 mm), Johannesburg 0.008 (700), Lhasa 0.003 (450), Kathmandu 0.018
+# (1400), Innsbruck 0.020 (900), the Columbia Mountains 0.024 (950), against the
+# Amazon's 0.690 (2300). Now a climb condenses 1 - exp(-rise / OROG_HV) of the
+# vapour and OROG_EFF of that falls; and descending air rains less
+# (exp(-drop / OROG_LEE_H)) without its vapour being destroyed, which is what a
+# rain shadow is -- so the next range inland rains again, as the Columbia
+# Mountains do after the dry BC interior.
+#
+# MEASURED AND NOT SHIPPED (2026-09-26). The physical form fixes the highlands
+# (Mexico City 0.006 -> 0.56, Columbia Mountains 0.024 -> 0.45) but it waters
+# everything the strip was drying: the Sierra lee (Reno) 0.017 -> 0.38 against
+# a real 190 mm, and Pangaea's interior (land > 1000 km from a coast, 280 Ma)
+# wetter than 0.2 on 17% -> 58% of it. A downwind foehn deficit restores some
+# of the shadow (Neuquen 0.31 -> 0.11) but leaves Pangaea at 48-52%. In this
+# model the highland dryness and the dry supercontinent are the SAME lever, and
+# the user chose the dry Pangaea on 2026-08-09 (audit_biomes.BASE_OVERLAPS).
+# Decoupling them needs another mechanism for Pangaea's aridity; see MODEL-GAPS.
+OROG_MODE = "strip"      # "moist" is the physical form above, kept for A/B
+OROG_HV = 2300.0         # m, moisture scale height
+OROG_EFF = 0.60          # precipitation efficiency of forced ascent
+OROG_LEE_H = 900.0       # m of descent over which rain falls by e on a lee slope
+
+
+def _orographic(dz, m):
+    """(rain multiplier, moisture drained) for a column risen by dz metres."""
+    up = np.clip(dz, 0, None)
+    uplift = up / UPLIFT_SCALE
+    if OROG_MODE == "strip":
+        return (1.0 + ORO_RAIN * uplift,
+                np.minimum(ORO_DRAIN * uplift * m, ORO_STRIP_MAX * m))
+    down = np.clip(-dz, 0, None)
+    return ((1.0 + ORO_RAIN * uplift) * np.exp(-down / OROG_LEE_H),
+            OROG_EFF * (1.0 - np.exp(-up / OROG_HV)) * m)
+
+
 def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None, rec_km=None):
     """March moisture downwind across each row, returning delivered rainfall.
 
@@ -222,9 +264,9 @@ def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None, rec
             # halving across the basin.
             fl = np.maximum(fl, RECYCLE_FLOOR * SEA_RECHARGE
                             * np.clip(regen[:, c] / RECYCLE_REF, 0.0, 1.0))
-        uplift = np.clip(elev[:, c] - elev[:, pc], 0, None) / UPLIFT_SCALE
+        ofac, odrain = _orographic(elev[:, c] - elev[:, pc], m)
         # rainfall where moist air is forced to rise
-        rain = m * (1.0 + ORO_RAIN * uplift)
+        rain = m * ofac
         if step >= W:
             R[:, c] = np.where(sea, 0.0, rain)
         # moisture budget: saturate over sea; inland decay toward the recycling
@@ -245,8 +287,7 @@ def _advect(elev, ocean, direction, decay, floor, regen=None, recharge=None, rec
         # rain shadow -- three columns of climbing still leave under 2% -- while
         # letting the windward slope and the crest take the water on the way up,
         # which is where it actually falls.
-        inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
-                                             ORO_STRIP_MAX * m), 0.0, 1.0)
+        inland = np.clip(inland - odrain, 0.0, 1.0)
         m = np.where(sea, SEA_RECHARGE if recharge is None else recharge[:, c], inland)
     return R
 
@@ -281,9 +322,8 @@ def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None, rec_km=No
         sea = ocean[r]
         dist = np.where(sea, 0.0, dist + dy_km)
         fl = floor[r] * np.exp(-dist / (RECYCLE_KM if rec_km is None else rec_km[r]))
-        uplift = np.zeros(W) if prev is None else \
-            np.clip(elev[r] - elev[prev], 0, None) / UPLIFT_SCALE
-        rain = m * (1.0 + ORO_RAIN * uplift)
+        ofac, odrain = _orographic(np.zeros(W) if prev is None else elev[r] - elev[prev], m)
+        rain = m * ofac
         R[r] = np.where(sea, 0.0, rain)
         inland = fl + (m - fl) * decay
         # AIR CANNOT LOSE MORE WATER THAN IT IS CARRYING. Unbounded, this term
@@ -301,8 +341,7 @@ def _advect_ns(elev, ocean, toward_north, decay, floor, recharge=None, rec_km=No
         # rain shadow -- three columns of climbing still leave under 2% -- while
         # letting the windward slope and the crest take the water on the way up,
         # which is where it actually falls.
-        inland = np.clip(inland - np.minimum(ORO_DRAIN * uplift * m,
-                                             ORO_STRIP_MAX * m), 0.0, 1.0)
+        inland = np.clip(inland - odrain, 0.0, 1.0)
         m = np.where(sea, SEA_RECHARGE if recharge is None else recharge[r], inland)
         # LATERAL MIXING INSIDE THE MARCH, not smoothing afterwards. Each column
         # is otherwise an isolated one-dimensional atmosphere, and isolated
