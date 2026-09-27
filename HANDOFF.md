@@ -300,10 +300,13 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260926-2210`**, release 3.18 (the stratocumulus decks only where
-  they form, drawn as ordinary cloud), commit `b07d3e2c` (the record is the commit after it),
-  verified live (the new cloud shader served; the 1000 Ma West African coast clear of the frosted
-  sheet; no console errors). Before it: 3.17, `DATA_V=20260926-2144`, `c4c35dc3` (subduction
+- Last live deploy: **`DATA_V=20260927-0025`**, release 3.19 (the sea's rainfall filled from the
+  land, clouds that form and dissipate, the observed decks, trenches that bow), commit `a336359b`
+  (the record is the commit after it), verified live (the page carries the new shaders and
+  `FIELD_V='20260926-319'`, `SHEET_V`/`IMAGERY_V='20260926d'`; the filled `phan_0000_r.webp`
+  served; the update log leads with 3.19; no console errors; the US east coast green to the
+  shore). Before it: 3.18, `DATA_V=20260926-2210`, `b07d3e2c` (the
+  stratocumulus decks only where they form); 3.17, `DATA_V=20260926-2144`, `c4c35dc3` (subduction
   trenches, the overlay in the terrain's frame, the Precambrian's own motion, moving weather, the
   crisp shelf break, the waterline, +378 regional taxa). Before that:
   3.16, `DATA_V=20260926-1126`, `c9b93685`; 3.15, `DATA_V=20260926-0618`, `0715ef78`; 3.14, `DATA_V=20260926-0235`, `977ca9e8`; 3.13,
@@ -311,9 +314,9 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
   README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
   desert heart (7.6E 23.4S); the old 2E 45S frame sat on the temperate belt.
-- Cache versions: `FIELD_V='20260926-317'`, `SHEET_V='20260926c'`, `IMAGERY_V='20260926c'`
-  (in `web/app.js` AND `web/ambient.html`). Backups of the 3.16 `_f`, `_t` and both sheet sets were
-  kept in the session scratchpad only.
+- Cache versions: `FIELD_V='20260926-319'`, `SHEET_V='20260926d'`, `IMAGERY_V='20260926d'`
+  (in `web/app.js` AND `web/ambient.html`). Backups of the 3.18 `_r` fields and both sheet sets
+  were kept in the session scratchpad only.
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
 - `audit_all.py --quick`: all validators at baseline (label windows 2: Gondwana, Kazakhstania, the
