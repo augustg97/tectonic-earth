@@ -8362,3 +8362,22 @@ shade or pattern that ... moves with our continents". The decks had formed where
 east -- every gulf, bay and shelf sea -- and carried a texture no other cloud had. Now: deep water, open
 ocean to the west, a coast upwind; drawn as thickened weather (README 7.65).
 
+
+**3.19, the same day: coasts, clouds and trenches, looked at again.** The user on 3.18: the clouds
+off north-west Africa and over the eastern US "look odd", and the trenches "still look unnaturally
+straight and symmetrical". README §5.15, traps 7.66-7.72.
+
+| item | what shipped | measured |
+|---|---|---|
+| wet coasts drawn as desert (the orange strip in the user's US screenshot) | `build/rain_fill.py`: the sea's rainfall filled from the land by pull-push, in `export()` and `bake_rain.py`; all 251 `_r` re-baked; the plumes take the shore's nearness from `landRing` | US Atlantic plain, Sierra Leone coast and island rims green to the water; land values unchanged inland (mean diff under 2 levels on every keyframe); files 6.76 -> 5.35 MB; coastal codec error 1.37 -> 0.85; `audit_island_rain` all bands, `audit_biomes` Spearman 0.988 kept |
+| stale rain at 95-110 Ma | the re-bake solved it on today's terrain | a landmass the app draws (the drifting Indian block's eastern lobe) had carried rain from when that ground was sea: ~0 -> ~0.2 |
+| the double-exposure haze | renewal by threshold (form from cores, dissolve from edges; phases combine as a union) | numpy replica on the observed field: haze share 37% -> 18% of the sky, deserts 34% -> 7%, mean opacity within 7%; rendered cloud brightness and cover within 4% and 3% of 3.18 |
+| the brickwork of dashes over the US | analytic stream function (value noise with exact gradient) instead of a 0.03 rad difference of texture-filtered noise | the pattern is gone at close zoom |
+| orographic threads, the deck's radial streaks | orographic cloud anchored and evolving in place; the deck on the renewal clock | frame-to-frame change steady over a 60 s window (max/median 1.12): no pops |
+| decks that looked synthetic | texture borrowed from the observed decks (fixed bands off Peru and California, two dissolving tilings) | the deck mask at 0 Ma finds exactly the five real subtropical decks |
+| straight, symmetric trenches | flat floor, terraced landward wall; festoons, wander, segment steps, depth saddles keyed at a landward foot point on the overriding plate; a separate bending-fault set; band-edge rules | two seams found and removed on the way (a blended orientation; the arc cut where the band ended short, which 3.17 had faintly); cost within timing noise |
+
+**Open.** The Sahel's soft ruled edge is the palette's khaki-to-forest step (finer jitter changed
+under 1% of pixels): a biome-palette item, to be done against `audit_biomes`. A full rebuild of
+`_e`, `_d` and `_w` will now read the filled rain along coasts and differ in a ~15 km coastal strip, by
+design.

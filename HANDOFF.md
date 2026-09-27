@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (wet coasts, forming clouds and bowed trenches 3.19; subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,15 +10,42 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.14 this round (the Precambrian's own motion,
-  weather, the shelf break, subduction trenches, the overlay's frame, the waterline, varied cards),
+- **Read `README.md` first**: §2 working rules, §5.15 this round (the sea's rainfall filled from the
+  land, clouds that form and dissipate, the observed decks, trenches that bow), §5.14 the round
+  before (the Precambrian's own motion, weather, the shelf break, subduction trenches, the overlay's
+  frame, the waterline, varied cards),
   §5.1b the future series (the plate engine, the future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
   mountains (the erosion relief), §5.5 lakes, §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.57–7.64 are this round's; 7.48–7.56 and 7.43–7.47 the rounds before), §9
+  commands, §7 traps (7.66–7.72 are this round's; 7.57–7.65, 7.48–7.56 and 7.43–7.47 the rounds before), §9
   known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest fix: clouds that read as clouds (3.18, 2026-09-26)
+## The latest round: wet coasts, clouds that form, trenches that bow (3.19, 2026-09-26)
+
+The user, on the live 3.18: "much better, but the clouds by africa above, and the US east coast, look
+odd - can we make these more natural and photorealistic and address similar errors? and our ocean
+trenches are an improvement but still look unnaturally straight and symmetrical - let's improve those
+as well". README §5.15, traps 7.66-7.72.
+
+- **The orange coastal strip** in their US screenshot was rain, not clouds: the sea stored zero and
+  every reader near a coast (bilinear, blur, the moisture warp) averaged it in. `build/rain_fill.py`
+  fills the sea from the land by pull-push, in both writers; all 251 `_r` re-baked (`bake_rain.py`,
+  ~65 min). The plumes, which had used the zero as their offshore fade, take `landRing` instead.
+  `_d`/`_w`/`_e` were NOT re-derived: they read land values only (bilinear upsampling excepted), so a
+  future full rebuild will differ in a ~15 km coastal strip, by design. `rerender_rain.py` is retired.
+- **Clouds** (`index__CFRAG`): renewal by threshold (form from cores, dissipate from edges; union, no
+  cross-fade); climate modulates cover by threshold, not optical depth; an analytic stream function
+  (the brick pattern was a finite difference of texture-filtered noise); orographic cloud anchored to
+  its slope; decks textured with the observed stratocumulus (fixed source bands off Peru and
+  California, two dissolving tilings). Calibrated so global cloudiness is within 4% of 3.18.
+- **Trenches** (`index__FRAG`): flat floor, terraced landward wall, festoons with cusps, segment
+  steps, depth saddles, a separate bending-fault set, everything keyed at a landward foot point on the
+  overriding plate; band-edge rules so nothing is cut where the shipped distance ends.
+- **Measured, not changed**: the Sahel's soft ruled edge is the palette's khaki-to-forest step
+  (finer jitter moved under 1% of pixels); left for a biome-palette round with `audit_biomes`.
+- Timing: within noise (8 interleaved repeats at a coastal close-up, 3.45 vs 3.55 ms p50).
+
+## The round before: clouds that read as clouds (3.18, 2026-09-26)
 
 The user, on the live 3.17: "something is now clearly wrong with our plates - there is a white shade
 or pattern that appears and moves with our continents, it is unclear if these are supposed to be
@@ -436,6 +463,9 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - Git on this repo is slow; a timed-out `git add` leaves `.git/index.lock`.
 - `build_webdata.build_updatelog()` must run before `build_site.py`, or `docs/updatelog.json`
   ships the previous release's log.
+- Add a release to `build/updatelog.json` (the source), never to `web/updatelog.json` (generated):
+  3.17 and 3.18 were written into the generated copy only, and the next `build_updatelog()` would
+  have dropped both (found and ported in 3.19).
 - The live stamp is in the PAGE (`?cb=`), not in `app.js`: a poll that greps the wrong URL
   reads an empty string forever and looks like a deploy that never landed.
 - A name written twice in `ranges_within_regions.PATCH` is merged now; before 3.10 the later

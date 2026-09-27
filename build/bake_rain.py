@@ -30,6 +30,7 @@ import epeiric as EP
 import paleo_tracks
 import precambrian as PRE
 import rain_anchor as RA
+import rain_fill as RFILL
 
 
 def rain_for(age, z, rec):
@@ -78,12 +79,16 @@ def main():
     for age in ages:
         z = read_dem(idx[float(avail[np.argmin(np.abs(avail - max(age, 0)))])])
         zc = rain_for(age, z, rec)
-        _, _, Rf, _, _ = compute_fields(zc, age, BF.CLIM_H, BF.CLIM_W)
+        Zc, _, Rf, _, _ = compute_fields(zc, age, BF.CLIM_H, BF.CLIM_W)
+        # the sea filled from the land (rain_fill.py), on the solve's own land mask
+        Rf = RFILL.apply(Rf, Zc >= 0)
         rain = np.asarray(Image.fromarray(
             (np.clip(Rf / BF.RF_MAX, 0, 1) * 255).astype(np.uint8)).resize(
             (BF.RAIN_W, BF.RAIN_H), Image.LANCZOS)) / 255.0
         # the present-day anchor, exactly as export() applies it
-        rain = RA.apply(rain, age, RA.land_mask(zc[::-1], BF.RAIN_H, BF.RAIN_W), BF.RF_MAX)
+        land_hi = RA.land_mask(zc[::-1], BF.RAIN_H, BF.RAIN_W)
+        rain = RA.apply(rain, age, land_hi, BF.RF_MAX)
+        rain = RFILL.apply(rain, land_hi)
         r = BF._gray(polar_lowpass(rain))
         path = os.path.join(BF.OUT, "%s_%04d_r.webp" % (tags[age], abs(age)))
         BF._save(r, path, BF.RAIN_Q)

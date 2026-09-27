@@ -48,7 +48,11 @@ vec2 climateAt(vec2 q){
     rain=mix(rain,texture2D(rainB,q).r,mixf);
   }
   float land=smoothstep(-80.0,160.0,h);
-  return vec2(land,rain);
+  /* rain weighted by land, so the caller's division by the summed land is a
+     true normalised average: the field fills the sea from the land around it
+     (build/rain_fill.py), and read raw that fill would count a coast's rain
+     twice. */
+  return vec2(land,rain*land);
 }
 /* Land for the deck's coast test, on a ramp across the continental slope
    (-2,500 m to +300 m) instead of at the waterline: summed over offsets, a
@@ -60,7 +64,7 @@ float deckLand(vec2 q){
   if(mixf>0.00001){ float b=texture2D(elevB,q).r*2.0-1.0; h=mix(h,sign(b)*b*b*8000.0,mixf); }
   return smoothstep(-2500.0,300.0,h);
 }
-vec2 satelliteWeather(float lon,float lat,float gain,float dry){
+vec2 satelliteWeather(float lon,float lat,float gain,float lo0){
   // One unbroken observed cloud field preserves real fronts, spirals and
   // clear slots. Only bounded residual flow deforms it; strain cannot grow.
   float t=uWeatherTime;
@@ -77,7 +81,7 @@ vec2 satelliteWeather(float lon,float lat,float gain,float dry){
   vec2 q=vec2((sourceLon+shear+bend)/(2.0*PI)+0.5,(lat+lift)/PI+0.5);
   float raw=texture2D(uCloudDetail,q).r;
   float broad=texture2D(uCloudDetail,q,2.0).r;
-  float d=smoothstep(0.025+dry*0.045,0.98,raw);
+  float d=smoothstep(lo0,0.98,raw);
   float tau=2.8*pow(d,1.25)*gain;
   float height=pow(max(broad,0.0),1.4)*gain;
   return vec2(tau,height);
@@ -91,68 +95,139 @@ vec2 satelliteWeather(float lon,float lat,float gain,float dry){
    storms of the westerly belt turn inside them. The eddies are the curl of a
    drifting stream function, so they swirl without piling cloud up. */
 float whash(float n){return fract(sin(n*12.9898+78.233)*43758.5453);}
+/* THE STREAM FUNCTION IS ANALYTIC (3.19). It was the lattice noise cn()
+   differenced over 0.03 rad -- and cn interpolates inside the texture unit,
+   whose bilinear weights carry 8 bits of sub-texel position, so the noise is
+   a fine staircase and a short difference of it is a spike train. Scaled by
+   a whole renewal cycle of travel, neighbouring pixels read winds that moved
+   their cloud tens of kilometres apart: the brickwork of short dashes over
+   the eastern United States. Value noise evaluated in arithmetic, with its
+   exact gradient (xyz) beside its value (w), has no staircase to amplify. */
+float wh(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+vec4 wnoise(vec3 x){
+  vec3 i=floor(x),f=fract(x),u=f*f*(3.0-2.0*f),du=6.0*f*(1.0-f);
+  float a=wh(i),b=wh(i+vec3(1.0,0.0,0.0)),c=wh(i+vec3(0.0,1.0,0.0)),d=wh(i+vec3(1.0,1.0,0.0));
+  float e=wh(i+vec3(0.0,0.0,1.0)),g=wh(i+vec3(1.0,0.0,1.0)),h=wh(i+vec3(0.0,1.0,1.0)),m=wh(i+vec3(1.0,1.0,1.0));
+  float k1=b-a,k2=c-a,k3=e-a,k4=a-b-c+d,k5=a-c-e+h,k6=a-b-e+g,k7=-a+b+c-d+e-g-h+m;
+  float v=a+k1*u.x+k2*u.y+k3*u.z+k4*u.x*u.y+k5*u.y*u.z+k6*u.z*u.x+k7*u.x*u.y*u.z;
+  vec3 dv=du*vec3(k1+k4*u.y+k6*u.z+k7*u.y*u.z,k2+k5*u.z+k4*u.x+k7*u.z*u.x,k3+k6*u.x+k5*u.y+k7*u.x*u.y);
+  return vec4(dv,v);
+}
 vec2 windAt(float lon,float lat,float t){
   float d=abs(degrees(lat));
   float u=mix(-0.42,1.0,smoothstep(16.0,30.0,d));
   u=mix(u,-0.22,smoothstep(58.0,72.0,d));
   float v=-sign(lat)*0.16*smoothstep(1.0,7.0,d)*(1.0-smoothstep(14.0,28.0,d));
   float storm=0.35+0.65*exp(-pow((d-48.0)/16.0,2.0));
-  vec3 base=vec3(5.3,11.7,2.9);
-  float drift=t*0.0035,e=0.03;
-  float p0=cn(sphere(lon-drift,lat)*2.4+base);
-  float pE=cn(sphere(lon-drift+e/max(cos(lat),0.2),lat)*2.4+base);
-  float pN=cn(sphere(lon-drift,lat+e)*2.4+base);
-  vec2 g=vec2(pE-p0,pN-p0)/e;
+  float lp=lon-t*0.0035;
+  vec4 n=wnoise(sphere(lp,lat)*2.4+vec3(5.3,11.7,2.9));
+  // the stream function's gradient per radian of arc, east and north
+  vec2 g=2.4*vec2(dot(n.xyz,vec3(-sin(lp),0.0,cos(lp))),
+                  dot(n.xyz,vec3(-sin(lat)*cos(lp),cos(lat),-sin(lat)*sin(lp))));
   vec2 eddy=vec2(-g.y,g.x)*0.30*storm;
   return (vec2(u,v)+eddy)*0.0042*uWind.x;
 }
 /* CLOUD CARRIED BY THAT WIND, RENEWED AS IT GOES (3.17). A field advected
    without end stretches into threads, so the satellite structure is carried
    for one renewal cycle and then replaced: two phases half a cycle apart,
-   each fading in, drifting with the local wind and fading out, their weights
-   summing to one. Each new cycle draws its cloud from a different stretch of
-   the observed field (the same latitude band, so storm tracks stay storm
-   tracks), and the cycle's phase varies slowly across the globe, so systems
-   form and dissipate region by region instead of the sky pulsing at once. */
-/* Closed convective cells, F2-F1 of a jittered point lattice (Worley): the
-   bright polygons with dark rims a stratocumulus sheet shows from orbit. 2-D
-   in the local (east, north) plane -- the decks lie between 10 and 40 degrees,
-   where that plane is undistorted enough. Returns 0 on a rim, 1 mid-cell. */
-vec2 whash2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}
-float cellsAt(vec2 x){
-  vec2 i=floor(x),f=fract(x);
-  float d1=8.0,d2=8.0;
-  for(int yy=-1;yy<=1;yy++)for(int xx=-1;xx<=1;xx++){
-    vec2 o=vec2(float(xx),float(yy));
-    vec2 r=o+0.15+0.7*whash2(i+o)-f;
-    float d=dot(r,r);
-    if(d<d1){d2=d1;d1=d;}else if(d<d2){d2=d;}
-  }
-  return smoothstep(0.0,0.35,sqrt(d2)-sqrt(d1));
+   each forming, drifting with the local wind and dissipating. Each new cycle
+   draws its cloud from a different stretch of the observed field (the same
+   latitude band, so storm tracks stay storm tracks), and the cycle's phase
+   varies slowly across the globe, so systems form and dissipate region by
+   region instead of the sky pulsing at once.
+
+   FORM AND DISSIPATE, NEVER FADE (3.19). The phases used to be cross-faded:
+   optical depth times a triangular weight, summed. Half of every cycle the
+   sky was two unrelated cloud fields at half strength each -- a translucent
+   double exposure, the grey haze over the Canaries. A cloud does not fade
+   as a whole; it grows from its thickest core and evaporates from its thin
+   edges. So a phase's life raises and lowers its density THRESHOLD: young,
+   only the cores of its field show; mature, the whole field; dying, the cores
+   again, then nothing. The two phases combine as a union, so what is visible
+   is always cloud at a cloud's own opacity. Calibrated on the observed field
+   itself (a numpy replica over random pairs of its longitudes): the sky's
+   mean opacity within 7% of the cross-fade's over open ocean, with the
+   translucent share (alpha 0.1-0.5) down from 37% of the sky to 18%, and over
+   the subtropical deserts from 34% to 7%. */
+vec2 renewalAt(float t,float ph,int i){
+  float s=t/max(uWind.y,5.0)+0.5*float(i)+ph;
+  float cyc=floor(s);
+  return vec2(s-cyc,cyc*2.0+float(i));        // life fraction, cycle key
 }
-vec2 flowWeather(float lon,float lat,float t,float gain,float dry,vec2 W){
+float renewalPhase(float lon,float lat){
+  return 0.45*wnoise(sphere(lon,lat)*1.3+vec3(19.0,2.0,7.0)).w;
+}
+vec2 flowWeather(float lon,float lat,float t,float gain,float lo0,vec2 W){
   float T=max(uWind.y,5.0);
-  float ph=0.45*cn(sphere(lon,lat)*1.3+vec3(19.0,2.0,7.0));
+  float ph=renewalPhase(lon,lat);
   float cl=max(cos(lat),0.2);
-  vec2 acc=vec2(0.0);
+  float dU=0.0,hU=0.0;
   for(int i=0;i<2;i++){
-    float s=t/T+0.5*float(i)+ph;
-    float cyc=floor(s);
-    float tau=s-cyc;
-    float w=1.0-abs(2.0*tau-1.0);
-    float k=cyc*2.0+float(i);
-    float oLon=whash(k*1.13+3.7)*6.2831853+sin(uEra*0.003)*0.9;
-    float oLat=(whash(k*2.71+9.1)-0.5)*0.10;
-    float age=tau*T;
+    vec2 r=renewalAt(t,ph,i);
+    float w=1.0-abs(2.0*r.x-1.0);
+    float oLon=whash(r.y*1.13+3.7)*6.2831853+sin(uEra*0.003)*0.9;
+    float oLat=(whash(r.y*2.71+9.1)-0.5)*0.10;
+    float age=r.x*T;
     float sLon=lon-W.x*age/cl+oLon;
     float sLat=clamp(lat-W.y*age+oLat,-1.55,1.55);
     vec2 q=vec2(sLon/(2.0*PI)+0.5,sLat/PI+0.5);
     float raw=texture2D(uCloudDetail,q).r;
     float broad=texture2D(uCloudDetail,q,2.0).r;
-    float dd=smoothstep(0.025+dry*0.045,0.98,raw);
-    acc+=w*vec2(2.8*pow(dd,1.25),pow(max(broad,0.0),1.4));
+    float lo=min(lo0+(1.0-w)*0.45,0.90);
+    float d=smoothstep(lo,0.98,raw)*smoothstep(0.0,0.22,w);
+    dU=1.0-(1.0-dU)*(1.0-d);
+    hU+=w*pow(max(broad,0.0),1.4);
   }
-  return acc*gain;
+  return vec2(3.4*pow(dU,1.25),hU)*gain;
+}
+/* THE DECKS ARE THE OBSERVED DECKS (3.19). Wherever the era puts the eastern
+   edge of an open subtropical ocean, its deck is drawn with the stratocumulus
+   the satellite field actually recorded off Peru and Chile (south of the
+   equator) or California and Baja (north of it): the same closed cells,
+   rifts and pockets of open cells, at the same latitude. Two noise sheets
+   tried before this read as a crackle glaze (3.17) and as soft blotches
+   (3.19's first attempt); a deck's texture is its own, so borrow it.
+
+   The source is a fixed band of longitude off each coast, tiled along
+   longitude by two copies half a tile apart, each dissolving toward its own
+   seam by the same union the renewal phases use -- so no seam and no mirror
+   line is ever drawn; latitude folds back at the band's ends (6 and 34
+   degrees), where the deck is thin anyway. The band is FIXED, not traced
+   along the coast: the Peruvian coast swings 7 degrees east between 11 and
+   18 S, and a band that followed it sheared the borrowed texture into
+   diagonal streaks. 92-78 W south of the equator (clear of the Andes at 5 S,
+   inside the deck at 30 S), 137-123 W north of it. */
+vec2 deckField(float lon,float lat,float t,vec2 W,float lo0){
+  float T=max(uWind.y,5.0);
+  float ph=renewalPhase(lon,lat);
+  float cl=max(cos(lat),0.2);
+  float dlon=degrees(lon),dlat=degrees(lat),south=step(dlat,0.0);
+  float dU=0.0,hU=0.0;
+  for(int i=0;i<2;i++){
+    vec2 r=renewalAt(t,ph,i);
+    float w=1.0-abs(2.0*r.x-1.0);
+    float age=r.x*T;
+    float x=dlon-degrees(W.x*age/cl)+whash(r.y*4.3+1.0)*97.0;
+    float y=abs(dlat-degrees(W.y*age))+(whash(r.y*6.1+2.0)-0.5)*4.0;
+    float sy=y<6.0 ? 12.0-y : (y>34.0 ? 68.0-y : y);
+    float sLat=mix(sy,-sy,south);
+    float c=mix(-121.0,-76.0,south);          // the band's east edge, degrees
+    for(int j=0;j<2;j++){
+      float f=fract(x/14.0+0.5*float(j));
+      float tw=1.0-abs(2.0*f-1.0);            // this copy's share of its tile
+      vec2 q=vec2((c-16.0+14.0*f)/360.0+0.5,sLat/180.0+0.5);
+      float raw=texture2D(uCloudDetail,q).r;
+      float broad=texture2D(uCloudDetail,q,2.0).r;
+      // a deck persists, so its phases erode half as deep as the weather's;
+      // the tile only gently, or two half-eroded copies of a thin deck would
+      // leave next to nothing
+      float lo=min(lo0+(1.0-w)*0.36+(1.0-tw)*0.30,0.92);
+      float d=smoothstep(lo,0.98,raw)*smoothstep(0.0,0.22,w)*smoothstep(0.0,0.20,tw);
+      dU=1.0-(1.0-dU)*(1.0-d);
+      hU+=w*tw*pow(max(broad,0.0),1.4);
+    }
+  }
+  return vec2(dU,hU);
 }
 float elevAtUv(vec2 q){
   q=vec2(fract(q.x),clamp(q.y,0.001,0.999));
@@ -190,8 +265,16 @@ void main(){
   float rain=climate.y/max(climate.x,0.12);
   float wet=mix(0.30,smoothstep(0.025,0.52,rain),uRainReady);
   float dry=land*(1.0-wet);
-  float gain=mix(0.94,mix(0.50,1.12,wet),land);
-  gain*=0.60+0.40*smoothstep(-5.0,-1.5,uTemp);
+  /* COVER, NOT HAZE (3.19). Everything below that makes a sky clearer -- dry
+     land, the subtropical highs, a quiet synoptic spell, the lee of a range,
+     a cold or frozen world -- used to multiply optical depth, and a cloud at a
+     third of its depth is a grey veil, not a smaller cloud: the haze over the
+     Sahara and the Canaries. Most of each now raises the density threshold
+     (lo0) instead, so a clearer sky has fewer clouds, each still a cloud; a
+     gentle share stays on optical depth so thin weather still reads thinner. */
+  float cold=smoothstep(-5.0,-1.5,uTemp);
+  float gain=mix(0.96,mix(0.72,1.10,wet),land)*mix(0.75,1.0,cold);
+  float lo0=0.025+dry*0.18+(1.0-cold)*0.08;
   /* THE ERA'S LIKELY WEATHER (round 2, 2026-09-07). A soft zonal
      climatology under the satellite structure: the tropical convergence
      band, the mid-latitude storm tracks, the clear subtropical highs --
@@ -200,7 +283,22 @@ void main(){
      era's land and rainfall above already move the deck with the
      continents; a snowball world loses most of it. */
   float zonal=0.80+0.30*exp(-pow(lat/0.16,2.0))+0.25*exp(-pow((al-52.0)/13.0,2.0))-0.30*exp(-pow((al-24.0)/9.0,2.0));
-  gain*=zonal*(1.0-0.45*uSnowball);
+  gain*=mix(1.0,zonal,0.5)*(1.0-0.30*uSnowball);
+  lo0+=max(0.0,1.0-zonal)*0.30+0.15*uSnowball;
+  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
+     day in transport; on its own nothing ever forms or dies. A smooth
+     three-dimensional lattice noise drifting through the weather clock
+     (about a minute from clear to overcast at a point) gates the optical
+     depth, so masses thicken, merge across a clearing and dissolve while
+     the fine structure inside them keeps its fronts and spirals. The era
+     moves the pattern too, gently, so a running timeline sees the weather
+     reorganise rather than jump. A gate, broad -- not a second cloud field,
+     and not a crossfade between two; since 3.19 it gates cover more than
+     depth (above). */
+  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
+  float syn=smoothstep(0.30,0.72,0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0)));
+  gain*=mix(0.80,1.30,syn);
+  lo0+=(1.0-syn)*0.10;
   /* THE AIR MEETS THE GROUND (3.17). Wind driven up a range lifts and
      cools and clouds over the windward slopes; the same air sinks down the
      lee and clears -- the rain shadow's cloud. And off the subtropical west
@@ -208,40 +306,45 @@ void main(){
      the subsiding air of the highs holds a bright low deck of stratocumulus:
      California, Peru, Namibia today. */
   vec2 W=windAt(lon,lat,t);
-  float orog=1.0,up=0.0;
+  float up=0.0;
   if(uWind.x>0.0&&uWind.z>0.0){
     vec2 Wd=W/max(length(W),1e-6);
     float dx=(1.2/360.0)/max(0.35,cos(lat)),dy=1.2/180.0;
     vec2 gh=vec2(elevAtUv(uv+vec2(dx,0.0))-elevAtUv(uv-vec2(dx,0.0)),
                  elevAtUv(uv+vec2(0.0,dy))-elevAtUv(uv-vec2(0.0,dy)))/(2.0*1.2*111.0);
     up=dot(Wd,gh)*land;                             // metres of climb per km along the wind
-    orog=clamp(1.0+uWind.z*(0.95*smoothstep(0.4,5.0,up)-0.60*smoothstep(0.4,5.0,-up)),0.35,2.0);
+    gain*=1.0+uWind.z*0.95*smoothstep(0.4,5.0,up);  // windward: lifted air thickens what is there
+    lo0+=uWind.z*0.30*smoothstep(0.4,5.0,-up);      // lee: sinking air clears it
   }
+  lo0=min(lo0,0.85);
   vec2 cloud;
   if(uWind.x<=0.0){
-    if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
+    if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,lo0);
     else{
       cloud=fallbackWeather(lon,lat,gain);
-      if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,lo0),uCloudDetailBlend);
     }
   } else {
-    if(uCloudDetailBlend>=1.0)cloud=flowWeather(lon,lat,t,gain,dry,W);
+    if(uCloudDetailBlend>=1.0)cloud=flowWeather(lon,lat,t,gain,lo0,W);
     else{
       cloud=fallbackWeather(lon,lat,gain);
-      if(uCloudDetailBlend>0.001)cloud=mix(cloud,flowWeather(lon,lat,t,gain,dry,W),uCloudDetailBlend);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,flowWeather(lon,lat,t,gain,lo0,W),uCloudDetailBlend);
     }
   }
-  cloud.x*=orog;
   /* ...and the ranges hold cloud of their own: a cap over the windward crest
      and a belt along the slope, as thick as the air is wet -- the cloud
      forest on the Andes' Amazon flank, the caps on the Cascades and the
-     Southern Alps in the westerlies. Its own cumulus texture, carried with
-     the wind, so it seethes rather than sits. */
+     Southern Alps in the westerlies. ANCHORED TO THE GROUND (3.19): it forms
+     where the slope lifts the air, so it stays there while its cells form and
+     dissolve (the noise volume drifts through the shell). It used to ride the
+     wind for the whole weather clock, and a wind that varies from place to
+     place, applied for minutes, sheared it into fine parallel threads. */
   if(uWind.x>0.0&&uWind.z>0.0&&up>0.3){
-    vec3 po=sphere(lon-W.x*t*0.4/max(cos(lat),0.3),lat-W.y*t*0.4);
-    float cu=smoothstep(0.35,0.80,0.6*cn(po*60.0+vec3(4.0,1.0,6.0))+0.4*cn(po*160.0+vec3(2.0,8.0,3.0)));
+    vec3 po=sphere(lon,lat);
+    vec3 ev=vec3(0.021,0.013,-0.017)*t;
+    float cu=smoothstep(0.35,0.80,0.6*cn(po*60.0+vec3(4.0,1.0,6.0)+ev)+0.4*cn(po*160.0+vec3(2.0,8.0,3.0)+2.3*ev));
     float oc=smoothstep(0.3,4.0,up)*mix(0.25,1.0,wet)*(1.0-0.5*uSnowball);
-    cloud.x+=uWind.z*oc*(0.1+2.4*cu)*gain;
+    cloud.x+=uWind.z*oc*(0.05+2.6*cu)*gain;
     cloud.y=max(cloud.y,0.4*oc*cu);
   }
   /* The deck's latitudes, ragged: it breaks into trade cumulus along an
@@ -256,12 +359,12 @@ void main(){
        The first version asked only for land to the east, so it laid decks in
        every gulf, bay, seaway and shelf sea of every age, drawn with a mesh of
        cells along a hard coastal edge: a white shape that rode the continents
-       and read as part of the land. Now it needs deep water beneath, open
-       ocean to the WEST (the fetch the trades cross), and a coast upwind. */
+       and read as part of the land. Now it needs open ocean to the WEST (the
+       fetch the trades cross) and a coast upwind. (3.18 also asked for deep
+       water beneath; read at the pixel, that punched a hole in the deck over
+       every seamount and island shelf, and open water to the west already
+       keeps decks out of gulfs, bays and shelf seas, so 3.19 dropped it.) */
     float cs=1.0/max(0.35,cos(lat));
-    float hz; { float a=texture2D(elevA,uv).r*2.0-1.0; hz=sign(a)*a*a*8000.0;
-      if(mixf>0.00001){ float b=texture2D(elevB,uv).r*2.0-1.0; hz=mix(hz,sign(b)*b*b*8000.0,mixf); } }
-    float deepK=smoothstep(-1500.0,-3500.0,hz);
     float jit=(cn(sphere(lon,lat)*55.0+vec3(8.0,2.0,6.0))-0.5)*2.6+(cn(sphere(lon,lat)*140.0+vec3(1.0,9.0,4.0))-0.5)*1.2;
     float lW=0.0;
     for(int k=0;k<6;k++){
@@ -270,7 +373,7 @@ void main(){
     }
     float openW=1.0-smoothstep(0.06,0.30,lW/6.0);
     float lE=0.0;
-    if(deepK*openW>0.001){
+    if(openW>0.001){
       for(int k=0;k<10;k++){
         float fk=float(k);
         lE+=deckLand(uv+vec2((1.5+2.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*1.6/180.0));
@@ -279,31 +382,23 @@ void main(){
     }
     float shore=1.0-smoothstep(0.20,0.75,deckLand(uv+vec2(0.9/360.0*cs,0.0)));
     float fray=0.65*(cn(sphere(lon,lat)*3.0+vec3(5.0,9.0,2.0))-0.5)+0.35*(cn(sphere(lon,lat)*8.0+vec3(1.0,3.0,7.0))-0.5);
-    float sc=(1.0-land)*sub*deepK*openW*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
+    float sc=(1.0-land)*sub*openW*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
     if(sc>0.001){
-      /* THE DECK IS CLOUD LIKE THE REST: it thickens the weather already
-         there and adds a soft sheet from the same noise family, carried
-         equatorward with the trades -- no mesh of cells, no edge of its own
-         (the cells read as a crackle glaze on the sea at every zoom). */
-      vec3 pd=sphere(lon-W.x*t*0.3/max(cos(lat),0.3),lat-W.y*t*0.3);
-      float sheet=smoothstep(0.28,0.78,0.55*cn(pd*18.0+vec3(3.0,7.0,1.0))+0.45*cn(pd*52.0+vec3(9.0,2.0,5.0)));
+      /* THE DECK IS CLOUD LIKE THE REST: the observed deck (deckField),
+         on the same renewal clock as everything around it (3.19) -- no mesh
+         of cells, no edge of its own, nothing carried by the whole weather
+         clock (the 3.18 sheet was, and sheared into radial threads), and no
+         translucent veil. It takes over from the borrowed weather where it is
+         thick, as a real deck owns its sky; a passing front still shows. Its
+         threshold keeps the deck's own clear-sky rule only: the subtropical
+         high that clears the sky around it is what holds the deck down. */
       float core=smoothstep(0.10,0.60,lE+0.20*fray);
-      cloud.x=cloud.x*(1.0+0.7*sc)+uWind.w*sc*(0.20+0.70*sheet)*mix(0.55,1.25,core);
-      cloud.y=max(cloud.y,0.20*sc*sheet);
+      float body=sc*mix(0.55,1.0,core);
+      vec2 D=deckField(lon,lat,t,W,0.025+(1.0-syn)*0.10);
+      cloud.x=cloud.x*(1.0-0.5*body)+uWind.w*body*2.8*pow(D.x,1.25)*mix(0.85,1.15,syn);
+      cloud.y=mix(cloud.y,max(cloud.y,D.y),body);
     }
   }
-  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
-     day in transport; on its own nothing ever forms or dies. A smooth
-     three-dimensional lattice noise drifting through the weather clock
-     (about a minute from clear to overcast at a point) gates the optical
-     depth, so masses thicken, merge across a clearing and dissolve while
-     the fine structure inside them keeps its fronts and spirals. The era
-     moves the pattern too, gently, so a running timeline sees the weather
-     reorganise rather than jump. A gate, multiplicative and broad -- not a
-     second cloud field, and not a crossfade between two. */
-  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
-  float syn=0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0));
-  cloud*=mix(0.30,1.35,smoothstep(0.30,0.72,syn));
   float mu=uCloudMap>0.5?1.0:max(normalize(vN).z,0.0);
   float path=mix(1.0,1.35,1.0-mu);
   float alpha=1.0-exp(-cloud.x*path);

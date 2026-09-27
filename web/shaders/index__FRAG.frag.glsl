@@ -167,6 +167,14 @@ float gShelfK=99.0;   // the same distance in km, + on the shelf side
    the trough, outer rise and (where the overriding side is ocean) the arc
    from it at every tap, so the colour and the hillshade both see them. */
 float gTrS=0.0, gTrW=0.0, gTrAK=1.0, gTrArcK=1.0;
+float gTrMe=0.0, gTrFW=6.0, gTrBen=22.0;   // along-strike: axis meander, floor half-width, terrace (km)
+vec3 gTrKS=vec3(0.0);                      // the along-strike key (main)
+float gTrRel=0.0;                          // how far the shipped distance can be trusted here (main)
+/* The bow moves the axis, and it must fade out landward: the band of distance
+   the field ships ends 70 km behind a margin trench (240 behind an arc), and a
+   wall pushed past it is cut off there in a straight seam. Wide enough that
+   the distance stays monotonic. */
+float trBow(float sr){ return gTrMe*smoothstep(-110.0,-20.0,sr); }
 vec2 gTrG=vec2(0.0), gTrUv=vec2(0.0);
 uniform vec2 uCoast;    // natural waterline: x strength (?coast=, 0 off), y lateral scale in km (?coastkm=)
 uniform vec3 uTrench;   // x: keyframe A has the field, y: B has it, z: strength (?trench=, 0 off)
@@ -713,16 +721,34 @@ void trTap(sampler2D stk, vec2 uv, out float s, out float cov, out vec2 g){
   s=mix(mix(sv.x,sv.y,t.x), mix(sv.z,sv.w,t.x), t.y);
   g=vec2(mix(sv.y-sv.x, sv.w-sv.z, t.y)*1024.0, mix(sv.z-sv.x, sv.w-sv.y, t.x)*512.0);
 }
+/* THE SECTION IS NOT A GAUSSIAN (3.19). 3.17 drew every trench as the same
+   two-sided bell along a smooth distance field, and the user saw it at once:
+   "unnaturally straight and symmetrical". A real trench is neither. Its axis
+   wanders and steps along strike; its floor is a flat of ponded turbidites,
+   wide where sediment arrives and nearly absent where it does not; its
+   landward wall is steep and broken by a mid-slope terrace where the
+   accretionary wedge benches; its seaward wall is a long gentle ramp up to the
+   outer rise. The meander, floor width and terrace come from main, once per
+   pixel, keyed to the overriding plate's material coordinate like the
+   along-strike depth (so they ride the margin that shapes them). */
 float trenchDz(vec2 uv, float z){
   vec2 d=uv-gTrUv; d.x-=floor(d.x+0.5);
-  float s=gTrS+dot(gTrG,d);
+  float sr=gTrS+dot(gTrG,d);                // the shipped distance
+  float s=sr+trBow(sr);
   float amp=clamp(1100.0+0.5*(-z-4000.0), 700.0, 2600.0);
-  float sig=s<0.0 ? 17.0 : 30.0;
-  float trough=exp(-s*s/(sig*sig));
-  float rise=0.16*exp(-(s-85.0)*(s-85.0)/1800.0)*step(0.0,s);
-  float arc=1700.0*exp(-(s+165.0)*(s+165.0)/2400.0)*smoothstep(-2700.0,-3600.0,z);
+  float x=abs(s)-gTrFW;                     // km beyond the flat floor
+  float trough = s<0.0
+    ? 1.0-0.58*smoothstep(0.0,13.0,x)-0.42*smoothstep(gTrBen,gTrBen+12.0,x)
+    : exp(-max(x,0.0)*max(x,0.0)/(34.0*34.0));
+  float rise=0.16*exp(-(s-85.0)*(s-85.0)/1800.0)*step(0.0,s)*(1.0-smoothstep(88.0,110.0,sr));
+  // the arc stands on the overriding plate and does not bow with the axis (the
+  // arc-trench gap varies, as it does), and it fades before the band's edge
+  // (its forearc flank is the steeper: its tail must be gone by the 70 km edge
+  // of a margin's band, where 3.17's reached 40 m and drew a faint seam)
+  float arc=1700.0*exp(-(sr+165.0)*(sr+165.0)/(sr>-165.0 ? 1200.0 : 2400.0))
+           *smoothstep(-2700.0,-3600.0,z)*(1.0-smoothstep(200.0,238.0,-sr));
   amp*=gTrAK; arc*=gTrArcK;   // along-strike variation, once per pixel (main)
-  return gTrW*(smoothstep(-2000.0,-3400.0,z)*amp*(rise-trough) + arc);
+  return gTrW*(smoothstep(-2000.0,-3400.0,z)*amp*(rise-trough)*(1.0-smoothstep(215.0,245.0,sr)) + arc);
 }
 float baseElev(vec2 uv){
   float z=mix(decElev(texture2D(elevA,wA(uv)).r), decElev(texture2D(elevB,wB(uv)).r), mixf);
@@ -1668,16 +1694,73 @@ void main(){
     gMatAxis=normalize(q.xyz+vec3(0.0,0.0,1e-9)); gMatAng=q.w;
     gMatOff=(dirFromUv(wA(uv))-dirFromUv(uv))*uMatOffK;
   }
-  /* Neither a trench nor an arc is uniform along strike: a trench deepens and
-     shoals by a kilometre over a few hundred km, and an arc is a chain of
-     volcanoes, not a wall. Keyed to the material coordinate -- on the arc side
-     the overriding plate's, the plate the arc and the inner wall ride -- and
-     computed once here: it varies over 70-300 km, far wider than any stencil,
-     and per tap it cost 3.5 ms on a coastal close-up. */
   if(gTrW>0.001){
-    vec3 md=matDir(dirFromUv(uv));
-    gTrAK=0.78+0.44*vnoise3(md*22.0);
-    gTrArcK=0.22+0.78*smoothstep(0.40,0.78,vnoise3(md*95.0+vec3(3.7,1.3,-2.1)));
+    /* WHERE THE BAND ENDS (3.19). The shipped distance stops at arbitrary
+       edges -- 70 km behind a margin, 240 behind an arc, 110 past a line's
+       end, wherever another line takes over -- and in the texel that straddles
+       an edge the distance is only filled in: its gradient is not a distance's.
+       A true distance has unit gradient, so measure it and trust the terms that
+       lean on the gradient (the foot point, the key, the arc probe) only where
+       it is one. And the arc lives 100-240 km landward, so it may exist only
+       where the band really reaches past it: probe the band 215 km landward on
+       this pixel's normal (the same point for the whole normal, so the test
+       cannot draw a seam across it) -- the arc was being cut off mid-flank
+       wherever the band ended short, a straight seam 3.17 already had faintly. */
+    vec3 d0=dirFromUv(uv);
+    float gs=length(vec2(gTrG.x/(2.0*PI*6371.0*max(sqrt(1.0-d0.y*d0.y),0.05)), gTrG.y/(PI*6371.0)));
+    gTrRel=smoothstep(0.55,0.80,gs)*(1.0-smoothstep(1.45,1.90,gs));
+    vec2 uvP=uv-gTrG*((gTrS+215.0)/max(dot(gTrG,gTrG),1e-6));
+    uvP=vec2(fract(uvP.x),clamp(uvP.y,0.0,1.0));
+    float sP=0.0, cPA=0.0, cPB=0.0; vec2 gP=vec2(0.0);
+    if(uTrench.x>0.5) trTap(stkA, uvP, sP, cPA, gP);
+    if(uTrench.y>0.5) trTap(stkB, uvP, sP, cPB, gP);
+    float arcOK=smoothstep(0.5,0.95,(cPA*(1.0-mixf)+cPB*mixf)*uTrench.z/max(gTrW,1e-3))*gTrRel;
+    /* THE ALONG-STRIKE KEY (3.19). Everything that varies along a trench is
+       read at one FOOT POINT, 80 km up the landward wall on the line normal
+       to the axis, and rotated by the plate found there -- the overriding
+       plate, which carries the margin, the wedge and the arc. The pixel's own
+       material coordinate was used before, and a pixel seaward of the axis
+       sits on the SUBDUCTING plate, so every along-strike term jumped at the
+       plate boundary. From the foot point the key is the same for every pixel
+       on a normal: a true along-strike coordinate, fixed to the crust that
+       shapes it, continuous across the axis. */
+    vec2 uvF=uv-gTrG*((gTrS+80.0)/max(dot(gTrG,gTrG),1e-6));
+    uvF=vec2(fract(uvF.x),clamp(uvF.y,0.0,1.0));
+    vec3 kS=dirFromUv(uvF);
+    if(uMat>0.5){
+      vec4 qF=uPlateQ[clamp(int(texture2D(plateA,wA(uvF)).r*255.0+0.5),0,47)];
+      vec3 aF=normalize(qF.xyz+vec3(0.0,0.0,1e-9));
+      vec3 dk=normalize(kS+(dirFromUv(wA(uvF))-kS)*uMatOffK);
+      kS=dk*cos(qF.w)+cross(aF,dk)*sin(qF.w)+aF*(dot(aF,dk)*(1.0-cos(qF.w)));
+    }
+    /* Neither a trench nor an arc is uniform along strike: a trench deepens and
+       shoals by a kilometre over a few hundred km, and an arc is a chain of
+       volcanoes, not a wall. Computed once here: it varies over 70-800 km, far
+       wider than any stencil, and per tap it cost 3.5 ms on a coastal close-up.
+       NOR IS A TRENCH STRAIGHT (3.19). The axes come from a plate model's
+       polylines, straight for hundreds of km between vertices. Real trenches
+       are festoons -- arcs convex toward the ocean, meeting at cusps (the
+       Aleutians, the Kurils, Izu-Bonin and the Marianas): a creased noise
+       (1 at a crease, -1 between) bows the axis +-30 km with sharp landward
+       cusps, a finer term wanders +-12 km over ~200 km, and the axis steps
+       sideways ~20 km where the trench is segmented. The floor is 4-24 km
+       wide, the terrace sits 16-28 km up the landward wall, the trench is
+       deepest mid-arc and shallower at the cusps, and here and there it
+       shoals by nearly half where a ridge or seamount chain is carried in. */
+    float n1=vnoise3(kS*7.0+vec3(2.3,7.1,4.4));
+    float cusp=clamp(1.0-abs(n1-0.5)/0.15,-1.0,1.0);
+    gTrMe=30.0*cusp+24.0*(vnoise3(kS*30.0+vec3(5.5,1.2,8.8))-0.5)
+         +22.0*(smoothstep(0.42,0.58,vnoise3(kS*13.0+vec3(8.2,6.4,0.9)))-0.5);
+    gTrFW=2.0+10.0*smoothstep(0.30,0.80,vnoise3(kS*9.0+vec3(9.1,3.3,6.6)));
+    gTrBen=16.0+12.0*vnoise3(kS*30.0+vec3(1.7,4.9,2.2));
+    gTrKS=kS;
+    gTrAK=(0.78+0.44*vnoise3(kS*22.0))*mix(1.08,0.80,smoothstep(0.2,1.0,cusp))
+         *(1.0-0.45*smoothstep(0.62,0.90,vnoise3(kS*28.0+vec3(6.3,2.9,5.1))));
+    gTrArcK=0.22+0.78*smoothstep(0.40,0.78,vnoise3(kS*95.0+vec3(3.7,1.3,-2.1)));
+    // where the distance is not trusted, every along-strike term goes neutral
+    gTrMe*=gTrRel; gTrAK=mix(1.0,gTrAK,gTrRel);
+    gTrFW=mix(6.0,gTrFW,gTrRel); gTrBen=mix(22.0,gTrBen,gTrRel);
+    gTrArcK*=arcOK;
   }
   /* Substrate, read early because elevDetail needs it to decide how much relief
      this ground carries -- see the amplitude note there. */
@@ -1872,6 +1955,10 @@ void main(){
      above it; a seamount and a ridge flank do not. Free, and it is the only
      honest way to tell them apart per pixel. */
   float shelfHi=-12000.0;
+  /* How much of that ring of taps is land, soft across the waterline: the
+     shore's nearness for what is drawn on the water and must hug it (the
+     sediment plumes). Free, from the same taps. */
+  float landRing=0.0;
   if(pw>0.004){
     float r=3.6/2048.0*PI;                  // blur radius AND gradient baseline (same angle at 2048 rows)
     float sum=0.0; vec2 gv=vec2(0.0);
@@ -1879,7 +1966,7 @@ void main(){
       float a=(float(k)+0.5)/6.0*2.0*PI;
       vec2 dk=vec2(cos(a),sin(a));
       float v=baseElev(uvFromDir(normalize(sdir+(t1*dk.x+t2*dk.y)*r)));
-      sum+=v; gv+=v*dk;
+      sum+=v; gv+=v*dk; landRing+=smoothstep(wl-40.0,wl+40.0,v)/6.0;
     }
     gv*=2.0/6.0;                            // ring moment -> gradient, in t1/t2
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
@@ -1941,6 +2028,8 @@ void main(){
     float zEp=baseElev(uvFromDir(normalize(sdir+Eax*rda))), zEm=baseElev(uvFromDir(normalize(sdir-Eax*rda)));
     float zNp=baseElev(uvFromDir(normalize(sdir+Nax*rda))), zNm=baseElev(uvFromDir(normalize(sdir-Nax*rda)));
     float rE=zEp-zEm, rN=zNp-zNm;
+    landRing=0.25*(smoothstep(wl-40.0,wl+40.0,zEp)+smoothstep(wl-40.0,wl+40.0,zEm)
+                  +smoothstep(wl-40.0,wl+40.0,zNp)+smoothstep(wl-40.0,wl+40.0,zNm));
     /* LOCAL RELIEF, NOT LOCAL SLOPE. rug was the first difference alone, and
        a first difference is ZERO on every crest and every valley axis: through
        a rugged range it read saturated on the flanks and fell to nothing
@@ -2741,7 +2830,15 @@ void main(){
        climate across the whole timeline -- strong off wet tropical margins,
        absent along desert and polar coasts. */
     float shallow=smoothstep(-500.0,-6.0,z);
-    float river=clamp((Rf-0.16)/0.55,0.0,1.0);
+    /* THE PLUME HUGS THE SHORE BY ITS OWN RULE (3.19). It used to fade
+       offshore only because rainfall was zero over the sea, so every read of
+       it near a coast was diluted. The rain skirt removed that dilution --
+       rightly, for the land it was drying out -- and the plume then ran at
+       full strength to the skirt's edge 100 km out: the whole Sunda Shelf and
+       the Gulf of Thailand went murky grey. Nearness is explicit now: the
+       share of the ~31 km ring that is land, which reaches about 30 km off a
+       straight coast and further into bays and gulfs, where plumes pool. */
+    float river=clamp((Rf-0.16)/0.55,0.0,1.0)*smoothstep(0.0,0.45,landRing);
     float pn=fbm3(sdir*10.0+21.0);
     float plume=shallow*river*(0.45+0.55*pn);
     col=mix(col, vec3(0.34,0.41,0.31), clamp(plume,0.0,0.55));
@@ -4099,6 +4196,24 @@ void main(){
        of the wide view. Below 0.90 it starts eating the thing the user likes. */
     aniso *= 1.0-smoothstep(1.10,1.70,sfoot);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
+    /* BENDING FAULTS (3.19). A plate bending into a trench cracks along its
+       outer wall and rise into horsts and grabens parallel to the axis, with
+       throws of hundreds of metres -- the strongest lineation on a trench chart
+       -- and the wedge on the landward wall is ridged the same way by its
+       thrusts. They CUT ACROSS the abyssal fabric rather than bending it: a
+       first version rotated the fabric toward the trench, and two line fields
+       90 degrees apart cannot be blended -- the grain flipped along a contour
+       parallel to the trench, a ruled seam. So the fault set is its own term
+       (below), the abyssal grain quietens under it, and where both are
+       present they cross, as they do on a chart. */
+    float trF=0.0, trSd=0.0;
+    if(gTrW>0.001){
+      trSd=gTrS+trBow(gTrS);
+      // the window on the SHIPPED distance, clear of the band's 70 km landward
+      // edge (on the bowed one it reached that edge and was cut off there)
+      trF=gTrW*gTrRel*smoothstep(-60.0,-25.0,gTrS)*(1.0-smoothstep(60.0,100.0,gTrS))
+         *smoothstep(-2000.0,-3400.0,z)*(1.0-smoothstep(1.10,1.70,sfoot));
+    }
     /* CRUSTAL AGE as tone -- OUTSIDE the fabric branch below. The depth ramp is
        compressed between 3 and 5 km, so without this the whole spreading system
        reads as one flat blue; lightening the youngest crust makes the age bands
@@ -4125,7 +4240,7 @@ void main(){
     col *= 1.0;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
-    if(aniso*deepw > 0.003){
+    if(aniso*deepw > 0.003 || trF > 0.003){
       vec2 sN = spr/max(length(spr),1e-3);            // across-ridge unit (E,N)
       // local tangent frame on the sphere, to step the noise along real bearings.
       // dirFromUv puts the pole axis on +Y (y = sin lat), so east and north are
@@ -4136,6 +4251,17 @@ void main(){
       vec3 e3 = cross(pax, sdir); float el = length(e3);
       e3 = el>1e-4 ? e3/el : vec3(1.0,0.0,0.0);        // east-ish (sign is immaterial here)
       vec3 n3 = cross(sdir, e3);                        // toward the pole (north-ish)
+      /* The trench's axis distance as a gradient in THIS frame (e3 points
+         west): differences along e3 and n3, so no sign convention can mirror
+         it. km of axis distance per radian of arc. */
+      vec2 trN=vec2(0.0);
+      if(trF>0.003){
+        float dq=0.2/180.0*PI;
+        vec2 u1=uvFromDir(normalize(sdir+e3*dq))-uvFromDir(normalize(sdir-e3*dq));
+        vec2 u2=uvFromDir(normalize(sdir+n3*dq))-uvFromDir(normalize(sdir-n3*dq));
+        u1.x-=floor(u1.x+0.5); u2.x-=floor(u2.x+0.5);
+        trN=vec2(dot(gTrG,u1),dot(gTrG,u2))/(2.0*dq);
+      }
       vec3 across3 = normalize(sN.x*e3 + sN.y*n3);     // along spreading = across ridge
       vec3 along3  = normalize(-sN.y*e3 + sN.x*n3);    // along the ridge
 
@@ -4642,7 +4768,8 @@ void main(){
          just make a dark line. What the fabric has to do is stop. */
       float amp = 1.55 * gFineFade * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
                 * mix(0.50, 1.30, bakedRough)
-                * (1.0 - 0.80*fzone);
+                * (1.0 - 0.80*fzone)
+                * (1.0 - 0.65*trF);                // quieter under the bending faults
       /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
          unit normal, so a value of 1 is a forty-five degree face, and the tail
          of the distribution ran well past that.
@@ -4662,6 +4789,32 @@ void main(){
          of flattened. Applied to the vector, so the knee cannot square the grain
          off along the uv axes. */
       vec2 gT=gUV*amp;
+      /* The bending-fault set: three spacings (13, 7.5 and 4.2 km), each
+         segmented along strike (its phase and throw drift over ~100 km, so no
+         scarp runs unbroken for hundreds of km), scarps facing the trench
+         steeper than their back-slopes, strongest on the outer wall and rise.
+         A slope, in the same units as the fabric's, along the trench normal. */
+      if(trF>0.003){
+        float fk=sfoot*3.11;                                   // km per pixel
+        /* Keyed along strike by the trench's own key (continuous across the
+           axis, where a plate's material coordinate would jump) and across it
+           by the distance itself, so the pattern is a map of (along, across).
+           The spacing is warped (real fault spacing is irregular, 2-10 km, not
+           a comb) and each scarp is broken into ~50 km segments. */
+        vec3 kA=gTrKS*140.0;
+        float sw=trSd+6.0*(vnoise3(kA+vec3(trSd/9.0,1.3,2.7))-0.5);
+        float ph1=6.2832*vnoise3(gTrKS*55.0+vec3(3.1,8.2,5.5));
+        float ph2=6.2832*vnoise3(gTrKS*90.0+vec3(7.7,2.4,9.3));
+        float thr=0.35+0.9*vnoise3(gTrKS*70.0+vec3(4.4,6.6,1.1));
+        float seg=0.30+0.70*smoothstep(0.30,0.70,vnoise3(kA*1.6+vec3(trSd/25.0,6.1,0.4)));
+        float fs=0.48*cos(6.2832*sw/13.0+ph1)*(1.0-smoothstep(0.30,0.45,fk/13.0))
+                +0.38*cos(6.2832*sw/7.5+ph2)*(1.0-smoothstep(0.30,0.45,fk/7.5))
+                +0.26*cos(6.2832*sw/4.2+ph1*1.7)*(1.0-smoothstep(0.30,0.45,fk/4.2));
+        fs=(fs<0.0 ? fs*1.5 : fs*0.75)*seg;
+        float outer=mix(0.45,1.0,smoothstep(-10.0,20.0,trSd));  // the outer wall breaks hardest
+        vec2 tnU=vec2(trN.x,-trN.y)/max(length(trN),1e-6);    // the fabric's uv basis (sUV's convention)
+        gT+=tnU*fs*thr*outer*trF*0.55*gFineFade;
+      }
       float gm=length(gT), K=0.62;
       gT *= inversesqrt(1.0 + (gm*gm)/(K*K));
       nrm = normalize(nrm + vec3(gT, 0.0));
@@ -4680,7 +4833,8 @@ void main(){
       float kn1=vnoise3(kd*310.0+7.0);
       float knL=vnoise3(kd*310.0+Lh3*0.38+7.0);
       float knm=smoothstep(0.34,0.66,vnoise3(kd*23.0+29.0));
-      float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade;
+      float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade
+                 *step(0.003,aniso*deepw);   // this block's own gate, now that trenches also open it
       col *= 1.0 + clamp((knL-kn1)*5.5,-1.0,1.0)*spotm*0.24;
     }
 

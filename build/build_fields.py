@@ -267,14 +267,24 @@ def export(age, Z_hi, z_for_climate, tag):
     # returns row 0 = NORTH, epeiric.carve assumes north-first, and
     # compute_fields wants ascending again. Hence the flip -- verified by
     # measuring that rainfall still peaks at the equator and not at the poles.
-    _, _, Rf, _, _ = compute_fields(z_for_climate, age, CLIM_H, CLIM_W)
+    Zc, _, Rf, _, _ = compute_fields(z_for_climate, age, CLIM_H, CLIM_W)
+    # THE SEA FILLED FROM THE LAND (rain_fill.py, 3.19): on the solve's own
+    # land mask, and again after the anchor, so no reader near a coast averages
+    # a zero sea into it (the dry orange coastal strips). The relief below
+    # reads it too -- its bilinear upsample was the same kind of reader -- so
+    # the next rebuild of `_e` erodes a coastal strip ~15 km wide with the
+    # coast's own rain instead of half of it.
+    import rain_anchor as _RA
+    import rain_fill as _RFILL
+    Rf = _RFILL.apply(Rf, Zc >= 0)
     rain = np.asarray(Image.fromarray(
         (np.clip(Rf / RF_MAX, 0, 1) * 255).astype(np.uint8)).resize(
         (RAIN_W, RAIN_H), Image.LANCZOS)) / 255.0
     # THE PRESENT-DAY ANCHOR (rain_anchor.py): observed rainfall calibrates the
     # model's own within 35 Myr of the present, riding the crust; a no-op past it.
-    import rain_anchor as _RA
-    rain = _RA.apply(rain, age, _RA.land_mask(Z_hi, RAIN_H, RAIN_W), RF_MAX)
+    _land_hi = _RA.land_mask(Z_hi, RAIN_H, RAIN_W)
+    rain = _RA.apply(rain, age, _land_hi, RF_MAX)
+    rain = _RFILL.apply(rain, _land_hi)
 
     # Evolving sea-floor structure and the oceanic plateaus: age-graded abyss
     # from ridge distance, fracture zones, and Kerguelen / Ontong Java / the

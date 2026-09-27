@@ -168,6 +168,14 @@ float gShelfK=99.0;   // the same distance in km, + on the shelf side
    the trough, outer rise and (where the overriding side is ocean) the arc
    from it at every tap, so the colour and the hillshade both see them. */
 float gTrS=0.0, gTrW=0.0, gTrAK=1.0, gTrArcK=1.0;
+float gTrMe=0.0, gTrFW=6.0, gTrBen=22.0;   // along-strike: axis meander, floor half-width, terrace (km)
+vec3 gTrKS=vec3(0.0);                      // the along-strike key (main)
+float gTrRel=0.0;                          // how far the shipped distance can be trusted here (main)
+/* The bow moves the axis, and it must fade out landward: the band of distance
+   the field ships ends 70 km behind a margin trench (240 behind an arc), and a
+   wall pushed past it is cut off there in a straight seam. Wide enough that
+   the distance stays monotonic. */
+float trBow(float sr){ return gTrMe*smoothstep(-110.0,-20.0,sr); }
 vec2 gTrG=vec2(0.0), gTrUv=vec2(0.0);
 uniform vec2 uCoast;    // natural waterline: x strength (?coast=, 0 off), y lateral scale in km (?coastkm=)
 uniform vec3 uTrench;   // x: keyframe A has the field, y: B has it, z: strength (?trench=, 0 off)
@@ -714,16 +722,34 @@ void trTap(sampler2D stk, vec2 uv, out float s, out float cov, out vec2 g){
   s=mix(mix(sv.x,sv.y,t.x), mix(sv.z,sv.w,t.x), t.y);
   g=vec2(mix(sv.y-sv.x, sv.w-sv.z, t.y)*1024.0, mix(sv.z-sv.x, sv.w-sv.y, t.x)*512.0);
 }
+/* THE SECTION IS NOT A GAUSSIAN (3.19). 3.17 drew every trench as the same
+   two-sided bell along a smooth distance field, and the user saw it at once:
+   "unnaturally straight and symmetrical". A real trench is neither. Its axis
+   wanders and steps along strike; its floor is a flat of ponded turbidites,
+   wide where sediment arrives and nearly absent where it does not; its
+   landward wall is steep and broken by a mid-slope terrace where the
+   accretionary wedge benches; its seaward wall is a long gentle ramp up to the
+   outer rise. The meander, floor width and terrace come from main, once per
+   pixel, keyed to the overriding plate's material coordinate like the
+   along-strike depth (so they ride the margin that shapes them). */
 float trenchDz(vec2 uv, float z){
   vec2 d=uv-gTrUv; d.x-=floor(d.x+0.5);
-  float s=gTrS+dot(gTrG,d);
+  float sr=gTrS+dot(gTrG,d);                // the shipped distance
+  float s=sr+trBow(sr);
   float amp=clamp(1100.0+0.5*(-z-4000.0), 700.0, 2600.0);
-  float sig=s<0.0 ? 17.0 : 30.0;
-  float trough=exp(-s*s/(sig*sig));
-  float rise=0.16*exp(-(s-85.0)*(s-85.0)/1800.0)*step(0.0,s);
-  float arc=1700.0*exp(-(s+165.0)*(s+165.0)/2400.0)*smoothstep(-2700.0,-3600.0,z);
+  float x=abs(s)-gTrFW;                     // km beyond the flat floor
+  float trough = s<0.0
+    ? 1.0-0.58*smoothstep(0.0,13.0,x)-0.42*smoothstep(gTrBen,gTrBen+12.0,x)
+    : exp(-max(x,0.0)*max(x,0.0)/(34.0*34.0));
+  float rise=0.16*exp(-(s-85.0)*(s-85.0)/1800.0)*step(0.0,s)*(1.0-smoothstep(88.0,110.0,sr));
+  // the arc stands on the overriding plate and does not bow with the axis (the
+  // arc-trench gap varies, as it does), and it fades before the band's edge
+  // (its forearc flank is the steeper: its tail must be gone by the 70 km edge
+  // of a margin's band, where 3.17's reached 40 m and drew a faint seam)
+  float arc=1700.0*exp(-(sr+165.0)*(sr+165.0)/(sr>-165.0 ? 1200.0 : 2400.0))
+           *smoothstep(-2700.0,-3600.0,z)*(1.0-smoothstep(200.0,238.0,-sr));
   amp*=gTrAK; arc*=gTrArcK;   // along-strike variation, once per pixel (main)
-  return gTrW*(smoothstep(-2000.0,-3400.0,z)*amp*(rise-trough) + arc);
+  return gTrW*(smoothstep(-2000.0,-3400.0,z)*amp*(rise-trough)*(1.0-smoothstep(215.0,245.0,sr)) + arc);
 }
 float baseElev(vec2 uv){
   float z=mix(decElev(texture2D(elevA,wA(uv)).r), decElev(texture2D(elevB,wB(uv)).r), mixf);
@@ -1669,16 +1695,73 @@ void main(){
     gMatAxis=normalize(q.xyz+vec3(0.0,0.0,1e-9)); gMatAng=q.w;
     gMatOff=(dirFromUv(wA(uv))-dirFromUv(uv))*uMatOffK;
   }
-  /* Neither a trench nor an arc is uniform along strike: a trench deepens and
-     shoals by a kilometre over a few hundred km, and an arc is a chain of
-     volcanoes, not a wall. Keyed to the material coordinate -- on the arc side
-     the overriding plate's, the plate the arc and the inner wall ride -- and
-     computed once here: it varies over 70-300 km, far wider than any stencil,
-     and per tap it cost 3.5 ms on a coastal close-up. */
   if(gTrW>0.001){
-    vec3 md=matDir(dirFromUv(uv));
-    gTrAK=0.78+0.44*vnoise3(md*22.0);
-    gTrArcK=0.22+0.78*smoothstep(0.40,0.78,vnoise3(md*95.0+vec3(3.7,1.3,-2.1)));
+    /* WHERE THE BAND ENDS (3.19). The shipped distance stops at arbitrary
+       edges -- 70 km behind a margin, 240 behind an arc, 110 past a line's
+       end, wherever another line takes over -- and in the texel that straddles
+       an edge the distance is only filled in: its gradient is not a distance's.
+       A true distance has unit gradient, so measure it and trust the terms that
+       lean on the gradient (the foot point, the key, the arc probe) only where
+       it is one. And the arc lives 100-240 km landward, so it may exist only
+       where the band really reaches past it: probe the band 215 km landward on
+       this pixel's normal (the same point for the whole normal, so the test
+       cannot draw a seam across it) -- the arc was being cut off mid-flank
+       wherever the band ended short, a straight seam 3.17 already had faintly. */
+    vec3 d0=dirFromUv(uv);
+    float gs=length(vec2(gTrG.x/(2.0*PI*6371.0*max(sqrt(1.0-d0.y*d0.y),0.05)), gTrG.y/(PI*6371.0)));
+    gTrRel=smoothstep(0.55,0.80,gs)*(1.0-smoothstep(1.45,1.90,gs));
+    vec2 uvP=uv-gTrG*((gTrS+215.0)/max(dot(gTrG,gTrG),1e-6));
+    uvP=vec2(fract(uvP.x),clamp(uvP.y,0.0,1.0));
+    float sP=0.0, cPA=0.0, cPB=0.0; vec2 gP=vec2(0.0);
+    if(uTrench.x>0.5) trTap(stkA, uvP, sP, cPA, gP);
+    if(uTrench.y>0.5) trTap(stkB, uvP, sP, cPB, gP);
+    float arcOK=smoothstep(0.5,0.95,(cPA*(1.0-mixf)+cPB*mixf)*uTrench.z/max(gTrW,1e-3))*gTrRel;
+    /* THE ALONG-STRIKE KEY (3.19). Everything that varies along a trench is
+       read at one FOOT POINT, 80 km up the landward wall on the line normal
+       to the axis, and rotated by the plate found there -- the overriding
+       plate, which carries the margin, the wedge and the arc. The pixel's own
+       material coordinate was used before, and a pixel seaward of the axis
+       sits on the SUBDUCTING plate, so every along-strike term jumped at the
+       plate boundary. From the foot point the key is the same for every pixel
+       on a normal: a true along-strike coordinate, fixed to the crust that
+       shapes it, continuous across the axis. */
+    vec2 uvF=uv-gTrG*((gTrS+80.0)/max(dot(gTrG,gTrG),1e-6));
+    uvF=vec2(fract(uvF.x),clamp(uvF.y,0.0,1.0));
+    vec3 kS=dirFromUv(uvF);
+    if(uMat>0.5){
+      vec4 qF=uPlateQ[clamp(int(texture2D(plateA,wA(uvF)).r*255.0+0.5),0,47)];
+      vec3 aF=normalize(qF.xyz+vec3(0.0,0.0,1e-9));
+      vec3 dk=normalize(kS+(dirFromUv(wA(uvF))-kS)*uMatOffK);
+      kS=dk*cos(qF.w)+cross(aF,dk)*sin(qF.w)+aF*(dot(aF,dk)*(1.0-cos(qF.w)));
+    }
+    /* Neither a trench nor an arc is uniform along strike: a trench deepens and
+       shoals by a kilometre over a few hundred km, and an arc is a chain of
+       volcanoes, not a wall. Computed once here: it varies over 70-800 km, far
+       wider than any stencil, and per tap it cost 3.5 ms on a coastal close-up.
+       NOR IS A TRENCH STRAIGHT (3.19). The axes come from a plate model's
+       polylines, straight for hundreds of km between vertices. Real trenches
+       are festoons -- arcs convex toward the ocean, meeting at cusps (the
+       Aleutians, the Kurils, Izu-Bonin and the Marianas): a creased noise
+       (1 at a crease, -1 between) bows the axis +-30 km with sharp landward
+       cusps, a finer term wanders +-12 km over ~200 km, and the axis steps
+       sideways ~20 km where the trench is segmented. The floor is 4-24 km
+       wide, the terrace sits 16-28 km up the landward wall, the trench is
+       deepest mid-arc and shallower at the cusps, and here and there it
+       shoals by nearly half where a ridge or seamount chain is carried in. */
+    float n1=vnoise3(kS*7.0+vec3(2.3,7.1,4.4));
+    float cusp=clamp(1.0-abs(n1-0.5)/0.15,-1.0,1.0);
+    gTrMe=30.0*cusp+24.0*(vnoise3(kS*30.0+vec3(5.5,1.2,8.8))-0.5)
+         +22.0*(smoothstep(0.42,0.58,vnoise3(kS*13.0+vec3(8.2,6.4,0.9)))-0.5);
+    gTrFW=2.0+10.0*smoothstep(0.30,0.80,vnoise3(kS*9.0+vec3(9.1,3.3,6.6)));
+    gTrBen=16.0+12.0*vnoise3(kS*30.0+vec3(1.7,4.9,2.2));
+    gTrKS=kS;
+    gTrAK=(0.78+0.44*vnoise3(kS*22.0))*mix(1.08,0.80,smoothstep(0.2,1.0,cusp))
+         *(1.0-0.45*smoothstep(0.62,0.90,vnoise3(kS*28.0+vec3(6.3,2.9,5.1))));
+    gTrArcK=0.22+0.78*smoothstep(0.40,0.78,vnoise3(kS*95.0+vec3(3.7,1.3,-2.1)));
+    // where the distance is not trusted, every along-strike term goes neutral
+    gTrMe*=gTrRel; gTrAK=mix(1.0,gTrAK,gTrRel);
+    gTrFW=mix(6.0,gTrFW,gTrRel); gTrBen=mix(22.0,gTrBen,gTrRel);
+    gTrArcK*=arcOK;
   }
   /* Substrate, read early because elevDetail needs it to decide how much relief
      this ground carries -- see the amplitude note there. */
@@ -1873,6 +1956,10 @@ void main(){
      above it; a seamount and a ridge flank do not. Free, and it is the only
      honest way to tell them apart per pixel. */
   float shelfHi=-12000.0;
+  /* How much of that ring of taps is land, soft across the waterline: the
+     shore's nearness for what is drawn on the water and must hug it (the
+     sediment plumes). Free, from the same taps. */
+  float landRing=0.0;
   if(pw>0.004){
     float r=3.6/2048.0*PI;                  // blur radius AND gradient baseline (same angle at 2048 rows)
     float sum=0.0; vec2 gv=vec2(0.0);
@@ -1880,7 +1967,7 @@ void main(){
       float a=(float(k)+0.5)/6.0*2.0*PI;
       vec2 dk=vec2(cos(a),sin(a));
       float v=baseElev(uvFromDir(normalize(sdir+(t1*dk.x+t2*dk.y)*r)));
-      sum+=v; gv+=v*dk;
+      sum+=v; gv+=v*dk; landRing+=smoothstep(wl-40.0,wl+40.0,v)/6.0;
     }
     gv*=2.0/6.0;                            // ring moment -> gradient, in t1/t2
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
@@ -1942,6 +2029,8 @@ void main(){
     float zEp=baseElev(uvFromDir(normalize(sdir+Eax*rda))), zEm=baseElev(uvFromDir(normalize(sdir-Eax*rda)));
     float zNp=baseElev(uvFromDir(normalize(sdir+Nax*rda))), zNm=baseElev(uvFromDir(normalize(sdir-Nax*rda)));
     float rE=zEp-zEm, rN=zNp-zNm;
+    landRing=0.25*(smoothstep(wl-40.0,wl+40.0,zEp)+smoothstep(wl-40.0,wl+40.0,zEm)
+                  +smoothstep(wl-40.0,wl+40.0,zNp)+smoothstep(wl-40.0,wl+40.0,zNm));
     /* LOCAL RELIEF, NOT LOCAL SLOPE. rug was the first difference alone, and
        a first difference is ZERO on every crest and every valley axis: through
        a rugged range it read saturated on the flanks and fell to nothing
@@ -2742,7 +2831,15 @@ void main(){
        climate across the whole timeline -- strong off wet tropical margins,
        absent along desert and polar coasts. */
     float shallow=smoothstep(-500.0,-6.0,z);
-    float river=clamp((Rf-0.16)/0.55,0.0,1.0);
+    /* THE PLUME HUGS THE SHORE BY ITS OWN RULE (3.19). It used to fade
+       offshore only because rainfall was zero over the sea, so every read of
+       it near a coast was diluted. The rain skirt removed that dilution --
+       rightly, for the land it was drying out -- and the plume then ran at
+       full strength to the skirt's edge 100 km out: the whole Sunda Shelf and
+       the Gulf of Thailand went murky grey. Nearness is explicit now: the
+       share of the ~31 km ring that is land, which reaches about 30 km off a
+       straight coast and further into bays and gulfs, where plumes pool. */
+    float river=clamp((Rf-0.16)/0.55,0.0,1.0)*smoothstep(0.0,0.45,landRing);
     float pn=fbm3(sdir*10.0+21.0);
     float plume=shallow*river*(0.45+0.55*pn);
     col=mix(col, vec3(0.34,0.41,0.31), clamp(plume,0.0,0.55));
@@ -4100,6 +4197,24 @@ void main(){
        of the wide view. Below 0.90 it starts eating the thing the user likes. */
     aniso *= 1.0-smoothstep(1.10,1.70,sfoot);  // 0 where undefined / plateau
     float deepw = smoothstep(-750.0,-2400.0,z);       // fade off the shelf into abyss
+    /* BENDING FAULTS (3.19). A plate bending into a trench cracks along its
+       outer wall and rise into horsts and grabens parallel to the axis, with
+       throws of hundreds of metres -- the strongest lineation on a trench chart
+       -- and the wedge on the landward wall is ridged the same way by its
+       thrusts. They CUT ACROSS the abyssal fabric rather than bending it: a
+       first version rotated the fabric toward the trench, and two line fields
+       90 degrees apart cannot be blended -- the grain flipped along a contour
+       parallel to the trench, a ruled seam. So the fault set is its own term
+       (below), the abyssal grain quietens under it, and where both are
+       present they cross, as they do on a chart. */
+    float trF=0.0, trSd=0.0;
+    if(gTrW>0.001){
+      trSd=gTrS+trBow(gTrS);
+      // the window on the SHIPPED distance, clear of the band's 70 km landward
+      // edge (on the bowed one it reached that edge and was cut off there)
+      trF=gTrW*gTrRel*smoothstep(-60.0,-25.0,gTrS)*(1.0-smoothstep(60.0,100.0,gTrS))
+         *smoothstep(-2000.0,-3400.0,z)*(1.0-smoothstep(1.10,1.70,sfoot));
+    }
     /* CRUSTAL AGE as tone -- OUTSIDE the fabric branch below. The depth ramp is
        compressed between 3 and 5 km, so without this the whole spreading system
        reads as one flat blue; lightening the youngest crust makes the age bands
@@ -4126,7 +4241,7 @@ void main(){
     col *= 1.0;
     // Gate only to skip work where there is provably nothing to draw. Every
     // term inside now scales with aniso, so crossing it changes nothing visible.
-    if(aniso*deepw > 0.003){
+    if(aniso*deepw > 0.003 || trF > 0.003){
       vec2 sN = spr/max(length(spr),1e-3);            // across-ridge unit (E,N)
       // local tangent frame on the sphere, to step the noise along real bearings.
       // dirFromUv puts the pole axis on +Y (y = sin lat), so east and north are
@@ -4137,6 +4252,17 @@ void main(){
       vec3 e3 = cross(pax, sdir); float el = length(e3);
       e3 = el>1e-4 ? e3/el : vec3(1.0,0.0,0.0);        // east-ish (sign is immaterial here)
       vec3 n3 = cross(sdir, e3);                        // toward the pole (north-ish)
+      /* The trench's axis distance as a gradient in THIS frame (e3 points
+         west): differences along e3 and n3, so no sign convention can mirror
+         it. km of axis distance per radian of arc. */
+      vec2 trN=vec2(0.0);
+      if(trF>0.003){
+        float dq=0.2/180.0*PI;
+        vec2 u1=uvFromDir(normalize(sdir+e3*dq))-uvFromDir(normalize(sdir-e3*dq));
+        vec2 u2=uvFromDir(normalize(sdir+n3*dq))-uvFromDir(normalize(sdir-n3*dq));
+        u1.x-=floor(u1.x+0.5); u2.x-=floor(u2.x+0.5);
+        trN=vec2(dot(gTrG,u1),dot(gTrG,u2))/(2.0*dq);
+      }
       vec3 across3 = normalize(sN.x*e3 + sN.y*n3);     // along spreading = across ridge
       vec3 along3  = normalize(-sN.y*e3 + sN.x*n3);    // along the ridge
 
@@ -4643,7 +4769,8 @@ void main(){
          just make a dark line. What the fabric has to do is stop. */
       float amp = 1.55 * gFineFade * rough * aniso * deepw * flatw * mix(0.50,1.0,sedq)
                 * mix(0.50, 1.30, bakedRough)
-                * (1.0 - 0.80*fzone);
+                * (1.0 - 0.80*fzone)
+                * (1.0 - 0.65*trF);                // quieter under the bending faults
       /* BOUND IT AS A SLOPE -- but with a knee, not a wall. gUV is added into a
          unit normal, so a value of 1 is a forty-five degree face, and the tail
          of the distribution ran well past that.
@@ -4663,6 +4790,32 @@ void main(){
          of flattened. Applied to the vector, so the knee cannot square the grain
          off along the uv axes. */
       vec2 gT=gUV*amp;
+      /* The bending-fault set: three spacings (13, 7.5 and 4.2 km), each
+         segmented along strike (its phase and throw drift over ~100 km, so no
+         scarp runs unbroken for hundreds of km), scarps facing the trench
+         steeper than their back-slopes, strongest on the outer wall and rise.
+         A slope, in the same units as the fabric's, along the trench normal. */
+      if(trF>0.003){
+        float fk=sfoot*3.11;                                   // km per pixel
+        /* Keyed along strike by the trench's own key (continuous across the
+           axis, where a plate's material coordinate would jump) and across it
+           by the distance itself, so the pattern is a map of (along, across).
+           The spacing is warped (real fault spacing is irregular, 2-10 km, not
+           a comb) and each scarp is broken into ~50 km segments. */
+        vec3 kA=gTrKS*140.0;
+        float sw=trSd+6.0*(vnoise3(kA+vec3(trSd/9.0,1.3,2.7))-0.5);
+        float ph1=6.2832*vnoise3(gTrKS*55.0+vec3(3.1,8.2,5.5));
+        float ph2=6.2832*vnoise3(gTrKS*90.0+vec3(7.7,2.4,9.3));
+        float thr=0.35+0.9*vnoise3(gTrKS*70.0+vec3(4.4,6.6,1.1));
+        float seg=0.30+0.70*smoothstep(0.30,0.70,vnoise3(kA*1.6+vec3(trSd/25.0,6.1,0.4)));
+        float fs=0.48*cos(6.2832*sw/13.0+ph1)*(1.0-smoothstep(0.30,0.45,fk/13.0))
+                +0.38*cos(6.2832*sw/7.5+ph2)*(1.0-smoothstep(0.30,0.45,fk/7.5))
+                +0.26*cos(6.2832*sw/4.2+ph1*1.7)*(1.0-smoothstep(0.30,0.45,fk/4.2));
+        fs=(fs<0.0 ? fs*1.5 : fs*0.75)*seg;
+        float outer=mix(0.45,1.0,smoothstep(-10.0,20.0,trSd));  // the outer wall breaks hardest
+        vec2 tnU=vec2(trN.x,-trN.y)/max(length(trN),1e-6);    // the fabric's uv basis (sUV's convention)
+        gT+=tnU*fs*thr*outer*trF*0.55*gFineFade;
+      }
       float gm=length(gT), K=0.62;
       gT *= inversesqrt(1.0 + (gm*gm)/(K*K));
       nrm = normalize(nrm + vec3(gT, 0.0));
@@ -4681,7 +4834,8 @@ void main(){
       float kn1=vnoise3(kd*310.0+7.0);
       float knL=vnoise3(kd*310.0+Lh3*0.38+7.0);
       float knm=smoothstep(0.34,0.66,vnoise3(kd*23.0+29.0));
-      float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade;
+      float spotm=smoothstep(0.775,0.85,max(kn1,knL))*knm*deepw*gFineFade
+                 *step(0.003,aniso*deepw);   // this block's own gate, now that trenches also open it
       col *= 1.0 + clamp((knL-kn1)*5.5,-1.0,1.0)*spotm*0.24;
     }
 
@@ -5413,7 +5567,11 @@ vec2 climateAt(vec2 q){
     rain=mix(rain,texture2D(rainB,q).r,mixf);
   }
   float land=smoothstep(-80.0,160.0,h);
-  return vec2(land,rain);
+  /* rain weighted by land, so the caller's division by the summed land is a
+     true normalised average: the field fills the sea from the land around it
+     (build/rain_fill.py), and read raw that fill would count a coast's rain
+     twice. */
+  return vec2(land,rain*land);
 }
 /* Land for the deck's coast test, on a ramp across the continental slope
    (-2,500 m to +300 m) instead of at the waterline: summed over offsets, a
@@ -5425,7 +5583,7 @@ float deckLand(vec2 q){
   if(mixf>0.00001){ float b=texture2D(elevB,q).r*2.0-1.0; h=mix(h,sign(b)*b*b*8000.0,mixf); }
   return smoothstep(-2500.0,300.0,h);
 }
-vec2 satelliteWeather(float lon,float lat,float gain,float dry){
+vec2 satelliteWeather(float lon,float lat,float gain,float lo0){
   // One unbroken observed cloud field preserves real fronts, spirals and
   // clear slots. Only bounded residual flow deforms it; strain cannot grow.
   float t=uWeatherTime;
@@ -5442,7 +5600,7 @@ vec2 satelliteWeather(float lon,float lat,float gain,float dry){
   vec2 q=vec2((sourceLon+shear+bend)/(2.0*PI)+0.5,(lat+lift)/PI+0.5);
   float raw=texture2D(uCloudDetail,q).r;
   float broad=texture2D(uCloudDetail,q,2.0).r;
-  float d=smoothstep(0.025+dry*0.045,0.98,raw);
+  float d=smoothstep(lo0,0.98,raw);
   float tau=2.8*pow(d,1.25)*gain;
   float height=pow(max(broad,0.0),1.4)*gain;
   return vec2(tau,height);
@@ -5456,68 +5614,139 @@ vec2 satelliteWeather(float lon,float lat,float gain,float dry){
    storms of the westerly belt turn inside them. The eddies are the curl of a
    drifting stream function, so they swirl without piling cloud up. */
 float whash(float n){return fract(sin(n*12.9898+78.233)*43758.5453);}
+/* THE STREAM FUNCTION IS ANALYTIC (3.19). It was the lattice noise cn()
+   differenced over 0.03 rad -- and cn interpolates inside the texture unit,
+   whose bilinear weights carry 8 bits of sub-texel position, so the noise is
+   a fine staircase and a short difference of it is a spike train. Scaled by
+   a whole renewal cycle of travel, neighbouring pixels read winds that moved
+   their cloud tens of kilometres apart: the brickwork of short dashes over
+   the eastern United States. Value noise evaluated in arithmetic, with its
+   exact gradient (xyz) beside its value (w), has no staircase to amplify. */
+float wh(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+vec4 wnoise(vec3 x){
+  vec3 i=floor(x),f=fract(x),u=f*f*(3.0-2.0*f),du=6.0*f*(1.0-f);
+  float a=wh(i),b=wh(i+vec3(1.0,0.0,0.0)),c=wh(i+vec3(0.0,1.0,0.0)),d=wh(i+vec3(1.0,1.0,0.0));
+  float e=wh(i+vec3(0.0,0.0,1.0)),g=wh(i+vec3(1.0,0.0,1.0)),h=wh(i+vec3(0.0,1.0,1.0)),m=wh(i+vec3(1.0,1.0,1.0));
+  float k1=b-a,k2=c-a,k3=e-a,k4=a-b-c+d,k5=a-c-e+h,k6=a-b-e+g,k7=-a+b+c-d+e-g-h+m;
+  float v=a+k1*u.x+k2*u.y+k3*u.z+k4*u.x*u.y+k5*u.y*u.z+k6*u.z*u.x+k7*u.x*u.y*u.z;
+  vec3 dv=du*vec3(k1+k4*u.y+k6*u.z+k7*u.y*u.z,k2+k5*u.z+k4*u.x+k7*u.z*u.x,k3+k6*u.x+k5*u.y+k7*u.x*u.y);
+  return vec4(dv,v);
+}
 vec2 windAt(float lon,float lat,float t){
   float d=abs(degrees(lat));
   float u=mix(-0.42,1.0,smoothstep(16.0,30.0,d));
   u=mix(u,-0.22,smoothstep(58.0,72.0,d));
   float v=-sign(lat)*0.16*smoothstep(1.0,7.0,d)*(1.0-smoothstep(14.0,28.0,d));
   float storm=0.35+0.65*exp(-pow((d-48.0)/16.0,2.0));
-  vec3 base=vec3(5.3,11.7,2.9);
-  float drift=t*0.0035,e=0.03;
-  float p0=cn(sphere(lon-drift,lat)*2.4+base);
-  float pE=cn(sphere(lon-drift+e/max(cos(lat),0.2),lat)*2.4+base);
-  float pN=cn(sphere(lon-drift,lat+e)*2.4+base);
-  vec2 g=vec2(pE-p0,pN-p0)/e;
+  float lp=lon-t*0.0035;
+  vec4 n=wnoise(sphere(lp,lat)*2.4+vec3(5.3,11.7,2.9));
+  // the stream function's gradient per radian of arc, east and north
+  vec2 g=2.4*vec2(dot(n.xyz,vec3(-sin(lp),0.0,cos(lp))),
+                  dot(n.xyz,vec3(-sin(lat)*cos(lp),cos(lat),-sin(lat)*sin(lp))));
   vec2 eddy=vec2(-g.y,g.x)*0.30*storm;
   return (vec2(u,v)+eddy)*0.0042*uWind.x;
 }
 /* CLOUD CARRIED BY THAT WIND, RENEWED AS IT GOES (3.17). A field advected
    without end stretches into threads, so the satellite structure is carried
    for one renewal cycle and then replaced: two phases half a cycle apart,
-   each fading in, drifting with the local wind and fading out, their weights
-   summing to one. Each new cycle draws its cloud from a different stretch of
-   the observed field (the same latitude band, so storm tracks stay storm
-   tracks), and the cycle's phase varies slowly across the globe, so systems
-   form and dissipate region by region instead of the sky pulsing at once. */
-/* Closed convective cells, F2-F1 of a jittered point lattice (Worley): the
-   bright polygons with dark rims a stratocumulus sheet shows from orbit. 2-D
-   in the local (east, north) plane -- the decks lie between 10 and 40 degrees,
-   where that plane is undistorted enough. Returns 0 on a rim, 1 mid-cell. */
-vec2 whash2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}
-float cellsAt(vec2 x){
-  vec2 i=floor(x),f=fract(x);
-  float d1=8.0,d2=8.0;
-  for(int yy=-1;yy<=1;yy++)for(int xx=-1;xx<=1;xx++){
-    vec2 o=vec2(float(xx),float(yy));
-    vec2 r=o+0.15+0.7*whash2(i+o)-f;
-    float d=dot(r,r);
-    if(d<d1){d2=d1;d1=d;}else if(d<d2){d2=d;}
-  }
-  return smoothstep(0.0,0.35,sqrt(d2)-sqrt(d1));
+   each forming, drifting with the local wind and dissipating. Each new cycle
+   draws its cloud from a different stretch of the observed field (the same
+   latitude band, so storm tracks stay storm tracks), and the cycle's phase
+   varies slowly across the globe, so systems form and dissipate region by
+   region instead of the sky pulsing at once.
+
+   FORM AND DISSIPATE, NEVER FADE (3.19). The phases used to be cross-faded:
+   optical depth times a triangular weight, summed. Half of every cycle the
+   sky was two unrelated cloud fields at half strength each -- a translucent
+   double exposure, the grey haze over the Canaries. A cloud does not fade
+   as a whole; it grows from its thickest core and evaporates from its thin
+   edges. So a phase's life raises and lowers its density THRESHOLD: young,
+   only the cores of its field show; mature, the whole field; dying, the cores
+   again, then nothing. The two phases combine as a union, so what is visible
+   is always cloud at a cloud's own opacity. Calibrated on the observed field
+   itself (a numpy replica over random pairs of its longitudes): the sky's
+   mean opacity within 7% of the cross-fade's over open ocean, with the
+   translucent share (alpha 0.1-0.5) down from 37% of the sky to 18%, and over
+   the subtropical deserts from 34% to 7%. */
+vec2 renewalAt(float t,float ph,int i){
+  float s=t/max(uWind.y,5.0)+0.5*float(i)+ph;
+  float cyc=floor(s);
+  return vec2(s-cyc,cyc*2.0+float(i));        // life fraction, cycle key
 }
-vec2 flowWeather(float lon,float lat,float t,float gain,float dry,vec2 W){
+float renewalPhase(float lon,float lat){
+  return 0.45*wnoise(sphere(lon,lat)*1.3+vec3(19.0,2.0,7.0)).w;
+}
+vec2 flowWeather(float lon,float lat,float t,float gain,float lo0,vec2 W){
   float T=max(uWind.y,5.0);
-  float ph=0.45*cn(sphere(lon,lat)*1.3+vec3(19.0,2.0,7.0));
+  float ph=renewalPhase(lon,lat);
   float cl=max(cos(lat),0.2);
-  vec2 acc=vec2(0.0);
+  float dU=0.0,hU=0.0;
   for(int i=0;i<2;i++){
-    float s=t/T+0.5*float(i)+ph;
-    float cyc=floor(s);
-    float tau=s-cyc;
-    float w=1.0-abs(2.0*tau-1.0);
-    float k=cyc*2.0+float(i);
-    float oLon=whash(k*1.13+3.7)*6.2831853+sin(uEra*0.003)*0.9;
-    float oLat=(whash(k*2.71+9.1)-0.5)*0.10;
-    float age=tau*T;
+    vec2 r=renewalAt(t,ph,i);
+    float w=1.0-abs(2.0*r.x-1.0);
+    float oLon=whash(r.y*1.13+3.7)*6.2831853+sin(uEra*0.003)*0.9;
+    float oLat=(whash(r.y*2.71+9.1)-0.5)*0.10;
+    float age=r.x*T;
     float sLon=lon-W.x*age/cl+oLon;
     float sLat=clamp(lat-W.y*age+oLat,-1.55,1.55);
     vec2 q=vec2(sLon/(2.0*PI)+0.5,sLat/PI+0.5);
     float raw=texture2D(uCloudDetail,q).r;
     float broad=texture2D(uCloudDetail,q,2.0).r;
-    float dd=smoothstep(0.025+dry*0.045,0.98,raw);
-    acc+=w*vec2(2.8*pow(dd,1.25),pow(max(broad,0.0),1.4));
+    float lo=min(lo0+(1.0-w)*0.45,0.90);
+    float d=smoothstep(lo,0.98,raw)*smoothstep(0.0,0.22,w);
+    dU=1.0-(1.0-dU)*(1.0-d);
+    hU+=w*pow(max(broad,0.0),1.4);
   }
-  return acc*gain;
+  return vec2(3.4*pow(dU,1.25),hU)*gain;
+}
+/* THE DECKS ARE THE OBSERVED DECKS (3.19). Wherever the era puts the eastern
+   edge of an open subtropical ocean, its deck is drawn with the stratocumulus
+   the satellite field actually recorded off Peru and Chile (south of the
+   equator) or California and Baja (north of it): the same closed cells,
+   rifts and pockets of open cells, at the same latitude. Two noise sheets
+   tried before this read as a crackle glaze (3.17) and as soft blotches
+   (3.19's first attempt); a deck's texture is its own, so borrow it.
+
+   The source is a fixed band of longitude off each coast, tiled along
+   longitude by two copies half a tile apart, each dissolving toward its own
+   seam by the same union the renewal phases use -- so no seam and no mirror
+   line is ever drawn; latitude folds back at the band's ends (6 and 34
+   degrees), where the deck is thin anyway. The band is FIXED, not traced
+   along the coast: the Peruvian coast swings 7 degrees east between 11 and
+   18 S, and a band that followed it sheared the borrowed texture into
+   diagonal streaks. 92-78 W south of the equator (clear of the Andes at 5 S,
+   inside the deck at 30 S), 137-123 W north of it. */
+vec2 deckField(float lon,float lat,float t,vec2 W,float lo0){
+  float T=max(uWind.y,5.0);
+  float ph=renewalPhase(lon,lat);
+  float cl=max(cos(lat),0.2);
+  float dlon=degrees(lon),dlat=degrees(lat),south=step(dlat,0.0);
+  float dU=0.0,hU=0.0;
+  for(int i=0;i<2;i++){
+    vec2 r=renewalAt(t,ph,i);
+    float w=1.0-abs(2.0*r.x-1.0);
+    float age=r.x*T;
+    float x=dlon-degrees(W.x*age/cl)+whash(r.y*4.3+1.0)*97.0;
+    float y=abs(dlat-degrees(W.y*age))+(whash(r.y*6.1+2.0)-0.5)*4.0;
+    float sy=y<6.0 ? 12.0-y : (y>34.0 ? 68.0-y : y);
+    float sLat=mix(sy,-sy,south);
+    float c=mix(-121.0,-76.0,south);          // the band's east edge, degrees
+    for(int j=0;j<2;j++){
+      float f=fract(x/14.0+0.5*float(j));
+      float tw=1.0-abs(2.0*f-1.0);            // this copy's share of its tile
+      vec2 q=vec2((c-16.0+14.0*f)/360.0+0.5,sLat/180.0+0.5);
+      float raw=texture2D(uCloudDetail,q).r;
+      float broad=texture2D(uCloudDetail,q,2.0).r;
+      // a deck persists, so its phases erode half as deep as the weather's;
+      // the tile only gently, or two half-eroded copies of a thin deck would
+      // leave next to nothing
+      float lo=min(lo0+(1.0-w)*0.36+(1.0-tw)*0.30,0.92);
+      float d=smoothstep(lo,0.98,raw)*smoothstep(0.0,0.22,w)*smoothstep(0.0,0.20,tw);
+      dU=1.0-(1.0-dU)*(1.0-d);
+      hU+=w*tw*pow(max(broad,0.0),1.4);
+    }
+  }
+  return vec2(dU,hU);
 }
 float elevAtUv(vec2 q){
   q=vec2(fract(q.x),clamp(q.y,0.001,0.999));
@@ -5555,8 +5784,16 @@ void main(){
   float rain=climate.y/max(climate.x,0.12);
   float wet=mix(0.30,smoothstep(0.025,0.52,rain),uRainReady);
   float dry=land*(1.0-wet);
-  float gain=mix(0.94,mix(0.50,1.12,wet),land);
-  gain*=0.60+0.40*smoothstep(-5.0,-1.5,uTemp);
+  /* COVER, NOT HAZE (3.19). Everything below that makes a sky clearer -- dry
+     land, the subtropical highs, a quiet synoptic spell, the lee of a range,
+     a cold or frozen world -- used to multiply optical depth, and a cloud at a
+     third of its depth is a grey veil, not a smaller cloud: the haze over the
+     Sahara and the Canaries. Most of each now raises the density threshold
+     (lo0) instead, so a clearer sky has fewer clouds, each still a cloud; a
+     gentle share stays on optical depth so thin weather still reads thinner. */
+  float cold=smoothstep(-5.0,-1.5,uTemp);
+  float gain=mix(0.96,mix(0.72,1.10,wet),land)*mix(0.75,1.0,cold);
+  float lo0=0.025+dry*0.18+(1.0-cold)*0.08;
   /* THE ERA'S LIKELY WEATHER (round 2, 2026-09-07). A soft zonal
      climatology under the satellite structure: the tropical convergence
      band, the mid-latitude storm tracks, the clear subtropical highs --
@@ -5565,7 +5802,22 @@ void main(){
      era's land and rainfall above already move the deck with the
      continents; a snowball world loses most of it. */
   float zonal=0.80+0.30*exp(-pow(lat/0.16,2.0))+0.25*exp(-pow((al-52.0)/13.0,2.0))-0.30*exp(-pow((al-24.0)/9.0,2.0));
-  gain*=zonal*(1.0-0.45*uSnowball);
+  gain*=mix(1.0,zonal,0.5)*(1.0-0.30*uSnowball);
+  lo0+=max(0.0,1.0-zonal)*0.30+0.15*uSnowball;
+  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
+     day in transport; on its own nothing ever forms or dies. A smooth
+     three-dimensional lattice noise drifting through the weather clock
+     (about a minute from clear to overcast at a point) gates the optical
+     depth, so masses thicken, merge across a clearing and dissolve while
+     the fine structure inside them keeps its fronts and spirals. The era
+     moves the pattern too, gently, so a running timeline sees the weather
+     reorganise rather than jump. A gate, broad -- not a second cloud field,
+     and not a crossfade between two; since 3.19 it gates cover more than
+     depth (above). */
+  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
+  float syn=smoothstep(0.30,0.72,0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0)));
+  gain*=mix(0.80,1.30,syn);
+  lo0+=(1.0-syn)*0.10;
   /* THE AIR MEETS THE GROUND (3.17). Wind driven up a range lifts and
      cools and clouds over the windward slopes; the same air sinks down the
      lee and clears -- the rain shadow's cloud. And off the subtropical west
@@ -5573,40 +5825,45 @@ void main(){
      the subsiding air of the highs holds a bright low deck of stratocumulus:
      California, Peru, Namibia today. */
   vec2 W=windAt(lon,lat,t);
-  float orog=1.0,up=0.0;
+  float up=0.0;
   if(uWind.x>0.0&&uWind.z>0.0){
     vec2 Wd=W/max(length(W),1e-6);
     float dx=(1.2/360.0)/max(0.35,cos(lat)),dy=1.2/180.0;
     vec2 gh=vec2(elevAtUv(uv+vec2(dx,0.0))-elevAtUv(uv-vec2(dx,0.0)),
                  elevAtUv(uv+vec2(0.0,dy))-elevAtUv(uv-vec2(0.0,dy)))/(2.0*1.2*111.0);
     up=dot(Wd,gh)*land;                             // metres of climb per km along the wind
-    orog=clamp(1.0+uWind.z*(0.95*smoothstep(0.4,5.0,up)-0.60*smoothstep(0.4,5.0,-up)),0.35,2.0);
+    gain*=1.0+uWind.z*0.95*smoothstep(0.4,5.0,up);  // windward: lifted air thickens what is there
+    lo0+=uWind.z*0.30*smoothstep(0.4,5.0,-up);      // lee: sinking air clears it
   }
+  lo0=min(lo0,0.85);
   vec2 cloud;
   if(uWind.x<=0.0){
-    if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,dry);
+    if(uCloudDetailBlend>=1.0)cloud=satelliteWeather(lon,lat,gain,lo0);
     else{
       cloud=fallbackWeather(lon,lat,gain);
-      if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,dry),uCloudDetailBlend);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,satelliteWeather(lon,lat,gain,lo0),uCloudDetailBlend);
     }
   } else {
-    if(uCloudDetailBlend>=1.0)cloud=flowWeather(lon,lat,t,gain,dry,W);
+    if(uCloudDetailBlend>=1.0)cloud=flowWeather(lon,lat,t,gain,lo0,W);
     else{
       cloud=fallbackWeather(lon,lat,gain);
-      if(uCloudDetailBlend>0.001)cloud=mix(cloud,flowWeather(lon,lat,t,gain,dry,W),uCloudDetailBlend);
+      if(uCloudDetailBlend>0.001)cloud=mix(cloud,flowWeather(lon,lat,t,gain,lo0,W),uCloudDetailBlend);
     }
   }
-  cloud.x*=orog;
   /* ...and the ranges hold cloud of their own: a cap over the windward crest
      and a belt along the slope, as thick as the air is wet -- the cloud
      forest on the Andes' Amazon flank, the caps on the Cascades and the
-     Southern Alps in the westerlies. Its own cumulus texture, carried with
-     the wind, so it seethes rather than sits. */
+     Southern Alps in the westerlies. ANCHORED TO THE GROUND (3.19): it forms
+     where the slope lifts the air, so it stays there while its cells form and
+     dissolve (the noise volume drifts through the shell). It used to ride the
+     wind for the whole weather clock, and a wind that varies from place to
+     place, applied for minutes, sheared it into fine parallel threads. */
   if(uWind.x>0.0&&uWind.z>0.0&&up>0.3){
-    vec3 po=sphere(lon-W.x*t*0.4/max(cos(lat),0.3),lat-W.y*t*0.4);
-    float cu=smoothstep(0.35,0.80,0.6*cn(po*60.0+vec3(4.0,1.0,6.0))+0.4*cn(po*160.0+vec3(2.0,8.0,3.0)));
+    vec3 po=sphere(lon,lat);
+    vec3 ev=vec3(0.021,0.013,-0.017)*t;
+    float cu=smoothstep(0.35,0.80,0.6*cn(po*60.0+vec3(4.0,1.0,6.0)+ev)+0.4*cn(po*160.0+vec3(2.0,8.0,3.0)+2.3*ev));
     float oc=smoothstep(0.3,4.0,up)*mix(0.25,1.0,wet)*(1.0-0.5*uSnowball);
-    cloud.x+=uWind.z*oc*(0.1+2.4*cu)*gain;
+    cloud.x+=uWind.z*oc*(0.05+2.6*cu)*gain;
     cloud.y=max(cloud.y,0.4*oc*cu);
   }
   /* The deck's latitudes, ragged: it breaks into trade cumulus along an
@@ -5621,12 +5878,12 @@ void main(){
        The first version asked only for land to the east, so it laid decks in
        every gulf, bay, seaway and shelf sea of every age, drawn with a mesh of
        cells along a hard coastal edge: a white shape that rode the continents
-       and read as part of the land. Now it needs deep water beneath, open
-       ocean to the WEST (the fetch the trades cross), and a coast upwind. */
+       and read as part of the land. Now it needs open ocean to the WEST (the
+       fetch the trades cross) and a coast upwind. (3.18 also asked for deep
+       water beneath; read at the pixel, that punched a hole in the deck over
+       every seamount and island shelf, and open water to the west already
+       keeps decks out of gulfs, bays and shelf seas, so 3.19 dropped it.) */
     float cs=1.0/max(0.35,cos(lat));
-    float hz; { float a=texture2D(elevA,uv).r*2.0-1.0; hz=sign(a)*a*a*8000.0;
-      if(mixf>0.00001){ float b=texture2D(elevB,uv).r*2.0-1.0; hz=mix(hz,sign(b)*b*b*8000.0,mixf); } }
-    float deepK=smoothstep(-1500.0,-3500.0,hz);
     float jit=(cn(sphere(lon,lat)*55.0+vec3(8.0,2.0,6.0))-0.5)*2.6+(cn(sphere(lon,lat)*140.0+vec3(1.0,9.0,4.0))-0.5)*1.2;
     float lW=0.0;
     for(int k=0;k<6;k++){
@@ -5635,7 +5892,7 @@ void main(){
     }
     float openW=1.0-smoothstep(0.06,0.30,lW/6.0);
     float lE=0.0;
-    if(deepK*openW>0.001){
+    if(openW>0.001){
       for(int k=0;k<10;k++){
         float fk=float(k);
         lE+=deckLand(uv+vec2((1.5+2.0*fk+jit)/360.0*cs,(fract(fk*0.618)-0.5)*1.6/180.0));
@@ -5644,31 +5901,23 @@ void main(){
     }
     float shore=1.0-smoothstep(0.20,0.75,deckLand(uv+vec2(0.9/360.0*cs,0.0)));
     float fray=0.65*(cn(sphere(lon,lat)*3.0+vec3(5.0,9.0,2.0))-0.5)+0.35*(cn(sphere(lon,lat)*8.0+vec3(1.0,3.0,7.0))-0.5);
-    float sc=(1.0-land)*sub*deepK*openW*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
+    float sc=(1.0-land)*sub*openW*smoothstep(0.03,0.45,lE+0.30*fray)*shore*(1.0-0.45*uSnowball);
     if(sc>0.001){
-      /* THE DECK IS CLOUD LIKE THE REST: it thickens the weather already
-         there and adds a soft sheet from the same noise family, carried
-         equatorward with the trades -- no mesh of cells, no edge of its own
-         (the cells read as a crackle glaze on the sea at every zoom). */
-      vec3 pd=sphere(lon-W.x*t*0.3/max(cos(lat),0.3),lat-W.y*t*0.3);
-      float sheet=smoothstep(0.28,0.78,0.55*cn(pd*18.0+vec3(3.0,7.0,1.0))+0.45*cn(pd*52.0+vec3(9.0,2.0,5.0)));
+      /* THE DECK IS CLOUD LIKE THE REST: the observed deck (deckField),
+         on the same renewal clock as everything around it (3.19) -- no mesh
+         of cells, no edge of its own, nothing carried by the whole weather
+         clock (the 3.18 sheet was, and sheared into radial threads), and no
+         translucent veil. It takes over from the borrowed weather where it is
+         thick, as a real deck owns its sky; a passing front still shows. Its
+         threshold keeps the deck's own clear-sky rule only: the subtropical
+         high that clears the sky around it is what holds the deck down. */
       float core=smoothstep(0.10,0.60,lE+0.20*fray);
-      cloud.x=cloud.x*(1.0+0.7*sc)+uWind.w*sc*(0.20+0.70*sheet)*mix(0.55,1.25,core);
-      cloud.y=max(cloud.y,0.20*sc*sheet);
+      float body=sc*mix(0.55,1.0,core);
+      vec2 D=deckField(lon,lat,t,W,0.025+(1.0-syn)*0.10);
+      cloud.x=cloud.x*(1.0-0.5*body)+uWind.w*body*2.8*pow(D.x,1.25)*mix(0.85,1.15,syn);
+      cloud.y=mix(cloud.y,max(cloud.y,D.y),body);
     }
   }
-  /* SLOW SYNOPTIC EVOLUTION (round 2). The satellite field is one frozen
-     day in transport; on its own nothing ever forms or dies. A smooth
-     three-dimensional lattice noise drifting through the weather clock
-     (about a minute from clear to overcast at a point) gates the optical
-     depth, so masses thicken, merge across a clearing and dissolve while
-     the fine structure inside them keeps its fronts and spirals. The era
-     moves the pattern too, gently, so a running timeline sees the weather
-     reorganise rather than jump. A gate, multiplicative and broad -- not a
-     second cloud field, and not a crossfade between two. */
-  vec3 ps=sphere(lon,lat)*1.35+vec3(t*0.011,t*0.007,t*0.013)+vec3(31.0,17.0,5.0)+uEra*0.0007;
-  float syn=0.65*cn(ps)+0.35*cn(ps*2.1+vec3(9.0,3.0,21.0));
-  cloud*=mix(0.30,1.35,smoothstep(0.30,0.72,syn));
   float mu=uCloudMap>0.5?1.0:max(normalize(vN).z,0.0);
   float path=mix(1.0,1.35,1.0-mu);
   float alpha=1.0-exp(-cloud.x*path);

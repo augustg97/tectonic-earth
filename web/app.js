@@ -357,13 +357,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260926-2210';
-const FIELD_V='20260926-317';   // bumped: trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
+const DATA_V='20260927-0025';
+const FIELD_V='20260926-319';   // bumped: the sea's rainfall filled from the land (3.19); trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260926c';
+const IMAGERY_V='20260926d';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -3586,7 +3586,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260926c';
+const SHEET_V='20260926d';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){

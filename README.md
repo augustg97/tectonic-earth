@@ -616,6 +616,22 @@ At zoom 1.35 a pixel is ~0.85 km and a texel of the elevation field 8–11 pixel
 
 **Cards that vary** (`build/biota.py`; §5.6, §7.61-7.62). 378 regional genera (`taxa_src/mesozoic_regional.py`, `palaeozoic_regional.py`, `paleogene_regional.py`; registry 1,943), each dated to its formation, checked against the PBDB and boxed to its locality where the codes are continent-sized. A province's markers no longer all lead every card: one per fauna/flora section leads, chosen by a stable hash of the label (`PROV_LEAD`, `PROV_BONUS`); the rest compete as fill. The usage charge is one pass (`USE_*`), and candidates within `PICK_TIE` points of the best are chosen by the same hash, so neighbouring cards differ instead of all taking one taxon. Distinct card lists 6,173 -> 12,855; most labels sharing one list 16 -> 7; all gates at 0.
 
+### 5.15 Wet coasts, clouds that form and dissipate, trenches that bow (3.19)
+
+**The sea's rainfall, filled from the land** (`build/rain_fill.py`). Rainfall is defined on land and the sea stored zero, so every reader near a coast averaged that zero in: the texture's bilinear filter (a texel is ~26 km), the five-tap blur, and above all the moisture warp, which moves a lookup up to ~10 degrees where the air comes off a continent. The Atlantic plain of the United States drew as a 30-50 km orange dune strip, the Sierra Leone coast (3 m of rain a year) as a 150 km sandy band, every small island got a tan rim. The field now carries a value everywhere: land exact, the sea a smooth pull-push average of the land around it (weighted means down a pyramid to 3 x 6, then back up), applied on the climate solve's own land mask and again after the anchor, in `export()` and `bake_rain.py` alike. The files are 35% smaller (a field without a cliff at every coast encodes cheaply) and carry less codec error on coastal land (mean 1.37 -> 0.85 levels). What reads rain over water says so: the sediment plumes had used the zero as their offshore fade, and ran murky across the whole Sunda Shelf once it was gone; they now take the shore's nearness explicitly (`landRing`, the land share of the ~31 km taps already taken). The cloud climate weights rain by land so its normalised average is not double-counted. The relief bake reads the filled field too, so the next rebuild of `_e` erodes a ~15 km coastal strip with the coast's own rain. `rerender_rain.py` is retired: it predated the anchor and would have stripped it.
+
+**Clouds that form and dissipate** (`index__CFRAG`). Four causes behind "the clouds by Africa and the US east coast look odd":
+- The renewal cross-faded two unrelated cloud fields -- half of every cycle the sky was a double exposure at half strength. A phase's life now raises and lowers its density THRESHOLD instead (young, only the cores show; mature, all of it; dying, the cores again), and the phases combine as a union. Calibrated on the observed field (a numpy replica over random pairs of its longitudes): mean opacity within 7% of before over open ocean, translucent haze (alpha 0.1-0.5) 37% -> 18% of the sky, over the subtropical deserts 34% -> 7%; rendered, global cloud brightness and cover within 4% and 3% of 3.18.
+- Everything that clears a sky (dry land, the subtropical highs, a quiet synoptic spell, the lee of a range, a cold or frozen world) multiplied optical depth, and a cloud at a third of its depth is a grey veil. Most of it now raises the threshold: fewer clouds, each still a cloud.
+- The eddy wind was a finite difference of the texture-filtered lattice noise over 0.03 rad; the texture unit's 8-bit sub-texel weights make that noise a staircase, and scaled by a cycle's travel neighbouring pixels drew clouds tens of km apart -- a brickwork of short dashes over the eastern US. The stream function is now analytic value noise with its exact gradient (§7.67).
+- The orographic cloud and the deck sheet were carried by the whole weather clock, and a wind that varies from place to place, applied for minutes, shears anything into threads. Orographic cloud is anchored to the slope that makes it, its cells evolving in place; the deck rides the renewal clock.
+
+**The decks are the observed decks.** The deck's placement is 3.18's (open ocean to the west, a coast upwind; the per-pixel deep-water test is gone -- it punched holes over seamounts). Its texture is now the stratocumulus the satellite field actually recorded: a fixed band 92-78 W (south of the equator, off Peru) or 137-123 W (north, off California) at the same latitude, tiled along longitude by two copies half a tile apart, each dissolving toward its own seam by the same union as the renewal phases, so no seam or mirror line is drawn (§7.72). Closed cells, rifts and pockets of open cells, at the opacity the real decks have in this shell (alpha 0.55-0.75), eroding half as deep as the weather because a deck persists. At 0 Ma the mask finds exactly the five real subtropical decks.
+
+**Trenches that bow, bench and break** (`index__FRAG`). The section is no longer a two-sided bell: a flat floor of ponded sediment (4-24 km), a steep landward wall broken by a mid-slope terrace, a long seaward ramp to the outer rise. Along strike everything is read at a FOOT POINT 80 km up the landward wall on the pixel's normal, rotated by the plate there -- the overriding plate -- so the key is the same for the whole normal and continuous across the axis (the pixel's own plate changes at the axis). From it: festoons (a creased noise bows the axis +-30 km between sharp landward cusps, as the Aleutian, Kuril and Izu-Bonin arcs do), a +-12 km wander, ~20 km sideways steps where the trench segments, depth deepest mid-arc and saddles where a ridge is carried in. The outer wall carries its own bending-fault set -- three irregular spacings (13, 7.5, 4.2 km), segmented along strike, scarps facing the trench -- crossing the abyssal fabric, which quietens under it (§7.70). The band the distance ships in ends at 70 km behind a margin, 240 behind an arc and 110 past a line's end: the bow fades out landward, the arc stands only where a probe 215 km landward finds the band, the rise and faults finish inside the end caps, and every along-strike term goes neutral where the distance's gradient is not a distance's (§7.71). Cost within timing noise (8 interleaved repeats: 3.45 vs 3.55 ms p50 at a coastal close-up).
+
+**Open.** The Sahel still reads as a soft ruled shoreline between sand and forest. The rain gradient behind it is gradual (the index runs 0.2 -> 0.55 over 14 -> 10 N); the palette's step from the khaki mid stop to the dark wet one compresses it into ~150 km, and finer jitter did not change it (under 1% of pixels). A fix belongs to the biome palette with `audit_biomes`, not to the jitter.
+
 ## 6. Build and deploy
 
 ```bash
@@ -1379,6 +1395,34 @@ Identical timing runs gave frame p50s of 11.5, 11.9 and 14.2 ms, and a single on
 ### 7.65 A cloud drawn as its own system reads as ground
 
 3.17's stratocumulus decks asked only for land to the east, so every gulf, bay, seaway and shelf sea of every age grew one; and they were drawn with their own texture (a mesh of Worley cells) out to an edge set by the coast. From the user's first look after release: "a white shade or pattern that appears and moves with our continents -- it is unclear if these are supposed to be clouds or parts of the land". A feature keyed to the coastline moves with the continents by construction, and a texture no other cloud has reads as a surface. The deck now needs the physics that makes one (deep water, open ocean to the west) and thickens the weather field already there with a sheet from the same noise family. The same rule as §5.12's clouds: one system owns a scale band (the memory note on two systems texturing one surface), and a feature tuned in close-ups must be looked at from a hemisphere away and in the time lapse before it ships.
+
+### 7.66 A zero is data to every reader that averages
+
+"Unmasked averages eat small land" -- the Kauai finding that the climate solve's smoothing and the shader's `rainTap` were both fixed for -- is the same fault at every coastline. A field defined on land and stored as zero on the sea is read by bilinear filtering, blurs and warps that know nothing of the mask; each one reads the zero as "dry". Fixing readers one by one never ends -- the texture unit's own filter is a reader the shader cannot change. Fill the undefined region in the DATA with a value no reader can mistake (a smooth average of the defined neighbourhood), then find the readers that used the zero on purpose (the plumes' offshore fade) and give them their rule explicitly.
+
+### 7.67 A finite difference of filtered noise is a spike train
+
+The GPU interpolates texture samples with a handful of bits of sub-texel position, so any texture-backed noise is a fine staircase. Its value is fine; its derivative over a short baseline is spikes. The cloud wind was exactly that, and the spikes -- amplified by a whole cycle of travel -- scattered neighbouring pixels' clouds tens of km apart. Take gradients analytically (value noise has an exact one) or over baselines many sub-texel steps wide.
+
+### 7.68 A cross-fade of two unrelated fields is a haze
+
+Blending two independent textures at 50/50 halves the contrast of both; for cloud that is a grey veil over the whole sky, half the time. Where two states of an evolving field must hand over, hand over through a threshold: the outgoing one erodes from its thin edges, the incoming one grows from its cores, and the union of the two is always made of full-contrast pieces. Calibrate the thresholds on the real input so the mean does not drift.
+
+### 7.69 Advection by the whole clock shears
+
+Displacing a texture by wind x time, with the wind varying from place to place and time unbounded, stretches the texture by time x the wind's gradient -- minutes of it turn any cloud into parallel threads. Advect only within a bounded renewal cycle, or anchor features that belong to the ground (orographic cloud) and let them evolve in place.
+
+### 7.70 Two line fields cannot be blended
+
+An orientation is a line, not an arrow; mixing two directions 90 degrees apart flips abruptly along the contour where the weights cross, and draws a ruled seam. When one fabric overprints another (bending faults over abyssal hills), add them as separate terms and fade the old one; they cross, as they do in nature.
+
+### 7.71 A band ends where it ends
+
+A field shipped in a band (the trench distance: 70 km behind a margin, 240 behind an arc, 110 past a line's end) is only filled in at its edge, and every term still alive there is cut in a straight seam: the arc's flank where the band ended short of it (3.17 had this faintly), the fault set, a bowed wall. Make every term finish inside the narrowest band edge it can meet; probe the band where a term needs room (the arc, 215 km landward on the pixel's normal); and trust anything derived from the field's gradient only where that gradient is what a distance's must be (magnitude one).
+
+### 7.72 A borrowed texture traced along a curving coast shears
+
+The deck's first source band followed the Peruvian coast, which swings 7 degrees east between 11 and 18 S: a vertical line in the target became a diagonal in the source, and the borrowed stratocumulus came out as diagonal streaks. Borrow from a fixed window and let the target's own geometry say where the texture shows.
 
 ## 8. Sources
 
