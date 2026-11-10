@@ -2,6 +2,47 @@
  "_note": "User-facing release notes. Newest first. Keep bullets short, concrete and in the reader's language -- what changed on screen, not which module changed. build_webdata.py copies this to web/updatelog.json. The September 2026 releases were once numbered 2.3-2.5 in the shipped copy while the August 5-9 releases 2.3-3.0 had never reached the site; reconciled 2026-09-08 as 3.1-3.3 after 3.0. This file is the only source: edit here, then build_webdata.py (or build_site.py) writes web/updatelog.json.",
  "releases": [
   {
+   "version": "3.20",
+   "date": "9 November 2026",
+   "title": "Shores that look like shores, and lakes that look like water",
+   "summary": "Coastlines are now smooth, natural curves instead of a ragged pale fringe: the stair-stepped edges and scattered pools along low coasts are gone, shallow water takes its colour from the kind of sea it is, and the shore itself has beaches, marshes and salt flats. Lakes are drawn as the kind of water they hold, dark where they are deep and clear, green where they are warm and shallow, turquoise with a rim of salt where they are drying out.",
+   "sections": [
+    {
+     "name": "Coastlines",
+     "items": [
+      "Low coasts no longer break up into a torn fringe of pools and islets, and no longer follow a staircase when you zoom in: the waterline is a smooth curve with headlands and bays, and it slides smoothly as the continents move.",
+      "Islands, straits and narrow inlets are kept as they were.",
+      "Rocky, steep coasts are more indented than soft, sandy ones, which run in long arcs."
+     ]
+    },
+    {
+     "name": "Shallow water",
+     "items": [
+      "The band of near-white water along every coast is gone. Warm, clear seas far from big rivers are turquoise over pale sand, as around the Bahamas, the Red Sea and the Persian Gulf; cold or muddy seas are green and only show their bed in the last few metres; lagoons and sounds are dark.",
+      "Shelf seas such as the North Sea and the Baltic are an even tone instead of flat patches with blocky edges.",
+      "Breaking surf is a thin white thread along open coasts, visible when you zoom in."
+     ]
+    },
+    {
+     "name": "The shore",
+     "items": [
+      "Beaches: a thin line of sand along soft coasts, nearly white in the tropics, absent under steep rocky shores.",
+      "Salt marsh along low, wet coasts and dark mangrove in the tropics, most of it in sheltered bays; pale salt flats along low desert coasts.",
+      "The edge between land and sea is smoothed instead of stepping pixel by pixel."
+     ]
+    },
+    {
+     "name": "Lakes and rivers",
+     "items": [
+      "Deep, clear lakes are dark blue, as they are from orbit, with a paler margin where the bed shows. Before, every lake was the same bright teal with its depth drawn as rings.",
+      "Warm, rain-fed lakes are green; lakes in dry country are milky turquoise with a white rim of salt; high mountain lakes carry the turquoise of glacial silt; lakes in the far north are partly under ice.",
+      "A lake's shore has a margin of reed and wet ground, and a river stains the lake where it enters.",
+      "River lines no longer run across the surface of lakes."
+     ]
+    }
+   ]
+  },
+  {
    "version": "3.19",
    "date": "26 September 2026",
    "title": "Wet coasts, clouds that form and fade, and trenches that curve",

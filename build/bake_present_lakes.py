@@ -195,7 +195,7 @@ def main():
         print(f"  the Caspian added from the 110m land ring: {int(cm.sum())} px, max {cd.max():.0f} m")
     # RGB, as bake_lakes writes: a grayscale file decodes with G == R, and G is
     # the DRY-BASIN mask -- every present-day lake read its own depth as salt
-    # flat (up to 0.42) until 3.17. G is 0 today; B is the shelf break.
+    # flat (up to 0.42) until 3.17. G carries no dry basin today; B is the shelf break.
     import shelf_edge as _SE
     from fieldpack import dec_elev
     try:
@@ -204,10 +204,12 @@ def main():
         pass
     ez = Image.open(os.path.join(FIELDS, "phan_0000_e.avif")).convert("RGB").resize((W, H), Image.BILINEAR)
     shelf = _SE.channel(dec_elev(np.asarray(ez)[..., 0].astype(np.float32) / 255.0))
-    zero = np.zeros_like(enc)
-    Image.fromarray(np.dstack([enc, zero, shelf])).save(
+    # G is the coast as a signed distance (coast_edge.py, 3.20); no dry basin today.
+    import coast_edge as _CE
+    coast = _CE.channel(_CE.read_Z(os.path.join(FIELDS, "phan_0000_e.avif")), None, enc.shape)
+    Image.fromarray(np.dstack([enc, coast, shelf])).save(
         os.path.join(FIELDS, "phan_0000_w.webp"), "WEBP", lossless=True, method=6)
-    Image.fromarray(np.dstack([enc_old, zero, shelf])).save(
+    Image.fromarray(np.dstack([enc_old, coast, shelf])).save(
         os.path.join(FIELDS, "phan_0000_wold.webp"), "WEBP", lossless=True, method=6)
     print(f"present: {kept} real lakes rasterized  max depth {depth.max():.0f} m  "
           f"cover {100.0*(mask>0).mean():.2f}% of grid  -> phan_0000_w.webp")

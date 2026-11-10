@@ -9,7 +9,7 @@ and the ambient build never run the terrain shader at all.
 
     python3 bake_sheets.py                    # all keyframes, 4096 wide, into ../web/sheets
     python3 bake_sheets.py --range 90-110     # a slice
-    python3 bake_sheets.py --width 2048       # the lean set (the ambient build's)
+    python3 bake_sheets.py --width 2048       # the lean set (the ambient build's), into ../web/sheets2048
     python3 bake_sheets.py --quality 80       # AVIF quality (default 82)
 
 It drives the real app headless through _verify.html?bake= (the same driver
@@ -35,7 +35,6 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 WEB = os.path.join(HERE, "..", "web")
 VERIFY = os.path.join(HERE, "verify")
-OUT = os.path.join(WEB, "sheets")
 SERVE_PORT, RECV_PORT = 8899, 8901
 CHROME_CANDIDATES = [
     os.environ.get("CHROME", ""),
@@ -61,6 +60,7 @@ def main():
     ap.add_argument("--width", type=int, default=4096)
     ap.add_argument("--range", default=None, help="i0-i1 keyframe indices (timeline order)")
     ap.add_argument("--quality", type=int, default=82)
+    ap.add_argument("--out", default=None, help="output directory (default: web/sheets at 4096, web/sheets<width> otherwise)")
     ap.add_argument("--keep-png", action="store_true")
     ap.add_argument("--software", action="store_true", help="allow SwiftShader (very slow)")
     a = ap.parse_args()
@@ -127,6 +127,12 @@ def main():
         import pillow_avif  # noqa: F401
     except ImportError:
         raise SystemExit("bake_sheets: pip install pillow-avif-plugin")
+    # THE SET'S FOLDER FOLLOWS ITS WIDTH (3.20). There was one output folder,
+    # so `--width 2048` wrote the lean set over the 4096 one it had just been
+    # run after, and left web/sheets2048 holding the previous release's
+    # sheets: a chained "4096, then 2048" bake shipped neither. 4096 goes to
+    # web/sheets, any other width to web/sheets<width>, unless --out says.
+    OUT = a.out or (os.path.join(WEB, "sheets") if a.width == 4096 else os.path.join(WEB, "sheets%d" % a.width))
     os.makedirs(OUT, exist_ok=True)
     mpath = os.path.join(OUT, "manifest.json")
     m = json.load(open(mpath)) if os.path.exists(mpath) else {"w": a.width, "h": a.width // 2, "files": {}}

@@ -1494,6 +1494,17 @@ float gTrRel=0.0;                          // how far the shipped distance can b
 float trBow(float sr){ return gTrMe*smoothstep(-110.0,-20.0,sr); }
 vec2 gTrG=vec2(0.0), gTrUv=vec2(0.0);
 uniform vec2 uCoast;    // natural waterline: x strength (?coast=, 0 off), y lateral scale in km (?coastkm=)
+uniform vec4 uShore;    // the shore (3.20): x nearshore water (?shore=), y beach and coastal fringe (?beach=), z lakes (?lake=), w the waterline's antialiasing (?shaa=); 0 = the 3.19 drawing
+uniform vec4 uShoreB;   // x the waterline from the baked coast distance (?wline=, 0 = 3.17's first-order warp); z draws the decision as colour (?shdbg=1: R the distance, G the trust, B land)
+/* What the nearshore water and the strand need to know about where they are,
+   set once in main() before either is drawn: the sea-level temperature, how
+   much river mud the coast supplies, the pixel's footprint in km, and the
+   distance to the waterline in km (from the final height and its own
+   screen-space gradient, so it is the drawn waterline's distance at any zoom). */
+float gSeaT=15.0, gSeaRiv=0.0, gSeaRing=0.0, gPxKm=10.0, gShoreKm=1000.0, gShoreG=0.0;
+/* The share of the ~31 km ring of taps that is truly sea (below the water
+   surface, not merely low): whether there is a shore within reach at all. */
+float gSeaTaps=0.0;
 uniform vec3 uTrench;   // x: keyframe A has the field, y: B has it, z: strength (?trench=, 0 off)
 /* How much of the wide submarine stencil is actually sea (iteration 30).
    Set where that stencil is taken; 1.0 means open ocean. Consumers that
@@ -2361,6 +2372,82 @@ float elevDetail(float z, vec3 d, float rug){
 float elevAt(vec2 uv, float rug){
   return elevDetail(baseElev(uv), matDir(dirFromUv(uv)), rug);
 }
+/* ================== THE WATERLINE (3.20) ==================
+
+   WHAT WAS WRONG. Land or sea was the sign of the elevation field, and on
+   every low coast of the Phanerozoic that field's zero contour is a staircase.
+   Measured on the shipped fields: the source draws its coastal lowlands at
+   exactly 0 m, so the keyframes carry a TERRACE of code 128 (+0.12 m) tens of
+   km wide (80,895 texels at 0 Ma, 25,189 at 100 Ma, 19,231 at 300 Ma; the
+   Carolinas' is 40-100 km), and between a texel at +0.12 m and a neighbour at
+   -10 m the bilinear field crosses zero a hundredth of the way along: the
+   waterline ran through the CENTRES of the outermost terrace texels, a
+   polyline with the land mask's own one- and two-texel steps. 3.17 hid them
+   under a noise times the REGIONAL slope added to the height, which flooded
+   the terrace wherever the noise was negative -- 12 cm of freeboard under
+   metres of shift: the torn fringe of pools and islets every low coast wore
+   (the slope is of a 62 km stencil; the shore itself is flat, 7.63).
+
+   WHAT WAS TRIED IN THE SHADER, AND WHY IT IS NOT HERE. Averaging heights over
+   a texel (+0.12 against -10 is a minimum filter: it eroded the terrace by the
+   tap pattern's own square, and deleted the Cyclades). A B-spline of the land
+   indicator over nine texels (symmetric, smooth -- and a kernel one texel
+   wide cannot round a two-texel stair; one wide enough is fifty reads a
+   pixel). Each left the stairs; the decision field drawn as colour
+   (?shdbg=1) showed the indicator deciding and the stairs in the mask itself.
+
+   WHAT THIS IS. The coast as a baked signed distance (build/coast_edge.py,
+   the green of the lake field): km to a coastline smoothed over ~15 km on
+   the ground, with islands, straits, inlets and necks protected. Near that
+   coast the distance decides the side -- a smooth curve at any zoom, the two
+   keyframes' distances blended so the shore slides between them; further
+   than ~10 km from it, and wherever the bake protected a feature (its
+   distance is multiplied up there, so the trust band closes), the elevation
+   field decides, as it always did. Both are read at a point moved sideways by
+   a coherent few km: a warp of a smooth function cannot open a pool or raise
+   an islet -- it bends the coast the field has -- and its size no longer
+   leans on a slope estimate. Hard, steep ground gets the larger displacement
+   and the finer octaves (a rocky coast is crenulate), soft flat ground the
+   smaller (waves straighten a sandy shore into long arcs). Keyed to the
+   material coordinate, so the headlands ride the rock.
+
+   The pixel only: the shading keeps the base field's slope. gmC is the
+   regional slope in m per km, z0 the base height the detail in z rides on. */
+float gShoreSd=1000.0, gShoreTr=0.0;   // the coast distance here (km, + on land; 1000 outside the coastal zone, 0 with no field) and how far it is trusted
+float shoreZ(vec3 sd3, float z, float z0, float gmC){
+  float rkC=mix(0.35,1.0,gHard)*mix(0.55,1.0,smoothstep(1.5,12.0,gmC));
+  vec3 mcC=matDir(sd3);
+  vec3 qc1=mcC*150.0, qc2=mcC*370.0+vec3(5.1,2.3,7.7), qc3=mcC*880.0+vec3(1.9,8.3,3.1);
+  vec3 wvC=(vec3(vnoise3(qc1), vnoise3(qc1+vec3(31.7,5.2,11.3)), vnoise3(qc1+vec3(7.9,23.1,3.3)))-0.5)*6.0
+          +(vec3(vnoise3(qc2), vnoise3(qc2+vec3(13.1,27.4,9.6)), vnoise3(qc2+vec3(21.2,4.4,17.9)))-0.5)*2.8*rkC
+          +(vec3(vnoise3(qc3), vnoise3(qc3+vec3(9.3,14.8,25.5)), vnoise3(qc3+vec3(18.6,2.1,6.4)))-0.5)*1.3*rkC*rkC;
+  wvC*=rkC*(uCoast.y/6.0)*uCoast.x*(1.0/6371.0);
+  vec2 uvp=uvFromDir(normalize(sd3+wvC-sd3*dot(wvC,sd3)));
+  vec4 ca=texture2D(waterA,wA(uvp)), cb=texture2D(waterB,wB(uvp));
+  /* 0 is "no field" and 255 the dry-basin flag; a keyframe without the field
+     hands the whole weight to the other, and with neither the heights decide. */
+  float okA=step(0.002,ca.g)*step(ca.g,0.984), okB=step(0.002,cb.g)*step(cb.g,0.984);
+  float wa=okA*(1.0-mixf)+okA*(1.0-okB)*mixf, wb=okB*mixf+okB*(1.0-okA)*(1.0-mixf);
+  float sdk=0.0, trC=0.0;
+  if(wa+wb>1e-4){
+    sdk=((wa*ca.g+wb*cb.g)/(wa+wb)*255.0-126.0)*(32.0/124.0);
+    trC=1.0-smoothstep(8.0,14.0,abs(sdk));
+  }
+  float tC0=baseElev(uvp);
+  /* Blended as SIDES, both in -1..1: blended as metres, a neighbour at -10 m
+     outvotes a distance of a few km at any weight under 0.9. Then in metres,
+     so everything downstream reads it as ground: six metres of rise or of
+     water over the first 8 km, the field's own height beyond. */
+  float Dc=6.0*mix(clamp((tC0-wl)/40.0,-1.0,1.0), clamp(sdk/8.0,-1.0,1.0), trC);
+  float zsm=wl+(Dc>=0.0 ? max(Dc, tC0-wl) : min(Dc, tC0-wl));
+  gShoreSd=sdk; gShoreTr=trC;
+  /* The detail the pixel already carries rides on it, held to the same
+     promise as everywhere else: it may not change which side this is. */
+  float dtlC=z-z0;
+  float znC=zsm>=wl ? zsm+max(dtlC,-0.85*(zsm-wl)) : zsm+min(dtlC,0.85*(wl-zsm));
+  float kwC=1.0-smoothstep(90.0,220.0,min(abs(z-wl),abs(znC-wl)));
+  return mix(z,znC,kwC);
+}
 /* ============== THE EROSION RELIEF (the mountain round, 2026-09) ==============
 
    WHAT WAS WRONG. The Palaeozoic and Precambrian ranges read as symmetric
@@ -2957,8 +3044,62 @@ vec3 oceanColour(float z, vec3 sd, float latd){
      happens to reach the right depth, wherever it is. */
   c=mix(c, vec3(0.190,0.270,0.470), smoothstep(-1500.0,-260.0,zc)*0.26);
   c=mix(c, vec3(0.390,0.500,0.700), smoothstep(-320.0,-90.0,zsb)*0.60*sqrt(botRet)*sE);
-  c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
-  c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
+  if(uShore.x<=0.0){
+    c=mix(c, vec3(0.545,0.665,0.810), smoothstep(-90.0,-28.0,z)*0.65);
+    c=mix(c, vec3(0.640,0.790,0.860), smoothstep(-28.0,-4.0,z)*0.70);
+  } else {
+    /* THE LAST FIFTY METRES AS WATER, NOT AS TWO MAP TINTS (3.20). The two
+       bands above took everything shallower than 90 m to a pale blue and
+       everything shallower than 28 m most of the way to white, keyed to the
+       pixel's own depth. Three things were wrong with that on screen. The
+       field's codes are 6-12 m apart at 30-90 m, so a flat shelf sea (the
+       North Sea, the Baltic, the Adriatic) drew as terraces of flat tint with
+       texel-shaped edges. The inner band is tens of km wide on a flat coast
+       and it is nearly white, so every low shore wore a pale torn fringe and
+       every pool the waterline warp opened read as a snow patch. And it was
+       the same white off Norway, the Sahara, the Amazon and the Bahamas.
+
+       What shallow water looks like is the bottom seen through the water, and
+       that depends on what the water and the bottom are. Warm water starved of
+       river mud grows carbonate sand and stays clear: a pale floor seen
+       through a clear column is the turquoise of the Bahama Banks, the Gulf
+       and the Red Sea's fringes, going to pale aqua on the flats. Cold or
+       river-fed water is green with plankton and silt: the bottom shows only
+       in the last few metres, as a dull green going sandy. The return is
+       exponential in depth, so the ramp is two exponentials (a ~9 m and a
+       ~2.5 m scale) instead of two steps, read half from the smoothed depth so
+       one code of the field is not one band of the picture. */
+    float warmw=smoothstep(12.0,22.5,gSeaT);
+    float clearw=warmw*(1.0-0.80*gSeaRiv);
+    float zn=min(mix(z, zsb, 0.5), -0.3);
+    float w40=smoothstep(-95.0,-18.0,zsb);
+    float w10=exp(zn/9.0);
+    float w3=exp(zn/2.5);
+    vec3 cOut =mix(vec3(0.420,0.560,0.640), vec3(0.500,0.660,0.790), clearw);
+    vec3 cMid =mix(vec3(0.270,0.430,0.430), vec3(0.150,0.560,0.540), clearw);
+    vec3 cFlat=mix(vec3(0.360,0.430,0.350), vec3(0.380,0.680,0.620), clearw);
+    /* An ancient sea keeps its own hue in the shallows too (uSeaTint 0 is the
+       iron-and-algae green of the Precambrian palette above). */
+    cMid=mix(mix(cMid, vec3(0.220,0.470,0.360), 0.6), cMid, uSeaTint);
+    /* THE BOTTOM IS NOT ONE THING. A bank seen from orbit is mottled: seagrass
+       and hardground dark, sand shoals pale, in patches a few km across. Tone
+       only, welded to the crust, faded out before a patch is under ~2 pixels. */
+    if(gPxKm<3.0){
+      vec3 mb=matDir(sd);
+      float pt=vnoise3(mb*1400.0+vec3(4.2,9.1,2.7))*0.6+vnoise3(mb*3100.0+vec3(7.7,1.3,5.9))*0.4;
+      float pf=1.0-smoothstep(1.2,3.0,gPxKm);
+      cMid*=1.0-0.30*smoothstep(0.50,0.68,pt)*pf*mix(0.5,1.0,clearw);
+      cFlat*=1.0+0.10*(pt-0.5)*pf;
+    }
+    /* Enclosed water is darker as well as greener: a lagoon's floor is mud. */
+    float encl=smoothstep(0.62,0.90,gSeaRing);
+    cMid=mix(cMid, vec3(0.110,0.210,0.230), 0.75*encl);
+    cFlat=mix(cFlat, vec3(0.150,0.230,0.205), 0.80*encl);
+    cOut=mix(cOut, vec3(0.200,0.330,0.400), 0.60*encl);
+    c=mix(c, cOut,  w40*mix(0.42,0.58,clearw)*uShore.x);
+    c=mix(c, cMid,  clamp(w10*0.88,0.0,1.0)*uShore.x);
+    c=mix(c, cFlat, clamp(w3*0.72,0.0,1.0)*uShore.x);
+  }
 
   /* Sea-floor colour follows the ELEVATION field now, not a procedural texture.
      seafloor.py bakes real relief -- age-graded abyss, ridges, fracture zones,
@@ -3133,7 +3274,9 @@ void main(){
      deep depocentres flooded and everything above them a salt flat, following
      the real bathymetry with no separate lake mask at all. */
   vec4 wqa=texture2D(waterA,wA(uv)), wqb=texture2D(waterB,wB(uv));
-  float dryb=max(wqa.g, wqb.g)*uDry;
+  /* G is the coast distance now (coast_edge.py, 3.20: 1..250), and the dry
+     flag is its top code alone. */
+  float dryb=max(smoothstep(0.985,0.998,wqa.g), smoothstep(0.985,0.998,wqb.g))*uDry;
   /* The shelf break as a distance: warped with the crust like the lake depth,
      interpolated between the two keyframes as a distance (so the edge moves
      smoothly instead of cross-fading), thresholded at one pixel. 0 in either
@@ -3278,12 +3421,12 @@ void main(){
   float landRing=0.0;
   if(pw>0.004){
     float r=3.6/2048.0*PI;                  // blur radius AND gradient baseline (same angle at 2048 rows)
-    float sum=0.0; vec2 gv=vec2(0.0);
+    float sum=0.0; vec2 gv=vec2(0.0); float seaP=0.0;
     for(int k=0;k<6;k++){
       float a=(float(k)+0.5)/6.0*2.0*PI;
       vec2 dk=vec2(cos(a),sin(a));
       float v=baseElev(uvFromDir(normalize(sdir+(t1*dk.x+t2*dk.y)*r)));
-      sum+=v; gv+=v*dk; landRing+=smoothstep(wl-40.0,wl+40.0,v)/6.0;
+      sum+=v; gv+=v*dk; landRing+=smoothstep(wl-40.0,wl+40.0,v)/6.0; seaP+=step(v,wl);
     }
     gv*=2.0/6.0;                            // ring moment -> gradient, in t1/t2
     // 1.78 puts rug on the same slope scale as the non-polar probe below, so
@@ -3301,6 +3444,9 @@ void main(){
     gEnv3=(t1*gv.x+t2*gv.y)/(r*6.371e6);    // metres over the ring radius -> m/m
     float zb=mix(baseElev(uv), sum/6.0, pw);
     z=elevDetail(zb, matDir(sdir), rug);
+    gSeaTaps=seaP/6.0;
+    if(uCoast.x>0.0 && uShoreB.x>0.5 && seaP>0.5 && seaP<5.5 && wl>-1.0 && abs(z-wl)<220.0)
+      z=shoreZ(sdir, z, zb, min(length(gv)/(r*6371.0), 30.0));
     // The gradient stays in ring-frame COMPONENTS here; the shared
     // submarine machinery below runs in whatever frame the branch hands
     // it (gAx1/gAx2), and east/north conversion happens once at the end,
@@ -3393,7 +3539,11 @@ void main(){
        overstates how steep the shore itself is. */
     float nWt=step(zEp,wl)+step(zEm,wl)+step(zNp,wl)+step(zNm,wl);
     bool coastal = z<wl ? nWt<3.5 : nWt>0.5;
-    if(uCoast.x>0.0 && coastal && abs(z-wl)<160.0){
+    gSeaTaps=nWt*0.25;
+    if(uCoast.x>0.0 && uShoreB.x>0.5 && coastal && wl>-1.0 && abs(z-wl)<220.0){
+      // the waterline from the baked coast distance, moved by a true warp: see shoreZ
+      z=shoreZ(sdir, z, z0r, min(length(vec2(rE,rN))/(2.0*rda*6371.0), 30.0));
+    } else if(uCoast.x>0.0 && uShoreB.x<=0.5 && coastal && abs(z-wl)<160.0){
       float gm=min(length(vec2(rE,rN))/(2.0*rda*6371.0), 30.0);   // m per km
       float wk=uCoast.y*mix(0.45,1.35,gHard);                 // km
       float band=clamp(gm*wk*2.6, 4.0, 160.0);
@@ -4110,6 +4260,35 @@ void main(){
   // lives inside the biome block and is out of scope past its brace
   float moistw=clamp(Rf*1.15,0.0,1.0);
 
+  /* WHERE THE WATERLINE IS FROM HERE (3.20). The height is final, so its
+     screen-space gradient is the drawn surface's, warp and all: |z - wl| over
+     it is the distance to the drawn waterline, in km, at any zoom, and it is
+     what a strand, a surf line and the waterline's own antialiasing need --
+     things a few hundred metres wide that follow the shore, which no depth or
+     height band can draw (a band 0-3 m is 300 m wide on a steep coast and
+     30 km on a flat one). */
+  {
+    vec3 dsx=dFdx(sdir), dsy=dFdy(sdir);
+    float kx=max(length(dsx)*6371.0,1e-5), ky=max(length(dsy)*6371.0,1e-5);
+    gPxKm=0.5*(kx+ky);
+    gShoreG=length(vec2(dFdx(z)/kx, dFdy(z)/ky));        // m per km
+    /* No floor worth the name on the gradient: on the sea-level terrace the
+       height is 12 cm and flat, and a floored slope would report a waterline
+       3 km away across all 60 km of it. Flat means far. */
+    gShoreKm=abs(z-wl)/max(gShoreG,1e-4);
+    /* ...and where the baked coast distance is trusted, it IS the distance.
+       Where it is not (a protected feature: its magnitude is raised, never
+       lowered), it still says when the sea is nowhere near -- the terrace's
+       INLAND edge is also ground a few cm above sea level on a slope, 60 km
+       from any water, and drew a second strand along the texel stairs. */
+    gShoreKm=mix(gShoreKm, abs(gShoreSd), gShoreTr);
+    gShoreKm=max(gShoreKm, 40.0*smoothstep(14.0,26.0,abs(gShoreSd)));
+    gSeaT=T0sl;
+    /* River mud, and enclosure: a lagoon or a sound ringed by land does not
+       flush, and is green-brown whatever the climate. */
+    gSeaRiv=max(clamp((Rf-0.16)/0.55,0.0,1.0), z<wl ? 0.85*smoothstep(0.62,0.90,landRing) : 0.0);
+    gSeaRing=landRing;
+  }
   vec3 col;
   if(z<wl){
     /* COLOUR FOLLOWS THE REGIONAL DEPTH, not the texel's own. Bottom return is
@@ -5277,6 +5456,74 @@ void main(){
     // Delta plain: wet flat lowland right at the shore, fed by a coastal low.
     float delta=(1.0-smoothstep(8.0,140.0,zp))*flatf*supply*warm*smoothstep(0.10,0.5,below);
     col=mix(col, vec3(0.263,0.357,0.235), clamp(delta*0.55,0.0,0.45));
+    /* THE SHORE AS A PLACE (3.20). The land colour ran unchanged to the
+       waterline: the biome of the hinterland, cut off by the sea. A shore is
+       its own ground, and from orbit it is three things, each set by what the
+       coast is made of and what the climate does to it.
+
+       THE STRAND: a pale line of sand a few hundred metres wide wherever
+       waves work loose sediment -- wide on a soft low coast, thin or absent
+       under a hard steep one, near white where the sand is carbonate (warm
+       water starved of river mud, the same test the shallows use), grey
+       shingle on a cold rocky shore. Drawn by distance from the waterline with
+       the pixel's coverage of it, like the surf: a thread at close zoom, a
+       faint lightening of the coast from further out, nothing from orbit.
+
+       THE TIDAL FRINGE: ground within a few metres of the sea on a low wet
+       coast is salt marsh, and in the tropics mangrove -- the darkest green on
+       a satellite image -- threaded by tidal creeks; on a low DRY coast in the
+       heat it is sabkha, pale salt and algal flat. Only where the sea is near
+       (the 31 km ring), so an inland lowland keeps its own cover.
+
+       None of it moves the waterline or the height: tone only. */
+    if(uShore.y>0.0 && z-wl<24.0 && uSchem<0.5){
+      float hsh=z-wl;
+      // (not under an ice sheet, and not where the sea itself is frozen: a snowball's shore is ice on ice)
+      float liveS=(1.0-landIce)*smoothstep(-5.0,2.0,T)*smoothstep(uSeaT-0.5,uSeaT+2.5,T);
+      /* The tide's reach is a distance, and on the sea-level terrace no height
+         says it (60 km of ground at +0.12 m): the distance to the waterline
+         does, and the tide reaches a few km -- further up a sheltered shore
+         (land most of the way round) than on an open one, where waves build a
+         beach instead, and in patches, not as a hem. */
+      vec3 mcS=matDir(sdir);
+      float tcA=vnoise3(mcS*2300.0+vec3(3.3,8.1,5.4));
+      float tcB=vnoise3(mcS*420.0+vec3(6.1,2.2,9.7));
+      float shelt=smoothstep(0.45,0.80,landRing);
+      float reach=mix(2.5,11.0,shelt)*(0.45+1.1*tcB);
+      float seaNearS=(1.0-smoothstep(0.35*reach,reach,gShoreKm))*step(0.2,gSeaTaps);
+      float wetS=clamp((Rf-0.10)/0.36,0.0,1.0);
+      float warmS=smoothstep(14.0,22.5,gSeaT);
+      float lowS=1.0-smoothstep(2.0,9.0,hsh);
+      // 1. marsh and mangrove
+      float tmarsh=lowS*seaNearS*wetS*liveS*flatf*mix(0.45,1.0,shelt);
+      vec3 marshc=mix(vec3(0.165,0.180,0.095), vec3(0.060,0.120,0.062), warmS);
+      marshc*=0.88+0.24*tcA;
+      col=mix(col, marshc, clamp(tmarsh*(0.42+0.30*tcA),0.0,0.62)*uShore.y);
+      // 2. sabkha
+      float sabk=lowS*seaNearS*(1.0-wetS)*smoothstep(15.0,23.0,gSeaT)*flatf*liveS;
+      col=mix(col, vec3(0.640,0.610,0.540), sabk*(0.20+0.40*smoothstep(0.40,0.70,tcA))*uShore.y);
+      // 3. the strand
+      float bwS=mix(0.80,0.28,gHard)*(0.65+0.70*tcA)*mix(1.0,0.55,shelt);         // km
+      /* ...and only where there IS water within reach: the terrace's inland
+         edge is also ground a few cm above sea level on a slope, and drew a
+         second strand 60 km from the sea along the texel stairs. */
+      float atSea=step(0.2,gSeaTaps);
+      float bcovS=clamp((bwS-gShoreKm)/max(gPxKm,0.02)+0.5,0.0,1.0)*min(1.0,bwS/max(gPxKm,0.02)*1.6)*atSea;
+      float cliffS=smoothstep(9.0,26.0,gShoreG)*smoothstep(0.35,0.80,gHard);
+      float carbS=warmS*(1.0-0.80*gSeaRiv);
+      vec3 sandc=mix(vec3(0.520,0.460,0.350), vec3(0.780,0.745,0.650), carbS);
+      sandc=mix(sandc, vec3(0.310,0.295,0.270), gHard*0.55*(1.0-warmS));
+      col=mix(col, sandc, bcovS*(1.0-cliffS)*(1.0-0.80*clamp(tmarsh*1.4,0.0,1.0))*liveS*0.88*uShore.y);
+      /* THE WATERLINE, ANTIALIASED. Land or sea is a branch, so the shore was
+         a hard stair of pixels at every zoom. A land pixel within one pixel of
+         the drawn waterline takes a share of the water it borders -- the
+         shallow tone of that water, which is what is on the other side. */
+      if(uShore.w>0.0){
+        float aaS=clamp(gShoreKm/max(gPxKm,1e-3),0.0,1.0);
+        vec3 wcolS=mix(vec3(0.340,0.430,0.380), vec3(0.420,0.700,0.640), carbS);
+        col=mix(col, wcolS, 0.55*(1.0-aaS)*atSea*liveS*uShore.w);
+      }
+    }
     /* Fine surface grain: perturb the SHADING normal with high-frequency noise
        so the relief carries micro-texture at close zoom instead of stopping at
        the shipped field's resolution. Two cheap single-octave taps; stronger on
@@ -6554,8 +6801,23 @@ void main(){
     col*=1.0+(-0.025+0.05*r1+0.03*(s1-0.5))*surfw;
     // Surf. Where the swell runs into water shallow enough to feel the bottom
     // it breaks, so the last few metres before land carry a bright, broken band.
-    float surf=smoothstep(-26.0,-2.0,z)*smoothstep(0.45,0.85,r1*0.6+s1*0.4);
-    col=mix(col, vec3(0.847,0.918,0.933), surf*0.42);
+    if(uShore.x<=0.0){
+      float surf=smoothstep(-26.0,-2.0,z)*smoothstep(0.45,0.85,r1*0.6+s1*0.4);
+      col=mix(col, vec3(0.847,0.918,0.933), surf*0.42);
+    } else {
+      /* SURF IS A LINE (3.20). A surf zone is a few hundred metres wide, and
+         the band above (-26 to -2 m) is tens of km wide on a flat shelf: it
+         was most of the pale fringe. Drawn by distance from the waterline
+         instead, with the pixel's coverage of it, so it is a broken white
+         thread at close zoom and fades to nothing as a pixel outgrows it;
+         stronger on an open coast than up a bay, and broken along shore by the
+         swell, which is what sets where waves are breaking. */
+      float sw=mix(0.22,0.50,smoothstep(0.35,0.75,s1));
+      float cov=clamp((sw-gShoreKm)/max(gPxKm,0.02)+0.5,0.0,1.0)*min(1.0,sw/max(gPxKm,0.02)*1.6);
+      float open=1.0-smoothstep(0.52,0.86,gSeaRing);
+      float brk=smoothstep(0.30,0.62,r1*0.55+s2*0.45);
+      col=mix(col, vec3(0.880,0.930,0.940), cov*brk*mix(0.25,0.75,open)*smoothstep(uSeaT,uSeaT+2.0,T)*uShore.x);
+    }
   }
 
   /* Freshwater lakes, DERIVED from the terrain, not authored. bake_lakes.py
@@ -6583,6 +6845,7 @@ void main(){
     float aaw=max(fwidth(lakeDepth), 0.001);
     float shore=clamp((lakeDepth-7.0)/aaw*0.85 + 0.5, 0.0, 1.0);
     shore*=1.0-landIce;                 // a frozen basin is ice, not open water
+    if(uShore.z<=0.0){
     if(shore>0.002){
       float dp=clamp(lakeDepth/230.0,0.0,1.0);
       // freshwater: a touch greener/darker than the open sea, shaded shallow->deep
@@ -6597,6 +6860,76 @@ void main(){
       float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),44.0);
       lakeCol=lakeCol*(0.96+0.06*q1)+vec3(0.55,0.66,0.76)*spc*0.20*smoothstep(0.02,0.2,dp);
       col=mix(col, lakeCol, shore);
+    }
+    } else {
+    /* A LAKE IS A KIND OF WATER, NOT A TINT (3.20). Every lake on the planet
+       was one teal ramp -- pale at the rim, mid at 70 m, dark by 200 -- so
+       Superior, Chad, the Dead Sea and a tarn in Tibet were the same paint,
+       brighter than the sea beside them, with the depth drawn as contour
+       rings. From orbit a lake's colour is what is in it, and the climate and
+       the setting the app already carries say what that is:
+
+       - deep, cold or clear water returns almost nothing: near black, blue;
+         it is the darkest natural surface on a continent (Baikal, Superior,
+         Tanganyika), which is most of why a real lake reads as water;
+       - warm, rain-fed, shallow water is green with algae and silt, and the
+         bottom is lost in a few metres (Victoria's gulfs, Chad, Tonle Sap);
+       - where evaporation outruns inflow the water is brine over a pale
+         floor -- milky turquoise -- and the shore is a white rim of salt (the
+         Great Salt Lake, Urmia, the salars), wider than the lake;
+       - under a glacier's snout it carries rock flour: opaque turquoise
+         (Tibet's and Patagonia's lakes);
+       - and in the cold it is under ice for most of the year.
+
+       The depth is drawn by attenuation -- an exponential with the water's
+       own clarity as its scale -- so there is a pale margin where the floor
+       shows and no rings. */
+    /* Aridity as the app measures it everywhere else: rain against what the
+       air could evaporate. And a lake a big river runs THROUGH is flushed
+       however dry the sky (Nasser is not the Dead Sea): the drainage says so. */
+    float humL=Rf/(0.46*clamp((T+12.0)/34.0,0.16,1.35));
+    float aridL=(1.0-clamp((humL-0.22)/0.42,0.0,1.0))*(1.0-smoothstep(0.45,0.72,max(drain,trunk)));
+    float warmL=smoothstep(6.0,21.0,T);
+    float trophL=warmL*clamp((Rf-0.16)/0.36,0.0,1.0);
+    float glacL=(1.0-smoothstep(-3.0,5.0,T))*smoothstep(1400.0,3000.0,zp)*(1.0-aridL*0.5);
+    if(shore>0.002){
+      vec3 deepL=mix(vec3(0.026,0.082,0.162), vec3(0.034,0.092,0.082), trophL*0.75);
+      vec3 shalL=mix(vec3(0.075,0.215,0.270), vec3(0.105,0.185,0.095), trophL);
+      shalL=mix(shalL, vec3(0.235,0.440,0.410), aridL*0.85);
+      shalL=mix(shalL, vec3(0.200,0.440,0.470), glacL);
+      deepL=mix(deepL, vec3(0.060,0.210,0.250), max(aridL*0.60, glacL*0.75));
+      float kd=mix(mix(30.0,8.0,trophL), 14.0, max(aridL,glacL));
+      /* A closed basin's lake is a pan: its water is a fraction as deep as a
+         through-flowing lake's of the same outline. */
+      float dEff=max(lakeDepth-7.0,0.0)*mix(1.0,0.25,aridL);
+      vec3 lakeCol=mix(deepL, shalL, exp(-dEff/kd));
+      /* Where a river comes in it brings its load: a brown-green stain at the
+         mouth, which is the one feature most lakes show from orbit. */
+      float inflow=smoothstep(0.50,0.80,drain)*exp(-max(lakeDepth-7.0,0.0)/60.0);
+      lakeCol=mix(lakeCol, vec3(0.200,0.215,0.130), inflow*0.55*(1.0-aridL));
+      // flat water surface: drop the land hillshade, add a low sun sheen
+      vec3 Lsl=normalize(vec3(-0.55,0.55,0.63));
+      vec3 rd=sdir*540.0+vec3(uTime*0.045);
+      float q1=fbm3(rd), q2=fbm3(rd*2.6+9.0);
+      vec3 wnl=normalize(vec3((q1-q2)*0.5,(q2-q1)*0.5,1.0));
+      float spc=pow(clamp(dot(wnl,Lsl),0.0,1.0),44.0);
+      lakeCol=lakeCol*(0.95+0.08*q1)+vec3(0.55,0.66,0.76)*spc*0.22;
+      /* Winter. The app has one season, the year's mean: a lake whose mean
+         is well below freezing is under ice most of it, in floes and leads. */
+      float frz=(1.0-smoothstep(-11.0,-3.5,T))*(0.62+0.38*smoothstep(0.30,0.70,fbm3(matDir(sdir)*260.0+vec3(2.2,5.5,8.8))));
+      lakeCol=mix(lakeCol, vec3(0.700,0.760,0.800)*(0.92+0.10*q1), clamp(frz,0.0,0.85));
+      col=mix(col, lakeCol, shore);
+    }
+    /* THE LAKE'S SHORE. The field's first seven metres are drawn as land, so
+       they are a ready margin: reed and wet meadow where it rains, a rim of
+       salt where the lake is shrinking under the sun -- and that rim reaches
+       further, over the floor the lake has already left. */
+    if(lakeDepth>0.08 && shore<0.998){
+      float rimW=smoothstep(mix(0.4,0.08,aridL),mix(6.0,3.0,aridL),lakeDepth)*(1.0-shore)*(1.0-landIce);
+      float saltL=aridL*smoothstep(8.0,20.0,T);
+      vec3 rimc=mix(vec3(0.150,0.200,0.105), vec3(0.700,0.680,0.630), saltL);
+      col=mix(col, rimc, rimW*mix(0.38,0.62,saltL)*uShore.z);
+    }
     }
   }
 
@@ -6706,6 +7039,11 @@ void main(){
                      : uShow<16.5 ? vec3(vnoise3(matDir(sdir)*30.0), vnoise3(matDir(sdir)*30.0+7.0), 0.5)
                      : vec3(clamp(uShow<17.5 ? gDbgV.x : uShow<18.5 ? gDbgV.y : uShow<19.5 ? gDbgV.z : gDbgV.w, 0.0, 1.0));
   }
+  /* ?shdbg=1: the waterline's decision as colour (red the coast distance
+     about mid-grey, green how far it is trusted, blue land). It is how the
+     round found that three in-shader smoothings were all deciding correctly
+     and the stairs were in the mask. */
+  if(uShoreB.z>0.5) col=vec3(clamp(0.5+gShoreSd/28.0,0.0,1.0), gShoreTr, z>=wl?1.0:0.0);
   gl_FragColor=vec4(col, uMapProj>1.5 ? (z<wl?0.5:1.0) : 1.0);
 }
 `,
@@ -7816,13 +8154,13 @@ function oldLakeTex(){
    match them — the same silent failure DATA_V exists to prevent, at fifty times
    the size. Bump this whenever build_fields, reskin_seafloor or anything they
    call changes what lands in web/fields. */
-const DATA_V='20260927-0025';
-const FIELD_V='20260926-319';   // bumped: the sea's rainfall filled from the land (3.19); trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
+const DATA_V='20261110-0033';
+const FIELD_V='20261109-320';   // bumped: the coast as a signed distance in _w's green (3.20); the sea's rainfall filled from the land (3.19); trenches in _f's alpha and arcs in _t's (3.17), the shelf break in _w's blue, the Precambrian's own motion (_v _p and everything derived), the Caspian
 /* The imagery under web/imagery/ (the Atlas port, 2026-09-07): the NASA cloud
    field and the timeline preview atlas. Bumped by hand when their bytes
    change; the preview must be regenerated whenever the shipped sheets are
    (build/build_timeline_preview.py checks their hashes). */
-const IMAGERY_V='20260926d';
+const IMAGERY_V='20261109a';
 /* ASSET BASES (WP-10, D4). The per-keyframe fields and the world sheets are
    the repository's weight; when they are hosted elsewhere -- a GitHub
    release, an object store, a second Pages site -- build_site.py stamps
@@ -8482,6 +8820,8 @@ function initGL(){
     uTrench:{value:new THREE.Vector3(0,0,+(_sq.get('trench')??1))},
     uCoast:{value:new THREE.Vector2(+(_sq.get('coast')??1),+(_sq.get('coastkm')??6))},   // natural waterline: strength, lateral scale (km)   // subduction trenches from the _f alpha (x,y: keyframe has it; z strength, 0 off)
     uShow:{value:+(_sq.get('show')||0)},       // mask view: draw one gate as grey (see FRAG)
+    uShore:{value:new THREE.Vector4(+(_sq.get('shore')??1),+(_sq.get('beach')??1),+(_sq.get('lake')??1),+(_sq.get('shaa')??1))},   // the shore (3.20): nearshore water, beach and fringe, lakes, the waterline's antialiasing; 0 = the 3.19 drawing
+    uShoreB:{value:new THREE.Vector4(+(_sq.get('wline')??1),0,+(_sq.get('shdbg')??0),0)},   // ...the waterline from the baked coast distance (0 = 3.17's warp); ?shdbg=1 draws its decision
     uMatOffK:{value:_sq.get('matoff')==='0'?0:1},   // texture rides the crust through an interval (FRAG gMatOff)
     uEroK2:{value:new THREE.Vector4(+(_sq.get('eroB')??1.5),+(_sq.get('eroR')??0.78),+(_sq.get('eroFa')??2.2),+(_sq.get('eroFb')??4.5))},   // erosion relief below the grid (FRAG): 12 km amplitude x old, ratio per finer octave
     uEroK3:{value:new THREE.Vector4(+(_sq.get('eroG')??0.55),+(_sq.get('eroW')??1.0),+(_sq.get('eroJ')??0.35),+(_sq.get('eroC')??2.0))},   // ...their shading ratio per octave below 12 km, their walls' steering weight, their pivots' jitter (the herringbone round)
@@ -8891,11 +9231,29 @@ function riverPaths(i){
   for(const q of dead){on[q]=0;if(best[q]>=0)indeg[best[q]]--;}
   const segs=[];
   const lonf=x=>(x+0.5)/RW*360-180, latf=y=>90-(y+0.5)/RH*180;
+  /* A RIVER STOPS AT A LAKE (3.20). The drainage runs on through a lake's
+     basin, so the thread was drawn across the water: a pale kinked line over
+     Superior and Victoria, plain to see once lakes were drawn dark. A segment
+     with both ends in open lake water (the lake field's own shore, 7 m:
+     code 14 of its sqrt encoding) is not drawn. If the lake field has not
+     arrived the threads are built without it and rebuilt when it has. */
+  let lake=null;
+  const wimg=fieldImage('w',i);
+  if(wimg){
+    const wc=document.createElement('canvas');wc.width=RW;wc.height=RH;
+    const wx=wc.getContext('2d',{willReadFrequently:true});
+    drawFieldImage(wx,wimg,RW,RH);
+    const wp=wx.getImageData(0,0,RW,RH).data;
+    lake=new Uint8Array(N);
+    for(let k=0;k<N;k++)lake[k]=wp[k*4]>=14?1:0;
+  } else ensureBitmap('w',i);
   for(const q of live){
     const b=best[q];
     if(!on[q]||b<0||!on[b])continue;
+    if(lake&&lake[q]&&lake[b])continue;
     segs.push([lonf(q%RW),latf((q/RW)|0),lonf(b%RW),latf((b/RW)|0)]);
   }
+  segs.noLake=!lake;
   RIVDATA.set(i,segs);
   if(RIVDATA.size>12){for(const k of RIVDATA.keys()){if(k!==i){RIVDATA.delete(k);break;}}}
   return segs;
@@ -11045,7 +11403,7 @@ const _rtPool=[]; let _bakeJob=null, _sheetClock=0, _liteOn=false, _liteFrames=0
    playback free at any speed and what the ambient build runs on. A shipped
    sheet may be any width; the LOD rule reads the width of the sheets in use.
    ?noshipped=1 ignores the manifest (the bake script itself needs that). */
-const SHEET_V='20260926d';
+const SHEET_V='20261109a';
 let SHEET_MANIFEST=null, SHEET_DIR='sheets/';
 const _shippedPending=new Set(), _shippedMissing=new Set(), _sheetRetryAt=new Map();
 function _shippedSheet(i){
@@ -11608,6 +11966,10 @@ function loop(now,force){
   }
   // state.spin scales the auto-rotate (the ambient view is its own page since 2026-09-08).
   if(_rivWant>=0&&fieldImage('d',_rivWant))buildRivers();
+  else if(_rivWant<0&&DATA.timeline){   // threads built before the lake field arrived: rebuild once it has
+    const fi=curFrame().i, rs=RIVDATA.get(fi);
+    if(rs&&rs.noLake&&fieldImage('w',fi)){RIVDATA.delete(fi);buildRivers();}
+  }
   if(state.layers.rotate&&!dragging)state.rot+=dtT*0.05*state.spin;
   updateExtinction();   // show/update the mass-extinction card as time scrubs past an event
   updateContextCards(); // and the interval / supercontinent / glaciation cards

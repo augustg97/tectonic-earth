@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (wet coasts, forming clouds and bowed trenches 3.19; subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (the shore: a baked waterline, water with a kind, dark lakes 3.20; wet coasts, forming clouds and bowed trenches 3.19; subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -10,17 +10,48 @@ Paste this whole file as the first message of a new session.
 
 - Repo: `/Users/augustgweon/Tectonic Plate Model` (venv at `./venv/bin/python`; do NOT move it to `~/Desktop`)
 - Live: https://augustg97.github.io/tectonic-earth/ (GitHub Pages serves `main:/docs`)
-- **Read `README.md` first**: §2 working rules, §5.15 this round (the sea's rainfall filled from the
-  land, clouds that form and dissipate, the observed decks, trenches that bow), §5.14 the round
-  before (the Precambrian's own motion, weather, the shelf break, subduction trenches, the overlay's
+- **Read `README.md` first**: §2 working rules, §5.16 this round (the waterline as a baked distance,
+  shallow water by kind, the strand and the tidal fringe, lakes by kind), §5.15 the round before (the
+  sea's rainfall filled from the land, clouds that form and dissipate, the observed decks, trenches
+  that bow), §5.14 the one before that (the Precambrian's own motion, weather, the shelf break, subduction trenches, the overlay's
   frame, the waterline, varied cards),
   §5.1b the future series (the plate engine, the future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
   mountains (the erosion relief), §5.5 lakes, §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.66–7.72 are this round's; 7.57–7.65, 7.48–7.56 and 7.43–7.47 the rounds before), §9
+  commands, §7 traps (7.73–7.79 are this round's; 7.66–7.72, 7.57–7.65, 7.48–7.56 and 7.43–7.47 the rounds before), §9
   known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
-## The latest round: wet coasts, clouds that form, trenches that bow (3.19, 2026-09-26)
+## The latest round: the shore (3.20, 2026-11-09)
+
+The user, on the live 3.19: "I really like how much we've improved our mountains, deserts, etc., but
+can we improve our coastlines to make them look less flat and a bit more realistic? There is some good
+shading/coloration that adds detail to the coasts, but let's see if we can make improvements to the
+coasts to make them more photorealistic. And I think we can make our lakes/freshwater more realistic
+in general. Let's be sure not to lose the detail and realism that we've added so far." README §5.16,
+traps 7.73-7.78.
+
+- **The waterline is a baked distance.** The Phanerozoic fields carry a terrace at exactly sea level
+  (code 128, +0.12 m; 80,895 texels at 0 Ma), so the zero contour was a polyline through texel
+  centres and 3.17's warp flooded pools into it. `build/coast_edge.py` writes the signed distance to
+  a coast smoothed over 15 km into the GREEN of every `_w` (lossless; R and B untouched; islands,
+  straits, inlets and necks protected; `bake_lakes.py` and `bake_present_lakes.py` call it, so a
+  lake re-bake keeps it). `shoreZ()` in `index__FRAG` decides the side from it near the coast and
+  from the heights elsewhere, at a truly warped point. `?wline=0` is 3.17's; `?shdbg=1` draws it.
+  The dry-basin flag is now code 255 alone, written one texel wider (7.77).
+- **Shallow water by kind** (`?shore=0`): the two near-white depth bands are a bottom return set by
+  the water (warm and clear: turquoise; cold or muddy: green; enclosed: dark), and surf is a thin
+  line by distance, not a band by depth.
+- **The shore** (`?beach=0`, `?shaa=0`): a strand, a tidal fringe (marsh, mangrove), sabkha, and an
+  antialiased waterline -- all by DISTANCE to the waterline (7.76).
+- **Lakes by kind** (`?lake=0`): dark clear water, green warm water, turquoise brine with a salt
+  rim, rock flour, ice; depth as attenuation, no rings. River threads stop at a lake (`app.js`).
+- Timing: inside noise (four interleaved repeats, three close-ups, 9-10 ms both ways).
+- **Seen, not touched:** the Sahel's ruled edge and straight-sided biome steps in some deep-time
+  interiors (100 Ma North America): the palette's khaki-to-forest step (5.15's open item).
+- **Open:** fjords and rias (the erosion relief may not cut below sea level); the protected
+  features keep the field's own stairs; present-day lake depth is a distance from shore.
+
+## The round before: wet coasts, clouds that form, trenches that bow (3.19, 2026-09-26)
 
 The user, on the live 3.18: "much better, but the clouds by africa above, and the US east coast, look
 odd - can we make these more natural and photorealistic and address similar errors? and our ocean

@@ -8381,3 +8381,34 @@ straight and symmetrical". README §5.15, traps 7.66-7.72.
 under 1% of pixels): a biome-palette item, to be done against `audit_biomes`. A full rebuild of
 `_e`, `_d` and `_w` will now read the filled rain along coasts and differ in a ~15 km coastal strip, by
 design.
+
+## THE SHORE ROUND (2026-11-09, 3.20): the waterline as a baked distance, water by kind, lakes by kind
+
+**The request.** "Can we improve our coastlines to make them look less flat and a bit more realistic ... more photorealistic. And I think we can make our lakes/freshwater more realistic in general. Let's be sure not to lose the detail and realism that we've added so far."
+
+**What the baselines showed** (`build/verify/b0_*`, `b1_*`, `b2_*`; closest zoom, clouds off). Every low coast wore a near-white, torn fringe with detached pools and islets; shelf seas (North Sea, Baltic, Adriatic) were flat pale tint in terraces with texel-shaped edges; the land colour ran unchanged to a hard waterline; every lake was one bright teal ramp with its depth as rings; the river threads crossed lakes.
+
+**Causes, each measured.**
+1. *The stairs and the pools are one fault in the field.* Histogram of `_e` at 0 Ma: code 128 (+0.12 m) holds 80,895 texels against ~15,000 for its neighbours; 25,189 at 100 Ma, 19,231 at 300 Ma, none in the future or the Precambrian. The source draws coastal lowlands at 0 m. A bilinear contour between +0.12 and -10 m sits at the land texel's centre: the coast is the mask's polyline. 3.17's warp (noise x regional slope, added to the height) put metres of shift on 12 cm of freeboard.
+2. *The white fringe is two palette bands and the surf.* `smoothstep(-90,-28,z)` to (0.545,0.665,0.810) and `smoothstep(-28,-4,z)` to (0.640,0.790,0.860) -- linear constants, lighter still once encoded -- on the pixel's own depth; then surf mixed toward white over -26..-2 m. On a shelf falling 1 m/km those bands are tens of km wide.
+3. *The lakes are one ramp.* Three stops by depth alone; present-day depth is a distance transform from the shore, so the ramp drew its rings.
+
+**What was tried on the waterline and failed** (kept because each looked right on paper).
+- Four diagonal taps of height, averaged: the terrace eroded by the tap square, the Cyclades deleted. Made adaptive on the taps' spread: islands back, stairs back.
+- A quadratic B-spline of the land indicator over nine texel centres, blended with the height by the neighbourhood's range, then by its highest texel, then as sides in -1..1: the shots differed by 657 pixels between two of these. `?shdbg=1` and a character grid of decision against rendered mask showed the indicator deciding everywhere it ran, and the stairs two texels deep in the mask.
+- Hence the bake (`coast_edge.py`): a 15 km Gaussian of the mask, inverted through erfinv to a distance; protection by topology (lost components, bridges, cut necks, flips further than 1.3 texels from their kind). Census over 252 files: land fraction unchanged to 0.01 point, at most 0.19% of texels change side (50 Ma), 0.3-2.6% protected in the Phanerozoic, ~0.02% in the Precambrian.
+
+**What shipped.** README 5.16. Knobs: `?wline= ?shore= ?beach= ?shaa= ?lake= ?shdbg=`.
+
+**Regressions found and fixed inside the round.**
+- A second strand and a dark fringe 60 km inland along the terrace's landward edge (a height band is not a distance): gated by the baked distance and a true-sea ring test.
+- Outline loops round protected pools: the same, where the distance is not trusted.
+- A blue thread round the drained Mediterranean at 5.3 Ma: the dry flag's bilinear edge moved inside the mask when it began sharing the channel; written one texel wider from the canonical mask.
+- Marsh as a uniform dark hem: reach by shelter and a 15 km noise, patchy.
+- Lake ice as pixel static: a lower-frequency fbm.
+
+**Not done, and why.**
+- *Fjords and rias.* Needs the erosion relief allowed below sea level near a rugged coast; that reverses a promise ("procedural relief may never carve new water") several systems lean on (lakes, marsh, the biome's elevation terms). A round of its own.
+- *Shelf-sea tone.* The shelf's pale blue below 90 m is the level earlier rounds fitted to the user's reference; cold shelf seas are darker and greener in true colour. Left: the request was to keep what was liked.
+- *The Sahel edge and the 100 Ma interior's straight biome steps.* The palette's khaki-to-forest step (the 3.19 open item); both visible in this round's baselines (`b1_wafrica`, `b2_p100`, `b2_wide0`).
+- *River threads in pictures.* GL lines do not rasterize headless; the lake cut-off is a data filter and was not seen rendered.

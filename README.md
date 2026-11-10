@@ -104,7 +104,7 @@ Ten textures per keyframe (138 MB for the timeline). Elevation is AVIF (§7.13);
 | `_e` | elevation | 4096×2048 | signed-sqrt encoded, so precision concentrates near sea level — the coastline is the one contour that must interpolate cleanly. Matches the 6-arc-minute source DEM, so more pixels would only interpolate |
 | `_r` | rainfall | 1536×768 | smooth, so it costs little |
 | `_m` | plate motion | 128×64 | R = east, G = north, B = confidence |
-| `_w` | lake depth | 2048×1024 | baked standing water, sqrt-encoded metres; G marks a desiccated basin |
+| `_w` | lake depth | 2048×1024 (4096×2048 at 0 Ma) | lossless. R baked standing water, sqrt-encoded metres; G the **coast as a signed distance**, codes 1–250 over ±32 km about 126, + on land (`coast_edge.py`, §5.16), with 255 alone marking a desiccated basin and 0 "no field"; B the shelf break as a signed distance (`shelf_edge.py`, §5.14) |
 | `_d` | surface process | 2048×1024 | drainage, substrate, fetch |
 | `_o` | ocean structure | 2048×1024 | R = **crustal age**, log-companded over 0–52° of spreading (190 Myr, the oldest surviving ocean crust); G/B = spreading direction from the age gradient, with confidence in its length |
 | `_v` | displacement | 1024×512 | how far the crust under each pixel moves to the next keyframe, east/north in degrees of great circle, B = divergence (`build_displacement.py`) |
@@ -632,6 +632,22 @@ At zoom 1.35 a pixel is ~0.85 km and a texel of the elevation field 8–11 pixel
 
 **Open.** The Sahel still reads as a soft ruled shoreline between sand and forest. The rain gradient behind it is gradual (the index runs 0.2 -> 0.55 over 14 -> 10 N); the palette's step from the khaki mid stop to the dark wet one compresses it into ~150 km, and finer jitter did not change it (under 1% of pixels). A fix belongs to the biome palette with `audit_biomes`, not to the jitter.
 
+### 5.16 The shore: a baked waterline, water that has a kind, lakes that are dark (3.20)
+
+The user, on 3.19: "can we improve our coastlines to make them look less flat and a bit more realistic ... more photorealistic. And I think we can make our lakes/freshwater more realistic in general. Let's be sure not to lose the detail and realism that we've added so far." Looked at closely (`build/verify/b0_*`, `b1_*`), the coasts were three separate things, and the lakes one.
+
+**The waterline is a baked distance** (`build/coast_edge.py`, the green of `_w`; `shoreZ()` in `index__FRAG`; §7.73–7.75). Land or sea was the sign of the elevation field, and the Phanerozoic keyframes carry a **terrace at exactly sea level** -- code 128, +0.12 m -- along most low coasts, because the source draws its coastal lowlands at 0 m (80,895 texels at 0 Ma, 25,189 at 100 Ma, 19,231 at 300 Ma; the Carolinas' is 40–100 km wide; the generated Precambrian and the future have none). Between a texel at +0.12 m and one at −10 m the bilinear field crosses zero a hundredth of the way along, so the waterline ran through the centres of the outermost terrace texels: a polyline with the land mask's own one- and two-texel steps. 3.17's waterline warp (a noise times the regional slope, added to the height) hid the stairs by flooding the terrace wherever the noise was negative -- the torn fringe of pools and islets on every low coast. Now each keyframe ships the signed distance to a coastline smoothed over 15 km on the ground (a Gaussian of the land mask, inverted through the error function: smooth, sub-texel, exact at the contour), and the shader decides the side from it within ~10 km of that coast, the two keyframes' distances blended so the shore slides between them. Islands, straits, inlets and necks are **protected**: wherever the smoothing would lose a component, bridge a strait, cut a neck or flip a texel further than 1.3 texels from its own kind, the field falls back toward the unsmoothed mask and its magnitude is multiplied up, which closes the shader's trust band so the elevation field decides there as before (0.3–2.6% of texels a keyframe; at most 0.19% of texels change side, land area unchanged to 0.01%). Both are read at a point moved sideways by a coherent few km -- a true domain warp, larger and finer on hard steep ground, small on soft flat ground -- which bends the coast the field has and cannot open a pool. `?wline=0` is 3.17's warp; `?shdbg=1` draws the decision (red the distance, green the trust, blue land). Both latitude branches. Cost: two texture reads and nine noise taps in the coastal zone, nothing measurable (below).
+
+**Shallow water has a kind** (`oceanColour`, `uShore.x`, `?shore=0`). The palette's last two bands took everything shallower than 90 m to a pale blue and everything shallower than 28 m most of the way to white, keyed to the pixel's own depth: terraces of flat tint on every shelf sea (the field's codes are 6–12 m apart at 30–90 m), a near-white band tens of km wide on every flat coast, and the same white off Norway, the Sahara, the Amazon and the Bahamas. They are replaced by the bottom seen through the water: two exponentials (9 m and 2.5 m scales) of a depth read half from the smoothed field, between colours set by what the water is. Warm water (sea-level temperature above ~12–22 °C) starved of river mud is clear over carbonate sand -- turquoise, pale aqua on the flats; cold or river-fed water is green and shows its floor only in the last few metres; water ringed by land (a lagoon, a sound) is dark and murky whatever the climate. At close zoom a bank is mottled with seagrass and sand at 2–5 km. The shelf's own pale blue (the tone the earlier rounds fitted to the reference) is untouched below 90 m. **Surf is a line**: the old band (−26 to −2 m, mixed to white by a noise) was most of the pale fringe; it is now drawn by distance from the waterline with the pixel's coverage of it, 220–500 m wide, broken by the swell, stronger on an open coast, absent where the sea is frozen.
+
+**The shore is a place** (`uShore.y`, `?beach=0`; §7.76). The land colour ran unchanged to the waterline. Three things are drawn, all tone, none moving the waterline: a **strand** by distance from the waterline (280–800 m, wide on soft low coasts, thin under hard ones, absent on a steep hard coast; quartz tan, near-white carbonate where the water is warm and clear, grey shingle on cold rock), with the pixel's coverage, so it is a thread at close zoom and gone from orbit; a **tidal fringe** within a few km of the sea on low wet ground -- salt marsh, mangrove in the tropics -- reaching further up a sheltered shore than an open one and in patches; **sabkha** on a low dry coast in the heat. And the waterline is **antialiased** (`uShore.w`, `?shaa=0`): a land pixel within a pixel of it takes a share of the shallow water it borders.
+
+**A lake is a kind of water** (`uShore.z`, `?lake=0`). Every lake was one teal ramp, brighter than the sea, with its depth as contour rings. Now: deep or clear water is near-black blue (the darkest natural surface on a continent, which is most of why a real lake reads as water); warm rain-fed water is green and loses its floor in a few metres; where evaporation outruns inflow (the app's own humidity index, and no big river running through) it is milky turquoise brine over a pale floor with a rim of salt reaching beyond the water; under high cold ground it carries rock flour; where the year's mean is well below freezing it is under ice in floes. Depth is attenuation -- an exponential with the water's clarity as its scale -- so there is a pale margin and no rings; a closed basin's lake is drawn a quarter as deep as its outline suggests. A river mouth stains the lake brown-green. The first seven metres of the lake field, drawn as land, are the lake's shore: reed and wet meadow, or salt. And the river threads (`riverPaths` in `app.js`) **stop at a lake**: a segment with both ends in open lake water is not drawn (they had crossed Superior and Victoria as pale kinked lines).
+
+**Measured.** Frame time at 2560×1440, four interleaved repeats, old against new: Aegean 10.2 vs 9.9 ms p50, Great Lakes 10.0 vs 9.8, the Carolinas 9.6 vs 9.0 -- inside the harness's noise (§7.64). Both sheet sets re-baked and the preview rebuilt; `FIELD_V`, `SHEET_V`, `IMAGERY_V` bumped.
+
+**Open.** Fjords and rias: a rugged coast is still the smoothed coast bent by a few km, because the erosion relief may not cut below sea level; drowning its valleys near the shore is the structural way to get them and was not attempted. The protected features (capes with inlets, island groups, straits) keep the field's own stairs. The present-day lakes' depth is a distance from their shore, not bathymetry, so the pale margin is the same width in Superior and in Erie. The river threads are GL lines and do not rasterize headless (§7.16): the lake cut-off was checked in the data, not in a picture. The Sahel's ruled edge and the straight-sided biome steps of some deep-time interiors (100 Ma North America) are the palette's khaki-to-forest step, as recorded in §5.15: seen again this round, not touched.
+
 ## 6. Build and deploy
 
 ```bash
@@ -693,12 +709,13 @@ python build_drainphase.py -j              # drainage coordinates for all 251 (~
 python build_arc.py                        # the belt-type alpha of _t for all 251 (~1 s each); --stats 0 lists what it flags
 python build_preframe.py                   # the Precambrian's own _v, _p and platerot rows from the craton poses (3.17); then rederive_fields.py --ages 545,...,995
 python trench_field.py                     # the trench distance into the alpha of every Phanerozoic and future _f (~4 min; 3.17); --show AGE draws it
+python coast_edge.py                       # the coast distance into the green of every _w (~2 min on 8 workers; 3.20), lossless, R and B untouched; bake_lakes and bake_present_lakes write it themselves. --show AGE draws what it smooths and protects, --stats measures
 python reframe_plates.py                   # Merdith's Phanerozoic boundaries onto the terrain's frame (after build_plates_gplates.py, every time)
 python pre_boundaries.py                   # the Precambrian overlay from the craton model (~3 min)
 python build_orogen_atlas.py               # the sixteen atlas patches (~1 h) and web/atlas.webp
 python emulate_fold.py 0 44 58 26 36 z.png  # draw the atlas at (φ, ψ) over a window, no browser
 python bake_sheets.py                      # world sheets for all 251 (needs a GPU; §5.9)
-python bake_sheets.py --width 2048         # the lean set the ambient build runs on
+python bake_sheets.py --width 2048         # the lean set the ambient build runs on, into web/sheets2048 (the folder follows the width since 3.20, §7.79)
 ```
 
 `stamp_data_version.py` bumps `DATA_V` in `app.js` **before** the page is assembled. This is not optional: Pages serves the JSON with `max-age=600` and an ETag, and a returning viewer can sit on a cached copy well past that window. The failure is silent — the app runs perfectly and shows yesterday's data. It has happened three times, on `labels.json`, `plates_time.json` and `life.json`, and each time it looked like the deploy had never landed.
@@ -1423,6 +1440,34 @@ A field shipped in a band (the trench distance: 70 km behind a margin, 240 behin
 ### 7.72 A borrowed texture traced along a curving coast shears
 
 The deck's first source band followed the Peruvian coast, which swings 7 degrees east between 11 and 18 S: a vertical line in the target became a diagonal in the source, and the borrowed stratocumulus came out as diagonal streaks. Borrow from a fixed window and let the target's own geometry say where the texture shows.
+
+### 7.73 A terrace at the threshold pins the contour to the texel centres
+
+A bilinear field crosses a threshold in proportion to the values either side. Where one side sits a hair past it (the source's coastal lowlands at 0 m: +0.12 m after encoding) and the other well beyond (−10 m), the crossing is at the near texel's centre, and the contour is a polyline through centres with the mask's own stairs -- at any magnification. Look at the histogram of the field round the threshold before trusting its contour: a spike at one code is a terrace, and the contour of a terrace is the mask.
+
+### 7.74 Averaging across a lopsided edge is a minimum filter; blend sides, not metres
+
+Smoothing heights across such a coast does not smooth the coast: +0.12 averaged with −10 is sea wherever any tap is sea, so the terrace is eroded by the tap pattern's own square and every one-texel island goes with it. What is symmetric across a coast is which side a point is on. The same holds when two decisions are blended: mixed as metres, a neighbour at −10 m outvotes a ±6 m indicator at any weight under 0.9 (two rounds of shots differed by 657 pixels); mixed as sides in −1..1, each gets its weight.
+
+### 7.75 Three fixes that change nothing: draw the decision
+
+Three in-shader waterlines (averaged heights, a B-spline of the land indicator, the two blended as sides) each rendered the same stairs. Drawn as colour (`?shdbg=1`) and compared with the rendered land mask in a character grid, the decision was shown to be doing exactly what it was asked: the stairs were two texels deep in the mask, and no kernel one texel wide rounds a two-texel stair. The cure was upstream (a baked distance with the width a smooth coast needs). When a fix leaves the picture unchanged, render the intermediate it changed before writing a third.
+
+### 7.76 A height band is not a distance
+
+"Ground within 3 m of the sea" is 300 m wide on a steep coast and 30 km on a flat one, and on the terrace it is also true 60 km inland, at its landward edge -- where the first strand and the first tidal fringe duly drew a second shoreline along the texel stairs. Anything that hugs the waterline (a beach, surf, a marsh's reach, antialiasing) needs the distance to it: the baked one where it is trusted, |z| over the screen-space gradient elsewhere, and a ring test that there is sea within reach at all.
+
+### 7.77 A flag sharing a channel with a value moves its own edge
+
+The dry-basin flag was 255 against 0 and the shader cut it at a half, so its bilinear edge fell half a texel outside the mask, over the shore. With the coast distance in the same channel the flag is the top code alone, reached only inside the mask: the basin's rim -- sea by the heights, not dry by the flag -- drew as a blue thread round the whole drained Mediterranean. The flag is written one texel wider, from the canonical mask every time (read back out of the channel, each re-run would have grown it).
+
+### 7.78 A pale palette stop is as wide as the ground is flat
+
+The innermost ocean band was a near-white reserved for "the last few metres" -- tens of km of every low coast, because that is how wide the last few metres are on a shelf that falls a metre a kilometre, and a pool the old warp opened in the terrace read as a snow patch. A colour meant for a narrow feature has to be gated by the feature's width (a distance), not by the quantity that happens to be small there.
+
+### 7.79 One output folder, two sets
+
+`bake_sheets.py` wrote every width to `web/sheets`, and the lean set lived in `web/sheets2048` only because someone had moved it there once. Chained as "4096, then `--width 2048`" (3.20), the second run replaced the first's output and `sheets2048` kept the previous release's sheets: both sets wrong, every log line green. Caught by reading the manifest's width before building the site, not by any check. The output folder now follows the width (`web/sheets` at 4096, `web/sheets<width>` otherwise, `--out` to override). A tool that produces two artefacts must name both destinations itself.
 
 ## 8. Sources
 

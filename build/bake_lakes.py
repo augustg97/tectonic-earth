@@ -386,7 +386,12 @@ def bake_one(epath, stats=False):
     # mask cannot be built without it. Omitting it returns an empty mask and
     # the feature silently does not ship.
     dry = _EP.messinian_mask(depth.shape, float(age), Z)
-    gch = (np.clip(dry, 0.0, 1.0) * 255.0 + 0.5).astype(np.uint8)
+    # G carries two things since 3.20 (coast_edge.py): the coast as a signed
+    # distance in codes 1..250, read from the FULL-resolution elevation (the
+    # waterline is the one thing this file may not blur), and the dry-basin
+    # flag as code 255 alone. The shader thresholds the flag at the top code.
+    import coast_edge as _CE
+    gch = _CE.channel(_CE.read_Z(epath), np.clip(dry, 0.0, 1.0) > 0.5, depth.shape)
     # B is the shelf break as a signed distance (shelf_edge.py, 3.17)
     import shelf_edge as _SE
     rgb = np.dstack([enc, gch, _SE.channel(Z)])
