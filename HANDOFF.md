@@ -331,7 +331,15 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20260927-0025`**, release 3.19 (the sea's rainfall filled from the
+- Last live deploy: **`DATA_V=20261110-0033`**, release 3.20 (the waterline as a baked distance,
+  shallow water and lakes by kind, the strand and the tidal fringe), commit `9177105e` (the record
+  is the commit after it), verified live (the page carries `shoreZ`, `uShore` and the river cut-off,
+  `FIELD_V='20261109-320'`, `SHEET_V`/`IMAGERY_V='20261109a'`; the served `phan_0000_w.webp` and
+  `sheets/phan_0000_s.avif` are byte-identical to the local ones, the first with the coast distance
+  in G, the second 4096 wide; `sheets2048` is 2048 wide; 5 Ma keeps its 11,348 dry texels; the
+  update log leads with 3.20). Not checked live: a rendered frame in a real browser (the local
+  harness rendered the same files). Before it:
+  **`DATA_V=20260927-0025`**, release 3.19 (the sea's rainfall filled from the
   land, clouds that form and dissipate, the observed decks, trenches that bow), commit `a336359b`
   (the record is the commit after it), verified live (the page carries the new shaders and
   `FIELD_V='20260926-319'`, `SHEET_V`/`IMAGERY_V='20260926d'`; the filled `phan_0000_r.webp`
@@ -345,8 +353,8 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
   README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
   desert heart (7.6E 23.4S); the old 2E 45S frame sat on the temperate belt.
-- Cache versions: `FIELD_V='20260926-319'`, `SHEET_V='20260926d'`, `IMAGERY_V='20260926d'`
-  (in `web/app.js` AND `web/ambient.html`). Backups of the 3.18 `_r` fields and both sheet sets
+- Cache versions: `FIELD_V='20261109-320'`, `SHEET_V='20261109a'`, `IMAGERY_V='20261109a'`
+  (in `web/app.js` AND `web/ambient.html`). Backups of the 3.19 `_w` fields and both sheet sets
   were kept in the session scratchpad only.
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
   cache) are gitignored on purpose.
