@@ -5576,11 +5576,47 @@ void main(){
     float trophL=warmL*clamp((Rf-0.16)/0.36,0.0,1.0);
     float glacL=(1.0-smoothstep(-3.0,5.0,T))*smoothstep(1400.0,3000.0,zp)*(1.0-aridL*0.5);
     if(shore>0.002){
-      vec3 deepL=mix(vec3(0.026,0.082,0.162), vec3(0.034,0.092,0.082), trophL*0.75);
-      vec3 shalL=mix(vec3(0.075,0.215,0.270), vec3(0.105,0.185,0.095), trophL);
-      shalL=mix(shalL, vec3(0.235,0.440,0.410), aridL*0.85);
-      shalL=mix(shalL, vec3(0.200,0.440,0.470), glacL);
-      deepL=mix(deepL, vec3(0.060,0.210,0.250), max(aridL*0.60, glacL*0.75));
+      /* THE LAKE IS THE ERA'S WATER (3.21). 3.20 drew deep lakes at their
+         true-colour value, near black -- beside a sea this app draws as a
+         bright bathymetric blue, and one that changes hue with the era (the
+         iron-and-algae green of the Proterozoic, the blue since the
+         Jurassic). A black lake on Rodinia next to a teal ocean was a hole
+         in the map, and the user said so: "too dark ... consistent with
+         other bodies of water as they change color over time, accounting for
+         size/reflection differences". So the lake starts from the SEA'S OWN
+         hue and shallow colour for this age (the same two mixes oceanColour
+         makes from uSeaTint), and departs from it only by what makes a lake
+         a lake:
+           - fresh water carries more dissolved organics and algae per
+             metre than the open sea: a little greener, a little less blue;
+           - SIZE. A small lake is darker than a large one -- less fetch, so
+             a smoother surface returning less skylight, and a shorter path
+             of clear water over a dark floor. Measured here as how much of
+             two rings (~45 and ~90 km) is lake: a pond reads about 0.7 of
+             an inland sea's tone (0.6 was tried and small lakes were still
+             holes at globe zoom);
+           - and the kinds 3.20 introduced (green and productive, brine,
+             rock flour, ice), now as departures from that base. */
+      vec3 seaHue=mix(vec3(0.128,0.300,0.300), vec3(0.130,0.163,0.350), uSeaTint);
+      vec3 seaShal=mix(vec3(0.300,0.612,0.545), vec3(0.260,0.400,0.600), uSeaTint);
+      float lfr=0.0;
+      for(int k=0;k<8;k++){
+        float ang=float(k)*0.7853982;
+        vec2 lo=vec2(cos(ang),sin(ang))*(k-2*(k/2)==0 ? 2.2 : 4.5)*uTexel;
+        lfr+=step(0.052, mix(texture2D(waterA,wA(uv+lw+lo)).r, texture2D(waterB,wB(uv+lw+lo)).r, mixf));
+      }
+      float sizeL=smoothstep(0.20,0.85,lfr*0.125);
+      vec3 lakeHue=seaHue*vec3(0.90,1.06,0.92);
+      vec3 deepL=lakeHue*mix(0.88,1.28,sizeL);
+      vec3 shalL=mix(lakeHue*1.7, seaShal, 0.55)*mix(0.90,1.0,sizeL);
+      /* (The productive shift is small: taking the blue out of an already
+         green Proterozoic hue left a bottle-green lake beside a teal sea.) */
+      deepL=mix(deepL, deepL*vec3(0.92,1.03,0.82), trophL*0.70);
+      shalL=mix(shalL, shalL*vec3(0.90,1.0,0.76), trophL*0.80);
+      shalL=mix(shalL, mix(seaShal, vec3(0.420,0.660,0.620), 0.5), aridL*0.80);
+      deepL=mix(deepL, seaShal*0.80, aridL*0.55);
+      shalL=mix(shalL, vec3(0.300,0.580,0.600), glacL);
+      deepL=mix(deepL, vec3(0.160,0.400,0.460), glacL*0.75);
       float kd=mix(mix(30.0,8.0,trophL), 14.0, max(aridL,glacL));
       /* A closed basin's lake is a pan: its water is a fraction as deep as a
          through-flowing lake's of the same outline. */

@@ -1,4 +1,4 @@
-# Handoff — Tectonic Earth (the shore: a baked waterline, water with a kind, dark lakes 3.20; wet coasts, forming clouds and bowed trenches 3.19; subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
+# Handoff — Tectonic Earth (lakes in their era's sea colour 3.21; the shore: a baked waterline, water with a kind 3.20; wet coasts, forming clouds and bowed trenches 3.19; subduction, weather and varied cards 3.17; the future engine and the rain anchor 3.16; close zoom and colour 3.15; mountains 3.12–3.14; flora and fauna 3.6–3.11)
 
 Paste this whole file as the first message of a new session.
 
@@ -17,7 +17,7 @@ Paste this whole file as the first message of a new session.
   frame, the waterline, varied cards),
   §5.1b the future series (the plate engine, the future's names), §5.13 the rain anchor and the herringbone, §5.12 close zoom and colour, §5.10
   mountains (the erosion relief), §5.5 lakes, §5.6 the biota subsystem, §6 the gate and the build
-  commands, §7 traps (7.73–7.79 are this round's; 7.66–7.72, 7.57–7.65, 7.48–7.56 and 7.43–7.47 the rounds before), §9
+  commands, §7 traps (7.73–7.80 are this round's; 7.66–7.72, 7.57–7.65, 7.48–7.56 and 7.43–7.47 the rounds before), §9
   known limits.
 - `build/taxa/SCHEMA.md` is the authoring contract for organisms.
 
@@ -46,6 +46,12 @@ traps 7.73-7.78.
 - **Lakes by kind** (`?lake=0`): dark clear water, green warm water, turquoise brine with a salt
   rim, rock flour, ice; depth as attenuation, no rings. River threads stop at a lake (`app.js`).
 - Timing: inside noise (four interleaved repeats, three close-ups, 9-10 ms both ways).
+- **3.21 (2026-11-10), the user on the live 3.20 at 1000 Ma:** "the lakes are too dark - let's make
+  these somewhat consistent with other bodies of water as they change color over time, accounting
+  for size/reflection differences." The lake's base colour is now the era's own sea hue and shallow
+  tone (`uSeaTint`), slightly greener for fresh water, with the deep tone scaled by lake size (two
+  rings of the lake field; a pond ~0.7 of an inland sea). The kinds are departures from that base.
+  README 5.16 (last paragraph but two), trap 7.80. Sheets re-baked; fields unchanged.
 - **Seen, not touched:** the Sahel's ruled edge and straight-sided biome steps in some deep-time
   interiors (100 Ma North America): the palette's khaki-to-forest step (5.15's open item).
 - **Open:** fjords and rias (the erosion relief may not cut below sea level); the protected
@@ -331,7 +337,10 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 
 ## State right now
 
-- Last live deploy: **`DATA_V=20261110-0033`**, release 3.20 (the waterline as a baked distance,
+- Last live deploy: **`DATA_V=20261110-0154`**, release 3.21 (lakes in the colour of their era's
+  sea, scaled by size; shader and both sheet sets only, fields unchanged; `SHEET_V`/`IMAGERY_V`
+  `'20261110a'`, `FIELD_V` still `'20261109-320'`). Before it:
+  **`DATA_V=20261110-0033`**, release 3.20 (the waterline as a baked distance,
   shallow water and lakes by kind, the strand and the tidal fringe), commit `9177105e` (the record
   is the commit after it), verified live (the page carries `shoreZ`, `uShore` and the river cut-off,
   `FIELD_V='20261109-320'`, `SHEET_V`/`IMAGERY_V='20261109a'`; the served `phan_0000_w.webp` and
@@ -353,7 +362,7 @@ registry` for own drawings, then `fix_form_icons.py` if a form pass ran.
 - The render audits' shots are re-taken by `build_site` when stale (`build_site_shots.py`,
   README 7.47): ~1 min of GPU per build. The deep-time Permian frame moved to the model's own
   desert heart (7.6E 23.4S); the old 2E 45S frame sat on the temperate belt.
-- Cache versions: `FIELD_V='20261109-320'`, `SHEET_V='20261109a'`, `IMAGERY_V='20261109a'`
+- Cache versions: `FIELD_V='20261109-320'`, `SHEET_V='20261110a'`, `IMAGERY_V='20261110a'`
   (in `web/app.js` AND `web/ambient.html`). Backups of the 3.19 `_w` fields and both sheet sets
   were kept in the session scratchpad only.
 - Nothing uncommitted that matters; `build/verify/` (proof PNGs) and `data/pbdb/` (the PBDB
